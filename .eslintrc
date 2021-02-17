@@ -1,6 +1,6 @@
 {
     "extends": [
-        "airbnb-typescript",
+        "airbnb-typescript/base",
         "airbnb/hooks",
         "plugin:@typescript-eslint/recommended",
         "prettier",
@@ -60,6 +60,7 @@
                 "tsx": "never"
             }
         ],
-        "import/prefer-default-export": "off"
+        "import/prefer-default-export": "off",
+        "@typescript-eslint/object-curly-spacing": "off"
     }
 }
