@@ -52,7 +52,15 @@
 
 1. [React-Loadable](https://github.com/jamiebuilds/react-loadable) - Component based splitting
 
+## i18n support ?
 
+1. [react-i18next](https://react.i18next.com/) - We can configure interpolation token
+2. [format-js](https://formatjs.io/)
+
+## Do we need storybook ?
+
+1. Yes
+2. ~~No~~
 ---
 
 ## Router
