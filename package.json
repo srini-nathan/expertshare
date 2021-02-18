@@ -19,7 +19,8 @@
     "react-dom": "16",
     "react-i18next": "^11.8.7",
     "react-router-dom": "^5.2.0",
-    "recoil": "^0.1.2"
+    "recoil": "^0.1.2",
+    "redaxios": "^0.4.1"
   },
   "scripts": {
     "start": "craco start",
