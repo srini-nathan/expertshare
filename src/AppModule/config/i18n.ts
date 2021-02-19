@@ -3,12 +3,13 @@ import { initReactI18next } from "react-i18next";
 
 export const init = (resources: Resource) => {
     i18n.use(initReactI18next).init({
-        lng: "fr",
+        lng: "en",
         fallbackLng: "en",
         debug: true,
         interpolation: {
             escapeValue: false,
         },
+        defaultNS: "AppModule",
         resources,
     });
 };

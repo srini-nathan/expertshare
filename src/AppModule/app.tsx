@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 
 function Home(): JSX.Element {
     const { t } = useTranslation();
-    return <h2>Hi {t("AppModule:global.name")}</h2>;
+    return <h2>Hi {t("global.name")}</h2>;
 }
 
 function AdminModule(): JSX.Element {
