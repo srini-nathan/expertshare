@@ -1,6 +1,9 @@
 import translations from "./translations";
+import ModuleConfig from "../SharedModule/models/ModuleConfig";
 
-export default {
+const moduleConfig: ModuleConfig = {
     id: "admin-module",
     translations,
 };
+
+export default moduleConfig;
