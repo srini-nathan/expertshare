@@ -1,19 +1,21 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
-import "./i18n/i18n";
+import "./bootstrap";
 import { useTranslation } from "react-i18next";
 
 function Home(): JSX.Element {
-    return <h2>Home</h2>;
-}
-
-function About(): JSX.Element {
     const { t } = useTranslation();
-    return <h2>{t("expertShare.title")}</h2>;
+    return <h2>Hi {t("AppModule:global.name")}</h2>;
 }
 
-function Users(): JSX.Element {
-    return <h2>Users</h2>;
+function AdminModule(): JSX.Element {
+    const { t } = useTranslation();
+    return <h2>Hi {t("AdminModule:global.name")}</h2>;
+}
+
+function ShareModule(): JSX.Element {
+    const { t } = useTranslation();
+    return <h2>Hi {t("SharedModule:global.name")}</h2>;
 }
 
 const App = (): JSX.Element => {
@@ -23,13 +25,13 @@ const App = (): JSX.Element => {
                 <nav>
                     <ul>
                         <li>
-                            <Link to="/">Home</Link>
+                            <Link to="/">AppModule</Link>
                         </li>
                         <li>
-                            <Link to="/about">About</Link>
+                            <Link to="/AdminModule">AdminModule</Link>
                         </li>
                         <li>
-                            <Link to="/users">Users</Link>
+                            <Link to="/ShareModule">ShareModule</Link>
                         </li>
                     </ul>
                 </nav>
@@ -37,11 +39,11 @@ const App = (): JSX.Element => {
                 {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
                 <Switch>
-                    <Route path="/about">
-                        <About />
+                    <Route path="/AdminModule">
+                        <AdminModule />
                     </Route>
-                    <Route path="/users">
-                        <Users />
+                    <Route path="/ShareModule">
+                        <ShareModule />
                     </Route>
                     <Route path="/">
                         <Home />
