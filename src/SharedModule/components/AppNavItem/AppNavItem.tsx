@@ -22,7 +22,7 @@ export const AppNavItem: React.FC<AppNavItemProps> = () => {
         <Nav tabs>
             <NavItem>
                 <NavLink active href="/">
-                    Active
+                    Active1
                 </NavLink>
             </NavItem>
             <NavDropdown
