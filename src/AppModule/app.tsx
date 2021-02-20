@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "./bootstrap";
+import "./app.scss";
 import { useTranslation } from "react-i18next";
 
 function Home(): JSX.Element {
