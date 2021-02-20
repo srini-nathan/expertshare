@@ -3,3 +3,4 @@ src/serviceWorker.js
 config/
 scripts/
 src/stories
+src/types
