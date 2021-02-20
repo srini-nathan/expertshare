@@ -1,67 +1,36 @@
 import React from "react";
-import {
-    Button as BaseButton,
-    ButtonProps as BaseButtonProps,
-} from "@bootstrap-styled/v4";
-import BootstrapProvider from "@bootstrap-styled/provider";
-import defaultTheme from "../../theme/expertshare";
 
-export interface ButtonProps extends BaseButtonProps {
-    /**
-     * Choose to change size of the button
-     */
-    size?: "sm" | "lg";
-    /**
-     * Predefined type of buttons
-     */
-    color?:
-        | "link"
-        | "primary"
-        | "secondary"
-        | "success"
-        | "info"
-        | "warning"
-        | "danger";
-    /**
-     * Checks if the button should be outlined
-     */
-    outline?: boolean;
-    /**
-     * Checks if the button width should be 100%
-     */
-    block?: boolean;
-    /**
-     * Checks if the button should be disabled
-     */
-    disabled?: boolean;
-    /**
-     * Add your manual class to apply this button
-     */
-    className?: string;
-    /**
-     * You can pass any function to call when the button clicked
-     */
-    onClick?: () => void;
-    /**
-     * Pass text need to render within the button
-     */
-    label?: string;
+export interface ButtonProps {
+    primary?: boolean;
+    backgroundColor?: string;
+    size?: "small" | "medium" | "large";
+    label: string;
+    onClick: () => void;
 }
 
-/**
- * Primary Button component for user interaction
- */
 export const Button: React.FC<ButtonProps> = ({
-    color = "primary",
+    primary = false,
+    size = "medium",
+    backgroundColor,
     label,
-    children,
     ...props
 }) => {
+    const mode = primary
+        ? "storybook-button--primary"
+        : "storybook-button--secondary";
+
     return (
-        <BootstrapProvider theme={defaultTheme}>
-            <BaseButton color={color} {...props}>
-                {label || children}
-            </BaseButton>
-        </BootstrapProvider>
+        <button
+            type="button"
+            className={[
+                "storybook-button",
+                `storybook-button--${size}`,
+                mode,
+            ].join(" ")}
+            style={{ backgroundColor }}
+            {...props}
+        >
+            {label}
+        </button>
     );
 };
