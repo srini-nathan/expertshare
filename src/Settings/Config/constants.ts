@@ -1,0 +1,2 @@
+export const REACT_APP_REST_RESOURCE_BASE_END_POINT = process.env.REACT_APP_REST_RESOURCE_BASE_END_POINT || "";
+export const AUTH_TOKEN_KEY = "expert-share-active-token";

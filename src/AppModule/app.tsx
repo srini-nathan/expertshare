@@ -3,6 +3,9 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "./bootstrap";
 import "./app.scss";
 import { useTranslation } from "react-i18next";
+import setupAxiosInterceptors from "../Settings/Config/asiox-interceptor-config";
+
+setupAxiosInterceptors(() => {});
 
 function Home(): JSX.Element {
     const { t } = useTranslation();

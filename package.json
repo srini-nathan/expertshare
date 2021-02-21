@@ -16,6 +16,8 @@
     "@bootstrap-styled/provider": "^2.0.3",
     "@bootstrap-styled/v4": "^3.4.0",
     "@storybook/react": "^6.1.18",
+    "axios": "^0.21.1",
+    "axios-progress-bar": "^1.2.0",
     "bootstrap-styled": "^2.7.2",
     "i18next": "^19.8.9",
     "lodash": "^4.17.20",
@@ -24,7 +26,6 @@
     "react-i18next": "^11.8.7",
     "react-router-dom": "^5.2.0",
     "recoil": "^0.1.2",
-    "redaxios": "^0.4.1",
     "styled-components": "^5.2.1"
   },
   "scripts": {
