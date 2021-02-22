@@ -1,7 +1,7 @@
 import React from "react";
-import { Button, ButtonProps } from "@bootstrap-styled/v4";
+import { Button } from "@bootstrap-styled/v4";
 
-export interface AppButtonProps extends ButtonProps {
+export interface AppButtonProps {
     /**
      * Choose to change size of the button
      */
