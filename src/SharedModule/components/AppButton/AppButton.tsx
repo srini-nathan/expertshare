@@ -1,7 +1,5 @@
 import React from "react";
 import { Button, ButtonProps } from "@bootstrap-styled/v4";
-import BootstrapProvider from "@bootstrap-styled/provider";
-import defaultTheme from "../../theme/expertshare";
 
 export interface AppButtonProps extends ButtonProps {
     /**
@@ -55,10 +53,8 @@ export const AppButton: React.FC<AppButtonProps> = ({
     ...props
 }) => {
     return (
-        <BootstrapProvider theme={defaultTheme}>
-            <Button color={color} {...props}>
-                {label || children}
-            </Button>
-        </BootstrapProvider>
+        <Button color={color} {...props}>
+            {label || children}
+        </Button>
     );
 };

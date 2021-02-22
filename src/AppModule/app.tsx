@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "./bootstrap";
 import "./app.scss";
 import { useTranslation } from "react-i18next";
+import BootstrapProvider from "@bootstrap-styled/provider";
+import defaultTheme from "../SharedModule/theme/expertshare";
 
 function Home(): JSX.Element {
     const { t } = useTranslation();
@@ -21,37 +23,39 @@ function ShareModule(): JSX.Element {
 
 const App = (): JSX.Element => {
     return (
-        <Router>
-            <div>
-                <nav>
-                    <ul>
-                        <li>
-                            <Link to="/">AppModule</Link>
-                        </li>
-                        <li>
-                            <Link to="/AdminModule">AdminModule</Link>
-                        </li>
-                        <li>
-                            <Link to="/ShareModule">ShareModule</Link>
-                        </li>
-                    </ul>
-                </nav>
+        <BootstrapProvider theme={defaultTheme}>
+            <Router>
+                <div>
+                    <nav>
+                        <ul>
+                            <li>
+                                <Link to="/">AppModule</Link>
+                            </li>
+                            <li>
+                                <Link to="/AdminModule">AdminModule</Link>
+                            </li>
+                            <li>
+                                <Link to="/ShareModule">ShareModule</Link>
+                            </li>
+                        </ul>
+                    </nav>
 
-                {/* A <Switch> looks through its children <Route>s and
+                    {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-                <Switch>
-                    <Route path="/AdminModule">
-                        <AdminModule />
-                    </Route>
-                    <Route path="/ShareModule">
-                        <ShareModule />
-                    </Route>
-                    <Route path="/">
-                        <Home />
-                    </Route>
-                </Switch>
-            </div>
-        </Router>
+                    <Switch>
+                        <Route path="/AdminModule">
+                            <AdminModule />
+                        </Route>
+                        <Route path="/ShareModule">
+                            <ShareModule />
+                        </Route>
+                        <Route path="/">
+                            <Home />
+                        </Route>
+                    </Switch>
+                </div>
+            </Router>
+        </BootstrapProvider>
     );
 };
 
