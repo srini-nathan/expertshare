@@ -1,12 +1,9 @@
 import React from "react";
-import {
-    Button as BaseButton,
-    ButtonProps as BaseButtonProps,
-} from "@bootstrap-styled/v4";
+import { Button, ButtonProps } from "@bootstrap-styled/v4";
 import BootstrapProvider from "@bootstrap-styled/provider";
 import defaultTheme from "../../theme/expertshare";
 
-export interface ButtonProps extends BaseButtonProps {
+export interface AppButtonProps extends ButtonProps {
     /**
      * Choose to change size of the button
      */
@@ -51,7 +48,7 @@ export interface ButtonProps extends BaseButtonProps {
 /**
  * Primary Button component for user interaction
  */
-export const Button: React.FC<ButtonProps> = ({
+export const AppButton: React.FC<AppButtonProps> = ({
     color = "primary",
     label,
     children,
@@ -59,9 +56,9 @@ export const Button: React.FC<ButtonProps> = ({
 }) => {
     return (
         <BootstrapProvider theme={defaultTheme}>
-            <BaseButton color={color} {...props}>
+            <Button color={color} {...props}>
                 {label || children}
-            </BaseButton>
+            </Button>
         </BootstrapProvider>
     );
 };
