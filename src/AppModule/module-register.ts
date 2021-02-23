@@ -1,4 +1,6 @@
 import AdminModule from "../AdminModule";
 import SharedModule from "../SharedModule";
+import SecurityModule from "../SecurityModule";
 
-export default [AdminModule, SharedModule];
+const activeModules = [AdminModule, SharedModule, SecurityModule];
+export default activeModules;
