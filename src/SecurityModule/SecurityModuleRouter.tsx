@@ -13,18 +13,18 @@ const SecurityModuleRouter: FC<PropsWithChildren<RouteComponentProps>> = (
             <nav>
                 <ul>
                     <li>
-                        <Link to="/auth">Home</Link>
+                        <Link to="">Home</Link>
                     </li>
                     <li>
-                        <Link to="/auth/login">Login</Link>
+                        <Link to="login">Login</Link>
                     </li>
                     <li>
-                        <Link to="/auth/register">Register</Link>
+                        <Link to="register">Register</Link>
                     </li>
                 </ul>
             </nav>
             <Router>
-                <IndexPage default path={"/"}></IndexPage>
+                <IndexPage default />
                 <LoginPage path={"/login"}></LoginPage>
                 <RegisterPage path={"/register"}></RegisterPage>
             </Router>
