@@ -1,5 +1,8 @@
 module.exports = {
-    extends: "stylelint-config-standard",
+    extends: [
+        "stylelint-prettier/recommended",
+        "stylelint-config-sass-guidelines"
+    ],
     rules: {
         "at-rule-no-unknown": [
             true,
@@ -10,6 +13,8 @@ module.exports = {
                     "responsive",
                     "variants",
                     "screen",
+                    "mixin",
+                    "each"
                 ],
             },
         ],
@@ -20,5 +25,13 @@ module.exports = {
         "no-eol-whitespace": null,
         "value-list-comma-newline-after": null,
         "declaration-colon-newline-after": null,
+        "string-quotes": "double",
+        "max-nesting-depth": 3,
+        "selector-no-qualifying-type": [
+            true,
+            {
+                "ignore": ["attribute"]
+            }
+        ]
     },
 };
