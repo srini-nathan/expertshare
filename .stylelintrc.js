@@ -1,6 +1,6 @@
 module.exports = {
     extends: [
-        "stylelint-config-sass-guidelines"
+        "stylelint-config-twbs-bootstrap/scss"
     ],
     rules: {
         "at-rule-no-unknown": [
