@@ -4,8 +4,10 @@ import "./bootstrap";
 import "./app.scss";
 import { useTranslation } from "react-i18next";
 import setupAxiosInterceptors from "../Settings/Config/asiox-interceptor-config";
+import { useAuth } from "./Authentication/approach2/AuthContext";
 
 setupAxiosInterceptors(() => {});
+
 
 function Home(): JSX.Element {
     const { t } = useTranslation();
@@ -23,6 +25,8 @@ function ShareModule(): JSX.Element {
 }
 
 const App = (): JSX.Element => {
+  const {user}=  useAuth();
+
     return (
         <Router>
             <div>
