@@ -8,7 +8,7 @@ import { Api } from "../../../lib/API/Api";
 
 const AuthContext = React.createContext(null);
 
-function AuthProvider(props) {
+function AuthProvider(): () => JSX.Element {
     const [user, setUser] = React.useState(null);
     const [token, setToken] = React.useState("");
     const [loginSuccess, setLoginSuccess] = React.useState(false);
