@@ -7,7 +7,7 @@ export class Api {
         return res.data;
     }
 
-    static async login(username, password) {
+    static async login(username: string, password: string) {
         const res = axios.post("/login", { username, password });
         return res.data;
     }

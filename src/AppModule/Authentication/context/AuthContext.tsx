@@ -6,41 +6,47 @@ import {
 } from "../../../Settings/Config/constants";
 import { Api } from "../../../lib/API/Api";
 
-const AuthContext = React.createContext(null);
+const AuthContext = React.createContext({});
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface AuthProviderProps {}
-function AuthProvider(props: AuthProviderProps): JSX.Element {
+export interface LoginResponse {
+    token: string;
+}
+type Props = {
+    children: JSX.Element;
+};
+
+function AuthProvider({ children }: Props): JSX.Element {
     const [user, setUser] = React.useState(null);
     const [token, setToken] = React.useState("");
     const [loginSuccess, setLoginSuccess] = React.useState(false);
     const [showLogin, setShowLogin] = React.useState(true);
     const [isAuthenticated, setIsAuthenticated] = React.useState(false);
 
-    useEffect(async () => {
-        () => {
-            const token = await localStorage.getItem(AUTH_TOKEN_KEY);
-            if (token) {
-            }
-        };
-    }, []);
-
     const fetchSession = async () => {
         try {
             const fetchedUser = await Api.fetchUserProfile();
             setUser(fetchedUser);
             if (!_.isEmpty(user)) {
-                localStorage.setItem(AUTH_PROFILE, JSON.stringify(user));
+                await localStorage.setItem(AUTH_PROFILE, JSON.stringify(user));
             }
         } catch (err) {
             // TODO: get idea about error json
         }
     };
+    useEffect(() => {
+        async function fetch() {
+            const result = localStorage.getItem(AUTH_TOKEN_KEY);
+            if (result) {
+                await fetchSession();
+            }
+        }
+        fetch().then();
+        return () => {};
+    }, [fetchSession]);
 
-    const login = async (username, password) => {
+    const login = async (username: string, password: string): Promise<void> => {
         try {
-            const result = await login(username, password);
-            setUser(result.user);
+            const result: LoginResponse = await Api.login(username, password);
             setToken(result.token);
             setIsAuthenticated(true);
             setShowLogin(false);
@@ -62,22 +68,27 @@ function AuthProvider(props: AuthProviderProps): JSX.Element {
         setIsAuthenticated(false);
     };
 
+    const value: {
+        login: (username: string, password: string) => void;
+        logout: () => void;
+        register: () => void;
+        token: string;
+        loginSuccess: boolean;
+        showLogin: boolean;
+        isAuthenticated: boolean;
+    } = {
+        login,
+        logout,
+        register,
+        token,
+        loginSuccess,
+        showLogin,
+        isAuthenticated,
+    };
     return (
-        <AuthContext.Provider
-            value={{
-                login,
-                logout,
-                register,
-                user,
-                token,
-                loginSuccess,
-                showLogin,
-                isAuthenticated,
-            }}
-            {...props}
-        />
+        <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
     );
 }
-
+export default AuthProvider;
 const useAuth = () => React.useContext(AuthContext);
-export { AuthContext, useAuth };
+export { useAuth };
