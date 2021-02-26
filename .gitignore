@@ -23,3 +23,6 @@ yarn-error.log*
 # IDE
 .idea
 .run
+
+# SASS watcher - compiled css and maps
+**/scss/**/*.{css,css.map}
