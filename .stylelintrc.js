@@ -33,6 +33,7 @@ module.exports = {
                 "ignore": ["attribute"]
             }
         ],
-        "color-hex-case": "upper"
+        "color-hex-case": "upper",
+        "at-rule-no-unknown": false
     },
 };
