@@ -8,7 +8,9 @@ import { Api } from "../../../lib/API/Api";
 
 const AuthContext = React.createContext(null);
 
-function AuthProvider(): () => JSX.Element {
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface AuthProviderProps {}
+function AuthProvider(props: AuthProviderProps): JSX.Element {
     const [user, setUser] = React.useState(null);
     const [token, setToken] = React.useState("");
     const [loginSuccess, setLoginSuccess] = React.useState(false);
@@ -16,9 +18,11 @@ function AuthProvider(): () => JSX.Element {
     const [isAuthenticated, setIsAuthenticated] = React.useState(false);
 
     useEffect(async () => {
-        const token = await localStorage.getItem(AUTH_TOKEN_KEY);
-        if (token) {
-        }
+        () => {
+            const token = await localStorage.getItem(AUTH_TOKEN_KEY);
+            if (token) {
+            }
+        };
     }, []);
 
     const fetchSession = async () => {
