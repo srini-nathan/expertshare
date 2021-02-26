@@ -1,7 +1,6 @@
 module.exports = {
     extends: [
-        "stylelint-prettier/recommended",
-        "stylelint-config-sass-guidelines"
+        "stylelint-config-twbs-bootstrap/scss"
     ],
     rules: {
         "at-rule-no-unknown": [
@@ -26,12 +25,14 @@ module.exports = {
         "value-list-comma-newline-after": null,
         "declaration-colon-newline-after": null,
         "string-quotes": "double",
-        "max-nesting-depth": 3,
+        "selector-max-compound-selectors": 5,
+        "max-nesting-depth": 5,
         "selector-no-qualifying-type": [
             true,
             {
                 "ignore": ["attribute"]
             }
-        ]
+        ],
+        "color-hex-case": "upper"
     },
 };
