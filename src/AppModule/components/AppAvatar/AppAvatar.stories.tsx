@@ -1,5 +1,5 @@
 import React from "react";
-import { Story, Meta } from "@storybook/react/types-6-0";
+import { Meta, Story } from "@storybook/react/types-6-0";
 import { AppAvatar, AppAvatarProps, AppAvatarVariant } from "./AppAvatar";
 
 export default {
@@ -31,20 +31,35 @@ export default {
                 category: "Size",
             },
         },
-        disabled: {
-            table: {
-                category: "States",
-            },
-        },
-        onClick: {
-            table: {
-                category: "Events",
-            },
-        },
     },
 } as Meta;
 
 const Template: Story<AppAvatarProps> = (args) => <AppAvatar {...args} />;
 
-export const Avatar = Template.bind({});
-Avatar.args = {};
+export const DefaultAvatar = Template.bind({});
+DefaultAvatar.args = {};
+
+export const LargeAvatar = Template.bind({});
+LargeAvatar.args = {
+    size: "lg",
+};
+
+export const SmallAvatar = Template.bind({});
+SmallAvatar.args = {
+    size: "sm",
+};
+
+export const CircularAvatar = Template.bind({});
+CircularAvatar.args = {
+    variant: AppAvatarVariant.CIRCLE,
+};
+
+export const ThumbnailAvatar = Template.bind({});
+ThumbnailAvatar.args = {
+    variant: AppAvatarVariant.THUMBNAIL,
+};
+
+export const FluidAvatar = Template.bind({});
+FluidAvatar.args = {
+    fluid: true,
+};
