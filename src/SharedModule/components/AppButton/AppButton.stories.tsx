@@ -4,7 +4,7 @@ import { Story, Meta } from "@storybook/react/types-6-0";
 import { AppButton, AppButtonProps } from "./AppButton";
 
 export default {
-    title: "Form/Button",
+    title: "Form/Button - old",
     component: AppButton,
     argTypes: {
         color: {
