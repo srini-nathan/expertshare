@@ -1,22 +1,23 @@
 import React, { FunctionComponent } from "react";
 import "./style.scss";
 import ceo from "../assets/images/ceo.jpg";
-import { AppAvatar } from "../../AppModule/components/AppAvatar/AppAvatar";
+import {
+    AppAvatar,
+    AppAvatarVariant,
+} from "../../AppModule/components/AppAvatar/AppAvatar";
 
-interface OwnProps {
+interface InfoPanelProps {
     className?: string;
 }
 
-type Props = OwnProps;
-
-const InfoPanel: FunctionComponent<Props> = (props) => {
+const InfoPanel: FunctionComponent<InfoPanelProps> = (props) => {
     return (
         <div className={`${props.className ?? ""} info-section`}>
-            <div className="m-auto container text-white info-details ">
+            <div className="m-auto container text-white">
                 <h2 className={"mb-4"}>
                     The best place for experience exchange.
                 </h2>
-                <p>
+                <p className="bit-small">
                     Lorem Ipsum is simply dummy text of the printing and
                     typesetting industry. Lorem Ipsum has been the industry's
                     standard dummy text ever since the 1500s, when an unknown
@@ -28,11 +29,15 @@ const InfoPanel: FunctionComponent<Props> = (props) => {
                     passages, and more recently with desktop publishing software
                     like Aldus PageMaker including versions of Lorem Ipsum.
                 </p>
-                <div className="person d-flex">
-                    <AppAvatar roundedCircle src={ceo} />
-                    <div className="person-details d-block">
+                <div className="d-flex p-2">
+                    <AppAvatar
+                        variant={AppAvatarVariant.CIRCLE}
+                        src={ceo}
+                        className="align-self-center"
+                    />
+                    <div className="px-2 d-block">
                         <b className="d-block">Samantha smith</b>
-                        <span className="d-block">CEO</span>
+                        <span className="d-block bit-small">CEO</span>
                     </div>
                 </div>
             </div>
