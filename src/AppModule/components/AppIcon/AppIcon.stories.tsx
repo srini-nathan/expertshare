@@ -1,7 +1,6 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react/types-6-0";
 import { AppIcon, AppIconProps } from "./AppIcon";
-import iconImage from "../../assets/images/icon-brand-google.png";
 
 export default {
     title: "Icon",
@@ -71,6 +70,4 @@ export default {
 const Template: Story<AppIconProps> = (args) => <AppIcon {...args} />;
 
 export const Primary = Template.bind({});
-Primary.args = {
-    src: iconImage,
-};
+Primary.args = {};

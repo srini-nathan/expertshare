@@ -2,9 +2,9 @@
 @import "./fonts";
 @import "../../../../node_modules/bootstrap/scss/bootstrap";
 @import "./icons";
+@import "bootstrap_rules";
 
-$bit-small-font-size: 90%;
-
+// typography
 .bit-small {
     @include font-size($bit-small-font-size);
     font-weight: $font-weight-normal;
