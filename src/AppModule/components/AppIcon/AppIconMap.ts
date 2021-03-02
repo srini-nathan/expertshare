@@ -3,7 +3,11 @@ import sponsors from "./assets/images/icon_sponsers.svg";
 import attendees from "./assets/images/icon_attendees.svg";
 import my_agenda from "./assets/images/icon_my_agenda.svg";
 
-export const AppIconMap = {
+interface IAppIconMap {
+    [index: string]: string;
+}
+
+export const AppIconMap: IAppIconMap = {
     dashboard,
     sponsors,
     suitcase: sponsors,

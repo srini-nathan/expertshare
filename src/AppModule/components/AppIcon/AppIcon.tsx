@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
 import { AppIconMap } from "./AppIconMap";
-import dashboard from "./assets/images/icon_dashboard.svg";
 
 export interface AppIconProps {
     name: string;
