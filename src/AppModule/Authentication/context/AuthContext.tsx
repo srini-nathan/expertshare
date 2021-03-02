@@ -1,9 +1,6 @@
 import React, { createContext, useEffect } from "react";
-import _ from "lodash";
-import {
-    AUTH_PROFILE,
-    AUTH_TOKEN_KEY,
-} from "../../../Settings/Config/constants";
+import { navigate } from "@reach/router";
+import { AUTH_TOKEN_KEY } from "../../../Settings/Config/constants";
 import { Api, UserProfile } from "../../../lib/API/Api";
 
 interface IAuthSate {
@@ -16,7 +13,7 @@ interface IAuthSate {
 }
 
 interface IAuthAction {
-    type: string;
+    type: AuthActionTypes;
     payload: IAuthSate;
 }
 
@@ -29,11 +26,16 @@ const initialState: IAuthSate = {
     loginError: "",
 };
 
+enum AuthActionTypes {
+    LOGIN_SUCCESS,
+    LOGIN_ERROR,
+    LOGOUT,
+}
 export const AuthContext = createContext<IAuthSate | any>(initialState);
 
 function reducer(state: IAuthSate, action: IAuthAction): IAuthSate {
     switch (action.type) {
-        case "LOGIN_SUCCESS":
+        case AuthActionTypes.LOGIN_SUCCESS:
             return {
                 ...state,
                 isAuthenticated: action.payload.isAuthenticated,
@@ -41,7 +43,17 @@ function reducer(state: IAuthSate, action: IAuthAction): IAuthSate {
                 showLogin: action.payload.showLogin,
                 token: action.payload.token,
             };
-        case "LOGIN_ERROR":
+        case AuthActionTypes.LOGIN_ERROR:
+            return {
+                ...state,
+                isAuthenticated: action.payload.isAuthenticated,
+                loginSuccess: action.payload.loginSuccess,
+                showLogin: action.payload.showLogin,
+                loginError: action.payload.loginError,
+                user: action.payload.user,
+                token: action.payload.token,
+            };
+        case AuthActionTypes.LOGOUT:
             return {
                 ...state,
                 isAuthenticated: action.payload.isAuthenticated,
@@ -64,6 +76,25 @@ type Props = {
     children: JSX.Element;
 };
 
+export const logoutAction = async (
+    dispatch: React.Dispatch<IAuthAction>
+): Promise<void> => {
+    if (localStorage.getItem(AUTH_TOKEN_KEY)) {
+        await localStorage.removeItem(AUTH_TOKEN_KEY);
+    }
+    dispatch({
+        type: AuthActionTypes.LOGOUT,
+        payload: {
+            loginError: "",
+            token: null,
+            user: null,
+            showLogin: true,
+            loginSuccess: false,
+            isAuthenticated: false,
+        },
+    });
+};
+
 export const loginAction = async (
     username: string,
     password: string,
@@ -74,7 +105,7 @@ export const loginAction = async (
         if (result.token) {
             await localStorage.setItem(AUTH_TOKEN_KEY, result.token);
             dispatch({
-                type: "LOGIN_SUCCESS",
+                type: AuthActionTypes.LOGIN_SUCCESS,
                 payload: {
                     isAuthenticated: true,
                     token: result.token,
@@ -84,12 +115,13 @@ export const loginAction = async (
                     loginError: null,
                 },
             });
+            await navigate("/");
         }
     } catch (err) {
         if (localStorage.getItem(AUTH_TOKEN_KEY)) {
             await localStorage.removeItem(AUTH_TOKEN_KEY);
             dispatch({
-                type: "LOGIN_SUCCESS",
+                type: AuthActionTypes.LOGIN_ERROR,
                 payload: {
                     isAuthenticated: true,
                     showLogin: false,
@@ -104,71 +136,25 @@ export const loginAction = async (
 };
 
 export default function AuthProvider({ children }: Props): JSX.Element {
-    const [user, setUser] = React.useState<UserProfile | null>(null);
     const [state, dispatch] = React.useReducer(reducer, initialState);
 
-    // const [token, setToken] = React.useState<string>("");
-    // const [loginSuccess, setLoginSuccess] = React.useState<boolean>(false);
-    // const [showLogin, setShowLogin] = React.useState<boolean>(true);
-    // const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(
-    //     false
-    // );
-
     useEffect(() => {
-        async function fetch() {
-            const result = localStorage.getItem(AUTH_TOKEN_KEY);
-            if (result) {
-                try {
-                    const fetchedUser = await Api.fetchUserProfile();
-                    setUser(fetchedUser);
-                    if (!_.isEmpty(user)) {
-                        await localStorage.setItem(
-                            AUTH_PROFILE,
-                            JSON.stringify(user)
-                        );
-                    }
-                    // eslint-disable-next-line no-empty
-                } catch (err) {}
-            }
+        if (localStorage.getItem(AUTH_TOKEN_KEY)) {
+            const token = localStorage.getItem(AUTH_TOKEN_KEY);
+            dispatch({
+                type: AuthActionTypes.LOGIN_SUCCESS,
+                payload: {
+                    isAuthenticated: true,
+                    loginError: null,
+                    token,
+                    loginSuccess: true,
+                    showLogin: false,
+                    user: null,
+                },
+            });
         }
+    }, []);
 
-        fetch().then();
-        return () => {};
-    }, [user]);
-
-    // const login = async (username: string, password: string): Promise<void> => {
-    //     try {
-    //         const result: LoginResponse = await Api.login(username, password);
-    //         setToken(result.token);
-    //         setIsAuthenticated(true);
-    //         setShowLogin(false);
-    //         setLoginSuccess(true);
-    //     } catch (err) {
-    //         setShowLogin(true);
-    //         setLoginSuccess(false);
-    //     }
-    // };
-    // const register = () => {};
-    // const logout = () => {
-    //     if (localStorage.getItem(AUTH_TOKEN_KEY)) {
-    //         localStorage.removeItem(AUTH_TOKEN_KEY);
-    //     }
-    //     if (localStorage.getItem(AUTH_PROFILE)) {
-    //         localStorage.removeItem(AUTH_PROFILE);
-    //     }
-    //     setShowLogin(true);
-    //     setIsAuthenticated(false);
-    // };
-    //
-    // const value: AuthContextType = {
-    //     login,
-    //     logout,
-    //     register,
-    //     token,
-    //     loginSuccess,
-    //     showLogin,
-    //     isAuthenticated,
-    // };
     return (
         <AuthContext.Provider value={{ state, dispatch }}>
             {children}

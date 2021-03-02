@@ -19,7 +19,7 @@ type Inputs = {
 export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { register, handleSubmit } = useForm<Inputs>();
 
-    const { state, dispatch } = React.useContext(AuthContext);
+    const { dispatch } = React.useContext(AuthContext);
     const onSubmit = async ({ email, password }: Inputs) => {
         await loginAction(email, password, dispatch);
     };
