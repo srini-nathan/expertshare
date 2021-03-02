@@ -10,9 +10,13 @@ interface InfoPanelProps {
     className?: string;
 }
 
-const InfoPanel: FunctionComponent<InfoPanelProps> = (props) => {
+const InfoPanel: FunctionComponent<InfoPanelProps> = () => {
     return (
-        <div className={`${props.className ?? ""} info-section`}>
+        <div
+            className={
+                "col-md-4 col-sm-4 col-xs-12 vh-100 d-none d-md-flex info-section"
+            }
+        >
             <div className="m-auto container text-white">
                 <h2 className={"mb-4"}>
                     The best place for experience exchange.
