@@ -3,7 +3,7 @@ import { i18n } from "./config";
 import registeredModules from "./module-register";
 import appModuleTranslations from "./translations";
 import appNavigation from "./navigation";
-import ModuleConfig from "../SharedModule/models/ModuleConfig";
+import { ModuleConfig } from "./models";
 
 let i18Resources = appModuleTranslations;
 

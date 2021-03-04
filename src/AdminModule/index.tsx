@@ -1,6 +1,6 @@
 import React from "react";
 import translations from "./translations";
-import ModuleConfig from "../SharedModule/models/ModuleConfig";
+import { ModuleConfig } from "../AppModule/models";
 import AdminModuleRouter from "./AdminModuleRouter";
 import { navigation } from "./navigation";
 
