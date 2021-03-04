@@ -4,4 +4,5 @@ export default interface ModuleConfig {
     id: string;
     translations: Resource;
     router?: JSX.Element;
+    navigation?: any[];
 }
