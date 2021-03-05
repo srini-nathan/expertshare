@@ -16,7 +16,7 @@ $input-color: $text-color;
 $input-bg: $widget-bg;
 $input-line-height: 1.15 !default;
 // use this variable to apply input forms padding independently
-$input-padding: .85rem .75rem .65rem .75rem;
+$input-padding: .85rem .75rem .65rem .75rem !default;
 // use this variable to calculate input forms line-height
 $input-padding-x: .75rem !default;
 $input-padding-y: .75rem !default;
