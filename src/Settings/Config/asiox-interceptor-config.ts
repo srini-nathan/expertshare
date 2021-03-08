@@ -13,6 +13,7 @@ const setupAxiosInterceptors=(onUnauthenticated: () => void)=> {
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+    config.headers.accept = "application/json";
     return config;
   }
   const onResponseSuccess = (response:AxiosResponse) => response;

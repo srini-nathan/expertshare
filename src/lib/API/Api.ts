@@ -1,11 +1,36 @@
 import axios from "axios";
-import { REACT_APP_LOGIN_END_POINT } from "../../Settings/Config/constants";
+import {
+    REACT_APP_CLIENT_RESOURCE_END_POINT,
+    REACT_APP_CONTAINER_RESOURCE_END_POINT,
+    REACT_APP_LOGIN_END_POINT,
+} from "../../Settings/Config/constants";
 
+export interface BaseEntity {
+    id: number;
+    createdAt: string;
+    updatedAt: string;
+}
 export interface UserProfile {
     username: string;
     roles: string[];
     permissions: string[];
     email: string;
+}
+
+export interface Container extends BaseEntity {
+    domain: string;
+    containerGroup: string;
+    storage: string;
+    bucketKey: string;
+    bucketSecret: string;
+    bucketName: string;
+    isActive: boolean;
+    client: string;
+    configuration: string[];
+}
+export interface Client extends BaseEntity {
+    name: string;
+    notes: string;
 }
 
 export interface Token {
@@ -30,6 +55,28 @@ export class Api {
             email,
             password,
         });
+        return res.data;
+    }
+
+    static async getClients(pageNo: number): Promise<Client[]> {
+        const res = await axios.get<Client[]>(
+            `${REACT_APP_CLIENT_RESOURCE_END_POINT}?page=${pageNo}`
+        );
+        return res.data;
+    }
+
+    static async getContainers(pageNo: number): Promise<Container[]> {
+        const res = await axios.get<Container[]>(
+            `${REACT_APP_CONTAINER_RESOURCE_END_POINT}?page${pageNo}`
+        );
+        return res.data;
+    }
+
+    static async createClient(name: string, notes: string): Promise<Client> {
+        const res = await axios.post<Client>(
+            `${REACT_APP_CLIENT_RESOURCE_END_POINT}`,
+            { name, notes }
+        );
         return res.data;
     }
 }
