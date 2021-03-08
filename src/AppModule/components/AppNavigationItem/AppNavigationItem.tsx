@@ -1,16 +1,10 @@
 import React, { FC } from "react";
 import { Link } from "@reach/router";
-import { AppIcon, AppIconProps } from "../index";
+import { AppIcon } from "../AppIcon";
+import { AppNavigationItemProps } from "./AppNavigationItemProps";
 
-interface AppNavigationItemProps {
-    icon: AppIconProps;
-    text: string;
-    isActive: boolean;
-    path: string;
-}
-
-const AppNavigationItem: FC<AppNavigationItemProps> = ({
-    text,
+export const AppNavigationItem: FC<AppNavigationItemProps> = ({
+    label,
     isActive = false,
     path,
     icon,
@@ -22,10 +16,8 @@ const AppNavigationItem: FC<AppNavigationItemProps> = ({
             }`}
         >
             <Link className="nav-link" to={path}>
-                <AppIcon {...icon} /> {text}
+                <AppIcon {...icon} /> {label}
             </Link>
         </li>
     );
 };
-
-export default AppNavigationItem;

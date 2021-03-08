@@ -4,11 +4,12 @@ import registeredModules from "./module-register";
 import appModuleTranslations from "./translations";
 import appNavigation from "./navigation";
 import { ModuleConfig } from "./models";
+import { AppNavigationItemProps } from "./components/AppNavigationItem";
 
 let i18Resources = appModuleTranslations;
 
 const moduleRouters: JSX.Element[] = [];
-const navigations: any[] = [...appNavigation];
+const navigations: AppNavigationItemProps[] = [...appNavigation];
 
 registeredModules.forEach(
     ({ router, translations, navigation }: ModuleConfig) => {

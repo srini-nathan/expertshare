@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Container } from "react-bootstrap";
 import "./styles.scss";
-import { AppButton } from "../../../AppModule/components";
+import { AppButton } from "../../../AppModule/components/AppButton";
 import {
     AppSocialLoginBtn,
     AppSocialLoginBtnType,
