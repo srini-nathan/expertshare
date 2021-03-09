@@ -1,4 +1,6 @@
-export const navigation = [
+import { AppNavigationItemProps } from "../AppModule/components/AppNavigationItem";
+
+export const navigation: AppNavigationItemProps[] = [
     {
         label: "Admin Home",
         path: "/admin",

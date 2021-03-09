@@ -3,11 +3,9 @@ import { ModuleConfigInterface } from "../AppModule/models";
 import { routers } from "./routers";
 import { navigation } from "./navigation";
 
-const config: ModuleConfigInterface = {
+export const adminModuleConfig: ModuleConfigInterface = {
     id: "admin-module",
     translations,
     routers,
     navigation,
 };
-
-export default config;

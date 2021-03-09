@@ -1,6 +1,6 @@
 import _merge from "lodash/merge";
 import { i18n } from "./config";
-import registeredModules from "./module-register";
+import { registeredModules } from "./module-register";
 import appModuleTranslations from "./translations";
 import appNavigation from "./navigation";
 import { ModuleConfigInterface, ModuleRouter } from "./models";

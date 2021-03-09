@@ -1,4 +1,6 @@
-export const navigation = [
+import { AppNavigationItemProps } from "./components/AppNavigationItem";
+
+export const navigation: AppNavigationItemProps[] = [
     {
         label: "Home",
         path: "/home",
