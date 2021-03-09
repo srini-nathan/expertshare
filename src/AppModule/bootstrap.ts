@@ -3,22 +3,22 @@ import { i18n } from "./config";
 import registeredModules from "./module-register";
 import appModuleTranslations from "./translations";
 import appNavigation from "./navigation";
-import { ModuleConfig } from "./models";
+import { ModuleConfigInterface, ModuleRouter } from "./models";
 import { AppNavigationItemProps } from "./components/AppNavigationItem";
 
 let i18Resources = appModuleTranslations;
 
-const moduleRouters: JSX.Element[] = [];
-const navigations: AppNavigationItemProps[] = [...appNavigation];
+const appRouters: ModuleRouter[] = [];
+const appNavigations: AppNavigationItemProps[] = [...appNavigation];
 
 registeredModules.forEach(
-    ({ router, translations, navigation }: ModuleConfig) => {
+    ({ routers, translations, navigation }: ModuleConfigInterface) => {
         i18Resources = _merge(i18Resources, translations);
-        if (router) moduleRouters.push(router);
-        if (navigation) navigations.push(...navigation);
+        if (routers) appRouters.push(...routers);
+        if (navigation) appNavigations.push(...navigation);
     }
 );
 
 i18n.init(i18Resources);
 
-export { moduleRouters, navigations };
+export { appRouters, appNavigations };

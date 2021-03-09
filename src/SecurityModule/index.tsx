@@ -1,14 +1,11 @@
-import React from "react";
 import translations from "./translations";
-import SecurityModuleRouter from "./SecurityModuleRouter";
-import { ModuleConfig } from "../AppModule/models";
+import { routers } from "./routers";
+import { ModuleConfigInterface } from "../AppModule/models";
 
-const moduleConfig: ModuleConfig = {
+const config: ModuleConfigInterface = {
     id: "security-module",
     translations,
-    router: (
-        <SecurityModuleRouter key={"security-module-router"} path={"/auth/*"} />
-    ),
+    routers,
 };
 
-export default moduleConfig;
+export default config;

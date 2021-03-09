@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { RouteComponentProps, Router } from "@reach/router";
 import { useTranslation } from "react-i18next";
-import { moduleRouters } from "./bootstrap";
+import { appRouters } from "./bootstrap";
 import "./assets/scss/app.scss";
 import { DashboardLayout } from "./layouts/DashboardLayout";
 
@@ -17,9 +17,9 @@ const Home: FC<RouteComponentProps> = (): JSX.Element => {
 const App = (): JSX.Element => {
     return (
         <Router>
-            <Home path="/" />
-            {moduleRouters.map((module) => {
-                return module;
+            <Home default path="/" />
+            {appRouters.map(({ RouterPlug, key, path }) => {
+                return <RouterPlug key={key} path={path} />;
             })}
         </Router>
     );

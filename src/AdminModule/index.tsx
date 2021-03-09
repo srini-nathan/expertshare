@@ -1,14 +1,13 @@
-import React from "react";
 import translations from "./translations";
-import { ModuleConfig } from "../AppModule/models";
-import AdminModuleRouter from "./AdminModuleRouter";
+import { ModuleConfigInterface } from "../AppModule/models";
+import { routers } from "./routers";
 import { navigation } from "./navigation";
 
-const moduleConfig: ModuleConfig = {
+const config: ModuleConfigInterface = {
     id: "admin-module",
     translations,
-    router: <AdminModuleRouter key={"admin-module-router"} path={"/admin/*"} />,
+    routers,
     navigation,
 };
 
-export default moduleConfig;
+export default config;

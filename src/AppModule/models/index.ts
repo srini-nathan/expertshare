@@ -1,1 +1,1 @@
-export * from "./ModuleConfig";
+export * from "./ModuleConfigInterface";
