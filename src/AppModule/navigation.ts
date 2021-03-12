@@ -5,21 +5,28 @@ export const navigation: AppNavigationItemProps[] = [
         label: "Home",
         path: "/home",
         icon: {
-            name: "blocks",
+            name: "dashboard",
         },
     },
     {
-        label: "Events",
+        label: "Sponsors",
         path: "/events",
         icon: {
-            name: "events",
+            name: "sponsors",
+        },
+    },
+    {
+        label: "Attendees",
+        path: "/events",
+        icon: {
+            name: "attendees",
         },
     },
     {
         label: "My Agenda",
         path: "/my-agendas",
         icon: {
-            name: "events",
+            name: "myAgenda",
         },
     },
 ];

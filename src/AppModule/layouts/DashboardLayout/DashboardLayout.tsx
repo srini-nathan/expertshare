@@ -7,10 +7,12 @@ export const DashboardLayout: FC = ({ children }) => {
     return (
         <Container className={"p-0"} fluid={true}>
             <Row noGutters={true}>
-                <Col md={4}>
+                <Col md={3} xl={2}>
                     <AppNavigation items={appNavigations} />
                 </Col>
-                <Col md={8}>{children}</Col>
+                <Col md={9} xl={10}>
+                    {children}
+                </Col>
             </Row>
         </Container>
     );

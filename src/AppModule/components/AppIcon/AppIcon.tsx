@@ -4,19 +4,18 @@ import { AppIconMap } from "./AppIconMap";
 
 export interface AppIconProps {
     name: string;
+    color?: string;
+    size?: number;
+    className?: string;
 }
 
-const Icon = styled.i<AppIconProps>`
-    display: inline-block;
-    height: 2.75rem;
-    width: 2.75rem;
-    mask-repeat: no-repeat;
-    mask-size: 2rem;
-    mask-position: center;
-    background-color: #36989c;
-    mask-image: url("${(props) => AppIconMap[props.name]}");
-`;
+const ITag = styled.i``;
 
-export const AppIcon: FunctionComponent<AppIconProps> = (props) => {
-    return <Icon className={"icon"} {...props} />;
+export const AppIcon: FunctionComponent<AppIconProps> = ({
+    name,
+    className = "",
+    ...props
+}) => {
+    const IconTag = AppIconMap[name] ?? ITag;
+    return <IconTag className={className} {...props}></IconTag>;
 };

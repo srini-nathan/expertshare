@@ -1,24 +1,26 @@
-import dashboard from "./assets/images/icon_dashboard.svg";
-import sponsors from "./assets/images/icon_sponsers.svg";
-import attendees from "./assets/images/icon_attendees.svg";
-import my_agenda from "./assets/images/icon_my_agenda.svg";
+import { FC } from "react";
+import {
+    IconProps,
+    Grid,
+    Briefcase,
+    Users,
+    Calendar,
+    Settings,
+} from "react-feather";
 
 interface IAppIconMap {
-    [index: string]: string;
+    [index: string]: FC<IconProps>;
 }
 
 export const AppIconMap: IAppIconMap = {
-    dashboard,
-    sponsors,
-    suitcase: sponsors,
-    attendees,
-    persons: attendees,
-    my_agenda,
-    calendar: my_agenda,
+    dashboard: Grid,
+    Grid,
+    sponsors: Briefcase,
+    Briefcase,
+    attendees: Users,
+    Users,
+    myAgenda: Calendar,
+    Calendar,
+    administrator: Settings,
+    Settings,
 };
-
-export const getIcon = (name: string): string => {
-    return AppIconMap[name];
-};
-
-export default AppIconMap;
