@@ -1,14 +1,9 @@
 import React, { FC, PropsWithChildren } from "react";
 import { Link, RouteComponentProps, Router } from "@reach/router";
 import { useTranslation } from "react-i18next";
-import {
-    IndexPage,
-    DesignPage,
-    SettingPage,
-    AgGridPage,
-    ClientNew,
-} from "./pages";
+import { IndexPage, DesignPage, SettingPage, AgGridPage } from "./pages";
 import { ClientList } from "./pages/ClientPage";
+import { ClientAddEdit } from "./pages/ClientPage/ClientAddEdit";
 
 const AdminModuleRouter: FC<PropsWithChildren<RouteComponentProps>> = (
     props
@@ -36,7 +31,8 @@ const AdminModuleRouter: FC<PropsWithChildren<RouteComponentProps>> = (
                 <SettingPage path={"/setting"} />
                 <ClientList path={"/client"} />
                 <AgGridPage path={"/ag-grid"} />
-                <ClientNew path={"/client/new"} />
+                <ClientAddEdit path={"/client/new"} />
+                <ClientAddEdit path={"/client/:id"} />
             </Router>
             {props.children}
         </div>

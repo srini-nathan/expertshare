@@ -1,3 +1,3 @@
 export * from "./ClientList";
 export * from "./ClientEdit";
-export * from "./ClientNew";
+export * from "./ClientAddEdit";

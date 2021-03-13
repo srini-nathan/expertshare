@@ -71,5 +71,4 @@ export const ClientNew: FC<RouteComponentProps> = (): JSX.Element => {
         </>
     );
 };
-
 export default ClientNew;

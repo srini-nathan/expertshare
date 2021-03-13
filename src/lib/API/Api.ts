@@ -65,6 +65,13 @@ export class Api {
         return res.data;
     }
 
+    static async getClient(id: number): Promise<Client> {
+        const res = await axios.get<Client>(
+            `${REACT_APP_CLIENT_RESOURCE_END_POINT}/${id}`
+        );
+        return res.data;
+    }
+
     static async getContainers(pageNo: number): Promise<Container[]> {
         const res = await axios.get<Container[]>(
             `${REACT_APP_CONTAINER_RESOURCE_END_POINT}?page${pageNo}`
@@ -75,6 +82,18 @@ export class Api {
     static async createClient(name: string, notes: string): Promise<Client> {
         const res = await axios.post<Client>(
             `${REACT_APP_CLIENT_RESOURCE_END_POINT}`,
+            { name, notes }
+        );
+        return res.data;
+    }
+
+    static async updateClient(
+        name: string,
+        notes: string,
+        id: number
+    ): Promise<Client> {
+        const res = await axios.put<Client>(
+            `${REACT_APP_CLIENT_RESOURCE_END_POINT}/${id}`,
             { name, notes }
         );
         return res.data;

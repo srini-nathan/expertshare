@@ -1,7 +1,10 @@
 import React, { FC, useEffect } from "react";
 import { RouteComponentProps, Link } from "@reach/router";
-import { AgGridColumn, AgGridReact } from "ag-grid-react";
+import { AgGridReact } from "ag-grid-react";
 
+import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
+
+import { ICellRendererParams } from "ag-grid-community";
 import { Api, Client } from "../../../lib/API/Api";
 
 // TODO:: Add header => name=> ES-DOMAIN value=>  domain.name(react client) currently on
@@ -23,6 +26,36 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     if (clients.length === 0) {
         return <div>Loading!!</div>;
     }
+    const handleClick = () => {};
+
+    const columnDef: ColDef[] = [
+        {
+            headerName: "ID",
+            field: "id",
+        },
+        {
+            headerName: "ID",
+            field: "name",
+        },
+        {
+            headerName: "Notes",
+            field: "note",
+        },
+        {
+            headerName: "Edit",
+            field: "id",
+            cellRendererFramework({ value }: ICellRendererParams) {
+                return <Link to={`/admin/client/${value}`}>Edit</Link>;
+            },
+        },
+        {
+            headerName: "Delete",
+            field: "id",
+            cellRendererFramework() {
+                return <button onClick={handleClick}> Test </button>;
+            },
+        },
+    ];
     return (
         <div>
             <Link to="/admin/client/new">Add New Client</Link>
@@ -34,17 +67,9 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
                     rowData={clients}
                     pagination={true}
                     paginationPageSize={10}
-                    onPaginationChanged={(event) => {
-                        console.log(event);
-                    }}
-                >
-                    <AgGridColumn field="id" sortable={true} filter={true} />
-                    <AgGridColumn field="name" sortable={true} filter={true} />
-                    <AgGridColumn field="notes" sortable={true} filter={true} />
-                </AgGridReact>
+                    columnDefs={columnDef}
+                />
             </div>
         </div>
     );
 };
-
-export default ClientList;
