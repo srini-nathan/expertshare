@@ -57,18 +57,71 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
         },
     ];
     return (
-        <div>
-            <Link to="/admin/client/new">Add New Client</Link>
-            <div
-                className="ag-theme-alpine"
-                style={{ height: 800, width: 1000, padding: 100 }}
-            >
-                <AgGridReact
-                    rowData={clients}
-                    pagination={true}
-                    paginationPageSize={10}
-                    columnDefs={columnDef}
-                />
+        <div className="theme-primary-clr theme-primary-font">
+            <div className="container-fluid p-0 mb-5">
+                <div className="row m-0">
+                    <div className="col-md-9 col-xl-10">
+                        <div className="row">
+                            <div className="nav-header mt-5 col-12">
+                                <div className="row">
+                                    <div className="col-md-9 nav-header--left">
+                                        <div className="page-title col-12">
+                                            <h1 className="theme-primary-font-bold theme-header-font-color">
+                                                Clients
+                                            </h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="app-container col-12">
+                                <div className="row m-0">
+                                    <div className="col-md-12">
+                                        <div className="row">
+                                            <div className="col-md-3 offset-md-7 search-inpt ">
+                                                <form>
+                                                    <input
+                                                        type="text"
+                                                        name="searchBox"
+                                                        id="searchBox"
+                                                        className="form-control theme-input theme-border-radius"
+                                                        placeholder="Quick Search"
+                                                    />
+                                                    <i data-feather="search"></i>
+                                                </form>
+                                            </div>
+                                            <div className="col-md-2 m-auto">
+                                                <Link
+                                                    className="btn btn-block btn-primary theme-btn-primary"
+                                                    to="/admin/client/new"
+                                                >
+                                                    Add New Client
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-12 table-responsive">
+                                        <div
+                                            className="ag-theme-alpine"
+                                            style={{
+                                                height: 800,
+                                                width: 1000,
+                                                padding: 100,
+                                            }}
+                                        >
+                                            <AgGridReact
+                                                rowData={clients}
+                                                pagination={true}
+                                                paginationPageSize={10}
+                                                columnDefs={columnDef}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );
