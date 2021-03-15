@@ -20,7 +20,7 @@ const Wrapper = styled.aside`
 
 const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     return (
-        <Wrapper className={"min-vh-100"}>
+        <Wrapper className={"min-vh-100 position-fixed"}>
             <ListGroup>
                 {items.map(({ label, path, icon }) => {
                     return (

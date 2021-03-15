@@ -2,8 +2,8 @@ import { AppNavigationItemProps } from "../AppModule/components/AppNavigationIte
 
 export const navigation: AppNavigationItemProps[] = [
     {
-        label: "Administrator",
-        path: "/admin",
+        label: "Admin - Translation",
+        path: "/admin/translation",
         icon: {
             name: "administrator",
         },
