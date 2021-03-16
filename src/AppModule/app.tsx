@@ -1,44 +1,48 @@
-import React, { FC } from "react";
-import { navigate, RouteComponentProps, Router } from "@reach/router";
+import React, { FC, useState } from "react";
+import { Redirect, RouteComponentProps, Router } from "@reach/router";
 import { useTranslation } from "react-i18next";
-import BootstrapProvider from "@bootstrap-styled/provider";
-import defaultTheme from "../SharedModule/theme/expertshare";
-import { moduleRouters } from "./bootstrap";
+import { appRouters } from "./bootstrap";
 import "./assets/scss/app.scss";
-import {
-    AuthContext,
-    logoutAction,
-} from "./Authentication/context/AuthContext";
+import { DashboardLayout } from "./layouts/DashboardLayout";
+import { AuthLayout } from "./layouts/AuthLayout";
+import { ModuleRouter } from "./models";
 
 const Home: FC<RouteComponentProps> = (): JSX.Element => {
-    const { state, dispatch } = React.useContext(AuthContext);
     const { t } = useTranslation();
-
-    const handleLogoutEvent = async () => {
-        await logoutAction(dispatch);
-    };
-    if (state.isAuthenticated) {
-        return (
-            <h2>
-                Hi {t("AppModule:global.name")} Authenticated
-                <button onClick={handleLogoutEvent}>Logout</button>
-            </h2>
-        );
-    }
-    navigate("/auth/login");
-    return <></>;
+    return <h2>Hi {t("AppModule:global.name")}</h2>;
 };
 
 const App = (): JSX.Element => {
+    const [authenticated] = useState(true);
+    const dashboardRoutes: ModuleRouter[] = appRouters.filter(
+        ({ layout }) => layout === "dashboard"
+    );
+    const authRoutes: ModuleRouter[] = appRouters.filter(
+        ({ layout }) => layout === "auth"
+    );
+
+    if (authenticated) {
+        return (
+            <DashboardLayout>
+                <Router>
+                    <Home default path="/" />
+                    {dashboardRoutes.map(({ RouterPlug, key, path }) => {
+                        return <RouterPlug key={key} path={path} />;
+                    })}
+                    <Redirect noThrow from="/auth/*" to="/" />
+                </Router>
+            </DashboardLayout>
+        );
+    }
     return (
-        <BootstrapProvider theme={defaultTheme}>
+        <AuthLayout>
             <Router>
-                <Home path="/" />
-                {moduleRouters.map((module) => {
-                    return module;
+                {authRoutes.map(({ RouterPlug, key, path }) => {
+                    return <RouterPlug key={key} path={path} />;
                 })}
             </Router>
-        </BootstrapProvider>
+            <Redirect noThrow from="/" to="/auth/login" />
+        </AuthLayout>
     );
 };
 

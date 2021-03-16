@@ -1,14 +1,21 @@
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
+import { AppIconMap } from "./AppIconMap";
 
 export interface AppIconProps {
-    src?: string;
+    name: string;
+    color?: string;
+    size?: number;
+    className?: string;
 }
 
-const Icon = styled.i<AppIconProps>`
-    ${(props) => props.src && `mask-image: url("${props.src}");`}
-`;
+const ITag = styled.i``;
 
-export const AppIcon: FunctionComponent<AppIconProps> = (props) => {
-    return <Icon className={"icon"} {...props} />;
+export const AppIcon: FunctionComponent<AppIconProps> = ({
+    name,
+    className = "",
+    ...props
+}) => {
+    const IconTag = AppIconMap[name] ?? ITag;
+    return <IconTag className={className} {...props}></IconTag>;
 };
