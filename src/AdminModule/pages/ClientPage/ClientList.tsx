@@ -6,6 +6,7 @@ import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 
 import { ICellRendererParams } from "ag-grid-community";
 import { Api, Client } from "../../../lib/API/Api";
+import "./style.scss";
 
 // TODO:: Add header => name=> ES-DOMAIN value=>  domain.name(react client) currently on
 
@@ -104,9 +105,8 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
                                         <div
                                             className="ag-theme-alpine"
                                             style={{
-                                                height: 800,
-                                                width: 1000,
-                                                padding: 100,
+                                                height: "100%",
+                                                width: "100%",
                                             }}
                                         >
                                             <AgGridReact

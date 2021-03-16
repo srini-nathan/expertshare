@@ -1,0 +1,280 @@
+//custom colors
+$input-bg-clr: #EBF5F5;
+$button-bg-clr: #36989C;
+$button-hover-bg-clr: #2E8285;
+$button-hover-fg-clr: #FFF;
+$button-fg-clr: #FFF;
+$button-border-color: transparent;
+$button-hover-border-color: transparent;
+$secondary-button-bg-clr: transparent;
+$secondary-button-hover-bg-clr: #36989C;
+$secondary-button-fg-clr: #36989C;
+$secondary-button-hover-fg-clr: #36989C;
+$secondary-button-hover-border-color: transparent;
+$secondary-button-border-color: #36989C;
+$profile-header-bg-clr: #EBF5F5;
+$input-border-raduis: 10px;
+$text-color: #5A5A5A;
+$input-fg-clr: #646464;
+$header-title-color: #808080;
+$info-section-background-overlay-first-color: #36999CAD;
+$info-section-background-overlay-second-color: #36889CA4;
+$info-section-fg-clr: #FFF;
+
+//client-edit colors
+$client-edit-labels-color: #051515;
+$client-edit-letter-counters-color: #051515;
+$client-edit-input-bg-color: #FCFCFC;
+$client-edit-input-placeholder: #051515;
+$client-edit-input-color: #051515;
+$client-edit-checkbox-checked-bg: #36989C;
+$client-edit-checkbox-not-checked-bg: #CCCACA;
+$client-edit-checkbox-toggler-color: #FCFCFC;
+$client-edit-bottom-separator-color: #E6E8E8;
+
+
+$secondary-button-bg-clr: #FFF;
+$secondary-button-fg-clr: #36989C;
+$secondary-button-border-color: #36989C;
+
+$secondary-button-hover-bg-clr: #36989C;
+$secondary-button-hover-fg-clr: #FFF;
+$secondary-button-hover-border-color: #36989C;
+
+$widget-background-color: #36999C15;
+$widget-border-color: #36999C;
+
+$questions-box-background: #F7FBFB;
+$questions-box-question-background: #EBF5F5;
+$questions-box-main-question-background: #FFFFFF50;
+$questions-box-main-question-left-border: #36989C20;
+
+$questions-box-main-answer-background: #36989C10;
+$questions-box-main-answer-left-border: #36989C20;
+
+
+$questions-box-indicator: #36989C;
+
+//bootstrap colors
+$border-radius: 5px;
+$border-color: #36989C;
+//label color
+$label-clr: #051515;
+
+//input color
+$input-bg: #FCFCFC;
+$input-clr: #051515;
+$input-border-clr: #A7A7A7;
+$input-border-width: 1px;
+$input-border-raduis: $border-radius;
+$input-padding: 14px 14px 12px;
+$input-placeholder-clr: #051515;
+$input-letter-counter-clr: #051515;
+
+$textarea-bg-clr: #FCFCFC;
+
+//checkbox colors
+$checkbox-checked-bg: #36989C;
+$checkbox-not-checked-bg: #D7EAEB;
+$checkbox-toggler-not-checked-clr: #98CBCC;
+$checkbox-toggler-checked-clr: #FCFCFC;
+$checkbox-block-bg-clr: #F7FBFB;
+$checkbox-block-border-radius: $border-radius;
+
+$divider-clr: #E6E8E8;
+$breadcrumbs-clr: #828A8A;
+
+$primary: #36989C;
+$secondary: #051515;
+
+$widget-tool-color: #30B7A7;
+
+$body-color: $primary;
+
+$font-family-sans-serif: "Spartan";
+$font-family-sans-serif-regular: "SpartanReqular";
+$font-family-sans-serif-semibold: "SpartanSemiBold";
+$font-family-sans-serif-bold: "SpartanBold";
+$font-family-sans-serif-medium: "SpartanMedium";
+
+
+.ag-theme-alpine {
+
+    .ag-sort-ascending-icon,
+    .ag-sort-descending-icon {
+        position: relative;
+        display: block !important;
+        color: $primary !important;
+
+        &.ag-hidden {
+            opacity: .6;
+        }
+
+    }
+
+    .ag-sort-ascending-icon:not(.ag-hidden) {
+        & + .ag-hidden {
+            color: $primary !important;
+        }
+    }
+
+    .ag-sort-descending-icon:not(.ag-hidden) {
+        & + .ag-hidden {
+            color: $primary !important;
+        }
+
+    }
+
+    .ag-hidden {
+        color: $secondary !important;
+    }
+
+    .ag-icon-desc {
+        position: absolute;
+        bottom: -12px;
+        left: -6px;
+
+        &::before {
+            content: "\f128" !important;
+        }
+    }
+
+    .ag-icon-asc {
+        position: absolute;
+        top: -12px;
+        left: 0;
+
+        &::before {
+            content: "\f12b" !important;
+        }
+    }
+
+    .ag-icon {
+        // required because Font Awesome uses bold for its icons
+        font-weight: bold;
+    }
+
+    .ag-root-wrapper {
+        border: 0 !important;
+    }
+
+    .ag-center-cols-container {
+        .ag-row {
+            height: 60px !important;
+            margin: 10px 0;
+            background-color: $widget-background-color;
+            border-bottom: unset;
+            border-radius: $border-radius;
+
+            .ag-cell {
+                font-family: $font-family-sans-serif;
+                font-size: 14px;
+                line-height: 60px;
+
+                a {
+                    width: 44px;
+                    height: 44px;
+                    text-decoration: none;
+
+                }
+            }
+
+            .ag-cell:first-child {
+                font-weight: 700;
+            }
+        }
+    }
+
+    .ag-header {
+        background: unset !important;
+        border-bottom: unquote("1px"+ " solid "+ $secondary + "20") !important;
+
+        .ag-header-cell {
+            .ag-header-cell-label {
+                font-family: $font-family-sans-serif;
+                font-size: 12px;
+                font-weight: 400;
+                opacity: .6;
+
+            }
+        }
+
+        .ag-header-cell-sorted-asc,
+        .ag-header-cell-sorted-desc {
+            .ag-header-cell-label {
+                opacity: 1;
+            }
+        }
+
+    }
+}
+
+.search-inpt {
+    svg {
+        position: absolute;
+        top: 16px;
+        left: 20px;
+    }
+
+    input {
+        padding-left: 30px;
+    }
+
+    input,
+    input::input-placeholder {
+        height: 37px;
+        font-size: 13px;
+        line-height: 40px;
+    }
+}
+
+.table-responsive {
+    min-height: 65vh;
+}
+
+
+.pagination {
+
+    .page-item {
+        span {
+            font-family: $font-family-sans-serif;
+            font-weight: 700;
+            line-height: 55px;
+            color: $secondary;
+            opacity: .3;
+        }
+
+        .page-link {
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            margin: 5px;
+            font-family: $font-family-sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 44px;
+            text-align: center;
+            vertical-align: middle;
+            border: none;
+
+            &.active {
+                color: $button-fg-clr;
+                background-color: $button-bg-clr;
+
+            }
+
+        }
+    }
+
+    .page-item:first-child,
+    .page-item:last-child {
+        a {
+            line-height: 40px;
+
+            svg {
+                width: 44px;
+                height: 38px;
+            }
+        }
+    }
+}
