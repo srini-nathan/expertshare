@@ -27,7 +27,6 @@ const LoadableInfoPanel = AppLoadable(
     }
 );
 
-
 type Inputs = {
     email: string;
     password: string;

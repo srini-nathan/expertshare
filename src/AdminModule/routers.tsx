@@ -14,7 +14,9 @@ export const routers: ModuleRouter[] = [
                     <IndexPage default path={"/"}></IndexPage>
                     <DesignPage path={"/design"}></DesignPage>
                     <SettingPage path={"/settings"}></SettingPage>
-                    <TranslationEditor path={"/translation"}></TranslationEditor>
+                    <TranslationEditor
+                        path={"/translation"}
+                    ></TranslationEditor>
                 </Router>
             );
         },
