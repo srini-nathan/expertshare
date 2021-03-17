@@ -1,5 +1,5 @@
-import React, { FC, useState } from "react";
-import { Redirect, navigate, RouteComponentProps, Router } from "@reach/router";
+import React, { FC } from "react";
+import { Redirect, RouteComponentProps, Router } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { appRouters } from "./bootstrap";
 import "./assets/scss/app.scss";
@@ -12,26 +12,23 @@ import {
 } from "./Authentication/context/AuthContext";
 
 const Home: FC<RouteComponentProps> = (): JSX.Element => {
-    const { state, dispatch } = React.useContext(AuthContext);
+    const { dispatch } = React.useContext(AuthContext);
     const { t } = useTranslation();
 
     const handleLogoutEvent = async () => {
         await logoutAction(dispatch);
     };
-    if (state.isAuthenticated) {
-        return (
-            <h2>
-                Hi {t("AppModule:global.name")} Authenticated
-                <button onClick={handleLogoutEvent}>Logout</button>
-            </h2>
-        );
-    }
-    navigate("/auth/login");
-    return <></>;
+
+    return (
+        <h2>
+            Hi {t("AppModule:global.name")} Authenticated
+            <button onClick={handleLogoutEvent}>Logout</button>
+        </h2>
+    );
 };
 
 const App = (): JSX.Element => {
-    const [authenticated] = useState(true);
+    const { state } = React.useContext(AuthContext);
     const dashboardRoutes: ModuleRouter[] = appRouters.filter(
         ({ layout }) => layout === "dashboard"
     );
@@ -39,7 +36,7 @@ const App = (): JSX.Element => {
         ({ layout }) => layout === "auth"
     );
 
-    if (authenticated) {
+    if (state.isAuthenticated) {
         return (
             <DashboardLayout>
                 <Router>
