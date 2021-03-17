@@ -3,6 +3,7 @@ import {
     REACT_APP_CLIENT_RESOURCE_END_POINT,
     REACT_APP_CONTAINER_RESOURCE_END_POINT,
     REACT_APP_LOGIN_END_POINT,
+    REACT_APP_PACKAGE_RESOURCE_END_POINT,
 } from "../../Settings/Config/constants";
 
 export interface BaseEntity {
@@ -33,6 +34,10 @@ export interface Client extends BaseEntity {
     notes: string;
 }
 
+export interface Package {
+    id: number;
+    packageKey: string;
+}
 export interface Token {
     token: string;
 }
@@ -95,6 +100,13 @@ export class Api {
         const res = await axios.put<Client>(
             `${REACT_APP_CLIENT_RESOURCE_END_POINT}/${id}`,
             { name, notes }
+        );
+        return res.data;
+    }
+
+    static async getPackages(): Promise<Package[]> {
+        const res = await axios.get<Package[]>(
+            `${REACT_APP_PACKAGE_RESOURCE_END_POINT}`
         );
         return res.data;
     }

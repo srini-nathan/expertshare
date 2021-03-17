@@ -5,7 +5,7 @@ import { AgGridReact } from "ag-grid-react";
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 
 // import { ICellRendererParams } from "ag-grid-community";
-import { Api, Client } from "../../../lib/API/Api";
+import { Api, Client, Package } from "../../../lib/API/Api";
 import "./style.scss";
 
 // TODO:: Add header => name=> ES-DOMAIN value=>  domain.name(react client) currently on
@@ -159,16 +159,20 @@ const BtnCellRenderer = () => {
 
 export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     const [clients, setClients] = React.useState<Client[]>([]);
+    const [packages, setPackages] = React.useState<Package[]>([]);
 
     useEffect(() => {
         async function fetchClients() {
             const fetchedClients = await Api.getClients(1);
+            const fetchedPackages = await Api.getPackages();
             setClients(fetchedClients);
+            setPackages(fetchedPackages);
         }
 
         fetchClients().then();
         return () => {};
     }, []);
+    console.log(packages);
 
     if (clients.length === 0) {
         return <div>Loading!!</div>;
