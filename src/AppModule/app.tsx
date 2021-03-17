@@ -6,6 +6,7 @@ import "./assets/scss/app.scss";
 import { DashboardLayout } from "./layouts/DashboardLayout";
 import { AuthLayout } from "./layouts/AuthLayout";
 import { ModuleRouter } from "./models";
+
 import {
     AuthContext,
     logoutAction,

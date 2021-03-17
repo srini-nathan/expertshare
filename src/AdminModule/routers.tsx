@@ -1,6 +1,13 @@
 import React from "react";
 import { Router } from "@reach/router";
-import { IndexPage, DesignPage, SettingPage, TranslationEditor } from "./pages";
+import {
+    IndexPage,
+    DesignPage,
+    SettingPage,
+    TranslationEditor,
+    ClientList,
+    ClientAddEdit,
+} from "./pages";
 import { ModuleRouter } from "../AppModule/models";
 
 export const routers: ModuleRouter[] = [
@@ -17,6 +24,10 @@ export const routers: ModuleRouter[] = [
                     <TranslationEditor
                         path={"/translation"}
                     ></TranslationEditor>
+                    <TranslationEditor path={"/translation"} />
+                    <ClientList path={"/client"} />
+                    <ClientAddEdit path={"/client/new"} />
+                    <ClientAddEdit path={"/client/:id"} />
                 </Router>
             );
         },

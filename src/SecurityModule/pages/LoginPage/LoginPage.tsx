@@ -8,6 +8,7 @@ import {
     AppSocialLoginBtn,
     AppSocialLoginBtnType,
 } from "../../components/AppSocialLoginBtn";
+
 import { AppLoadable } from "../../../AppModule/components/AppLoadable/AppLoadable";
 import {
     AuthContext,
@@ -44,7 +45,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
             <div className="row">
                 <div className="col-md-8 col-sm-8 col-xs-12 d-flex vh-100 background-main">
                     <div className="company-login-form m-auto">
-                        <div className="company-logo"></div>
+                        <div className="company-logo" />
                         <p
                             className={
                                 "text-muted my-4 text-center font-weight-light"

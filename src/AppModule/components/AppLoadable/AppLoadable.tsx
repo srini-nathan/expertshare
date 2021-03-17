@@ -21,9 +21,7 @@ export const AppLoadable = (
     return loadable(
         () => wait(pMinDelay(ComponentLoadable, minDelay), timeout),
         {
-            fallback: (
-                <AppLoadableFallback {...fallbackProps}></AppLoadableFallback>
-            ),
+            fallback: <AppLoadableFallback {...fallbackProps} />,
         }
     );
 };
