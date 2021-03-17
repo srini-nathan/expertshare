@@ -4,17 +4,16 @@ import { useForm } from "react-hook-form";
 import { Container } from "react-bootstrap";
 import "./styles.scss";
 import { AppButton } from "../../../AppModule/components/AppButton";
-import { AppSocialLoginBtn, AppSocialLoginBtnType } from "../../components";
+import {
+    AppSocialLoginBtn,
+    AppSocialLoginBtnType,
+} from "../../components/AppSocialLoginBtn";
+
 import { AppLoadable } from "../../../AppModule/components/AppLoadable/AppLoadable";
 import {
     AuthContext,
     loginAction,
 } from "../../../AppModule/Authentication/context/AuthContext";
-
-type Inputs = {
-    email: string;
-    password: string;
-};
 
 const LoadableInfoPanel = AppLoadable(
     import(/* webpackChunkName: "InfoPanel" */ "../../components/InfoPanel"),
@@ -28,6 +27,11 @@ const LoadableInfoPanel = AppLoadable(
         },
     }
 );
+
+type Inputs = {
+    email: string;
+    password: string;
+};
 
 export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { register, handleSubmit } = useForm<Inputs>();

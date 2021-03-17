@@ -21,6 +21,9 @@ export const routers: ModuleRouter[] = [
                     <IndexPage default path={"/"}></IndexPage>
                     <DesignPage path={"/design"}></DesignPage>
                     <SettingPage path={"/settings"}></SettingPage>
+                    <TranslationEditor
+                        path={"/translation"}
+                    ></TranslationEditor>
                     <TranslationEditor path={"/translation"} />
                     <ClientList path={"/client"} />
                     <ClientAddEdit path={"/client/new"} />

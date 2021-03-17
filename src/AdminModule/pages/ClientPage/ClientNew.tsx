@@ -2,8 +2,8 @@ import React, { FC } from "react";
 import { RouteComponentProps, useNavigate } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { Container } from "react-bootstrap";
-import { Api } from "../../../lib/API/Api";
 import { AppButton } from "../../../AppModule/components/AppButton";
+import { Api } from "../../../lib/API/Api";
 
 // TODO: define a naming convention for it
 
