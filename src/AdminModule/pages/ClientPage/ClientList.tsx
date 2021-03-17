@@ -172,8 +172,8 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
         fetchClients().then();
         return () => {};
     }, []);
-    console.log(packages);
 
+    console.log(packages);
     if (clients.length === 0) {
         return <div>Loading!!</div>;
     }

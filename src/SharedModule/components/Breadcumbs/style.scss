@@ -1,0 +1,12 @@
+@import "./../../assets/scss/variables";
+
+.theme-breadcrumbs-clr {
+    color: $breadcrumbs-clr;
+}
+
+.breadcrumbs {
+    margin-bottom: 29px;
+    font-family: $font-family-sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+}
