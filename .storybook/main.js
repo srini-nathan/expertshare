@@ -1,3 +1,4 @@
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 module.exports = {
   "stories": [
     "../src/**/*.stories.mdx",
@@ -9,21 +10,19 @@ module.exports = {
     "@storybook/preset-create-react-app",
     "@storybook/preset-scss"
   ],
-  webpackFinal: async config => {
+  webpackFinal: async (config, { configType }) => {
     config.module.rules.push({
-      test: /\.scss$/,
+      test: /.*\.(?:le|c|sc)ss$/,
       loaders: [
-        require.resolve('style-loader'),
-        {
-          loader: require.resolve('css-loader'),
-          options: {
-            importLoaders: 1,
-            modules: true,
-          },
-        },
-        require.resolve('sass-loader'),
+        'style-loader',
+        'css-loader',
+        'sass-loader',
       ]
     });
+    config.plugins.push(new MiniCssExtractPlugin({
+      filename: '[name]-[contenthash].css',
+      chunkFilename: '[id]-[contenthash].css',
+    }));
     return config;
   },
 }
