@@ -14,7 +14,6 @@ import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHead
 import { TextInput } from "../../../SharedModule/components/TextInput/TextInput";
 import { CustomCheckBox } from "../../../SharedModule/components/CustomCheckBox/CustomCheckBox";
 import { ClientApi } from "../../apis/ClientApi";
-import { PackageApi } from "../../apis/PackageApi";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is Required"),
@@ -121,7 +120,6 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         message={errors.name?.message}
                                         placeholder={"Please Enter ..."}
                                     />
-
                                     <CustomCheckBox
                                         name={"activate"}
                                         label={"Active"}

@@ -172,6 +172,7 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
         return () => {};
     }, []);
 
+    console.log(packages);
     if (clients.length === 0) {
         return <div>Loading!!</div>;
     }
