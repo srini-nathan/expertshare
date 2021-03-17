@@ -9,6 +9,10 @@ import {
     AppSocialLoginBtnType,
 } from "../../components/AppSocialLoginBtn";
 import { AppLoadable } from "../../../AppModule/components/AppLoadable/AppLoadable";
+import {
+    AuthContext,
+    loginAction,
+} from "../../../AppModule/Authentication/context/AuthContext";
 
 const LoadableInfoPanel = AppLoadable(
     import(/* webpackChunkName: "InfoPanel" */ "../../components/InfoPanel"),
@@ -22,10 +26,7 @@ const LoadableInfoPanel = AppLoadable(
         },
     }
 );
-import {
-    AuthContext,
-    loginAction,
-} from "../../../AppModule/Authentication/context/AuthContext";
+
 
 type Inputs = {
     email: string;
