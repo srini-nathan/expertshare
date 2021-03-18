@@ -4,7 +4,6 @@ import { AgGridReact } from "ag-grid-react";
 
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 import { Search } from "react-feather";
-// import { Pagination } from "../../../SharedModule/components/Pagination/Pagination";
 // import { ICellRendererParams } from "ag-grid-community";
 import { Api, Client } from "../../../lib/API/Api";
 import "./style.scss";
@@ -172,7 +171,6 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
         return () => {};
     }, []);
 
-    console.log(packages);
     if (clients.length === 0) {
         return <div>Loading!!</div>;
     }
@@ -183,9 +181,6 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     // const onPageChange = (pageNumber: number) => {
     //     console.log(pageNumber);
     // };
-    const onGridReady = (params: any) => {
-        params.api.setRowCount(1000);
-    };
     const datasource = {
         getRows(params: any) {
             // console.log(JSON.stringify(params.request, null, 1));
@@ -294,12 +289,9 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
                                                     rowHeight: 70,
                                                     serverSideDatasource: datasource,
                                                 }}
-                                                onGridReady={onGridReady}
-                                                pagination={true}
-                                                // rowData={clients}
-                                                // pagination={true}
-                                                // suppressPaginationPanel={false}
-                                                // paginationPageSize={10}
+                                                rowData={clients}
+                                                suppressPaginationPanel={true}
+                                                paginationPageSize={10}
                                                 columnDefs={columnDef}
                                             />
                                         </div>

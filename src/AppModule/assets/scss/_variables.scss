@@ -136,3 +136,27 @@ $body-color: $primary;
 $font-family-sans-serif: "Spartan";
 $widget-background-color: #36999C15;
 $widget-border-color: #36999C;
+
+// bootstrap color variable overwriting
+$primary: #36989C !default;
+$secondary: #051515;
+$danger: #C31F27 !default;
+
+// bootstrap general variable overwriting
+$border-radius: 5px !default;
+$font-family-sans-serif: "Sparta" !default;
+
+// bootstrap input variable overwriting
+$input-color: $text-color;
+$input-bg: $widget-bg;
+$input-line-height: 1.15 !default;
+// use this variable to apply input forms padding independently
+$input-padding: .85rem .75rem .65rem .75rem !default;
+// use this variable to calculate input forms line-height
+$input-padding-x: .75rem !default;
+$input-padding-y: .75rem !default;
+
+// bootstrap button variable overwriting
+$btn-line-height: 1.15rem !default;
+$btn-padding-x: .75rem !default;
+$btn-padding-y: .75rem !default;
