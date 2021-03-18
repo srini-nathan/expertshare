@@ -1,3 +1,12 @@
+
+$input-bg-clr: #EBF5F5;
+$button-bg-clr: #36989C;
+$button-hover-bg-clr: #2E8285;
+$button-hover-fg-clr: #FFF;
+$button-fg-clr: #FFF;
+$button-border-color: transparent;
+$button-hover-border-color: transparent;
+
 // custom global variable
 $widget-bg: #EBF5F5;
 $text-color: #5A5A5A;
@@ -5,6 +14,7 @@ $bit-small-font-size: 90%;
 
 // bootstrap color variable overwriting
 $primary: #36989C !default;
+$secondary: #051515;
 $danger: #C31F27 !default;
 
 // bootstrap general variable overwriting

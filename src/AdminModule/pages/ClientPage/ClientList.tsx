@@ -3,7 +3,8 @@ import { RouteComponentProps, Link } from "@reach/router";
 import { AgGridReact } from "ag-grid-react";
 
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
-
+import { Search } from "react-feather";
+import { Pagination } from "../../../SharedModule/components/Pagination/Pagination";
 // import { ICellRendererParams } from "ag-grid-community";
 import { Api, Client, Package } from "../../../lib/API/Api";
 import "./style.scss";
@@ -177,6 +178,10 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     if (clients.length === 0) {
         return <div>Loading!!</div>;
     }
+
+    const onPageChange = (pageNumber: number) => {
+        console.log(pageNumber);
+    };
     const columnDef: ColDef[] = [
         {
             headerName: "Client",
@@ -201,7 +206,7 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
         <div className="theme-primary-clr theme-primary-font">
             <div className="container-fluid p-0 mb-5">
                 <div className="row m-0">
-                    <div className="col-md-9 col-xl-10">
+                    <div className="col-md-12">
                         <div className="row">
                             <div className="nav-header mt-5 col-12">
                                 <div className="row">
@@ -228,7 +233,7 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
                                                         className="form-control theme-input theme-border-radius"
                                                         placeholder="Quick Search"
                                                     />
-                                                    <i data-feather="search"></i>
+                                                    <Search />
                                                 </form>
                                             </div>
                                             <div className="col-md-2 m-auto">
@@ -257,7 +262,7 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
                                                     rowHeight: 70,
                                                 }}
                                                 rowData={clients}
-                                                pagination={true}
+                                                suppressPaginationPanel={true}
                                                 paginationPageSize={10}
                                                 columnDefs={columnDef}
                                             />
@@ -265,6 +270,12 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
                                     </div>
                                 </div>
                             </div>
+                            <Pagination
+                                totalRows={255}
+                                currentPage={1}
+                                pageLimit={10}
+                                onPageChange={onPageChange}
+                            />
                         </div>
                     </div>
                 </div>
