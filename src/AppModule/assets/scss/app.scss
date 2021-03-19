@@ -1,0 +1,10 @@
+@import "./variables";
+@import "./fonts";
+@import "../../../../node_modules/bootstrap/scss/bootstrap";
+@import "./bootstrap_extention";
+
+// typography
+.bit-small {
+    @include font-size($bit-small-font-size);
+    font-weight: $font-weight-normal;
+}
