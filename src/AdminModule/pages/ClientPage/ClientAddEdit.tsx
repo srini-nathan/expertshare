@@ -120,6 +120,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         message={errors.name?.message}
                                         placeholder={"Please Enter ..."}
                                     />
+
                                     <CustomCheckBox
                                         name={"activate"}
                                         label={"Active"}

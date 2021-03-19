@@ -32,6 +32,7 @@ export const CustomCheckBox: FC<CustomCheckBoxProps> = ({
                 return "custom-checkbox theme-checkbox-block-bg-clr theme-checkbox-block-border-radius d-flex flex-column justify-content-end h-100 flex-sm-row text-center justify-content-sm-between align-items-center";
         }
     };
+
     return (
         <div className="col-6 col-xl-4 pr-xl-5 mb-4">
             <div className={renderClass()}>
