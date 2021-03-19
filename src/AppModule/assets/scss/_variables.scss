@@ -5,7 +5,9 @@ $button-hover-fg-clr: #FFF;
 $button-fg-clr: #FFF;
 $button-border-color: transparent;
 $button-hover-border-color: transparent;
-
+$input-border-clr: #A7A7A7;
+$input-bg: #FFFFFF;
+$input-clr: #051515;
 // custom global variable
 $widget-bg: #EBF5F5;
 $text-color: #5A5A5A;
@@ -34,3 +36,11 @@ $input-padding-y: .75rem !default;
 $btn-line-height: 1.15rem !default;
 $btn-padding-x: .75rem !default;
 $btn-padding-y: .75rem !default;
+
+
+$checkbox-checked-bg: #36989C;
+$checkbox-not-checked-bg: #D7EAEB;
+$checkbox-toggler-not-checked-clr: #98CBCC;
+$checkbox-toggler-checked-clr: #FCFCFC;
+$checkbox-block-bg-clr: #F7FBFB;
+$checkbox-block-border-radius: $border-radius;

@@ -12,6 +12,7 @@ import "./client_add_edit_style.scss";
 import { Api, Client } from "../../../lib/API/Api";
 import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHeader";
 import { TextInput } from "../../../SharedModule/components/TextInput/TextInput";
+import { CustomCheckBox } from "../../../SharedModule/components/CustomCheckBox/CustomCheckBox";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is Required"),
@@ -110,21 +111,29 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         placeholder={"Please Enter ..."}
                                     />
 
-                                    <div className="col-12 col-sm-3 pr-xl-5 pl-xl-3">
-                                        <div className="custom-checkbox d-flex flex-column align-items-center align-items-sm-start mb-3">
-                                            <div className="light-label theme-label-clr mb-1">
-                                                Active
-                                            </div>
-                                            <input
-                                                className="d-none theme-checkbox-bg-clr"
-                                                type="checkbox"
-                                                id="edit-client-design"
-                                                name="edit-client-design"
-                                            />
-                                            <label
-                                                className="position-relative mb-0"
-                                                htmlFor="edit-client-design"
-                                            ></label>
+                                    <CustomCheckBox
+                                        name={"activate"}
+                                        label={"Active"}
+                                        labelPosition={"top"}
+                                    />
+                                </div>
+                                <div className="row mx-0 mb-2">
+                                    <div className="col-12 mt-2 px-0 pl-xl-3">
+                                        <div className="col-12 light-label theme-label-clr pb-1 mb-3">
+                                            Default Packages
+                                        </div>
+                                    </div>
+                                    <div className="edit-client-packages w-100">
+                                        <div className="d-flex flex-wrap">
+                                            {[1, 2, 3, 4, 5, 6, 7].map((e) => {
+                                                return (
+                                                    <CustomCheckBox
+                                                        name={e}
+                                                        label={"Custom Design"}
+                                                        labelPosition={"left"}
+                                                    />
+                                                );
+                                            })}
                                         </div>
                                     </div>
                                 </div>
