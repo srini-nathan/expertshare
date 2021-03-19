@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { FieldElement, Ref } from "react-hook-form/dist/types/fields";
 import { RegisterOptions } from "react-hook-form/dist/types/validator";
+import "./style.scss";
 
 export interface TextInputProps {
     label: string;
