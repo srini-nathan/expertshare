@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import "./client_add_edit_style.scss";
-import { Api, Client } from "../../../lib/API/Api";
+import { Api, Client, Package } from "../../../lib/API/Api";
 import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHeader";
 import { TextInput } from "../../../SharedModule/components/TextInput/TextInput";
 import { CustomCheckBox } from "../../../SharedModule/components/CustomCheckBox/CustomCheckBox";
@@ -31,6 +31,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const { id } = useParams();
     const isAddMode = !id;
     const navigate = useNavigate();
+    const [packages, setPackages] = React.useState<Package[]>([]);
     const {
         register,
         handleSubmit,
@@ -52,6 +53,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                 setClientFetched(true);
             });
         }
+        Api.getPackages().then((res) => setPackages(res));
     }, [id, isAddMode, clientFetched, setValue]);
 
     async function createClient({ name, notes }: ClientFormType) {
@@ -125,10 +127,10 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                     </div>
                                     <div className="edit-client-packages w-100">
                                         <div className="d-flex flex-wrap">
-                                            {[1, 2, 3, 4, 5, 6, 7].map((e) => {
+                                            {packages.map((e) => {
                                                 return (
                                                     <CustomCheckBox
-                                                        name={e}
+                                                        name={e.packageKey}
                                                         label={"Custom Design"}
                                                         labelPosition={"left"}
                                                     />
