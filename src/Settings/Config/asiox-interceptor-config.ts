@@ -12,8 +12,9 @@ const setupAxiosInterceptors=(onUnauthenticated: () => void)=> {
     const token = localStorage.getItem(AUTH_TOKEN_KEY);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+
     }
-    // config.headers.accept = "application/json";
+    config.headers.accept = "application/json";
     //config.headers.origin="http://localhost:3000"
     // ACCEPT==SPECIFIC==> Header then we will be able to send (otherwise cors issue will be kicked in)
     return config;
