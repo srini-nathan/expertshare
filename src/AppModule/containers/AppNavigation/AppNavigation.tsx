@@ -1,26 +1,34 @@
 import React, { FC } from "react";
 import { ListGroup } from "react-bootstrap";
-import styled from "styled-components";
 import {
     AppNavigationItem,
     AppNavigationItemProps,
 } from "../../components/AppNavigationItem";
-import theme from "../../themes";
+import "./assets/scss/style.scss";
 
 interface AppNavigationProps {
     items: AppNavigationItemProps[];
 }
 
-const { navigation } = theme;
-
-const Wrapper = styled.aside`
-    background-color: ${navigation.bgColor};
-    color: ${navigation.fgColor};
-`;
-
 const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     return (
-        <Wrapper className={"min-vh-100 position-fixed"}>
+        <aside className={"left-sidebar d-block navbar-expand-md sidebar p-0"}>
+            <div className="m-0 mb-md-4">
+                <div className="main-logo-container p-md-4">
+                    <a href="#" className="main-logo col-xl-9"></a>
+                </div>
+                <button
+                    className="navbar-toggler"
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+                >
+                    <span className="navbar-toggler-icon icon icon-menu"></span>
+                </button>
+            </div>
             <ListGroup>
                 {items.map(({ label, path, icon }) => {
                     return (
@@ -33,7 +41,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                     );
                 })}
             </ListGroup>
-        </Wrapper>
+        </aside>
     );
 };
 
