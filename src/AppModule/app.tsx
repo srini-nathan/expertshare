@@ -2,10 +2,12 @@ import React, { FC } from "react";
 import { Redirect, RouteComponentProps, Router } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { appRouters } from "./bootstrap";
-import "./assets/scss/app.scss";
 import { DashboardLayout } from "./layouts/DashboardLayout";
 import { AuthLayout } from "./layouts/AuthLayout";
 import { ModuleRouter } from "./models";
+
+import "./assets/scss/bootstrap.scss";
+import "./assets/scss/main.scss";
 
 import {
     AuthContext,

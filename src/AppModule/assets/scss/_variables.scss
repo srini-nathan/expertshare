@@ -1,4 +1,17 @@
+// Variables
+//
+// Variables should follow the `$component-state-property-size` formula for
+// consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
+
+// Use abbreviations as follow
+//  background => bg
+//  foreground => fg
+//  button => btn
+//  color => clr
+
+//custom colors
 $input-bg-clr: #EBF5F5;
+
 $button-bg-clr: #36989C;
 $button-hover-bg-clr: #2E8285;
 $button-hover-fg-clr: #FFF;
@@ -6,40 +19,103 @@ $button-fg-clr: #FFF;
 $button-border-color: transparent;
 $button-hover-border-color: transparent;
 
-$input-border-clr: #A7A7A7;
-$input-bg: #FFFFFF;
-$input-clr: #051515;
-
 // custom global variable
 $widget-bg: #EBF5F5;
 $text-color: #5A5A5A;
 $bit-small-font-size: 90%;
 
-// bootstrap color variable overwriting
-$primary: #36989C !default;
-$secondary: #051515;
-$danger: #C31F27 !default;
+$btn-bg-clr: #36989C;
+$btn-hover-bg-clr: #2E8285;
+$btn-hover-fg-clr: #FFF;
+$btn-fg-clr: #FFF;
+$btn-border-clr: transparent;
+$btn-hover-border-clr: transparent;
+$btn-secondary-bg-clr: transparent;
+$btn-secondary-hover-bg-clr: #36989C;
+$btn-secondary-fg-clr: #36989C;
+$btn-secondary-hover-fg-clr: #36989C;
+$btn-secondary-hover-border-clr: transparent;
+$btn-secondary-border-clr: #36989C;
+$profile-header-bg-clr: #EBF5F5;
+$input-border-radius: 10px;
+$text-clr: #5A5A5A;
+$input-fg-clr: #646464;
+$header-title-clr: #808080;
+$info-section-overlay-start-bg-clr: #36999CAD;
+$info-section-overlay-stop-bg-clr: #36889CA4;
+$info-section-fg-clr: #FFF;
+$btn-details-like: #FFF;
+$btn-bg-clr-dislike: #E43124;
+$btn-fg-clr-dislike: #E43124;
+$scrollbar-bg-clr: #FFF;
 
-// bootstrap general variable overwriting
-$border-radius: 5px !default;
-$font-family-sans-serif: "Sparta" !default;
+//social-icon-bg-color
+$fb-bg-clr: #3B5998;
+$tw-bg-clr: #03A9F4;
+$in-bg-clr: #0E76A8;
+$xe-bg-clr: #00796B;
+$cb-bg-clr: #A54387;
 
-// bootstrap input variable overwriting
-$input-color: $text-color;
-$input-bg: $widget-bg;
-$input-line-height: 1.15 !default;
-// use this variable to apply input forms padding independently
-$input-padding: .85rem .75rem .65rem .75rem !default;
-// use this variable to calculate input forms line-height
-$input-padding-x: .75rem !default;
-$input-padding-y: .75rem !default;
+//client-edit colors
+$client-edit-labels-color: #051515;
+$client-edit-letter-counters-color: #051515;
+$client-edit-input-bg-color: #FCFCFC;
+$client-edit-input-placeholder: #051515;
+$client-edit-input-color: #051515;
+$client-edit-checkbox-checked-bg: #36989C;
+$client-edit-checkbox-not-checked-bg: #CCCACA;
+$client-edit-checkbox-toggler-color: #FCFCFC;
+$client-edit-bottom-separator-color: #E6E8E8;
 
-// bootstrap button variable overwriting
-$btn-line-height: 1.15rem !default;
-$btn-padding-x: .75rem !default;
-$btn-padding-y: .75rem !default;
+//sidebar colors
+$sidebar-bg-clr: #E5F0F0;
+$sidebar-hover-bg-clr: #36999C10;
+$sidebar-fg-clr: #051515;
+$sidebar-hover-fg-clr: #051515;
+$sidebar-icon-clr: #36989C;
+$sidebar-hover-icon-clr: #36989C;
+$sidebar-menu-extra-bg-clr: #D4EBEA;
+
+$btn-secondary-bg-clr: #FFF;
+$btn-secondary-hover-bg-clr: #36989C;
+$btn-secondary-fg-clr: #36989C;
+$btn-secondary-hover-fg-clr: #FFF;
+$btn-secondary-border-clr: #36989C;
+$btn-secondary-hover-border-clr: #36989C;
+
+$widget-bg-color: #36999C15;
+$widget-border-clr: #36999C;
+
+$questions-box-bg-clr: #F7FBFB;
+$questions-box-question-bg-clr: #EBF5F5;
+$questions-box-question-main-bg-clr: #FFFFFF50;
+$questions-box-question-main-border-left-clr: #36989C20;
+$questions-box-answer-main-bg-clr: #36989C10;
+$questions-box-answer-main-border-left-clr: #36989C20;
 
 
+$questions-box-indicator: #36989C;
+
+//bootstrap colors
+$border-radius: 5px;
+$border-color: #36989C;
+
+//label color
+$label-clr: #051515;
+
+//input color
+$input-bg: #FCFCFC;
+$input-clr: #051515;
+$input-border-clr: #A7A7A7;
+$input-border-width: 1px;
+$input-border-radius: $border-radius;
+$input-padding: 14px 14px 12px;
+$input-placeholder-clr: #051515;
+$input-letter-counter-clr: #051515;
+
+$textarea-bg-clr: #FCFCFC;
+
+//checkbox colors
 $checkbox-checked-bg: #36989C;
 $checkbox-not-checked-bg: #D7EAEB;
 $checkbox-toggler-not-checked-clr: #98CBCC;
@@ -47,3 +123,14 @@ $checkbox-toggler-checked-clr: #FCFCFC;
 $checkbox-block-bg-clr: #F7FBFB;
 $checkbox-block-border-radius: $border-radius;
 
+$divider-clr: #E6E8E8;
+$breadcrumbs-clr: #828A8A;
+
+$primary: #36989C;
+$secondary: #051515;
+
+$widget-tool-color: #30B7A7;
+
+$body-color: $primary;
+
+$font-family-sans-serif: "Spartan";
