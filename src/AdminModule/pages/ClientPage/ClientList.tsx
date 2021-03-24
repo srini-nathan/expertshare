@@ -6,7 +6,7 @@ import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 import { Search } from "react-feather";
 import { Pagination } from "../../../SharedModule/components/Pagination/Pagination";
 // import { ICellRendererParams } from "ag-grid-community";
-import { Api, Client, Package } from "../../../lib/API/Api";
+import { Api, Client } from "../../../lib/API/Api";
 import "./style.scss";
 
 // TODO:: Add header => name=> ES-DOMAIN value=>  domain.name(react client) currently on
@@ -160,21 +160,23 @@ const BtnCellRenderer = () => {
 
 export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     const [clients, setClients] = React.useState<Client[]>([]);
-    const [packages, setPackages] = React.useState<Package[]>([]);
+    // const [packages, setPackages] = React.useState<Package[]>([]);
 
     useEffect(() => {
         async function fetchClients() {
             const fetchedClients = await Api.getClients(1);
-            const fetchedPackages = await Api.getPackages();
+            // const fetchedPackages = await Api.getPackages();
             setClients(fetchedClients);
-            setPackages(fetchedPackages);
+            //      setPackages(fetchedPackages);
+
+            const result = await Api.getClientHydra(1);
+            console.log(result);
         }
 
         fetchClients().then();
         return () => {};
     }, []);
 
-    console.log(packages);
     if (clients.length === 0) {
         return <div>Loading!!</div>;
     }

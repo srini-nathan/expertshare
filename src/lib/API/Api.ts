@@ -3,6 +3,7 @@ import {
     REACT_APP_CLIENT_RESOURCE_END_POINT,
     REACT_APP_CONTAINER_RESOURCE_END_POINT,
     REACT_APP_LOGIN_END_POINT,
+    REACT_APP_ME_END_POINT,
     REACT_APP_PACKAGE_RESOURCE_END_POINT,
 } from "../../Settings/Config/constants";
 
@@ -12,10 +13,19 @@ export interface BaseEntity {
     updatedAt: string;
 }
 export interface UserProfile {
-    username: string;
-    roles: string[];
-    permissions: string[];
+    id: number;
     email: string;
+    firstName: string;
+    lastName: string;
+    locale: string;
+    client: string;
+    roles: string[];
+    status: string;
+}
+
+export interface HydraResponse<T> {
+    "hydra:member": T[];
+    hydraTotalItems: 100;
 }
 
 export interface Container extends BaseEntity {
@@ -42,24 +52,30 @@ export interface Token {
     token: string;
 }
 export class Api {
-    static async fetchUserProfile(): Promise<UserProfile> {
-        return new Promise((resolve) =>
-            setTimeout(() => {
-                return resolve({
-                    username: "Mash",
-                    roles: ["SUPER-ADMIN", "ADMIN"],
-                    permissions: ["ALL", "NONE"],
-                    email: "moshiour0027@gmail.com",
-                });
-            }, 1000)
-        );
-    }
-
     static async login(email: string, password: string): Promise<Token> {
         const res = await axios.post<Token>(REACT_APP_LOGIN_END_POINT, {
             email,
             password,
         });
+        return res.data;
+    }
+
+    static async fetchProfile(): Promise<UserProfile> {
+        const res = await axios.get<UserProfile>(`${REACT_APP_ME_END_POINT}`);
+        return res.data;
+    }
+
+    static async getClientHydra(
+        pageNo: number
+    ): Promise<HydraResponse<Client>> {
+        const res = await axios.get<HydraResponse<Client>>(
+            `${REACT_APP_CLIENT_RESOURCE_END_POINT}?page=${pageNo}`,
+            {
+                headers: {
+                    accept: "application/ld+json",
+                },
+            }
+        );
         return res.data;
     }
 

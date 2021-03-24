@@ -1,6 +1,9 @@
 import React, { createContext, useEffect } from "react";
 import { navigate } from "@reach/router";
-import { AUTH_TOKEN_KEY } from "../../../Settings/Config/constants";
+import {
+    AUTH_TOKEN_KEY,
+    AUTH_USER_PROFILE,
+} from "../../../Settings/Config/constants";
 import { Api, UserProfile } from "../../../lib/API/Api";
 
 interface IAuthSate {
@@ -10,6 +13,7 @@ interface IAuthSate {
     token: string | null;
     user: UserProfile | null;
     loginError: string | null;
+    sessionFetched: boolean;
 }
 
 interface IAuthAction {
@@ -24,6 +28,7 @@ const initialState: IAuthSate = {
     token: null,
     user: null,
     loginError: "",
+    sessionFetched: false,
 };
 
 enum AuthActionTypes {
@@ -91,6 +96,7 @@ export const logoutAction = async (
             showLogin: true,
             loginSuccess: false,
             isAuthenticated: false,
+            sessionFetched: false,
         },
     });
 };
@@ -104,6 +110,8 @@ export const loginAction = async (
         const result: LoginResponse = await Api.login(username, password);
         if (result.token) {
             await localStorage.setItem(AUTH_TOKEN_KEY, result.token);
+            const user = await Api.fetchProfile();
+            localStorage.setItem(AUTH_USER_PROFILE, JSON.stringify(user));
             dispatch({
                 type: AuthActionTypes.LOGIN_SUCCESS,
                 payload: {
@@ -111,8 +119,9 @@ export const loginAction = async (
                     token: result.token,
                     showLogin: false,
                     loginSuccess: true,
-                    user: null,
+                    user,
                     loginError: null,
+                    sessionFetched: true,
                 },
             });
             await navigate("/");
@@ -129,6 +138,7 @@ export const loginAction = async (
                     user: null,
                     loginError: null,
                     token: null,
+                    sessionFetched: false,
                 },
             });
         }
@@ -137,24 +147,89 @@ export const loginAction = async (
 
 export default function AuthProvider({ children }: Props): JSX.Element {
     const [state, dispatch] = React.useReducer(reducer, initialState);
-
-    useEffect(() => {
+    const fetchSession = async () => {
         if (localStorage.getItem(AUTH_TOKEN_KEY)) {
             const token = localStorage.getItem(AUTH_TOKEN_KEY);
-            dispatch({
-                type: AuthActionTypes.LOGIN_SUCCESS,
-                payload: {
-                    isAuthenticated: true,
-                    loginError: null,
-                    token,
-                    loginSuccess: true,
-                    showLogin: false,
-                    user: null,
-                },
-            });
+            if (token) {
+                try {
+                    const user = await Api.fetchProfile();
+                    dispatch({
+                        type: AuthActionTypes.LOGIN_SUCCESS,
+                        payload: {
+                            isAuthenticated: true,
+                            loginError: null,
+                            sessionFetched: true,
+                            token,
+                            loginSuccess: true,
+                            showLogin: false,
+                            user,
+                        },
+                    });
+                } catch (error) {
+                    dispatch({
+                        type: AuthActionTypes.LOGIN_SUCCESS,
+                        payload: {
+                            isAuthenticated: false,
+                            loginError: null,
+                            sessionFetched: false,
+                            token: null,
+                            loginSuccess: false,
+                            showLogin: true,
+                            user: null,
+                        },
+                    });
+                }
+            }
         }
+    };
+    useEffect(() => {
+        fetchSession().then();
     }, []);
 
+    // const fetchSession = async () => {
+    //     try {
+    //         await Api.fetchProfile();
+    //     } catch (error) {}
+    // };
+    // async fetchSessionAndUpdateState() {
+    //     try {
+    //         const accountRaw = await fetchUserProfile();
+    //         const account = accountRaw.data;
+    //
+    //         if (!_.isEmpty(accountRaw) && !_.isEmpty(account)) {
+    //             sessionStorage.setItem(AUTH_PROFILE, JSON.stringify(account));
+    //             const isAuthenticated = account.enabled;
+    //             const isAdmin = this.isAdmin(account);
+    //
+    //             const proxyToken = sessionStorage.getItem(PROXY_TOKEN);
+    //             if (proxyToken) {
+    //                 const { sub } = jwtDecode(proxyToken);
+    //                 this.setState({ ...this.state, proxyUserName: sub });
+    //             }
+    //
+    //             this.setState({
+    //                 ...this.state,
+    //                 isAuthenticated,
+    //                 isAdmin,
+    //                 sessionHasBeenFetched: true,
+    //                 account,
+    //                 currentLocale: 'en',
+    //                 activeUserName: account.username
+    //             });
+    //         }
+    //     } catch (err) {
+    //         const errorMessage =
+    //           err && err.response && err.response.data && err.response.data.type ? err.response.data.type : err;
+    //         this.setState({
+    //             ...this.state,
+    //             loading: false,
+    //             isAuthenticated: false,
+    //             sessionHasBeenFetched: false,
+    //             showLogin: true,
+    //             errorMessage
+    //         });
+    //     }
+    // }
     return (
         <AuthContext.Provider value={{ state, dispatch }}>
             {children}
