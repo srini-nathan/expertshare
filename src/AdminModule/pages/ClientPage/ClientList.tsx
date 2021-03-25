@@ -4,9 +4,9 @@ import { AgGridReact } from "ag-grid-react";
 
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 import { Search } from "react-feather";
-import { Pagination } from "../../../SharedModule/components/Pagination/Pagination";
+// import { Pagination } from "../../../SharedModule/components/Pagination/Pagination";
 // import { ICellRendererParams } from "ag-grid-community";
-import { Client } from "../../../lib/API/Api";
+import { Api, Client } from "../../../lib/API/Api";
 import "./style.scss";
 import { ClientApi } from "../../apis/ClientApi";
 
@@ -179,6 +179,37 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const onPageChange = (pageNumber: number) => {};
 
+    // const onPageChange = (pageNumber: number) => {
+    //     console.log(pageNumber);
+    // };
+    const onGridReady = (params: any) => {
+        params.api.setRowCount(1000);
+    };
+    const datasource = {
+        getRows(params: any) {
+            console.log(params.request);
+            // console.log(JSON.stringify(params.request, null, 1));
+            //
+            if (!params.request.startRow) {
+                Api.getClients(1).then((response) =>
+                    params.successCallback(response, response[20])
+                );
+            }
+            // fetch("./olympicWinners/", {
+            //     method: "post",
+            //     body: JSON.stringify(params.request),
+            //     headers: { "Content-Type": "application/json; charset=utf-8" },
+            // })
+            //     .then((httpResponse) => httpResponse.json())
+            //     .then((response) => {
+            //         params.successCallback(response.rows, response.lastRow);
+            //     })
+            //     .catch((error) => {
+            //         console.error(error);
+            //         params.failCallback();
+            //     });
+        },
+    };
     const columnDef: ColDef[] = [
         {
             headerName: "Client",
@@ -256,23 +287,28 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
                                                     defaultColDef: {
                                                         sortable: true,
                                                     },
+                                                    rowModelType: "serverSide",
                                                     rowHeight: 70,
+                                                    serverSideDatasource: datasource,
                                                 }}
-                                                rowData={clients}
-                                                suppressPaginationPanel={true}
-                                                paginationPageSize={10}
+                                                onGridReady={onGridReady}
+                                                pagination={true}
+                                                // rowData={clients}
+                                                // pagination={true}
+                                                // suppressPaginationPanel={false}
+                                                // paginationPageSize={10}
                                                 columnDefs={columnDef}
                                             />
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <Pagination
-                                totalRows={255}
-                                currentPage={1}
-                                pageLimit={10}
-                                onPageChange={onPageChange}
-                            />
+                            {/* <Pagination */}
+                            {/*    totalRows={255} */}
+                            {/*    currentPage={1} */}
+                            {/*    pageLimit={10} */}
+                            {/*    onPageChange={onPageChange} */}
+                            {/* /> */}
                         </div>
                     </div>
                 </div>
