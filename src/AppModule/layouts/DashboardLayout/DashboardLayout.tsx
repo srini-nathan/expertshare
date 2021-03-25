@@ -5,12 +5,12 @@ import AppNavigation from "../../containers/AppNavigation/AppNavigation";
 
 export const DashboardLayout: FC = ({ children }) => {
     return (
-        <Container className={"p-0 mb-5"} fluid={true}>
-            <Row noGutters={true} className={"m-0"}>
+        <Container className={"p-0"} fluid={true}>
+            <Row className={"m-0"}>
                 <Col sm={12} md={3} xl={2} className={"p-0"}>
                     <AppNavigation items={appNavigations} />
                 </Col>
-                <Col md={9} xl={10}>
+                <Col md={9} xl={10} className={"p-5"}>
                     {children}
                 </Col>
             </Row>
