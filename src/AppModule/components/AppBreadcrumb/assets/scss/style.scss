@@ -1,0 +1,13 @@
+@import "../../../../assets/scss/variables";
+
+.es-breadcrumb {
+    margin-bottom: 29px;
+    font-family: $font-family-sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: $breadcrumbs-clr;
+
+    svg {
+        color: $primary;
+    }
+}
