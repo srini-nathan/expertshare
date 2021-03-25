@@ -7,6 +7,8 @@ import {
     TranslationEditor,
     ClientList,
     ClientAddEdit,
+    LanguageListPage,
+    LanguageAddPage,
 } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
 
@@ -21,11 +23,12 @@ export const routers: ModuleRouter[] = [
                     <IndexPage default path={"/"} />
                     <DesignPage path={"/design"} />
                     <SettingPage path={"/settings"} />
-                    <TranslationEditor path={"/translation"} />
-                    <TranslationEditor path={"/translation"} />
+                    <TranslationEditor path={"/translations"} />
                     <ClientList path={"/client"} />
                     <ClientAddEdit path={"/client/new"} />
                     <ClientAddEdit path={"/client/:id"} />
+                    <LanguageListPage path={"/languages"} />
+                    <LanguageAddPage path={"/languages/new"} />
                 </Router>
             );
         },
