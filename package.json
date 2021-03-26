@@ -48,7 +48,10 @@
     "build-storybook": "build-storybook -s public",
     "fix:code": "prettier-eslint --write src/**/*.{js,jsx,ts,tsx}",
     "fix:styles": "stylelint --fix src/**/*.{css,scss}",
-    "lint": "tsc --noEmit && eslint src/**/*.ts{,x}",
+    "lint": "yarn lint:ts && yarn lint:code && yarn lint:styles",
+    "lint:ts": "tsc --noEmit && eslint src/**/*.ts{,x}",
+    "lint:code": "eslint src/**/*.{js,jsx,ts,tsx}",
+    "lint:styles": "stylelint src/**/*.{css,scss}",
     "preinstall": "node -e \"if(process.env.npm_execpath.indexOf('yarn') === -1) throw new Error('You must use Yarn as a package manager, not NPM')\""
   },
   "eslintConfig": {
