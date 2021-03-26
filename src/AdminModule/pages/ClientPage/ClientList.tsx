@@ -6,8 +6,10 @@ import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 import { Search } from "react-feather";
 import { Pagination } from "../../../SharedModule/components/Pagination/Pagination";
 // import { ICellRendererParams } from "ag-grid-community";
-import { Api, Client, Package } from "../../../lib/API/Api";
+import { Client, Package } from "../../../lib/API/Api";
 import "./style.scss";
+import { ClientApi } from "../../apis/ClientApi";
+import { PackageApi } from "../../apis/PackageApi";
 
 // TODO:: Add header => name=> ES-DOMAIN value=>  domain.name(react client) currently on
 
@@ -160,12 +162,12 @@ const BtnCellRenderer = () => {
 
 export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     const [clients, setClients] = React.useState<Client[]>([]);
-    const [packages, setPackages] = React.useState<Package[]>([]);
+    const [, setPackages] = React.useState<Package[]>([]);
 
     useEffect(() => {
         async function fetchClients() {
-            const fetchedClients = await Api.getClients(1);
-            const fetchedPackages = await Api.getPackages();
+            const fetchedClients = await ClientApi.findAll<Client[]>(1);
+            const fetchedPackages = await PackageApi.findAll<Package[]>();
             setClients(fetchedClients);
             setPackages(fetchedPackages);
         }
@@ -174,14 +176,13 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
         return () => {};
     }, []);
 
-    console.log(packages);
     if (clients.length === 0) {
         return <div>Loading!!</div>;
     }
 
-    const onPageChange = (pageNumber: number) => {
-        console.log(pageNumber);
-    };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const onPageChange = (pageNumber: number) => {};
+
     const columnDef: ColDef[] = [
         {
             headerName: "Client",

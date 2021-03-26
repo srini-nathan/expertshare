@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Redirect, RouteComponentProps, Router } from "@reach/router";
+import { RouteComponentProps, Router } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { appRouters } from "./bootstrap";
 import { DashboardLayout } from "./layouts/DashboardLayout";
@@ -47,7 +47,6 @@ const App = (): JSX.Element => {
                     {dashboardRoutes.map(({ RouterPlug, key, path }) => {
                         return <RouterPlug key={key} path={path} />;
                     })}
-                    <Redirect noThrow from="/auth/*" to="/" />
                 </Router>
             </DashboardLayout>
         );
@@ -59,7 +58,6 @@ const App = (): JSX.Element => {
                     return <RouterPlug key={key} path={path} />;
                 })}
             </Router>
-            <Redirect noThrow from="/" to="/auth/login" />
         </AuthLayout>
     );
 };

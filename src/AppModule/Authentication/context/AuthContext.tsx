@@ -1,7 +1,9 @@
 import React, { createContext, useEffect } from "react";
 import { navigate } from "@reach/router";
-import { AUTH_TOKEN_KEY } from "../../../Settings/Config/constants";
-import { Api, UserProfile } from "../../../lib/API/Api";
+import { AxiosResponse } from "axios";
+import { UserProfile } from "../../../lib/API/Api";
+import { AuthApi } from "../../../SecurityModule/apis/AuthApi";
+import { AUTH_TOKEN_KEY } from "../../config/app-env";
 
 interface IAuthSate {
     isAuthenticated: boolean;
@@ -101,21 +103,24 @@ export const loginAction = async (
     dispatch: React.Dispatch<IAuthAction>
 ): Promise<void> => {
     try {
-        const result: LoginResponse = await Api.login(username, password);
-        if (result.token) {
-            await localStorage.setItem(AUTH_TOKEN_KEY, result.token);
+        const result: AxiosResponse<LoginResponse> = await AuthApi.login(
+            username,
+            password
+        );
+        if (result.data && result.data.token) {
+            await localStorage.setItem(AUTH_TOKEN_KEY, result.data.token);
             dispatch({
                 type: AuthActionTypes.LOGIN_SUCCESS,
                 payload: {
                     isAuthenticated: true,
-                    token: result.token,
+                    token: result.data.token,
                     showLogin: false,
                     loginSuccess: true,
                     user: null,
                     loginError: null,
                 },
             });
-            await navigate("/");
+            await navigate("/home");
         }
     } catch (err) {
         if (localStorage.getItem(AUTH_TOKEN_KEY)) {
