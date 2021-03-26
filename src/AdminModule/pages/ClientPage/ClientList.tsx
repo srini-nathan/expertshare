@@ -6,8 +6,9 @@ import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 import { Search } from "react-feather";
 import { Pagination } from "../../../SharedModule/components/Pagination/Pagination";
 // import { ICellRendererParams } from "ag-grid-community";
-import { Api, Client } from "../../../lib/API/Api";
+import { Client } from "../../../lib/API/Api";
 import "./style.scss";
+import { ClientApi } from "../../apis/ClientApi";
 
 // TODO:: Add header => name=> ES-DOMAIN value=>  domain.name(react client) currently on
 
@@ -160,17 +161,11 @@ const BtnCellRenderer = () => {
 
 export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     const [clients, setClients] = React.useState<Client[]>([]);
-    // const [packages, setPackages] = React.useState<Package[]>([]);
 
     useEffect(() => {
         async function fetchClients() {
-            const fetchedClients = await Api.getClients(1);
-            // const fetchedPackages = await Api.getPackages();
+            const fetchedClients = await ClientApi.findAll<Client[]>(1);
             setClients(fetchedClients);
-            //      setPackages(fetchedPackages);
-
-            const result = await Api.getClientHydra(1);
-            console.log(result);
         }
 
         fetchClients().then();
@@ -181,9 +176,9 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
         return <div>Loading!!</div>;
     }
 
-    const onPageChange = (pageNumber: number) => {
-        console.log(pageNumber);
-    };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const onPageChange = (pageNumber: number) => {};
+
     const columnDef: ColDef[] = [
         {
             headerName: "Client",

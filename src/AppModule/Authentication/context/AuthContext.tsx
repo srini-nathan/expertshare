@@ -1,10 +1,14 @@
 import React, { createContext, useEffect } from "react";
 import { navigate } from "@reach/router";
-import {
-    AUTH_TOKEN_KEY,
-    AUTH_USER_PROFILE,
-} from "../../../Settings/Config/constants";
+import { AxiosResponse } from "axios";
+import { AUTH_USER_PROFILE } from "../../../Settings/Config/constants";
 import { Api, UserProfile } from "../../../lib/API/Api";
+import {
+    AuthApi,
+    LoginPayload,
+    LoginResponse,
+} from "../../../SecurityModule/apis/AuthApi";
+import { AUTH_TOKEN_KEY } from "../../config/app-env";
 
 interface IAuthSate {
     isAuthenticated: boolean;
@@ -73,10 +77,6 @@ function reducer(state: IAuthSate, action: IAuthAction): IAuthSate {
     }
 }
 
-export interface LoginResponse {
-    token: string;
-}
-
 type Props = {
     children: JSX.Element;
 };
@@ -107,11 +107,15 @@ export const loginAction = async (
     dispatch: React.Dispatch<IAuthAction>
 ): Promise<void> => {
     try {
-        const result: LoginResponse = await Api.login(username, password);
+        const result: LoginResponse = await AuthApi.login({
+            email: username,
+            password,
+        });
+
         if (result.token) {
             await localStorage.setItem(AUTH_TOKEN_KEY, result.token);
             const user = await Api.fetchProfile();
-            localStorage.setItem(AUTH_USER_PROFILE, JSON.stringify(user));
+            await localStorage.setItem(AUTH_USER_PROFILE, JSON.stringify(user));
             dispatch({
                 type: AuthActionTypes.LOGIN_SUCCESS,
                 payload: {
@@ -124,7 +128,7 @@ export const loginAction = async (
                     sessionFetched: true,
                 },
             });
-            await navigate("/");
+            await navigate("/home");
         }
     } catch (err) {
         if (localStorage.getItem(AUTH_TOKEN_KEY)) {

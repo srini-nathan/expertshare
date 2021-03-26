@@ -9,10 +9,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import "./client_add_edit_style.scss";
-import { Api, Client, Package } from "../../../lib/API/Api";
+import { Client, Package } from "../../../lib/API/Api";
 import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHeader";
 import { TextInput } from "../../../SharedModule/components/TextInput/TextInput";
 import { CustomCheckBox } from "../../../SharedModule/components/CustomCheckBox/CustomCheckBox";
+import { ClientApi } from "../../apis/ClientApi";
+import { PackageApi } from "../../apis/PackageApi";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is Required"),
@@ -45,7 +47,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const [clientFetched, setClientFetched] = useState(false);
     useEffect(() => {
         if (!isAddMode) {
-            Api.getClient(id).then((res) => {
+            ClientApi.findById<Client>(id).then((res) => {
                 const fields: string[] = ["name", "notes"];
                 fields.forEach((field) =>
                     setValue(field, getProperty(res, field as keyof Client))
@@ -53,15 +55,15 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                 setClientFetched(true);
             });
         }
-        Api.getPackages().then((res) => setPackages(res));
+        PackageApi.findAll<Package[]>().then((res) => setPackages(res));
     }, [id, isAddMode, clientFetched, setValue]);
 
     async function createClient({ name, notes }: ClientFormType) {
-        await Api.createClient(name, notes);
+        await ClientApi.create({ name, notes });
         await navigate(`/admin/client`);
     }
     async function updateClient({ name, notes }: ClientFormType) {
-        await Api.updateClient(name, notes, id);
+        await ClientApi.update(id, { name, notes });
         await navigate(`/admin/client`);
     }
     const onSubmit = async ({

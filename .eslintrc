@@ -61,6 +61,7 @@
             }
         ],
         "import/prefer-default-export": "off",
-        "@typescript-eslint/object-curly-spacing": "off"
+        "@typescript-eslint/object-curly-spacing": "off",
+        "no-console": "error"
     }
 }

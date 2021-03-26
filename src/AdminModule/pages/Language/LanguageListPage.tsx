@@ -4,13 +4,11 @@ import { Row, Col } from "react-bootstrap";
 import { AppGrid } from "../../../AppModule/containers/AppGrid";
 import { AppPageHeader } from "../../../AppModule/components/AppPageHeader";
 import { AppListPageToolbar } from "../../../AppModule/components/AppListPageToolbar";
-import { LanguageRepository } from "../../apis/LanguageRepository";
+import { LanguageApi } from "../../apis/LanguageApi";
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     useEffect(() => {
-        LanguageRepository.findAll().then((data) => {
-            console.log(data, "data");
-        });
+        LanguageApi.findAll().then(() => {});
     }, []);
 
     return (

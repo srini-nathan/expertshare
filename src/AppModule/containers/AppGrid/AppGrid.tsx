@@ -21,7 +21,6 @@ export const AppGrid: FC<AppGridProps> = ({ data }) => {
 
     useEffect(() => {
         gridApi?.refreshCells();
-        console.log(data, "data");
     }, [data]);
 
     return (
