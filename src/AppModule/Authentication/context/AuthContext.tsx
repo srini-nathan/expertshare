@@ -1,9 +1,9 @@
 import React, { createContext, useEffect } from "react";
 import { navigate } from "@reach/router";
 import { UserProfile } from "../../../lib/API/Api";
+import { AUTH_USER_PROFILE } from "../../../Settings/Config/constants";
 import { AuthApi, LoginResponse } from "../../../SecurityModule/apis/AuthApi";
 import { AUTH_TOKEN_KEY } from "../../config/app-env";
-import { AUTH_USER_PROFILE } from "../../../Settings/Config/constants";
 import { UserApi } from "../../apis/UserApi";
 
 interface IAuthSate {

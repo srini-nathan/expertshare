@@ -6,8 +6,8 @@ import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 import { Search } from "react-feather";
 // import { ICellRendererParams } from "ag-grid-community";
 import { Api, Client } from "../../../lib/API/Api";
-import "./style.scss";
 import { ClientApi } from "../../apis/ClientApi";
+import "./style.scss";
 
 // TODO:: Add header => name=> ES-DOMAIN value=>  domain.name(react client) currently on
 
@@ -160,7 +160,6 @@ const BtnCellRenderer = () => {
 
 export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     const [clients, setClients] = React.useState<Client[]>([]);
-
     useEffect(() => {
         async function fetchClients() {
             const fetchedClients = await ClientApi.findAll<Client[]>(1);
@@ -174,9 +173,6 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     if (clients.length === 0) {
         return <div>Loading!!</div>;
     }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const onPageChange = (pageNumber: number) => {};
 
     // const onPageChange = (pageNumber: number) => {
     //     console.log(pageNumber);
@@ -205,6 +201,7 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
             //     });
         },
     };
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const onPageChange = (pageNumber: number) => {};
 
