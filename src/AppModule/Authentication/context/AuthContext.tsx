@@ -4,6 +4,7 @@ import { Api, UserProfile } from "../../../lib/API/Api";
 import { AuthApi, LoginResponse } from "../../../SecurityModule/apis/AuthApi";
 import { AUTH_TOKEN_KEY } from "../../config/app-env";
 import { AUTH_USER_PROFILE } from "../../../Settings/Config/constants";
+import { UserApi } from "../../apis/UserApi";
 
 interface IAuthSate {
     isAuthenticated: boolean;
@@ -109,7 +110,7 @@ export const loginAction = async (
 
         if (result.token) {
             await localStorage.setItem(AUTH_TOKEN_KEY, result.token);
-            const user = await Api.fetchProfile();
+            const user = await UserApi.me();
             await localStorage.setItem(AUTH_USER_PROFILE, JSON.stringify(user));
 
             dispatch({
