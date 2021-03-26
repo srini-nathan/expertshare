@@ -1,18 +1,17 @@
 import React, { FC } from "react";
-import { RouteComponentProps, Router } from "@reach/router";
+import { RouteComponentProps, Router, navigate } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { appRouters } from "./bootstrap";
 import { DashboardLayout } from "./layouts/DashboardLayout";
 import { AuthLayout } from "./layouts/AuthLayout";
 import { ModuleRouter } from "./models";
-
-import "./assets/scss/bootstrap.scss";
-import "./assets/scss/main.scss";
-
 import {
     AuthContext,
     logoutAction,
 } from "./Authentication/context/AuthContext";
+
+import "./assets/scss/bootstrap.scss";
+import "./assets/scss/main.scss";
 
 const Home: FC<RouteComponentProps> = (): JSX.Element => {
     const { dispatch } = React.useContext(AuthContext);
@@ -51,6 +50,13 @@ const App = (): JSX.Element => {
             </DashboardLayout>
         );
     }
+
+    if (!state.isAuthenticated) {
+        navigate("/auth/login");
+    } else {
+        navigate("/home");
+    }
+
     return (
         <AuthLayout>
             <Router>
