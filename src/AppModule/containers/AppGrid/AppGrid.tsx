@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { AgGridColumn, AgGridReact } from "ag-grid-react";
 
 import "ag-grid-enterprise";
@@ -29,9 +29,9 @@ export const AppGrid: FC<AppGridProps> = ({ data }) => {
             style={{ height: 400, width: 600 }}
         >
             <AgGridReact onGridReady={onGridReady} rowData={data}>
-                <AgGridColumn field="make"></AgGridColumn>
-                <AgGridColumn field="model"></AgGridColumn>
-                <AgGridColumn field="price"></AgGridColumn>
+                <AgGridColumn field="make" />
+                <AgGridColumn field="model" />
+                <AgGridColumn field="price" />
             </AgGridReact>
         </div>
     );
