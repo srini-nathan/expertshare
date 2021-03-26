@@ -1,6 +1,6 @@
 import React, { createContext, useEffect } from "react";
 import { navigate } from "@reach/router";
-import { Api, UserProfile } from "../../../lib/API/Api";
+import { UserProfile } from "../../../lib/API/Api";
 import { AuthApi, LoginResponse } from "../../../SecurityModule/apis/AuthApi";
 import { AUTH_TOKEN_KEY } from "../../config/app-env";
 import { AUTH_USER_PROFILE } from "../../../Settings/Config/constants";
@@ -153,7 +153,7 @@ export default function AuthProvider({ children }: Props): JSX.Element {
             const token = localStorage.getItem(AUTH_TOKEN_KEY);
             if (token) {
                 try {
-                    const user = await Api.fetchProfile();
+                    const user = await UserApi.me();
                     dispatch({
                         type: AuthActionTypes.LOGIN_SUCCESS,
                         payload: {
