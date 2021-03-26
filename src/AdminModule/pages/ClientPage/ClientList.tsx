@@ -187,7 +187,6 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     };
     const datasource = {
         getRows(params: any) {
-            console.log(params.request);
             // console.log(JSON.stringify(params.request, null, 1));
             //
             if (!params.request.startRow) {
