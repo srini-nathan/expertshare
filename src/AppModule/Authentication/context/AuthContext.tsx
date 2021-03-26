@@ -1,14 +1,9 @@
 import React, { createContext, useEffect } from "react";
 import { navigate } from "@reach/router";
-import { AxiosResponse } from "axios";
-import { AUTH_USER_PROFILE } from "../../../Settings/Config/constants";
 import { Api, UserProfile } from "../../../lib/API/Api";
-import {
-    AuthApi,
-    LoginPayload,
-    LoginResponse,
-} from "../../../SecurityModule/apis/AuthApi";
+import { AuthApi, LoginResponse } from "../../../SecurityModule/apis/AuthApi";
 import { AUTH_TOKEN_KEY } from "../../config/app-env";
+import { AUTH_USER_PROFILE } from "../../../Settings/Config/constants";
 
 interface IAuthSate {
     isAuthenticated: boolean;
@@ -116,6 +111,7 @@ export const loginAction = async (
             await localStorage.setItem(AUTH_TOKEN_KEY, result.token);
             const user = await Api.fetchProfile();
             await localStorage.setItem(AUTH_USER_PROFILE, JSON.stringify(user));
+
             dispatch({
                 type: AuthActionTypes.LOGIN_SUCCESS,
                 payload: {
