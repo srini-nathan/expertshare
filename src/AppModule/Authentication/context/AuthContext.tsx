@@ -112,7 +112,6 @@ export const loginAction = async (
             await localStorage.setItem(AUTH_TOKEN_KEY, result.token);
             const user = await UserApi.me();
             await localStorage.setItem(AUTH_USER_PROFILE, JSON.stringify(user));
-
             dispatch({
                 type: AuthActionTypes.LOGIN_SUCCESS,
                 payload: {
