@@ -3,7 +3,6 @@ import { RouteComponentProps, useNavigate } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { Container } from "react-bootstrap";
 import { AppButton } from "../../../AppModule/components/AppButton";
-import { Api } from "../../../lib/API/Api";
 
 // TODO: define a naming convention for it
 
@@ -14,8 +13,7 @@ export type ClientFormType = {
 export const ClientNew: FC<RouteComponentProps> = (): JSX.Element => {
     const navigate = useNavigate();
     const { register, handleSubmit } = useForm<ClientFormType>();
-    const onSubmit = async ({ name, notes }: ClientFormType) => {
-        await Api.createClient(name, notes);
+    const onSubmit = async () => {
         await navigate(`/admin/client`);
     };
     return (

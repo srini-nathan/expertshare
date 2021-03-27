@@ -100,10 +100,14 @@ export class Api {
         return res.data;
     }
 
-    static async createClient(name: string, notes: string): Promise<Client> {
+    static async createClient(
+        name: string,
+        notes: string,
+        active: boolean
+    ): Promise<Client> {
         const res = await axios.post<Client>(
             `${REACT_APP_CLIENT_RESOURCE_END_POINT}`,
-            { name, notes }
+            { name, notes, active }
         );
         return res.data;
     }
@@ -111,6 +115,7 @@ export class Api {
     static async updateClient(
         name: string,
         notes: string,
+        active: boolean,
         id: number
     ): Promise<Client> {
         const res = await axios.put<Client>(

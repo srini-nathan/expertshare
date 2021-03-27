@@ -25,6 +25,7 @@ function getProperty<T, K extends keyof T>(obj: T, key: K) {
 }
 
 export type ClientFormType = {
+    activate: boolean;
     name: string;
     notes: string;
 };
@@ -45,6 +46,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         resolver: yupResolver(validationSchema),
     });
     const [clientFetched, setClientFetched] = useState(false);
+    const [packageKeys, setPackageKeys] = useState<string[]>();
     useEffect(() => {
         if (!isAddMode) {
             ClientApi.findById<Client>(id).then((res) => {
@@ -66,17 +68,15 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         await ClientApi.update(id, { name, notes });
         await navigate(`/admin/client`);
     }
-    const onSubmit = async ({
-        name,
-        notes,
-    }: {
-        name: string;
-        notes: string;
-    }) => {
+    // async function updateClient({ name, notes, activate }: ClientFormType) {
+    //     await Api.updateClient(name, notes, activate, id);
+    //     await navigate(`/admin/client`);
+    // }
+    const onSubmit = async (data: any) => {
         if (isAddMode) {
-            await createClient({ name, notes });
+            await createClient(data);
         } else {
-            await updateClient({ name, notes });
+            // await updateClient({ name, notes, activate });
         }
     };
 
@@ -119,6 +119,9 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         name={"activate"}
                                         label={"Active"}
                                         labelPosition={"top"}
+                                        value="0"
+                                        register={register}
+                                        defaultChecked={true}
                                     />
                                 </div>
                                 <div className="row mx-0 mb-2">
@@ -132,9 +135,15 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                             {packages.map((e) => {
                                                 return (
                                                     <CustomCheckBox
-                                                        name={e.packageKey}
-                                                        label={"Custom Design"}
+                                                        key={e.id}
+                                                        name={e.packageKey.replace(
+                                                            ".",
+                                                            "_"
+                                                        )}
+                                                        label={e.packageKey}
                                                         labelPosition={"left"}
+                                                        value={String(e.id)}
+                                                        register={register}
                                                     />
                                                 );
                                             })}
