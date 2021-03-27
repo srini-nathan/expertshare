@@ -11,7 +11,7 @@ export const routers: ModuleRouter[] = [
         RouterPlug: (): JSX.Element => {
             return (
                 <Router>
-                    <LoginPage default path={"/login"}></LoginPage>
+                    <LoginPage path={"/login"}></LoginPage>
                     <RegisterPage path={"/register"}></RegisterPage>
                 </Router>
             );

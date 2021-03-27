@@ -42,7 +42,7 @@ const App = (): JSX.Element => {
         return (
             <DashboardLayout>
                 <Router>
-                    <Home default path="/" />
+                    <Home path="/" />
                     {dashboardRoutes.map(({ RouterPlug, key, path }) => {
                         return <RouterPlug key={key} path={path} />;
                     })}
@@ -54,7 +54,7 @@ const App = (): JSX.Element => {
     if (!state.isAuthenticated) {
         navigate("/auth/login");
     } else {
-        navigate("/home");
+        navigate("/home", { replace: true });
     }
 
     return (

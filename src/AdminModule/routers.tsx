@@ -20,7 +20,7 @@ export const routers: ModuleRouter[] = [
         RouterPlug: (): JSX.Element => {
             return (
                 <Router>
-                    <IndexPage default path={"/"} />
+                    <IndexPage path={"/"} />
                     <DesignPage path={"/design"} />
                     <SettingPage path={"/settings"} />
                     <TranslationEditor path={"/translations"} />
