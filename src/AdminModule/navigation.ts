@@ -2,6 +2,20 @@ import { AppNavigationItemProps } from "../AppModule/components/AppNavigationIte
 
 export const navigation: AppNavigationItemProps[] = [
     {
+        label: "Admin - Design",
+        path: "/admin/design",
+        icon: {
+            name: "administrator",
+        },
+    },
+    {
+        label: "Admin - Settings",
+        path: "/admin/settings",
+        icon: {
+            name: "administrator",
+        },
+    },
+    {
         label: "Admin - Languages",
         path: "/admin/languages",
         icon: {

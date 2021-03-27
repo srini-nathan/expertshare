@@ -1,6 +1,7 @@
 import React, { FC } from "react";
-import { RouteComponentProps, Router, navigate } from "@reach/router";
+import { Redirect, RouteComponentProps, Router, navigate } from "@reach/router";
 import { useTranslation } from "react-i18next";
+import { Spinner } from "react-bootstrap";
 import { appRouters } from "./bootstrap";
 import { DashboardLayout } from "./layouts/DashboardLayout";
 import { AuthLayout } from "./layouts/AuthLayout";
@@ -31,6 +32,8 @@ const Home: FC<RouteComponentProps> = (): JSX.Element => {
 
 const App = (): JSX.Element => {
     const { state } = React.useContext(AuthContext);
+    // eslint-disable-next-line no-console
+    console.log(state, "state");
     const dashboardRoutes: ModuleRouter[] = appRouters.filter(
         ({ layout }) => layout === "dashboard"
     );
@@ -38,11 +41,24 @@ const App = (): JSX.Element => {
         ({ layout }) => layout === "auth"
     );
 
+    if (state.isAuthenticated === null) {
+        return (
+            <div
+                className={
+                    "vh-100 vw-100 d-flex align-items-center justify-content-center"
+                }
+            >
+                <Spinner animation={"border"} variant={"primary"} />
+            </div>
+        );
+    }
+
     if (state.isAuthenticated) {
         return (
             <DashboardLayout>
                 <Router>
-                    <Home path="/" />
+                    <Redirect from="/" to="home" noThrow />
+                    <Home path="home" />
                     {dashboardRoutes.map(({ RouterPlug, key, path }) => {
                         return <RouterPlug key={key} path={path} />;
                     })}
@@ -53,8 +69,6 @@ const App = (): JSX.Element => {
 
     if (!state.isAuthenticated) {
         navigate("/auth/login");
-    } else {
-        navigate("/home", { replace: true });
     }
 
     return (

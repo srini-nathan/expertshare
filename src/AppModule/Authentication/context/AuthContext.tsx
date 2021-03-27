@@ -7,7 +7,7 @@ import { AUTH_USER_PROFILE } from "../../../Settings/Config/constants";
 import { UserApi } from "../../apis/UserApi";
 
 interface IAuthSate {
-    isAuthenticated: boolean;
+    isAuthenticated: boolean | null;
     loginSuccess: boolean;
     showLogin: boolean;
     token: string | null;
@@ -22,7 +22,7 @@ interface IAuthAction {
 }
 
 const initialState: IAuthSate = {
-    isAuthenticated: false,
+    isAuthenticated: null,
     loginSuccess: false,
     showLogin: true,
     token: null,
@@ -181,6 +181,19 @@ export default function AuthProvider({ children }: Props): JSX.Element {
                     });
                 }
             }
+        } else {
+            dispatch({
+                type: AuthActionTypes.LOGIN_SUCCESS,
+                payload: {
+                    isAuthenticated: false,
+                    loginError: null,
+                    sessionFetched: false,
+                    token: null,
+                    loginSuccess: false,
+                    showLogin: true,
+                    user: null,
+                },
+            });
         }
     };
     useEffect(() => {

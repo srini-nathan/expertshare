@@ -21,14 +21,14 @@ export const routers: ModuleRouter[] = [
             return (
                 <Router>
                     <IndexPage path={"/"} />
-                    <DesignPage path={"/design"} />
-                    <SettingPage path={"/settings"} />
-                    <TranslationEditor path={"/translations"} />
-                    <ClientList path={"/client"} />
-                    <ClientAddEdit path={"/client/new"} />
-                    <ClientAddEdit path={"/client/:id"} />
-                    <LanguageListPage path={"/languages"} />
-                    <LanguageAddPage path={"/languages/new"} />
+                    <DesignPage path={"design"} />
+                    <SettingPage path={"settings"} />
+                    <TranslationEditor path={"translations"} />
+                    <ClientList path={"client"} />
+                    <ClientAddEdit path={"client/new"} />
+                    <ClientAddEdit path={"client/:id"} />
+                    <LanguageListPage path={"languages"} />
+                    <LanguageAddPage path={"languages/new"} />
                 </Router>
             );
         },

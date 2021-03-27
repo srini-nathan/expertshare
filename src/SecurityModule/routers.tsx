@@ -1,5 +1,5 @@
 import React from "react";
-import { Router } from "@reach/router";
+import { Redirect, Router } from "@reach/router";
 import { LoginPage, RegisterPage } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
 
@@ -11,8 +11,9 @@ export const routers: ModuleRouter[] = [
         RouterPlug: (): JSX.Element => {
             return (
                 <Router>
-                    <LoginPage path={"/login"}></LoginPage>
-                    <RegisterPage path={"/register"}></RegisterPage>
+                    <Redirect from={"/"} to={"login"} noThrow />
+                    <LoginPage path={"login"}></LoginPage>
+                    <RegisterPage path={"register"}></RegisterPage>
                 </Router>
             );
         },
