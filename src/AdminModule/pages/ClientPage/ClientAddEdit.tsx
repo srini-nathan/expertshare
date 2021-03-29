@@ -14,6 +14,7 @@ import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHead
 import { TextInput } from "../../../SharedModule/components/TextInput/TextInput";
 import { CustomCheckBox } from "../../../SharedModule/components/CustomCheckBox/CustomCheckBox";
 import { ClientApi } from "../../apis/ClientApi";
+import { PackageApi } from "../../apis/PackageApi";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is Required"),
@@ -45,6 +46,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         resolver: yupResolver(validationSchema),
     });
     const [clientFetched, setClientFetched] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [packageKeys, setPackageKeys] = useState<string[]>();
     useEffect(() => {
         if (!isAddMode) {
@@ -62,7 +64,6 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                 res.map((p) => p.packageKey).map((key) => key.replace(".", "_"))
             );
             setPackages(res);
-            console.log(packageKeys);
         });
     }, [id, isAddMode, clientFetched, setValue]);
 
@@ -70,6 +71,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         await ClientApi.create({ name, notes });
         await navigate(`/admin/client`);
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async function updateClient({ name, notes }: ClientFormType) {
         await ClientApi.update(id, { name, notes });
         await navigate(`/admin/client`);
