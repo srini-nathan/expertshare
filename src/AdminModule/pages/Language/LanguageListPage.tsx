@@ -1,15 +1,46 @@
-import React, { FC, Fragment, useEffect } from "react";
+import React, { FC, Fragment, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Row, Col } from "react-bootstrap";
-import { AppGrid } from "../../../AppModule/containers/AppGrid";
+import {
+    GridApi,
+    GridReadyEvent,
+    IServerSideDatasource,
+    IServerSideGetRowsParams,
+    ServerSideStoreType,
+} from "ag-grid-community";
+import { ColumnApi } from "ag-grid-community/dist/lib/columnController/columnApi";
+import { AgGridColumn, AgGridReact } from "ag-grid-react";
 import { AppPageHeader } from "../../../AppModule/components/AppPageHeader";
 import { AppListPageToolbar } from "../../../AppModule/components/AppListPageToolbar";
 import { LanguageApi } from "../../apis/LanguageApi";
+import { Language } from "../../models";
+
+const GlobalGridConfig = {
+    pageSize: 30,
+};
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
-    useEffect(() => {
-        LanguageApi.findAll().then(() => {});
-    }, []);
+    const [, setGridApi] = useState<GridApi>();
+    const [, setGridColumnApi] = useState<ColumnApi>();
+    const onGridReady = (event: GridReadyEvent) => {
+        setGridApi(event.api);
+        setGridColumnApi(event.columnApi);
+
+        const dataSource: IServerSideDatasource = {
+            getRows(params: IServerSideGetRowsParams) {
+                // eslint-disable-next-line no-console
+                console.log(params, `asking for ${params} to ${params}`);
+                const { request } = params;
+                const { endRow } = request;
+                const pageNo = endRow / GlobalGridConfig.pageSize;
+                LanguageApi.findAll<Language[]>(pageNo).then((data) => {
+                    params.successCallback(data, 200);
+                });
+            },
+        };
+
+        event.api.setServerSideDatasource(dataSource);
+    };
 
     return (
         <Fragment>
@@ -20,13 +51,32 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
             />
             <Row>
                 <Col>
-                    <AppGrid
-                        data={[
-                            { make: "Toyota", model: "Celica", price: 35000 },
-                            { make: "Ford", model: "Mondeo", price: 32000 },
-                            { make: "Porsche", model: "Boxter", price: 72000 },
-                        ]}
-                    />
+                    <div className="ag-theme-alpine">
+                        <AgGridReact
+                            defaultColDef={{
+                                flex: 1,
+                                minWidth: 150,
+                                sortable: true,
+                                resizable: true,
+                            }}
+                            rowModelType={"serverSide"}
+                            serverSideStoreType={ServerSideStoreType.Partial}
+                            paginationPageSize={GlobalGridConfig.pageSize}
+                            cacheBlockSize={GlobalGridConfig.pageSize}
+                            pagination={true}
+                            getRowNodeId={(item) => {
+                                return item.id;
+                            }}
+                            onGridReady={onGridReady}
+                            gridOptions={{
+                                domLayout: "autoHeight",
+                            }}
+                        >
+                            <AgGridColumn field="id" />
+                            <AgGridColumn field="name" />
+                            <AgGridColumn field="locale" />
+                        </AgGridReact>
+                    </div>
                 </Col>
             </Row>
         </Fragment>

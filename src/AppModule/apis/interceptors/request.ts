@@ -13,8 +13,8 @@ export const onRequestFulfilled = (
     return config;
 };
 
-export const onRequestRejected = (error: any): any => {
+export const onRequestRejected = (error: any): null => {
     // eslint-disable-next-line no-console
-    console.error(error);
+    console.error("onRequestRejected", error);
     return null;
 };

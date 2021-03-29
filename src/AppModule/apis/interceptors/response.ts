@@ -6,8 +6,8 @@ export const onResponseFulfilled = (response: AxiosResponse): AxiosResponse => {
     return response;
 };
 
-export const onResponseRejected = (error: AxiosError): any => {
+export const onResponseRejected = (error: AxiosError): null => {
     // eslint-disable-next-line no-console
-    console.error(error);
+    console.error("onResponseRejected", error);
     return null;
 };
