@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { AgGridColumn, AgGridReact } from "ag-grid-react";
+import { AgGridReact } from "ag-grid-react";
 
 import "ag-grid-enterprise";
 import "ag-grid-community/dist/styles/ag-grid.css";
@@ -9,48 +9,34 @@ import {
     GridApi,
     GridReadyEvent,
     IServerSideDatasource,
-    IServerSideGetRowsParams,
     ServerSideStoreType,
 } from "ag-grid-community";
 import { ColumnApi } from "ag-grid-community/dist/lib/columnController/columnApi";
 import { PaginationChangedEvent } from "ag-grid-community/dist/lib/events";
-import { LanguageApi } from "../../../AdminModule/apis/LanguageApi";
-import { Language } from "../../../AdminModule/models";
-import { ListResponse } from "../../models";
+import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 import { AppGridPagination } from "../../components/AppGridPagination";
 
-const GlobalGridConfig = {
+export const GlobalGridConfig = {
     pageSize: 30,
 };
-
 export interface AppGridProps {
-    data: any[];
+    columnDef: ColDef[];
+    dataSource: IServerSideDatasource;
+    totalItems: number;
 }
 
-export const AppGrid: FC<AppGridProps> = ({ data }) => {
+export const AppGrid: FC<AppGridProps> = ({
+    columnDef,
+    dataSource,
+    totalItems,
+}) => {
     const [gridApi, setGridApi] = useState<GridApi>();
     const [, setGridColumnApi] = useState<ColumnApi>();
-    const [totalItems, setTotalItems] = useState<number>(0);
+
     const [active, setActive] = useState<number>(1);
     const onGridReady = (event: GridReadyEvent) => {
         setGridApi(event.api);
         setGridColumnApi(event.columnApi);
-
-        const dataSource: IServerSideDatasource = {
-            getRows(params: IServerSideGetRowsParams) {
-                // eslint-disable-next-line no-console
-                console.log("IServerSideDatasource", params);
-                const { request } = params;
-                const { endRow } = request;
-                const pageNo = endRow / GlobalGridConfig.pageSize;
-                LanguageApi.findAll<Language>(pageNo).then(
-                    (data: ListResponse<Language>) => {
-                        setTotalItems(data.totalItems);
-                        params.successCallback(data.items, data.totalItems);
-                    }
-                );
-            },
-        };
 
         event.api.setServerSideDatasource(dataSource);
     };
@@ -84,11 +70,8 @@ export const AppGrid: FC<AppGridProps> = ({ data }) => {
                     gridOptions={{
                         domLayout: "autoHeight",
                     }}
-                >
-                    <AgGridColumn field="id" />
-                    <AgGridColumn field="name" />
-                    <AgGridColumn field="locale" />
-                </AgGridReact>
+                    columnDefs={columnDef}
+                />
             </div>
             <br />
             <AppGridPagination
