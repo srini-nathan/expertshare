@@ -37,7 +37,6 @@ export const AppGrid: FC<AppGridProps> = ({
     const onGridReady = (event: GridReadyEvent) => {
         setGridApi(event.api);
         setGridColumnApi(event.columnApi);
-
         event.api.setServerSideDatasource(dataSource);
     };
 
