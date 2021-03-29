@@ -57,7 +57,14 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                 setClientFetched(true);
             });
         }
-        PackageApi.findAll<Package[]>().then((res) => setPackages(res));
+
+        PackageApi.findAll<Package[]>().then((res) => {
+            setPackageKeys(
+                res.map((p) => p.packageKey).map((key) => key.replace(".", "_"))
+            );
+            setPackages(res);
+            console.log(packageKeys);
+        });
     }, [id, isAddMode, clientFetched, setValue]);
 
     async function createClient({ name, notes }: ClientFormType) {
