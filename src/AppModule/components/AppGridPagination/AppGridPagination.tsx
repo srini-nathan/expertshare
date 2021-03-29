@@ -10,6 +10,7 @@ export interface AppGridPaginationProps {
     firstLastCtrl?: boolean;
     nextPrevCtrl?: boolean;
     onClick?: (pageNumber: number) => void;
+    className?: string;
 }
 
 export const AppGridPagination: FC<AppGridPaginationProps> = ({
@@ -19,6 +20,7 @@ export const AppGridPagination: FC<AppGridPaginationProps> = ({
     firstLastCtrl = false,
     nextPrevCtrl = true,
     onClick = () => {},
+    className = "d-flex justify-content-end",
 }): JSX.Element => {
     if (totalItems === 0) {
         return <Pagination />;
@@ -112,5 +114,5 @@ export const AppGridPagination: FC<AppGridPaginationProps> = ({
         );
     }
 
-    return <Pagination>{pages}</Pagination>;
+    return <Pagination className={className}>{pages}</Pagination>;
 };
