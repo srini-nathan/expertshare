@@ -15,6 +15,7 @@ import { TextInput } from "../../../SharedModule/components/TextInput/TextInput"
 import { CustomCheckBox } from "../../../SharedModule/components/CustomCheckBox/CustomCheckBox";
 import { ClientApi } from "../../apis/ClientApi";
 import { PackageApi } from "../../apis/PackageApi";
+import { ListResponse } from "../../../AppModule/models";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is Required"),
@@ -59,12 +60,16 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
             });
         }
 
-        PackageApi.findAll<Package[]>().then((res) => {
-            setPackageKeys(
-                res.map((p) => p.packageKey).map((key) => key.replace(".", "_"))
-            );
-            setPackages(res);
-        });
+        PackageApi.findAll<Package>().then(
+            ({ items }: ListResponse<Package>) => {
+                setPackageKeys(
+                    items
+                        .map((p) => p.packageKey)
+                        .map((key) => key.replace(".", "_"))
+                );
+                setPackages(items);
+            }
+        );
     }, [id, isAddMode, clientFetched, setValue]);
 
     async function createClient({ name, notes }: ClientFormType) {

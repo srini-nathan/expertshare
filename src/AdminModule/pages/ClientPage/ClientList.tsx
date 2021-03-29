@@ -162,8 +162,8 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     const [clients, setClients] = React.useState<Client[]>([]);
     useEffect(() => {
         async function fetchClients() {
-            const fetchedClients = await ClientApi.findAll<Client[]>(1);
-            setClients(fetchedClients);
+            const { items } = await ClientApi.findAll<Client>(1);
+            setClients(items);
         }
 
         fetchClients().then();
