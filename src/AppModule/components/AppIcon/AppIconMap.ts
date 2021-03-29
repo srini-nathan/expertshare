@@ -8,6 +8,8 @@ import {
     Settings,
     ChevronLeft,
     ChevronRight,
+    Edit3,
+    Trash2,
 } from "react-feather";
 
 interface IAppIconMap {
@@ -29,4 +31,8 @@ export const AppIconMap: IAppIconMap = {
     ChevronLeft,
     next: ChevronRight,
     ChevronRight,
+    edit: Edit3,
+    Edit3,
+    delete: Trash2,
+    Trash2,
 };
