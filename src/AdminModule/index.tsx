@@ -1,9 +1,9 @@
 import translations from "./translations";
-import { ModuleConfigInterface } from "../AppModule/models";
+import { ModuleConfig } from "../AppModule/models";
 import { routers } from "./routers";
 import { navigation } from "./navigation";
 
-export const adminModuleConfig: ModuleConfigInterface = {
+export const adminModuleConfig: ModuleConfig = {
     id: "admin-module",
     translations,
     routers,

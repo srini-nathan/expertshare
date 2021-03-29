@@ -1,4 +1,4 @@
-import { BaseEntity } from "../../AppModule/models";
+import { BaseEntity } from "../../../AppModule/models";
 
 export interface Language extends BaseEntity {
     locale: string;
