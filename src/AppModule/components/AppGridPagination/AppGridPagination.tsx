@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { Pagination } from "react-bootstrap";
 import "./assets/scss/style.scss";
+import { AppIcon } from "../AppIcon";
 
 export interface AppGridPaginationProps {
     itemsPerPage?: number;
@@ -15,7 +16,7 @@ export const AppGridPagination: FC<AppGridPaginationProps> = ({
     itemsPerPage = 30,
     totalItems = 0,
     active = 1,
-    firstLastCtrl = true,
+    firstLastCtrl = false,
     nextPrevCtrl = true,
     onClick = () => {},
 }): JSX.Element => {
@@ -53,7 +54,9 @@ export const AppGridPagination: FC<AppGridPaginationProps> = ({
                 key={"pagePrev"}
                 disabled={active === 1}
                 onClick={() => onClick(active - 1)}
-            />
+            >
+                <AppIcon name={"back"} />
+            </Pagination.Prev>
         );
     }
 
@@ -93,7 +96,9 @@ export const AppGridPagination: FC<AppGridPaginationProps> = ({
                 key={"pageNext"}
                 disabled={active === totalPages}
                 onClick={() => onClick(active + 1)}
-            />
+            >
+                <AppIcon name={"next"} />
+            </Pagination.Next>
         );
     }
 

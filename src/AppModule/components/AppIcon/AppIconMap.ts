@@ -7,6 +7,7 @@ import {
     Calendar,
     Settings,
     ChevronLeft,
+    ChevronRight,
 } from "react-feather";
 
 interface IAppIconMap {
@@ -26,4 +27,6 @@ export const AppIconMap: IAppIconMap = {
     Settings,
     back: ChevronLeft,
     ChevronLeft,
+    next: ChevronRight,
+    ChevronRight,
 };
