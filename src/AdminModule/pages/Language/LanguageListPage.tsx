@@ -14,6 +14,7 @@ import { AppPageHeader } from "../../../AppModule/components/AppPageHeader";
 import { AppListPageToolbar } from "../../../AppModule/components/AppListPageToolbar";
 import { LanguageApi } from "../../apis/LanguageApi";
 import { Language } from "../../models";
+import { ListResponse } from "../../../AppModule/models";
 
 const GlobalGridConfig = {
     pageSize: 30,
@@ -33,9 +34,11 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
                 const { request } = params;
                 const { endRow } = request;
                 const pageNo = endRow / GlobalGridConfig.pageSize;
-                LanguageApi.findAll<Language[]>(pageNo).then((data) => {
-                    params.successCallback(data, 200);
-                });
+                LanguageApi.findAll<Language>(pageNo).then(
+                    (data: ListResponse<Language>) => {
+                        params.successCallback(data.items, data.totalItems);
+                    }
+                );
             },
         };
 
