@@ -1,7 +1,6 @@
 import { default as Axios, AxiosRequestConfig, AxiosInstance } from "axios";
 import  { API_HOST } from "./app-env";
-import { onRequestFulfilled, onRequestRejected } from "../apis/interceptors/request";
-import { onResponseFulfilled, onResponseRejected } from "../apis/interceptors/response";
+import { onRequestFulfilled, onRequestRejected, onResponseFulfilled, onResponseRejected } from "../apis/interceptors";
 import { ACCEPTABLE_RESPONSE } from "../config/app-env";
 import { AcceptableResponse } from "../models";
 

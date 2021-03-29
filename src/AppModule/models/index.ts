@@ -1,4 +1,5 @@
 export * from "./entities";
+export * from "./apis";
 export * from "./ModuleConfig";
 export * from "./ModuleRouter";
 export * from "./SimpleObject";
