@@ -1,12 +1,19 @@
-import React, { FC } from "react";
-import { RouteComponentProps } from "@reach/router";
+import React, { FC, useState } from "react";
 
 import { AppIcon } from "../AppIcon";
+import { AppModal } from "../AppModal";
 
-export const AppGridAction: FC<RouteComponentProps> = (props): JSX.Element => {
+export const AppGridAction: FC<{ value: number }> = (props: {
+    value: number;
+}): JSX.Element => {
     // eslint-disable-next-line no-console
-    console.log(props);
+    const [show, setShow] = useState(false);
 
+    const handleClose = () => setShow(false);
+    const handleDelete = () => {
+        setShow(false);
+        // TODO DELETE FUNCTION => in=Client
+    };
     return (
         <div>
             <a
@@ -14,7 +21,7 @@ export const AppGridAction: FC<RouteComponentProps> = (props): JSX.Element => {
                 className={"mr-3"}
                 onClick={() => {
                     // eslint-disable-next-line no-console
-                    console.log(props);
+                    setShow(true);
                 }}
             >
                 <AppIcon name={"delete"} />
@@ -78,6 +85,12 @@ export const AppGridAction: FC<RouteComponentProps> = (props): JSX.Element => {
                     />
                 </svg>
             </a>
+            <AppModal
+                show={show}
+                handleClose={handleClose}
+                handleDelete={handleDelete}
+                id={props.value}
+            />
         </div>
     );
 };
