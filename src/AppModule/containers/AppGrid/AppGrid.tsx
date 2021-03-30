@@ -21,12 +21,14 @@ export interface AppGridProps {
     columnDef: ColDef[];
     dataSource: IServerSideDatasource;
     totalItems: number;
+    frameworkComponents?: any;
 }
 
 export const AppGrid: FC<AppGridProps> = ({
     columnDef,
     dataSource,
     totalItems,
+    frameworkComponents,
 }) => {
     const [gridApi, setGridApi] = useState<GridApi>();
     const [, setGridColumnApi] = useState<ColumnApi>();
@@ -47,6 +49,7 @@ export const AppGrid: FC<AppGridProps> = ({
         <React.Fragment>
             <div className="ag-theme-alpine">
                 <AgGridReact
+                    frameworkComponents={frameworkComponents}
                     defaultColDef={{
                         flex: 1,
                         minWidth: 150,
