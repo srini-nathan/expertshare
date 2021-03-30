@@ -17,7 +17,7 @@ export abstract class AcceptableResponse {
         return AcceptableResponse.REQUEST_ACCEPT_HEADERS[type];
     };
 
-    public static isHydra(type: string) {
+    public static isHydra(type: string): boolean {
         return AcceptableResponse.HYDRA === type;
     }
 }

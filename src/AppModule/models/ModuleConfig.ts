@@ -5,5 +5,6 @@ export interface ModuleConfig {
     id: string;
     translations: Resource;
     routers?: ModuleRouter[];
-    navigation?: any[];
+    // @TODO: define type of following navigation key
+    navigation?: [];
 }

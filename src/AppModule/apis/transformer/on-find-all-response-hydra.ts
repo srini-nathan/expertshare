@@ -1,8 +1,6 @@
 import { ListResponse } from "../../models";
 
-export const onFindAllResponseHydra = <T>(
-    data: { [key: string]: any } | [{ [key: string]: any }] | any
-) => {
+export const onFindAllResponseHydra = <T>(data: string): ListResponse<T> => {
     const listResponse = new ListResponse<T>();
     const parsedData = JSON.parse(data);
 
