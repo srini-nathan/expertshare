@@ -12,7 +12,10 @@ import { Col, Row } from "react-bootstrap";
 import { ListResponse } from "../../../AppModule/models";
 import { AppPageHeader } from "../../../AppModule/components/AppPageHeader";
 import { AppListPageToolbar } from "../../../AppModule/components/AppListPageToolbar";
-import { AppGrid } from "../../../AppModule/containers/AppGrid";
+import {
+    AppGrid,
+    buildSortParams,
+} from "../../../AppModule/containers/AppGrid";
 import { ClientApi } from "../../apis/ClientApi";
 import { Client } from "../../../lib/API/Api";
 import { appGridConfig } from "../../../AppModule/config";
@@ -41,12 +44,12 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
             const { request } = params;
             const { endRow } = request;
             const pageNo = endRow / appGridConfig.pageSize;
-            ClientApi.findAll<Client>(pageNo).then(
-                (res: ListResponse<Client>) => {
-                    setTotalItems(res.totalItems);
-                    params.successCallback(res.items, res.totalItems);
-                }
-            );
+            ClientApi.findAll<Client>(pageNo, {
+                order: buildSortParams(request),
+            }).then((res: ListResponse<Client>) => {
+                setTotalItems(res.totalItems);
+                params.successCallback(res.items, res.totalItems);
+            });
         },
     };
     return (

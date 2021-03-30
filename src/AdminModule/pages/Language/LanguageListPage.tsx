@@ -9,7 +9,10 @@ import {
 import { AppPageHeader } from "../../../AppModule/components/AppPageHeader";
 import { AppListPageToolbar } from "../../../AppModule/components/AppListPageToolbar";
 import { LanguageApi } from "../../apis/LanguageApi";
-import { AppGrid } from "../../../AppModule/containers/AppGrid";
+import {
+    AppGrid,
+    buildSortParams,
+} from "../../../AppModule/containers/AppGrid";
 import { Language } from "../../models";
 import { ListResponse } from "../../../AppModule/models";
 import { appGridConfig } from "../../../AppModule/config";
@@ -38,12 +41,12 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
             const { request } = params;
             const { endRow } = request;
             const pageNo = endRow / appGridConfig.pageSize;
-            LanguageApi.findAll<Language>(pageNo).then(
-                (res: ListResponse<Language>) => {
-                    setTotalItems(res.totalItems);
-                    params.successCallback(res.items, res.totalItems);
-                }
-            );
+            LanguageApi.findAll<Language>(pageNo, {
+                order: buildSortParams(request),
+            }).then((res: ListResponse<Language>) => {
+                setTotalItems(res.totalItems);
+                params.successCallback(res.items, res.totalItems);
+            });
         },
     };
     return (
