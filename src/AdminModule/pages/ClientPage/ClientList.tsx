@@ -41,7 +41,11 @@ const columnDef: ColDef[] = [
         field: "id",
         sortable: false,
         cellRenderer: "appGridActionRenderer",
-        cellRendererParams: { callback: handleDelete },
+        cellRendererParams: {
+            callback: handleDelete,
+            editLink: "/admin/client/",
+            addLink: "/admin/client/new",
+        },
     },
 ];
 const frameworkComponents = {

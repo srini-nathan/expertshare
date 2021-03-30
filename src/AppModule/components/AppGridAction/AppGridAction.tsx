@@ -1,18 +1,20 @@
 import React, { FC, useState } from "react";
 
+import { Link } from "@reach/router";
 import { AppIcon } from "../AppIcon";
 import { AppModal } from "../AppModal";
 
 export const AppGridAction: FC<{
     value: number;
     callback: () => void;
-}> = ({ value, callback }): JSX.Element => {
+    editLink: string;
+    addLink: string;
+}> = ({ value, callback, editLink, addLink }): JSX.Element => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleDelete = () => {
         setShow(false);
         callback();
-        // TODO DELETE FUNCTION => in=Client
     };
     return (
         <div>
@@ -26,12 +28,12 @@ export const AppGridAction: FC<{
                 <AppIcon name={"delete"} />
             </a>
 
-            <a href="#" className={"mr-3"}>
+            <Link className={"mr-3"} to={`${editLink}${value}`}>
                 <AppIcon name={"edit"} />
-            </a>
-            <a href="#" className={"mr-3"}>
+            </Link>
+            <Link className={"mr-3"} to={`${addLink}`}>
                 <AppIcon name={"add"} />
-            </a>
+            </Link>
             <a href="#">
                 <svg
                     width="32"
