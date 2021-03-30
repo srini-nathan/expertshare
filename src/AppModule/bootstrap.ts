@@ -13,7 +13,11 @@ const appNavigations: AppNavigationItemProps[] = [...appNavigation];
 
 // all registered modules' navigation and routing injecting within AppModule
 registeredModules.forEach(
-    ({ routers, translations, navigation }: ModuleConfig) => {
+    ({
+        routers,
+        translations,
+        navigation,
+    }: ModuleConfig<AppNavigationItemProps>) => {
         i18Resources = _merge(i18Resources, translations);
         if (routers) appRouters.push(...routers);
         if (navigation) appNavigations.push(...navigation);
