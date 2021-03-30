@@ -1,4 +1,5 @@
 import { default as Axios, AxiosRequestConfig, AxiosInstance } from "axios";
+import QueryString from "qs";
 import  { API_HOST } from "./app-env";
 import { onRequestFulfilled, onRequestRejected, onResponseFulfilled, onResponseRejected } from "../apis/interceptors";
 import { ACCEPTABLE_RESPONSE } from "../config/app-env";
@@ -9,6 +10,9 @@ const defaultConfig: AxiosRequestConfig = {
     timeout: 1000 * 60,
     headers: {
         accept: AcceptableResponse.header(ACCEPTABLE_RESPONSE),
+    },
+    paramsSerializer: params => {
+        return QueryString.stringify(params, { arrayFormat: "brackets" })
     }
 }
 
