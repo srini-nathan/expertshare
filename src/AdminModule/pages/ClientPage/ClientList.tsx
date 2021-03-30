@@ -15,6 +15,7 @@ import { AppListPageToolbar } from "../../../AppModule/components/AppListPageToo
 import { AppGrid } from "../../../AppModule/containers/AppGrid";
 import { ClientApi } from "../../apis/ClientApi";
 import { Client } from "../../../lib/API/Api";
+import { appGridConfig } from "../../../AppModule/config";
 
 // TODO:: Add header => name=> ES-DOMAIN value=>  domain.name(react client) currently on
 
@@ -33,16 +34,13 @@ const columnDef: ColDef[] = [
     },
 ];
 
-const GlobalGridConfig = {
-    pageSize: 30,
-};
 export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const dataSource: IServerSideDatasource = {
         getRows(params: IServerSideGetRowsParams) {
             const { request } = params;
             const { endRow } = request;
-            const pageNo = endRow / GlobalGridConfig.pageSize;
+            const pageNo = endRow / appGridConfig.pageSize;
             ClientApi.findAll<Client>(pageNo).then(
                 (res: ListResponse<Client>) => {
                     setTotalItems(res.totalItems);

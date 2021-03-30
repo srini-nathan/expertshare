@@ -15,10 +15,8 @@ import { ColumnApi } from "ag-grid-community/dist/lib/columnController/columnApi
 import { PaginationChangedEvent } from "ag-grid-community/dist/lib/events";
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 import { AppGridPagination } from "../../components/AppGridPagination";
+import { appGridConfig } from "../../config";
 
-export const GlobalGridConfig = {
-    pageSize: 30,
-};
 export interface AppGridProps {
     columnDef: ColDef[];
     dataSource: IServerSideDatasource;
@@ -57,9 +55,9 @@ export const AppGrid: FC<AppGridProps> = ({
                     }}
                     rowModelType={"serverSide"}
                     serverSideStoreType={ServerSideStoreType.Partial}
-                    paginationPageSize={GlobalGridConfig.pageSize}
+                    paginationPageSize={appGridConfig.pageSize}
                     suppressPaginationPanel={true}
-                    cacheBlockSize={GlobalGridConfig.pageSize}
+                    cacheBlockSize={appGridConfig.pageSize}
                     onPaginationChanged={onPaginationChanged}
                     pagination={true}
                     getRowNodeId={(item) => {

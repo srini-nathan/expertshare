@@ -12,6 +12,7 @@ import { LanguageApi } from "../../apis/LanguageApi";
 import { AppGrid } from "../../../AppModule/containers/AppGrid";
 import { Language } from "../../models";
 import { ListResponse } from "../../../AppModule/models";
+import { appGridConfig } from "../../../AppModule/config";
 
 const columnDef: ColDef[] = [
     {
@@ -30,17 +31,13 @@ const columnDef: ColDef[] = [
     },
 ];
 
-const GlobalGridConfig = {
-    pageSize: 30,
-};
-
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const dataSource: IServerSideDatasource = {
         getRows(params: IServerSideGetRowsParams) {
             const { request } = params;
             const { endRow } = request;
-            const pageNo = endRow / GlobalGridConfig.pageSize;
+            const pageNo = endRow / appGridConfig.pageSize;
             LanguageApi.findAll<Language>(pageNo).then(
                 (res: ListResponse<Language>) => {
                     setTotalItems(res.totalItems);
