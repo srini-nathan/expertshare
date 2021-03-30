@@ -3,15 +3,15 @@ import React, { FC, useState } from "react";
 import { AppIcon } from "../AppIcon";
 import { AppModal } from "../AppModal";
 
-export const AppGridAction: FC<{ value: number }> = (props: {
+export const AppGridAction: FC<{
     value: number;
-}): JSX.Element => {
-    // eslint-disable-next-line no-console
+    callback: () => void;
+}> = ({ value, callback }): JSX.Element => {
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleDelete = () => {
         setShow(false);
+        callback();
         // TODO DELETE FUNCTION => in=Client
     };
     return (
@@ -20,7 +20,6 @@ export const AppGridAction: FC<{ value: number }> = (props: {
                 href="#"
                 className={"mr-3"}
                 onClick={() => {
-                    // eslint-disable-next-line no-console
                     setShow(true);
                 }}
             >
@@ -89,7 +88,7 @@ export const AppGridAction: FC<{ value: number }> = (props: {
                 show={show}
                 handleClose={handleClose}
                 handleDelete={handleDelete}
-                id={props.value}
+                id={value}
             />
         </div>
     );

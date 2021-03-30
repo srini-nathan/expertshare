@@ -21,6 +21,10 @@ import { Client } from "../../../lib/API/Api";
 import { appGridConfig } from "../../../AppModule/config";
 import { AppGridAction } from "../../../AppModule/components/AppGridAction";
 
+function handleDelete() {
+    // eslint-disable-next-line no-console
+    console.log("delete called");
+}
 const columnDef: ColDef[] = [
     {
         headerName: "Client",
@@ -37,6 +41,7 @@ const columnDef: ColDef[] = [
         field: "id",
         sortable: false,
         cellRenderer: "appGridActionRenderer",
+        cellRendererParams: { callback: handleDelete },
     },
 ];
 const frameworkComponents = {
