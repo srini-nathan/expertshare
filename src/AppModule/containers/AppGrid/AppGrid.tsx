@@ -53,6 +53,7 @@ export const AppGrid: FC<AppGridProps> = ({
                         sortable: true,
                         resizable: true,
                     }}
+                    rowHeight={70}
                     rowModelType={"serverSide"}
                     serverSideStoreType={ServerSideStoreType.Partial}
                     paginationPageSize={appGridConfig.pageSize}
