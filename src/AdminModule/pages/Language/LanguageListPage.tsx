@@ -16,13 +16,9 @@ import {
 import { Language } from "../../models";
 import { ListResponse } from "../../../AppModule/models";
 import { appGridConfig } from "../../../AppModule/config";
+import { AppSwitch } from "../../../AppModule/components/AppSwitch";
 
 const columnDef: ColDef[] = [
-    {
-        headerName: "ID",
-        field: "id",
-        flex: 1,
-    },
     {
         headerName: "Language",
         field: "name",
@@ -32,7 +28,33 @@ const columnDef: ColDef[] = [
         headerName: "Locale",
         field: "locale",
     },
+    {
+        headerName: "Active",
+        field: "isActive",
+        cellRenderer: "appSwitch",
+    },
+    {
+        headerName: "Default",
+        field: "isDefault",
+        editable: true,
+    },
 ];
+
+const frameworkComponents = {
+    appSwitch: (params: any) => {
+        const { value, data } = params;
+        const { id } = data;
+        // eslint-disable-next-line no-console
+        console.log(params, "params");
+        return (
+            <AppSwitch
+                value={value}
+                name={`isActive${id}`}
+                defaultChecked={value}
+            />
+        );
+    },
+};
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
@@ -59,6 +81,7 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
             <Row>
                 <Col>
                     <AppGrid
+                        frameworkComponents={frameworkComponents}
                         columnDef={columnDef}
                         dataSource={dataSource}
                         totalItems={totalItems}

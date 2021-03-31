@@ -1,0 +1,47 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.custom-switch {
+    display: flex !important;
+    padding-left: 0 !important;
+    height: 100%;
+    label {
+        width: 74px;
+        margin: auto 0;
+        height: 44px;
+        cursor: pointer;
+        border-radius: $checkbox-block-border-radius;
+        transition: all .2s;
+    }
+    [type="checkbox"] + label::before {
+        position: absolute;
+        top: 3px;
+        display: block;
+        width: 34px;
+        height: 38px;
+        content: "";
+        border: none;
+        border-radius: $checkbox-block-border-radius;
+        transition: all .2s;
+        appearance: none;
+        background-color: $checkbox-toggler-not-checked-clr;
+    }
+    [type="checkbox"]:not(:checked) + label::before {
+        transform: translateX(40px);
+    }
+    [type="checkbox"]:not(:checked) + label {
+        background-color: $checkbox-not-checked-bg;
+    }
+    [type="checkbox"]:checked {
+        & + label{
+        background-color: $checkbox-checked-bg;
+        }
+        & + label::before {
+            background-color: $checkbox-toggler-checked-clr;
+            transform: translateX(74px);
+        }
+    }
+    label::after,[type="checkbox"]:checked + label::after{
+        background-color: unset !important;
+    }
+}
