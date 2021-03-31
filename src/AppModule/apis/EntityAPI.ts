@@ -55,7 +55,9 @@ export abstract class EntityAPI extends API {
     public static async update<R, P>(id: number, data: P): Promise<R> {
         const res: AxiosResponse<R> = await this.makePatch<R, P>(
             `${this.PATH}/${id}`,
-            data
+            data,
+            {},
+            { headers: { "content-type": "application/merge-patch+json" } }
         );
         return res.data;
     }

@@ -42,6 +42,7 @@ export interface Container extends BaseEntity {
 export interface Client extends BaseEntity {
     name: string;
     notes: string;
+    packages: Package[];
 }
 
 export interface Package {

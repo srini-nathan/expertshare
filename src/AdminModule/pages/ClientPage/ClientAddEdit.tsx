@@ -28,10 +28,10 @@ function getProperty<T, K extends keyof T>(obj: T, key: K) {
 export type ClientFormType = {
     name: string;
     notes: string;
-    packages: [];
+    [key: string]: any;
 };
 
-export interface ClientAdd {
+export interface ClientRequestData {
     name: string;
     notes: string;
     packages: string[];
@@ -55,18 +55,6 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const [packageKeys, setPackageKeys] = useState<string[]>();
 
     useEffect(() => {
-        if (!isAddMode) {
-            ClientApi.findById<Client>(id).then((res) => {
-                // eslint-disable-next-line no-console
-                console.log(res);
-                const fields: string[] = ["name", "notes"];
-                fields.forEach((field) =>
-                    setValue(field, getProperty(res, field as keyof Client))
-                );
-                setClientFetched(true);
-            });
-        }
-
         PackageApi.findAll<Package>().then(
             ({ items }: ListResponse<Package>) => {
                 setPackageKeys(
@@ -77,11 +65,27 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                 setPackages(items);
             }
         );
+        if (!isAddMode) {
+            ClientApi.findById<Client>(id).then((res) => {
+                const fetchedClientPackagesKeys = res.packages.map((item) => {
+                    const key = item.packageKey.replace(".", "_");
+                    return { key, value: item.id };
+                });
+
+                const fields: string[] = ["name", "notes"];
+                fields.forEach((field) =>
+                    setValue(field, getProperty(res, field as keyof Client))
+                );
+                fetchedClientPackagesKeys.forEach((pk) =>
+                    setValue(pk.key, pk.value)
+                );
+                setClientFetched(true);
+            });
+        }
     }, [id, isAddMode, clientFetched, setValue]);
 
-    async function createClient(data: any) {
-        const keys = Object.keys(data);
-        const result = keys.reduce<ClientAdd>(
+    function buildPackageArray(keys: string[], data: ClientFormType) {
+        return keys.reduce<ClientRequestData>(
             (acc, item: string) => {
                 if (packageKeys?.includes(item)) {
                     if (data[item] !== false) {
@@ -101,25 +105,29 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
             },
             { name: "", notes: "", packages: [] }
         );
-        // eslint-disable-next-line no-console
-        console.log(result);
-        await ClientApi.create<Client, ClientAdd>(result);
+    }
+
+    async function createClient(data: ClientFormType) {
+        const keys = Object.keys(data);
+        const result = buildPackageArray(keys, data);
+        await ClientApi.create<Client, ClientRequestData>(result);
         await navigate(`/admin/client`);
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async function updateClient({ name, notes }: ClientFormType) {
-        await ClientApi.update(id, { name, notes });
+    async function updateClient(data: ClientFormType) {
+        const keys = Object.keys(data);
+        const result = buildPackageArray(keys, data);
+        await ClientApi.update<Client, ClientRequestData>(id, result);
         await navigate(`/admin/client`);
     }
     // async function updateClient({ name, notes, activate }: ClientFormType) {
     //     await Api.updateClient(name, notes, activate, id);
     //     await navigate(`/admin/client`);
     // }
-    const onSubmit = async (data: any) => {
+    const onSubmit = async (data: ClientFormType) => {
         if (isAddMode) {
             await createClient(data);
         } else {
-            // await updateClient({ name, notes, activate });
+            await updateClient(data);
         }
     };
 
