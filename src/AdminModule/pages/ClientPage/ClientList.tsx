@@ -19,10 +19,7 @@ import {
 import { ClientApi } from "../../apis/ClientApi";
 import { Client } from "../../../lib/API/Api";
 import { appGridConfig } from "../../../AppModule/config";
-
-// TODO:: Add header => name=> ES-DOMAIN value=>  domain.name(react client) currently on
-
-// TODO:  logged in=> jwt=> /me/? => container id=> i keep it => LocalStorage ...(will be provided )
+import { AppGridAction } from "../../../AppModule/components/AppGridAction";
 
 const columnDef: ColDef[] = [
     {
@@ -35,7 +32,16 @@ const columnDef: ColDef[] = [
         field: "notes",
         flex: 2,
     },
+    {
+        headerName: "Actions",
+        field: "id",
+        sortable: false,
+        cellRenderer: "appGridActionRenderer",
+    },
 ];
+const frameworkComponents = {
+    appGridActionRenderer: AppGridAction,
+};
 
 export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
@@ -62,6 +68,7 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
             <Row>
                 <Col>
                     <AppGrid
+                        frameworkComponents={frameworkComponents}
                         columnDef={columnDef}
                         dataSource={dataSource}
                         totalItems={totalItems}

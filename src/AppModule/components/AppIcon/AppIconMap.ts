@@ -10,6 +10,7 @@ import {
     ChevronRight,
     Edit3,
     Trash2,
+    Plus,
 } from "react-feather";
 
 interface IAppIconMap {
@@ -35,4 +36,6 @@ export const AppIconMap: IAppIconMap = {
     Edit3,
     delete: Trash2,
     Trash2,
+    add: Plus,
+    Plus,
 };
