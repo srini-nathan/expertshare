@@ -57,6 +57,8 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     useEffect(() => {
         if (!isAddMode) {
             ClientApi.findById<Client>(id).then((res) => {
+                // eslint-disable-next-line no-console
+                console.log(res);
                 const fields: string[] = ["name", "notes"];
                 fields.forEach((field) =>
                     setValue(field, getProperty(res, field as keyof Client))
@@ -83,7 +85,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
             (acc, item: string) => {
                 if (packageKeys?.includes(item)) {
                     if (data[item] !== false) {
-                        const newPackageString = `/api/package/${data[item]}`;
+                        const newPackageString = `/api/packages/${data[item]}`;
                         const newPackageArray = [
                             ...acc.packages,
                             newPackageString,
@@ -99,6 +101,8 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
             },
             { name: "", notes: "", packages: [] }
         );
+        // eslint-disable-next-line no-console
+        console.log(result);
         await ClientApi.create<Client, ClientAdd>(result);
         await navigate(`/admin/client`);
     }
