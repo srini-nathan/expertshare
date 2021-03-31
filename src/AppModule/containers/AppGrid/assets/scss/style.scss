@@ -1,6 +1,9 @@
 @import "./../../../../assets/scss/variables";
 
 .ag-theme-alpine {
+    .ag-react-container{
+        height: 100%;
+    }
     .ag-sort-ascending-icon,
     .ag-sort-descending-icon {
         position: relative;

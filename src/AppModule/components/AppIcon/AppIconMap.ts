@@ -13,6 +13,8 @@ import {
     Plus,
 } from "react-feather";
 
+import { ListTree } from "./CustomIcons";
+
 interface IAppIconMap {
     [index: string]: FC<IconProps>;
 }
@@ -38,4 +40,5 @@ export const AppIconMap: IAppIconMap = {
     Trash2,
     add: Plus,
     Plus,
+    ListTree,
 };

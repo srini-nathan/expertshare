@@ -18,7 +18,6 @@ export const AppSwitch: FC<AppSwitchProps> = ({
     return (
         <Form.Check
             type="switch"
-            className={"custom-switch"}
             label={label}
             name={name}
             value={value}
