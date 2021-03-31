@@ -26,11 +26,16 @@ function getProperty<T, K extends keyof T>(obj: T, key: K) {
 }
 
 export type ClientFormType = {
-    activate: boolean;
     name: string;
     notes: string;
+    packages: [];
 };
 
+export interface ClientAdd {
+    name: string;
+    notes: string;
+    packages: string[];
+}
 export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const { id } = useParams();
     const isAddMode = !id;
@@ -47,8 +52,8 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         resolver: yupResolver(validationSchema),
     });
     const [clientFetched, setClientFetched] = useState(false);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [packageKeys, setPackageKeys] = useState<string[]>();
+
     useEffect(() => {
         if (!isAddMode) {
             ClientApi.findById<Client>(id).then((res) => {
@@ -72,8 +77,29 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         );
     }, [id, isAddMode, clientFetched, setValue]);
 
-    async function createClient({ name, notes }: ClientFormType) {
-        await ClientApi.create({ name, notes });
+    async function createClient(data: any) {
+        const keys = Object.keys(data);
+        const result = keys.reduce<ClientAdd>(
+            (acc, item: string) => {
+                if (packageKeys?.includes(item)) {
+                    if (data[item] !== false) {
+                        const newPackageString = `/api/package/${data[item]}`;
+                        const newPackageArray = [
+                            ...acc.packages,
+                            newPackageString,
+                        ];
+                        return { ...acc, packages: newPackageArray };
+                    }
+                    return acc;
+                }
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                acc[item] = data[item];
+                return acc;
+            },
+            { name: "", notes: "", packages: [] }
+        );
+        await ClientApi.create<Client, ClientAdd>(result);
         await navigate(`/admin/client`);
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -127,15 +153,6 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         message={errors.name?.message}
                                         placeholder={"Please Enter ..."}
                                     />
-
-                                    <CustomCheckBox
-                                        name={"activate"}
-                                        label={"Active"}
-                                        labelPosition={"top"}
-                                        value="0"
-                                        register={register}
-                                        defaultChecked={true}
-                                    />
                                 </div>
                                 <div className="row mx-0 mb-2">
                                     <div className="col-12 mt-2 px-0 pl-xl-3">
@@ -163,54 +180,64 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         </div>
                                     </div>
                                 </div>
+                                <div className="row mx-0 pr-xl-3">
+                                    <div className="col-12 px-0 px-xl-3">
+                                        <div className="pr-xl-3">
+                                            <div className="col-12 d-flex flex-wrap justify-content-between">
+                                                <label
+                                                    className="light-label theme-label-clr m-0"
+                                                    htmlFor="edit-client-notes"
+                                                >
+                                                    Notes
+                                                </label>
+                                                <span className="input-letter-counter theme-input-letter-counter-clr">
+                                                    0/120
+                                                </span>
 
-                                <div className="form-row">
-                                    <div className="form-group col-5">
-                                        <label>Name</label>
-                                        <input
-                                            name="name"
-                                            type="text"
-                                            ref={register}
-                                            className={`form-control ${
-                                                errors.name ? "is-invalid" : ""
-                                            }`}
-                                        />
-                                        <div className="invalid-feedback">
-                                            {errors.name?.message}
-                                        </div>
-                                    </div>
-                                    <div className="form-group col-5">
-                                        <label>Notes</label>
-                                        <input
-                                            name="notes"
-                                            type="text"
-                                            ref={register}
-                                            className={`form-control ${
-                                                errors.notes ? "is-invalid" : ""
-                                            }`}
-                                        />
-                                        <div className="invalid-feedback">
-                                            {errors.notes?.message}
+                                                <textarea
+                                                    className={`theme-textarea-bg-clr theme-input-clr theme-input-border theme-input-border-radius theme-input-padding w-100 mt-1 ${
+                                                        errors.notes
+                                                            ? "is-invalid"
+                                                            : ""
+                                                    }`}
+                                                    name="notes"
+                                                    id="edit-client-notes"
+                                                    rows={17}
+                                                    ref={register}
+                                                    placeholder="Please Enter..."
+                                                />
+                                                <div className="invalid-feedback">
+                                                    {errors.notes?.message}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="form-group">
-                                    <button
-                                        type="submit"
-                                        disabled={formState.isSubmitting}
-                                        className="btn btn-primary"
-                                    >
-                                        {formState.isSubmitting && (
-                                            <span className="spinner-border spinner-border-sm mr-1"></span>
-                                        )}
-                                        Save
-                                    </button>
-                                    <Link
-                                        to={isAddMode ? "." : ".."}
-                                        className="btn btn-link"
-                                    >
-                                        Cancel
-                                    </Link>
+                                <div className="row mx-0">
+                                    <div className="col-12 pl-xl-0">
+                                        <div className="edit-client-footer-wrap">
+                                            <div className="edit-client-footer w-100 d-flex flex-column flex-sm-row align-items-center justify-content-end">
+                                                <button
+                                                    type="submit"
+                                                    disabled={
+                                                        formState.isSubmitting
+                                                    }
+                                                    className="btn btn-primary"
+                                                >
+                                                    {formState.isSubmitting && (
+                                                        <span className="spinner-border spinner-border-sm mr-1" />
+                                                    )}
+                                                    Save
+                                                </button>
+                                                <Link
+                                                    to={isAddMode ? "." : ".."}
+                                                    className="btn btn-link"
+                                                >
+                                                    Cancel
+                                                </Link>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         </div>
