@@ -1,6 +1,6 @@
 import React, { FunctionComponent } from "react";
 import styled from "styled-components";
-import { AppIconMap } from "./AppIconMap";
+import { appIconMap } from "./app-icon-map";
 
 export interface AppIconProps {
     name: string;
@@ -16,6 +16,6 @@ export const AppIcon: FunctionComponent<AppIconProps> = ({
     className = "",
     ...props
 }) => {
-    const IconTag = AppIconMap[name] ?? ITag;
+    const IconTag = appIconMap[name] ?? ITag;
     return <IconTag className={className} {...props}></IconTag>;
 };

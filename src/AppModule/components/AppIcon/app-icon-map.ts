@@ -1,6 +1,4 @@
-import { FC } from "react";
 import {
-    IconProps,
     Grid,
     Briefcase,
     Users,
@@ -13,13 +11,10 @@ import {
     Plus,
 } from "react-feather";
 
-import { ListTree } from "./CustomIcons";
+import { ListTree } from "./app-custom-icons";
+import { AppIconMap } from "../../models";
 
-interface IAppIconMap {
-    [index: string]: FC<IconProps>;
-}
-
-export const AppIconMap: IAppIconMap = {
+export const appIconMap: AppIconMap = {
     dashboard: Grid,
     Grid,
     sponsors: Briefcase,
