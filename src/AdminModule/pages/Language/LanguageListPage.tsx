@@ -37,6 +37,12 @@ const columnDef: ColDef[] = [
         field: "isDefault",
         cellRenderer: "appFormRadio",
     },
+    {
+        headerName: "Actions",
+        field: "id",
+        sortable: false,
+        cellRenderer: "appGridActionRenderer",
+    },
 ];
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {

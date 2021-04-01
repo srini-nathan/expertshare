@@ -1,5 +1,6 @@
 import React from "react";
 import { AppFormRadio, AppSwitch } from "../../components";
+import { AppGridAction } from "../../components/AppGridAction";
 
 export const appGridFrameworkComponents = {
     appSwitch: (params: any) => {
@@ -25,4 +26,5 @@ export const appGridFrameworkComponents = {
             />
         );
     },
+    appGridActionRenderer: AppGridAction,
 };
