@@ -71,7 +71,7 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
         <Fragment>
             <AppPageHeader title={"Client"} />
             <AppListPageToolbar
-                createLabel={"New Client"}
+                createLabel={"Create Client"}
                 createLink={"client/new"}
             />
             <Row>

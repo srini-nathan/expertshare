@@ -168,7 +168,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                 </div>
                                 <div className="row mx-0 mb-2">
                                     <div className="col-12 mt-2 px-0 pl-xl-3">
-                                        <div className="col-12 light-label theme-label-clr pb-1 mb-3">
+                                        <div className="col-12 light-label theme-label-clr px-0 pb-1 mb-3">
                                             Default Packages
                                         </div>
                                     </div>
@@ -195,7 +195,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                 <div className="row mx-0 pr-xl-3">
                                     <div className="col-12 px-0 px-xl-3">
                                         <div className="pr-xl-3">
-                                            <div className="col-12 d-flex flex-wrap justify-content-between">
+                                            <div className="col-12 d-flex p-0 flex-wrap justify-content-between">
                                                 <label
                                                     className="light-label theme-label-clr m-0"
                                                     htmlFor="edit-client-notes"
@@ -207,7 +207,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                                 </span>
 
                                                 <textarea
-                                                    className={`theme-textarea-bg-clr theme-input-clr theme-input-border theme-input-border-radius theme-input-padding w-100 mt-1 ${
+                                                    className={`text-area w-100 mt-1 ${
                                                         errors.notes
                                                             ? "is-invalid"
                                                             : ""
@@ -229,24 +229,24 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                     <div className="col-12 pl-xl-0">
                                         <div className="edit-client-footer-wrap">
                                             <div className="edit-client-footer w-100 d-flex flex-column flex-sm-row align-items-center justify-content-end">
+                                                <Link
+                                                    to={isAddMode ? "." : ".."}
+                                                    className="btn m-2 btn-secondary"
+                                                >
+                                                    Cancel
+                                                </Link>
                                                 <button
                                                     type="submit"
                                                     disabled={
                                                         formState.isSubmitting
                                                     }
-                                                    className="btn btn-primary"
+                                                    className="btn m-2 btn-primary"
                                                 >
                                                     {formState.isSubmitting && (
                                                         <span className="spinner-border spinner-border-sm mr-1" />
                                                     )}
                                                     Save
                                                 </button>
-                                                <Link
-                                                    to={isAddMode ? "." : ".."}
-                                                    className="btn btn-link"
-                                                >
-                                                    Cancel
-                                                </Link>
                                             </div>
                                         </div>
                                     </div>
