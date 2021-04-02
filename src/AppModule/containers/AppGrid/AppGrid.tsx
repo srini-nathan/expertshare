@@ -16,6 +16,7 @@ import { PaginationChangedEvent } from "ag-grid-community/dist/lib/events";
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 import { AppGridPagination } from "../../components/AppGridPagination";
 import { appGridConfig } from "../../config";
+import { appGridFrameworkComponents } from "./app-grid-framework-components";
 
 export interface AppGridProps {
     columnDef: ColDef[];
@@ -49,7 +50,10 @@ export const AppGrid: FC<AppGridProps> = ({
         <React.Fragment>
             <div className="ag-theme-alpine">
                 <AgGridReact
-                    frameworkComponents={frameworkComponents}
+                    frameworkComponents={{
+                        ...appGridFrameworkComponents,
+                        ...frameworkComponents,
+                    }}
                     defaultColDef={{
                         flex: 1,
                         minWidth: 150,
