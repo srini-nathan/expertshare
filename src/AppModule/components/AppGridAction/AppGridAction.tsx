@@ -6,7 +6,7 @@ import { AppModal } from "../AppModal";
 
 export const AppGridAction: FC<{
     value: number;
-    callback: () => void;
+    callback: (id: number) => void;
     editLink: string;
     addLink: string;
 }> = ({ value, callback, editLink, addLink }): JSX.Element => {
@@ -14,7 +14,7 @@ export const AppGridAction: FC<{
     const handleClose = () => setShow(false);
     const handleDelete = () => {
         setShow(false);
-        callback();
+        callback(value);
     };
     return (
         <div>

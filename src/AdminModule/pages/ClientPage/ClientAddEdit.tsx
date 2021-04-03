@@ -16,6 +16,7 @@ import { CustomCheckBox } from "../../../SharedModule/components/CustomCheckBox/
 import { ClientApi } from "../../apis/ClientApi";
 import { PackageApi } from "../../apis/PackageApi";
 import { ListResponse } from "../../../AppModule/models";
+import { sweetSuccess } from "../../../AppModule/components/Util";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is Required"),
@@ -111,18 +112,17 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         const keys = Object.keys(data);
         const result = buildPackageArray(keys, data);
         await ClientApi.create<Client, ClientRequestData>(result);
+        await sweetSuccess({ text: "Client saved successfully " });
         await navigate(`/admin/client`);
     }
     async function updateClient(data: ClientFormType) {
         const keys = Object.keys(data);
         const result = buildPackageArray(keys, data);
         await ClientApi.update<Client, ClientRequestData>(id, result);
+        await sweetSuccess({ text: "Client updated successfully " });
         await navigate(`/admin/client`);
     }
-    // async function updateClient({ name, notes, activate }: ClientFormType) {
-    //     await Api.updateClient(name, notes, activate, id);
-    //     await navigate(`/admin/client`);
-    // }
+
     const onSubmit = async (data: ClientFormType) => {
         if (isAddMode) {
             await createClient(data);

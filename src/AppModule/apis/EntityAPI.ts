@@ -40,7 +40,13 @@ export abstract class EntityAPI extends API {
             },
             config
         );
+        return res.data;
+    }
 
+    public static async delete<R>(id: number): Promise<R> {
+        const res: AxiosResponse<R> = await this.makeDelete(
+            `${this.PATH}/${id}`
+        );
         return res.data;
     }
 

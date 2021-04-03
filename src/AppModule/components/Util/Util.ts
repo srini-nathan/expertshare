@@ -13,19 +13,17 @@ export const sweetSuccess = ({
         text,
         icon: "success",
         confirmButtonText,
-        animation: true,
     }).then();
 };
 
 export const sweetError = ({
     text,
-    confirmButtonText,
+    confirmButtonText = "OK",
 }: SweetAlertInput): void => {
     Swal.fire({
         title: "Error!",
         text,
         icon: "error",
         confirmButtonText,
-        animation: true,
     }).then();
 };

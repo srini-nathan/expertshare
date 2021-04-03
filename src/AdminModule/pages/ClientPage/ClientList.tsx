@@ -20,40 +20,45 @@ import { ClientApi } from "../../apis/ClientApi";
 import { Client } from "../../../lib/API/Api";
 import { appGridConfig } from "../../../AppModule/config";
 import { AppGridAction } from "../../../AppModule/components/AppGridAction";
-
-function handleDelete() {
-    // eslint-disable-next-line no-console
-    console.log("delete called");
-}
-const columnDef: ColDef[] = [
-    {
-        headerName: "Client",
-        field: "name",
-        flex: 1,
-    },
-    {
-        headerName: "Notes",
-        field: "notes",
-        flex: 2,
-    },
-    {
-        headerName: "Actions",
-        field: "id",
-        sortable: false,
-        cellRenderer: "appGridActionRenderer",
-        cellRendererParams: {
-            callback: handleDelete,
-            editLink: "/admin/client/",
-            addLink: "/admin/client/new",
-        },
-    },
-];
-const frameworkComponents = {
-    appGridActionRenderer: AppGridAction,
-};
+import { sweetError, sweetSuccess } from "../../../AppModule/components/Util";
 
 export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
+    async function handleDelete(id: number) {
+        try {
+            await ClientApi.delete<void>(id);
+            await sweetSuccess({ text: " Successfully deleted " });
+        } catch (e) {
+            await sweetError({ text: "Something Went Wrong!" });
+        }
+    }
+    const columnDef: ColDef[] = [
+        {
+            headerName: "Client",
+            field: "name",
+            flex: 1,
+        },
+        {
+            headerName: "Notes",
+            field: "notes",
+            flex: 2,
+        },
+        {
+            headerName: "Actions",
+            field: "id",
+            sortable: false,
+            cellRenderer: "appGridActionRenderer",
+            cellRendererParams: {
+                callback: handleDelete,
+                editLink: "/admin/client/",
+                addLink: "/admin/client/new",
+            },
+        },
+    ];
+    const frameworkComponents = {
+        appGridActionRenderer: AppGridAction,
+    };
+
     const dataSource: IServerSideDatasource = {
         getRows(params: IServerSideGetRowsParams) {
             const { request } = params;
