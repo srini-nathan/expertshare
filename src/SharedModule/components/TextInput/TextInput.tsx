@@ -44,7 +44,7 @@ export const TextInput: FC<TextInputProps> = ({
                     </span>
                 )}
                 <input
-                    className="mt-1 mb-0"
+                    className={`mt-1 mb-0 ${invalid && " is-invalid"}`}
                     type={type}
                     name={name}
                     ref={register}
