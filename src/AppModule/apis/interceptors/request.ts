@@ -15,6 +15,8 @@ export const onRequestFulfilled = (
 
 export const onRequestRejected = (error: any): null => {
     // eslint-disable-next-line no-console
+    console.log(error.response);
+    // eslint-disable-next-line no-console
     console.error("onRequestRejected", error);
     return null;
 };

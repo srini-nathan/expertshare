@@ -1,18 +1,20 @@
 import React, { FC, useState } from "react";
 
+import { Link } from "@reach/router";
 import { AppIcon } from "../AppIcon";
 import { AppModal } from "../AppModal";
 
-export const AppGridAction: FC<{ value: number }> = (props: {
+export const AppGridAction: FC<{
     value: number;
-}): JSX.Element => {
-    // eslint-disable-next-line no-console
+    callback: (id: number) => void;
+    editLink: string;
+    addLink: string;
+}> = ({ value, callback, editLink, addLink }): JSX.Element => {
     const [show, setShow] = useState(false);
-
     const handleClose = () => setShow(false);
     const handleDelete = () => {
         setShow(false);
-        // TODO DELETE FUNCTION => in=Client
+        callback(value);
     };
     return (
         <div>
@@ -20,19 +22,18 @@ export const AppGridAction: FC<{ value: number }> = (props: {
                 href="#"
                 className={"mr-3"}
                 onClick={() => {
-                    // eslint-disable-next-line no-console
                     setShow(true);
                 }}
             >
                 <AppIcon name={"delete"} />
             </a>
 
-            <a href="#" className={"mr-3"}>
+            <Link className={"mr-3"} to={`${editLink}${value}`}>
                 <AppIcon name={"edit"} />
-            </a>
-            <a href="#" className={"mr-3"}>
+            </Link>
+            <Link className={"mr-3"} to={`${addLink}`}>
                 <AppIcon name={"add"} />
-            </a>
+            </Link>
             <a href="#">
                 <AppIcon name={"ListTree"} />
             </a>
@@ -40,7 +41,7 @@ export const AppGridAction: FC<{ value: number }> = (props: {
                 show={show}
                 handleClose={handleClose}
                 handleDelete={handleDelete}
-                id={props.value}
+                id={value}
             />
         </div>
     );

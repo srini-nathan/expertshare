@@ -30,7 +30,7 @@ export const TextInput: FC<TextInputProps> = ({
     maxCount,
 }): JSX.Element => {
     return (
-        <div className="col-12 col-sm-9 col-xl-4 mr-xl-1 input-wrap-pr">
+        <div className="col-12 col-sm-9 col-xl-4 mr-xl-1 px-0 input-wrap-pr">
             <div className="d-flex flex-wrap justify-content-between mb-4">
                 <label
                     className="light-label theme-label-clr m-0"
@@ -44,7 +44,7 @@ export const TextInput: FC<TextInputProps> = ({
                     </span>
                 )}
                 <input
-                    className="mt-1 mb-0"
+                    className={`mt-1 mb-0 ${invalid && " is-invalid"}`}
                     type={type}
                     name={name}
                     ref={register}

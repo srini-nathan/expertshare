@@ -16,6 +16,7 @@ import { CustomCheckBox } from "../../../SharedModule/components/CustomCheckBox/
 import { ClientApi } from "../../apis/ClientApi";
 import { PackageApi } from "../../apis/PackageApi";
 import { ListResponse } from "../../../AppModule/models";
+import { sweetSuccess } from "../../../AppModule/components/Util";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is Required"),
@@ -26,11 +27,16 @@ function getProperty<T, K extends keyof T>(obj: T, key: K) {
 }
 
 export type ClientFormType = {
-    activate: boolean;
     name: string;
     notes: string;
+    [key: string]: any;
 };
 
+export interface ClientRequestData {
+    name: string;
+    notes: string;
+    packages: string[];
+}
 export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const { id } = useParams();
     const isAddMode = !id;
@@ -47,19 +53,9 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         resolver: yupResolver(validationSchema),
     });
     const [clientFetched, setClientFetched] = useState(false);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [packageKeys, setPackageKeys] = useState<string[]>();
-    useEffect(() => {
-        if (!isAddMode) {
-            ClientApi.findById<Client>(id).then((res) => {
-                const fields: string[] = ["name", "notes"];
-                fields.forEach((field) =>
-                    setValue(field, getProperty(res, field as keyof Client))
-                );
-                setClientFetched(true);
-            });
-        }
 
+    useEffect(() => {
         PackageApi.findAll<Package>().then(
             ({ items }: ListResponse<Package>) => {
                 setPackageKeys(
@@ -70,26 +66,68 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                 setPackages(items);
             }
         );
+        if (!isAddMode) {
+            ClientApi.findById<Client>(id).then((res) => {
+                const fetchedClientPackagesKeys = res.packages.map((item) => {
+                    const key = item.packageKey.replace(".", "_");
+                    return { key, value: item.id };
+                });
+
+                const fields: string[] = ["name", "notes"];
+                fields.forEach((field) =>
+                    setValue(field, getProperty(res, field as keyof Client))
+                );
+                fetchedClientPackagesKeys.forEach((pk) =>
+                    setValue(pk.key, pk.value)
+                );
+                setClientFetched(true);
+            });
+        }
     }, [id, isAddMode, clientFetched, setValue]);
 
-    async function createClient({ name, notes }: ClientFormType) {
-        await ClientApi.create({ name, notes });
+    function buildPackageArray(keys: string[], data: ClientFormType) {
+        return keys.reduce<ClientRequestData>(
+            (acc, item: string) => {
+                if (packageKeys?.includes(item)) {
+                    if (data[item] !== false) {
+                        const newPackageString = `/api/packages/${data[item]}`;
+                        const newPackageArray = [
+                            ...acc.packages,
+                            newPackageString,
+                        ];
+                        return { ...acc, packages: newPackageArray };
+                    }
+                    return acc;
+                }
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                acc[item] = data[item];
+                return acc;
+            },
+            { name: "", notes: "", packages: [] }
+        );
+    }
+
+    async function createClient(data: ClientFormType) {
+        const keys = Object.keys(data);
+        const result = buildPackageArray(keys, data);
+        await ClientApi.create<Client, ClientRequestData>(result);
+        await sweetSuccess({ text: "Client saved successfully " });
         await navigate(`/admin/client`);
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async function updateClient({ name, notes }: ClientFormType) {
-        await ClientApi.update(id, { name, notes });
+    async function updateClient(data: ClientFormType) {
+        const keys = Object.keys(data);
+        const result = buildPackageArray(keys, data);
+        await ClientApi.update<Client, ClientRequestData>(id, result);
+        await sweetSuccess({ text: "Client updated successfully " });
         await navigate(`/admin/client`);
     }
-    // async function updateClient({ name, notes, activate }: ClientFormType) {
-    //     await Api.updateClient(name, notes, activate, id);
-    //     await navigate(`/admin/client`);
-    // }
-    const onSubmit = async (data: any) => {
+
+    const onSubmit = async (data: ClientFormType) => {
         if (isAddMode) {
             await createClient(data);
         } else {
-            // await updateClient({ name, notes, activate });
+            await updateClient(data);
         }
     };
 
@@ -127,19 +165,10 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         message={errors.name?.message}
                                         placeholder={"Please Enter ..."}
                                     />
-
-                                    <CustomCheckBox
-                                        name={"activate"}
-                                        label={"Active"}
-                                        labelPosition={"top"}
-                                        value="0"
-                                        register={register}
-                                        defaultChecked={true}
-                                    />
                                 </div>
                                 <div className="row mx-0 mb-2">
                                     <div className="col-12 mt-2 px-0 pl-xl-3">
-                                        <div className="col-12 light-label theme-label-clr pb-1 mb-3">
+                                        <div className="col-12 light-label theme-label-clr px-0 pb-1 mb-3">
                                             Default Packages
                                         </div>
                                     </div>
@@ -163,54 +192,64 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         </div>
                                     </div>
                                 </div>
+                                <div className="row mx-0 pr-xl-3">
+                                    <div className="col-12 px-0 px-xl-3">
+                                        <div className="pr-xl-3">
+                                            <div className="col-12 d-flex p-0 flex-wrap justify-content-between">
+                                                <label
+                                                    className="light-label theme-label-clr m-0"
+                                                    htmlFor="edit-client-notes"
+                                                >
+                                                    Notes
+                                                </label>
+                                                <span className="input-letter-counter theme-input-letter-counter-clr">
+                                                    0/120
+                                                </span>
 
-                                <div className="form-row">
-                                    <div className="form-group col-5">
-                                        <label>Name</label>
-                                        <input
-                                            name="name"
-                                            type="text"
-                                            ref={register}
-                                            className={`form-control ${
-                                                errors.name ? "is-invalid" : ""
-                                            }`}
-                                        />
-                                        <div className="invalid-feedback">
-                                            {errors.name?.message}
-                                        </div>
-                                    </div>
-                                    <div className="form-group col-5">
-                                        <label>Notes</label>
-                                        <input
-                                            name="notes"
-                                            type="text"
-                                            ref={register}
-                                            className={`form-control ${
-                                                errors.notes ? "is-invalid" : ""
-                                            }`}
-                                        />
-                                        <div className="invalid-feedback">
-                                            {errors.notes?.message}
+                                                <textarea
+                                                    className={`text-area w-100 mt-1 ${
+                                                        errors.notes
+                                                            ? "is-invalid"
+                                                            : ""
+                                                    }`}
+                                                    name="notes"
+                                                    id="edit-client-notes"
+                                                    rows={17}
+                                                    ref={register}
+                                                    placeholder="Please Enter..."
+                                                />
+                                                <div className="invalid-feedback">
+                                                    {errors.notes?.message}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="form-group">
-                                    <button
-                                        type="submit"
-                                        disabled={formState.isSubmitting}
-                                        className="btn btn-primary"
-                                    >
-                                        {formState.isSubmitting && (
-                                            <span className="spinner-border spinner-border-sm mr-1"></span>
-                                        )}
-                                        Save
-                                    </button>
-                                    <Link
-                                        to={isAddMode ? "." : ".."}
-                                        className="btn btn-link"
-                                    >
-                                        Cancel
-                                    </Link>
+                                <div className="row mx-0">
+                                    <div className="col-12 pl-xl-0">
+                                        <div className="edit-client-footer-wrap">
+                                            <div className="edit-client-footer w-100 d-flex flex-column flex-sm-row align-items-center justify-content-end">
+                                                <Link
+                                                    to={isAddMode ? "." : ".."}
+                                                    className="btn m-2 btn-secondary"
+                                                >
+                                                    Cancel
+                                                </Link>
+                                                <button
+                                                    type="submit"
+                                                    disabled={
+                                                        formState.isSubmitting
+                                                    }
+                                                    className="btn m-2 btn-primary"
+                                                >
+                                                    {formState.isSubmitting && (
+                                                        <span className="spinner-border spinner-border-sm mr-1" />
+                                                    )}
+                                                    Save
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                         </div>

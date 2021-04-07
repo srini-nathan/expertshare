@@ -2,6 +2,11 @@
 
 
 .custom-checkbox {
+    .normal-label{
+        color: $secondary;
+        font-weight: 600;
+        font-size: 12px;
+    }
     label {
         width: 74px;
         height: 44px;
