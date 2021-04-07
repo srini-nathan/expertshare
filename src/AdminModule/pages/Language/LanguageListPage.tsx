@@ -60,6 +60,7 @@ const frameworkComponents = {
         return (
             <AppSwitch
                 name={`${name}-${id}`}
+                size={"sm"}
                 id={`${name}-${id}`}
                 value={isActive}
                 onChange={(event) => {

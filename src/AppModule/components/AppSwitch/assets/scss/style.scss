@@ -5,10 +5,35 @@
     display: flex !important;
     padding-left: 0 !important;
     height: 100%;
+    &.lg  {
+        label{
+            width: 74px;
+            height: 44px;
+        }
+        [type="checkbox"] + label::before {
+            width: 34px;
+            height: 38px;
+        }
+    }
+    &.sm  {
+        label{
+            width: 40px;
+            height: 24px;
+        }
+        [type="checkbox"] + label::before {
+            top: 2px;
+            width: 20px;
+            height: 20px;
+        }
+        [type="checkbox"]:checked + label::before{
+            transform: translateX(54px);
+        }
+        [type="checkbox"]:not(:checked) + label::before {
+            transform: translateX(38px);
+        }
+    }
     label {
-        width: 74px;
         margin: auto 0;
-        height: 44px;
         cursor: pointer;
         border-radius: $checkbox-block-border-radius;
         transition: all .2s;
@@ -17,8 +42,6 @@
         position: absolute;
         top: 3px;
         display: block;
-        width: 34px;
-        height: 38px;
         content: "";
         border: none;
         border-radius: $checkbox-block-border-radius;

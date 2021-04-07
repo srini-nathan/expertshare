@@ -7,6 +7,7 @@ export interface AppSwitchProps {
     name: string;
     value: boolean;
     label?: string;
+    size?: string;
     onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
@@ -15,12 +16,14 @@ export const AppSwitch: FC<AppSwitchProps> = ({
     name,
     value,
     label = "",
+    size = "lg",
     onChange = () => {},
 }): JSX.Element => {
     return (
         <FormCheck
             type="switch"
             id={id}
+            className={size}
             name={name}
             defaultChecked={value}
             label={label}
