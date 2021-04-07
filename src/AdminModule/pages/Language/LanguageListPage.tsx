@@ -1,90 +1,22 @@
-import React, { ChangeEventHandler, FC, Fragment, useState } from "react";
+import React, { FC, Fragment, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
-import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 import {
     IServerSideDatasource,
     IServerSideGetRowsParams,
 } from "ag-grid-community";
+import { appGridColDef } from "./app-grid-col-def";
+import { appGridFrameworkComponents } from "./app-grid-framework-components";
+import { LanguageApi } from "../../apis/LanguageApi";
+import { Language } from "../../models";
 import { AppPageHeader } from "../../../AppModule/components/AppPageHeader";
 import { AppListPageToolbar } from "../../../AppModule/components/AppListPageToolbar";
-import { LanguageApi } from "../../apis/LanguageApi";
 import {
     AppGrid,
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
-import { Language } from "../../models";
 import { ListResponse } from "../../../AppModule/models";
 import { appGridConfig } from "../../../AppModule/config";
-import { AppGridAction } from "../../../AppModule/components/AppGridAction";
-import { AppFormRadio, AppSwitch } from "../../../AppModule/components";
-
-const columnDef: ColDef[] = [
-    {
-        headerName: "Language",
-        field: "name",
-        flex: 2,
-    },
-    {
-        headerName: "Locale",
-        field: "locale",
-    },
-    {
-        headerName: "Active",
-        field: "isActive",
-        cellRenderer: "appSwitch",
-    },
-    {
-        headerName: "Default",
-        field: "isDefault",
-        cellRenderer: "appFormRadio",
-        cellRendererParams: {
-            onChange: (event: ChangeEventHandler) => {
-                // eslint-disable-next-line no-console
-                console.log("event", event);
-            },
-        },
-    },
-    {
-        headerName: "Actions",
-        field: "id",
-        sortable: false,
-        cellRenderer: "appGridActionRenderer",
-    },
-];
-
-const frameworkComponents = {
-    appSwitch: (params: any) => {
-        const { data } = params;
-        const { id, name, isActive } = data as Language;
-        return (
-            <AppSwitch
-                name={`${name}-${id}`}
-                size={"sm"}
-                id={`${name}-${id}`}
-                value={isActive}
-                onChange={(event) => {
-                    LanguageApi.update<Language, Partial<Language>>(id, {
-                        isActive: event.currentTarget.checked,
-                    }).then();
-                }}
-            />
-        );
-    },
-    appFormRadio: (params: any) => {
-        const { data, onChange } = params;
-        const { id, name, isDefault } = data as Language;
-        return (
-            <AppFormRadio
-                name={`${name}`}
-                id={`${name}-${id}`}
-                value={isDefault}
-                onChange={onChange}
-            />
-        );
-    },
-    appGridActionRenderer: AppGridAction,
-};
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
@@ -111,8 +43,8 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
             <Row>
                 <Col>
                     <AppGrid
-                        frameworkComponents={frameworkComponents}
-                        columnDef={columnDef}
+                        frameworkComponents={appGridFrameworkComponents}
+                        columnDef={appGridColDef}
                         dataSource={dataSource}
                         totalItems={totalItems}
                     />
