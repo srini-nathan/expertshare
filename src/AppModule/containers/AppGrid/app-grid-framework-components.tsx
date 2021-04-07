@@ -4,27 +4,22 @@ import { AppGridAction } from "../../components/AppGridAction";
 
 export const appGridFrameworkComponents = {
     appSwitch: (params: any) => {
-        const { value, data } = params;
-        const { id } = data;
+        // eslint-disable-next-line no-console
+        console.log(params, "params");
+        const { value, name, id, onChange } = params;
         return (
             <AppSwitch
+                name={`${name}id`}
+                id={`${name}-${id}`}
                 value={value}
-                name={`isActive${id}`}
-                defaultChecked={value}
+                onChange={onChange}
             />
         );
     },
     appFormRadio: (params: any) => {
-        const { value, data } = params;
+        const { value, data, name } = params;
         const { id } = data;
-        return (
-            <AppFormRadio
-                value={id}
-                name={`isDefault`}
-                id={`is-default-${id}`}
-                defaultChecked={value}
-            />
-        );
+        return <AppFormRadio name={name} id={`${name}-${id}`} value={value} />;
     },
     appGridActionRenderer: AppGridAction,
 };

@@ -1,28 +1,30 @@
-import React, { FC } from "react";
-import { Form } from "react-bootstrap";
+import React, { ChangeEventHandler, FC } from "react";
+import { FormCheck } from "react-bootstrap";
 import "./assets/scss/style.scss";
 
 export interface AppSwitchProps {
-    value: string | number;
-    name?: string;
-    defaultChecked?: boolean;
+    id: string;
+    name: string;
+    value: boolean;
     label?: string;
+    onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
 export const AppSwitch: FC<AppSwitchProps> = ({
+    id,
     name,
     value,
-    defaultChecked = false,
     label = "",
+    onChange = () => {},
 }): JSX.Element => {
     return (
-        <Form.Check
+        <FormCheck
             type="switch"
-            label={label}
+            id={id}
             name={name}
-            value={value}
-            defaultChecked={defaultChecked}
-            id={name}
+            defaultChecked={value}
+            label={label}
+            onChange={onChange}
         />
     );
 };
