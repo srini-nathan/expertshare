@@ -23,7 +23,7 @@ export const AppFormRadio: FC<AppFormRadioProps> = ({
             label={label}
             name={name}
             defaultChecked={value}
-            id={id}
+            id={`radio_${id}`}
             onChange={(event) => onChange(event)}
         />
     );

@@ -48,6 +48,8 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
             field: "id",
             sortable: false,
             cellRenderer: "appGridActionRenderer",
+            cellClass: "text-right",
+            headerClass: "action-header",
             cellRendererParams: {
                 callback: handleDelete,
                 editLink: "/admin/client/",

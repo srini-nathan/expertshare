@@ -15,21 +15,28 @@ export const appGridColDef = ({
     {
         headerName: "Language",
         field: "name",
-        flex: 2,
+        minWidth: 80,
+        flex: 0.35,
     },
     {
         headerName: "Locale",
         field: "locale",
+        minWidth: 40,
+        flex: 0.35,
     },
     {
         headerName: "Active",
         field: "isActive",
         cellRenderer: "appSwitch",
+        flex: 1,
+        minWidth: 70,
     },
     {
         headerName: "Default",
         field: "isDefault",
         cellRenderer: "appFormRadio",
+        minWidth: 40,
+        flex: 0.3,
         cellRendererParams: {
             onChange: (event: ChangeEventHandler) => {
                 // eslint-disable-next-line no-console
@@ -41,6 +48,9 @@ export const appGridColDef = ({
         headerName: "Actions",
         field: "id",
         sortable: false,
+        flex: 0.4,
+        cellClass: "text-right",
+        headerClass: "action-header",
         cellRenderer: "appGridActionRenderer",
         cellRendererParams: {
             callback: onPressDelete,
