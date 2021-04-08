@@ -5,6 +5,7 @@ import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 // import { ICellRendererParams } from "ag-grid-community";
 import "./style.scss";
 import {
+    GridApi,
     IServerSideDatasource,
     IServerSideGetRowsParams,
 } from "ag-grid-community";
@@ -24,9 +25,13 @@ import { sweetError, sweetSuccess } from "../../../AppModule/components/Util";
 
 export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
+    let appGridApi: GridApi;
+
     async function handleDelete(id: number) {
         try {
-            await ClientApi.delete<void>(id);
+            await ClientApi.delete<void>(id).then(() => {
+                appGridApi?.refreshServerSideStore({ purge: false, route: [] });
+            });
             await sweetSuccess({ text: " Successfully deleted " });
         } catch (e) {
             await sweetError({ text: "Something Went Wrong!" });
@@ -86,6 +91,9 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
                         columnDef={columnDef}
                         dataSource={dataSource}
                         totalItems={totalItems}
+                        onReady={(event) => {
+                            appGridApi = event.api;
+                        }}
                     />
                 </Col>
             </Row>

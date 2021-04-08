@@ -2,6 +2,7 @@ import React, { FC, Fragment, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import {
+    GridApi,
     IServerSideDatasource,
     IServerSideGetRowsParams,
 } from "ag-grid-community";
@@ -21,6 +22,8 @@ import { sweetError, sweetSuccess } from "../../../AppModule/components/Util";
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
+    let appGridApi: GridApi;
+
     const dataSource: IServerSideDatasource = {
         getRows(params: IServerSideGetRowsParams) {
             const { request } = params;
@@ -35,19 +38,22 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
         },
     };
 
-    const handleDelete = async (id: number) => {
-        LanguageApi.delete<void>(id).then(
+    async function handleDelete(id: number) {
+        await LanguageApi.delete<void>(id).then(
             () => {
                 sweetSuccess({ text: " Successfully deleted " });
+                appGridApi?.refreshServerSideStore({ purge: false, route: [] });
             },
             () => {
                 sweetError({
                     text:
                         "Something went wrong, please reload browser and try again!",
                 });
+                // @TODO: This should be removed, after CORS error resolved
+                appGridApi?.refreshServerSideStore({ purge: false, route: [] });
             }
         );
-    };
+    }
 
     return (
         <Fragment>
@@ -67,6 +73,9 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
                         })}
                         dataSource={dataSource}
                         totalItems={totalItems}
+                        onReady={(event) => {
+                            appGridApi = event.api;
+                        }}
                     />
                 </Col>
             </Row>
