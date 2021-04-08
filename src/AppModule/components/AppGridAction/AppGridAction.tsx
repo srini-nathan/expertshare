@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
-
 import { Link } from "@reach/router";
+
 import { AppIcon } from "../AppIcon";
 import { AppModal } from "../AppModal";
 

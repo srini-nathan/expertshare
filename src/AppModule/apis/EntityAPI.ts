@@ -1,8 +1,12 @@
 import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { API } from "./API";
 import { ACCEPTABLE_RESPONSE } from "../config/app-env";
-import { AcceptableResponse, ListResponse } from "../models";
-import { onFindAllResponseHydra, onFindAllResponseJson } from "./transformer";
+import { AcceptableResponse, ListResponse, SimpleObject } from "../models";
+import {
+    onFindAllResponseHydra,
+    onFindAllResponseJson,
+    onUpdateRequestHydra,
+} from "./transformer";
 
 export abstract class EntityAPI extends API {
     protected static PATH = "/";
@@ -59,11 +63,30 @@ export abstract class EntityAPI extends API {
     }
 
     public static async update<R, P>(id: number, data: P): Promise<R> {
+        let config = {};
+        // on patch request, hydra only accept particular MIME type,
+        // so we're using request transformer to change content-type header
+        if (AcceptableResponse.isHydra(ACCEPTABLE_RESPONSE)) {
+            config = {
+                transformRequest: [
+                    (payload: P, headers: SimpleObject<string>) =>
+                        onUpdateRequestHydra(payload, headers),
+                ],
+            };
+        }
         const res: AxiosResponse<R> = await this.makePatch<R, P>(
             `${this.PATH}/${id}`,
-            data,
+            JSON.stringify(data),
             {},
-            { headers: { "content-type": "application/merge-patch+json" } }
+            config
+        );
+        return res.data;
+    }
+
+    public static async replace<R, P>(id: number, data: P): Promise<R> {
+        const res: AxiosResponse<R> = await this.makePut<R, P>(
+            `${this.PATH}/${id}`,
+            data
         );
         return res.data;
     }

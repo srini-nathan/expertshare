@@ -1,49 +1,23 @@
 import React, { FC, Fragment, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
-import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 import {
     IServerSideDatasource,
     IServerSideGetRowsParams,
 } from "ag-grid-community";
+import { appGridColDef } from "./app-grid-col-def";
+import { appGridFrameworkComponents } from "./app-grid-framework-components";
+import { LanguageApi } from "../../apis/LanguageApi";
+import { Language } from "../../models";
 import { AppPageHeader } from "../../../AppModule/components/AppPageHeader";
 import { AppListPageToolbar } from "../../../AppModule/components/AppListPageToolbar";
-import { LanguageApi } from "../../apis/LanguageApi";
 import {
     AppGrid,
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
-import { Language } from "../../models";
 import { ListResponse } from "../../../AppModule/models";
 import { appGridConfig } from "../../../AppModule/config";
-
-const columnDef: ColDef[] = [
-    {
-        headerName: "Language",
-        field: "name",
-        flex: 2,
-    },
-    {
-        headerName: "Locale",
-        field: "locale",
-    },
-    {
-        headerName: "Active",
-        field: "isActive",
-        cellRenderer: "appSwitch",
-    },
-    {
-        headerName: "Default",
-        field: "isDefault",
-        cellRenderer: "appFormRadio",
-    },
-    {
-        headerName: "Actions",
-        field: "id",
-        sortable: false,
-        cellRenderer: "appGridActionRenderer",
-    },
-];
+import { sweetError, sweetSuccess } from "../../../AppModule/components/Util";
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
@@ -60,6 +34,21 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
             });
         },
     };
+
+    const handleDelete = async (id: number) => {
+        LanguageApi.delete<void>(id).then(
+            () => {
+                sweetSuccess({ text: " Successfully deleted " });
+            },
+            () => {
+                sweetError({
+                    text:
+                        "Something went wrong, please reload browser and try again!",
+                });
+            }
+        );
+    };
+
     return (
         <Fragment>
             <AppPageHeader title={"Language"} />
@@ -70,7 +59,12 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
             <Row>
                 <Col>
                     <AppGrid
-                        columnDef={columnDef}
+                        frameworkComponents={appGridFrameworkComponents}
+                        columnDef={appGridColDef({
+                            onPressDelete: handleDelete,
+                            editLink: "/admin/languages/",
+                            addLink: "/admin/languages/add",
+                        })}
                         dataSource={dataSource}
                         totalItems={totalItems}
                     />

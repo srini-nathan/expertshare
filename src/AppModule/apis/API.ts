@@ -46,7 +46,7 @@ export abstract class API {
 
     protected static async makePatch<R, P>(
         url: string,
-        data: RequestPayloadDataType | P,
+        data: RequestPayloadDataType | P | string,
         params: RequestParamsType = {},
         config: AxiosRequestConfig = {}
     ): Promise<AxiosResponse<R>> {
