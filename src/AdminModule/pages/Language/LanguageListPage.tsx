@@ -36,17 +36,14 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     };
 
     const handleDelete = async (id: number) => {
-        LanguageApi.delete<void>(id).then(
-            () => {
-                sweetSuccess({ text: " Successfully deleted " });
-            },
-            () => {
+        LanguageApi.delete<void>(id)
+            .then(() => sweetSuccess({ text: " Successfully deleted " }))
+            .catch(() => {
                 sweetError({
                     text:
                         "Something went wrong, please reload browser and try again!",
                 });
-            }
-        );
+            });
     };
 
     return (
