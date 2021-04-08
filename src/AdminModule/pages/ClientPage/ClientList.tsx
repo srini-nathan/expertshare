@@ -11,13 +11,16 @@ import {
 } from "ag-grid-community";
 import { Col, Row } from "react-bootstrap";
 import { ListResponse } from "../../../AppModule/models";
-import { AppPageHeader } from "../../../AppModule/components/AppPageHeader";
-import { AppListPageToolbar } from "../../../AppModule/components/AppListPageToolbar";
+import {
+    AppPageHeader,
+    AppListPageToolbar,
+} from "../../../AppModule/components";
+
 import {
     AppGrid,
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
-import { ClientApi } from "../../apis/ClientApi";
+import { ClientApi } from "../../apis";
 import { Client } from "../../../lib/API/Api";
 import { appGridConfig } from "../../../AppModule/config";
 import { AppGridAction } from "../../../AppModule/components/AppGridAction";
