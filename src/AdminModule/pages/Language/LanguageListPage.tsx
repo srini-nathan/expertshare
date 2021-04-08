@@ -8,10 +8,12 @@ import {
 } from "ag-grid-community";
 import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
-import { LanguageApi } from "../../apis/LanguageApi";
+import { LanguageApi } from "../../apis";
 import { Language } from "../../models";
-import { AppPageHeader } from "../../../AppModule/components/AppPageHeader";
-import { AppListPageToolbar } from "../../../AppModule/components/AppListPageToolbar";
+import {
+    AppPageHeader,
+    AppListPageToolbar,
+} from "../../../AppModule/components";
 import {
     AppGrid,
     buildSortParams,
