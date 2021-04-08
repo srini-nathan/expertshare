@@ -66,7 +66,7 @@ const App = (): JSX.Element => {
     }
 
     if (!state.isAuthenticated) {
-        navigate("/auth/login").then();
+        navigate("/auth/login");
     }
 
     return (

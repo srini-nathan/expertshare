@@ -1,5 +1,4 @@
 import React, { FC, useEffect, useState } from "react";
-import { toast, ToastContainer } from "react-toastify";
 import {
     RouteComponentProps,
     Link,
@@ -17,6 +16,7 @@ import { CustomCheckBox } from "../../../SharedModule/components/CustomCheckBox/
 import { ClientApi } from "../../apis/ClientApi";
 import { PackageApi } from "../../apis/PackageApi";
 import { ListResponse } from "../../../AppModule/models";
+import { sweetSuccess } from "../../../AppModule/components/Util";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is Required"),
@@ -112,32 +112,14 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         const keys = Object.keys(data);
         const result = buildPackageArray(keys, data);
         await ClientApi.create<Client, ClientRequestData>(result);
-        // await sweetSuccess({ text: "Client saved successfully " });
-        toast(" Client Saved Successfully ", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
+        await sweetSuccess({ text: "Client saved successfully " });
         await navigate(`/admin/client`);
     }
     async function updateClient(data: ClientFormType) {
         const keys = Object.keys(data);
         const result = buildPackageArray(keys, data);
         await ClientApi.update<Client, ClientRequestData>(id, result);
-        toast(" Client Updated Successfully ", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-        });
-        // await sweetSuccess({ text: "Client updated successfully " });
+        await sweetSuccess({ text: "Client updated successfully " });
         await navigate(`/admin/client`);
     }
 
@@ -156,7 +138,6 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     }
     return (
         <div className="theme-primary-clr theme-primary-font">
-            <ToastContainer />
             <div className="container-fluid p-0 mb-5">
                 <div className="row m-0">
                     <PageHeader

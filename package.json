@@ -36,7 +36,6 @@
     "react-feather": "^2.0.9",
     "react-hook-form": "^6.15.4",
     "react-i18next": "^11.8.7",
-    "react-toastify": "^7.0.3",
     "recoil": "^0.1.2",
     "styled-components": "^4.4.1",
     "sweetalert2": "^10.15.7",
