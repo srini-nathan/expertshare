@@ -7,7 +7,7 @@ export interface AppSwitchProps {
     name: string;
     value: boolean;
     label?: string;
-    size?: string;
+    size?: "lg" | "sm";
     onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
