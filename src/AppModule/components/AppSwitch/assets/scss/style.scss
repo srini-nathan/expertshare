@@ -40,7 +40,6 @@
     }
     [type="checkbox"] + label::before {
         position: absolute;
-        top: 3px;
         display: block;
         content: "";
         border: none;
@@ -57,7 +56,7 @@
     }
     [type="checkbox"]:checked {
         & + label{
-        background-color: $checkbox-checked-bg;
+            background-color: $checkbox-checked-bg;
         }
         & + label::before {
             background-color: $checkbox-toggler-checked-clr;
