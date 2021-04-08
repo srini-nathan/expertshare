@@ -11,7 +11,10 @@ export const sweetSuccess = ({
     Swal.fire({
         title: "Success",
         text,
+        toast: true,
+        timer: 2000,
         icon: "success",
+        position: "top-end",
         confirmButtonText,
     }).then();
 };
@@ -23,6 +26,9 @@ export const sweetError = ({
     Swal.fire({
         title: "Error!",
         text,
+        timer: 2000,
+        position: "top-end",
+        toast: true,
         icon: "error",
         confirmButtonText,
     }).then();
