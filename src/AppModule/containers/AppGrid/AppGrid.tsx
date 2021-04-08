@@ -22,6 +22,7 @@ export interface AppGridProps {
     dataSource: IServerSideDatasource;
     totalItems: number;
     frameworkComponents?: any;
+    onReady?: (event: GridReadyEvent) => void;
 }
 
 export const AppGrid: FC<AppGridProps> = ({
@@ -29,12 +30,16 @@ export const AppGrid: FC<AppGridProps> = ({
     dataSource,
     totalItems,
     frameworkComponents,
+    onReady,
 }) => {
     const [gridApi, setGridApi] = useState<GridApi>();
     const [, setGridColumnApi] = useState<ColumnApi>();
 
     const [active, setActive] = useState<number>(1);
     const onGridReady = (event: GridReadyEvent) => {
+        if (onReady) {
+            onReady(event);
+        }
         setGridApi(event.api);
         setGridColumnApi(event.columnApi);
         event.api.setServerSideDatasource(dataSource);
@@ -58,7 +63,6 @@ export const AppGrid: FC<AppGridProps> = ({
                         sortable: true,
                         resizable: true,
                     }}
-                    rowHeight={70}
                     rowModelType={"serverSide"}
                     serverSideStoreType={ServerSideStoreType.Partial}
                     paginationPageSize={appGridConfig.pageSize}

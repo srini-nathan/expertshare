@@ -23,14 +23,18 @@ export const appGridFrameworkComponents = {
         );
     },
     appFormRadio: (params: any) => {
-        const { data, onChange } = params;
+        const { data } = params;
         const { id, name, isDefault } = data as Language;
         return (
             <AppFormRadio
-                name={`${name}`}
+                name={"isDefault"}
                 id={`${name}-${id}`}
                 value={isDefault}
-                onChange={onChange}
+                onChange={(event) => {
+                    LanguageApi.update<Language, Partial<Language>>(id, {
+                        isDefault: event.currentTarget.checked,
+                    }).then();
+                }}
             />
         );
     },

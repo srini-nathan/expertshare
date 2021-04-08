@@ -7,7 +7,7 @@ export interface AppFormRadioProps {
     name: string;
     value: boolean;
     label?: string;
-    onChange?: ChangeEventHandler;
+    onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
 export const AppFormRadio: FC<AppFormRadioProps> = ({
@@ -20,11 +20,11 @@ export const AppFormRadio: FC<AppFormRadioProps> = ({
     return (
         <Form.Check
             type="radio"
-            label={label}
+            id={`radio_${id}`}
             name={name}
             defaultChecked={value}
-            id={id}
-            onChange={(event) => onChange(event)}
+            label={label}
+            onChange={onChange}
         />
     );
 };

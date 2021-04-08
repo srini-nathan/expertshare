@@ -10,6 +10,38 @@
 //  color => clr
 
 //custom colors
+
+
+:root {
+    //primary color range
+    --primary: #36989C;
+    --primary-10: #36989C10;
+    --primary-15: #36989C15;
+    --primary-20: #36989C20;
+    --primary-30: #36989C30;
+    --primary-40: #36989C40;
+    --primary-50: #36989C50;
+    --primary-60: #36989C60;
+    --primary-70: #36989C70;
+    --primary-80: #36989C80;
+    --primary-90: #36989C90;
+    //secondary color range
+    --secondary: #051515;
+    --secondary-10: #05151510;
+    --secondary-15: #05151515;
+    --secondary-20: #05151520;
+    --secondary-30: #05151530;
+    --secondary-40: #05151540;
+    --secondary-50: #05151550;
+    --secondary-60: #05151560;
+    --secondary-70: #05151570;
+    --secondary-80: #05151580;
+    --secondary-90: #05151590;
+}
+
+
+
+
 $input-bg-clr: #EBF5F5;
 
 $button-bg-clr: #36989C;

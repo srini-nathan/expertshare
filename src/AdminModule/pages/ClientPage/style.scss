@@ -1,7 +1,16 @@
 @import "./variables";
 
 .ag-theme-alpine {
-
+    .action-header  {
+        .ag-header-cell-label{
+            width: 100%;
+            text-align: right;
+            
+            span {
+                width: 100%;
+            }
+        }
+    }
     .ag-sort-ascending-icon,
     .ag-sort-descending-icon {
         position: relative;
@@ -62,16 +71,13 @@
 
     .ag-center-cols-container {
         .ag-row {
-            height: 60px !important;
-            margin: 10px 0;
             background-color: $widget-background-color;
             border-bottom: unset;
-            border-radius: $border-radius;
+            border-bottom: 1px solid var(--primary-20);
 
             .ag-cell {
                 font-family: $font-family-sans-serif;
                 font-size: 14px;
-                line-height: 60px;
 
                 a {
                     width: 44px;
@@ -80,16 +86,12 @@
 
                 }
             }
-
-            .ag-cell:first-child {
-                font-weight: 700;
-            }
         }
     }
 
     .ag-header {
         background: unset !important;
-        border-bottom: unquote("1px"+ " solid "+ $secondary + "20") !important;
+        border-bottom: 2px solid var(--primary);
 
         .ag-header-cell {
             .ag-header-cell-label {

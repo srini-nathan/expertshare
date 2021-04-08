@@ -14,7 +14,15 @@ $media-queries: (
     "laptop-laptopl": "(max-width: 1460px) and (min-width: 992px)",
     "container-b-l": "only screen and (max-width: 992px)",
     "container-b-lw": "(max-width: 1142px) and (min-width: 992px)",
-    "container-d-ts": "only screen and (max-width: 542px)"
+    "container-d-ts": "only screen and (max-width: 542px)",
+    "4k": "only screen and (min-width: 1930px)",
+    "lgv2": "only screen and (max-width: 1200px)",
+    "fabuplap": "(max-width: 1640px) and (min-width: 1200px)",
+    "fabuplap2": "(max-width: 1370px) and (min-width: 1200px)",
+    "tabtomob" : "(max-width: 1100px) and (min-width: 576px)",
+    "mobtosmall" : "only screen and (max-width: 575px)",
+    "lapto4k" : "only screen and (min-width: 1550px)",
+    "tabtolap2" : "(max-width: 1220px) and (min-width: 769px)",
 );
 
 @mixin media($breakpoints) {

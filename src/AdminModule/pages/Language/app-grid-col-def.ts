@@ -1,5 +1,4 @@
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
-import { ChangeEventHandler } from "react";
 
 interface AppGridColDefParams {
     onPressDelete: (id: number) => void;
@@ -15,32 +14,36 @@ export const appGridColDef = ({
     {
         headerName: "Language",
         field: "name",
-        flex: 2,
+        minWidth: 80,
+        flex: 0.35,
     },
     {
         headerName: "Locale",
         field: "locale",
+        minWidth: 40,
+        flex: 0.35,
     },
     {
         headerName: "Active",
         field: "isActive",
         cellRenderer: "appSwitch",
+        flex: 1,
+        minWidth: 70,
     },
     {
         headerName: "Default",
         field: "isDefault",
         cellRenderer: "appFormRadio",
-        cellRendererParams: {
-            onChange: (event: ChangeEventHandler) => {
-                // eslint-disable-next-line no-console
-                console.log("event", event);
-            },
-        },
+        minWidth: 40,
+        flex: 0.3,
     },
     {
         headerName: "Actions",
         field: "id",
         sortable: false,
+        flex: 0.4,
+        cellClass: "text-right",
+        headerClass: "action-header",
         cellRenderer: "appGridActionRenderer",
         cellRendererParams: {
             callback: onPressDelete,
