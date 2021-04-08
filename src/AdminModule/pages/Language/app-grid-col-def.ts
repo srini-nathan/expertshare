@@ -1,7 +1,17 @@
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 import { ChangeEventHandler } from "react";
 
-export const appGridColDef: ColDef[] = [
+interface AppGridColDefParams {
+    onPressDelete: (id: number) => void;
+    editLink: string;
+    addLink: string;
+}
+
+export const appGridColDef = ({
+    onPressDelete,
+    editLink,
+    addLink,
+}: AppGridColDefParams): ColDef[] => [
     {
         headerName: "Language",
         field: "name",
@@ -32,5 +42,10 @@ export const appGridColDef: ColDef[] = [
         field: "id",
         sortable: false,
         cellRenderer: "appGridActionRenderer",
+        cellRendererParams: {
+            callback: onPressDelete,
+            editLink,
+            addLink,
+        },
     },
 ];

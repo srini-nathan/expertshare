@@ -13,6 +13,7 @@ export const appGridFrameworkComponents = {
                 name={`${name}-${id}`}
                 id={`${name}-${id}`}
                 value={isActive}
+                size={"sm"}
                 onChange={(event) => {
                     LanguageApi.update<Language, Partial<Language>>(id, {
                         isActive: event.currentTarget.checked,

@@ -17,6 +17,7 @@ import {
 } from "../../../AppModule/containers/AppGrid";
 import { ListResponse } from "../../../AppModule/models";
 import { appGridConfig } from "../../../AppModule/config";
+import { sweetError, sweetSuccess } from "../../../AppModule/components/Util";
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
@@ -33,6 +34,21 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
             });
         },
     };
+
+    const handleDelete = async (id: number) => {
+        LanguageApi.delete<void>(id).then(
+            () => {
+                sweetSuccess({ text: " Successfully deleted " });
+            },
+            () => {
+                sweetError({
+                    text:
+                        "Something went wrong, please reload browser and try again!",
+                });
+            }
+        );
+    };
+
     return (
         <Fragment>
             <AppPageHeader title={"Language"} />
@@ -44,7 +60,11 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
                 <Col>
                     <AppGrid
                         frameworkComponents={appGridFrameworkComponents}
-                        columnDef={appGridColDef}
+                        columnDef={appGridColDef({
+                            onPressDelete: handleDelete,
+                            editLink: "/admin/languages/",
+                            addLink: "/admin/languages/add",
+                        })}
                         dataSource={dataSource}
                         totalItems={totalItems}
                     />
