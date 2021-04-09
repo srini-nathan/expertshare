@@ -13,6 +13,9 @@
 
 
 :root {
+    //font
+    --font-family-sans-serif: "Spartan";
+
     //primary color range
     --primary: #36989C;
     --primary-10: #36989C10;
@@ -37,6 +40,28 @@
     --secondary-70: #05151570;
     --secondary-80: #05151580;
     --secondary-90: #05151590;
+    //input colors
+    --input-bg-clr: #FCFCFC;
+    --input-fg-clr: #051515;
+    --input-border-clr: #A7A7A7;
+
+    --border-radius: 5px;
+
+
+    //widget colors
+    --widget-bg-color: #36999C15;
+    --widget-border-clr: #36999C;
+
+    //button colors
+    --btn-bg-clr: #36989C;
+    --btn-bg-clr-20: #36989C20;
+    --btn-hover-bg-clr: #2E8285;
+    --btn-hover-fg-clr: #FFF;
+    --btn-fg-clr: #FFF;
+    --btn-fg-clr-60: #FFFFFF60;
+    --btn-border-clr: transparent;
+    --btn-hover-border-clr: transparent;
+
 }
 
 

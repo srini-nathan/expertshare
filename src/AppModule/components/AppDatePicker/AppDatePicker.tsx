@@ -15,5 +15,12 @@ export const AppDatePicker: FC<AppDatePickerProps> = ({
     value,
     onChange = () => {},
 }): JSX.Element => {
-    return <ReactDatePicker selected={value} inline onChange={onChange} />;
+    return (
+        <ReactDatePicker
+            selected={value}
+            inline
+            onChange={onChange}
+            calendarClassName="custom-datepicker"
+        />
+    );
 };

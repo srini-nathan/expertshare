@@ -1,0 +1,9 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.custom-select{
+    background: var(--input-bg-clr) !important;
+    border: 1px solid var(--input-border-clr);
+    border-radius: var(--border-radius);
+    color: var(--input-fg-clr) ;
+}
