@@ -5,6 +5,12 @@ import { AppPageHeader } from "../../../AppModule/components/AppPageHeader";
 import { AppBreadcrumb } from "../../../AppModule/components/AppBreadcrumb";
 import { AppDatePicker, AppFormDropdown } from "../../../AppModule/components";
 
+const options = [
+    { value: "chocolate", label: "Chocolate" },
+    { value: "strawberry", label: "Strawberry" },
+    { value: "vanilla", label: "Vanilla" },
+];
+
 export const LanguageAddPage: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Fragment>
@@ -12,9 +18,15 @@ export const LanguageAddPage: FC<RouteComponentProps> = (): JSX.Element => {
             <AppPageHeader title={"New Language"} />
             <Row>
                 <Col>
-                    <AppFormDropdown id={"example"} value={1} />
+                    <AppFormDropdown
+                        id={"example"}
+                        value={"chocolate"}
+                        options={options}
+                    />
                 </Col>
             </Row>
+            <hr />
+            <hr />
             <Row>
                 <Col>
                     <AppDatePicker value={new Date()} onChange={() => {}} />
