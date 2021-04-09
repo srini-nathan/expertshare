@@ -1,9 +1,8 @@
 import React, { createContext, useEffect } from "react";
 import { navigate } from "@reach/router";
 import { User } from "../../models";
-import { AUTH_USER_PROFILE } from "../../../Settings/Config/constants";
 import { AuthApi, LoginResponse } from "../../../SecurityModule/apis/AuthApi";
-import { AUTH_TOKEN_KEY } from "../../config/app-env";
+import { AUTH_TOKEN_KEY, AUTH_USER_KEY } from "../../config/app-env";
 import { UserApi } from "../../apis/UserApi";
 
 interface IAuthSate {
@@ -111,7 +110,7 @@ export const loginAction = async (
         if (result.token) {
             await localStorage.setItem(AUTH_TOKEN_KEY, result.token);
             const user = await UserApi.me();
-            await localStorage.setItem(AUTH_USER_PROFILE, JSON.stringify(user));
+            await localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
             dispatch({
                 type: AuthActionTypes.LOGIN_SUCCESS,
                 payload: {
