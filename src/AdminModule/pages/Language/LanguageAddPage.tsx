@@ -3,7 +3,7 @@ import { RouteComponentProps } from "@reach/router";
 import { Row, Col } from "react-bootstrap";
 import { AppPageHeader } from "../../../AppModule/components/AppPageHeader";
 import { AppBreadcrumb } from "../../../AppModule/components/AppBreadcrumb";
-import { AppFormDropdown } from "../../../AppModule/components";
+import { AppDatePicker, AppFormDropdown } from "../../../AppModule/components";
 
 export const LanguageAddPage: FC<RouteComponentProps> = (): JSX.Element => {
     return (
@@ -13,6 +13,11 @@ export const LanguageAddPage: FC<RouteComponentProps> = (): JSX.Element => {
             <Row>
                 <Col>
                     <AppFormDropdown id={"example"} value={1} />
+                </Col>
+            </Row>
+            <Row>
+                <Col>
+                    <AppDatePicker value={new Date()} onChange={() => {}} />
                 </Col>
             </Row>
         </Fragment>
