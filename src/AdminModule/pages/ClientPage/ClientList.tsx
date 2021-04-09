@@ -18,7 +18,7 @@ import {
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
 import { ClientApi } from "../../apis/ClientApi";
-import { Client } from "../../../lib/API/Api";
+import { Client } from "../../models";
 import { appGridConfig } from "../../../AppModule/config";
 import { AppGridAction } from "../../../AppModule/components/AppGridAction";
 import { sweetError, sweetSuccess } from "../../../AppModule/components/Util";

@@ -1,6 +1,6 @@
 import React, { createContext, useEffect } from "react";
 import { navigate } from "@reach/router";
-import { UserProfile } from "../../../lib/API/Api";
+import { User } from "../../models";
 import { AUTH_USER_PROFILE } from "../../../Settings/Config/constants";
 import { AuthApi, LoginResponse } from "../../../SecurityModule/apis/AuthApi";
 import { AUTH_TOKEN_KEY } from "../../config/app-env";
@@ -11,7 +11,7 @@ interface IAuthSate {
     loginSuccess: boolean;
     showLogin: boolean;
     token: string | null;
-    user: UserProfile | null;
+    user: User | null;
     loginError: string | null;
     sessionFetched: boolean;
 }

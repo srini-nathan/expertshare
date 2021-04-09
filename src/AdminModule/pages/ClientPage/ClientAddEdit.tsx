@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import "./client_add_edit_style.scss";
-import { Client, Package } from "../../../lib/API/Api";
+import { Client, Package } from "../../models";
 import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHeader";
 import { TextInput } from "../../../SharedModule/components/TextInput/TextInput";
 import { CustomCheckBox } from "../../../SharedModule/components/CustomCheckBox/CustomCheckBox";
