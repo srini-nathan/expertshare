@@ -30,6 +30,8 @@ export const AppFormDropdown: FC<AppFormDropdownProps> = ({
             id={id}
             onChange={onChange}
             placeholder={placeholder}
+            className="custom-select-container"
+            classNamePrefix="custom-select"
         />
     );
 };
