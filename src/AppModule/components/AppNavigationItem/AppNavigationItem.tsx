@@ -16,7 +16,7 @@ export const AppNavigationItem: FC<AppNavigationItemProps> = ({
     return (
         <ListGroupItem className={`${isActive ? "active" : ""}`}>
             <Link to={path}>
-                <IconWrapper {...icon}></IconWrapper>
+                <IconWrapper {...icon} />
                 {label}
             </Link>
         </ListGroupItem>

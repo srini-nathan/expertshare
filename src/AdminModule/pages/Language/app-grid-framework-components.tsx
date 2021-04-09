@@ -1,11 +1,11 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import { Language } from "../../models";
 import { AppFormRadio, AppSwitch } from "../../../AppModule/components";
-import { LanguageApi } from "../../apis/LanguageApi";
+import { LanguageApi } from "../../apis";
 import { AppGridAction } from "../../../AppModule/components/AppGridAction";
 
 export const appGridFrameworkComponents = {
-    appSwitch: (params: any) => {
+    appSwitch: (params: never): ReactElement => {
         const { data } = params;
         const { id, name, isActive } = data as Language;
         return (
@@ -22,7 +22,7 @@ export const appGridFrameworkComponents = {
             />
         );
     },
-    appFormRadio: (params: any) => {
+    appFormRadio: (params: never): ReactElement => {
         const { data } = params;
         const { id, name, isDefault } = data as Language;
         return (

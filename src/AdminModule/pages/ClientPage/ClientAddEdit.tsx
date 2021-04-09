@@ -13,8 +13,8 @@ import { Client, Package } from "../../../lib/API/Api";
 import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHeader";
 import { TextInput } from "../../../SharedModule/components/TextInput/TextInput";
 import { CustomCheckBox } from "../../../SharedModule/components/CustomCheckBox/CustomCheckBox";
-import { ClientApi } from "../../apis/ClientApi";
-import { PackageApi } from "../../apis/PackageApi";
+import { ClientApi, PackageApi } from "../../apis";
+
 import { ListResponse } from "../../../AppModule/models";
 import { sweetSuccess } from "../../../AppModule/components/Util";
 
@@ -29,7 +29,7 @@ function getProperty<T, K extends keyof T>(obj: T, key: K) {
 export type ClientFormType = {
     name: string;
     notes: string;
-    [key: string]: any;
+    [key: string]: string | boolean;
 };
 
 export interface ClientRequestData {
@@ -87,7 +87,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
 
     function buildPackageArray(keys: string[], data: ClientFormType) {
         return keys.reduce<ClientRequestData>(
-            (acc, item: string) => {
+            (acc, item) => {
                 if (packageKeys?.includes(item)) {
                     if (data[item] !== false) {
                         const newPackageString = `/api/packages/${data[item]}`;
@@ -113,14 +113,14 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         const result = buildPackageArray(keys, data);
         await ClientApi.create<Client, ClientRequestData>(result);
         await sweetSuccess({ text: "Client saved successfully " });
-        await navigate(`/admin/client`);
+        await navigate(ClientApi.CLIENT_LIST_PAGE_PATH);
     }
     async function updateClient(data: ClientFormType) {
         const keys = Object.keys(data);
         const result = buildPackageArray(keys, data);
         await ClientApi.update<Client, ClientRequestData>(id, result);
         await sweetSuccess({ text: "Client updated successfully " });
-        await navigate(`/admin/client`);
+        await navigate(ClientApi.CLIENT_LIST_PAGE_PATH);
     }
 
     const onSubmit = async (data: ClientFormType) => {
@@ -142,7 +142,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                 <div className="row m-0">
                     <PageHeader
                         linkText={"Client"}
-                        linkUrl={"/admin/client"}
+                        linkUrl={ClientApi.CLIENT_LIST_PAGE_PATH}
                         pageHeader={
                             isAddMode ? "Add new Client" : "Edit Client"
                         }
