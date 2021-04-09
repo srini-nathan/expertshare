@@ -19,7 +19,7 @@ export const AppFormDropdown: FC<AppFormDropdownProps> = ({
 }): JSX.Element => {
     return (
         <Form.Group controlId={id}>
-            <Form.Label>{{ label }}</Form.Label>
+            <Form.Label>{label}</Form.Label>
             <Form.Control
                 as="select"
                 custom
