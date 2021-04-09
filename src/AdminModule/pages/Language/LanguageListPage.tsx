@@ -51,8 +51,6 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
                     text:
                         "Something went wrong, please reload browser and try again!",
                 });
-                // @TODO: This should be removed, after CORS error resolved
-                appGridApi?.refreshServerSideStore({ purge: false, route: [] });
             }
         );
     }

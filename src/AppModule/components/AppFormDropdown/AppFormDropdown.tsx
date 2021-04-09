@@ -1,38 +1,35 @@
-import React, { ChangeEventHandler, FC } from "react";
-import { Form } from "react-bootstrap";
+import React, { FC } from "react";
+import Select from "react-select";
+import { ActionMeta, ValueType } from "react-select/src/types";
+import { SimpleObject } from "../../models";
 import "./assets/scss/style.scss";
 
 export interface AppFormDropdownProps {
     id: string;
-    value: string | string[] | number;
-    label?: string;
-    onChange?: ChangeEventHandler<HTMLInputElement>;
+    value: any;
+    placeholder?: string;
+    onChange?: (
+        value: ValueType<SimpleObject<string>, boolean>,
+        actionMeta: ActionMeta<SimpleObject<string>>
+    ) => void;
     size?: "lg" | "sm";
+    options: SimpleObject<string>[];
 }
 
 export const AppFormDropdown: FC<AppFormDropdownProps> = ({
     id,
     value,
-    label = "",
-    size,
+    placeholder = "",
     onChange = () => {},
+    options,
 }): JSX.Element => {
     return (
-        <Form.Group controlId={id}>
-            <Form.Label>{label}</Form.Label>
-            <Form.Control
-                as="select"
-                custom
-                onChange={onChange}
-                value={value}
-                size={size}
-            >
-                <option>1</option>
-                <option>2</option>
-                <option>3</option>
-                <option>4</option>
-                <option>5</option>
-            </Form.Control>
-        </Form.Group>
+        <Select
+            options={options}
+            value={value}
+            id={id}
+            onChange={onChange}
+            placeholder={placeholder}
+        />
     );
 };
