@@ -3,6 +3,7 @@ import { RouteComponentProps } from "@reach/router";
 import { Row, Col } from "react-bootstrap";
 import { AppPageHeader } from "../../../AppModule/components/AppPageHeader";
 import { AppBreadcrumb } from "../../../AppModule/components/AppBreadcrumb";
+import { AppFormDropdown } from "../../../AppModule/components";
 
 export const LanguageAddPage: FC<RouteComponentProps> = (): JSX.Element => {
     return (
@@ -10,7 +11,9 @@ export const LanguageAddPage: FC<RouteComponentProps> = (): JSX.Element => {
             <AppBreadcrumb linkText={"Language"} linkUrl={".."} />
             <AppPageHeader title={"New Language"} />
             <Row>
-                <Col></Col>
+                <Col>
+                    <AppFormDropdown id={"example"} value={1} />
+                </Col>
             </Row>
         </Fragment>
     );
