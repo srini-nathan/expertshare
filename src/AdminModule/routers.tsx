@@ -11,6 +11,7 @@ import {
     LanguageAddPage,
 } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
+import { ContainerList } from "./pages/ContainerPage/ContainerList";
 
 export const routers: ModuleRouter[] = [
     {
@@ -25,6 +26,7 @@ export const routers: ModuleRouter[] = [
                     <SettingPage path={"settings"} />
                     <TranslationEditor path={"translations"} />
                     <ClientList path={"client"} />
+                    <ContainerList path={"container"} />
                     <ClientAddEdit path={"client/new"} />
                     <ClientAddEdit path={"client/:id"} />
                     <LanguageListPage path={"languages"} />
