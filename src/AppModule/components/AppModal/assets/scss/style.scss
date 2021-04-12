@@ -1,0 +1,95 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.modal-backdrop.show {
+    opacity: .8 !important;
+}
+
+.modal {
+    overflow-y: hidden !important;
+
+    &-dialog {
+        display: flex;
+        height: 100%;
+        max-width: 859px !important;
+    }
+
+    &-content {
+        margin: auto;
+        border-radius: var(--border-radius) !important;
+    }
+
+    &-header {
+        background-color: var(--widget-bg-clr);
+        border-top-left-radius: var(--border-radius) !important;
+        border-top-right-radius: var(--border-radius) !important;
+        border-bottom: unset !important;
+
+        .close {
+            color: var(--primary);
+            font-size: 50px;
+            font-weight: 400;
+            margin: auto 15px !important;
+            padding: 0 !important;
+            opacity: 1 !important;
+
+            &:hover {
+                color: var(--primary);
+            }
+        }
+    }
+
+    &-title {
+        &.h4 {
+            padding: 10px;
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+    }
+
+    &-body {
+        padding: 3rem calc(1rem + 15px) !important;
+        text-align: center;
+        font-weight: 400;
+        color: var(--secondary);
+        font-size: 16px;
+
+    }
+
+    &-footer {
+        border-color: var(--secondary-20) !important;
+        margin: 0 10px;
+    }
+}
+
+
+.btn {
+    font-size: 16px;
+    line-height: 18px;
+}
+
+.btn-secondary {
+    padding: 15px 36px 11px !important;
+    margin-right: 0 !important;
+    color: $btn-secondary-fg-clr !important;
+    background-color: $btn-secondary-bg-clr !important;
+    border: $btn-secondary-border-clr solid 1px !important;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &:not(:disabled):not(.disabled):active {
+        color: $btn-secondary-hover-fg-clr !important;
+        background-color: $btn-secondary-hover-bg-clr !important;
+        border: $btn-secondary-hover-border-clr solid 1px !important;
+    }
+
+    @media screen and (min-width: 576px) {
+        margin-right: 42px !important;
+    }
+}
+
+.btn-primary {
+    padding: 15px 82px 11px !important;
+}
