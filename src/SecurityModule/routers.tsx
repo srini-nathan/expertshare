@@ -12,8 +12,8 @@ export const routers: ModuleRouter[] = [
             return (
                 <Router>
                     <Redirect from={"/"} to={"login"} noThrow />
-                    <LoginPage path={"login"}></LoginPage>
-                    <RegisterPage path={"register"}></RegisterPage>
+                    <LoginPage path={"login"} />
+                    <RegisterPage path={"register"} />
                 </Router>
             );
         },

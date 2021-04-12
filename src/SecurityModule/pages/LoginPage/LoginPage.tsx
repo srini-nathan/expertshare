@@ -2,18 +2,14 @@ import React, { FC } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { Container } from "react-bootstrap";
-import "./styles.scss";
 import { AppButton } from "../../../AppModule/components/AppButton";
-import {
-    AppSocialLoginBtn,
-    AppSocialLoginBtnType,
-} from "../../components/AppSocialLoginBtn";
-
+import { AppSocialLoginBtn, AppSocialLoginBtnType } from "../../components";
 import { AppLoadable } from "../../../AppModule/components/AppLoadable/AppLoadable";
 import {
     AuthContext,
     loginAction,
 } from "../../../AppModule/Authentication/context/AuthContext";
+import "./styles.scss";
 
 const LoadableInfoPanel = AppLoadable(
     import(/* webpackChunkName: "InfoPanel" */ "../../components/InfoPanel"),

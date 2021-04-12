@@ -13,7 +13,8 @@ module.exports = {
                     "variants",
                     "screen",
                     "mixin",
-                    "each"
+                    "each",
+                    "media"
                 ],
             },
         ],

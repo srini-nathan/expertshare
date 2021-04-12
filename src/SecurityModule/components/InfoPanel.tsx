@@ -4,7 +4,7 @@ import ceo from "../assets/images/ceo.jpg";
 import {
     AppAvatar,
     AppAvatarVariant,
-} from "../../AppModule/components/AppAvatar/AppAvatar";
+} from "../../AppModule/components/AppAvatar";
 
 interface InfoPanelProps {
     className?: string;

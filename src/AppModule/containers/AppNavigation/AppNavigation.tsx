@@ -26,7 +26,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                     aria-expanded="false"
                     aria-label="Toggle navigation"
                 >
-                    <span className="navbar-toggler-icon icon icon-menu"></span>
+                    <span className="navbar-toggler-icon icon icon-menu" />
                 </button>
             </div>
             <ListGroup>
@@ -37,7 +37,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                             path={path}
                             icon={icon}
                             key={label}
-                        ></AppNavigationItem>
+                        />
                     );
                 })}
             </ListGroup>

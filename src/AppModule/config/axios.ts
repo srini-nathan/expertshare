@@ -2,7 +2,7 @@ import { default as Axios, AxiosRequestConfig, AxiosInstance } from "axios";
 import QueryString from "qs";
 import  { API_HOST } from "./app-env";
 import { onRequestFulfilled, onRequestRejected, onResponseFulfilled, onResponseRejected } from "../apis/interceptors";
-import { ACCEPTABLE_RESPONSE } from "../config/app-env";
+import { ACCEPTABLE_RESPONSE } from "./app-env";
 import { AcceptableResponse } from "../models";
 
 const defaultConfig: AxiosRequestConfig = {
