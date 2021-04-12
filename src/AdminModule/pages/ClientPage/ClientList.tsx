@@ -1,7 +1,6 @@
 import React, { FC, Fragment, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
-import "./style.scss";
 import {
     GridApi,
     IServerSideDatasource,
