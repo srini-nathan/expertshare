@@ -18,6 +18,11 @@ export const onResponseRejected = (error: AxiosError): Promise<any> => {
                 });
             });
         }
+        if (status === 422) {
+            sweetError({
+                text: "Bad Request!",
+            });
+        }
         if (status >= 500 && status <= 599) {
             sweetError({
                 text: "Something went wrong!",

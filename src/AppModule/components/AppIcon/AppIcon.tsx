@@ -17,5 +17,5 @@ export const AppIcon: FunctionComponent<AppIconProps> = ({
     ...props
 }) => {
     const IconTag = appIconMap[name] ?? ITag;
-    return <IconTag className={className} {...props}></IconTag>;
+    return <IconTag className={className} {...props} />;
 };

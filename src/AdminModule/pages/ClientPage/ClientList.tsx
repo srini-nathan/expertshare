@@ -1,9 +1,6 @@
 import React, { FC, Fragment, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
-
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
-// import { ICellRendererParams } from "ag-grid-community";
-import "./style.scss";
 import {
     GridApi,
     IServerSideDatasource,
@@ -57,8 +54,8 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
             headerClass: "action-header",
             cellRendererParams: {
                 callback: handleDelete,
-                editLink: "/admin/client/",
-                addLink: "/admin/client/new",
+                editLink: ClientApi.CLIENT_LIST_PAGE_PATH,
+                addLink: ClientApi.CLIENT_NEW_PAGE_PATH,
             },
         },
     ];
