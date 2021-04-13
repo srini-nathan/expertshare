@@ -5,6 +5,7 @@ import {
     AppPageHeader,
     AppDatePicker,
     AppFormDropdown,
+    AppTagSelect,
 } from "../../../AppModule/components";
 import { AppBreadcrumb } from "../../../AppModule/components/AppBreadcrumb";
 
@@ -18,7 +19,7 @@ export const LanguageAddPage: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Fragment>
             <AppBreadcrumb linkText={"Language"} linkUrl={".."} />
-            <AppPageHeader title={"New Language"} />
+            <AppPageHeader title={"Add Language"} />
             <Row>
                 <Col>
                     <AppFormDropdown
@@ -33,6 +34,17 @@ export const LanguageAddPage: FC<RouteComponentProps> = (): JSX.Element => {
             <Row>
                 <Col>
                     <AppDatePicker value={new Date()} onChange={() => {}} />
+                </Col>
+            </Row>
+            <hr />
+            <Row>
+                <Col>
+                    <AppTagSelect
+                        options={options}
+                        value={new Date()}
+                        onChange={() => {}}
+                        id={"tag-selector"}
+                    />
                 </Col>
             </Row>
         </Fragment>
