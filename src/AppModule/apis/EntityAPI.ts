@@ -22,7 +22,7 @@ export abstract class EntityAPI extends API {
         page = 1,
         extraParams = {}
     ): Promise<ListResponse<R>> {
-        let config: AxiosRequestConfig = {};
+        let config: AxiosRequestConfig;
 
         if (AcceptableResponse.isHydra(ACCEPTABLE_RESPONSE)) {
             config = {

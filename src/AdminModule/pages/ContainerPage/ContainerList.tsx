@@ -17,11 +17,12 @@ import {
     AppGrid,
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
-import { Container } from "../../../lib/API/Api";
+
 import { appGridConfig } from "../../../AppModule/config";
 import { AppGridAction } from "../../../AppModule/components/AppGridAction";
 import { sweetError, sweetSuccess } from "../../../AppModule/components/Util";
 import { ContainerApi } from "../../apis/ContainerApi";
+import { Container } from "../../models";
 
 export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);

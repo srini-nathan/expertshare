@@ -11,7 +11,7 @@ export const init = (resources: Resource) => {
         },
         defaultNS: "AppModule",
         resources,
-    });
+    }).then();
 };
 
 export default i18n;

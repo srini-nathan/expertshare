@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import {
-    RouteComponentProps,
     Link,
+    RouteComponentProps,
     useNavigate,
     useParams,
 } from "@reach/router";
@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import "./client_add_edit_style.scss";
-import { Client, Package } from "../../../lib/API/Api";
+import { Client, Package } from "../../models";
 import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHeader";
 import { TextInput } from "../../../SharedModule/components/TextInput/TextInput";
 import { CustomCheckBox } from "../../../SharedModule/components/CustomCheckBox/CustomCheckBox";
@@ -22,6 +22,7 @@ const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is Required"),
     notes: Yup.string().required("Notes is Required"),
 });
+
 function getProperty<T, K extends keyof T>(obj: T, key: K) {
     return obj[key];
 }
@@ -37,6 +38,7 @@ export interface ClientRequestData {
     notes: string;
     packages: string[];
 }
+
 export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const { id } = useParams();
     const isAddMode = !id;
@@ -115,6 +117,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         await sweetSuccess({ text: "Client saved successfully " });
         await navigate(ClientApi.CLIENT_LIST_PAGE_PATH);
     }
+
     async function updateClient(data: ClientFormType) {
         const keys = Object.keys(data);
         const result = buildPackageArray(keys, data);

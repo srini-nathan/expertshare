@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 import { Redirect, RouteComponentProps, Router, navigate } from "@reach/router";
-import { useTranslation } from "react-i18next";
 import { Spinner } from "react-bootstrap";
 import { appRouters } from "./bootstrap";
 import { DashboardLayout } from "./layouts/DashboardLayout";
@@ -16,7 +15,6 @@ import "./assets/scss/main.scss";
 
 const Home: FC<RouteComponentProps> = (): JSX.Element => {
     const { dispatch } = React.useContext(AuthContext);
-    const { t } = useTranslation();
 
     const handleLogoutEvent = async () => {
         await logoutAction(dispatch);
@@ -24,7 +22,7 @@ const Home: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <h2>
-            Hi {t("AppModule:global.name")} Authenticated
+            Hi Authenticated User
             <button onClick={handleLogoutEvent}>Logout</button>
         </h2>
     );

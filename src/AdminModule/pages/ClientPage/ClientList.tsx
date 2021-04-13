@@ -1,7 +1,6 @@
 import React, { FC, Fragment, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
-import "./style.scss";
 import {
     GridApi,
     IServerSideDatasource,
@@ -13,12 +12,13 @@ import {
     AppPageHeader,
     AppListPageToolbar,
 } from "../../../AppModule/components";
+
 import {
     AppGrid,
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
 import { ClientApi } from "../../apis";
-import { Client } from "../../../lib/API/Api";
+import { Client } from "../../models";
 import { appGridConfig } from "../../../AppModule/config";
 import { AppGridAction } from "../../../AppModule/components/AppGridAction";
 import { sweetError, sweetSuccess } from "../../../AppModule/components/Util";

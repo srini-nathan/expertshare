@@ -37,6 +37,7 @@ const Avatar = styled(Image)<AppAvatarProps>(({ fluid, size }) => {
 
 export const AppAvatar: FunctionComponent<AppAvatarProps> = (props) => {
     const { src, variant } = props;
+    // noinspection SpellCheckingInspection
     return (
         <Avatar
             src={

@@ -1,0 +1,64 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.custom-select {
+    &-container {
+        background: var(--input-bg-clr) !important;
+        border: 1px solid var(--input-border-clr);
+        border-radius: var(--border-radius);
+        color: var(--input-fg-clr);
+        z-index: 2;
+
+    }
+
+    &__control {
+        background-color: unset !important;
+        border-color: unset !important;
+        border-radius: unset !important;
+        border-style: unset !important;
+        border-width: unset !important;
+        box-shadow: unset !important;
+
+        &:focus {
+            background-color: unset !important;
+            border-color: unset !important;
+            border-radius: unset !important;
+            border-style: unset !important;
+            border-width: unset !important;
+            box-shadow: unset !important;
+        }
+    }
+
+    &__indicator-separator {
+        display: none;
+    }
+
+    &__indicator {
+        svg {
+            color: var(--primary);
+        }
+    }
+
+    &__menu {
+        border: 1px solid var(--primary);
+        border-radius: var(--border-radius);
+        padding: 10px 0 ;
+        &-list {
+            padding: 10px;
+        }
+    }
+
+    &__option {
+        border-bottom: 1px solid var(--primary-20);
+        color: var(--secondary);
+        &:last-child {
+            border-bottom: unset;
+        }
+
+        &:hover{
+            background: var(--primary-20);
+            border-radius: var(--border-radius);
+
+        }
+    }
+}

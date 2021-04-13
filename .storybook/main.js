@@ -10,7 +10,7 @@ module.exports = {
     "@storybook/preset-create-react-app",
     "@storybook/preset-scss"
   ],
-  webpackFinal: async (config, { configType }) => {
+  webpackFinal: async (config, { }) => {
     config.module.rules.push({
       test: /.*\.(?:le|c|sc)ss$/,
       loaders: [

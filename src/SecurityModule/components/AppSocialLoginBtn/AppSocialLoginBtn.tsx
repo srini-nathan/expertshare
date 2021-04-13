@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {
     AppButtonProps,
     AppButton,
-} from "../../../AppModule/components/AppButton/AppButton";
+} from "../../../AppModule/components/AppButton";
 import google from "../../assets/images/icon-brand-google.png";
 
 export enum AppSocialLoginBtnType {

@@ -13,7 +13,8 @@ module.exports = {
                     "variants",
                     "screen",
                     "mixin",
-                    "each"
+                    "each",
+                    "media"
                 ],
             },
         ],
@@ -34,6 +35,5 @@ module.exports = {
             }
         ],
         "color-hex-case": "upper",
-        "at-rule-no-unknown": false
     },
 };
