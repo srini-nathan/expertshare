@@ -9,6 +9,8 @@ import {
     Edit3,
     Trash2,
     Plus,
+    Search,
+    X,
 } from "react-feather";
 
 import { ListTree } from "./app-custom-icons";
@@ -17,6 +19,8 @@ import { AppIconMap } from "../../models";
 export const appIconMap: AppIconMap = {
     dashboard: Grid,
     Grid,
+    X,
+    Search,
     sponsors: Briefcase,
     Briefcase,
     attendees: Users,

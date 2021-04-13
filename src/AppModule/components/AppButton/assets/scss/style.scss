@@ -1,0 +1,31 @@
+@import "../../../../assets/scss/variables";
+
+.btn {
+    font-size: 16px;
+    line-height: 18px;
+}
+
+.btn-secondary {
+    padding: 15px 36px 11px;
+    margin-right: 0;
+    color: $btn-secondary-fg-clr;
+    background-color: $btn-secondary-bg-clr;
+    border: $btn-secondary-border-clr solid 1px;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &:not(:disabled):not(.disabled):active {
+        color: $btn-secondary-hover-fg-clr;
+        background-color: $btn-secondary-hover-bg-clr;
+        border: $btn-secondary-hover-border-clr solid 1px;
+    }
+
+    @media screen and (min-width: 576px) {
+        margin-right: 42px;
+    }
+}
+
+.btn-primary {
+    padding: 15px 82px 11px;
+}
