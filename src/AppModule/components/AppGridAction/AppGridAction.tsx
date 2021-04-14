@@ -34,9 +34,9 @@ export const AppGridAction: FC<{
             <Link className={"mr-3"} to={`${addLink}`}>
                 <AppIcon name={"add"} />
             </Link>
-            <a href="#">
+            <Link className={"mr-3"} to={`${editLink}${value}/container`}>
                 <AppIcon name={"ListTree"} />
-            </a>
+            </Link>
             <AppModal
                 show={show}
                 handleClose={handleClose}

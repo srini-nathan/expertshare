@@ -9,9 +9,9 @@ import {
     ClientAddEdit,
     LanguageListPage,
     LanguageAddPage,
+    ContainerList,
 } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
-import { ContainerList } from "./pages/ContainerPage/ContainerList";
 
 export const routers: ModuleRouter[] = [
     {
@@ -26,9 +26,9 @@ export const routers: ModuleRouter[] = [
                     <SettingPage path={"settings"} />
                     <TranslationEditor path={"translations"} />
                     <ClientList path={"client"} />
-                    <ContainerList path={"container"} />
                     <ClientAddEdit path={"client/new"} />
                     <ClientAddEdit path={"client/:id"} />
+                    <ContainerList path={"client/:clientId/container"} />
                     <LanguageListPage path={"languages"} />
                     <LanguageAddPage path={"languages/new"} />
                 </Router>
