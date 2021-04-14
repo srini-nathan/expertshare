@@ -1,6 +1,12 @@
+import { AxiosRequestConfig } from "axios";
 import { EntityAPI } from "../../AppModule/apis/EntityAPI";
-import { ListResponse } from "../../AppModule/models";
+import { AcceptableResponse, ListResponse } from "../../AppModule/models";
 import { axios } from "../../AppModule/config/axios";
+import { ACCEPTABLE_RESPONSE } from "../../AppModule/config/app-env";
+import {
+    onFindAllResponseHydra,
+    onFindAllResponseJson,
+} from "../../AppModule/apis/transformer";
 
 export abstract class ContainerApi extends EntityAPI {
     protected static PATH = "/api/containers";
@@ -13,6 +19,22 @@ export abstract class ContainerApi extends EntityAPI {
         page = 1,
         clientId: number
     ): Promise<ListResponse<R>> {
-        return axios.get(`${this.PATH}?page=${page}&client.id=${clientId}`);
+        let config: AxiosRequestConfig;
+
+        if (AcceptableResponse.isHydra(ACCEPTABLE_RESPONSE)) {
+            config = {
+                transformResponse: [(data) => onFindAllResponseHydra<R>(data)],
+            };
+        } else {
+            config = {
+                transformResponse: [(data) => onFindAllResponseJson<R>(data)],
+            };
+        }
+
+        const result = await axios.get(
+            `${this.PATH}?page=${page}&client.id=${clientId}`,
+            config
+        );
+        return result.data;
     }
 }

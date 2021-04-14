@@ -13,10 +13,7 @@ import {
     AppPageHeader,
     AppListPageToolbar,
 } from "../../../AppModule/components";
-import {
-    AppGrid,
-    buildSortParams,
-} from "../../../AppModule/containers/AppGrid";
+import { AppGrid } from "../../../AppModule/containers/AppGrid";
 
 import { appGridConfig } from "../../../AppModule/config";
 import { AppGridAction } from "../../../AppModule/components/AppGridAction";
@@ -28,19 +25,12 @@ import { ClientApi } from "../../apis";
 export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
     const { clientId } = useParams();
     const [totalItems, setTotalItems] = useState<number>(0);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const { client, setClient } = useState<Partial<Client>>({});
-
+    const [client, setClient] = useState<Client>();
     let appGridApi: GridApi;
 
     useEffect(() => {
         ClientApi.findById<Client>(clientId)
-            .then((res) => {
-                // eslint-disable-next-line no-console
-                console.log(res);
-                return setClient(res);
-            })
+            .then((res) => setClient(res))
             .catch((err) => {
                 // eslint-disable-next-line no-console
                 console.log(err);
@@ -93,21 +83,21 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
             const { request } = params;
             const { endRow } = request;
             const pageNo = endRow / appGridConfig.pageSize;
-            ContainerApi.findAll<Container>(pageNo, {
-                order: buildSortParams(request),
-                clientId,
-            }).then((res: ListResponse<Container>) => {
+            ContainerApi.findAllContainersByClient<Container>(
+                pageNo,
+                clientId
+            ).then((res: ListResponse<Container>) => {
+                // eslint-disable-next-line no-console
+                console.log(res);
                 setTotalItems(res.totalItems);
                 params.successCallback(res.items, res.totalItems);
             });
         },
     };
-    // eslint-disable-next-line no-console
-    console.log(client);
     return (
         <Fragment>
             <AppPageHeader title={"Container"} />
-            {/* <h2>{client.name}</h2> */}
+            <h5>{client?.name}</h5>
             <AppListPageToolbar
                 createLabel={"Create Container"}
                 createLink={"container/new"}
