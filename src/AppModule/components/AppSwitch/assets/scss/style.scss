@@ -4,7 +4,6 @@
 .custom-switch {
     display: flex !important;
     padding-left: 0 !important;
-    height: 100%;
     &.lg  {
         label{
             width: 74px;
@@ -46,7 +45,6 @@
         border-radius: $checkbox-block-border-radius;
         transition: all .2s;
         appearance: none;
-        background-color: $checkbox-toggler-not-checked-clr;
     }
     [type="checkbox"]:not(:checked) + label::before {
         transform: translateX(40px);
@@ -63,7 +61,8 @@
             transform: translateX(74px);
         }
     }
-    label::after,[type="checkbox"]:checked + label::after{
+    label::after,
+    [type="checkbox"]:checked + label::after{
         background-color: unset !important;
     }
 }

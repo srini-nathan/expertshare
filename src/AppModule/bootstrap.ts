@@ -3,12 +3,13 @@ import { axios, i18n } from "./config";
 import { registeredModules } from "./module-register";
 import appModuleTranslations from "./translations";
 import appNavigation from "./navigation";
+import appRouter from "./routers";
 import { ModuleConfig, ModuleRouter } from "./models";
 import { AppNavigationItemProps } from "./components/AppNavigationItem";
 
 let i18Resources = appModuleTranslations;
 
-const appRouters: ModuleRouter[] = [];
+const appRouters: ModuleRouter[] = [...appRouter];
 const appNavigations: AppNavigationItemProps[] = [...appNavigation];
 
 // all registered modules' navigation and routing injecting within AppModule

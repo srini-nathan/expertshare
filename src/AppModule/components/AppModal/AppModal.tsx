@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 
 import { Button, Modal } from "react-bootstrap";
+import "./assets/scss/style.scss";
 
 interface AppModalProps {
     show: boolean;

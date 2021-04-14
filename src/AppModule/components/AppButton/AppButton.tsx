@@ -1,5 +1,6 @@
 import React, { FunctionComponent, ReactNode } from "react";
 import { Button, ButtonProps } from "react-bootstrap";
+import "./assets/scss/style.scss";
 
 export interface AppButtonProps extends ButtonProps {
     variant?:

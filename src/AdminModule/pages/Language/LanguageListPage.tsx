@@ -21,6 +21,7 @@ import {
 import { ListResponse } from "../../../AppModule/models";
 import { appGridConfig } from "../../../AppModule/config";
 import { sweetError, sweetSuccess } from "../../../AppModule/components/Util";
+import "./assets/scss/list.scss";
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
