@@ -4,6 +4,7 @@ import { Row, Col, Form } from "react-bootstrap";
 import { AppPageHeader, AppSwitch } from "../../../AppModule/components";
 import { AppBreadcrumb } from "../../../AppModule/components/AppBreadcrumb";
 import { AppButton } from "../../../AppModule/components/AppButton";
+import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 
 export const LanguageAddPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [validated, setValidated] = useState(false);
@@ -28,6 +29,22 @@ export const LanguageAddPage: FC<RouteComponentProps> = (): JSX.Element => {
                         onSubmit={handleSubmit}
                     >
                         <Form.Row>
+                            <AppFormInput
+                                id="validationCustom02"
+                                required
+                                md="4"
+                                sm="4"
+                                lg="4"
+                                xl="4"
+                                name="first_name"
+                                label="First Name"
+                                value="hello"
+                                placeholder="hello"
+                                description="hello this is descriprion"
+                                maxCount={50}
+                                errorMessage="This field is required"
+                                invalid={true}
+                            />
                             <Form.Group
                                 as={Col}
                                 md="4"

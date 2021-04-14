@@ -1,0 +1,66 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+
+
+.form-label {
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding-bottom: 3px;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--secondary-70);
+}
+
+.required {
+    font-size: 14px;
+    font-weight: 700;
+    color: #C31F27;
+}
+
+.counter {
+    position: absolute;
+    right: 0;
+}
+
+.custom-input {
+    &-description {
+        cursor: pointer;
+        position: relative;
+
+        &:hover>&-content {
+            display: block;
+        }
+
+        span {
+            padding: 0 5px;
+            margin-left: 2px;
+            font-size: 10px;
+            color: #FFF;
+            background-color: #CAD0DC;
+            border: unset;
+            border-radius: 50%;
+        }
+
+        &-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1060;
+            display: none;
+            max-width: 276px;
+            font-weight: 400;
+            line-height: 1.5;
+            text-align: left;
+            text-align: start;
+            font-size: 0.875rem;
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.2);
+            border-radius: var(--border-radius);
+            color: var(--secondary-90);
+            padding: 0.5rem 0.75rem;
+            min-width: 200px;
+        }
+    }
+}

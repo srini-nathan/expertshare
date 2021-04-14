@@ -11,7 +11,7 @@
         }
         [type="checkbox"] + label::before {
             width: 34px;
-            height: 38px;
+            height: 36px;
         }
     }
     &.sm  {
@@ -58,7 +58,7 @@
         }
         & + label::before {
             background-color: $checkbox-toggler-checked-clr;
-            transform: translateX(74px);
+            transform: translateX(72px);
         }
     }
     label::after,
