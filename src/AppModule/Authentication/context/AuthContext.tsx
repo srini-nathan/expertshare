@@ -81,6 +81,7 @@ export const logoutAction = async (
 ): Promise<void> => {
     if (localStorage.getItem(AUTH_TOKEN_KEY)) {
         await localStorage.removeItem(AUTH_TOKEN_KEY);
+        await localStorage.removeItem(AUTH_USER_KEY);
     }
     dispatch({
         type: AuthActionTypes.LOGOUT,
@@ -197,7 +198,7 @@ export default function AuthProvider({ children }: Props): JSX.Element {
     useEffect(() => {
         fetchSession().then();
     }, []);
-
+    // @TODO: If not requires, remove following commented code
     // const fetchSession = async () => {
     //     try {
     //         await Api.fetchProfile();
