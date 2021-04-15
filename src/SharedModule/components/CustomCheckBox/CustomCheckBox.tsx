@@ -7,7 +7,7 @@ export interface CustomCheckBoxProps {
     label: string;
     name: string;
     labelPosition: string;
-    value: string;
+    value: string | number;
     register<TFieldElement extends FieldElement<TFieldElement>>(
         ref: (TFieldElement & Ref) | null,
         rules?: RegisterOptions

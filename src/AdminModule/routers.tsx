@@ -12,6 +12,7 @@ import {
     ContainerList,
 } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
+import { ContainerAddEdit } from "./pages/ContainerPage/ContainerAddEdit";
 
 export const routers: ModuleRouter[] = [
     {
@@ -29,6 +30,8 @@ export const routers: ModuleRouter[] = [
                     <ClientAddEdit path={"client/new"} />
                     <ClientAddEdit path={"client/:id"} />
                     <ContainerList path={"client/:clientId/container"} />
+                    <ContainerAddEdit path={"client/:clientId/container/new"} />
+                    <ContainerAddEdit path={"client/:clientId/container/:id"} />
                     <LanguageListPage path={"languages"} />
                     <LanguageAddPage path={"languages/new"} />
                 </Router>
