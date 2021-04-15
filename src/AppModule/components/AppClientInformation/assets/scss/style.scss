@@ -1,0 +1,12 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.client-information {
+    background-color: var(--widget-bg-color);
+    border-radius: var(--border-raduis);
+    color: var(--secondary);
+    font-size: 14px;
+    div:first-child {
+        font-weight: 700;
+    }
+}

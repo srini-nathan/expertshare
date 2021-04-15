@@ -12,6 +12,7 @@ import { ListResponse } from "../../../AppModule/models";
 import {
     AppPageHeader,
     AppListPageToolbar,
+    AppClientInformation,
 } from "../../../AppModule/components";
 import { AppGrid } from "../../../AppModule/containers/AppGrid";
 
@@ -25,7 +26,8 @@ import { ClientApi } from "../../apis";
 export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
     const { clientId } = useParams();
     const [totalItems, setTotalItems] = useState<number>(0);
-    const [client, setClient] = useState<Client>();
+    // const [client, setClient] = useState<Client>();
+    const [, setClient] = useState<Client>();
     let appGridApi: GridApi;
 
     useEffect(() => {
@@ -97,11 +99,11 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Fragment>
             <AppPageHeader title={"Container"} />
-            <h5>{client?.name}</h5>
             <AppListPageToolbar
                 createLabel={"Create Container"}
                 createLink={"container/new"}
             />
+            <AppClientInformation title={"Client Name"} />
             <Row>
                 <Col>
                     <AppGrid

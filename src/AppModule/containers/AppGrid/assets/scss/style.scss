@@ -7,19 +7,30 @@
             max-width: 140px;
         }
     }
-    .action-header  {
-        .ag-header-cell-label{
+
+    .action-header {
+        .ag-header-cell-label {
             width: 100%;
             text-align: right;
-            
+
             span {
                 width: 100%;
             }
         }
     }
-    .ag-react-container{
+
+    .text-right {
+        .ag-react-container {
+            div {
+                margin-left: auto;
+            }
+        }
+    }
+
+    .ag-react-container {
         height: 100%;
     }
+
     .ag-sort-ascending-icon,
     .ag-sort-descending-icon {
         position: relative;
@@ -33,13 +44,13 @@
     }
 
     .ag-sort-ascending-icon:not(.ag-hidden) {
-        & + .ag-hidden {
+        &+.ag-hidden {
             color: var(--primary) !important;
         }
     }
 
     .ag-sort-descending-icon:not(.ag-hidden) {
-        & + .ag-hidden {
+        &+.ag-hidden {
             color: var(--primary) !important;
         }
 

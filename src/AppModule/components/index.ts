@@ -6,3 +6,4 @@ export * from "./AppFormDropdown";
 export * from "./AppPageHeader";
 export * from "./AppListPageToolbar";
 export * from "./AppTagSelect";
+export * from "./AppClientInformation";

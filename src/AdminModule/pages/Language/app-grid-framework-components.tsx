@@ -29,7 +29,7 @@ export const appGridFrameworkComponents = {
             <AppFormRadio
                 name={"isDefault"}
                 id={`${name}-${id}`}
-                value={isDefault}
+                defaultChecked={isDefault}
                 onChange={(event) => {
                     LanguageApi.update<Language, Partial<Language>>(id, {
                         isDefault: event.currentTarget.checked,

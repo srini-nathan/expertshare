@@ -6,6 +6,7 @@ import { RegisterOptions } from "react-hook-form/dist/types/validator";
 export interface CustomCheckBoxProps {
     label: string;
     name: string;
+    className?: string;
     labelPosition: string;
     value: string | number;
     register<TFieldElement extends FieldElement<TFieldElement>>(
@@ -20,6 +21,7 @@ export const CustomCheckBox: FC<CustomCheckBoxProps> = ({
     name,
     labelPosition,
     value,
+    className,
     register,
     // defaultChecked,
 }): JSX.Element => {
@@ -34,7 +36,7 @@ export const CustomCheckBox: FC<CustomCheckBoxProps> = ({
     };
 
     return (
-        <div className="col-6 col-xl-4 pr-xl-5 mb-4">
+        <div className={`col-6 col-xl-4 pr-xl-5 mb-4 ${className}`}>
             <div className={renderClass()}>
                 <div className="normal-label theme-label-clr mb-1 mb-sm-0">
                     {label}

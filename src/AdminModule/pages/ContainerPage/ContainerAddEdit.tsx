@@ -14,6 +14,7 @@ import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHead
 import { TextInput } from "../../../SharedModule/components/TextInput/TextInput";
 import { CustomCheckBox } from "../../../SharedModule/components/CustomCheckBox/CustomCheckBox";
 import { ClientApi, PackageApi } from "../../apis";
+import { AppFormRadio } from "../../../AppModule/components";
 
 import { ListResponse } from "../../../AppModule/models";
 import { sweetSuccess } from "../../../AppModule/components/Util";
@@ -56,6 +57,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const isAddMode = !id;
     const navigate = useNavigate();
     const [packages, setPackages] = React.useState<Package[]>([]);
+    const [notes, setNotes] = React.useState<string>("");
     const [, setClient] = React.useState<Client>();
     const {
         register,
@@ -201,7 +203,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                 onSubmit={handleSubmit(onSubmit)}
                                 onReset={reset}
                             >
-                                <div className="row m-0 px-0 px-xl-3 d-flex align-items-start container">
+                                <div className="row m-0 px-0 d-flex align-items-start">
                                     <TextInput
                                         label={"Domain"}
                                         name={"domain"}
@@ -224,31 +226,42 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         message={errors.containerGroup?.message}
                                         placeholder={"Please Enter ..."}
                                     />
-                                    <div className={"col-md-2"}>
-                                        <label
-                                            className="light-label theme-label-clr m-0"
-                                            htmlFor="edit-client-notes"
-                                        >
-                                            Notes
-                                        </label>
-                                        <span className="input-letter-counter theme-input-letter-counter-clr">
-                                            0/120
-                                        </span>
-                                        <textarea
-                                            className={`text-area w-100 mt-1 ${
-                                                errors.notes ? "is-invalid" : ""
-                                            }`}
-                                            name="notes"
-                                            id="edit-client-notes"
-                                            rows={5}
-                                            ref={register}
-                                            placeholder="Please Enter..."
-                                        />
-                                        <div className="invalid-feedback">
-                                            {errors.notes?.message}
+                                    <div className={"col-md-4 px-3"}>
+                                        <div className="d-flex flex-wrap justify-content-between mb-4">
+                                            <label
+                                                className="light-label m-0"
+                                                htmlFor="edit-client-notes"
+                                            >
+                                                Notes
+                                            </label>
+                                            <span className="input-letter-counter theme-input-letter-counter-clr">
+                                                {notes.length}/120
+                                            </span>
+                                            <textarea
+                                                className={`text-area w-100 mt-1 ${
+                                                    errors.notes
+                                                        ? "is-invalid"
+                                                        : ""
+                                                }`}
+                                                name="notes"
+                                                id="edit-client-notes"
+                                                rows={4}
+                                                maxLength={120}
+                                                ref={register}
+                                                onChange={(e) => {
+                                                    setNotes(e.target.value);
+                                                }}
+                                                placeholder="Please Enter..."
+                                            >
+                                                {notes}
+                                            </textarea>
+                                            <div className="invalid-feedback">
+                                                {errors.notes?.message}
+                                            </div>
                                         </div>
                                     </div>
                                     <CustomCheckBox
+                                        className="container-checkbox"
                                         name={"isActive"}
                                         label={"Active"}
                                         labelPosition={"top"}
@@ -256,38 +269,31 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         register={register}
                                     />
                                 </div>
+                                <hr className="col-12 mb-5"></hr>
                                 <div className="row m-0 px-0 px-xl-3 d-flex align-items-start container">
-                                    <input
-                                        id="aws"
-                                        name="storage"
-                                        type="radio"
-                                        value="Aws S3 Bucket"
-                                        ref={register({ required: true })}
-                                    />
-                                    <label
-                                        className="light-label theme-label-clr m-0"
-                                        htmlFor="aws"
-                                    >
-                                        Aws S3 Bucket
+                                    <label className="light-label m-0  w-100 mb-2">
+                                        Storage Type
                                     </label>
-                                    <input
+                                    <AppFormRadio
+                                        name={"storage"}
+                                        id="aws"
+                                        label="Aws S3 Bucket"
+                                        value="Aws S3 Bucket"
+                                        register={register({ required: true })}
+                                    />
+
+                                    <AppFormRadio
+                                        name={"storage"}
                                         id="local"
-                                        name="storage"
-                                        type="radio"
+                                        label="Local"
                                         value="local"
                                         defaultChecked={true}
-                                        ref={register({ required: true })}
+                                        register={register({ required: true })}
                                     />
-                                    <label
-                                        className="light-label theme-label-clr m-0"
-                                        htmlFor="local"
-                                    >
-                                        Local
-                                    </label>
                                 </div>
                                 {storage === "Aws S3 Bucket" ? (
                                     <>
-                                        <div className="row m-0 px-0 px-xl-3 d-flex align-items-start container">
+                                        <div className="row m-0 px-0 mt-2 d-flex align-items-start container">
                                             <TextInput
                                                 label={"AWS S3 Bucket Key"}
                                                 name={"bucketKey"}
@@ -332,6 +338,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                 ) : (
                                     <></>
                                 )}
+                                <hr className="col-12 my-5"></hr>
 
                                 <div className="row mx-0 mb-2">
                                     <div className="col-12 mt-2 px-0 pl-xl-3">

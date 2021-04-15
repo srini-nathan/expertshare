@@ -55,6 +55,7 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
             cellRenderer: "appGridActionRenderer",
             cellClass: "text-right",
             headerClass: "action-header",
+            resizable: false,
             cellRendererParams: {
                 callback: handleDelete,
                 editLink: ClientApi.CLIENT_LIST_PAGE_PATH,
