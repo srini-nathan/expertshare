@@ -6,6 +6,7 @@ import {
     AppFormDropdown,
     AppPageHeader,
     AppTagSelect,
+    AppFormTextArea,
 } from "../../components";
 import { SimpleObject } from "../../../AdminModule/models";
 
@@ -81,6 +82,23 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                         }}
                     />
                 </Col>
+                <AppFormTextArea
+                    id="textarea"
+                    required
+                    md="4"
+                    sm="4"
+                    lg="4"
+                    xl="4"
+                    name="textarea"
+                    label="Text Area"
+                    value="hello"
+                    placeholder="hello"
+                    description="hello this is descriprion"
+                    maxCount={150}
+                    rows={5}
+                    errorMessage="This field is required"
+                    invalid={true}
+                />
             </Row>
         </Fragment>
     );

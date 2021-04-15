@@ -2,8 +2,8 @@
 @import "../../../../assets/scss/variables";
 
 
-
-input.form-control {
+textarea.form-control {
+    min-height: 180px;
     background-color: var(--input-bg-clr);
     color: var(--input-fg-clr);
     border: 1px solid var(--input-border-clr);
@@ -19,8 +19,8 @@ input.form-control {
 
 .form-label {
     display: flex;
-    align-items: center;
     margin: 0;
+    align-items: center;
     position: relative;
     padding-bottom: 3px;
     font-size: 12px;
