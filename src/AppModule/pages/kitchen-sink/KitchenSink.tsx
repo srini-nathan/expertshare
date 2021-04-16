@@ -7,6 +7,7 @@ import {
     AppPageHeader,
     AppTagSelect,
     AppFormTextArea,
+    AppFormTwoOption,
 } from "../../components";
 import { SimpleObject } from "../../../AdminModule/models";
 
@@ -55,14 +56,13 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     />
                 </Col>
             </Row>
-            <hr />
-            <hr />
+            <hr className="col-12" />
             <Row>
                 <Col>
                     <AppDatePicker value={new Date()} onChange={() => {}} />
                 </Col>
             </Row>
-            <hr />
+            <hr className="col-12" />
             <Row>
                 <Col md={6}>
                     <AppTagSelect
@@ -82,6 +82,8 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                         }}
                     />
                 </Col>
+                <hr className="col-12" />
+
                 <AppFormTextArea
                     id="textarea"
                     required
@@ -98,6 +100,25 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     rows={5}
                     errorMessage="This field is required"
                     invalid={true}
+                />
+                <hr className="col-12" />
+
+                <AppFormTwoOption
+                    required
+                    md="4"
+                    sm="4"
+                    lg="4"
+                    xl="4"
+                    name="twooption"
+                    label="Success Calculated By"
+                    firstOptionLabel="Overall"
+                    firstOptionValue="overall"
+                    secondOptionLabel="Per Session"
+                    secondOptionValue="per_session"
+                    description="hello this is descriprion"
+                    errorMessage="This field is required"
+                    invalid={true}
+                    defaultValue="overall"
                 />
             </Row>
         </Fragment>

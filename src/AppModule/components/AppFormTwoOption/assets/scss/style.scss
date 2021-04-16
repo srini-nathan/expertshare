@@ -1,52 +1,52 @@
 @import "../../../../assets/scss/screens-sizes";
 @import "../../../../assets/scss/variables";
 
-.form-check {
-    padding-left: 0 !important;
+.button-group {
 
-    .form-check-input {
-        margin-left: 0 !important;
-        position: relative;
-        display: none;
-
-        &:checked~.form-check-label::after {
-            background-image: url(../images/svg/circle_radio.svg);
-        }
-
-        &:checked~.form-check-label::before {
-            background-color: unset;
-            border-color: var(--primary);
-        }
-
-        &:focus~.form-check-label::before {
-            box-shadow: unset;
-        }
+    &-buttons {
+        border: 1px solid var(--input-border-clr);
+        border-radius: var(--border-radius);
     }
 
-    &-label {
-        cursor: pointer;
-        position: relative;
-        margin-bottom: 12px !important;
-        &::before {
-            position: absolute;
-            top: 0;
-            display: block;
-            width: 1rem;
-            height: 1rem;
-            pointer-events: none;
-            content: "";
-            border: 2px solid var(--primary-50);
-            border-radius: 50%;
+    .form-check {
+        text-align: center;
+        background-color: var(--input-bg-color);
+        color: var(--input-fg-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 44px;
+        padding: 0;
+
+        &:first-child {
+            border-right: 1px solid var(--input-border-clr);
         }
 
-        &::after {
-            position: absolute;
-            top: 0;
-            display: block;
-            width: 1rem;
-            height: 1rem;
-            content: "";
-            background: 50%/50% 50% no-repeat;
+        input {
+            display: none;
+
+            &:checked~label {
+                font-weight: 700;
+                color: var(--secondary);
+            }
+        }
+
+        label {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 400;
+            padding: 5px;
+            color: var(--secondary-50);
+            cursor: pointer;
+            width: 100%;
+            height: 44px;
+            line-height: 35px;
+            margin-bottom: 0 !important;
+
+            &::before,
+            &::after {
+                content: unset;
+            }
         }
     }
 }
