@@ -6,9 +6,11 @@
     &-buttons {
         border: 1px solid var(--input-border-clr);
         border-radius: var(--border-radius);
+        flex-wrap: nowrap !important;
     }
 
     .form-check {
+        width: 100%;
         text-align: center;
         background-color: var(--input-bg-color);
         color: var(--input-fg-color);
@@ -17,9 +19,10 @@
         justify-content: center;
         height: 44px;
         padding: 0;
+        border-right: 1px solid var(--input-border-clr);
 
-        &:first-child {
-            border-right: 1px solid var(--input-border-clr);
+        &:last-child {
+            border-right: unset;
         }
 
         input {

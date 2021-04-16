@@ -1,8 +1,9 @@
 import React, { FC } from "react";
 import { Col, Form, Row } from "react-bootstrap";
+import { SimpleObject } from "../../models";
 import "./assets/scss/style.scss";
 
-export interface AppFormTwoOptionProps {
+export interface AppFormRadioSwitchProps {
     name?: string;
     sm?: string;
     md?: string;
@@ -10,24 +11,18 @@ export interface AppFormTwoOptionProps {
     xl?: string;
     required?: boolean;
     label?: string;
-    firstOptionLabel: string;
-    secondOptionLabel: string;
-    firstOptionValue: string;
-    secondOptionValue: string;
+    values: SimpleObject<string>[];
     defaultValue?: string;
     description?: string;
     errorMessage?: string;
     invalid?: boolean;
 }
 
-export const AppFormTwoOption: FC<AppFormTwoOptionProps> = ({
+export const AppFormRadioSwitch: FC<AppFormRadioSwitchProps> = ({
     name,
     errorMessage,
     label = "",
-    firstOptionLabel,
-    secondOptionLabel,
-    firstOptionValue,
-    secondOptionValue,
+    values,
     defaultValue,
     description,
     md,
@@ -37,6 +32,23 @@ export const AppFormTwoOption: FC<AppFormTwoOptionProps> = ({
     invalid = false,
     required = false,
 }): JSX.Element => {
+    const renderOptions = () => {
+        return values.map((e, i) => {
+            return (
+                <Form.Check
+                    key={i}
+                    type="radio"
+                    id={`option_${i}`}
+                    required={required}
+                    label={e.label}
+                    value={e.value}
+                    name={name}
+                    defaultChecked={defaultValue === e.value}
+                />
+            );
+        });
+    };
+
     return (
         <Form.Group
             className="button-group"
@@ -58,28 +70,7 @@ export const AppFormTwoOption: FC<AppFormTwoOptionProps> = ({
                     </div>
                 )}
             </Form.Label>
-            <Row className="button-group-buttons m-0">
-                <Form.Check
-                    type="radio"
-                    id="first_option"
-                    className="col-6"
-                    required={required}
-                    label={firstOptionLabel}
-                    value={firstOptionValue}
-                    name={name}
-                    defaultChecked={defaultValue === firstOptionValue}
-                />
-                <Form.Check
-                    type="radio"
-                    id="second_option"
-                    className="col-6"
-                    required={required}
-                    label={secondOptionLabel}
-                    value={secondOptionValue}
-                    name={name}
-                    defaultChecked={defaultValue === secondOptionValue}
-                />
-            </Row>
+            <Row className="button-group-buttons m-0">{renderOptions()}</Row>
             {invalid && (
                 <Form.Control.Feedback type="invalid">
                     {errorMessage}

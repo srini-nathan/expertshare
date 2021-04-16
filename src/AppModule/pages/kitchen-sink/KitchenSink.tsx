@@ -7,7 +7,7 @@ import {
     AppPageHeader,
     AppTagSelect,
     AppFormTextArea,
-    AppFormTwoOption,
+    AppFormRadioSwitch,
 } from "../../components";
 import { SimpleObject } from "../../../AdminModule/models";
 
@@ -103,18 +103,15 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                 />
                 <hr className="col-12" />
 
-                <AppFormTwoOption
+                <AppFormRadioSwitch
                     required
-                    md="4"
-                    sm="4"
-                    lg="4"
-                    xl="4"
-                    name="twooption"
+                    sm="6"
+                    name="radio_switch"
                     label="Success Calculated By"
-                    firstOptionLabel="Overall"
-                    firstOptionValue="overall"
-                    secondOptionLabel="Per Session"
-                    secondOptionValue="per_session"
+                    values={[
+                        { label: "Overall", value: "overall" },
+                        { label: "Per Session", value: "per_session" },
+                    ]}
                     description="hello this is descriprion"
                     errorMessage="This field is required"
                     invalid={true}
