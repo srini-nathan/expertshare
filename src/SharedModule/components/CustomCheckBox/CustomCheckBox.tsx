@@ -23,7 +23,7 @@ export const CustomCheckBox: FC<CustomCheckBoxProps> = ({
     value,
     className,
     register,
-    // defaultChecked,
+    defaultChecked,
 }): JSX.Element => {
     const renderClass = () => {
         switch (labelPosition) {
@@ -48,7 +48,7 @@ export const CustomCheckBox: FC<CustomCheckBoxProps> = ({
                     name={name}
                     value={value}
                     ref={register}
-                    // defaultChecked={defaultChecked}
+                    defaultChecked={defaultChecked}
                 />
                 <label
                     className="position-relative mb-0"

@@ -60,6 +60,8 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
                 callback: handleDelete,
                 editLink: ClientApi.CLIENT_LIST_PAGE_PATH,
                 addLink: ClientApi.CLIENT_NEW_PAGE_PATH,
+                listTree: true,
+                listTreeSubUrl: "container",
             },
         },
     ];

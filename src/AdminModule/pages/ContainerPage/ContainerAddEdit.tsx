@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import "./container_add_edit_style.scss";
-import { Client, Package } from "../../models";
+import { Client, Container, Package } from "../../models";
 import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHeader";
 import { TextInput } from "../../../SharedModule/components/TextInput/TextInput";
 import { CustomCheckBox } from "../../../SharedModule/components/CustomCheckBox/CustomCheckBox";
@@ -18,9 +18,25 @@ import { AppFormRadio } from "../../../AppModule/components";
 
 import { ListResponse } from "../../../AppModule/models";
 import { sweetSuccess } from "../../../AppModule/components/Util";
+import { ContainerApi } from "../../apis/ContainerApi";
 
 const validationSchema = Yup.object().shape({
-    // name: Yup.string().required("Name is Required"),
+    domain: Yup.string().required("Domain is Required"),
+    containerGroup: Yup.string().optional(),
+    notes: Yup.string().optional(),
+    bucketKey: Yup.string().when("storage", {
+        is: "S3",
+        then: Yup.string().required("Bucket Key is Required"),
+    }),
+    bucketSecret: Yup.string().when("storage", {
+        is: "S3",
+        then: Yup.string().required("Bucket Secret is Required"),
+    }),
+    bucketName: Yup.string().when("storage", {
+        is: "S3",
+        then: Yup.string().required("Bucket Name is Required"),
+    }),
+    // storage: Yup.string().when(""),
     // notes: Yup.string().required("Notes is Required"),
 });
 
@@ -37,19 +53,22 @@ export type ContainerFormType = {
     bucketName: string;
     isActive: string;
     client: string;
+    notes: string;
     [key: string]: string | boolean;
 };
 
 export interface ContainerRequestData {
     domain: string;
-    containerGroup: string;
+    containerGroup?: string;
     storage: string;
-    bucketKey: string;
-    bucketSecret: string;
-    bucketName: string;
-    isActive: string;
-    client: string;
+    bucketKey?: string;
+    bucketSecret?: string;
+    bucketName?: string;
+    isActive?: boolean;
+    client?: string;
+    notes?: string;
     packages: string[];
+    configuration?: string[];
 }
 
 export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
@@ -57,8 +76,8 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const isAddMode = !id;
     const navigate = useNavigate();
     const [packages, setPackages] = React.useState<Package[]>([]);
-    const [notes, setNotes] = React.useState<string>("");
-    const [, setClient] = React.useState<Client>();
+    // const [notes, setNotes] = React.useState<string>("");
+    const [client, setClient] = React.useState<Client>();
     const {
         register,
         handleSubmit,
@@ -73,6 +92,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const [clientFetched, setClientFetched] = useState(false);
     const [packageKeys, setPackageKeys] = useState<string[]>();
     const storage = watch("storage");
+    const notes = watch("notes");
 
     useEffect(() => {
         PackageApi.findAll<Package>().then(
@@ -136,13 +156,8 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                 return acc;
             },
             {
-                bucketKey: "",
-                bucketName: "",
-                bucketSecret: "",
-                client: "",
-                containerGroup: "",
+                configuration: [],
                 domain: "",
-                isActive: "",
                 storage: "",
                 packages: [],
             }
@@ -153,33 +168,34 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     async function createContainer(data: ContainerFormType) {
         const keys = Object.keys(data);
         const result = buildPackageArray(keys, data);
-        await ClientApi.create<Client, ContainerRequestData>(result);
+        delete result.notes;
+        delete result.configuration;
+        const includeData = {
+            ...result,
+            client: `/api/clients/${client?.id}`,
+            isActive: data.isActive === "1",
+        };
+        await ContainerApi.create<Container, ContainerRequestData>(includeData);
         await sweetSuccess({ text: "Client saved successfully " });
-        await navigate(ClientApi.CLIENT_LIST_PAGE_PATH);
+        await navigate(`/admin/client/${clientId}/container`);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     async function updateContainer(data: ContainerFormType) {
         const keys = Object.keys(data);
         const result = buildPackageArray(keys, data);
+        delete result.notes;
         await ClientApi.update<Client, ContainerRequestData>(id, result);
         await sweetSuccess({ text: "Client updated successfully " });
         await navigate(ClientApi.CLIENT_LIST_PAGE_PATH);
     }
 
     const onSubmit = async (data: ContainerFormType) => {
-        // eslint-disable-next-line no-alert
-        alert("i am here");
-        // eslint-disable-next-line no-console
-        console.log("on submit called");
-        // eslint-disable-next-line no-console
-        console.log(data);
-
-        // if (isAddMode) {
-        //     await createContainer(data);
-        // } else {
-        //     await updateContainer(data);
-        // }
+        if (isAddMode) {
+            await createContainer(data);
+        } else {
+            await updateContainer(data);
+        }
     };
 
     if (!clientFetched) {
@@ -235,7 +251,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                                 Notes
                                             </label>
                                             <span className="input-letter-counter theme-input-letter-counter-clr">
-                                                {notes.length}/120
+                                                {notes?.length}/120
                                             </span>
                                             <textarea
                                                 className={`text-area w-100 mt-1 ${
@@ -248,9 +264,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                                 rows={4}
                                                 maxLength={120}
                                                 ref={register}
-                                                onChange={(e) => {
-                                                    setNotes(e.target.value);
-                                                }}
+                                                // onChange={(e) => {
+                                                //     setNotes(e.target.value);
+                                                // }}
                                                 placeholder="Please Enter..."
                                             >
                                                 {notes}
@@ -266,10 +282,11 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         label={"Active"}
                                         labelPosition={"top"}
                                         value={1}
+                                        defaultChecked={true}
                                         register={register}
                                     />
                                 </div>
-                                <hr className="col-12 mb-5"></hr>
+                                <hr className="col-12 mb-5" />
                                 <div className="row m-0 px-0 px-xl-3 d-flex align-items-start container">
                                     <label className="light-label m-0  w-100 mb-2">
                                         Storage Type
@@ -278,7 +295,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         name={"storage"}
                                         id="aws"
                                         label="Aws S3 Bucket"
-                                        value="Aws S3 Bucket"
+                                        value="S3"
                                         register={register({ required: true })}
                                     />
 
@@ -286,12 +303,12 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         name={"storage"}
                                         id="local"
                                         label="Local"
-                                        value="local"
+                                        value="Local"
                                         defaultChecked={true}
                                         register={register({ required: true })}
                                     />
                                 </div>
-                                {storage === "Aws S3 Bucket" ? (
+                                {storage === "S3" ? (
                                     <>
                                         <div className="row m-0 px-0 mt-2 d-flex align-items-start container">
                                             <TextInput
@@ -338,7 +355,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                 ) : (
                                     <></>
                                 )}
-                                <hr className="col-12 my-5"></hr>
+                                <hr className="col-12 my-5" />
 
                                 <div className="row mx-0 mb-2">
                                     <div className="col-12 mt-2 px-0 pl-xl-3">

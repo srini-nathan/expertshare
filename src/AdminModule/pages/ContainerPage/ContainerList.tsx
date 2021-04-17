@@ -26,8 +26,7 @@ import { ClientApi } from "../../apis";
 export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
     const { clientId } = useParams();
     const [totalItems, setTotalItems] = useState<number>(0);
-    // const [client, setClient] = useState<Client>();
-    const [, setClient] = useState<Client>();
+    const [client, setClient] = useState<Client>();
     let appGridApi: GridApi;
 
     useEffect(() => {
@@ -71,8 +70,8 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
             headerClass: "action-header",
             cellRendererParams: {
                 callback: handleDelete,
-                editLink: ContainerApi.CONTAINER_LIST_PAGE_PATH,
-                addLink: ContainerApi.CONTAINER_NEW_PAGE_PATH,
+                addLink: undefined,
+                editLink: `${ClientApi.CLIENT_LIST_PAGE_PATH}${clientId}/container/`,
             },
         },
     ];
@@ -103,7 +102,7 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
                 createLabel={"Create Container"}
                 createLink={"container/new"}
             />
-            <AppClientInformation title={"Client Name"} />
+            <AppClientInformation title={client?.name || ""} />
             <Row>
                 <Col>
                     <AppGrid
