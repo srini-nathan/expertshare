@@ -62,6 +62,7 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
                 addLink: ClientApi.CLIENT_NEW_PAGE_PATH,
                 listTree: true,
                 listTreeSubUrl: "container",
+                ui: "Client",
             },
         },
     ];
@@ -87,7 +88,7 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
             <AppPageHeader title={"Client"} />
             <AppListPageToolbar
                 createLabel={"Create Client"}
-                createLink={"client/new"}
+                createLink={"/admin/client/new"}
             />
             <Row>
                 <Col>

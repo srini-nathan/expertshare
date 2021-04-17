@@ -2,7 +2,14 @@ import { BaseEntity } from "../../../AppModule/models";
 import { Package } from "./Package";
 
 export interface Container extends BaseEntity {
-    name: string;
-    notes: string;
+    domain: string;
+    containerGroup: string;
+    storage: string;
+    bucketKey: string;
+    bucketSecret: string;
+    bucketName: string;
+    isActive: boolean;
+    client: string;
+    configuration: string[];
     packages: Package[];
 }

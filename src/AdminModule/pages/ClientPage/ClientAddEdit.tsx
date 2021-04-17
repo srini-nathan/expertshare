@@ -20,7 +20,7 @@ import { sweetSuccess } from "../../../AppModule/components/Util";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is Required"),
-    notes: Yup.string().required("Notes is Required"),
+    notes: Yup.string().optional(),
 });
 
 function getProperty<T, K extends keyof T>(obj: T, key: K) {

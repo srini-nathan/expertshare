@@ -8,12 +8,14 @@ interface AppModalProps {
     handleClose: () => void;
     handleDelete: () => void;
     id: number;
+    ui: string;
 }
 export const AppModal: FC<AppModalProps> = ({
     show,
     handleClose,
     handleDelete,
     id,
+    ui,
 }): JSX.Element => {
     return (
         <Modal
@@ -26,7 +28,7 @@ export const AppModal: FC<AppModalProps> = ({
                 <Modal.Title>Client Delete Action</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                Area You sure you want to delete the client with id: {id}
+                Area You sure you want to delete the {ui} with id: {id}
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>

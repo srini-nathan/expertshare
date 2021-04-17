@@ -11,6 +11,7 @@ export const AppGridAction: FC<{
     addLink: string;
     listTree?: boolean;
     listTreeSubUrl?: string;
+    ui: string;
 }> = ({
     value,
     callback,
@@ -18,6 +19,7 @@ export const AppGridAction: FC<{
     addLink,
     listTree,
     listTreeSubUrl,
+    ui,
 }): JSX.Element => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -63,6 +65,7 @@ export const AppGridAction: FC<{
                 handleClose={handleClose}
                 handleDelete={handleDelete}
                 id={value}
+                ui={ui}
             />
         </div>
     );

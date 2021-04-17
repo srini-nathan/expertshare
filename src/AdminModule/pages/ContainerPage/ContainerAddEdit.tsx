@@ -36,13 +36,11 @@ const validationSchema = Yup.object().shape({
         is: "S3",
         then: Yup.string().required("Bucket Name is Required"),
     }),
-    // storage: Yup.string().when(""),
-    // notes: Yup.string().required("Notes is Required"),
 });
 
-// function getProperty<T, K extends keyof T>(obj: T, key: K) {
-//     return obj[key];
-// }
+function getProperty<T, K extends keyof T>(obj: T, key: K) {
+    return obj[key];
+}
 
 export type ContainerFormType = {
     domain: string;
@@ -76,7 +74,6 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const isAddMode = !id;
     const navigate = useNavigate();
     const [packages, setPackages] = React.useState<Package[]>([]);
-    // const [notes, setNotes] = React.useState<string>("");
     const [client, setClient] = React.useState<Client>();
     const {
         register,
@@ -105,35 +102,44 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                 setPackages(items);
             }
         );
-        ClientApi.findById<Client>(clientId).then((res) => {
-            setClient(res);
-            const fetchedClientPackagesKeys = res.packages.map((item) => {
-                const key = item.packageKey.replace(".", "_");
-                return { key, value: item.id };
+        if (isAddMode) {
+            ClientApi.findById<Client>(clientId).then((res) => {
+                setClient(res);
+                const fetchedClientPackagesKeys = res.packages.map((item) => {
+                    const key = item.packageKey.replace(".", "_");
+                    return { key, value: item.id };
+                });
+                fetchedClientPackagesKeys.forEach((pk) =>
+                    setValue(pk.key, pk.value)
+                );
+                setClientFetched(true);
             });
-            fetchedClientPackagesKeys.forEach((pk) =>
-                setValue(pk.key, pk.value)
-            );
-            setClientFetched(true);
-        });
+        }
+        if (!isAddMode) {
+            ContainerApi.findById<Container>(id).then((res) => {
+                const fetchedClientPackagesKeys = res.packages.map((item) => {
+                    const key = item.packageKey.replace(".", "_");
+                    return { key, value: item.id };
+                });
 
-        // if (!isAddMode) {
-        //     ClientApi.findById<Client>(id).then((res) => {
-        //         const fetchedClientPackagesKeys = res.packages.map((item) => {
-        //             const key = item.packageKey.replace(".", "_");
-        //             return { key, value: item.id };
-        //         });
-        //
-        //         const fields: string[] = ["name", "notes"];
-        //         fields.forEach((field) =>
-        //             setValue(field, getProperty(res, field as keyof Client))
-        //         );
-        //         fetchedClientPackagesKeys.forEach((pk) =>
-        //             setValue(pk.key, pk.value)
-        //         );
-        //         setClientFetched(true);
-        //     });
-        // }
+                const fields: string[] = [
+                    "domain",
+                    "containerGroup",
+                    "storage",
+                    "bucketKey",
+                    "bucketSecret",
+                    "bucketName",
+                    "isActive",
+                ];
+                fields.forEach((field) =>
+                    setValue(field, getProperty(res, field as keyof Container))
+                );
+                fetchedClientPackagesKeys.forEach((pk) =>
+                    setValue(pk.key, pk.value)
+                );
+                setClientFetched(true);
+            });
+        }
     }, [id, isAddMode, clientFetched, setValue, clientId]);
 
     function buildPackageArray(keys: string[], data: ContainerFormType) {
@@ -185,9 +191,18 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         const keys = Object.keys(data);
         const result = buildPackageArray(keys, data);
         delete result.notes;
-        await ClientApi.update<Client, ContainerRequestData>(id, result);
+        delete result.configuration;
+        const includeData = {
+            ...result,
+            client: `/api/clients/${client?.id}`,
+            isActive: data.isActive === "1",
+        };
+        await ContainerApi.update<Container, ContainerRequestData>(
+            id,
+            includeData
+        );
         await sweetSuccess({ text: "Client updated successfully " });
-        await navigate(ClientApi.CLIENT_LIST_PAGE_PATH);
+        await navigate(`/admin/client/${clientId}/container`);
     }
 
     const onSubmit = async (data: ContainerFormType) => {
@@ -264,9 +279,6 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                                 rows={4}
                                                 maxLength={120}
                                                 ref={register}
-                                                // onChange={(e) => {
-                                                //     setNotes(e.target.value);
-                                                // }}
                                                 placeholder="Please Enter..."
                                             >
                                                 {notes}

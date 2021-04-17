@@ -30,13 +30,7 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
     let appGridApi: GridApi;
 
     useEffect(() => {
-        ClientApi.findById<Client>(clientId)
-            .then((res) => setClient(res))
-            .catch((err) => {
-                // eslint-disable-next-line no-console
-                console.log(err);
-            });
-
+        ClientApi.findById<Client>(clientId).then((res) => setClient(res));
         return () => {};
     }, [clientId, setClient]);
 
@@ -72,6 +66,7 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
                 callback: handleDelete,
                 addLink: undefined,
                 editLink: `${ClientApi.CLIENT_LIST_PAGE_PATH}${clientId}/container/`,
+                ui: "Container",
             },
         },
     ];
@@ -88,8 +83,6 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
                 pageNo,
                 clientId
             ).then((res: ListResponse<Container>) => {
-                // eslint-disable-next-line no-console
-                console.log(res);
                 setTotalItems(res.totalItems);
                 params.successCallback(res.items, res.totalItems);
             });
