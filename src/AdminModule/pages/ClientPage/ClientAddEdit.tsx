@@ -17,6 +17,7 @@ import { ClientApi, PackageApi } from "../../apis";
 
 import { ListResponse } from "../../../AppModule/models";
 import { sweetSuccess } from "../../../AppModule/components/Util";
+import { AppSpinner } from "../../../AppModule/components";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is Required"),
@@ -136,7 +137,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
 
     if (!isAddMode) {
         if (!clientFetched) {
-            return <div>Loading!!!</div>;
+            return <AppSpinner />;
         }
     }
     return (
@@ -145,7 +146,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                 <div className="row m-0">
                     <PageHeader
                         linkText={"Client"}
-                        linkUrl={ClientApi.CLIENT_LIST_PAGE_PATH}
+                        linkUrl={".."}
                         pageHeader={
                             isAddMode ? "Add new Client" : "Edit Client"
                         }
