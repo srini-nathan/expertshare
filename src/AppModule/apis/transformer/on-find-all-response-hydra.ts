@@ -1,8 +1,11 @@
-import { ListResponse } from "../../models";
+import { ListResponse, SimpleObject } from "../../models";
+import { checkAndParseResponse } from "../../utils";
 
-export const onFindAllResponseHydra = <T>(data: string): ListResponse<T> => {
+export const onFindAllResponseHydra = <T>(
+    data: string | SimpleObject<any>
+): ListResponse<T> => {
     const listResponse = new ListResponse<T>();
-    const parsedData = JSON.parse(data);
+    const parsedData: SimpleObject<any> = checkAndParseResponse(data);
 
     if (parsedData["hydra:member"]) {
         listResponse.items = parsedData["hydra:member"];

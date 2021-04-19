@@ -1,21 +1,22 @@
-import { UnprocessableEntityErrorResponse } from "../../models";
+import { SimpleObject, UnprocessableEntityErrorResponse } from "../../models";
+import { checkAndParseResponse } from "../../utils";
 
 export const onAddEditErrorResponseJson = (
-    data: string
+    data: string | SimpleObject<any>
 ): UnprocessableEntityErrorResponse => {
     const errorResponse = new UnprocessableEntityErrorResponse();
-    const parseData = JSON.parse(data);
+    const parsedData: SimpleObject<any> = checkAndParseResponse(data);
 
-    if (parseData.title) {
-        errorResponse.title = parseData.title;
+    if (parsedData.title) {
+        errorResponse.title = parsedData.title;
     }
 
-    if (parseData.detail) {
-        errorResponse.description = parseData.detail;
+    if (parsedData.detail) {
+        errorResponse.description = parsedData.detail;
     }
 
-    if (parseData.violations) {
-        errorResponse.setViolations(parseData.violations);
+    if (parsedData.violations) {
+        errorResponse.setViolations(parsedData.violations);
     }
 
     return errorResponse;
