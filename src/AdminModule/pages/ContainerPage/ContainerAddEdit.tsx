@@ -90,6 +90,11 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const [packageKeys, setPackageKeys] = useState<string[]>();
     const storage = watch("storage");
     const notes = watch("notes");
+    const domain = watch("domain");
+    const containerGroup = watch("containerGroup");
+    const bucketKey = watch("bucketKey");
+    const bucketSecret = watch("bucketSecret");
+    const bucketName = watch("bucketName");
 
     useEffect(() => {
         PackageApi.findAll<Package>().then(
@@ -131,6 +136,8 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                     "bucketName",
                     "isActive",
                 ];
+                // eslint-disable-next-line no-console
+                console.log(res, fields);
                 fields.forEach((field) =>
                     setValue(field, getProperty(res, field as keyof Container))
                 );
@@ -236,6 +243,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                             >
                                 <div className="row m-0 px-0 d-flex align-items-start">
                                     <TextInput
+                                        length={domain?.length}
                                         label={"Domain"}
                                         name={"domain"}
                                         type={"text"}
@@ -252,6 +260,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         type={"text"}
                                         limit={true}
                                         maxCount={120}
+                                        length={containerGroup?.length}
                                         register={register}
                                         invalid={!!errors.containerGroup}
                                         message={errors.containerGroup?.message}
@@ -328,6 +337,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                                 name={"bucketKey"}
                                                 type={"text"}
                                                 limit={true}
+                                                length={bucketKey?.length}
                                                 maxCount={120}
                                                 register={register}
                                                 invalid={!!errors.bucketKey}
@@ -337,6 +347,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                                 placeholder={"Please Enter ..."}
                                             />
                                             <TextInput
+                                                length={bucketSecret?.length}
                                                 label={"AWS S3 Bucket Secret"}
                                                 name={"bucketSecret"}
                                                 type={"text"}
@@ -350,6 +361,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                                 placeholder={"Please Enter ..."}
                                             />
                                             <TextInput
+                                                length={bucketName?.length}
                                                 label={"AWS S3 Bucket Name"}
                                                 name={"bucketName"}
                                                 type={"text"}

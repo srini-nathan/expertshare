@@ -16,7 +16,7 @@ export interface TextInputProps {
     invalid: boolean;
     message: string;
     placeholder: string;
-    defaultValue?: string;
+    length: number;
 }
 
 export const TextInput: FC<TextInputProps> = ({
@@ -29,9 +29,8 @@ export const TextInput: FC<TextInputProps> = ({
     placeholder,
     limit,
     maxCount,
-    defaultValue = "",
+    length = 0,
 }): JSX.Element => {
-    const [text, setText] = React.useState<string>(defaultValue);
     return (
         <div className="col-12 col-sm-6 col-xl-4 col-md-4  px-3 input-wrap-pr">
             <div className="d-flex flex-wrap justify-content-between mb-4">
@@ -40,7 +39,7 @@ export const TextInput: FC<TextInputProps> = ({
                 </label>
                 {limit && (
                     <span className="input-letter-counter">
-                        {text.length}/{maxCount}
+                        {length}/{maxCount}
                     </span>
                 )}
                 <input
@@ -49,9 +48,7 @@ export const TextInput: FC<TextInputProps> = ({
                     name={name}
                     ref={register}
                     placeholder={placeholder}
-                    value={text}
                     maxLength={maxCount}
-                    onChange={(e) => setText(e.target.value)}
                 />
                 {invalid && <div className="invalid-feedback">{message}</div>}
             </div>
