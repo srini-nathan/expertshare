@@ -29,6 +29,7 @@ export const routers: ModuleRouter[] = [
                     <ClientAddEdit path={"client/:id"} />
                     <LanguageListPage path={"languages"} />
                     <LanguageAddPage path={"languages/new"} />
+                    <LanguageAddPage path={"languages/:id"} />
                 </Router>
             );
         },

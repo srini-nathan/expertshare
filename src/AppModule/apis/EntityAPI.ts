@@ -24,11 +24,38 @@ export abstract class EntityAPI extends API {
 
     protected static PATH = "/";
 
+    /**
+     * @deprecated
+     */
     public static async findById<R>(id: number): Promise<R> {
         const res: AxiosResponse<R> = await this.makeGet<R>(
             `${this.PATH}/${id}`
         );
         return res.data;
+    }
+
+    public static async getById<R>(
+        id: number
+    ): Promise<FinalResponse<R | null>> {
+        return this.makeGet<R>(`${this.PATH}/${id}`)
+            .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
+            .catch((error) => this.handleServerError(error))
+            .catch((error) => {
+                const { response } = error as AxiosError;
+                if (response) {
+                    const { status } = response;
+                    if (status === 404) {
+                        return Promise.resolve(
+                            new FinalResponse(
+                                null,
+                                new EntityNotFoundErrorResponse()
+                            )
+                        );
+                    }
+                }
+                return Promise.reject(error);
+            })
+            .catch((error) => this.handleUnknownError(error));
     }
 
     /**
@@ -169,6 +196,23 @@ export abstract class EntityAPI extends API {
             .catch((error: AxiosError | ServerError) =>
                 this.handleErrorDuringCreatingOrUpdating(error)
             );
+    }
+
+    private static handleServerError(
+        error: AxiosError | ServerError
+    ): Promise<FinalResponse<null>> {
+        const { message } = error;
+        if (error instanceof ServerError) {
+            return Promise.resolve(new FinalResponse(null, message));
+        }
+        return Promise.reject(error);
+    }
+
+    private static handleUnknownError(
+        error: AxiosError | ServerError
+    ): Promise<FinalResponse<null>> {
+        const { message } = error;
+        return Promise.resolve(new FinalResponse(null, message));
     }
 
     private static handleErrorDuringCreatingOrUpdating(

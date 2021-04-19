@@ -1,45 +1,61 @@
-import React, { FC, Fragment, useState } from "react";
-import { RouteComponentProps, useParams } from "@reach/router";
+import React, { FC, Fragment, useState, useEffect } from "react";
+import { RouteComponentProps, useNavigate, useParams } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
+import { isString as _isString } from "lodash";
 import { AppPageHeader, AppSwitch } from "../../../AppModule/components";
 import { AppBreadcrumb } from "../../../AppModule/components/AppBreadcrumb";
 import { AppButton } from "../../../AppModule/components/AppButton";
 import { LanguageEntity } from "../../models";
 import { LanguageApi } from "../../apis";
 import { errorToast, successToast } from "../../../AppModule/utils";
-import { handleCommonAPIErrors } from "../../../AppModule/utils/api-error-handling";
+import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
+import { AppLoadableFallback } from "../../../AppModule/components/AppLoadableFallback";
 
-export const LanguageAddPage: FC<RouteComponentProps> = (): JSX.Element => {
-    const { id } = useParams();
-    const isEditMode = !!id;
+export const LanguageAddPage: FC<RouteComponentProps> = ({
+    navigate,
+}): JSX.Element => {
+    const { id = null } = useParams();
+    const isEditMode: boolean = id !== null;
+    const hookNav = useNavigate();
+    const nav = navigate ?? hookNav;
 
     const [validated, setValidated] = useState(false);
     const [data, setData] = useState<LanguageEntity>(new LanguageEntity());
+    const [loading, setLoading] = useState<boolean>(isEditMode);
+
+    useEffect(() => {
+        if (isEditMode) {
+            LanguageApi.getById<LanguageEntity>(id).then(
+                ({ error, response }) => {
+                    if (error === null && response !== null) {
+                        setData(response);
+                    }
+                    setLoading(false);
+                }
+            );
+        }
+    }, [id]);
 
     const saveData = () => {
-        if (isEditMode) {
-            LanguageApi.update<LanguageEntity, LanguageEntity>(id, data)
-                .then(() => {
-                    successToast("Language created");
-                })
-                .catch((e: Error) => {
-                    const handled = handleCommonAPIErrors(e);
-                    if (!handled) {
-                        errorToast(e.message);
+        LanguageApi.createOrUpdate<LanguageEntity>(id, data).then(
+            ({ error }) => {
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
                     }
-                });
-        } else {
-            LanguageApi.create<LanguageEntity, LanguageEntity>(data)
-                .then(() => {
-                    successToast("Language created");
-                })
-                .catch((e: Error) => {
-                    const handled = handleCommonAPIErrors(e);
-                    if (!handled) {
-                        errorToast(e.message);
+                    if (error instanceof UnprocessableEntityErrorResponse) {
+                        const { description } = error;
+                        errorToast(description);
                     }
-                });
-        }
+                } else {
+                    nav("..").then(() => {
+                        successToast(
+                            isEditMode ? "Language updated" : "Language created"
+                        );
+                    });
+                }
+            }
+        );
     };
 
     const handleChange = (name: string, value: string | number | boolean) => {
@@ -60,10 +76,16 @@ export const LanguageAddPage: FC<RouteComponentProps> = (): JSX.Element => {
         setValidated(true);
     };
 
+    if (loading) {
+        return <AppLoadableFallback />;
+    }
+
     return (
         <Fragment>
             <AppBreadcrumb linkText={"Language"} linkUrl={".."} />
-            <AppPageHeader title={"Add Language"} />
+            <AppPageHeader
+                title={isEditMode ? "Edit Language" : "Add Language"}
+            />
             <Row>
                 <Col>
                     <Form
@@ -130,10 +152,13 @@ export const LanguageAddPage: FC<RouteComponentProps> = (): JSX.Element => {
                                     type="button"
                                     variant={"outline-primary"}
                                     className="mr-4"
+                                    onClick={() => nav("..").then()}
                                 >
                                     Cancel
                                 </AppButton>
-                                <AppButton type="submit">Save</AppButton>
+                                <AppButton type="submit">
+                                    {isEditMode ? "Update" : "Save"}
+                                </AppButton>
                             </div>
                         </div>
                     </Form>
