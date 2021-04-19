@@ -29,6 +29,7 @@ export const appGridColDef = ({
         cellRenderer: "appSwitch",
         flex: 1,
         minWidth: 70,
+        sortable: false,
     },
     {
         headerName: "Default",
@@ -36,6 +37,7 @@ export const appGridColDef = ({
         cellRenderer: "appFormRadio",
         minWidth: 40,
         flex: 0.3,
+        sortable: false,
     },
     {
         headerName: "Actions",
