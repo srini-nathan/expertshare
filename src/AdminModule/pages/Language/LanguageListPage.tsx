@@ -6,6 +6,7 @@ import {
     IServerSideDatasource,
     IServerSideGetRowsParams,
 } from "ag-grid-community";
+import { isString as _isString } from "lodash";
 import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { LanguageApi } from "../../apis";
@@ -18,9 +19,8 @@ import {
     AppGrid,
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
-import { ListResponse } from "../../../AppModule/models";
 import { appGridConfig } from "../../../AppModule/config";
-import { sweetError, sweetSuccess } from "../../../AppModule/components/Util";
+import { errorToast, successToast } from "../../../AppModule/utils";
 import "./assets/scss/list.scss";
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
@@ -32,28 +32,35 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
             const { request } = params;
             const { endRow } = request;
             const pageNo = endRow / appGridConfig.pageSize;
-            LanguageApi.findAll<Language>(pageNo, {
+            LanguageApi.find<Language>(pageNo, {
                 order: buildSortParams(request),
-            }).then((res: ListResponse<Language>) => {
-                setTotalItems(res.totalItems);
-                params.successCallback(res.items, res.totalItems);
+            }).then(({ error, response }) => {
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    }
+                } else if (response?.totalItems && response?.items) {
+                    setTotalItems(response.totalItems);
+                    params.successCallback(response.items, response.totalItems);
+                }
             });
         },
     };
 
     async function handleDelete(id: number) {
-        await LanguageApi.delete<void>(id).then(
-            () => {
-                sweetSuccess({ text: " Successfully deleted " });
-                appGridApi?.refreshServerSideStore({ purge: false, route: [] });
-            },
-            () => {
-                sweetError({
-                    text:
-                        "Something went wrong, please reload browser and try again!",
+        LanguageApi.delete(id).then(({ error }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                }
+            } else {
+                successToast("Successfully deleted");
+                appGridApi?.refreshServerSideStore({
+                    purge: false,
+                    route: [],
                 });
             }
-        );
+        });
     }
 
     return (
