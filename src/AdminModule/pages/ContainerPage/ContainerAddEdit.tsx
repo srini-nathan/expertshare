@@ -14,7 +14,7 @@ import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHead
 import { TextInput } from "../../../SharedModule/components/TextInput/TextInput";
 import { CustomCheckBox } from "../../../SharedModule/components/CustomCheckBox/CustomCheckBox";
 import { ClientApi, PackageApi } from "../../apis";
-import { AppFormRadio } from "../../../AppModule/components";
+import { AppFormRadio, AppSpinner } from "../../../AppModule/components";
 
 import { ListResponse } from "../../../AppModule/models";
 import { sweetSuccess } from "../../../AppModule/components/Util";
@@ -214,7 +214,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     };
 
     if (!clientFetched) {
-        return <div>Loading!!!</div>;
+        return <AppSpinner />;
     }
 
     return (

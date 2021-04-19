@@ -46,11 +46,4 @@ export const navigation: AppNavigationItemProps[] = [
             name: "administrator",
         },
     },
-    {
-        label: "Admin - Container",
-        path: "/admin/container",
-        icon: {
-            name: "administrator",
-        },
-    },
 ];
