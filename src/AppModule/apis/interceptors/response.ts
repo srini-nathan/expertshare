@@ -1,7 +1,7 @@
 import { AxiosError, AxiosResponse } from "axios";
 import { navigate } from "@reach/router";
 import { sweetError } from "../../components/Util";
-import { ServerError, UnprocessableEntityError } from "../../models";
+import { ServerError } from "../../models";
 
 export const onResponseFulfilled = (response: AxiosResponse): AxiosResponse => {
     return response;
@@ -18,9 +18,6 @@ export const onResponseRejected = (error: AxiosError): Promise<any> => {
                     text: "You need to login!",
                 });
             });
-        }
-        if (status === 422) {
-            return Promise.reject(new UnprocessableEntityError());
         }
         if (status >= 500 && status <= 599) {
             return Promise.reject(new ServerError());
