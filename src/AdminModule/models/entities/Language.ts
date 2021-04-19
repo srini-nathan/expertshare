@@ -7,3 +7,20 @@ export interface Language extends BaseEntity {
     isDefault: boolean;
     container: string;
 }
+
+export class LanguageEntity {
+    name: string;
+
+    locale: string;
+
+    isActive: boolean;
+
+    isDefault: boolean;
+
+    constructor() {
+        this.name = "";
+        this.locale = "";
+        this.isActive = false;
+        this.isDefault = false;
+    }
+}

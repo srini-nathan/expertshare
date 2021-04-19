@@ -1,22 +1,65 @@
 import React, { FC, Fragment, useState } from "react";
-import { RouteComponentProps } from "@reach/router";
+import { RouteComponentProps, useParams } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
 import { AppPageHeader, AppSwitch } from "../../../AppModule/components";
 import { AppBreadcrumb } from "../../../AppModule/components/AppBreadcrumb";
 import { AppButton } from "../../../AppModule/components/AppButton";
-import { AppFormInput } from "../../../AppModule/components/AppFormInput";
+import { LanguageEntity } from "../../models";
+import { LanguageApi } from "../../apis";
+import { errorToast, successToast } from "../../../AppModule/utils";
+import { handleCommonAPIErrors } from "../../../AppModule/utils/api-error-handling";
 
 export const LanguageAddPage: FC<RouteComponentProps> = (): JSX.Element => {
+    const { id } = useParams();
+    const isEditMode = !!id;
+
     const [validated, setValidated] = useState(false);
+    const [data, setData] = useState<LanguageEntity>(new LanguageEntity());
+
+    const saveData = () => {
+        if (isEditMode) {
+            LanguageApi.update<LanguageEntity, LanguageEntity>(id, data)
+                .then(() => {
+                    successToast("Language created");
+                })
+                .catch((e: Error) => {
+                    const handled = handleCommonAPIErrors(e);
+                    if (!handled) {
+                        errorToast(e.message);
+                    }
+                });
+        } else {
+            LanguageApi.create<LanguageEntity, LanguageEntity>(data)
+                .then(() => {
+                    successToast("Language created");
+                })
+                .catch((e: Error) => {
+                    const handled = handleCommonAPIErrors(e);
+                    if (!handled) {
+                        errorToast(e.message);
+                    }
+                });
+        }
+    };
+
+    const handleChange = (name: string, value: string | number | boolean) => {
+        setData({
+            ...data,
+            [name]: value,
+        });
+    };
+
     const handleSubmit = (event: any) => {
         const form = event.currentTarget;
-        if (form.checkValidity() === false) {
-            event.preventDefault();
-            event.stopPropagation();
+        if (form.checkValidity() === true) {
+            saveData();
         }
 
+        event.preventDefault();
+        event.stopPropagation();
         setValidated(true);
     };
+
     return (
         <Fragment>
             <AppBreadcrumb linkText={"Language"} linkUrl={".."} />
@@ -29,38 +72,6 @@ export const LanguageAddPage: FC<RouteComponentProps> = (): JSX.Element => {
                         onSubmit={handleSubmit}
                     >
                         <Form.Row>
-                            <AppFormInput
-                                id="validationCustom02"
-                                required
-                                md="4"
-                                sm="4"
-                                lg="4"
-                                xl="4"
-                                name="first_name"
-                                label="First Name"
-                                value="hello"
-                                placeholder="hello"
-                                description="hello this is descriprion"
-                                maxCount={50}
-                                errorMessage="This field is required"
-                                invalid={true}
-                            />
-
-                            <AppFormInput
-                                id="validationCustom02"
-                                md="4"
-                                sm="4"
-                                lg="4"
-                                xl="4"
-                                name="first_name"
-                                label="First Name"
-                                value="hello"
-                                placeholder="hello"
-                                description="hello this is descriprion"
-                                maxCount={50}
-                                errorMessage="This field is required"
-                                invalid={true}
-                            />
                             <Form.Group
                                 as={Col}
                                 md="4"
@@ -70,11 +81,17 @@ export const LanguageAddPage: FC<RouteComponentProps> = (): JSX.Element => {
                                 <Form.Control
                                     required
                                     type="text"
-                                    placeholder="First name"
-                                    defaultValue="Mark"
+                                    placeholder="Enter Language"
+                                    defaultValue={data.name}
+                                    onChange={(e) =>
+                                        handleChange(
+                                            "name",
+                                            e.currentTarget.value
+                                        )
+                                    }
                                 />
-                                <Form.Control.Feedback>
-                                    Looks good!
+                                <Form.Control.Feedback type={"invalid"}>
+                                    This is error
                                 </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group
@@ -86,19 +103,18 @@ export const LanguageAddPage: FC<RouteComponentProps> = (): JSX.Element => {
                                 <Form.Control
                                     required
                                     type="text"
-                                    placeholder="Last name"
-                                    defaultValue="Otto"
+                                    placeholder="Enter Locale"
+                                    defaultValue={data.locale}
+                                    onChange={(e) =>
+                                        handleChange(
+                                            "locale",
+                                            e.currentTarget.value
+                                        )
+                                    }
                                 />
-                                <Form.Control.Feedback>
-                                    Looks good!
-                                </Form.Control.Feedback>
                             </Form.Group>
-                            <Form.Group
-                                as={Col}
-                                md="4"
-                                controlId="validationCustom02"
-                            >
-                                <Form.Label>Active</Form.Label>
+                            <Form.Group as={Col} md={4}>
+                                <Form.Label>Is Active ?</Form.Label>
                                 <AppSwitch
                                     id={"is-active"}
                                     name={"isActive"}
