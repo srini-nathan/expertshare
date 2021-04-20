@@ -29,7 +29,7 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
 
     async function handleDelete(id: number) {
         try {
-            await ClientApi.delete<void>(id).then(() => {
+            await ClientApi.delete(id).then(() => {
                 appGridApi?.refreshServerSideStore({ purge: false, route: [] });
             });
             await sweetSuccess({ text: " Successfully deleted " });
