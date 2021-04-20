@@ -11,6 +11,7 @@ import {
     Plus,
     Search,
     X,
+    Menu,
 } from "react-feather";
 
 import { ListTree } from "./app-custom-icons";
@@ -20,6 +21,7 @@ export const appIconMap: AppIconMap = {
     dashboard: Grid,
     Grid,
     X,
+    Menu,
     Search,
     sponsors: Briefcase,
     Briefcase,

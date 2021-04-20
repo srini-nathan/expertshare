@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Link } from "@reach/router";
+import { Link, Match } from "@reach/router";
 import { ListGroupItem } from "react-bootstrap";
 import styled from "styled-components";
 import { AppIcon } from "../AppIcon";
@@ -9,16 +9,29 @@ const IconWrapper = styled(AppIcon)``;
 
 export const AppNavigationItem: FC<AppNavigationItemProps> = ({
     label,
-    isActive = false,
     path,
     icon,
 }) => {
     return (
-        <ListGroupItem className={`${isActive ? "active" : ""}`}>
-            <Link to={path}>
-                <IconWrapper {...icon} />
-                {label}
-            </Link>
-        </ListGroupItem>
+        <Match path={path}>
+            {(props) => {
+                return (
+                    <ListGroupItem
+                        className={`nav-item pt-2 pr-3 pl-3 p-2 ${
+                            props.location.pathname.includes(path)
+                                ? "active"
+                                : ""
+                        }`}
+                    >
+                        <Link to={path} className="nav-link">
+                            <div className="nav-icon">
+                                <IconWrapper {...icon} />
+                            </div>
+                            <span>{label}</span>
+                        </Link>
+                    </ListGroupItem>
+                );
+            }}
+        </Match>
     );
 };

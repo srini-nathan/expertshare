@@ -2,7 +2,7 @@ import { AppNavigationItemProps } from "./components/AppNavigationItem";
 
 export const navigation: AppNavigationItemProps[] = [
     {
-        label: "Home",
+        label: "Dashboard",
         path: "/home",
         icon: {
             name: "dashboard",

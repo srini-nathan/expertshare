@@ -12,7 +12,7 @@
             }
         }
 
-        background-color: $sidebar-hover-bg-clr;
+        background-color: var(--sidebar-hover-bg-clr) !important;
     }
 
     .dropdown-menu {
@@ -37,11 +37,12 @@
         }
     }
 
-    .img-container  {
+    .img-container {
         opacity: 1 !important;
     }
-    .language{
-        svg{
+
+    .language {
+        svg {
             position: absolute;
             top: 15px;
             right: 10px;
@@ -69,21 +70,23 @@
 
 
     }
-    .languages{
+
+    .languages {
         background: url("../images/en_flag.png") no-repeat center;
         background-size: 28px;
     }
 
-    ul {
+    .list-group {
         .icon-arrow-down {
             position: absolute;
             top: 22px;
+
             @include media("xl") {
                 top: 14px;
             }
         }
 
-        li.bottom-menu {
+        .list-group-item.bottom-menu {
             position: absolute;
             bottom: 0;
             width: 100%;
@@ -100,7 +103,7 @@
             }
 
             li {
-                $border-values: unquote("1px" + " solid " + $sidebar-icon-clr + "20");
+                $border-values: unquote("1px"+ " solid "+ $sidebar-icon-clr + "20");
 
                 border-bottom: $border-values;
             }
@@ -113,25 +116,28 @@
         width: 100%;
         padding: 0;
 
-        li {
+        .list-group-item {
+            background-color: unset;
+            border: unset;
+            cursor: pointer;
+
             .dropdown-toggle::after {
                 display: none;
             }
 
             a {
-                color: $sidebar-fg-clr;
+                color: var(--sidebar-fg-clr);
             }
-
-            list-style-type: none;
 
             .nav-icon {
                 display: inline-flex;
                 width: 42px;
                 height: 42px;
-                border-radius: $border-radius;
+                border-radius: var(--border-radius);
                 opacity: .6;
 
                 svg {
+                    color: var(--sidebar-icon-clr);
                     width: 28px;
                     height: 28px;
                     margin: auto;
@@ -143,27 +149,27 @@
 
                 &.active {
                     .nav-icon {
-                        background-color: $sidebar-hover-bg-clr;
+                        background-color: var(--sidebar-hover-bg-clr);
                         opacity: 1;
                     }
 
                     span {
-                        font-family: $font-family-sans-serif;
+                        font-family: var(--font-family-sans-serif);
                         font-weight: 700;
                     }
 
                 }
 
                 &:hover {
-                    background-color: $sidebar-hover-bg-clr;
+                    background-color: var(--sidebar-hover-bg-clr);
 
                     a {
-                        color: $sidebar-hover-fg-clr;
+                        color: var(--sidebar-hover-fg-clr);
                     }
 
                     .nav-icon {
                         svg {
-                            stroke: $sidebar-hover-icon-clr;
+                            stroke: var(--sidebar-hover-icon-clr);
                         }
 
                         opacity: 1;
@@ -195,7 +201,7 @@
 
                     span {
                         margin: auto 0 auto 20px;
-
+                        color: var(--sidebar-fg-clr);
                         @include media("xl") {
                             margin: auto 0 auto 15px;
                         }
@@ -322,11 +328,11 @@
 }
 
 .left-sidebar {
-    position: fixed;
+    position: fixed !important;
     height: 100%;
 
     @include media("mobile") {
-        position: relative;
+        position: relative !important;
     }
 
     .collapse-menu {
