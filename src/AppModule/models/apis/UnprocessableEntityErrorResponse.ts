@@ -12,7 +12,7 @@ export class UnprocessableEntityErrorResponse extends ErrorResponse {
 
     description = "Unable to process your entity, please try again!";
 
-    violations: SimpleObject<string>[] | undefined;
+    violations: SimpleObject<string> = {};
 
     constructor(
         title?: string,
@@ -26,8 +26,8 @@ export class UnprocessableEntityErrorResponse extends ErrorResponse {
     }
 
     setViolations(violations: Violation[]) {
-        this.violations = violations.map((violation) => {
-            return { [violation.propertyPath]: violation.message };
+        violations.forEach((violation) => {
+            this.violations[violation.propertyPath] = violation.message;
         });
     }
 }

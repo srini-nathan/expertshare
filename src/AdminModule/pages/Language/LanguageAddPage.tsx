@@ -1,14 +1,27 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps, useNavigate, useParams } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
-import { AppPageHeader, AppSwitch } from "../../../AppModule/components";
-import { AppBreadcrumb } from "../../../AppModule/components/AppBreadcrumb";
-import { AppButton } from "../../../AppModule/components/AppButton";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { forEach as _forEach } from "lodash";
+import {
+    AppPageHeader,
+    AppSwitch,
+    AppBreadcrumb,
+    AppButton,
+} from "../../../AppModule/components";
 import { LanguageEntity } from "../../models";
 import { LanguageApi } from "../../apis";
 import { errorToast, successToast } from "../../../AppModule/utils";
-import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
 import { AppLoadableFallback } from "../../../AppModule/components/AppLoadableFallback";
+import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
+
+const schema = yup.object().shape({
+    name: yup.string().required(),
+    locale: yup.string().required(),
+    isActive: yup.boolean(),
+});
 
 export const LanguageAddPage: FC<RouteComponentProps> = ({
     navigate,
@@ -18,9 +31,43 @@ export const LanguageAddPage: FC<RouteComponentProps> = ({
     const hookNav = useNavigate();
     const nav = navigate ?? hookNav;
 
-    const [validated, setValidated] = useState(false);
     const [data, setData] = useState<LanguageEntity>(new LanguageEntity());
     const [loading, setLoading] = useState<boolean>(isEditMode);
+
+    const {
+        control,
+        handleSubmit,
+        formState: { errors, touchedFields },
+        setError,
+    } = useForm<LanguageEntity>({
+        resolver: yupResolver(schema),
+        mode: "all",
+    });
+
+    const onSubmit = (formData: LanguageEntity) => {
+        LanguageApi.createOrUpdate<LanguageEntity>(id, formData).then(
+            ({ error, errorMessage }) => {
+                if (error instanceof UnprocessableEntityErrorResponse) {
+                    const { violations } = error;
+                    _forEach(violations, (value: string, key: string) => {
+                        const propertyName = key as keyof LanguageEntity;
+                        setError(propertyName, {
+                            type: "backend",
+                            message: value,
+                        });
+                    });
+                } else if (errorMessage) {
+                    errorToast(errorMessage);
+                } else {
+                    nav("..").then(() => {
+                        successToast(
+                            isEditMode ? "Language updated" : "Language created"
+                        );
+                    });
+                }
+            }
+        );
+    };
 
     useEffect(() => {
         if (isEditMode) {
@@ -39,46 +86,6 @@ export const LanguageAddPage: FC<RouteComponentProps> = ({
         }
     }, [id]);
 
-    const saveData = () => {
-        LanguageApi.createOrUpdate<LanguageEntity>(id, data).then(
-            ({ error, isInvalid, errorMessage }) => {
-                if (errorMessage) {
-                    errorToast(errorMessage);
-                } else if (
-                    isInvalid &&
-                    error instanceof UnprocessableEntityErrorResponse
-                ) {
-                    const { description } = error;
-                    errorToast(description);
-                } else {
-                    nav("..").then(() => {
-                        successToast(
-                            isEditMode ? "Language updated" : "Language created"
-                        );
-                    });
-                }
-            }
-        );
-    };
-
-    const handleChange = (name: string, value: string | number | boolean) => {
-        setData({
-            ...data,
-            [name]: value,
-        });
-    };
-
-    const handleSubmit = (event: any) => {
-        const form = event.currentTarget;
-        if (form.checkValidity() === true) {
-            saveData();
-        }
-
-        event.preventDefault();
-        event.stopPropagation();
-        setValidated(true);
-    };
-
     if (loading) {
         return <AppLoadableFallback />;
     }
@@ -91,52 +98,53 @@ export const LanguageAddPage: FC<RouteComponentProps> = ({
             />
             <Row>
                 <Col>
-                    <Form
-                        noValidate
-                        validated={validated}
-                        onSubmit={handleSubmit}
-                    >
+                    <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                         <Form.Row>
-                            <Form.Group
-                                as={Col}
-                                md="4"
-                                controlId="validationCustom01"
-                            >
+                            <Form.Group as={Col} md="4" controlId="name">
                                 <Form.Label>Language</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="text"
-                                    placeholder="Enter Language"
+                                <Controller
+                                    name="name"
                                     defaultValue={data.name}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            "name",
-                                            e.currentTarget.value
-                                        )
-                                    }
+                                    control={control}
+                                    render={({ field }) => (
+                                        <Form.Control
+                                            {...field}
+                                            type="text"
+                                            placeholder="Enter Language"
+                                            isValid={
+                                                touchedFields.name &&
+                                                !errors.name
+                                            }
+                                            isInvalid={!!errors?.name}
+                                        />
+                                    )}
                                 />
                                 <Form.Control.Feedback type={"invalid"}>
-                                    This is error
+                                    {errors.name?.message}
                                 </Form.Control.Feedback>
                             </Form.Group>
-                            <Form.Group
-                                as={Col}
-                                md="4"
-                                controlId="validationCustom02"
-                            >
+                            <Form.Group as={Col} md="4" controlId="locale">
                                 <Form.Label>Locale</Form.Label>
-                                <Form.Control
-                                    required
-                                    type="text"
-                                    placeholder="Enter Locale"
+                                <Controller
+                                    name="locale"
+                                    control={control}
                                     defaultValue={data.locale}
-                                    onChange={(e) =>
-                                        handleChange(
-                                            "locale",
-                                            e.currentTarget.value
-                                        )
-                                    }
+                                    render={({ field }) => (
+                                        <Form.Control
+                                            {...field}
+                                            type="text"
+                                            placeholder="Enter Locale"
+                                            isValid={
+                                                touchedFields.locale &&
+                                                !errors.locale
+                                            }
+                                            isInvalid={!!errors.locale}
+                                        />
+                                    )}
                                 />
+                                <Form.Control.Feedback type={"invalid"}>
+                                    {errors.locale?.message}
+                                </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group as={Col} md={4}>
                                 <Form.Label>Is Active ?</Form.Label>
