@@ -1,7 +1,6 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps, useNavigate, useParams } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
-import { isString as _isString } from "lodash";
 import { AppPageHeader, AppSwitch } from "../../../AppModule/components";
 import { AppBreadcrumb } from "../../../AppModule/components/AppBreadcrumb";
 import { AppButton } from "../../../AppModule/components/AppButton";
@@ -26,8 +25,12 @@ export const LanguageAddPage: FC<RouteComponentProps> = ({
     useEffect(() => {
         if (isEditMode) {
             LanguageApi.getById<LanguageEntity>(id).then(
-                ({ error, response }) => {
-                    if (error === null && response !== null) {
+                ({ response, isNotFound, errorMessage }) => {
+                    if (errorMessage) {
+                        errorToast(errorMessage);
+                    } else if (isNotFound) {
+                        errorToast("Language not exist");
+                    } else if (response !== null) {
                         setData(response);
                     }
                     setLoading(false);
@@ -38,15 +41,15 @@ export const LanguageAddPage: FC<RouteComponentProps> = ({
 
     const saveData = () => {
         LanguageApi.createOrUpdate<LanguageEntity>(id, data).then(
-            ({ error }) => {
-                if (error !== null) {
-                    if (_isString(error)) {
-                        errorToast(error);
-                    }
-                    if (error instanceof UnprocessableEntityErrorResponse) {
-                        const { description } = error;
-                        errorToast(description);
-                    }
+            ({ error, isInvalid, errorMessage }) => {
+                if (errorMessage) {
+                    errorToast(errorMessage);
+                } else if (
+                    isInvalid &&
+                    error instanceof UnprocessableEntityErrorResponse
+                ) {
+                    const { description } = error;
+                    errorToast(description);
                 } else {
                     nav("..").then(() => {
                         successToast(
