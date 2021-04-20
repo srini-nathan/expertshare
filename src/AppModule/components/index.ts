@@ -1,5 +1,5 @@
 export * from "./AppSwitch";
-export * from "./AppSpinner";
+export * from "./AppLoader";
 export * from "./AppDatePicker";
 export * from "./AppFormRadio";
 export * from "./AppFormDropdown";

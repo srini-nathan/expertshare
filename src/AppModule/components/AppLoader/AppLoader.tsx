@@ -1,8 +1,9 @@
 import React, { CSSProperties, FC } from "react";
 import { Spinner } from "react-bootstrap";
 import { Variant } from "react-bootstrap/types";
+import "./assets/scss/style.scss";
 
-export interface AppSpinnerProps {
+export interface AppLoaderProps {
     containerClassName?: string;
     containerStyle?: CSSProperties;
     spinnerClassName?: string;
@@ -12,7 +13,7 @@ export interface AppSpinnerProps {
     spinnerVariant?: Variant;
 }
 
-export const AppSpinner: FC<AppSpinnerProps> = ({
+export const AppLoader: FC<AppLoaderProps> = ({
     containerClassName,
     containerStyle,
     spinnerClassName,
@@ -20,9 +21,12 @@ export const AppSpinner: FC<AppSpinnerProps> = ({
     spinnerAnimation = "border",
     spinnerVariant = "primary",
 }) => (
-    <div className={containerClassName} style={containerStyle}>
+    <div
+        className={`loaderContainer ${containerClassName}`}
+        style={containerStyle}
+    >
         <Spinner
-            className={spinnerClassName}
+            className={`appLoader ${spinnerClassName}`}
             style={spinnerContainerStyle}
             variant={spinnerVariant}
             animation={spinnerAnimation}

@@ -1,6 +1,5 @@
 import React, { FC } from "react";
 import { Redirect, RouteComponentProps, Router, navigate } from "@reach/router";
-import { Spinner } from "react-bootstrap";
 import { appRouters } from "./bootstrap";
 import { DashboardLayout } from "./layouts/DashboardLayout";
 import { AuthLayout } from "./layouts/AuthLayout";
@@ -9,6 +8,7 @@ import {
     AuthContext,
     logoutAction,
 } from "./Authentication/context/AuthContext";
+import { AppLoader } from "./components";
 
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
@@ -39,12 +39,8 @@ const App = (): JSX.Element => {
 
     if (state.isAuthenticated === null) {
         return (
-            <div
-                className={
-                    "vh-100 vw-100 d-flex align-items-center justify-content-center"
-                }
-            >
-                <Spinner animation={"border"} variant={"primary"} />
+            <div className={"vh-100 vw-100"}>
+                <AppLoader />
             </div>
         );
     }

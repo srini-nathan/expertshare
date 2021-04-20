@@ -8,6 +8,7 @@ import {
     AppTagSelect,
     AppFormTextArea,
     AppFormRadioSwitch,
+    AppLoader,
 } from "../../components";
 import { SimpleObject } from "../../../AdminModule/models";
 
@@ -117,6 +118,37 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     invalid={true}
                     defaultValue="overall"
                 />
+
+                <hr className="col-12" />
+
+                <div
+                    className="col-md-12 vh-100"
+                    style={{ border: "1px solid" }}
+                >
+                    <AppLoader
+                        spinnerAnimation="border"
+                        spinnerVariant="primary"
+                    />
+                </div>
+
+                <div
+                    className="col-md-6 vh-100"
+                    style={{ border: "1px solid" }}
+                >
+                    <AppLoader
+                        spinnerAnimation="border"
+                        spinnerVariant="primary"
+                    />
+                </div>
+                <div
+                    className="col-md-6 vh-100"
+                    style={{ border: "1px solid" }}
+                >
+                    <AppLoader
+                        spinnerAnimation="grow"
+                        spinnerVariant="primary"
+                    />
+                </div>
             </Row>
         </Fragment>
     );

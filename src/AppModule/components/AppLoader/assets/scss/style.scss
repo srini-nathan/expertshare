@@ -1,0 +1,11 @@
+@import "../../../../assets/scss/variables";
+
+.loaderContainer{
+    position: absolute;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    .appLoader{
+        margin: auto;
+    }
+}
