@@ -37,8 +37,9 @@ export const LanguageAddPage: FC<RouteComponentProps> = ({
     const {
         control,
         handleSubmit,
-        formState: { errors, touchedFields },
+        formState: { errors, dirtyFields },
         setError,
+        trigger,
     } = useForm<LanguageEntity>({
         resolver: yupResolver(schema),
         mode: "all",
@@ -79,6 +80,7 @@ export const LanguageAddPage: FC<RouteComponentProps> = ({
                         errorToast("Language not exist");
                     } else if (response !== null) {
                         setData(response);
+                        trigger();
                     }
                     setLoading(false);
                 }
@@ -121,8 +123,10 @@ export const LanguageAddPage: FC<RouteComponentProps> = ({
                                             type="text"
                                             placeholder="Enter Language"
                                             isValid={
-                                                touchedFields.name &&
-                                                !errors.name
+                                                isEditMode
+                                                    ? !errors.name
+                                                    : dirtyFields.name &&
+                                                      !errors.name
                                             }
                                             isInvalid={!!errors?.name}
                                         />
@@ -144,8 +148,10 @@ export const LanguageAddPage: FC<RouteComponentProps> = ({
                                             type="text"
                                             placeholder="Enter Locale"
                                             isValid={
-                                                touchedFields.locale &&
-                                                !errors.locale
+                                                isEditMode
+                                                    ? !errors.locale
+                                                    : dirtyFields.locale &&
+                                                      !errors.locale
                                             }
                                             isInvalid={!!errors.locale}
                                         />
