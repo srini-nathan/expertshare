@@ -87,6 +87,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         resolver: yupResolver(validationSchema),
     });
     const [clientFetched, setClientFetched] = useState(false);
+    const [containerFetched, setContainerFetched] = useState(false);
     const [packageKeys, setPackageKeys] = useState<string[]>();
     const storage = watch("storage");
     const notes = watch("notes");
@@ -135,9 +136,8 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                     "bucketSecret",
                     "bucketName",
                     "isActive",
+                    // "notes",
                 ];
-                // eslint-disable-next-line no-console
-                console.log(res, fields);
                 fields.forEach((field) =>
                     setValue(field, getProperty(res, field as keyof Container))
                 );
@@ -145,6 +145,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                     setValue(pk.key, pk.value)
                 );
                 setClientFetched(true);
+                setContainerFetched(true);
             });
         }
     }, [id, isAddMode, clientFetched, setValue, clientId]);
@@ -219,6 +220,11 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
             await updateContainer(data);
         }
     };
+    // eslint-disable-next-line no-console
+    console.log(isAddMode, containerFetched);
+    if (!isAddMode && !containerFetched) {
+        return <AppSpinner />;
+    }
 
     if (!clientFetched) {
         return <AppSpinner />;
