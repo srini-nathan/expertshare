@@ -1,25 +1,28 @@
 import React, { FC } from "react";
 import { Form, Col } from "react-bootstrap";
 import "./assets/scss/style.scss";
+import { Control, Controller } from "react-hook-form";
+import { isString as _isString, startCase as _startCase } from "lodash";
 
 export interface AppFormInputProps {
-    id: string;
+    id?: string;
     name: string;
-    sm?: string;
-    md?: string;
-    lg?: string;
-    xl?: string;
-    col?: string;
+    sm?: string | number;
+    md?: string | number;
+    lg?: string | number;
+    xl?: string | number;
     value?: string;
     type?: string;
-    placeholder?: string;
+    placeholder?: string | boolean;
     required?: boolean;
     label?: string;
     description?: string;
     errorMessage?: string;
-    invalid?: boolean;
+    isInvalid?: boolean;
+    isValid?: boolean;
     withCounter?: boolean;
     maxCount?: number;
+    control?: Control<any>;
 }
 
 export const AppFormInput: FC<AppFormInputProps> = ({
@@ -31,18 +34,35 @@ export const AppFormInput: FC<AppFormInputProps> = ({
     label = "",
     type = "text",
     description,
-    md,
-    sm,
-    lg,
-    xl,
-    invalid = false,
+    sm = 12,
+    md = 6,
+    lg = 4,
+    xl = 4,
+    isInvalid,
+    isValid,
     required = false,
     withCounter = false,
     maxCount = 25,
+    control,
 }): JSX.Element => {
+    const controlId = id || name;
+    let placeholderText = "";
+
+    if (placeholder !== false) {
+        placeholderText = _isString(placeholder)
+            ? placeholder
+            : `Enter ${_startCase(label) || _startCase(name)}`;
+    }
     const [input, setInput] = React.useState<string>(value);
     return (
-        <Form.Group as={Col} md={md} sm={sm} lg={lg} xl={xl} controlId={id}>
+        <Form.Group
+            as={Col}
+            md={md}
+            sm={sm}
+            lg={lg}
+            xl={xl}
+            controlId={controlId}
+        >
             <Form.Label>
                 {label}
                 {required && <span className="required">*</span>}
@@ -58,20 +78,37 @@ export const AppFormInput: FC<AppFormInputProps> = ({
                     <span className="counter">{`${input.length}/${maxCount}`}</span>
                 )}
             </Form.Label>
-            <Form.Control
-                required={required}
-                type={type}
-                placeholder={placeholder}
-                value={input}
-                name={name}
-                maxLength={withCounter || maxCount !== 25 ? maxCount : -1}
-                onChange={(e) => setInput(e.target.value)}
-            />
-            {invalid && (
-                <Form.Control.Feedback type="invalid">
-                    {errorMessage}
-                </Form.Control.Feedback>
+            {control ? (
+                <Controller
+                    name={name}
+                    defaultValue={value}
+                    control={control}
+                    render={({ field }) => (
+                        <Form.Control
+                            {...field}
+                            type={type}
+                            placeholder={placeholderText}
+                            isValid={isValid}
+                            isInvalid={isInvalid}
+                        />
+                    )}
+                />
+            ) : (
+                <Form.Control
+                    required={required}
+                    type={type}
+                    placeholder={placeholderText}
+                    value={input}
+                    name={name}
+                    maxLength={withCounter || maxCount !== 25 ? maxCount : -1}
+                    onChange={(e) => setInput(e.target.value)}
+                    isInvalid={isInvalid}
+                    isValid={isValid}
+                />
             )}
+            <Form.Control.Feedback type="invalid">
+                {errorMessage}
+            </Form.Control.Feedback>
         </Form.Group>
     );
 };
