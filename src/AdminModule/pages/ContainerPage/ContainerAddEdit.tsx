@@ -14,7 +14,7 @@ import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHead
 import { TextInput } from "../../../SharedModule/components/TextInput/TextInput";
 import { CustomCheckBox } from "../../../SharedModule/components/CustomCheckBox/CustomCheckBox";
 import { ClientApi, PackageApi } from "../../apis";
-import { AppFormRadio, AppSpinner } from "../../../AppModule/components";
+import { AppFormRadio, AppLoader } from "../../../AppModule/components";
 
 import { ListResponse } from "../../../AppModule/models";
 import { sweetSuccess } from "../../../AppModule/components/Util";
@@ -223,11 +223,11 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     // eslint-disable-next-line no-console
     console.log(isAddMode, containerFetched);
     if (!isAddMode && !containerFetched) {
-        return <AppSpinner />;
+        return <AppLoader />;
     }
 
     if (!clientFetched) {
-        return <AppSpinner />;
+        return <AppLoader />;
     }
 
     return (
