@@ -1,20 +1,30 @@
 import React, { ChangeEventHandler, FC } from "react";
+import { FieldElement, Ref } from "react-hook-form/dist/types/fields";
+import { RegisterOptions } from "react-hook-form/dist/types/validator";
+
 import { Form } from "react-bootstrap";
 import "./assets/scss/style.scss";
 
 export interface AppFormRadioProps {
     id: string;
     name: string;
-    value: boolean;
+    value?: string;
+    defaultChecked?: boolean;
     label?: string;
     onChange?: ChangeEventHandler<HTMLInputElement>;
+    register?<TFieldElement extends FieldElement<TFieldElement>>(
+        ref?: (TFieldElement & Ref) | null,
+        rules?: RegisterOptions
+    ): void;
 }
 
 export const AppFormRadio: FC<AppFormRadioProps> = ({
     id,
     name,
     value,
+    defaultChecked = false,
     label = "",
+    register,
     onChange = () => {},
 }): JSX.Element => {
     return (
@@ -22,9 +32,11 @@ export const AppFormRadio: FC<AppFormRadioProps> = ({
             type="radio"
             id={`radio_${id}`}
             name={name}
-            defaultChecked={value}
+            value={value}
+            defaultChecked={defaultChecked}
             label={label}
             onChange={onChange}
+            ref={register}
         />
     );
 };

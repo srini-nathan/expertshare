@@ -29,5 +29,8 @@
         border: 1px solid $input-border-clr;
         background-color: $input-bg;
         color: $input-clr;
+        &:focus{
+            outline: unset !important
+        }
     }
 }

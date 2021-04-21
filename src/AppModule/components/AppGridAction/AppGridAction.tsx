@@ -9,7 +9,18 @@ export const AppGridAction: FC<{
     callback: (id: number) => void;
     editLink: string;
     addLink: string;
-}> = ({ value, callback, editLink, addLink }): JSX.Element => {
+    listTree?: boolean;
+    listTreeSubUrl?: string;
+    ui: string;
+}> = ({
+    value,
+    callback,
+    editLink,
+    addLink,
+    listTree,
+    listTreeSubUrl,
+    ui,
+}): JSX.Element => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleDelete = () => {
@@ -31,17 +42,30 @@ export const AppGridAction: FC<{
             <Link className={"mr-3"} to={`${editLink}${value}`}>
                 <AppIcon name={"edit"} />
             </Link>
-            <Link className={"mr-3"} to={`${addLink}`}>
-                <AppIcon name={"add"} />
-            </Link>
-            <a href="#">
-                <AppIcon name={"ListTree"} />
-            </a>
+            {addLink ? (
+                <Link className={"mr-3"} to={`${addLink}`}>
+                    <AppIcon name={"add"} />
+                </Link>
+            ) : (
+                <></>
+            )}
+
+            {listTree ? (
+                <Link
+                    className={"mr-3"}
+                    to={`${editLink}${value}/${listTreeSubUrl}`}
+                >
+                    <AppIcon name={"ListTree"} />
+                </Link>
+            ) : (
+                <></>
+            )}
             <AppModal
                 show={show}
                 handleClose={handleClose}
                 handleDelete={handleDelete}
                 id={value}
+                ui={ui}
             />
         </div>
     );

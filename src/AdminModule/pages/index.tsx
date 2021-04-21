@@ -4,3 +4,4 @@ export * from "./SettingPage";
 export * from "./Translation";
 export * from "./ClientPage";
 export * from "./Language";
+export * from "./ContainerPage";
