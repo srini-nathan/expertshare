@@ -10,16 +10,16 @@ import {
     AppSwitch,
     AppBreadcrumb,
     AppButton,
+    AppLoader,
 } from "../../../AppModule/components";
 import { LanguageEntity } from "../../models";
 import { LanguageApi } from "../../apis";
 import { errorToast, successToast } from "../../../AppModule/utils";
-import { AppLoadableFallback } from "../../../AppModule/components/AppLoadableFallback";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
 
 const schema = yup.object().shape({
-    name: yup.string().required(),
-    locale: yup.string().required(),
+    name: yup.string().min(2).required(),
+    locale: yup.string().min(2).required(),
     isActive: yup.boolean(),
 });
 
@@ -87,7 +87,16 @@ export const LanguageAddPage: FC<RouteComponentProps> = ({
     }, [id]);
 
     if (loading) {
-        return <AppLoadableFallback />;
+        return (
+            <Row>
+                <Col md={12} className="vh-100">
+                    <AppLoader
+                        spinnerAnimation="border"
+                        spinnerVariant="primary"
+                    />
+                </Col>
+            </Row>
+        );
     }
 
     return (
