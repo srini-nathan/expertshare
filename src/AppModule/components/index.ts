@@ -10,3 +10,4 @@ export * from "./AppFormTextArea";
 export * from "./AppFormRadioSwitch";
 export * from "./AppBreadcrumb";
 export * from "./AppButton";
+export * from "./AppClientInformation";

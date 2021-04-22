@@ -1,41 +1,21 @@
-@import "../../../../assets/scss/screens-sizes";
-@import "./../../../../assets/scss/variables";
+@import "./variables";
 
 .ag-theme-alpine {
-    .action-header {
-        @include media("container-d-ts") {
-            max-width: 140px;
-        }
-    }
-
-    .action-header {
-        .ag-header-cell-label {
+    .action-header  {
+        .ag-header-cell-label{
             width: 100%;
             text-align: right;
-
+            
             span {
                 width: 100%;
             }
         }
     }
-
-    .text-right {
-        .ag-react-container {
-            div {
-                margin-left: auto;
-            }
-        }
-    }
-
-    .ag-react-container {
-        height: 100%;
-    }
-
     .ag-sort-ascending-icon,
     .ag-sort-descending-icon {
         position: relative;
         display: block !important;
-        color: var(--primary) !important;
+        color: $primary !important;
 
         &.ag-hidden {
             opacity: .6;
@@ -44,20 +24,20 @@
     }
 
     .ag-sort-ascending-icon:not(.ag-hidden) {
-        &+.ag-hidden {
-            color: var(--primary) !important;
+        & + .ag-hidden {
+            color: $primary !important;
         }
     }
 
     .ag-sort-descending-icon:not(.ag-hidden) {
-        &+.ag-hidden {
-            color: var(--primary) !important;
+        & + .ag-hidden {
+            color: $primary !important;
         }
 
     }
 
     .ag-hidden {
-        color: var(--secondary) !important;
+        color: $secondary !important;
     }
 
     .ag-icon-desc {
@@ -80,7 +60,6 @@
         }
     }
 
-    //noinspection Stylelint
     .ag-icon {
         // required because Font Awesome uses bold for its icons
         font-weight: bold;
@@ -132,4 +111,27 @@
         }
 
     }
+}
+
+.search-inpt {
+    svg {
+        position: absolute;
+        top: 16px;
+        left: 20px;
+    }
+
+    input {
+        padding-left: 30px;
+    }
+
+    input,
+    input::input-placeholder {
+        height: 37px;
+        font-size: 13px;
+        line-height: 40px;
+    }
+}
+
+.table-responsive {
+    min-height: 65vh;
 }

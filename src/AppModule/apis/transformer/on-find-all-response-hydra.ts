@@ -13,6 +13,5 @@ export const onFindAllResponseHydra = <T>(
     if (parsedData["hydra:totalItems"]) {
         listResponse.totalItems = parsedData["hydra:totalItems"];
     }
-
     return listResponse;
 };

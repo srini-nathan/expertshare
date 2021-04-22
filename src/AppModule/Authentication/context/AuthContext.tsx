@@ -198,51 +198,6 @@ export default function AuthProvider({ children }: Props): JSX.Element {
     useEffect(() => {
         fetchSession().then();
     }, []);
-    // @TODO: If not requires, remove following commented code
-    // const fetchSession = async () => {
-    //     try {
-    //         await Api.fetchProfile();
-    //     } catch (error) {}
-    // };
-    // async fetchSessionAndUpdateState() {
-    //     try {
-    //         const accountRaw = await fetchUserProfile();
-    //         const account = accountRaw.data;
-    //
-    //         if (!_.isEmpty(accountRaw) && !_.isEmpty(account)) {
-    //             sessionStorage.setItem(AUTH_PROFILE, JSON.stringify(account));
-    //             const isAuthenticated = account.enabled;
-    //             const isAdmin = this.isAdmin(account);
-    //
-    //             const proxyToken = sessionStorage.getItem(PROXY_TOKEN);
-    //             if (proxyToken) {
-    //                 const { sub } = jwtDecode(proxyToken);
-    //                 this.setState({ ...this.state, proxyUserName: sub });
-    //             }
-    //
-    //             this.setState({
-    //                 ...this.state,
-    //                 isAuthenticated,
-    //                 isAdmin,
-    //                 sessionHasBeenFetched: true,
-    //                 account,
-    //                 currentLocale: 'en',
-    //                 activeUserName: account.username
-    //             });
-    //         }
-    //     } catch (err) {
-    //         const errorMessage =
-    //           err && err.response && err.response.data && err.response.data.type ? err.response.data.type : err;
-    //         this.setState({
-    //             ...this.state,
-    //             loading: false,
-    //             isAuthenticated: false,
-    //             sessionHasBeenFetched: false,
-    //             showLogin: true,
-    //             errorMessage
-    //         });
-    //     }
-    // }
     return (
         <AuthContext.Provider value={{ state, dispatch }}>
             {children}

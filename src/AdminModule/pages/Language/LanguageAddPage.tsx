@@ -1,7 +1,7 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps, useNavigate, useParams } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { forEach as _forEach } from "lodash";
@@ -14,8 +14,9 @@ import {
 } from "../../../AppModule/components";
 import { LanguageEntity } from "../../models";
 import { LanguageApi } from "../../apis";
-import { errorToast, successToast } from "../../../AppModule/utils";
+import { errorToast, successToast, validation } from "../../../AppModule/utils";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
+import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 
 const schema = yup.object().shape({
     name: yup.string().min(2).required(),
@@ -37,7 +38,7 @@ export const LanguageAddPage: FC<RouteComponentProps> = ({
     const {
         control,
         handleSubmit,
-        formState: { errors, dirtyFields },
+        formState,
         setError,
         trigger,
     } = useForm<LanguageEntity>({
@@ -101,6 +102,8 @@ export const LanguageAddPage: FC<RouteComponentProps> = ({
         );
     }
 
+    const { errors } = formState;
+
     return (
         <Fragment>
             <AppBreadcrumb linkText={"Language"} linkUrl={".."} />
@@ -111,56 +114,26 @@ export const LanguageAddPage: FC<RouteComponentProps> = ({
                 <Col>
                     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                         <Form.Row>
-                            <Form.Group as={Col} md="4" controlId="name">
-                                <Form.Label>Language</Form.Label>
-                                <Controller
-                                    name="name"
-                                    defaultValue={data.name}
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Form.Control
-                                            {...field}
-                                            type="text"
-                                            placeholder="Enter Language"
-                                            isValid={
-                                                isEditMode
-                                                    ? !errors.name
-                                                    : dirtyFields.name &&
-                                                      !errors.name
-                                            }
-                                            isInvalid={!!errors?.name}
-                                        />
-                                    )}
-                                />
-                                <Form.Control.Feedback type={"invalid"}>
-                                    {errors.name?.message}
-                                </Form.Control.Feedback>
-                            </Form.Group>
-                            <Form.Group as={Col} md="4" controlId="locale">
-                                <Form.Label>Locale</Form.Label>
-                                <Controller
-                                    name="locale"
-                                    control={control}
-                                    defaultValue={data.locale}
-                                    render={({ field }) => (
-                                        <Form.Control
-                                            {...field}
-                                            type="text"
-                                            placeholder="Enter Locale"
-                                            isValid={
-                                                isEditMode
-                                                    ? !errors.locale
-                                                    : dirtyFields.locale &&
-                                                      !errors.locale
-                                            }
-                                            isInvalid={!!errors.locale}
-                                        />
-                                    )}
-                                />
-                                <Form.Control.Feedback type={"invalid"}>
-                                    {errors.locale?.message}
-                                </Form.Control.Feedback>
-                            </Form.Group>
+                            <AppFormInput
+                                name={"name"}
+                                label={"Name"}
+                                required={true}
+                                withCounter={true}
+                                {...validation("name", formState, isEditMode)}
+                                errorMessage={errors.name?.message}
+                                value={data.name}
+                                control={control}
+                            />
+                            <AppFormInput
+                                name={"locale"}
+                                label={"Locale"}
+                                required={true}
+                                withCounter={true}
+                                {...validation("locale", formState, isEditMode)}
+                                errorMessage={errors.locale?.message}
+                                value={data.locale}
+                                control={control}
+                            />
                             <Form.Group as={Col} md={4}>
                                 <Form.Label>Is Active ?</Form.Label>
                                 <AppSwitch

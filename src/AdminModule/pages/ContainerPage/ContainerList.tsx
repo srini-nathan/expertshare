@@ -1,6 +1,7 @@
-import React, { FC, Fragment, useState } from "react";
-import { RouteComponentProps } from "@reach/router";
+import React, { FC, Fragment, useEffect, useState } from "react";
+import { RouteComponentProps, useParams } from "@reach/router";
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
+import "./style.scss";
 import {
     GridApi,
     IServerSideDatasource,
@@ -11,25 +12,31 @@ import { ListResponse } from "../../../AppModule/models";
 import {
     AppPageHeader,
     AppListPageToolbar,
+    AppClientInformation,
 } from "../../../AppModule/components";
+import { AppGrid } from "../../../AppModule/containers/AppGrid";
 
-import {
-    AppGrid,
-    buildSortParams,
-} from "../../../AppModule/containers/AppGrid";
-import { ClientApi } from "../../apis";
-import { Client } from "../../models";
 import { appGridConfig } from "../../../AppModule/config";
 import { AppGridAction } from "../../../AppModule/components/AppGridAction";
 import { sweetError, sweetSuccess } from "../../../AppModule/components/Util";
+import { ContainerApi } from "../../apis/ContainerApi";
+import { Client, Container } from "../../models";
+import { ClientApi } from "../../apis";
 
-export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
+export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
+    const { clientId } = useParams();
     const [totalItems, setTotalItems] = useState<number>(0);
+    const [client, setClient] = useState<Client>();
     let appGridApi: GridApi;
+
+    useEffect(() => {
+        ClientApi.findById<Client>(clientId).then((res) => setClient(res));
+        return () => {};
+    }, [clientId, setClient]);
 
     async function handleDelete(id: number) {
         try {
-            await ClientApi.delete(id).then(() => {
+            await ContainerApi.delete<void>(id).then(() => {
                 appGridApi?.refreshServerSideStore({ purge: false, route: [] });
             });
             await sweetSuccess({ text: " Successfully deleted " });
@@ -39,13 +46,13 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     }
     const columnDef: ColDef[] = [
         {
-            headerName: "Client",
-            field: "name",
+            headerName: "Domain",
+            field: "domain",
             flex: 1,
         },
         {
-            headerName: "Notes",
-            field: "notes",
+            headerName: "Storage",
+            field: "storage",
             flex: 2,
         },
         {
@@ -55,14 +62,11 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
             cellRenderer: "appGridActionRenderer",
             cellClass: "text-right",
             headerClass: "action-header",
-            resizable: false,
             cellRendererParams: {
                 callback: handleDelete,
-                editLink: ClientApi.CLIENT_LIST_PAGE_PATH,
-                addLink: ClientApi.CLIENT_NEW_PAGE_PATH,
-                listTree: true,
-                listTreeSubUrl: "container",
-                ui: "Client",
+                addLink: undefined,
+                editLink: `${ClientApi.CLIENT_LIST_PAGE_PATH}${clientId}/container/`,
+                ui: "Container",
             },
         },
     ];
@@ -75,9 +79,10 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
             const { request } = params;
             const { endRow } = request;
             const pageNo = endRow / appGridConfig.pageSize;
-            ClientApi.findAll<Client>(pageNo, {
-                order: buildSortParams(request),
-            }).then((res: ListResponse<Client>) => {
+            ContainerApi.findAllContainersByClient<Container>(
+                pageNo,
+                clientId
+            ).then((res: ListResponse<Container>) => {
                 setTotalItems(res.totalItems);
                 params.successCallback(res.items, res.totalItems);
             });
@@ -85,11 +90,12 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     };
     return (
         <Fragment>
-            <AppPageHeader title={"Client"} />
+            <AppPageHeader title={"Container"} />
             <AppListPageToolbar
-                createLabel={"Create Client"}
-                createLink={"/admin/client/new"}
+                createLabel={"Create Container"}
+                createLink={"container/new"}
             />
+            <AppClientInformation title={client?.name || ""} />
             <Row>
                 <Col>
                     <AppGrid

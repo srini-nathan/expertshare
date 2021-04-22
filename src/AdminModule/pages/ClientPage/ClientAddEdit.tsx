@@ -17,10 +17,11 @@ import { ClientApi, PackageApi } from "../../apis";
 
 import { ListResponse } from "../../../AppModule/models";
 import { sweetSuccess } from "../../../AppModule/components/Util";
+import { AppLoader } from "../../../AppModule/components";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is Required"),
-    notes: Yup.string().required("Notes is Required"),
+    notes: Yup.string().optional(),
 });
 
 function getProperty<T, K extends keyof T>(obj: T, key: K) {
@@ -51,9 +52,13 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         setValue,
         errors,
         formState,
+        watch,
     } = useForm({
         resolver: yupResolver(validationSchema),
     });
+
+    const name = watch("name");
+    const notes = watch("notes");
     const [clientFetched, setClientFetched] = useState(false);
     const [packageKeys, setPackageKeys] = useState<string[]>();
 
@@ -136,7 +141,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
 
     if (!isAddMode) {
         if (!clientFetched) {
-            return <div>Loading!!!</div>;
+            return <AppLoader />;
         }
     }
     return (
@@ -145,7 +150,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                 <div className="row m-0">
                     <PageHeader
                         linkText={"Client"}
-                        linkUrl={ClientApi.CLIENT_LIST_PAGE_PATH}
+                        linkUrl={".."}
                         pageHeader={
                             isAddMode ? "Add new Client" : "Edit Client"
                         }
@@ -158,6 +163,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                             >
                                 <div className="row m-0 px-0 px-xl-3 d-flex align-items-start">
                                     <TextInput
+                                        length={name?.length}
                                         label={"Name"}
                                         name={"name"}
                                         type={"text"}
@@ -206,7 +212,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                                     Notes
                                                 </label>
                                                 <span className="input-letter-counter theme-input-letter-counter-clr">
-                                                    0/120
+                                                    {notes?.length}/120
                                                 </span>
 
                                                 <textarea
