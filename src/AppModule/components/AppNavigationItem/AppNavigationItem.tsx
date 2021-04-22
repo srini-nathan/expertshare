@@ -11,7 +11,7 @@ export const AppNavigationItem: FC<AppNavigationItemProps> = ({
     label,
     path,
     icon,
-    className,
+    className = "",
 }) => {
     return (
         <Match path={path}>
