@@ -7,10 +7,10 @@ import * as yup from "yup";
 import { forEach as _forEach } from "lodash";
 import {
     AppPageHeader,
-    AppSwitch,
     AppBreadcrumb,
     AppButton,
     AppLoader,
+    AppFormSwitch,
 } from "../../../AppModule/components";
 import { LanguageEntity } from "../../models";
 import { LanguageApi } from "../../apis";
@@ -134,14 +134,14 @@ export const LanguageAddPage: FC<RouteComponentProps> = ({
                                 value={data.locale}
                                 control={control}
                             />
-                            <Form.Group as={Col} md={4}>
-                                <Form.Label>Is Active ?</Form.Label>
-                                <AppSwitch
-                                    id={"is-active"}
-                                    name={"isActive"}
-                                    value={true}
-                                ></AppSwitch>
-                            </Form.Group>
+                            <AppFormSwitch
+                                name={"isActive"}
+                                label={"Is Active ?"}
+                                {...validation("locale", formState, isEditMode)}
+                                errorMessage={errors.isActive?.message}
+                                value={data.isActive}
+                                control={control}
+                            />
                         </Form.Row>
                         {/* @TODO: Move it to FormAction component */}
                         <div>
