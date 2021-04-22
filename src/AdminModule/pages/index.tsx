@@ -3,5 +3,5 @@ export * from "./DesignPage";
 export * from "./SettingPage";
 export * from "./Translation";
 export * from "./ClientPage";
-export * from "./Language";
+export * from "./LanguagePage";
 export * from "./ContainerPage";

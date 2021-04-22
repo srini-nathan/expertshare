@@ -1,0 +1,68 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.custom-switch {
+    display: flex !important;
+    padding-left: 0 !important;
+    &.lg  {
+        label{
+            width: 74px;
+            height: 44px;
+        }
+        [type="checkbox"] + label::before {
+            width: 34px;
+            height: 36px;
+        }
+    }
+    &.sm  {
+        label{
+            width: 40px;
+            height: 24px;
+        }
+        [type="checkbox"] + label::before {
+            top: 2px;
+            width: 20px;
+            height: 20px;
+        }
+        [type="checkbox"]:checked + label::before{
+            transform: translateX(54px);
+        }
+        [type="checkbox"]:not(:checked) + label::before {
+            transform: translateX(38px);
+        }
+    }
+    label {
+        margin: auto 0;
+        cursor: pointer;
+        border-radius: $checkbox-block-border-radius;
+        transition: all .2s;
+    }
+    [type="checkbox"] + label::before {
+        position: absolute;
+        display: block;
+        content: "";
+        border: none;
+        border-radius: $checkbox-block-border-radius;
+        transition: all .2s;
+        appearance: none;
+    }
+    [type="checkbox"]:not(:checked) + label::before {
+        transform: translateX(40px);
+    }
+    [type="checkbox"]:not(:checked) + label {
+        background-color: $checkbox-not-checked-bg;
+    }
+    [type="checkbox"]:checked {
+        & + label{
+            background-color: $checkbox-checked-bg;
+        }
+        & + label::before {
+            background-color: $checkbox-toggler-checked-clr;
+            transform: translateX(72px);
+        }
+    }
+    label::after,
+    [type="checkbox"]:checked + label::after{
+        background-color: unset !important;
+    }
+}

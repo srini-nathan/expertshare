@@ -31,7 +31,6 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         return hasWindow ? window.innerWidth : 0;
     };
     const updateScreenSize = () => {
-        /* eslint-disable no-console */
         if (getScreenWidth() > 767) {
             const mainItems = document.getElementsByClassName("main-menu");
 
@@ -45,14 +44,11 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             numberOfMenusToShow = Math.floor(
                 getScreenHeight() / itemHeight - 1
             );
-            console.log(numberOfMenusToShow, itemHeight, getScreenHeight());
             const oItems = [];
-            for (let i = numberOfMenusToShow; i < mainItems.length; i++) {
+            for (let i = numberOfMenusToShow; i < mainItems.length; i += 1) {
                 oItems.push(items[i]);
             }
             setOverflowItems(oItems);
-
-            /* eslint-enable no-console */
         }
     };
     useEffect(() => {
