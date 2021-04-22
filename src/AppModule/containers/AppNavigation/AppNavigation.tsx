@@ -37,7 +37,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
 
         numberOfMenusToShow = Math.floor(getScreenHeight() / itemHeight - 1);
         const oItems = [];
-        for (let i = numberOfMenusToShow; i < mainItems.length; i++) {
+        for (let i = numberOfMenusToShow; i < mainItems.length; i += 1) {
             oItems.push(items[i]);
         }
         setOverflowItems(oItems);
