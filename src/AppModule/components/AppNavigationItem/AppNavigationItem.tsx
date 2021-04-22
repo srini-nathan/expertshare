@@ -11,13 +11,14 @@ export const AppNavigationItem: FC<AppNavigationItemProps> = ({
     label,
     path,
     icon,
+    className,
 }) => {
     return (
         <Match path={path}>
             {(props) => {
                 return (
                     <ListGroupItem
-                        className={`nav-item pt-2 pr-3 pl-3 p-2 ${
+                        className={`nav-item pt-2 pr-3 pl-3 p-2 ${className} ${
                             props.location.pathname.includes(path)
                                 ? "active"
                                 : ""

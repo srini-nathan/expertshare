@@ -6,18 +6,27 @@
     background-color: $sidebar-bg-clr;
 
     .item-more {
+        position: relative;
+
         .nav-link {
             .icon {
                 opacity: 1 !important;
             }
         }
 
+        &:hover>.more-menu {
+            display: block;
+        }
+
         background-color: var(--sidebar-hover-bg-clr) !important;
     }
 
-    .dropdown-menu {
+    .more-menu {
+        position: absolute;
+        display: none;
+        left: 100%;
         min-width: 370px;
-        margin: 17px;
+        bottom: 0;
         background: $sidebar-menu-extra-bg-clr;
         border: 0;
         border-radius: $border-radius;
@@ -202,6 +211,7 @@
                     span {
                         margin: auto 0 auto 20px;
                         color: var(--sidebar-fg-clr);
+
                         @include media("xl") {
                             margin: auto 0 auto 15px;
                         }
@@ -267,7 +277,7 @@
         height: 70px;
     }
 
-    .dropdown-menu {
+    .more-menu {
         margin: unset;
     }
 

@@ -11,18 +11,15 @@ import {
 } from "../../../AppModule/Authentication/context/AuthContext";
 import "./styles.scss";
 
-const LoadableInfoPanel = AppLoadable(
-    import(/* webpackChunkName: "InfoPanel" */ "../../components/InfoPanel"),
-    {
-        fallbackProps: {
-            containerStyle: {
-                background: "linear-gradient(#36999CAD, #36889CA4)",
-            },
-            containerClassName:
-                "col-md-4 col-sm-4 col-xs-12 vh-100  d-none d-md-flex d-flex align-items-center justify-content-center",
+const LoadableInfoPanel = AppLoadable(import("../../components/InfoPanel"), {
+    fallbackProps: {
+        containerStyle: {
+            background: "linear-gradient(#36999CAD, #36889CA4)",
         },
-    }
-);
+        containerClassName:
+            "col-md-4 col-sm-4 col-xs-12 vh-100  d-none d-md-flex d-flex align-items-center justify-content-center",
+    },
+});
 
 type Inputs = {
     email: string;
@@ -51,22 +48,20 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                             All you need just enter your email.
                         </p>
                         <form onSubmit={handleSubmit(onSubmit)}>
-                            <input
-                                className="form-control"
-                                type="email"
-                                name="email"
-                                defaultValue="admin@admin.com"
-                                ref={register({ required: true })}
-                                placeholder="Email"
-                            />
                             <br />
                             <input
                                 className="form-control"
+                                type="email"
+                                defaultValue="admin@admin.com"
+                                placeholder="Email"
+                                {...register("email", { required: true })}
+                            />
+                            <input
+                                className="form-control"
                                 type="password"
-                                name="password"
                                 defaultValue={"123123"}
-                                ref={register({ required: true })}
                                 placeholder="Password"
+                                {...register("password", { required: true })}
                             />
 
                             <div className="terms text-center my-2">
