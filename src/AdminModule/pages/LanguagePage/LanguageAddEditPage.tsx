@@ -24,7 +24,7 @@ const schema = yup.object().shape({
     isActive: yup.boolean(),
 });
 
-export const LanguageAddPage: FC<RouteComponentProps> = ({
+export const LanguageAddEditPage: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
     const { id = null } = useParams();
