@@ -21,6 +21,10 @@
         background-color: var(--sidebar-hover-bg-clr) !important;
     }
 
+    .navbar {
+        height: 100%;
+    }
+
     .more-menu {
         position: absolute;
         display: none;
@@ -53,7 +57,7 @@
     .language {
         svg {
             position: absolute;
-            top: 15px;
+            top: 8px;
             right: 10px;
         }
     }
@@ -63,9 +67,9 @@
         width: 48px;
         height: 48px;
         margin: auto;
-        background: url("./../images/profile.jpg") no-repeat center;
         background-size: 28px;
         border-radius: $border-radius;
+        background: url("./../images/profile.jpg") no-repeat center;
 
 
         @include media("xl") {
@@ -81,8 +85,16 @@
     }
 
     .languages {
-        background: url("../images/en_flag.png") no-repeat center;
-        background-size: 28px;
+        &.en {
+            background: url("../images/en_flag.png") no-repeat center;
+            background-size: 28px;
+        }
+
+        &.de {
+            background: url("../images/de_flag.png") no-repeat center;
+            background-size: 28px;
+        }
+
     }
 
     .list-group {
@@ -99,9 +111,28 @@
             position: absolute;
             bottom: 0;
             width: 100%;
+
+            @include media("mobile") {
+                position: relative;
+            }
         }
 
-        ul {
+        .dropdown-menu {
+            position: absolute;
+            width: 100%;
+        }
+
+        .dropdown {
+            a {
+                width: 100%;
+            }
+
+            &-item {
+                display: flex;
+            }
+        }
+
+        .bottom-menu {
             .icon-arrow-down {
                 position: absolute;
                 top: 22px;

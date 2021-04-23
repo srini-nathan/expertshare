@@ -1,11 +1,14 @@
 import React, { FC, useEffect, useState } from "react";
-import { ListGroup, ListGroupItem, Navbar, Nav } from "react-bootstrap";
+import { ListGroup, Navbar, Nav, ListGroupItem } from "react-bootstrap";
+import { Link } from "@reach/router";
 import { AppIcon } from "../../components/AppIcon";
 import {
     AppNavigationItem,
     AppNavigationItemProps,
+    AppNavigationDropDown,
 } from "../../components/AppNavigationItem";
 import "./assets/scss/style.scss";
+import FooterLogo from "./assets/images/expertshare_logo_footer.svg";
 
 interface AppNavigationProps {
     items: AppNavigationItemProps[];
@@ -16,13 +19,24 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         AppNavigationItemProps[]
     >([]);
     const getScreenHeight = () => {
+        const hasWindow = typeof window !== "undefined";
+
+        const screenHight = hasWindow ? window.innerHeight : 0;
+        return screenHight;
+    };
+    const getMenuitemsHeight = () => {
         const logoHolder = document.getElementsByClassName(
             "logo-holder"
         )[0] as HTMLElement;
-        const hasWindow = typeof window !== "undefined";
+        const bottomMenu = document.getElementsByClassName(
+            "bottom-menu"
+        )[0] as HTMLElement;
 
         const screenHight =
-            (hasWindow ? window.innerHeight : 0) - logoHolder.offsetHeight;
+            getScreenHeight() -
+            logoHolder.offsetHeight -
+            bottomMenu.offsetHeight -
+            20;
         return screenHight;
     };
 
@@ -42,7 +56,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             }
 
             numberOfMenusToShow = Math.floor(
-                getScreenHeight() / itemHeight - 1
+                getMenuitemsHeight() / itemHeight - 1
             );
             const oItems = [];
             for (let i = numberOfMenusToShow; i < mainItems.length; i += 1) {
@@ -116,14 +130,65 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                     </div>
                                 </ListGroupItem>
                             )}
+                            <ListGroupItem className={`bottom-menu p-0`}>
+                                <ListGroup>
+                                    <ListGroupItem
+                                        className={`nav-item pt-2 pr-3 pl-3 p-2`}
+                                    >
+                                        <AppNavigationDropDown
+                                            className="language"
+                                            label="English"
+                                            iconClassName="languages en"
+                                            subDropDownItems={[
+                                                {
+                                                    label: "German",
+                                                    iconClassName:
+                                                        "languages de",
+                                                    path: "#",
+                                                },
+                                            ]}
+                                        />
+                                    </ListGroupItem>
+                                    <ListGroupItem
+                                        className={`nav-item pt-2 pr-3 pl-3 p-2`}
+                                    >
+                                        <Link to={"#"} className="nav-link">
+                                            <div className="nav-icon">
+                                                <AppIcon name="Settings" />
+                                            </div>
+                                            <span>Administratration</span>
+                                        </Link>
+                                    </ListGroupItem>
+                                    <ListGroupItem
+                                        className={`nav-item pt-2 pr-3 pl-3 p-2`}
+                                    >
+                                        <Link to={"#"} className="nav-link">
+                                            <div className="nav-icon img-container">
+                                                <i className="profile-picture"></i>
+                                            </div>
+                                            <span>Account</span>
+                                        </Link>
+                                    </ListGroupItem>
+
+                                    <ListGroupItem
+                                        className={`nav-item pt-2 pr-3 pl-3 p-2`}
+                                    >
+                                        <Link
+                                            to={"#"}
+                                            className="nav-link copyright"
+                                        >
+                                            <span>
+                                                Virtual event platform by
+                                                <img src={FooterLogo} />
+                                            </span>
+                                        </Link>
+                                    </ListGroupItem>
+                                </ListGroup>
+                            </ListGroupItem>
                         </ListGroup>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
-            <nav
-                className="collapse navbar-collapse"
-                id="navbarSupportedContent"
-            ></nav>
         </aside>
     );
 };
