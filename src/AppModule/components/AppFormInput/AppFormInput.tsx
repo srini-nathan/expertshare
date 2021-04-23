@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { Form, Col } from "react-bootstrap";
 import "./assets/scss/style.scss";
-import { Control, Controller } from "react-hook-form";
+import { Control, Controller, useWatch } from "react-hook-form";
 import { isString as _isString, startCase as _startCase } from "lodash";
 
 export interface AppFormInputProps {
@@ -53,7 +53,11 @@ export const AppFormInput: FC<AppFormInputProps> = ({
             ? placeholder
             : `Enter ${_startCase(label) || _startCase(name)}`;
     }
-    const [input, setInput] = React.useState<string>(value);
+    const fieldValue = useWatch({
+        control,
+        name,
+        defaultValue: value,
+    });
     return (
         <Form.Group
             as={Col}
@@ -75,37 +79,24 @@ export const AppFormInput: FC<AppFormInputProps> = ({
                     </div>
                 )}
                 {(withCounter || maxCount !== 25) && (
-                    <span className="counter">{`${input.length}/${maxCount}`}</span>
+                    <span className="counter">{`${fieldValue}/${maxCount}`}</span>
                 )}
             </Form.Label>
-            {control ? (
-                <Controller
-                    name={name}
-                    defaultValue={value}
-                    control={control}
-                    render={({ field }) => (
-                        <Form.Control
-                            {...field}
-                            type={type}
-                            placeholder={placeholderText}
-                            isValid={isValid}
-                            isInvalid={isInvalid}
-                        />
-                    )}
-                />
-            ) : (
-                <Form.Control
-                    required={required}
-                    type={type}
-                    placeholder={placeholderText}
-                    value={input}
-                    name={name}
-                    maxLength={withCounter || maxCount !== 25 ? maxCount : -1}
-                    onChange={(e) => setInput(e.target.value)}
-                    isInvalid={isInvalid}
-                    isValid={isValid}
-                />
-            )}
+            <Controller
+                name={name}
+                defaultValue={value}
+                control={control}
+                render={({ field }) => (
+                    <Form.Control
+                        {...field}
+                        type={type}
+                        placeholder={placeholderText}
+                        isValid={isValid}
+                        isInvalid={isInvalid}
+                    />
+                )}
+            />
+
             <Form.Control.Feedback type="invalid">
                 {errorMessage}
             </Form.Control.Feedback>

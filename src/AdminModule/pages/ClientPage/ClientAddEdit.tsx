@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import "./client_add_edit_style.scss";
+import { Col, Form, Row } from "react-bootstrap";
 import { Client, Package } from "../../models";
 import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHeader";
 import { TextInput } from "../../../SharedModule/components/TextInput/TextInput";
@@ -17,7 +18,9 @@ import { ClientApi, PackageApi } from "../../apis";
 
 import { ListResponse } from "../../../AppModule/models";
 import { sweetSuccess } from "../../../AppModule/components/Util";
-import { AppLoader } from "../../../AppModule/components";
+import { AppFormTextArea, AppLoader } from "../../../AppModule/components";
+import { errorToast, validation } from "../../../AppModule/utils";
+import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is Required"),
@@ -40,26 +43,48 @@ export interface ClientRequestData {
     packages: string[];
 }
 
+export class ClientEntity {
+    name: string;
+
+    notes: string;
+
+    packages: Package[];
+
+    constructor() {
+        this.name = "";
+        this.notes = "";
+        this.packages = [];
+    }
+}
+
 export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const { id } = useParams();
     const isAddMode = !id;
     const navigate = useNavigate();
     const [packages, setPackages] = React.useState<Package[]>([]);
+    const [client, setClient] = React.useState<ClientEntity>(
+        new ClientEntity()
+    );
+    const [loading, setLoading] = useState<boolean>(!isAddMode);
+
     const {
-        register,
+        control,
         handleSubmit,
-        reset,
-        setValue,
-        errors,
         formState,
+        register,
+        setError,
+        trigger,
+        setValue,
+        reset,
         watch,
     } = useForm({
         resolver: yupResolver(validationSchema),
+        mode: "all",
     });
 
     const name = watch("name");
     const notes = watch("notes");
-    const [clientFetched, setClientFetched] = useState(false);
+    // const [clientFetched, setClientFetched] = useState(false);
     const [packageKeys, setPackageKeys] = useState<string[]>();
 
     useEffect(() => {
@@ -74,23 +99,41 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
             }
         );
         if (!isAddMode) {
-            ClientApi.findById<Client>(id).then((res) => {
-                const fetchedClientPackagesKeys = res.packages.map((item) => {
-                    const key = item.packageKey.replace(".", "_");
-                    return { key, value: item.id };
-                });
+            ClientApi.getById<ClientEntity>(id).then(
+                ({ response, isNotFound, errorMessage }) => {
+                    if (errorMessage) {
+                        errorToast(errorMessage);
+                    } else if (isNotFound) {
+                        errorToast("Language not exist");
+                    } else if (response !== null) {
+                        const fetchedClientPackagesKeys = response.packages.map(
+                            (item) => {
+                                const key = item.packageKey.replace(".", "_");
+                                return { key, value: item.id };
+                            }
+                        );
 
-                const fields: string[] = ["name", "notes"];
-                fields.forEach((field) =>
-                    setValue(field, getProperty(res, field as keyof Client))
-                );
-                fetchedClientPackagesKeys.forEach((pk) =>
-                    setValue(pk.key, pk.value)
-                );
-                setClientFetched(true);
-            });
+                        const fields: string[] = ["name", "notes"];
+                        fields.forEach((field) =>
+                            setValue(
+                                field,
+                                getProperty(
+                                    response,
+                                    field as keyof ClientEntity
+                                )
+                            )
+                        );
+                        fetchedClientPackagesKeys.forEach((pk) =>
+                            setValue(pk.key, pk.value)
+                        );
+                        setClient(response);
+                        trigger();
+                    }
+                    setLoading(false);
+                }
+            );
         }
-    }, [id, isAddMode, clientFetched, setValue]);
+    }, [id, isAddMode]);
 
     function buildPackageArray(keys: string[], data: ClientFormType) {
         return keys.reduce<ClientRequestData>(
@@ -139,11 +182,19 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         }
     };
 
-    if (!isAddMode) {
-        if (!clientFetched) {
-            return <AppLoader />;
-        }
+    if (loading) {
+        return (
+            <Row>
+                <Col md={12} className="vh-100">
+                    <AppLoader
+                        spinnerAnimation="border"
+                        spinnerVariant="primary"
+                    />
+                </Col>
+            </Row>
+        );
     }
+    const { errors } = formState;
     return (
         <div className="theme-primary-clr theme-primary-font">
             <div className="container-fluid p-0 mb-5">
@@ -157,22 +208,25 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                     />
                     <div className="app-container center-block col-12">
                         <div className="edit-client">
-                            <form
+                            <Form
+                                noValidate
                                 onSubmit={handleSubmit(onSubmit)}
                                 onReset={reset}
                             >
                                 <div className="row m-0 px-0 px-xl-3 d-flex align-items-start">
-                                    <TextInput
-                                        length={name?.length}
-                                        label={"Name"}
+                                    <AppFormInput
                                         name={"name"}
-                                        type={"text"}
-                                        limit={true}
-                                        maxCount={120}
-                                        register={register}
-                                        invalid={!!errors.name}
-                                        message={errors.name?.message}
-                                        placeholder={"Please Enter ..."}
+                                        label={"Name"}
+                                        required={true}
+                                        withCounter={true}
+                                        {...validation(
+                                            "name",
+                                            formState,
+                                            !isAddMode
+                                        )}
+                                        errorMessage={errors.name?.message}
+                                        value={client.name}
+                                        control={control}
                                     />
                                 </div>
                                 <div className="row mx-0 mb-2">
@@ -205,31 +259,22 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                     <div className="col-12 px-0 px-xl-3">
                                         <div className="pr-xl-3">
                                             <div className="col-12 d-flex p-0 flex-wrap justify-content-between">
-                                                <label
-                                                    className="light-label theme-label-clr m-0"
-                                                    htmlFor="edit-client-notes"
-                                                >
-                                                    Notes
-                                                </label>
-                                                <span className="input-letter-counter theme-input-letter-counter-clr">
-                                                    {notes?.length}/120
-                                                </span>
-
-                                                <textarea
-                                                    className={`text-area w-100 mt-1 ${
-                                                        errors.notes
-                                                            ? "is-invalid"
-                                                            : ""
-                                                    }`}
-                                                    name="notes"
-                                                    id="edit-client-notes"
-                                                    rows={17}
-                                                    ref={register}
-                                                    placeholder="Please Enter..."
+                                                <AppFormTextArea
+                                                    name={"notes"}
+                                                    label={"Notes"}
+                                                    required={false}
+                                                    withCounter={true}
+                                                    {...validation(
+                                                        "notes",
+                                                        formState,
+                                                        !isAddMode
+                                                    )}
+                                                    errorMessage={
+                                                        errors.notes?.message
+                                                    }
+                                                    value={client.notes}
+                                                    control={control}
                                                 />
-                                                <div className="invalid-feedback">
-                                                    {errors.notes?.message}
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -260,7 +305,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         </div>
                                     </div>
                                 </div>
-                            </form>
+                            </Form>
                         </div>
                     </div>
                 </div>
