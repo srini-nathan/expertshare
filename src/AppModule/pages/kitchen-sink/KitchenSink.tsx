@@ -116,7 +116,7 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     description="hello this is descriprion"
                     errorMessage="This field is required"
                     invalid={true}
-                    defaultValue="overall"
+                    // defaultValue="overall"
                 />
 
                 <hr className="col-12" />

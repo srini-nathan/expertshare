@@ -10,7 +10,7 @@ export interface AppFormSwitchProps {
     md?: string | number;
     lg?: string | number;
     xl?: string | number;
-    // value?: boolean;
+    value?: boolean;
     type?: string;
     required?: boolean;
     label?: string;
@@ -25,7 +25,7 @@ export interface AppFormSwitchProps {
 export const AppFormSwitch: FC<AppFormSwitchProps> = ({
     id,
     name,
-    // value,
+    value,
     errorMessage,
     label = "",
     description,
@@ -67,6 +67,7 @@ export const AppFormSwitch: FC<AppFormSwitchProps> = ({
             </Form.Label>
             <Controller
                 name={name}
+                defaultValue={value}
                 control={control}
                 render={({ field }) => (
                     <FormCheck
