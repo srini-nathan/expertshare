@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Col, Form, FormCheck, Row } from "react-bootstrap";
+import { Col, Form, InputGroup, Row } from "react-bootstrap";
 import { Control, Controller } from "react-hook-form";
 import { SimpleObject } from "../../models";
 import "./assets/scss/style.scss";
@@ -45,7 +45,7 @@ export const AppFormRadioSwitch: FC<AppFormRadioSwitchProps> = ({
                     defaultValue={false}
                     control={control}
                     render={({ field }) => (
-                        <FormCheck
+                        <InputGroup.Radio
                             key={i}
                             type="radio"
                             label={e.label}

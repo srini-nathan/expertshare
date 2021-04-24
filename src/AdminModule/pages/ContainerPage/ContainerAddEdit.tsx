@@ -10,17 +10,14 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import "./container_add_edit_style.scss";
 import { Col, Form, Row } from "react-bootstrap";
-
 import { Client, Container, Package } from "../../models";
 import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHeader";
-
 import { ClientApi, PackageApi } from "../../apis";
 import {
     AppFormRadioSwitch,
     AppFormTextArea,
     AppLoader,
 } from "../../../AppModule/components";
-
 import { ListResponse } from "../../../AppModule/models";
 import { sweetSuccess } from "../../../AppModule/components/Util";
 import { ContainerApi } from "../../apis/ContainerApi";
@@ -146,7 +143,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
             }
         );
         if (isAddMode) {
-            ClientApi.getById<Client>(id).then(
+            ClientApi.getById<Client>(clientId).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);
@@ -411,6 +408,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         description="hello this is descriprion"
                                         errorMessage="This field is required"
                                         invalid={true}
+                                        control={control}
                                     />
                                 </div>
                                 {storage === "S3" ? (

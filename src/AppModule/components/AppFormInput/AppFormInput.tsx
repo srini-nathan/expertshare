@@ -79,7 +79,7 @@ export const AppFormInput: FC<AppFormInputProps> = ({
                     </div>
                 )}
                 {(withCounter || maxCount !== 25) && (
-                    <span className="counter">{`${fieldValue}/${maxCount}`}</span>
+                    <span className="counter">{`${fieldValue.length}/${maxCount}`}</span>
                 )}
             </Form.Label>
             <Controller
