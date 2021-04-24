@@ -98,9 +98,9 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     placeholder="hello"
                     description="hello this is descriprion"
                     maxCount={150}
-                    rows={5}
+                    //  rows={5}
                     errorMessage="This field is required"
-                    invalid={true}
+                    // invalid={true}
                 />
                 <hr className="col-12" />
 

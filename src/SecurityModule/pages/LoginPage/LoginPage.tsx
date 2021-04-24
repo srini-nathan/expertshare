@@ -54,18 +54,16 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                             <input
                                 className="form-control"
                                 type="email"
-                                name="email"
+                                {...register("email", { required: true })}
                                 defaultValue="admin@admin.com"
-                                ref={register({ required: true })}
                                 placeholder="Email"
                             />
                             <br />
                             <input
                                 className="form-control"
                                 type="password"
-                                name="password"
                                 defaultValue={"123123"}
-                                ref={register({ required: true })}
+                                {...register("password", { required: true })}
                                 placeholder="Password"
                             />
 

@@ -1,10 +1,12 @@
 import React, { FC } from "react";
-import { Col, Form, Row } from "react-bootstrap";
+import { Col, Form, FormCheck, Row } from "react-bootstrap";
+import { Control, Controller } from "react-hook-form";
 import { SimpleObject } from "../../models";
 import "./assets/scss/style.scss";
 
 export interface AppFormRadioSwitchProps {
-    name?: string;
+    // id?: string;
+    name: string;
     sm?: string;
     md?: string;
     lg?: string;
@@ -12,18 +14,20 @@ export interface AppFormRadioSwitchProps {
     required?: boolean;
     label?: string;
     values: SimpleObject<string>[];
-    defaultValue?: string;
+    // defaultValue?: string;
     description?: string;
     errorMessage?: string;
     invalid?: boolean;
+    control?: Control<any>;
 }
 
 export const AppFormRadioSwitch: FC<AppFormRadioSwitchProps> = ({
+    // id,
     name,
     errorMessage,
     label = "",
     values,
-    defaultValue,
+    // defaultValue,
     description,
     md,
     sm,
@@ -31,19 +35,23 @@ export const AppFormRadioSwitch: FC<AppFormRadioSwitchProps> = ({
     xl,
     invalid = false,
     required = false,
+    control,
 }): JSX.Element => {
     const renderOptions = () => {
         return values.map((e, i) => {
             return (
-                <Form.Check
-                    key={i}
-                    type="radio"
-                    id={`option_${i}`}
-                    required={required}
-                    label={e.label}
-                    value={e.value}
+                <Controller
                     name={name}
-                    defaultChecked={defaultValue === e.value}
+                    defaultValue={false}
+                    control={control}
+                    render={({ field }) => (
+                        <FormCheck
+                            key={i}
+                            type="radio"
+                            label={e.label}
+                            {...field}
+                        />
+                    )}
                 />
             );
         });

@@ -12,8 +12,6 @@ import "./client_add_edit_style.scss";
 import { Col, Form, Row } from "react-bootstrap";
 import { Client, Package } from "../../models";
 import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHeader";
-import { TextInput } from "../../../SharedModule/components/TextInput/TextInput";
-import { CustomCheckBox } from "../../../SharedModule/components/CustomCheckBox/CustomCheckBox";
 import { ClientApi, PackageApi } from "../../apis";
 
 import { ListResponse } from "../../../AppModule/models";
@@ -21,6 +19,7 @@ import { sweetSuccess } from "../../../AppModule/components/Util";
 import { AppFormTextArea, AppLoader } from "../../../AppModule/components";
 import { errorToast, validation } from "../../../AppModule/utils";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
+import { AppFormCheckBox } from "../../../AppModule/components/AppFormCheckBox";
 
 const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is Required"),
@@ -71,20 +70,15 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         control,
         handleSubmit,
         formState,
-        register,
-        setError,
         trigger,
         setValue,
         reset,
-        watch,
+        register,
     } = useForm({
         resolver: yupResolver(validationSchema),
         mode: "all",
     });
 
-    const name = watch("name");
-    const notes = watch("notes");
-    // const [clientFetched, setClientFetched] = useState(false);
     const [packageKeys, setPackageKeys] = useState<string[]>();
 
     useEffect(() => {
@@ -104,7 +98,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                     if (errorMessage) {
                         errorToast(errorMessage);
                     } else if (isNotFound) {
-                        errorToast("Language not exist");
+                        errorToast("Client not exist");
                     } else if (response !== null) {
                         const fetchedClientPackagesKeys = response.packages.map(
                             (item) => {
@@ -135,6 +129,8 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         }
     }, [id, isAddMode]);
 
+    // eslint-disable-next-line no-console
+    console.log(packages);
     function buildPackageArray(keys: string[], data: ClientFormType) {
         return keys.reduce<ClientRequestData>(
             (acc, item) => {
@@ -239,7 +235,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         <div className="d-flex flex-wrap">
                                             {packages.map((e) => {
                                                 return (
-                                                    <CustomCheckBox
+                                                    <AppFormCheckBox
                                                         key={e.id}
                                                         name={e.packageKey.replace(
                                                             ".",

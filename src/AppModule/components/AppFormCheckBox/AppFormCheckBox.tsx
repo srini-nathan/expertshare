@@ -1,7 +1,7 @@
 import React, { FC } from "react";
-import "./style.scss";
+import "./assets/scss/style.scss";
 
-export interface CustomCheckBoxProps {
+export interface AppFormCheckBoxProps {
     label: string;
     name: string;
     className?: string;
@@ -11,7 +11,7 @@ export interface CustomCheckBoxProps {
     defaultChecked?: boolean;
 }
 
-export const CustomCheckBox: FC<CustomCheckBoxProps> = ({
+export const AppFormCheckBox: FC<AppFormCheckBoxProps> = ({
     label,
     name,
     labelPosition,
@@ -48,4 +48,4 @@ export const CustomCheckBox: FC<CustomCheckBoxProps> = ({
     );
 };
 
-export default CustomCheckBox;
+export default AppFormCheckBox;

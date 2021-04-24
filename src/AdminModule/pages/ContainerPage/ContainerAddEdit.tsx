@@ -1,24 +1,32 @@
 import React, { FC, useEffect, useState } from "react";
 import {
-    Link,
     RouteComponentProps,
     useNavigate,
     useParams,
+    Link,
 } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import "./container_add_edit_style.scss";
+import { Col, Form, Row } from "react-bootstrap";
+
 import { Client, Container, Package } from "../../models";
 import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHeader";
-import { TextInput } from "../../../SharedModule/components/TextInput/TextInput";
-import { CustomCheckBox } from "../../../SharedModule/components/CustomCheckBox/CustomCheckBox";
+
 import { ClientApi, PackageApi } from "../../apis";
-import { AppFormRadio, AppLoader } from "../../../AppModule/components";
+import {
+    AppFormRadioSwitch,
+    AppFormTextArea,
+    AppLoader,
+} from "../../../AppModule/components";
 
 import { ListResponse } from "../../../AppModule/models";
 import { sweetSuccess } from "../../../AppModule/components/Util";
 import { ContainerApi } from "../../apis/ContainerApi";
+import { errorToast, validation } from "../../../AppModule/utils";
+import { AppFormInput } from "../../../AppModule/components/AppFormInput";
+import { AppFormCheckBox } from "../../../AppModule/components/AppFormCheckBox";
 
 const validationSchema = Yup.object().shape({
     domain: Yup.string().required("Domain is Required"),
@@ -69,6 +77,35 @@ export interface ContainerRequestData {
     configuration?: string[];
 }
 
+export class ContainerEntity {
+    domain: string;
+
+    containerGroup?: string;
+
+    storage: string;
+
+    bucketKey?: string;
+
+    bucketSecret?: string;
+
+    bucketName?: string;
+
+    isActive?: boolean;
+
+    client?: string;
+
+    notes?: string;
+
+    packages: Package[];
+
+    configuration?: string[];
+
+    constructor() {
+        this.domain = "";
+        this.storage = "Local";
+        this.packages = [];
+    }
+}
 export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const { clientId, id } = useParams();
     const isAddMode = !id;
@@ -76,27 +113,27 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const [packages, setPackages] = React.useState<Package[]>([]);
     const [client, setClient] = React.useState<Client>();
     const {
-        register,
+        control,
         handleSubmit,
-        reset,
-        setValue,
-        errors,
         formState,
+        trigger,
+        setValue,
+        reset,
+        register,
         watch,
     } = useForm({
         resolver: yupResolver(validationSchema),
+        mode: "all",
     });
     const [clientFetched, setClientFetched] = useState(false);
     const [containerFetched, setContainerFetched] = useState(false);
     const [packageKeys, setPackageKeys] = useState<string[]>();
     const storage = watch("storage");
-    const notes = watch("notes");
-    const domain = watch("domain");
-    const containerGroup = watch("containerGroup");
-    const bucketKey = watch("bucketKey");
-    const bucketSecret = watch("bucketSecret");
-    const bucketName = watch("bucketName");
-
+    const [container, setContainer] = React.useState<ContainerEntity>(
+        new ContainerEntity()
+    );
+    // const [loading, setLoading] = useState<boolean>(!isAddMode);
+    const { errors } = formState;
     useEffect(() => {
         PackageApi.findAll<Package>().then(
             ({ items }: ListResponse<Package>) => {
@@ -109,20 +146,43 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
             }
         );
         if (isAddMode) {
-            ClientApi.findById<Client>(clientId).then((res) => {
-                setClient(res);
-                const fetchedClientPackagesKeys = res.packages.map((item) => {
-                    const key = item.packageKey.replace(".", "_");
-                    return { key, value: item.id };
-                });
-                fetchedClientPackagesKeys.forEach((pk) =>
-                    setValue(pk.key, pk.value)
-                );
-                setClientFetched(true);
-            });
+            ClientApi.getById<Client>(id).then(
+                ({ response, isNotFound, errorMessage }) => {
+                    if (errorMessage) {
+                        errorToast(errorMessage);
+                    } else if (isNotFound) {
+                        errorToast("Client not exist");
+                    } else if (response !== null) {
+                        setClient(response);
+                        const fetchedClientPackagesKeys = response.packages.map(
+                            (item) => {
+                                const key = item.packageKey.replace(".", "_");
+                                return { key, value: item.id };
+                            }
+                        );
+                        fetchedClientPackagesKeys.forEach((pk) =>
+                            setValue(pk.key, pk.value)
+                        );
+                        trigger();
+                    }
+                    setClientFetched(true);
+                }
+            );
+
+            // ClientApi.getById<Client>(clientId).then((res) => {
+            //     setClient(res);
+            //     const fetchedClientPackagesKeys = res.packages.map((item) => {
+            //         const key = item.packageKey.replace(".", "_");
+            //         return { key, value: item.id };
+            //     });
+            //     fetchedClientPackagesKeys.forEach((pk) =>
+            //         setValue(pk.key, pk.value)
+            //     );
+            //     setClientFetched(true);
+            // });
         }
         if (!isAddMode) {
-            ContainerApi.findById<Container>(id).then((res) => {
+            ContainerApi.findById<ContainerEntity>(id).then((res) => {
                 const fetchedClientPackagesKeys = res.packages.map((item) => {
                     const key = item.packageKey.replace(".", "_");
                     return { key, value: item.id };
@@ -139,12 +199,16 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                     // "notes",
                 ];
                 fields.forEach((field) =>
-                    setValue(field, getProperty(res, field as keyof Container))
+                    setValue(
+                        field,
+                        getProperty(res, field as keyof ContainerEntity)
+                    )
                 );
                 fetchedClientPackagesKeys.forEach((pk) =>
                     setValue(pk.key, pk.value)
                 );
                 setClientFetched(true);
+                setContainer(res);
                 setContainerFetched(true);
             });
         }
@@ -220,14 +284,30 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
             await updateContainer(data);
         }
     };
-    // eslint-disable-next-line no-console
-    console.log(isAddMode, containerFetched);
     if (!isAddMode && !containerFetched) {
-        return <AppLoader />;
+        return (
+            <Row>
+                <Col md={12} className="vh-100">
+                    <AppLoader
+                        spinnerAnimation="border"
+                        spinnerVariant="primary"
+                    />
+                </Col>
+            </Row>
+        );
     }
 
     if (!clientFetched) {
-        return <AppLoader />;
+        return (
+            <Row>
+                <Col md={12} className="vh-100">
+                    <AppLoader
+                        spinnerAnimation="border"
+                        spinnerVariant="primary"
+                    />
+                </Col>
+            </Row>
+        );
     }
 
     return (
@@ -243,67 +323,65 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                     />
                     <div className="app-container center-block col-12">
                         <div className="edit-client">
-                            <form
+                            <Form
+                                noValidate
                                 onSubmit={handleSubmit(onSubmit)}
                                 onReset={reset}
                             >
                                 <div className="row m-0 px-0 d-flex align-items-start">
-                                    <TextInput
-                                        length={domain?.length}
-                                        label={"Domain"}
+                                    <AppFormInput
                                         name={"domain"}
-                                        type={"text"}
-                                        limit={true}
-                                        maxCount={120}
-                                        register={register}
-                                        invalid={!!errors.domain}
-                                        message={errors.domain?.message}
-                                        placeholder={"Please Enter ..."}
+                                        label={"Domain"}
+                                        required={true}
+                                        withCounter={true}
+                                        {...validation(
+                                            "domain",
+                                            formState,
+                                            !isAddMode
+                                        )}
+                                        errorMessage={errors.domain?.message}
+                                        value={container.domain}
+                                        control={control}
                                     />
-                                    <TextInput
-                                        label={"Container Group"}
+
+                                    <AppFormInput
                                         name={"containerGroup"}
-                                        type={"text"}
-                                        limit={true}
-                                        maxCount={120}
-                                        length={containerGroup?.length}
-                                        register={register}
-                                        invalid={!!errors.containerGroup}
-                                        message={errors.containerGroup?.message}
-                                        placeholder={"Please Enter ..."}
+                                        label={"Container Group"}
+                                        required={true}
+                                        withCounter={true}
+                                        {...validation(
+                                            "containerGroup",
+                                            formState,
+                                            !isAddMode
+                                        )}
+                                        errorMessage={
+                                            errors.containerGroup?.message
+                                        }
+                                        value={container.containerGroup}
+                                        control={control}
                                     />
+
                                     <div className={"col-md-4 px-3"}>
                                         <div className="d-flex flex-wrap justify-content-between mb-4">
-                                            <label
-                                                className="light-label m-0"
-                                                htmlFor="edit-client-notes"
-                                            >
-                                                Notes
-                                            </label>
-                                            <span className="input-letter-counter theme-input-letter-counter-clr">
-                                                {notes?.length}/120
-                                            </span>
-                                            <textarea
-                                                className={`text-area w-100 mt-1 ${
-                                                    errors.notes
-                                                        ? "is-invalid"
-                                                        : ""
-                                                }`}
-                                                name="notes"
-                                                id="edit-client-notes"
-                                                rows={4}
-                                                maxLength={120}
-                                                ref={register}
-                                                placeholder="Please Enter..."
-                                            >
-                                                {notes}
-                                            </textarea>
-                                            <div className="invalid-feedback">
-                                                {errors.notes?.message}
-                                            </div>
+                                            <AppFormTextArea
+                                                name={"notes"}
+                                                label={"Notes"}
+                                                required={false}
+                                                withCounter={true}
+                                                {...validation(
+                                                    "notes",
+                                                    formState,
+                                                    !isAddMode
+                                                )}
+                                                errorMessage={
+                                                    errors.notes?.message
+                                                }
+                                                value={container.notes}
+                                                control={control}
+                                            />
                                         </div>
                                     </div>
-                                    <CustomCheckBox
+                                    <AppFormCheckBox
                                         className="container-checkbox"
                                         name={"isActive"}
                                         label={"Active"}
@@ -315,70 +393,78 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                 </div>
                                 <hr className="col-12 mb-5" />
                                 <div className="row m-0 px-0 px-xl-3 d-flex align-items-start container">
-                                    <label className="light-label m-0  w-100 mb-2">
-                                        Storage Type
-                                    </label>
-                                    <AppFormRadio
-                                        name={"storage"}
-                                        id="aws"
-                                        label="Aws S3 Bucket"
-                                        value="S3"
-                                        register={register({ required: true })}
-                                    />
-
-                                    <AppFormRadio
-                                        name={"storage"}
-                                        id="local"
-                                        label="Local"
-                                        value="Local"
-                                        defaultChecked={true}
-                                        register={register({ required: true })}
+                                    <AppFormRadioSwitch
+                                        required
+                                        sm="6"
+                                        name={storage}
+                                        label="Storage Type"
+                                        values={[
+                                            {
+                                                label: "Aws S3 Bucket",
+                                                value: "S3",
+                                            },
+                                            {
+                                                label: "Local",
+                                                value: "Local",
+                                            },
+                                        ]}
+                                        description="hello this is descriprion"
+                                        errorMessage="This field is required"
+                                        invalid={true}
                                     />
                                 </div>
                                 {storage === "S3" ? (
                                     <>
                                         <div className="row m-0 px-0 mt-2 d-flex align-items-start container">
-                                            <TextInput
-                                                label={"AWS S3 Bucket Key"}
+                                            <AppFormInput
                                                 name={"bucketKey"}
-                                                type={"text"}
-                                                limit={true}
-                                                length={bucketKey?.length}
-                                                maxCount={120}
-                                                register={register}
-                                                invalid={!!errors.bucketKey}
-                                                message={
+                                                label={"AWS S3 Bucket Key"}
+                                                required={true}
+                                                withCounter={true}
+                                                {...validation(
+                                                    "bucketKey",
+                                                    formState,
+                                                    !isAddMode
+                                                )}
+                                                errorMessage={
                                                     errors.bucketKey?.message
                                                 }
-                                                placeholder={"Please Enter ..."}
+                                                value={container.bucketKey}
+                                                control={control}
                                             />
-                                            <TextInput
-                                                length={bucketSecret?.length}
-                                                label={"AWS S3 Bucket Secret"}
+
+                                            <AppFormInput
                                                 name={"bucketSecret"}
-                                                type={"text"}
-                                                limit={true}
-                                                maxCount={120}
-                                                register={register}
-                                                invalid={!!errors.bucketSecret}
-                                                message={
+                                                label={"AWS S3 Bucket Secret"}
+                                                required={true}
+                                                withCounter={true}
+                                                {...validation(
+                                                    "bucketSecret",
+                                                    formState,
+                                                    !isAddMode
+                                                )}
+                                                errorMessage={
                                                     errors.bucketSecret?.message
                                                 }
-                                                placeholder={"Please Enter ..."}
+                                                value={container.bucketSecret}
+                                                control={control}
                                             />
-                                            <TextInput
-                                                length={bucketName?.length}
-                                                label={"AWS S3 Bucket Name"}
+
+                                            <AppFormInput
                                                 name={"bucketName"}
-                                                type={"text"}
-                                                limit={true}
-                                                maxCount={120}
-                                                register={register}
-                                                invalid={!!errors.bucketName}
-                                                message={
+                                                label={"AWS S3 Bucket Name"}
+                                                required={true}
+                                                withCounter={true}
+                                                {...validation(
+                                                    "bucketName",
+                                                    formState,
+                                                    !isAddMode
+                                                )}
+                                                errorMessage={
                                                     errors.bucketName?.message
                                                 }
-                                                placeholder={"Please Enter ..."}
+                                                value={container.bucketName}
+                                                control={control}
                                             />
                                         </div>
                                     </>
@@ -397,7 +483,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         <div className="d-flex flex-wrap">
                                             {packages.map((e) => {
                                                 return (
-                                                    <CustomCheckBox
+                                                    <AppFormCheckBox
                                                         key={e.id}
                                                         name={e.packageKey.replace(
                                                             ".",
@@ -439,7 +525,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         </div>
                                     </div>
                                 </div>
-                            </form>
+                            </Form>
                         </div>
                     </div>
                 </div>
