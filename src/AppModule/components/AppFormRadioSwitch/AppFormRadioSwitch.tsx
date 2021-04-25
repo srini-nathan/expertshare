@@ -1,12 +1,12 @@
 import React, { FC } from "react";
-import { Col, Form, InputGroup, Row } from "react-bootstrap";
+import { Col, Form, Row } from "react-bootstrap";
 import { Control, Controller } from "react-hook-form";
 import { SimpleObject } from "../../models";
 import "./assets/scss/style.scss";
 
 export interface AppFormRadioSwitchProps {
     // id?: string;
-    name: string;
+    fieldName: string;
     sm?: string;
     md?: string;
     lg?: string;
@@ -23,7 +23,7 @@ export interface AppFormRadioSwitchProps {
 
 export const AppFormRadioSwitch: FC<AppFormRadioSwitchProps> = ({
     // id,
-    name,
+    fieldName,
     errorMessage,
     label = "",
     values,
@@ -41,15 +41,22 @@ export const AppFormRadioSwitch: FC<AppFormRadioSwitchProps> = ({
         return values.map((e, i) => {
             return (
                 <Controller
-                    name={name}
+                    name={fieldName}
                     defaultValue={false}
                     control={control}
-                    render={({ field }) => (
-                        <InputGroup.Radio
+                    render={({
+                        field: { name, onChange, onBlur, value, ref },
+                    }) => (
+                        <Form.Check
                             key={i}
                             type="radio"
-                            label={e.label}
-                            {...field}
+                            label={label}
+                            onBlur={onBlur}
+                            onChange={onChange}
+                            checked={value}
+                            name={name}
+                            value={value}
+                            ref={ref}
                         />
                     )}
                 />

@@ -393,7 +393,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                     <AppFormRadioSwitch
                                         required
                                         sm="6"
-                                        name={storage}
+                                        fieldName={storage}
                                         label="Storage Type"
                                         values={[
                                             {

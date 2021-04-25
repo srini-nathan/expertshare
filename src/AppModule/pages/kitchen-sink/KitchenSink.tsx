@@ -107,7 +107,7 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                 <AppFormRadioSwitch
                     required
                     sm="6"
-                    name="radio_switch"
+                    fieldName="radio_switch"
                     label="Success Calculated By"
                     values={[
                         { label: "Overall", value: "overall" },
