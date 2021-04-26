@@ -22,6 +22,7 @@ export interface AppFormTextAreaProps {
     withCounter?: boolean;
     maxCount?: number;
     control?: Control<any>;
+    rows?: number;
 }
 
 export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
@@ -42,6 +43,7 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
     withCounter = false,
     maxCount = 25,
     control,
+    rows = 5,
 }): JSX.Element => {
     const controlId = id || name;
     let placeholderText = "";
@@ -91,6 +93,7 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
                         placeholder={placeholderText}
                         isValid={isValid}
                         isInvalid={isInvalid}
+                        rows={rows}
                     />
                 )}
             />
