@@ -8,9 +8,9 @@ import { forEach as _forEach } from "lodash";
 import {
     AppPageHeader,
     AppBreadcrumb,
-    AppButton,
     AppLoader,
     AppFormSwitch,
+    AppFormActions,
 } from "../../../AppModule/components";
 import { LanguageEntity } from "../../models";
 import { LanguageApi } from "../../apis";
@@ -90,16 +90,7 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
     }, [id, isEditMode]);
 
     if (loading) {
-        return (
-            <Row>
-                <Col md={12} className="vh-100">
-                    <AppLoader
-                        spinnerAnimation="border"
-                        spinnerVariant="primary"
-                    />
-                </Col>
-            </Row>
-        );
+        return <AppLoader />;
     }
 
     const { errors } = formState;
@@ -143,23 +134,10 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
                                 control={control}
                             />
                         </Form.Row>
-                        {/* @TODO: Move it to FormAction component */}
-                        <div>
-                            <hr />
-                            <div className="d-flex justify-content-end">
-                                <AppButton
-                                    type="button"
-                                    variant={"outline-primary"}
-                                    className="mr-4"
-                                    onClick={() => nav("..").then()}
-                                >
-                                    Cancel
-                                </AppButton>
-                                <AppButton type="submit">
-                                    {isEditMode ? "Update" : "Save"}
-                                </AppButton>
-                            </div>
-                        </div>
+                        <AppFormActions
+                            isEditMode={isEditMode}
+                            navigation={nav}
+                        />
                     </Form>
                 </Col>
             </Row>
