@@ -4,7 +4,7 @@ import {
     IndexPage,
     DesignPage,
     SettingPage,
-    TranslationEditor,
+    TranslationAddEdit,
     ClientList,
     ClientAddEdit,
     LanguageListPage,
@@ -25,7 +25,7 @@ export const routers: ModuleRouter[] = [
                     <IndexPage path={"/"} />
                     <DesignPage path={"design"} />
                     <SettingPage path={"settings"} />
-                    <TranslationEditor path={"translations"} />
+                    <TranslationAddEdit path={"translations"} />
                     <ClientList path={"client"} />
                     <ClientAddEdit path={"client/new"} />
                     <ClientAddEdit path={"client/:id"} />

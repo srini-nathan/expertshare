@@ -23,7 +23,7 @@ export const navigation: AppNavigationItemProps[] = [
         },
     },
     {
-        label: "Admin - Translation",
+        label: "Admin - TranslationPage",
         path: "/admin/translations",
         icon: {
             name: "administrator",
@@ -34,7 +34,7 @@ export const navigation: AppNavigationItemProps[] = [
                 path: "/admin/settings",
             },
             {
-                label: "Translation",
+                label: "TranslationPage",
                 path: "/admin/translation",
             },
         ],
