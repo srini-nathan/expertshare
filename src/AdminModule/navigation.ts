@@ -32,10 +32,16 @@ export const navigation: AppNavigationItemProps[] = [
             {
                 label: "General Settings",
                 path: "/admin/settings",
+                icon: {
+                    name: "",
+                },
             },
             {
                 label: "TranslationPage",
                 path: "/admin/translation",
+                icon: {
+                    name: "",
+                },
             },
         ],
     },

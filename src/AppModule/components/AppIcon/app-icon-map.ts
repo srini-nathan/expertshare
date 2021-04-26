@@ -13,6 +13,7 @@ import {
     Search,
     X,
     Menu,
+    ArrowLeft,
 } from "react-feather";
 
 import { ListTree } from "./app-custom-icons";
@@ -22,6 +23,7 @@ export const appIconMap: AppIconMap = {
     dashboard: Grid,
     Grid,
     X,
+    ArrowLeft,
     Menu,
     Search,
     sponsors: Briefcase,

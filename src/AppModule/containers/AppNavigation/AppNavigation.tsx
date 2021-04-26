@@ -5,6 +5,8 @@ import { AppIcon } from "../../components/AppIcon";
 import {
     AppNavigationDropDown,
     AppNavigationItem,
+    AppNavigationSubMenuItem,
+    AppSubNavigationItemProps,
     AppNavigationItemProps,
 } from "../../components/AppNavigationItem";
 import "./assets/scss/style.scss";
@@ -17,8 +19,133 @@ interface AppNavigationProps {
 
 const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const [overflowItems, setOverflowItems] = useState<
-        AppNavigationItemProps[]
+        AppNavigationItemProps[] | AppSubNavigationItemProps[]
     >([]);
+    const [
+        activeMenuItem,
+        setActiveMenuItem,
+    ] = useState<AppNavigationItemProps>({
+        label: "",
+        path: "",
+        icon: {
+            name: "",
+        },
+    });
+    const [subMenuItems] = useState<AppSubNavigationItemProps[]>([
+        {
+            label: "General Settings",
+            path: "#",
+            isActive: false,
+            icon: {
+                name: "",
+            },
+        },
+        {
+            label: "3D Setings",
+            path: "#",
+            isActive: false,
+            icon: {
+                name: "",
+            },
+        },
+        {
+            label: "Email",
+            path: "#",
+            isActive: false,
+            icon: {
+                name: "",
+            },
+        },
+        {
+            label: "Tags",
+            path: "#",
+            isActive: false,
+            icon: {
+                name: "",
+            },
+        },
+        {
+            label: "Categories",
+            path: "#",
+            isActive: false,
+            icon: {
+                name: "",
+            },
+        },
+        {
+            label: "Rooms",
+            path: "#",
+            isActive: false,
+            icon: {
+                name: "",
+            },
+        },
+        {
+            label: "Session Colors",
+            path: "#",
+            isActive: false,
+            icon: {
+                name: "",
+            },
+        },
+        {
+            label: "Design",
+            path: "#",
+            isActive: false,
+            icon: {
+                name: "",
+            },
+        },
+        {
+            label: "Users",
+            path: "#",
+            isActive: false,
+            icon: {
+                name: "",
+            },
+        },
+        {
+            label: "Sponsers",
+            path: "#",
+            isActive: false,
+            icon: {
+                name: "",
+            },
+        },
+        {
+            label: "Forms",
+            path: "#",
+            isActive: false,
+            icon: {
+                name: "",
+            },
+        },
+        {
+            label: "Exporter",
+            path: "#",
+            isActive: false,
+            icon: {
+                name: "",
+            },
+        },
+        {
+            label: "Importer",
+            path: "#",
+            isActive: false,
+            icon: {
+                name: "",
+            },
+        },
+        {
+            label: "Jobs Queue",
+            path: "#",
+            isActive: false,
+            icon: {
+                name: "",
+            },
+        },
+    ]);
+    const [showSubMenuItems, isSubMenuItems] = useState<boolean>(false);
     const { width, height } = useWindowSize();
     const mainItems = document.getElementsByClassName("main-menu");
     const getMenuItemsHeight = () => {
@@ -45,15 +172,104 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             );
             const oItems = [];
             for (let i = numberOfMenusToShow; i < mainItems.length; i += 1) {
-                oItems.push(items[i]);
+                oItems.push(showSubMenuItems ? subMenuItems[i] : items[i]);
             }
             setOverflowItems(oItems);
         }
     };
     useEffect(() => {
         updateScreenSize();
-    }, [width, height]);
+    }, [width, height, showSubMenuItems]);
 
+    const renderMenu = () => {
+        if (showSubMenuItems) {
+            return (
+                <>
+                    <AppNavigationItem
+                        label={activeMenuItem.label}
+                        path={activeMenuItem.path}
+                        icon={activeMenuItem.icon}
+                        className="active main-menu "
+                    />
+                    {subMenuItems
+                        .filter((e) => !overflowItems.includes(e))
+                        .map(({ label, path, icon }) => {
+                            return (
+                                <AppNavigationSubMenuItem
+                                    label={label}
+                                    path={path}
+                                    key={label}
+                                    icon={icon}
+                                    className="main-menu sub-menu"
+                                />
+                            );
+                        })}
+                </>
+            );
+        }
+        return (
+            <>
+                {items
+                    .filter((e) => !overflowItems.includes(e))
+                    .map(({ label, path, icon }) => {
+                        return (
+                            <AppNavigationItem
+                                label={label}
+                                path={path}
+                                icon={icon}
+                                key={label}
+                                className="main-menu"
+                            />
+                        );
+                    })}
+            </>
+        );
+    };
+    const renderMoreMenu = () => {
+        return (
+            overflowItems.length > 0 && (
+                <ListGroupItem
+                    className={`nav-item item-more dropright pt-2 pr-3 pl-3 p-2 `}
+                >
+                    <div className="nav-link show-more">
+                        <div className="nav-icon">
+                            <AppIcon name="Menu" />
+                        </div>
+                        <span>More</span>
+                    </div>
+                    <div className="more-menu">
+                        <ListGroup>
+                            {overflowItems.map(
+                                (
+                                    e:
+                                        | AppNavigationItemProps
+                                        | AppSubNavigationItemProps
+                                ) => {
+                                    if (e)
+                                        return showSubMenuItems ? (
+                                            <AppNavigationSubMenuItem
+                                                label={e.label}
+                                                path={e.path}
+                                                key={e.label}
+                                                icon={e.icon}
+                                            />
+                                        ) : (
+                                            <AppNavigationItem
+                                                label={e.label}
+                                                path={e.path}
+                                                icon={e.icon}
+                                                key={e.label}
+                                            />
+                                        );
+                                    return "";
+                                }
+                            )}
+                        </ListGroup>
+                    </div>
+                </ListGroupItem>
+            )
+        );
+    };
     return (
         <aside
             className={
@@ -73,47 +289,8 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="w-100">
                         <ListGroup>
-                            {items
-                                .filter((e) => !overflowItems.includes(e))
-                                .map(({ label, path, icon }) => {
-                                    return (
-                                        <AppNavigationItem
-                                            label={label}
-                                            path={path}
-                                            icon={icon}
-                                            key={label}
-                                            className="main-menu"
-                                        />
-                                    );
-                                })}
-                            {overflowItems.length > 0 && (
-                                <ListGroupItem
-                                    className={`nav-item item-more dropright pt-2 pr-3 pl-3 p-2 `}
-                                >
-                                    <div className="nav-link show-more">
-                                        <div className="nav-icon">
-                                            <AppIcon name="Menu" />
-                                        </div>
-                                        <span>More</span>
-                                    </div>
-                                    <div className="more-menu">
-                                        <ListGroup>
-                                            {overflowItems.map((e) => {
-                                                return e ? (
-                                                    <AppNavigationItem
-                                                        label={e.label}
-                                                        path={e.path}
-                                                        icon={e.icon}
-                                                        key={e.label}
-                                                    />
-                                                ) : (
-                                                    ""
-                                                );
-                                            })}
-                                        </ListGroup>
-                                    </div>
-                                </ListGroupItem>
-                            )}
+                            {renderMenu()}
+                            {renderMoreMenu()}
                             <ListGroupItem className={`bottom-menu p-0`}>
                                 <ListGroup>
                                     <ListGroupItem
@@ -136,12 +313,36 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                     <ListGroupItem
                                         className={`nav-item pt-2 pr-3 pl-3 p-2`}
                                     >
-                                        <Link to={"#"} className="nav-link">
+                                        <div
+                                            onClick={() => {
+                                                setActiveMenuItem({
+                                                    label: "Administration",
+                                                    path: "#",
+                                                    icon: {
+                                                        name: "Settings",
+                                                    },
+                                                });
+                                                isSubMenuItems(
+                                                    !showSubMenuItems
+                                                );
+                                            }}
+                                            className="nav-link"
+                                        >
                                             <div className="nav-icon">
-                                                <AppIcon name="Settings" />
+                                                <AppIcon
+                                                    name={
+                                                        showSubMenuItems
+                                                            ? "ArrowLeft"
+                                                            : "Settings"
+                                                    }
+                                                />
                                             </div>
-                                            <span>Administration</span>
-                                        </Link>
+                                            <span>
+                                                {showSubMenuItems
+                                                    ? "Back to Menu"
+                                                    : "Administration"}
+                                            </span>
+                                        </div>
                                     </ListGroupItem>
                                     <ListGroupItem
                                         className={`nav-item pt-2 pr-3 pl-3 p-2`}
