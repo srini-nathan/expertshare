@@ -1,14 +1,15 @@
 import React, { FC, useEffect, useState } from "react";
-import { ListGroup, Navbar, Nav, ListGroupItem } from "react-bootstrap";
+import { ListGroup, ListGroupItem, Nav, Navbar } from "react-bootstrap";
 import { Link } from "@reach/router";
 import { AppIcon } from "../../components/AppIcon";
 import {
+    AppNavigationDropDown,
     AppNavigationItem,
     AppNavigationItemProps,
-    AppNavigationDropDown,
 } from "../../components/AppNavigationItem";
 import "./assets/scss/style.scss";
 import FooterLogo from "./assets/images/expertshare_logo_footer.svg";
+import { useWindowSize } from "../../hooks";
 
 interface AppNavigationProps {
     items: AppNavigationItemProps[];
@@ -18,13 +19,9 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const [overflowItems, setOverflowItems] = useState<
         AppNavigationItemProps[]
     >([]);
-    const getScreenHeight = () => {
-        const hasWindow = typeof window !== "undefined";
-
-        const screenHight = hasWindow ? window.innerHeight : 0;
-        return screenHight;
-    };
-    const getMenuitemsHeight = () => {
+    const { width, height } = useWindowSize();
+    const mainItems = document.getElementsByClassName("main-menu");
+    const getMenuItemsHeight = () => {
         const logoHolder = document.getElementsByClassName(
             "logo-holder"
         )[0] as HTMLElement;
@@ -32,22 +29,10 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             "bottom-menu"
         )[0] as HTMLElement;
 
-        const screenHight =
-            getScreenHeight() -
-            logoHolder.offsetHeight -
-            bottomMenu.offsetHeight -
-            20;
-        return screenHight;
-    };
-
-    const getScreenWidth = () => {
-        const hasWindow = typeof window !== "undefined";
-        return hasWindow ? window.innerWidth : 0;
+        return height - logoHolder.offsetHeight - bottomMenu.offsetHeight - 20;
     };
     const updateScreenSize = () => {
-        if (getScreenWidth() > 767) {
-            const mainItems = document.getElementsByClassName("main-menu");
-
+        if (width > 767) {
             let itemHeight = 0;
             let numberOfMenusToShow = 0;
 
@@ -56,7 +41,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             }
 
             numberOfMenusToShow = Math.floor(
-                getMenuitemsHeight() / itemHeight - 1
+                getMenuItemsHeight() / itemHeight - 1
             );
             const oItems = [];
             for (let i = numberOfMenusToShow; i < mainItems.length; i += 1) {
@@ -67,8 +52,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     };
     useEffect(() => {
         updateScreenSize();
-        window.addEventListener("resize", updateScreenSize);
-    }, []);
+    }, [width, height]);
 
     return (
         <aside
@@ -156,7 +140,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                             <div className="nav-icon">
                                                 <AppIcon name="Settings" />
                                             </div>
-                                            <span>Administratration</span>
+                                            <span>Administration</span>
                                         </Link>
                                     </ListGroupItem>
                                     <ListGroupItem
