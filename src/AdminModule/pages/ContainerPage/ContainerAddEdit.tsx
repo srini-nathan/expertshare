@@ -307,6 +307,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         );
     }
 
+    // eslint-disable-next-line no-console
+    console.log(storage);
+
     return (
         <div className="theme-primary-clr theme-primary-font">
             <div className="container-fluid p-0 mb-5">
@@ -340,7 +343,6 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         value={container.domain}
                                         control={control}
                                     />
-
                                     <AppFormInput
                                         name={"containerGroup"}
                                         label={"Container Group"}
@@ -357,7 +359,6 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         value={container.containerGroup}
                                         control={control}
                                     />
-
                                     <div className={"col-md-4 px-3"}>
                                         <div className="d-flex flex-wrap justify-content-between mb-4">
                                             <AppFormTextArea
@@ -391,24 +392,17 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                 <hr className="col-12 mb-5" />
                                 <div className="row m-0 px-0 px-xl-3 d-flex align-items-start container">
                                     <AppFormRadioSwitch
-                                        required
-                                        sm="6"
-                                        fieldName={storage}
-                                        label="Storage Type"
-                                        values={[
-                                            {
-                                                label: "Aws S3 Bucket",
-                                                value: "S3",
-                                            },
-                                            {
-                                                label: "Local",
-                                                value: "Local",
-                                            },
-                                        ]}
-                                        description="hello this is descriprion"
-                                        errorMessage="This field is required"
-                                        invalid={true}
+                                        fieldName={"storage"}
+                                        radioValue={"S3"}
                                         control={control}
+                                        label={"AWS S3 Bucket"}
+                                    />
+                                    <AppFormRadioSwitch
+                                        fieldName={"storage"}
+                                        radioValue={"Local"}
+                                        control={control}
+                                        label={"Local"}
+                                        defaultChecked={true}
                                     />
                                 </div>
                                 {storage === "S3" ? (
