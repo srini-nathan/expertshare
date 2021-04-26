@@ -152,18 +152,7 @@ export abstract class EntityAPI extends API {
         id: number,
         entity: P
     ): Promise<FinalResponse<R | null>> {
-        const config: AxiosRequestConfig = {
-            transformRequest: [
-                (payload: P, headers: SimpleObject<string>) =>
-                    this.acceptHydra
-                        ? // on patch request,
-                          // hydra only accept particular MIME type,
-                          // so we're using request transformer;
-                          // to change content-type header
-                          onUpdateRequestHydra(payload, headers)
-                        : () => {},
-            ],
-        };
+        const config: AxiosRequestConfig = this.getPatchRequestConfig<P>();
 
         return this.makePatch<R, P>(
             `${this.PATH}/${id}`,
@@ -215,7 +204,7 @@ export abstract class EntityAPI extends API {
         return Promise.resolve(new FinalResponse(null, message));
     }
 
-    private static handleErrorDuringCreatingOrUpdating(
+    protected static handleErrorDuringCreatingOrUpdating(
         error: AxiosError | ServerError
     ): Promise<FinalResponse<null>> {
         const { message } = error;
@@ -240,5 +229,22 @@ export abstract class EntityAPI extends API {
         }
 
         return Promise.resolve(new FinalResponse(null, message));
+    }
+
+    protected static getPatchRequestConfig<P = null>(): AxiosRequestConfig {
+        const config: AxiosRequestConfig = {
+            transformRequest: [
+                (payload: P, headers: SimpleObject<string>) =>
+                    this.acceptHydra
+                        ? // on patch request,
+                          // hydra only accept particular MIME type,
+                          // so we're using request transformer;
+                          // to change content-type header
+                          onUpdateRequestHydra(payload, headers)
+                        : () => {},
+            ],
+        };
+
+        return config;
     }
 }
