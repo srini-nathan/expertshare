@@ -1,8 +1,9 @@
 import React, { ReactElement } from "react";
 import { Language } from "../../models";
-import { AppFormRadio, AppSwitch } from "../../../AppModule/components";
+import { AppRadio, AppSwitch } from "../../../AppModule/components";
 import { LanguageApi } from "../../apis";
 import { AppGridAction } from "../../../AppModule/components/AppGridAction";
+import { errorToast, successToast } from "../../../AppModule/utils";
 
 export const appGridFrameworkComponents = {
     appSwitch: (params: never): ReactElement => {
@@ -26,16 +27,22 @@ export const appGridFrameworkComponents = {
         const { data } = params;
         const { id, name, isDefault } = data as Language;
         return (
-            <AppFormRadio
+            <AppRadio
                 name={"isDefault"}
-                id={`${name}-${id}`}
                 defaultChecked={isDefault}
-                onChange={(event) => {
-                    LanguageApi.update<Language, Partial<Language>>(id, {
-                        isDefault: event.currentTarget.checked,
-                    }).then();
+                id={`is-default-${name}-${id}`}
+                onChange={() => {
+                    LanguageApi.setDefaultLanguage<Language>(id).then(
+                        ({ errorMessage, error }) => {
+                            if (error) {
+                                errorToast(errorMessage);
+                            } else {
+                                successToast("Default language changed.");
+                            }
+                        }
+                    );
                 }}
-            />
+            ></AppRadio>
         );
     },
     appGridActionRenderer: AppGridAction,
