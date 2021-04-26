@@ -35,7 +35,7 @@ export const AppNavigationDropDown: FC<AppNavigationDropDownProps> = ({
             {subDropDownItems &&
                 subDropDownItems.map((e) => {
                     return (
-                        <NavDropdown.Item href={e.path}>
+                        <NavDropdown.Item href={e.path} key={e.label}>
                             <div className="nav-icon img-container">
                                 <i className={`${e.iconClassName}`}></i>
                             </div>
