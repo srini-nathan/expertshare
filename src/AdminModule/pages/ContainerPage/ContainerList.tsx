@@ -36,7 +36,7 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
 
     async function handleDelete(id: number) {
         try {
-            await ContainerApi.delete<void>(id).then(() => {
+            await ContainerApi.delete(id).then(() => {
                 appGridApi?.refreshServerSideStore({ purge: false, route: [] });
             });
             await sweetSuccess({ text: " Successfully deleted " });

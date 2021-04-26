@@ -1,25 +1,28 @@
 import React, { FC } from "react";
 import { Form, Col } from "react-bootstrap";
 import "./assets/scss/style.scss";
+import { Control, Controller, useWatch } from "react-hook-form";
+import { isString as _isString, startCase as _startCase } from "lodash";
 
 export interface AppFormTextAreaProps {
     id?: string;
-    name?: string;
-    sm?: string;
-    md?: string;
-    lg?: string;
-    xl?: string;
-    col?: string;
-    rows?: number;
+    name: string;
+    sm?: string | number;
+    md?: string | number;
+    lg?: string | number;
+    xl?: string | number;
     value?: string;
-    placeholder?: string;
+    placeholder?: string | boolean;
     required?: boolean;
     label?: string;
     description?: string;
     errorMessage?: string;
-    invalid?: boolean;
+    isInvalid?: boolean;
+    isValid?: boolean;
     withCounter?: boolean;
     maxCount?: number;
+    control?: Control<any>;
+    rows?: number;
 }
 
 export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
@@ -30,19 +33,40 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
     errorMessage,
     label = "",
     description,
-    md,
-    sm,
-    lg,
-    xl,
-    rows = 3,
-    invalid = false,
+    sm = 12,
+    md = 6,
+    lg = 4,
+    xl = 4,
+    isInvalid,
+    isValid,
     required = false,
     withCounter = false,
     maxCount = 25,
+    control,
+    rows = 5,
 }): JSX.Element => {
-    const [input, setInput] = React.useState<string>(value);
+    const controlId = id || name;
+    let placeholderText = "";
+
+    if (placeholder !== false) {
+        placeholderText = _isString(placeholder)
+            ? placeholder
+            : `Enter ${_startCase(label) || _startCase(name)}`;
+    }
+    const fieldValue = useWatch({
+        control,
+        name,
+        defaultValue: value,
+    });
     return (
-        <Form.Group as={Col} md={md} sm={sm} lg={lg} xl={xl} controlId={id}>
+        <Form.Group
+            as={Col}
+            md={md}
+            sm={sm}
+            lg={lg}
+            xl={xl}
+            controlId={controlId}
+        >
             <Form.Label>
                 {label}
                 {required && <span className="required">*</span>}
@@ -55,24 +79,27 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
                     </div>
                 )}
                 {(withCounter || maxCount !== 25) && (
-                    <span className="counter">{`${input.length}/${maxCount}`}</span>
+                    <span className="counter">{`${fieldValue}/${maxCount}`}</span>
                 )}
             </Form.Label>
-            <Form.Control
-                required={required}
-                as={"textarea"}
-                placeholder={placeholder}
-                value={input}
+            <Controller
                 name={name}
-                rows={rows}
-                maxLength={withCounter || maxCount !== 25 ? maxCount : -1}
-                onChange={(e) => setInput(e.target.value)}
+                defaultValue={value}
+                control={control}
+                render={({ field }) => (
+                    <Form.Control
+                        {...field}
+                        as={"textarea"}
+                        placeholder={placeholderText}
+                        isValid={isValid}
+                        isInvalid={isInvalid}
+                        rows={rows}
+                    />
+                )}
             />
-            {invalid && (
-                <Form.Control.Feedback type="invalid">
-                    {errorMessage}
-                </Form.Control.Feedback>
-            )}
+            <Form.Control.Feedback type="invalid">
+                {errorMessage}
+            </Form.Control.Feedback>
         </Form.Group>
     );
 };

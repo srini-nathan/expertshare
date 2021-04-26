@@ -1,6 +1,7 @@
 import React, { FC, Fragment } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
+import { useForm } from "react-hook-form";
 import {
     AppDatePicker,
     AppFormDropdown,
@@ -42,6 +43,7 @@ const options = [
 ];
 
 export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
+    const { control } = useForm();
     const [selectedItems, setSelectedItem] = React.useState<
         SimpleObject<string>[]
     >([]);
@@ -96,11 +98,12 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     label="Text Area"
                     value="hello"
                     placeholder="hello"
-                    description="hello this is descriprion"
+                    description="hello this is description"
                     maxCount={150}
                     rows={5}
                     errorMessage="This field is required"
-                    invalid={true}
+                    isInvalid={true}
+                    control={control}
                 />
                 <hr className="col-12" />
 

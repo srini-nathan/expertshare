@@ -1,10 +1,5 @@
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
-
-interface AppGridColDefParams {
-    onPressDelete: (id: number) => void;
-    editLink: string;
-    addLink: string;
-}
+import { AppGridColDefParams } from "../../../AppModule/models";
 
 export const appGridColDef = ({
     onPressDelete,
