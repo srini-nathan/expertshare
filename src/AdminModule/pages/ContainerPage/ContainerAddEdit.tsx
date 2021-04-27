@@ -8,7 +8,6 @@ import {
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import "./container_add_edit_style.scss";
 import { Col, Form, Row } from "react-bootstrap";
 import { Client, Container, Package } from "../../models";
 import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHeader";
@@ -24,6 +23,7 @@ import { ContainerApi } from "../../apis/ContainerApi";
 import { errorToast, validation } from "../../../AppModule/utils";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { AppFormCheckBox } from "../../../AppModule/components/AppFormCheckBox";
+import "./assets/scss/container_add_edit_style.scss";
 
 const validationSchema = Yup.object().shape({
     domain: Yup.string().required("Domain is Required"),
@@ -328,7 +328,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                 onSubmit={handleSubmit(onSubmit)}
                                 onReset={reset}
                             >
-                                <div className="row m-0 px-0 d-flex align-items-start">
+                                <Form.Row>
                                     <AppFormInput
                                         name={"domain"}
                                         label={"Domain"}
@@ -359,26 +359,22 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         value={container.containerGroup}
                                         control={control}
                                     />
-                                    <div className={"col-md-4 px-3"}>
-                                        <div className="d-flex flex-wrap justify-content-between mb-4">
-                                            <AppFormTextArea
-                                                name={"notes"}
-                                                label={"Notes"}
-                                                required={false}
-                                                withCounter={true}
-                                                {...validation(
-                                                    "notes",
-                                                    formState,
-                                                    !isAddMode
-                                                )}
-                                                errorMessage={
-                                                    errors.notes?.message
-                                                }
-                                                value={container.notes}
-                                                control={control}
-                                            />
-                                        </div>
-                                    </div>
+                                    <AppFormTextArea
+                                        name={"notes"}
+                                        label={"Notes"}
+                                        required={false}
+                                        withCounter={true}
+                                        {...validation(
+                                            "notes",
+                                            formState,
+                                            !isAddMode
+                                        )}
+                                        errorMessage={errors.notes?.message}
+                                        value={container.notes}
+                                        control={control}
+                                    />
+                                </Form.Row>
+                                <Form.Row>
                                     <AppFormCheckBox
                                         className="container-checkbox"
                                         name={"isActive"}
@@ -388,7 +384,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         defaultChecked={true}
                                         register={register}
                                     />
-                                </div>
+                                </Form.Row>
                                 <hr className="col-12 mb-5" />
                                 <div className="row m-0 px-0 px-xl-3 d-flex align-items-start container">
                                     <AppFormRadioSwitch
@@ -464,7 +460,6 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                     <></>
                                 )}
                                 <hr className="col-12 my-5" />
-
                                 <div className="row mx-0 mb-2">
                                     <div className="col-12 mt-2 px-0 pl-xl-3">
                                         <div className="col-12 light-label theme-label-clr px-0 pb-1 mb-3">
