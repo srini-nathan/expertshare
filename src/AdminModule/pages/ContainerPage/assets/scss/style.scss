@@ -1,5 +1,6 @@
-@import "./variables";
+@import "../../../../../AppModule/assets/scss/variables";
 
+// @TODO: check weather it is duplicate style or not
 .ag-theme-alpine {
     .action-header  {
         .ag-header-cell-label{
