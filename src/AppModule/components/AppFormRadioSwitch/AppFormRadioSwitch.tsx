@@ -1,54 +1,31 @@
 import React, { FC } from "react";
 import { Col, Form, Row } from "react-bootstrap";
-import { SimpleObject } from "../../models";
+import { Control, Controller } from "react-hook-form";
 import "./assets/scss/style.scss";
 
 export interface AppFormRadioSwitchProps {
-    name?: string;
     sm?: string;
     md?: string;
     lg?: string;
     xl?: string;
-    required?: boolean;
-    label?: string;
-    values: SimpleObject<string>[];
-    defaultValue?: string;
-    description?: string;
-    errorMessage?: string;
-    invalid?: boolean;
+    label: string;
+    control: Control<any>;
+    fieldName: string;
+    radioValue: string;
+    defaultChecked?: boolean;
 }
 
 export const AppFormRadioSwitch: FC<AppFormRadioSwitchProps> = ({
-    name,
-    errorMessage,
+    fieldName,
     label = "",
-    values,
-    defaultValue,
-    description,
+    radioValue,
     md,
     sm,
     lg,
     xl,
-    invalid = false,
-    required = false,
+    control,
+    defaultChecked = false,
 }): JSX.Element => {
-    const renderOptions = () => {
-        return values.map((e, i) => {
-            return (
-                <Form.Check
-                    key={i}
-                    type="radio"
-                    id={`option_${i}`}
-                    required={required}
-                    label={e.label}
-                    value={e.value}
-                    name={name}
-                    defaultChecked={defaultValue === e.value}
-                />
-            );
-        });
-    };
-
     return (
         <Form.Group
             className="button-group"
@@ -58,24 +35,22 @@ export const AppFormRadioSwitch: FC<AppFormRadioSwitchProps> = ({
             lg={lg}
             xl={xl}
         >
-            <Form.Label>
-                {label}
-                {required && <span className="required">*</span>}
-                {description && (
-                    <div className="custom-input-description">
-                        <span>i</span>
-                        <div className="custom-input-description-content">
-                            {description}
-                        </div>
-                    </div>
-                )}
-            </Form.Label>
-            <Row className="button-group-buttons m-0">{renderOptions()}</Row>
-            {invalid && (
-                <Form.Control.Feedback type="invalid">
-                    {errorMessage}
-                </Form.Control.Feedback>
-            )}
+            <Form.Label>{label}</Form.Label>
+            <Row className="button-group-buttons m-0">
+                <Controller
+                    control={control}
+                    name={fieldName}
+                    render={({ field: { onChange, name } }) => (
+                        <input
+                            type="radio"
+                            name={name}
+                            value={radioValue}
+                            defaultChecked={defaultChecked}
+                            onChange={onChange}
+                        />
+                    )}
+                />
+            </Row>
         </Form.Group>
     );
 };
