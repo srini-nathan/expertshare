@@ -302,23 +302,6 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                     <ListGroupItem
                                         className={`nav-item pt-2 pr-3 pl-3 p-2`}
                                     >
-                                        <AppNavigationDropDown
-                                            className="language"
-                                            label="English"
-                                            iconClassName="languages en"
-                                            subDropDownItems={[
-                                                {
-                                                    label: "German",
-                                                    iconClassName:
-                                                        "languages de",
-                                                    path: "#",
-                                                },
-                                            ]}
-                                        />
-                                    </ListGroupItem>
-                                    <ListGroupItem
-                                        className={`nav-item pt-2 pr-3 pl-3 p-2`}
-                                    >
                                         <div
                                             onClick={() => {
                                                 setActiveMenuItem({
@@ -350,6 +333,24 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                             </span>
                                         </div>
                                     </ListGroupItem>
+                                    <ListGroupItem
+                                        className={`nav-item pt-2 pr-3 pl-3 p-2`}
+                                    >
+                                        <AppNavigationDropDown
+                                            className="language"
+                                            label="English"
+                                            iconClassName="languages en"
+                                            subDropDownItems={[
+                                                {
+                                                    label: "German",
+                                                    iconClassName:
+                                                        "languages de",
+                                                    path: "#",
+                                                },
+                                            ]}
+                                        />
+                                    </ListGroupItem>
+
                                     <ListGroupItem
                                         className={`nav-item pt-2 pr-3 pl-3 p-2`}
                                     >
