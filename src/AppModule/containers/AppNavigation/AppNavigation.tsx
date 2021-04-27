@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState, useRef } from "react";
 import { ListGroup, ListGroupItem, Nav, Navbar } from "react-bootstrap";
 import { Link } from "@reach/router";
 import { AppIcon } from "../../components/AppIcon";
@@ -147,31 +147,31 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     ]);
     const [showSubMenuItems, isSubMenuItems] = useState<boolean>(false);
     const { width, height } = useWindowSize();
-    const mainItems = document.getElementsByClassName("main-menu");
-    const getMenuItemsHeight = () => {
-        const logoHolder = document.getElementsByClassName(
-            "logo-holder"
-        )[0] as HTMLElement;
-        const bottomMenu = document.getElementsByClassName(
-            "bottom-menu"
-        )[0] as HTMLElement;
+    const logoHolder = useRef<HTMLDivElement>(null);
+    const bottomMenu = useRef<HTMLAnchorElement>(null);
 
-        return height - logoHolder.offsetHeight - bottomMenu.offsetHeight - 20;
+    const getMenuItemsHeight = () => {
+        let logoHeight = 0;
+        let bottomMenuHeight = 0;
+
+        if (logoHolder && logoHolder.current)
+            logoHeight = logoHolder.current.clientHeight;
+
+        if (bottomMenu && bottomMenu.current)
+            bottomMenuHeight = bottomMenu.current.clientHeight;
+        return height - logoHeight - bottomMenuHeight - 58;
     };
     const updateScreenSize = () => {
         if (width > 767) {
-            let itemHeight = 0;
             let numberOfMenusToShow = 0;
 
-            if (mainItems.length > 0) {
-                itemHeight = (mainItems[0] as HTMLElement).offsetHeight;
-            }
-
-            numberOfMenusToShow = Math.floor(
-                getMenuItemsHeight() / itemHeight - 1
-            );
+            numberOfMenusToShow = Math.floor(getMenuItemsHeight() / 58 - 1);
             const oItems = [];
-            for (let i = numberOfMenusToShow; i < mainItems.length; i += 1) {
+            for (
+                let i = numberOfMenusToShow;
+                i < (showSubMenuItems ? subMenuItems.length : items.length);
+                i += 1
+            ) {
                 oItems.push(showSubMenuItems ? subMenuItems[i] : items[i]);
             }
             setOverflowItems(oItems);
@@ -279,7 +279,10 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             <Navbar className="row m-0 p-0 mb-md-4 d-block" expand="lg">
                 <div className="col-md-12">
                     <div className="logo-holder row">
-                        <div className="main-logo-container  m-0 p-md-4">
+                        <div
+                            ref={logoHolder}
+                            className="main-logo-container  m-0 p-md-4"
+                        >
                             <a href="#" className="main-logo col-xl-9"></a>
                         </div>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -291,7 +294,10 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                         <ListGroup>
                             {renderMenu()}
                             {renderMoreMenu()}
-                            <ListGroupItem className={`bottom-menu p-0`}>
+                            <ListGroupItem
+                                ref={bottomMenu}
+                                className={`bottom-menu p-0`}
+                            >
                                 <ListGroup>
                                     <ListGroupItem
                                         className={`nav-item pt-2 pr-3 pl-3 p-2`}
