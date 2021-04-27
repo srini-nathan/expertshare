@@ -10,6 +10,8 @@ import {
     LanguageListPage,
     LanguageAddEditPage,
     ContainerList,
+    UserGroupListPage,
+    UserGroupAddEditPage,
 } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
 import { ContainerAddEdit } from "./pages/ContainerPage/ContainerAddEdit";
@@ -35,6 +37,9 @@ export const routers: ModuleRouter[] = [
                     <LanguageListPage path={"languages"} />
                     <LanguageAddEditPage path={"languages/new"} />
                     <LanguageAddEditPage path={"languages/:id"} />
+                    <UserGroupListPage path={"user-groups"} />
+                    <UserGroupAddEditPage path={"user-groups/new"} />
+                    <UserGroupAddEditPage path={"user-groups/:id"} />
                 </Router>
             );
         },

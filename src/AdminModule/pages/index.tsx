@@ -5,3 +5,4 @@ export * from "./TranslationPage";
 export * from "./ClientPage";
 export * from "./LanguagePage";
 export * from "./ContainerPage";
+export * from "./UserGroupPage";

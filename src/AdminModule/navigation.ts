@@ -52,4 +52,12 @@ export const navigation: AppNavigationItemProps[] = [
             name: "administrator",
         },
     },
+
+    {
+        label: "Admin - User Groups",
+        path: "/admin/user-groups",
+        icon: {
+            name: "Users",
+        },
+    },
 ];
