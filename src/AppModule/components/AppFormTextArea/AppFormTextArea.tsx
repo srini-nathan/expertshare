@@ -67,21 +67,23 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
             xl={xl}
             controlId={controlId}
         >
-            <Form.Label>
-                {label}
-                {required && <span className="required">*</span>}
-                {description && (
-                    <div className="custom-input-description">
-                        <span>i</span>
-                        <div className="custom-input-description-content">
-                            {description}
+            {label?.length > 0 ? (
+                <Form.Label>
+                    {label}
+                    {required && <span className="required">*</span>}
+                    {description && (
+                        <div className="custom-input-description">
+                            <span>i</span>
+                            <div className="custom-input-description-content">
+                                {description}
+                            </div>
                         </div>
-                    </div>
-                )}
-                {(withCounter || maxCount !== 25) && (
-                    <span className="counter">{`${fieldValue}/${maxCount}`}</span>
-                )}
-            </Form.Label>
+                    )}
+                    {(withCounter || maxCount !== 25) && (
+                        <span className="counter">{`${fieldValue?.length}/${maxCount}`}</span>
+                    )}
+                </Form.Label>
+            ) : null}
             <Controller
                 name={name}
                 defaultValue={value}
