@@ -1,7 +1,9 @@
 import React, { FC } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { useForm } from "react-hook-form";
-import { Container } from "react-bootstrap";
+import { Container, Form } from "react-bootstrap";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { AppButton } from "../../../AppModule/components/AppButton";
 import { AppSocialLoginBtn, AppSocialLoginBtnType } from "../../components";
 import { AppLoadable } from "../../../AppModule/components/AppLoadable/AppLoadable";
@@ -9,7 +11,9 @@ import {
     AuthContext,
     loginAction,
 } from "../../../AppModule/Authentication/context/AuthContext";
-import "./styles.scss";
+import "./assets/scss/styles.scss";
+import { AppFormInput } from "../../../AppModule/components/AppFormInput";
+import { validation } from "../../../AppModule/utils";
 
 const LoadableInfoPanel = AppLoadable(
     import(/* webpackChunkName: "InfoPanel" */ "../../components/InfoPanel"),
@@ -24,16 +28,25 @@ const LoadableInfoPanel = AppLoadable(
     }
 );
 
-type Inputs = {
+type LoginForm = {
     email: string;
     password: string;
 };
 
+const schema = yup.object().shape({
+    email: yup.string().email().required(),
+    password: yup.string().min(6).required(),
+});
+
 export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
-    const { register, handleSubmit } = useForm<Inputs>();
+    const { control, handleSubmit, formState } = useForm<LoginForm>({
+        resolver: yupResolver(schema),
+        mode: "all",
+    });
+    const { errors } = formState;
 
     const { dispatch } = React.useContext(AuthContext);
-    const onSubmit = async ({ email, password }: Inputs) => {
+    const onSubmit = async ({ email, password }: LoginForm) => {
         await loginAction(email, password, dispatch);
     };
     return (
@@ -50,25 +63,41 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                             We user innovative password authentication. <br />
                             All you need just enter your email.
                         </p>
-                        <form onSubmit={handleSubmit(onSubmit)}>
-                            <input
-                                className="form-control"
-                                type="email"
-                                name="email"
-                                defaultValue="admin@admin.com"
-                                ref={register({ required: true })}
-                                placeholder="Email"
-                            />
-                            <br />
-                            <input
-                                className="form-control"
-                                type="password"
-                                name="password"
-                                defaultValue={"123123"}
-                                ref={register({ required: true })}
-                                placeholder="Password"
-                            />
-
+                        <Form onSubmit={handleSubmit(onSubmit)}>
+                            <Form.Row>
+                                <AppFormInput
+                                    md={12}
+                                    lg={12}
+                                    xl={12}
+                                    type={"email"}
+                                    name={"email"}
+                                    label={""}
+                                    required={true}
+                                    {...validation("email", formState, false)}
+                                    errorMessage={errors.email?.message}
+                                    value={"admin@admin.com"}
+                                    control={control}
+                                />
+                            </Form.Row>
+                            <Form.Row>
+                                <AppFormInput
+                                    md={12}
+                                    lg={12}
+                                    xl={12}
+                                    type={"password"}
+                                    name={"password"}
+                                    label={""}
+                                    required={true}
+                                    {...validation(
+                                        "password",
+                                        formState,
+                                        false
+                                    )}
+                                    errorMessage={errors.password?.message}
+                                    value={"123123"}
+                                    control={control}
+                                />
+                            </Form.Row>
                             <div className="terms text-center my-2">
                                 <p>
                                     By continuing you agree to the <br />
@@ -79,10 +108,11 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                             <AppButton block={true} type={"submit"}>
                                 Login
                             </AppButton>
-                        </form>
+                        </Form>
                         <AppSocialLoginBtn
                             type={AppSocialLoginBtnType.GOOGLE}
                             block={true}
+                            className={"mt-2"}
                         >
                             Login with Google
                         </AppSocialLoginBtn>
