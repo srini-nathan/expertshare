@@ -3,16 +3,9 @@ import { Link } from "@reach/router";
 
 import { AppIcon } from "../AppIcon";
 import { AppModal } from "../AppModal";
+import { AppGridActionParams } from "../../models";
 
-export const AppGridAction: FC<{
-    value: number;
-    callback: (id: number) => void;
-    editLink: string;
-    addLink: string;
-    listTree?: boolean;
-    listTreeSubUrl?: string;
-    ui: string;
-}> = ({
+export const AppGridAction: FC<AppGridActionParams> = ({
     value,
     callback,
     editLink,
@@ -20,6 +13,7 @@ export const AppGridAction: FC<{
     listTree,
     listTreeSubUrl,
     ui,
+    enableDelete = true,
 }): JSX.Element => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -29,15 +23,17 @@ export const AppGridAction: FC<{
     };
     return (
         <div>
-            <a
-                href="#"
-                className={"mr-3"}
-                onClick={() => {
-                    setShow(true);
-                }}
-            >
-                <AppIcon name={"delete"} />
-            </a>
+            {enableDelete ? (
+                <a
+                    href="#"
+                    className={"mr-3"}
+                    onClick={() => {
+                        setShow(true);
+                    }}
+                >
+                    <AppIcon name={"delete"} />
+                </a>
+            ) : null}
 
             <Link className={"mr-3"} to={`${editLink}${value}`}>
                 <AppIcon name={"edit"} />
