@@ -1,14 +1,21 @@
 import React, { ReactElement } from "react";
+import { ICellRendererParams } from "ag-grid-community";
 import { Language } from "../../models";
 import { AppRadio, AppSwitch } from "../../../AppModule/components";
 import { LanguageApi } from "../../apis";
-import { AppGridAction } from "../../../AppModule/components/AppGridAction";
 import { errorToast, successToast } from "../../../AppModule/utils";
+import { AppGridAction } from "../../../AppModule/components/AppGridAction";
+import { AppGridActionParams } from "../../../AppModule/models";
 
 export const appGridFrameworkComponents = {
-    appSwitch: (params: never): ReactElement => {
+    appSwitch: (params: ICellRendererParams): ReactElement => {
         const { data } = params;
-        const { id, name, isActive } = data as Language;
+        const { id, name, isActive, isDefault } = data as Language;
+
+        if (isDefault) {
+            return <></>;
+        }
+
         return (
             <AppSwitch
                 name={`${name}-${id}`}
@@ -23,8 +30,8 @@ export const appGridFrameworkComponents = {
             />
         );
     },
-    appFormRadio: (params: never): ReactElement => {
-        const { data } = params;
+    appFormRadio: (params: ICellRendererParams): ReactElement => {
+        const { data, api } = params;
         const { id, name, isDefault } = data as Language;
         return (
             <AppRadio
@@ -37,6 +44,7 @@ export const appGridFrameworkComponents = {
                             if (error) {
                                 errorToast(errorMessage);
                             } else {
+                                api.refreshServerSideStore({ purge: true });
                                 successToast("Default language changed.");
                             }
                         }
@@ -45,5 +53,32 @@ export const appGridFrameworkComponents = {
             ></AppRadio>
         );
     },
-    appGridActionRenderer: AppGridAction,
+    appGridActionRenderer: (params: AppGridActionParams): ReactElement => {
+        const {
+            value,
+            callback,
+            editLink,
+            addLink,
+            listTree,
+            listTreeSubUrl,
+            ui,
+            ...restProps
+        } = params;
+        const { data } = restProps;
+        const { isDefault } = data as Language;
+
+        return (
+            <AppGridAction
+                value={value}
+                callback={callback}
+                editLink={editLink}
+                addLink={addLink}
+                listTree={listTree}
+                listTreeSubUrl={listTreeSubUrl}
+                ui={ui}
+                enableDelete={!isDefault}
+                {...restProps}
+            />
+        );
+    },
 };
