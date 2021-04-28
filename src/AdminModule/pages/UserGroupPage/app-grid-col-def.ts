@@ -14,10 +14,13 @@ export const appGridColDef = ({
     {
         headerName: "Client",
         field: "client",
+        sortable: false,
     },
     {
         headerName: "Is Generated",
         field: "isGenerated",
+        sortable: false,
+        cellRenderer: "appBooleanRender",
     },
     {
         headerName: "Actions",

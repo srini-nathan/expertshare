@@ -66,7 +66,7 @@ export const UserGroupAddEditPage: FC<RouteComponentProps> = ({
                         successToast(
                             isEditMode
                                 ? "User Group updated"
-                                : "User Group  created"
+                                : "User Group created"
                         );
                     });
                 }
