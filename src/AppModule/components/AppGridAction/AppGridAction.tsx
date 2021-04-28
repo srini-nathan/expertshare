@@ -56,6 +56,7 @@ export const AppGridAction: FC<AppGridActionParams> = ({
             ) : (
                 <></>
             )}
+            {/* TODO: move it to grid or else, otherwise repeat multiple times on rows, on iterations */}
             <AppModal
                 show={show}
                 handleClose={handleClose}
