@@ -14,33 +14,33 @@
 
 :root {
     //font
-    --font-family-sans-serif: "Spartan";
+    --font-family-sans-serif: "grotesque";
     --divider-clr: #E6E8E8;
 
     //primary color range
-    --primary: #36989C;
-    --primary-10: #36989C10;
-    --primary-15: #36989C15;
-    --primary-20: #36989C20;
-    --primary-30: #36989C30;
-    --primary-40: #36989C40;
-    --primary-50: #36989C50;
-    --primary-60: #36989C60;
-    --primary-70: #36989C70;
-    --primary-80: #36989C80;
-    --primary-90: #36989C90;
+    --primary: #30B7A7;
+    --primary-10: #30B7A710;
+    --primary-15: #30B7A715;
+    --primary-20: #30B7A720;
+    --primary-30: #30B7A730;
+    --primary-40: #30B7A740;
+    --primary-50: #30B7A750;
+    --primary-60: #30B7A760;
+    --primary-70: #30B7A770;
+    --primary-80: #30B7A780;
+    --primary-90: #30B7A790;
     //secondary color range
-    --secondary: #051515;
-    --secondary-10: #05151510;
-    --secondary-15: #05151515;
-    --secondary-20: #05151520;
-    --secondary-30: #05151530;
-    --secondary-40: #05151540;
-    --secondary-50: #05151550;
-    --secondary-60: #05151560;
-    --secondary-70: #05151570;
-    --secondary-80: #05151580;
-    --secondary-90: #05151590;
+    --secondary: #444444;
+    --secondary-10: #44444410;
+    --secondary-15: #44444415;
+    --secondary-20: #44444420;
+    --secondary-30: #44444430;
+    --secondary-40: #44444440;
+    --secondary-50: #44444450;
+    --secondary-60: #44444460;
+    --secondary-70: #44444470;
+    --secondary-80: #44444480;
+    --secondary-90: #44444490;
     //input colors
     --input-bg-clr: #FCFCFC;
     --input-fg-clr: #051515;
@@ -54,9 +54,9 @@
     --widget-border-clr: #36999C;
 
     //button colors
-    --btn-bg-clr: #36989C;
-    --btn-bg-clr-20: #36989C20;
-    --btn-hover-bg-clr: #2E8285;
+    --btn-bg-clr: #30B7A7;
+    --btn-bg-clr-20: #30B7A720;
+    --btn-hover-bg-clr: #29a092;
     --btn-hover-fg-clr: #FFF;
     --btn-fg-clr: #FFF;
     --btn-fg-clr-60: #FFFFFF60;
@@ -82,6 +82,26 @@
     --sidebar-menu-extra-bg-clr: #D4EBEA;
     --sidebar-sub-menu-bg-clr: #D4E7E8;
 
+
+
+    //Login Page
+    --agree-bg-clr: #A0B2C033;
+    --agree-scrollbar-track-bg-clr: #A0B2C0;
+    --body-bg-clr: #F3F9FD;
+    --body-bg-clr: #F3F9FD;
+    --placeholder-fg-clr: #939AA7;
+    --placeholder-auth-fg-clr: #A0B2C0;
+    --border-text-box: #A0B2C0;
+    --border-inner-box: #A0B2C030;
+    --border-separate-box: #A0B2C050;
+    --checkbox-border-radius: 1px;
+    --checkbox-label-fg-clr: #939AA7;
+    --checkbox-not-checked-bg: #EAF8F6;
+    --container-box-bg-clr: #FFF;
+    --sub-text-fg-clr: #A0B2C0;
+    --p-sub-fg-clr: #5B6275;
+    --i-fg-clr: #FFF;
+    --i-bg-clr: #FFF;
 }
 
 
@@ -203,25 +223,25 @@ $checkbox-block-border-radius: $border-radius;
 $divider-clr: #E6E8E8;
 $breadcrumbs-clr: #828A8A;
 
-$primary: #36989C;
+$primary: #30B7A7;
 $secondary: #051515;
 
 $widget-tool-color: #30B7A7;
 
 $body-color: $primary;
 
-$font-family-sans-serif: "Spartan";
+$font-family-sans-serif: "grotesque";
 $widget-background-color: #36999C15;
 $widget-border-color: #36999C;
 
 // bootstrap color variable overwriting
-$primary: #36989C !default;
+$primary: #30B7A7 !default;
 $secondary: #051515;
 $danger: #C31F27 !default;
 
 // bootstrap general variable overwriting
 $border-radius: 5px !default;
-$font-family-sans-serif: "Sparta" !default;
+$font-family-sans-serif: "grotesque" !default;
 
 // bootstrap input variable overwriting
 $input-color: $text-color;

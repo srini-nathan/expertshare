@@ -1,32 +1,18 @@
 import React, { FC } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { useForm } from "react-hook-form";
-import { Container, Form } from "react-bootstrap";
+import { Container, Row, Col, Form } from "react-bootstrap";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AppButton } from "../../../AppModule/components/AppButton";
-import { AppSocialLoginBtn, AppSocialLoginBtnType } from "../../components";
-import { AppLoadable } from "../../../AppModule/components/AppLoadable/AppLoadable";
 import {
     AuthContext,
     loginAction,
 } from "../../../AppModule/Authentication/context/AuthContext";
+import { AppAuthHeader, AppAuthFooter } from "../../components";
 import "./assets/scss/styles.scss";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { validation } from "../../../AppModule/utils";
-
-const LoadableInfoPanel = AppLoadable(
-    import(/* webpackChunkName: "InfoPanel" */ "../../components/InfoPanel"),
-    {
-        fallbackProps: {
-            containerStyle: {
-                background: "linear-gradient(#36999CAD, #36889CA4)",
-            },
-            containerClassName:
-                "col-md-4 col-sm-4 col-xs-12 vh-100  d-none d-md-flex d-flex align-items-center justify-content-center",
-        },
-    }
-);
 
 type LoginForm = {
     email: string;
@@ -50,76 +36,72 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
         await loginAction(email, password, dispatch);
     };
     return (
-        <Container fluid>
-            <div className="row">
-                <div className="col-md-8 col-sm-8 col-xs-12 d-flex vh-100 background-main">
-                    <div className="company-login-form m-auto">
-                        <div className="company-logo" />
-                        <p
-                            className={
-                                "text-muted my-4 text-center font-weight-light"
-                            }
-                        >
-                            We user innovative password authentication. <br />
-                            All you need just enter your email.
-                        </p>
-                        <Form onSubmit={handleSubmit(onSubmit)}>
-                            <Form.Row>
-                                <AppFormInput
-                                    md={12}
-                                    lg={12}
-                                    xl={12}
-                                    type={"email"}
-                                    name={"email"}
-                                    label={""}
-                                    required={true}
-                                    {...validation("email", formState, false)}
-                                    errorMessage={errors.email?.message}
-                                    value={"admin@admin.com"}
-                                    control={control}
-                                />
-                            </Form.Row>
-                            <Form.Row>
-                                <AppFormInput
-                                    md={12}
-                                    lg={12}
-                                    xl={12}
-                                    type={"password"}
-                                    name={"password"}
-                                    label={""}
-                                    required={true}
-                                    {...validation(
-                                        "password",
-                                        formState,
-                                        false
-                                    )}
-                                    errorMessage={errors.password?.message}
-                                    value={"123123"}
-                                    control={control}
-                                />
-                            </Form.Row>
-                            <div className="terms text-center my-2">
-                                <p>
-                                    By continuing you agree to the <br />
-                                    <a href="#">Terms & Conditions</a> &{" "}
-                                    <a href="#">Privacy Policy</a>
-                                </p>
-                            </div>
-                            <AppButton block={true} type={"submit"}>
-                                Login
-                            </AppButton>
-                        </Form>
-                        <AppSocialLoginBtn
-                            type={AppSocialLoginBtnType.GOOGLE}
-                            block={true}
-                            className={"mt-2"}
-                        >
-                            Login with Google
-                        </AppSocialLoginBtn>
+        <Container fluid className="active-account auth-container">
+            <div className="auth-container--box">
+                <Row className="p-0 m-auto">
+                    <AppAuthHeader
+                        title="Log In"
+                        desctiption="Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
+            velit mollit. Exercitation veniam consequat sunt nostrud amet."
+                    />
+                    <div className="active-account-box">
+                        <Col md={12} className="active-account-box--auth-form">
+                            <Form onSubmit={handleSubmit(onSubmit)}>
+                                <Form.Group>
+                                    <Form.Row>
+                                        <AppFormInput
+                                            md={12}
+                                            lg={12}
+                                            xl={12}
+                                            type={"email"}
+                                            name={"email"}
+                                            label={""}
+                                            required={true}
+                                            {...validation(
+                                                "email",
+                                                formState,
+                                                false
+                                            )}
+                                            errorMessage={errors.email?.message}
+                                            value={"admin@admin.com"}
+                                            control={control}
+                                        />
+                                    </Form.Row>
+                                    <Form.Row>
+                                        <AppFormInput
+                                            md={12}
+                                            lg={12}
+                                            xl={12}
+                                            type={"password"}
+                                            name={"password"}
+                                            label={""}
+                                            required={true}
+                                            {...validation(
+                                                "password",
+                                                formState,
+                                                false
+                                            )}
+                                            errorMessage={
+                                                errors.password?.message
+                                            }
+                                            value={"123123"}
+                                            control={control}
+                                        />
+                                    </Form.Row>
+                                    <a href="#" className="forgot-password">
+                                        Forgot Password
+                                    </a>
+                                </Form.Group>
+
+                                <AppButton block={true} type={"submit"}>
+                                    Login
+                                </AppButton>
+                            </Form>
+                        </Col>
                     </div>
-                </div>
-                <LoadableInfoPanel />
+                </Row>
             </div>
+            <AppAuthFooter />
         </Container>
     );
 };

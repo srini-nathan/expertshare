@@ -1,0 +1,53 @@
+@import "../../../../assets/scss/variables";
+@import "../../../../assets/scss/screen_sizes";
+
+.auth-copyright-container {
+    position: relative;
+    width: 550px;
+    height: 100%;
+    min-height: 70px;
+    margin: auto auto 0;
+    text-align: center;
+
+    @include media("mobile") {
+        width: 100%;
+        margin: auto auto 15px;
+    }
+
+    &--text-content {
+        position: absolute;
+        bottom: 65px;
+        width: 100%;
+        margin: auto;
+        font-size: 14px;
+        font-weight: 300;
+        color: var(--sub-text-fg-clr);
+    }
+
+    &--create-content {
+        position: absolute;
+        bottom: 45px;
+        width: 100%;
+        font-size: 14px;
+        font-weight: 300;
+        color: var(--sub-text-fg-clr);
+
+        label {}
+    }
+
+    &--logo {
+        position: absolute;
+        bottom: 15px;
+        width: 100%;
+
+        span {
+            display: block;
+            width: 127px;
+            height: 29px;
+            margin: auto;
+            background-image: url(../images/main_logo.png);
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+    }
+}

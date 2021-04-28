@@ -1,0 +1,33 @@
+@import "../../../../assets/scss/variables";
+@import "../../../../assets/scss/screen_sizes";
+
+.active-account-box {
+    &--logo-box {
+        a {
+            i {
+                display: block;
+                width: 190px;
+                height: 45px;
+                margin: auto;
+                background-image: url(../images/main_logo.png);
+                background-repeat: no-repeat;
+                background-size: contain;
+            }
+        }
+    }
+
+    &--text-box {
+        h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        p {
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--p-sub-fg-clr);
+        }
+    }
+
+}
