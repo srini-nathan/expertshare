@@ -128,9 +128,6 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
             );
         }
     }, [id, isAddMode]);
-
-    // eslint-disable-next-line no-console
-    console.log(packages);
     function buildPackageArray(keys: string[], data: ClientFormType) {
         return keys.reduce<ClientRequestData>(
             (acc, item) => {

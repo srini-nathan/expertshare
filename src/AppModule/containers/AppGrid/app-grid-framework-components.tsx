@@ -4,8 +4,6 @@ import { AppGridAction } from "../../components/AppGridAction";
 
 export const appGridFrameworkComponents = {
     appSwitch: (params: any) => {
-        // eslint-disable-next-line no-console
-        console.log(params, "params");
         const { value, name, id, onChange } = params;
         return (
             <AppSwitch
