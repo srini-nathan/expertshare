@@ -12,11 +12,10 @@ export const onResponseRejected = (error: AxiosError): Promise<any> => {
 
     // status code available
     if (status) {
-        if (status === 401) {
-            return navigate("/auth/login").then(() => {
-                sweetError({
-                    text: "You need to login!",
-                });
+        if (status === 401 || status === 403) {
+            navigate("/auth/login", { state: {} });
+            sweetError({
+                text: "You need to login!",
             });
         }
         if (status >= 500 && status <= 599) {
