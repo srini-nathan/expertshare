@@ -307,9 +307,6 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         );
     }
 
-    // eslint-disable-next-line no-console
-    console.log(storage);
-
     return (
         <div className="theme-primary-clr theme-primary-font">
             <div className="container-fluid p-0 mb-5">
