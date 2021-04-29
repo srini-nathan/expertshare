@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { RouteComponentProps } from "@reach/router";
+import { RouteComponentProps, Link } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import * as yup from "yup";
@@ -88,9 +88,12 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                             control={control}
                                         />
                                     </Form.Row>
-                                    <a href="#" className="forgot-password">
+                                    <Link
+                                        to={"/auth/forgot-password"}
+                                        className="forgot-password"
+                                    >
                                         Forgot Password
-                                    </a>
+                                    </Link>
                                 </Form.Group>
 
                                 <AppButton block={true} type={"submit"}>
