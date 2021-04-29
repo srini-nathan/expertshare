@@ -30,6 +30,8 @@ const Home: FC<RouteComponentProps> = (): JSX.Element => {
 
 const App = (): JSX.Element => {
     const { state } = React.useContext(AuthContext);
+    // eslint-disable-next-line no-console
+    console.log(state);
     const dashboardRoutes: ModuleRouter[] = appRouters.filter(
         ({ layout }) => layout === "dashboard"
     );

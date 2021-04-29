@@ -1,5 +1,6 @@
 import React, { createContext, useEffect } from "react";
 import { navigate } from "@reach/router";
+import jwtDecode from "jwt-decode";
 import { User } from "../../models";
 import { AuthApi, LoginResponse } from "../../../SecurityModule/apis/AuthApi";
 import { AUTH_TOKEN_KEY, AUTH_USER_KEY } from "../../config/app-env";
@@ -13,6 +14,8 @@ interface IAuthSate {
     user: User | null;
     loginError: string | null;
     sessionFetched: boolean;
+    ip: string | null;
+    roles: string[];
 }
 
 interface IAuthAction {
@@ -28,6 +31,8 @@ const initialState: IAuthSate = {
     user: null,
     loginError: "",
     sessionFetched: false,
+    ip: null,
+    roles: [],
 };
 
 enum AuthActionTypes {
@@ -46,6 +51,9 @@ function reducer(state: IAuthSate, action: IAuthAction): IAuthSate {
                 loginSuccess: action.payload.loginSuccess,
                 showLogin: action.payload.showLogin,
                 token: action.payload.token,
+                ip: action.payload.ip,
+                roles: action.payload.roles,
+                user: action.payload.user,
             };
         case AuthActionTypes.LOGIN_ERROR:
             return {
@@ -56,6 +64,8 @@ function reducer(state: IAuthSate, action: IAuthAction): IAuthSate {
                 loginError: action.payload.loginError,
                 user: action.payload.user,
                 token: action.payload.token,
+                ip: action.payload.ip,
+                roles: action.payload.roles,
             };
         case AuthActionTypes.LOGOUT:
             return {
@@ -66,6 +76,8 @@ function reducer(state: IAuthSate, action: IAuthAction): IAuthSate {
                 loginError: action.payload.loginError,
                 user: action.payload.user,
                 token: action.payload.token,
+                ip: action.payload.ip,
+                roles: action.payload.roles,
             };
         default:
             return state;
@@ -93,10 +105,15 @@ export const logoutAction = async (
             loginSuccess: false,
             isAuthenticated: false,
             sessionFetched: false,
+            ip: null,
+            roles: [],
         },
     });
 };
-
+export interface JWT {
+    ip: string | null;
+    roles: string[];
+}
 export const loginAction = async (
     username: string,
     password: string,
@@ -107,16 +124,19 @@ export const loginAction = async (
             email: username,
             password,
         });
-
-        if (result.token) {
-            await localStorage.setItem(AUTH_TOKEN_KEY, result.token);
+        const { token } = result;
+        if (token) {
+            const { ip, roles }: JWT = await jwtDecode(token);
+            await localStorage.setItem(AUTH_TOKEN_KEY, token);
             const user = await UserApi.me();
             await localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
             dispatch({
                 type: AuthActionTypes.LOGIN_SUCCESS,
                 payload: {
+                    ip,
+                    roles,
                     isAuthenticated: true,
-                    token: result.token,
+                    token,
                     showLogin: false,
                     loginSuccess: true,
                     user,
@@ -139,6 +159,8 @@ export const loginAction = async (
                     loginError: null,
                     token: null,
                     sessionFetched: false,
+                    ip: null,
+                    roles: [],
                 },
             });
         }
@@ -153,6 +175,7 @@ export default function AuthProvider({ children }: Props): JSX.Element {
             if (token) {
                 try {
                     const user = await UserApi.me();
+                    const { ip, roles }: JWT = jwtDecode(token);
                     dispatch({
                         type: AuthActionTypes.LOGIN_SUCCESS,
                         payload: {
@@ -163,6 +186,8 @@ export default function AuthProvider({ children }: Props): JSX.Element {
                             loginSuccess: true,
                             showLogin: false,
                             user,
+                            ip,
+                            roles,
                         },
                     });
                 } catch (error) {
@@ -176,6 +201,8 @@ export default function AuthProvider({ children }: Props): JSX.Element {
                             loginSuccess: false,
                             showLogin: true,
                             user: null,
+                            ip: null,
+                            roles: [],
                         },
                     });
                 }
@@ -191,6 +218,8 @@ export default function AuthProvider({ children }: Props): JSX.Element {
                     loginSuccess: false,
                     showLogin: true,
                     user: null,
+                    ip: null,
+                    roles: [],
                 },
             });
         }
