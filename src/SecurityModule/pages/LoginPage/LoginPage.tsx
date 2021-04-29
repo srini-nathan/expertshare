@@ -8,7 +8,7 @@ import { AppButton } from "../../../AppModule/components/AppButton";
 import {
     AuthContext,
     loginAction,
-} from "../../../AppModule/Authentication/context/AuthContext";
+} from "../../Authentication/context/AuthContext";
 import { AppAuthHeader, AppAuthFooter } from "../../components";
 import "./assets/scss/styles.scss";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
