@@ -27,5 +27,18 @@
 }
 
 .btn-primary {
-    padding: 15px 82px 11px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--secondary);
+    border-radius: var(--border-radius);
+    box-shadow: 0 3px 9px var(--box-shadow-box-clr);
+    background-color: #fff;
+
+    &:hover {
+        color: var(--secondary);
+    }
 }
