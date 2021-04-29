@@ -1,0 +1,58 @@
+@import "../../../../assets/scss/variables";
+@import "../../../../assets/scss/screen_sizes";
+
+.auth-container {
+    display: grid;
+    min-height: 100vh;
+    background-color: var(--body-bg-clr);
+
+    &--box {
+        box-sizing: border-box;
+        display: inline-table;
+        width: 550px;
+        height: -moz-min-content;
+        padding: 30px;
+        margin: 40px auto;
+        background-color: var(--container-box-bg-clr);
+        border-radius: var(--border-radius);
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -webkit-touch-callout: none;
+        user-select: none;
+
+        @include media("mobile") {
+            width: 90%;
+            padding: 10px;
+            margin: 20px auto;
+        }
+
+        @include media("lapto4k") {
+            margin: 80px auto;
+        }
+    }
+}
+
+.active-account-box {
+    width: 100%;
+
+    &--auth-form {
+        .form-group {
+            input {
+                height: 36px;
+                font-size: 14px;
+                font-weight: 400;
+                color: var(--secondary);
+                border: 1px solid var(--border-text-box);
+                border-radius: var(--border-radius);
+
+                &::placeholder {
+                    color: var(--placeholder-auth-fg-clr);
+                }
+
+                &:focus {
+                    outline: none;
+                }
+            }
+        }
+    }
+}
