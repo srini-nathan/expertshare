@@ -16,6 +16,8 @@ interface IAuthSate {
     sessionFetched: boolean;
     ip: string | null;
     roles: string[];
+    cid: number | null;
+    cntid: number | null;
 }
 
 interface IAuthAction {
@@ -33,6 +35,8 @@ const initialState: IAuthSate = {
     sessionFetched: false,
     ip: null,
     roles: [],
+    cid: null,
+    cntid: null,
 };
 
 enum AuthActionTypes {
@@ -54,6 +58,8 @@ function reducer(state: IAuthSate, action: IAuthAction): IAuthSate {
                 ip: action.payload.ip,
                 roles: action.payload.roles,
                 user: action.payload.user,
+                cid: action.payload.cid,
+                cntid: action.payload.cntid,
             };
         case AuthActionTypes.LOGIN_ERROR:
             return {
@@ -66,6 +72,8 @@ function reducer(state: IAuthSate, action: IAuthAction): IAuthSate {
                 token: action.payload.token,
                 ip: action.payload.ip,
                 roles: action.payload.roles,
+                cid: action.payload.cid,
+                cntid: action.payload.cntid,
             };
         case AuthActionTypes.LOGOUT:
             return {
@@ -78,6 +86,8 @@ function reducer(state: IAuthSate, action: IAuthAction): IAuthSate {
                 token: action.payload.token,
                 ip: action.payload.ip,
                 roles: action.payload.roles,
+                cid: action.payload.cid,
+                cntid: action.payload.cntid,
             };
         default:
             return state;
@@ -107,12 +117,16 @@ export const logoutAction = async (
             sessionFetched: false,
             ip: null,
             roles: [],
+            cntid: null,
+            cid: null,
         },
     });
 };
 export interface JWT {
     ip: string | null;
     roles: string[];
+    cid: number;
+    cntid: number;
 }
 export const loginAction = async (
     username: string,
@@ -126,7 +140,7 @@ export const loginAction = async (
         });
         const { token } = result;
         if (token) {
-            const { ip, roles }: JWT = await jwtDecode(token);
+            const { ip, roles, cid, cntid }: JWT = await jwtDecode(token);
             await localStorage.setItem(AUTH_TOKEN_KEY, token);
             const user = await UserApi.me();
             await localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
@@ -142,6 +156,8 @@ export const loginAction = async (
                     user,
                     loginError: null,
                     sessionFetched: true,
+                    cid,
+                    cntid,
                 },
             });
             await navigate("/home");
@@ -161,6 +177,8 @@ export const loginAction = async (
                     sessionFetched: false,
                     ip: null,
                     roles: [],
+                    cntid: null,
+                    cid: null,
                 },
             });
         }
@@ -175,7 +193,7 @@ export default function AuthProvider({ children }: Props): JSX.Element {
             if (token) {
                 try {
                     const user = await UserApi.me();
-                    const { ip, roles }: JWT = jwtDecode(token);
+                    const { ip, roles, cid, cntid }: JWT = jwtDecode(token);
                     dispatch({
                         type: AuthActionTypes.LOGIN_SUCCESS,
                         payload: {
@@ -188,6 +206,8 @@ export default function AuthProvider({ children }: Props): JSX.Element {
                             user,
                             ip,
                             roles,
+                            cid,
+                            cntid,
                         },
                     });
                 } catch (error) {
@@ -203,6 +223,8 @@ export default function AuthProvider({ children }: Props): JSX.Element {
                             user: null,
                             ip: null,
                             roles: [],
+                            cid: null,
+                            cntid: null,
                         },
                     });
                 }
@@ -220,6 +242,8 @@ export default function AuthProvider({ children }: Props): JSX.Element {
                     user: null,
                     ip: null,
                     roles: [],
+                    cid: null,
+                    cntid: null,
                 },
             });
         }
