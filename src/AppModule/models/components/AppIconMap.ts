@@ -1,6 +1,6 @@
-import { FC } from "react";
-import { IconProps } from "react-feather";
+import { PropsWithChildren } from "react";
+import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 
 export interface AppIconMap {
-    [index: string]: FC<IconProps>;
+    [index: string]: PropsWithChildren<IconDefinition>;
 }
