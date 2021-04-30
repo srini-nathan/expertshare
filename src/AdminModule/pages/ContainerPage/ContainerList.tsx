@@ -1,6 +1,6 @@
-import React, { FC, Fragment, useEffect, useState } from "react";
+import React, { FC, Fragment, useEffect, useRef, useState } from "react";
 import { RouteComponentProps, useParams } from "@reach/router";
-import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
+import { isString as _isString } from "lodash";
 import "./assets/scss/style.scss";
 import {
     GridApi,
@@ -8,104 +8,130 @@ import {
     IServerSideGetRowsParams,
 } from "ag-grid-community";
 import { Col, Row } from "react-bootstrap";
-import { ListResponse } from "../../../AppModule/models";
+import { Canceler } from "axios";
 import {
     AppClientInformation,
     AppListPageToolbar,
     AppPageHeader,
 } from "../../../AppModule/components";
-import { AppGrid } from "../../../AppModule/containers/AppGrid";
-
+import {
+    AppGrid,
+    buildFilterParams,
+    buildSortParams,
+} from "../../../AppModule/containers/AppGrid";
+import { appGridColDef } from "./app-grid-col-def";
+import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { appGridConfig } from "../../../AppModule/config";
-import { AppGridAction } from "../../../AppModule/components/AppGridAction";
-import { sweetError, sweetSuccess } from "../../../AppModule/components/Util";
 import { ContainerApi } from "../../apis/ContainerApi";
 import { Client, Container } from "../../models";
 import { ClientApi } from "../../apis";
+import { errorToast, successToast } from "../../../AppModule/utils";
 
 export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
     const { clientId } = useParams();
     const [totalItems, setTotalItems] = useState<number>(0);
     const [client, setClient] = useState<Client>();
-    let appGridApi: GridApi;
+    const appGridApi = useRef<GridApi>();
+    const cancelTokenSourcesRef = useRef<Canceler[]>([]);
 
     useEffect(() => {
-        ClientApi.findById<Client>(clientId).then((res) => setClient(res));
+        ClientApi.getById<Client>(clientId).then(
+            ({ response, isNotFound, errorMessage }) => {
+                if (errorMessage) {
+                    errorToast(errorMessage);
+                } else if (isNotFound) {
+                    errorToast("Client not exist");
+                } else if (response !== null) {
+                    setClient(response);
+                }
+            }
+        );
         return () => {};
-    }, [clientId, setClient]);
+    }, [clientId]);
 
-    async function handleDelete(id: number) {
-        try {
-            await ContainerApi.delete(id).then(() => {
-                appGridApi?.refreshServerSideStore({ purge: false, route: [] });
-            });
-            await sweetSuccess({ text: " Successfully deleted " });
-        } catch (e) {
-            await sweetError({ text: "Something Went Wrong!" });
-        }
+    function getDataSource(): IServerSideDatasource {
+        return {
+            getRows(params: IServerSideGetRowsParams) {
+                const { request, api } = params;
+                const { endRow } = request;
+                const pageNo = endRow / appGridConfig.pageSize;
+                api?.hideOverlay();
+                ContainerApi.find<Container>(
+                    pageNo,
+                    {
+                        order: buildSortParams(request),
+                        ...buildFilterParams(request),
+                        "client.id": clientId,
+                    },
+                    (c) => {
+                        cancelTokenSourcesRef.current.push(c);
+                    }
+                ).then(({ error, response }) => {
+                    if (error !== null) {
+                        if (_isString(error)) {
+                            errorToast(error);
+                        }
+                    } else if (response !== null) {
+                        if (response.items.length === 0) {
+                            api?.showNoRowsOverlay();
+                        }
+                        setTotalItems(response.totalItems);
+                        params.successCallback(
+                            response.items,
+                            response.totalItems
+                        );
+                    }
+                });
+            },
+        };
     }
 
-    const columnDef: ColDef[] = [
-        {
-            headerName: "Domain",
-            field: "domain",
-            flex: 1,
-        },
-        {
-            headerName: "Storage",
-            field: "storage",
-            flex: 2,
-        },
-        {
-            headerName: "Actions",
-            field: "id",
-            sortable: false,
-            cellRenderer: "appGridActionRenderer",
-            cellClass: "text-right",
-            headerClass: "action-header",
-            cellRendererParams: {
-                callback: handleDelete,
-                addLink: undefined,
-                editLink: `${ClientApi.CLIENT_LIST_PAGE_PATH}${clientId}/container/`,
-                ui: "Container",
-            },
-        },
-    ];
-    const frameworkComponents = {
-        appGridActionRenderer: AppGridAction,
-    };
+    async function handleDelete(id: number) {
+        ContainerApi.delete(id).then(({ error }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                }
+            } else {
+                successToast("Successfully deleted");
+                appGridApi.current?.refreshServerSideStore({
+                    purge: false,
+                    route: [],
+                });
+            }
+        });
+    }
 
-    const dataSource: IServerSideDatasource = {
-        getRows(params: IServerSideGetRowsParams) {
-            const { request } = params;
-            const { endRow } = request;
-            const pageNo = endRow / appGridConfig.pageSize;
-            ContainerApi.findAllContainersByClient<Container>(
-                pageNo,
-                clientId
-            ).then((res: ListResponse<Container>) => {
-                setTotalItems(res.totalItems);
-                params.successCallback(res.items, res.totalItems);
-            });
-        },
-    };
+    async function handleFilter(search: string) {
+        appGridApi.current?.setFilterModel({
+            domain: {
+                filter: search,
+            },
+        });
+    }
+
     return (
         <Fragment>
             <AppPageHeader title={"Container"} />
             <AppListPageToolbar
                 createLabel={"Create Container"}
                 createLink={"container/new"}
+                onQuickFilterChange={handleFilter}
+                cancelTokenSources={cancelTokenSourcesRef.current}
             />
             <AppClientInformation title={client?.name || ""} />
             <Row>
                 <Col>
                     <AppGrid
-                        frameworkComponents={frameworkComponents}
-                        columnDef={columnDef}
-                        dataSource={dataSource}
+                        frameworkComponents={appGridFrameworkComponents}
+                        columnDef={appGridColDef({
+                            onPressDelete: handleDelete,
+                            editLink: `${ClientApi.CLIENT_LIST_PAGE_PATH}${clientId}/container/`,
+                        })}
+                        dataSource={getDataSource()}
                         totalItems={totalItems}
                         onReady={(event) => {
-                            appGridApi = event.api;
+                            appGridApi.current = event.api;
                         }}
                     />
                 </Col>
