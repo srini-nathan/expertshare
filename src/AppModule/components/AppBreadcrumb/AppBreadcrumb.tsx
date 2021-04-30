@@ -17,7 +17,7 @@ export const AppBreadcrumb: FC<AppBreadcrumbProps> = ({
         <Row>
             <Col>
                 <nav className={"es-breadcrumb d-flex align-items-center"}>
-                    <AppIcon name={"back"} />
+                    <AppIcon name={"ChevronLeft"} />
                     <Link to={linkUrl} className="theme-breadcrumbs-clr ml-2">
                         {linkText}
                     </Link>

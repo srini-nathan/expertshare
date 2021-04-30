@@ -13,6 +13,8 @@
     }
   ],
   "dependencies": {
+    "@fortawesome/pro-regular-svg-icons": "^5.15.3",
+    "@fortawesome/react-fontawesome": "^0.1.14",
     "@hookform/resolvers": "^2.4.0",
     "@loadable/component": "^5.14.1",
     "@reach/router": "^1.3.4",
@@ -33,7 +35,6 @@
     "react-bootstrap": "^1.5.0",
     "react-datepicker": "^3.7.0",
     "react-dom": "16",
-    "react-feather": "^2.0.9",
     "react-hook-form": "^7.2.1",
     "react-i18next": "^11.8.7",
     "react-select": "^4.3.0",
