@@ -12,10 +12,7 @@ import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { LanguageApi } from "../../apis";
 import { Language } from "../../models";
-import {
-    AppListPageToolbar,
-    AppPageHeader,
-} from "../../../AppModule/components";
+import { AppPageHeader } from "../../../AppModule/components";
 import {
     AppGrid,
     buildFilterParams,
@@ -92,12 +89,13 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <Fragment>
-            <AppPageHeader title={"Language"} />
-            <AppListPageToolbar
+            <AppPageHeader
+                title={"Language"}
                 createLabel={"Create Language"}
                 createLink={"languages/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}
+                showToolbar
             />
             <Row>
                 <Col>
@@ -116,7 +114,6 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
                     />
                 </Col>
             </Row>
-            <hr />
         </Fragment>
     );
 };

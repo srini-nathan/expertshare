@@ -1,135 +1,185 @@
 @import "../../../../assets/scss/screens-sizes";
 @import "./../../../../assets/scss/variables";
 
-.ag-theme-alpine {
-    .action-header {
-        @include media("container-d-ts") {
-            max-width: 140px;
+.client-list {
+    min-height: 100vh;
+
+    &.table-responsive {
+        min-height: 65vh;
+    }
+
+    .ag-center-cols-viewport {
+        overflow: hidden;
+        background-color: var(--body-bg-clr);
+
+        @include media("lg") {
+            overflow: auto;
         }
     }
 
-    .action-header {
-        .ag-header-cell-label {
-            width: 100%;
-            text-align: right;
-
-            span {
-                width: 100%;
-            }
-        }
+    .ag-body-horizontal-scroll {
+        background-color: var(--body-bg-clr);
     }
 
-    .text-right {
-        .ag-react-container {
-            div {
-                margin-left: auto;
-            }
-        }
-    }
+    .ag-cell {
+        display: flex;
+        align-items: center;
+        text-align: right;
 
-    .ag-react-container {
-        height: 100%;
-    }
+        div.actions {
+            display: flex;
 
-    .ag-sort-ascending-icon,
-    .ag-sort-descending-icon {
-        position: relative;
-        display: block !important;
-        color: var(--primary) !important;
+            a {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 44px !important;
+                height: 44px !important;
+                margin: auto !important;
 
-        &.ag-hidden {
-            opacity: .6;
-        }
-
-    }
-
-    .ag-sort-ascending-icon:not(.ag-hidden) {
-        &+.ag-hidden {
-            color: var(--primary) !important;
-        }
-    }
-
-    .ag-sort-descending-icon:not(.ag-hidden) {
-        &+.ag-hidden {
-            color: var(--primary) !important;
-        }
-
-    }
-
-    .ag-hidden {
-        color: var(--secondary) !important;
-    }
-
-    .ag-icon-desc {
-        position: absolute;
-        bottom: -12px;
-        left: -6px;
-
-        &::before {
-            content: "\f128" !important;
-        }
-    }
-
-    .ag-icon-asc {
-        position: absolute;
-        top: -12px;
-        left: 0;
-
-        &::before {
-            content: "\f12b" !important;
-        }
-    }
-
-    //noinspection Stylelint
-    .ag-icon {
-        // required because Font Awesome uses bold for its icons
-        font-weight: bold;
-    }
-
-    .ag-root-wrapper {
-        border: 0 !important;
-    }
-
-    .ag-center-cols-container {
-        .ag-row {
-            background-color: $widget-background-color;
-            border-bottom: unset;
-            border-bottom: 1px solid var(--primary-20);
-
-            .ag-cell {
-                font-family: $font-family-sans-serif;
-                font-size: 14px;
-
-                a {
-                    width: 44px;
-                    height: 44px;
-                    text-decoration: none;
-
+                svg {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 36px;
+                    height: 36px;
+                    padding: 8px;
+                    color: var(--secondary);
+                    border-radius: var(--border-radius);
+                    box-shadow: 0 3px 9px var(--box-shadow-box-clr);
                 }
             }
         }
+
     }
 
-    .ag-header {
-        background: unset !important;
-        border-bottom: 2px solid var(--primary);
+    .ag-theme-alpine {
 
-        .ag-header-cell {
-            .ag-header-cell-label {
-                font-family: $font-family-sans-serif;
-                font-size: 12px;
-                font-weight: 400;
-                opacity: .6;
+        .ag-sort-ascending-icon,
+        .ag-sort-descending-icon {
+            display: block !important;
+            position: relative;
+            color: var(--primary) !important;
 
+            &.ag-hidden {
+                opacity: 0;
             }
         }
 
-        .ag-header-cell-sorted-asc,
-        .ag-header-cell-sorted-desc {
-            .ag-header-cell-label {
-                opacity: 1;
+        .ag-sort-ascending-icon:not(.ag-hidden) {
+            &+.ag-hidden {
+                color: var(--primary) !important;
             }
         }
 
+        .ag-sort-descending-icon:not(.ag-hidden) {
+            &+.ag-hidden {
+                color: var(--primary) !important;
+            }
+        }
+
+        .ag-hidden {
+            color: var(--secondary) !important;
+        }
+
+        .ag-icon-desc {
+            position: absolute;
+            bottom: -9px;
+            left: -6px;
+
+            &:before {
+                //content: "\f128" !important;
+            }
+        }
+
+        .ag-icon-asc {
+            position: absolute;
+            top: -11px;
+            left: 0;
+
+            &:before {
+                //content: "\f12b" !important;
+            }
+        }
+
+        .ag-icon {
+            // required because Font Awesome uses bold for its icons
+            font-weight: 300;
+        }
+
+        .ag-root-wrapper {
+            border: 0 !important;
+        }
+
+        .ag-react-container {
+            height: 100%;
+        }
+
+        .ag-center-cols-container {
+            .ag-row {
+                &:hover {
+                    background-color: var(--container-box-bg-clr);
+                }
+
+                //height: 60px !important;
+                .ag-cell {
+                    font-size: 14px;
+                    line-height: 60px;
+
+                    &:focus {
+                        border-color: var(--container-box-bg-clr);
+                    }
+
+                    a {
+                        text-decoration: none;
+                        width: 44px;
+                        height: 44px;
+                    }
+                }
+
+                .ag-cell-focus {
+                    border-color: var(--container-box-bg-clr) !important;
+                }
+
+                .ag-cell:first-child {
+                    font-weight: 500;
+                }
+            }
+
+            .ag-row-odd {
+                background-color: var(--row-odd-bg-clr);
+
+                &:hover {
+                    background-color: var(--row-odd-bg-clr);
+                }
+            }
+        }
+
+        .ag-header-cell-resize {
+            &::after {
+                background-color: unset;
+            }
+        }
+
+        .ag-header {
+            background-color: var(--body-bg-clr);
+            border-bottom: unset;
+
+            .ag-header-cell {
+                .ag-header-cell-label {
+                    font-size: 12px;
+                    font-weight: 400;
+                    color: var(--secondary);
+                    opacity: .6;
+                }
+            }
+
+            .ag-header-cell-sorted-asc,
+            .ag-header-cell-sorted-desc {
+                .ag-header-cell-label {
+                    opacity: 1;
+                }
+            }
+        }
     }
 }

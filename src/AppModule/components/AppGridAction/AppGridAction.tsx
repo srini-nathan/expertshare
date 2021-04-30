@@ -22,10 +22,7 @@ export const AppGridAction: FC<AppGridActionParams> = ({
         callback(value);
     };
     return (
-        <div>
-            <Link className={"mr-3"} to={`${editLink}${value}`}>
-                <AppIcon name={"edit"} />
-            </Link>
+        <div className="actions">
             {addLink ? (
                 <Link className={"mr-3"} to={`${addLink}`}>
                     <AppIcon name={"add"} />
@@ -33,7 +30,6 @@ export const AppGridAction: FC<AppGridActionParams> = ({
             ) : (
                 <></>
             )}
-
             {listTree ? (
                 <Link
                     className={"mr-3"}
@@ -44,6 +40,9 @@ export const AppGridAction: FC<AppGridActionParams> = ({
             ) : (
                 <></>
             )}
+            <Link className={"mr-3"} to={`${editLink}${value}`}>
+                <AppIcon name={"edit"} />
+            </Link>
 
             <a
                 href="#"

@@ -1,3 +1,7 @@
 @import "./variables";
 @import "./fonts";
 @import "~@sweetalert2/theme-bootstrap-4/bootstrap-4";
+
+body {
+    background-color: var(--body-bg-clr);
+}

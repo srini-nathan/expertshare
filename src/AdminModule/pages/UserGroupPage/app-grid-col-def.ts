@@ -27,7 +27,7 @@ export const appGridColDef = ({
         headerName: "Actions",
         field: "id",
         sortable: false,
-        flex: 0.4,
+        maxWidth: 120,
         cellClass: "text-right",
         headerClass: "action-header",
         cellRenderer: "appGridActionRenderer",

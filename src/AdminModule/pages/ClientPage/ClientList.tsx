@@ -10,10 +10,7 @@ import { Canceler } from "axios";
 import { isString as _isString } from "lodash";
 import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
-import {
-    AppPageHeader,
-    AppListPageToolbar,
-} from "../../../AppModule/components";
+import { AppPageHeader } from "../../../AppModule/components";
 
 import {
     AppGrid,
@@ -92,12 +89,13 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <Fragment>
-            <AppPageHeader title={"Client"} />
-            <AppListPageToolbar
+            <AppPageHeader
+                title={"Clients"}
                 createLabel={"Create Client"}
                 createLink={"/admin/client/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}
+                showToolbar
             />
             <Row>
                 <Col>
@@ -114,7 +112,6 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
                     />
                 </Col>
             </Row>
-            <hr />
         </Fragment>
     );
 };

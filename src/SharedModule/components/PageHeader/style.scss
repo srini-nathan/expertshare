@@ -3,11 +3,14 @@
 
 .page-title {
     margin: 0 0 20px;
+    font-weight: 700;
 
     h1 {
-        font-size: 2.4rem;
+        margin-bottom: 0;
+        font-size: 42px;
         font-weight: 700;
-        color: $primary;
+        line-height: 50.4px;
+        color: var(--secondary);
 
         @include media("lg") {
             font-size: 2rem;

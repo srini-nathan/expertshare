@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Pagination } from "react-bootstrap";
+import { Pagination, Row, Col, Dropdown } from "react-bootstrap";
 import "./assets/scss/style.scss";
 import { AppIcon } from "../AppIcon";
 
@@ -14,7 +14,7 @@ export interface AppGridPaginationProps {
 }
 
 export const AppGridPagination: FC<AppGridPaginationProps> = ({
-    itemsPerPage = 30,
+    itemsPerPage = 1,
     totalItems = 0,
     active = 1,
     firstLastCtrl = false,
@@ -114,5 +114,39 @@ export const AppGridPagination: FC<AppGridPaginationProps> = ({
         );
     }
 
-    return <Pagination className={className}>{pages}</Pagination>;
+    return (
+        <Col className="pagination-container p-0">
+            <Row>
+                <Col md={6}>
+                    <Dropdown>
+                        <Dropdown.Toggle
+                            variant="secondary"
+                            id="dropdown-basic"
+                        >
+                            20 Rows
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                            <Dropdown.Item>10 Rows</Dropdown.Item>
+                            <Dropdown.Item>20 Rows</Dropdown.Item>
+                            <Dropdown.Item>30 Rows</Dropdown.Item>
+                            <Dropdown.Item>40 Rows</Dropdown.Item>
+                            <Dropdown.Item>50 Rows</Dropdown.Item>
+                            <Dropdown.Item>60 Rows</Dropdown.Item>
+                            <Dropdown.Item>70 Rows</Dropdown.Item>
+                            <Dropdown.Item>80 Rows</Dropdown.Item>
+                            <Dropdown.Item>90 Rows</Dropdown.Item>
+                            <Dropdown.Item>100 Rows</Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </Col>
+
+                {totalPages > 1 && (
+                    <Col md={6}>
+                        <Pagination className={className}>{pages}</Pagination>
+                    </Col>
+                )}
+            </Row>
+        </Col>
+    );
 };

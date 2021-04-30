@@ -1,10 +1,12 @@
 import React, { FC, useEffect, useRef } from "react";
-import { Col, Form, Row } from "react-bootstrap";
+import { Col, Form, Row, InputGroup } from "react-bootstrap";
 import { navigate } from "@reach/router";
 import { Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { Canceler } from "axios";
 import { AppButton } from "../AppButton";
+import { AppIcon } from "../AppIcon";
+import "./assets/scss/style.scss";
 
 export interface AppListPageToolbarProps {
     createLink?: string;
@@ -49,19 +51,28 @@ export const AppListPageToolbar: FC<AppListPageToolbarProps> = ({
     }
 
     return (
-        <Row className={"p-2"}>
+        <Row>
             <Col className={"d-flex justify-content-end"}>
                 <Form>
                     <Form.Row>
-                        <Col>
-                            <Form.Control
-                                onChange={handleQuickSearch}
-                                type={"search"}
-                            ></Form.Control>
+                        <Col md="auto">
+                            <InputGroup>
+                                <Form.Control
+                                    onChange={handleQuickSearch}
+                                    placeholder="Search ..."
+                                    type={"search"}
+                                ></Form.Control>
+                                <InputGroup.Prepend>
+                                    <InputGroup.Text id="basic-addon1">
+                                        <AppIcon name="Search" />
+                                    </InputGroup.Text>
+                                </InputGroup.Prepend>
+                            </InputGroup>
                         </Col>
-                        <Col>
+                        <Col md="auto">
                             {createLink ? (
                                 <AppButton
+                                    variant={"secondary"}
                                     onClick={() => {
                                         navigate(createLink);
                                     }}

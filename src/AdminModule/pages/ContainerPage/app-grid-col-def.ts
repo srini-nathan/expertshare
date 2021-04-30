@@ -9,11 +9,13 @@ export const appGridColDef = ({
         headerName: "Domain",
         field: "domain",
         filter: "text",
+        flex: 1,
     },
     {
         headerName: "Storage",
         field: "storage",
         sortable: false,
+        flex: 1,
     },
     {
         headerName: "Actions",
@@ -22,6 +24,7 @@ export const appGridColDef = ({
         cellRenderer: "appGridActionRenderer",
         cellClass: "text-right",
         headerClass: "action-header",
+        maxWidth: 120,
         cellRendererParams: {
             callback: onPressDelete,
             addLink: undefined,

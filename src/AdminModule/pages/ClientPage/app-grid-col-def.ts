@@ -25,6 +25,7 @@ export const appGridColDef = ({
         cellClass: "text-right",
         headerClass: "action-header",
         resizable: false,
+        maxWidth: 215,
         cellRendererParams: {
             callback: onPressDelete,
             editLink: ClientApi.CLIENT_LIST_PAGE_PATH,

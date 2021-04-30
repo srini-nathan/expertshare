@@ -17,6 +17,13 @@
     --font-family-sans-serif: "grotesque";
     --divider-clr: #E6E8E8;
 
+    //main colors
+    --body-bg-clr: #F3F9FD;
+
+    //Grid Colors
+    --row-odd-bg-clr: #FCFCFC90;
+    --box-shadow-box-clr: #9BA7BA25;
+
     //primary color range
     --primary: #30B7A7;
     --primary-10: #30B7A710;
@@ -62,6 +69,9 @@
     --btn-fg-clr-60: #FFFFFF60;
     --btn-border-clr: transparent;
     --btn-hover-border-clr: transparent;
+    --btn-secondary-fg-clr: #444444;
+    --btn-secondary-bg-clr: #FFF;
+
 
     //check box color
     --checkbox-checked-bg: #36989C;

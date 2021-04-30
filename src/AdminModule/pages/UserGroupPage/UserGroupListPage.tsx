@@ -12,10 +12,7 @@ import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { UserGroupApi } from "../../apis";
 import { UserGroup } from "../../models";
-import {
-    AppPageHeader,
-    AppListPageToolbar,
-} from "../../../AppModule/components";
+import { AppPageHeader } from "../../../AppModule/components";
 import {
     AppGrid,
     buildFilterParams,
@@ -91,8 +88,9 @@ export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <Fragment>
-            <AppPageHeader title={"User Group"} />
-            <AppListPageToolbar
+            <AppPageHeader
+                title={"User Group"}
+                showToolbar
                 createLabel={"Create User Group"}
                 createLink={"user-groups/new"}
                 onQuickFilterChange={handleFilter}
@@ -115,7 +113,6 @@ export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
                     />
                 </Col>
             </Row>
-            <hr />
         </Fragment>
     );
 };

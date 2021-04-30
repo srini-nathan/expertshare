@@ -11,7 +11,6 @@ import { Col, Row } from "react-bootstrap";
 import { Canceler } from "axios";
 import {
     AppClientInformation,
-    AppListPageToolbar,
     AppPageHeader,
 } from "../../../AppModule/components";
 import {
@@ -112,12 +111,13 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <Fragment>
-            <AppPageHeader title={"Container"} />
-            <AppListPageToolbar
+            <AppPageHeader
+                title={"Container"}
                 createLabel={"Create Container"}
                 createLink={"container/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}
+                showToolbar
             />
             <AppClientInformation title={client?.name || ""} />
             <Row>
@@ -136,7 +136,6 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
                     />
                 </Col>
             </Row>
-            <hr />
         </Fragment>
     );
 };

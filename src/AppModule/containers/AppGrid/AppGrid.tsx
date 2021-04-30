@@ -52,49 +52,52 @@ export const AppGrid: FC<AppGridProps> = ({
 
     return (
         <React.Fragment>
-            <div className="ag-theme-alpine">
-                <AgGridReact
-                    frameworkComponents={{
-                        ...frameworkComponents,
-                        customNoRowsOverlay: AppGridNoRowsOverlay,
-                    }}
-                    defaultColDef={{
-                        flex: 1,
-                        minWidth: 150,
-                        sortable: true,
-                        resizable: true,
-                    }}
-                    rowModelType={"serverSide"}
-                    serverSideStoreType={ServerSideStoreType.Partial}
-                    paginationPageSize={appGridConfig.pageSize}
-                    suppressPaginationPanel={true}
-                    cacheBlockSize={appGridConfig.pageSize}
-                    onPaginationChanged={onPaginationChanged}
-                    pagination={true}
-                    getRowNodeId={(item) => {
-                        return item.id;
-                    }}
-                    onGridReady={onGridReady}
-                    gridOptions={{
-                        domLayout: "autoHeight",
-                    }}
-                    columnDefs={columnDef}
-                    noRowsOverlayComponent={"customNoRowsOverlay"}
-                    noRowsOverlayComponentParams={{
-                        noRowsMessageFunc() {
-                            return `Sorry - no data!`;
-                        },
+            <div className="client-list">
+                <div className="ag-theme-alpine">
+                    <AgGridReact
+                        frameworkComponents={{
+                            ...frameworkComponents,
+                            customNoRowsOverlay: AppGridNoRowsOverlay,
+                        }}
+                        defaultColDef={{
+                            flex: 1,
+                            minWidth: 150,
+                            sortable: true,
+                            resizable: true,
+                        }}
+                        rowHeight={62}
+                        rowModelType={"serverSide"}
+                        serverSideStoreType={ServerSideStoreType.Partial}
+                        paginationPageSize={appGridConfig.pageSize}
+                        suppressPaginationPanel={true}
+                        cacheBlockSize={appGridConfig.pageSize}
+                        onPaginationChanged={onPaginationChanged}
+                        pagination={true}
+                        getRowNodeId={(item) => {
+                            return item.id;
+                        }}
+                        onGridReady={onGridReady}
+                        gridOptions={{
+                            domLayout: "autoHeight",
+                        }}
+                        columnDefs={columnDef}
+                        noRowsOverlayComponent={"customNoRowsOverlay"}
+                        noRowsOverlayComponentParams={{
+                            noRowsMessageFunc() {
+                                return `Sorry - no data!`;
+                            },
+                        }}
+                    />
+                </div>
+                <br />
+                <AppGridPagination
+                    totalItems={totalItems}
+                    active={active}
+                    onClick={(pageNumber) => {
+                        gridApi?.paginationGoToPage(pageNumber - 1);
                     }}
                 />
             </div>
-            <br />
-            <AppGridPagination
-                totalItems={totalItems}
-                active={active}
-                onClick={(pageNumber) => {
-                    gridApi?.paginationGoToPage(pageNumber - 1);
-                }}
-            />
         </React.Fragment>
     );
 };
