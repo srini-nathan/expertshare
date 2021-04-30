@@ -10,6 +10,7 @@ export const appGridColDef = ({
     {
         headerName: "Name",
         field: "name",
+        filter: "text",
     },
     {
         headerName: "Client",
