@@ -1,10 +1,13 @@
 import React, { ReactElement } from "react";
 import { ICellRendererParams } from "ag-grid-community";
+import {
+    AppRadio,
+    AppSwitch,
+    AppGridAction,
+} from "../../../AppModule/components";
 import { Language } from "../../models";
-import { AppRadio, AppSwitch } from "../../../AppModule/components";
 import { LanguageApi } from "../../apis";
 import { errorToast, successToast } from "../../../AppModule/utils";
-import { AppGridAction } from "../../../AppModule/components/AppGridAction";
 import { AppGridActionParams } from "../../../AppModule/models";
 
 export const appGridFrameworkComponents = {
