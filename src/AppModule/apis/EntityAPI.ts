@@ -1,4 +1,4 @@
-import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
+import { AxiosError, AxiosRequestConfig, AxiosResponse, Canceler } from "axios";
 import { API } from "./API";
 import { ACCEPTABLE_RESPONSE } from "../config/app-env";
 import {
@@ -92,12 +92,25 @@ export abstract class EntityAPI extends API {
 
     public static async find<E>(
         page = 1,
-        extraParams = {}
+        extraParams = {},
+        cancelToken?: (c: Canceler) => void
     ): Promise<FinalResponse<ListResponse<E> | null>> {
-        return this.makeGet<E>(this.PATH, {
-            ...extraParams,
-            page,
-        })
+        const source = this.createCancelTokenSource();
+
+        if (cancelToken) {
+            cancelToken(source.cancel);
+        }
+
+        return this.makeGet<E>(
+            this.PATH,
+            {
+                ...extraParams,
+                page,
+            },
+            {
+                cancelToken: source.token,
+            }
+        )
             .then(({ data }) => {
                 const list = this.acceptHydra
                     ? onFindAllResponseHydra<E>(data)
