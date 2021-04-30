@@ -1,0 +1,15 @@
+@import "../../../../assets/scss/variables";
+
+.form-group {
+    .show-password {
+        position: absolute;
+        top: 31px;
+        right: 30px;
+        color: var(--input-fg-clr);
+        opacity: .6;
+    }
+
+    .show-password.invalid {
+        right: 55px;
+    }
+}

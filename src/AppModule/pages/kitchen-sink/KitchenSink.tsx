@@ -9,6 +9,7 @@ import {
     AppTagSelect,
     AppFormTextArea,
     AppLoader,
+    AppFormInputPassword,
 } from "../../components";
 import { SimpleObject } from "../../../AdminModule/models";
 
@@ -84,6 +85,24 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                         }}
                     />
                 </Col>
+                <hr className="col-12" />
+
+                <AppFormInputPassword
+                    id="password"
+                    required
+                    md="4"
+                    sm="4"
+                    lg="4"
+                    xl="4"
+                    name="password"
+                    label="Password"
+                    placeholder="Input password"
+                    description="hello this is description"
+                    maxCount={150}
+                    errorMessage="This field is required"
+                    isValid={true}
+                    control={control}
+                />
                 <hr className="col-12" />
 
                 <AppFormTextArea
