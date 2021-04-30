@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useState } from "react";
+import React, { FC, Fragment, useRef, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import {
@@ -7,6 +7,7 @@ import {
     IServerSideGetRowsParams,
 } from "ag-grid-community";
 import { isString as _isString } from "lodash";
+import { Canceler } from "axios";
 import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { UserGroupApi } from "../../apis";
@@ -17,6 +18,7 @@ import {
 } from "../../../AppModule/components";
 import {
     AppGrid,
+    buildFilterParams,
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
@@ -24,27 +26,44 @@ import { errorToast, successToast } from "../../../AppModule/utils";
 
 export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
-    let appGridApi: GridApi;
+    const appGridApi = useRef<GridApi>();
+    const cancelTokenSourcesRef = useRef<Canceler[]>([]);
 
-    const dataSource: IServerSideDatasource = {
-        getRows(params: IServerSideGetRowsParams) {
-            const { request } = params;
-            const { endRow } = request;
-            const pageNo = endRow / appGridConfig.pageSize;
-            UserGroupApi.find<UserGroup>(pageNo, {
-                order: buildSortParams(request),
-            }).then(({ error, response }) => {
-                if (error !== null) {
-                    if (_isString(error)) {
-                        errorToast(error);
+    function getDataSource(): IServerSideDatasource {
+        return {
+            getRows(params: IServerSideGetRowsParams) {
+                const { request, api } = params;
+                const { endRow } = request;
+                const pageNo = endRow / appGridConfig.pageSize;
+                api?.hideOverlay();
+                UserGroupApi.find<UserGroup>(
+                    pageNo,
+                    {
+                        order: buildSortParams(request),
+                        ...buildFilterParams(request),
+                    },
+                    (c) => {
+                        cancelTokenSourcesRef.current.push(c);
                     }
-                } else if (response?.totalItems && response?.items) {
-                    setTotalItems(response.totalItems);
-                    params.successCallback(response.items, response.totalItems);
-                }
-            });
-        },
-    };
+                ).then(({ error, response }) => {
+                    if (error !== null) {
+                        if (_isString(error)) {
+                            errorToast(error);
+                        }
+                    } else if (response !== null) {
+                        if (response.items.length === 0) {
+                            api?.showNoRowsOverlay();
+                        }
+                        setTotalItems(response.totalItems);
+                        params.successCallback(
+                            response.items,
+                            response.totalItems
+                        );
+                    }
+                });
+            },
+        };
+    }
 
     async function handleDelete(id: number) {
         UserGroupApi.delete(id).then(({ error }) => {
@@ -54,11 +73,19 @@ export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
                 }
             } else {
                 successToast("Successfully deleted");
-                appGridApi?.refreshServerSideStore({
+                appGridApi.current?.refreshServerSideStore({
                     purge: false,
                     route: [],
                 });
             }
+        });
+    }
+
+    async function handleFilter(search: string) {
+        appGridApi.current?.setFilterModel({
+            name: {
+                filter: search,
+            },
         });
     }
 
@@ -68,6 +95,8 @@ export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
             <AppListPageToolbar
                 createLabel={"Create User Group"}
                 createLink={"user-groups/new"}
+                onQuickFilterChange={handleFilter}
+                cancelTokenSources={cancelTokenSourcesRef.current}
             />
             <Row>
                 <Col>
@@ -78,10 +107,10 @@ export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
                             editLink: "/admin/user-groups/",
                             ui: "User Group",
                         })}
-                        dataSource={dataSource}
+                        dataSource={getDataSource()}
                         totalItems={totalItems}
                         onReady={(event) => {
-                            appGridApi = event.api;
+                            appGridApi.current = event.api;
                         }}
                     />
                 </Col>
