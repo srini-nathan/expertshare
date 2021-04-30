@@ -14,3 +14,4 @@ export * from "./AppClientInformation";
 export * from "./AppFormSwitch";
 export * from "./AppFormActions";
 export * from "./AppRadio";
+export * from "./AppFormInputPassword";
