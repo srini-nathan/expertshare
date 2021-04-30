@@ -1,10 +1,5 @@
 import React, { FC, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
-
-import "ag-grid-enterprise";
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-import "./assets/scss/style.scss";
 import {
     GridApi,
     GridReadyEvent,
@@ -14,8 +9,13 @@ import {
 import { ColumnApi } from "ag-grid-community/dist/lib/columnController/columnApi";
 import { PaginationChangedEvent } from "ag-grid-community/dist/lib/events";
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
-import { AppGridPagination } from "../../components/AppGridPagination";
+import { AppGridPagination, AppGridNoRowsOverlay } from "../../components";
 import { appGridConfig } from "../../config";
+
+import "ag-grid-enterprise";
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+import "./assets/scss/style.scss";
 
 export interface AppGridProps {
     columnDef: ColDef[];
@@ -56,6 +56,7 @@ export const AppGrid: FC<AppGridProps> = ({
                 <AgGridReact
                     frameworkComponents={{
                         ...frameworkComponents,
+                        customNoRowsOverlay: AppGridNoRowsOverlay,
                     }}
                     defaultColDef={{
                         flex: 1,
@@ -78,6 +79,12 @@ export const AppGrid: FC<AppGridProps> = ({
                         domLayout: "autoHeight",
                     }}
                     columnDefs={columnDef}
+                    noRowsOverlayComponent={"customNoRowsOverlay"}
+                    noRowsOverlayComponentParams={{
+                        noRowsMessageFunc() {
+                            return `Sorry - no data!`;
+                        },
+                    }}
                 />
             </div>
             <br />
