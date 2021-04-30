@@ -17,3 +17,4 @@ export * from "./AppRadio";
 export * from "./AppGridNoRowsOverlay";
 export * from "./AppGridPagination";
 export * from "./AppGridAction";
+export * from "./AppFormInputPassword";

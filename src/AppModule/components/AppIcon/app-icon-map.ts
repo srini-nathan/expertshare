@@ -14,6 +14,8 @@ import {
     X,
     Menu,
     ArrowLeft,
+    Eye,
+    EyeOff,
 } from "react-feather";
 
 import { ListTree } from "./app-custom-icons";
@@ -23,6 +25,8 @@ export const appIconMap: AppIconMap = {
     dashboard: Grid,
     Grid,
     X,
+    Eye,
+    EyeOff,
     ArrowLeft,
     Menu,
     Search,
