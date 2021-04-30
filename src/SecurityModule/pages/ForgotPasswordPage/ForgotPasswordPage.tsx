@@ -1,46 +1,45 @@
 import React, { FC } from "react";
-import { RouteComponentProps, Link } from "@reach/router";
+import { RouteComponentProps } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AppButton } from "../../../AppModule/components/AppButton";
-import {
-    AuthContext,
-    loginAction,
-} from "../../../AppModule/Authentication/context/AuthContext";
 import { AppAuthHeader, AppAuthFooter } from "../../components";
 import "./assets/scss/styles.scss";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { validation } from "../../../AppModule/utils";
 
-type LoginForm = {
+type ForgotPasswordForm = {
     email: string;
-    password: string;
 };
 
 const schema = yup.object().shape({
     email: yup.string().email().required(),
-    password: yup.string().min(6).required(),
 });
 
-export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
-    const { control, handleSubmit, formState } = useForm<LoginForm>({
+export const ForgotPasswordPage: FC<RouteComponentProps> = ({
+    navigate,
+}): JSX.Element => {
+    const { control, handleSubmit, formState } = useForm<ForgotPasswordForm>({
         resolver: yupResolver(schema),
         mode: "all",
     });
     const { errors } = formState;
 
-    const { dispatch } = React.useContext(AuthContext);
-    const onSubmit = async ({ email, password }: LoginForm) => {
-        await loginAction(email, password, dispatch);
+    const onSubmit = async ({ email }: ForgotPasswordForm) => {
+        // I just add the email to alert fo future changes
+        alert(email);
+        if (navigate) {
+            navigate("/auth/forgot-password-email-confirmation");
+        }
     };
     return (
         <Container fluid className="active-account auth-container">
             <div className="auth-container--box">
                 <Row className="p-0 m-auto">
                     <AppAuthHeader
-                        title="Log In"
+                        title="Forgot Password?"
                         desctiption="Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
             velit mollit. Exercitation veniam consequat sunt nostrud amet."
                     />
@@ -63,41 +62,14 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                                 false
                                             )}
                                             errorMessage={errors.email?.message}
-                                            value={"admin@admin.com"}
+                                            placeholder={"Type in your Email"}
                                             control={control}
                                         />
                                     </Form.Row>
-                                    <Form.Row>
-                                        <AppFormInput
-                                            md={12}
-                                            lg={12}
-                                            xl={12}
-                                            type={"password"}
-                                            name={"password"}
-                                            label={""}
-                                            required={true}
-                                            {...validation(
-                                                "password",
-                                                formState,
-                                                false
-                                            )}
-                                            errorMessage={
-                                                errors.password?.message
-                                            }
-                                            value={"123123"}
-                                            control={control}
-                                        />
-                                    </Form.Row>
-                                    <Link
-                                        to={"/auth/forgot-password"}
-                                        className="forgot-password"
-                                    >
-                                        Forgot Password
-                                    </Link>
                                 </Form.Group>
 
                                 <AppButton block={true} type={"submit"}>
-                                    Login
+                                    Reset Password
                                 </AppButton>
                             </Form>
                         </Col>
