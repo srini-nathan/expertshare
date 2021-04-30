@@ -1,5 +1,10 @@
-import { AxiosRequestConfig, AxiosResponse } from "axios";
+import Axios, {
+    AxiosRequestConfig,
+    AxiosResponse,
+    CancelTokenSource,
+} from "axios";
 import { axios } from "../config/axios";
+import { RequestParamsType, RequestPayloadDataType } from "../models";
 
 export abstract class API {
     protected static async makeGet<R>(
@@ -55,11 +60,8 @@ export abstract class API {
             params,
         });
     }
-}
 
-interface QueryParams {
-    [param: string]: string | boolean | number | null;
+    public static createCancelTokenSource(): CancelTokenSource {
+        return Axios.CancelToken.source();
+    }
 }
-
-type RequestParamsType = QueryParams | URLSearchParams;
-type RequestPayloadDataType = RequestParamsType | FormData;
