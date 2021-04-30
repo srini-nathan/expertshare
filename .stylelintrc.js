@@ -14,7 +14,8 @@ module.exports = {
                     "screen",
                     "mixin",
                     "each",
-                    "media"
+                    "media",
+                    "include"
                 ],
             },
         ],
