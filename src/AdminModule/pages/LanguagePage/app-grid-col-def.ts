@@ -9,6 +9,7 @@ export const appGridColDef = ({
     {
         headerName: "Language",
         field: "name",
+        filter: "text",
         minWidth: 80,
         flex: 0.35,
     },
