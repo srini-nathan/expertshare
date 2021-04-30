@@ -1,13 +1,15 @@
-import React, { FC, Fragment, useState } from "react";
+import React, { FC, Fragment, useRef, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
-import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 import {
     GridApi,
     IServerSideDatasource,
     IServerSideGetRowsParams,
 } from "ag-grid-community";
 import { Col, Row } from "react-bootstrap";
-import { ListResponse } from "../../../AppModule/models";
+import { Canceler } from "axios";
+import { isString as _isString } from "lodash";
+import { appGridColDef } from "./app-grid-col-def";
+import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import {
     AppPageHeader,
     AppListPageToolbar,
@@ -15,90 +17,99 @@ import {
 
 import {
     AppGrid,
+    buildFilterParams,
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
 import { ClientApi } from "../../apis";
 import { Client } from "../../models";
 import { appGridConfig } from "../../../AppModule/config";
-import { AppGridAction } from "../../../AppModule/components/AppGridAction";
-import { sweetError, sweetSuccess } from "../../../AppModule/components/Util";
+import { errorToast, successToast } from "../../../AppModule/utils";
 
 export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
-    let appGridApi: GridApi;
+    const appGridApi = useRef<GridApi>();
+    const cancelTokenSourcesRef = useRef<Canceler[]>([]);
+
+    function getDataSource(): IServerSideDatasource {
+        return {
+            getRows(params: IServerSideGetRowsParams) {
+                const { request, api } = params;
+                const { endRow } = request;
+                const pageNo = endRow / appGridConfig.pageSize;
+                api?.hideOverlay();
+                ClientApi.find<Client>(
+                    pageNo,
+                    {
+                        order: buildSortParams(request),
+                        ...buildFilterParams(request),
+                    },
+                    (c) => {
+                        cancelTokenSourcesRef.current.push(c);
+                    }
+                ).then(({ error, response }) => {
+                    if (error !== null) {
+                        if (_isString(error)) {
+                            errorToast(error);
+                        }
+                    } else if (response !== null) {
+                        if (response.items.length === 0) {
+                            api?.showNoRowsOverlay();
+                        }
+                        setTotalItems(response.totalItems);
+                        params.successCallback(
+                            response.items,
+                            response.totalItems
+                        );
+                    }
+                });
+            },
+        };
+    }
 
     async function handleDelete(id: number) {
-        try {
-            await ClientApi.delete(id).then(() => {
-                appGridApi?.refreshServerSideStore({ purge: false, route: [] });
-            });
-            await sweetSuccess({ text: " Successfully deleted " });
-        } catch (e) {
-            await sweetError({ text: "Something Went Wrong!" });
-        }
+        ClientApi.delete(id).then(({ error }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                }
+            } else {
+                successToast("Successfully deleted");
+                appGridApi.current?.refreshServerSideStore({
+                    purge: false,
+                    route: [],
+                });
+            }
+        });
     }
-    const columnDef: ColDef[] = [
-        {
-            headerName: "Client",
-            field: "name",
-            flex: 1,
-        },
-        {
-            headerName: "Notes",
-            field: "notes",
-            flex: 2,
-        },
-        {
-            headerName: "Actions",
-            field: "id",
-            sortable: false,
-            cellRenderer: "appGridActionRenderer",
-            cellClass: "text-right",
-            headerClass: "action-header",
-            resizable: false,
-            cellRendererParams: {
-                callback: handleDelete,
-                editLink: ClientApi.CLIENT_LIST_PAGE_PATH,
-                addLink: ClientApi.CLIENT_NEW_PAGE_PATH,
-                listTree: true,
-                listTreeSubUrl: "container",
-                ui: "Client",
-            },
-        },
-    ];
-    const frameworkComponents = {
-        appGridActionRenderer: AppGridAction,
-    };
 
-    const dataSource: IServerSideDatasource = {
-        getRows(params: IServerSideGetRowsParams) {
-            const { request } = params;
-            const { endRow } = request;
-            const pageNo = endRow / appGridConfig.pageSize;
-            ClientApi.findAll<Client>(pageNo, {
-                order: buildSortParams(request),
-            }).then((res: ListResponse<Client>) => {
-                setTotalItems(res.totalItems);
-                params.successCallback(res.items, res.totalItems);
-            });
-        },
-    };
+    async function handleFilter(search: string) {
+        appGridApi.current?.setFilterModel({
+            name: {
+                filter: search,
+            },
+        });
+    }
+
     return (
         <Fragment>
             <AppPageHeader title={"Client"} />
             <AppListPageToolbar
                 createLabel={"Create Client"}
                 createLink={"/admin/client/new"}
+                onQuickFilterChange={handleFilter}
+                cancelTokenSources={cancelTokenSourcesRef.current}
             />
             <Row>
                 <Col>
                     <AppGrid
-                        frameworkComponents={frameworkComponents}
-                        columnDef={columnDef}
-                        dataSource={dataSource}
+                        frameworkComponents={appGridFrameworkComponents}
+                        columnDef={appGridColDef({
+                            onPressDelete: handleDelete,
+                        })}
+                        dataSource={getDataSource()}
                         totalItems={totalItems}
                         onReady={(event) => {
-                            appGridApi = event.api;
+                            appGridApi.current = event.api;
                         }}
                     />
                 </Col>
