@@ -1,6 +1,6 @@
 export interface AppGridColDefParams {
     onPressDelete: (id: number) => void;
-    editLink: string;
+    editLink?: string;
     addLink?: string;
     ui?: string;
 }
