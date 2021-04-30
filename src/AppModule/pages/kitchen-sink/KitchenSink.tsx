@@ -94,13 +94,13 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     sm="4"
                     lg="4"
                     xl="4"
-                    name="passsword"
+                    name="password"
                     label="Password"
                     placeholder="Input password"
                     description="hello this is description"
                     maxCount={150}
                     errorMessage="This field is required"
-                    isInvalid={true}
+                    isValid={true}
                     control={control}
                 />
                 <hr className="col-12" />
