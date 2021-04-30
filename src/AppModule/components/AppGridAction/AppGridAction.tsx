@@ -23,18 +23,6 @@ export const AppGridAction: FC<AppGridActionParams> = ({
     };
     return (
         <div>
-            {enableDelete ? (
-                <a
-                    href="#"
-                    className={"mr-3"}
-                    onClick={() => {
-                        setShow(true);
-                    }}
-                >
-                    <AppIcon name={"delete"} />
-                </a>
-            ) : null}
-
             <Link className={"mr-3"} to={`${editLink}${value}`}>
                 <AppIcon name={"edit"} />
             </Link>
@@ -56,6 +44,18 @@ export const AppGridAction: FC<AppGridActionParams> = ({
             ) : (
                 <></>
             )}
+
+            <a
+                href="#"
+                className={enableDelete ? "" : "disabled text-muted"}
+                onClick={() => {
+                    if (enableDelete) {
+                        setShow(true);
+                    }
+                }}
+            >
+                <AppIcon name={"delete"} />
+            </a>
             {/* TODO: move it to grid or else, otherwise repeat multiple times on rows, on iterations */}
             <AppModal
                 show={show}
