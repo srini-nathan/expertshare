@@ -14,7 +14,7 @@ export interface AppGridPaginationProps {
 }
 
 export const AppGridPagination: FC<AppGridPaginationProps> = ({
-    itemsPerPage = 1,
+    itemsPerPage = 30,
     totalItems = 0,
     active = 1,
     firstLastCtrl = false,
