@@ -5,6 +5,7 @@ import {
     RegisterPage,
     ForgotPasswordPage,
     ForgotPasswordConfirmationPage,
+    ResetPasswordPage,
 } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
 
@@ -23,6 +24,7 @@ export const routers: ModuleRouter[] = [
                     <ForgotPasswordConfirmationPage
                         path={"forgot-password-email-confirmation"}
                     />
+                    <ResetPasswordPage path={"reset-password"} />
                 </Router>
             );
         },
