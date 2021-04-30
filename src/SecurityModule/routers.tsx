@@ -1,6 +1,11 @@
 import React from "react";
 import { Redirect, Router } from "@reach/router";
-import { LoginPage, RegisterPage, ForgotPasswordPage } from "./pages";
+import {
+    LoginPage,
+    RegisterPage,
+    ForgotPasswordPage,
+    ForgotPasswordConfirmationPage,
+} from "./pages";
 import { ModuleRouter } from "../AppModule/models";
 
 export const routers: ModuleRouter[] = [
@@ -15,6 +20,9 @@ export const routers: ModuleRouter[] = [
                     <LoginPage path={"login"} />
                     <RegisterPage path={"register"} />
                     <ForgotPasswordPage path={"forgot-password"} />
+                    <ForgotPasswordConfirmationPage
+                        path={"forgot-password-email-confirmation"}
+                    />
                 </Router>
             );
         },
