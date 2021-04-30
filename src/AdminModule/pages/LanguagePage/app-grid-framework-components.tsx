@@ -15,10 +15,6 @@ export const appGridFrameworkComponents = {
         const { data } = params;
         const { id, name, isActive, isDefault } = data as Language;
 
-        if (isDefault) {
-            return <></>;
-        }
-
         return (
             <AppSwitch
                 name={`${name}-${id}`}
@@ -30,6 +26,7 @@ export const appGridFrameworkComponents = {
                         isActive: event.currentTarget.checked,
                     }).then();
                 }}
+                disabled={isDefault}
             />
         );
     },
