@@ -13,11 +13,6 @@ export const appGridColDef = ({
         filter: "text",
     },
     {
-        headerName: "Client",
-        field: "client",
-        sortable: false,
-    },
-    {
         headerName: "Is Generated",
         field: "isGenerated",
         sortable: false,
