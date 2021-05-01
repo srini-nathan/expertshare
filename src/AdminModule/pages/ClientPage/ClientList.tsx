@@ -17,9 +17,10 @@ import {
     buildFilterParams,
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
+import { appGridConfig } from "../../../AppModule/config";
+
 import { ClientApi } from "../../apis";
 import { Client } from "../../models";
-import { appGridConfig } from "../../../AppModule/config";
 import { errorToast, successToast } from "../../../AppModule/utils";
 
 export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
