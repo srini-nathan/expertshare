@@ -4,18 +4,25 @@ import {
     GridApi,
     GridReadyEvent,
     IServerSideDatasource,
+    PaginationChangedEvent,
     ServerSideStoreType,
 } from "ag-grid-community";
 import { ColumnApi } from "ag-grid-community/dist/lib/columnController/columnApi";
-import { PaginationChangedEvent } from "ag-grid-community/dist/lib/events";
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
-import { AppGridPagination, AppGridNoRowsOverlay } from "../../components";
+import { Col, Row } from "react-bootstrap";
+import {
+    AppGridPagination,
+    AppGridNoRowsOverlay,
+    AppFormDropdown,
+} from "../../components";
 import { appGridConfig } from "../../config";
+import { AppGridPageSizeOption } from "../../models";
 
 import "ag-grid-enterprise";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import "./assets/scss/style.scss";
+import { defaultPageSize, pageSizeOptions } from "./app-grid-helpers";
 
 export interface AppGridProps {
     columnDef: ColDef[];
@@ -34,8 +41,9 @@ export const AppGrid: FC<AppGridProps> = ({
 }) => {
     const [gridApi, setGridApi] = useState<GridApi>();
     const [, setGridColumnApi] = useState<ColumnApi>();
-
+    const [pageSize, setPageSize] = useState<number>(appGridConfig.pageSize);
     const [active, setActive] = useState<number>(1);
+
     const onGridReady = (event: GridReadyEvent) => {
         if (onReady) {
             onReady(event);
@@ -52,7 +60,7 @@ export const AppGrid: FC<AppGridProps> = ({
 
     return (
         <React.Fragment>
-            <div className="client-list">
+            <div className="app-grid">
                 <div className="ag-theme-alpine">
                     <AgGridReact
                         frameworkComponents={{
@@ -68,9 +76,9 @@ export const AppGrid: FC<AppGridProps> = ({
                         rowHeight={62}
                         rowModelType={"serverSide"}
                         serverSideStoreType={ServerSideStoreType.Partial}
-                        paginationPageSize={appGridConfig.pageSize}
+                        paginationPageSize={pageSize}
                         suppressPaginationPanel={true}
-                        cacheBlockSize={appGridConfig.pageSize}
+                        cacheBlockSize={pageSize}
                         onPaginationChanged={onPaginationChanged}
                         pagination={true}
                         getRowNodeId={(item) => {
@@ -90,13 +98,33 @@ export const AppGrid: FC<AppGridProps> = ({
                     />
                 </div>
                 <br />
-                <AppGridPagination
-                    totalItems={totalItems}
-                    active={active}
-                    onClick={(pageNumber) => {
-                        gridApi?.paginationGoToPage(pageNumber - 1);
-                    }}
-                />
+                <Row>
+                    <Col>
+                        <AppFormDropdown
+                            id={"pageSize"}
+                            defaultValue={defaultPageSize()}
+                            options={pageSizeOptions()}
+                            menuPlacement={"top"}
+                            onChange={(selectedValue) => {
+                                const {
+                                    value,
+                                } = selectedValue as AppGridPageSizeOption;
+                                gridApi?.paginationSetPageSize(value);
+                                setPageSize(value);
+                            }}
+                        />
+                    </Col>
+                    <Col>
+                        <AppGridPagination
+                            itemsPerPage={pageSize}
+                            totalItems={totalItems}
+                            active={active}
+                            onClick={(pageNumber) => {
+                                gridApi?.paginationGoToPage(pageNumber - 1);
+                            }}
+                        />
+                    </Col>
+                </Row>
             </div>
         </React.Fragment>
     );

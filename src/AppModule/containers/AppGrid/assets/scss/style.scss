@@ -1,7 +1,7 @@
 @import "../../../../assets/scss/screens-sizes";
 @import "./../../../../assets/scss/variables";
 
-.client-list {
+.app-grid {
     min-height: 100vh;
 
     &.table-responsive {
@@ -57,8 +57,8 @@
 
         .ag-sort-ascending-icon,
         .ag-sort-descending-icon {
-            display: block !important;
             position: relative;
+            display: block !important;
             color: var(--primary) !important;
 
             &.ag-hidden {
@@ -67,13 +67,13 @@
         }
 
         .ag-sort-ascending-icon:not(.ag-hidden) {
-            &+.ag-hidden {
+            & + .ag-hidden {
                 color: var(--primary) !important;
             }
         }
 
         .ag-sort-descending-icon:not(.ag-hidden) {
-            &+.ag-hidden {
+            & + .ag-hidden {
                 color: var(--primary) !important;
             }
         }
@@ -87,7 +87,7 @@
             bottom: -9px;
             left: -6px;
 
-            &:before {
+            &::before {
                 //content: "\f128" !important;
             }
         }
@@ -97,7 +97,7 @@
             top: -11px;
             left: 0;
 
-            &:before {
+            &::before {
                 //content: "\f12b" !important;
             }
         }
@@ -131,9 +131,9 @@
                     }
 
                     a {
-                        text-decoration: none;
                         width: 44px;
                         height: 44px;
+                        text-decoration: none;
                     }
                 }
 
