@@ -1,37 +1,40 @@
 import React, { FC } from "react";
-import Select from "react-select";
+import Select, { MenuPlacement } from "react-select";
 import { ActionMeta, ValueType } from "react-select/src/types";
-import { SimpleObject } from "../../models";
+import { PrimitiveObject } from "../../models";
 import "./assets/scss/style.scss";
 
 export interface AppFormDropdownProps {
     id: string;
-    value: any;
+    defaultValue: any;
     placeholder?: string;
     onChange?: (
-        value: ValueType<SimpleObject<string>, boolean>,
-        actionMeta: ActionMeta<SimpleObject<string>>
+        value: ValueType<PrimitiveObject, boolean>,
+        actionMeta: ActionMeta<PrimitiveObject>
     ) => void;
     size?: "lg" | "sm";
-    options: SimpleObject<string>[];
+    options: PrimitiveObject[];
+    menuPlacement?: MenuPlacement;
 }
 
 export const AppFormDropdown: FC<AppFormDropdownProps> = ({
     id,
-    value,
+    defaultValue,
     placeholder = "",
     onChange = () => {},
     options,
+    menuPlacement = "auto",
 }): JSX.Element => {
     return (
         <Select
             options={options}
-            value={value}
+            defaultValue={defaultValue}
             id={id}
             onChange={onChange}
             placeholder={placeholder}
             className="custom-select-container"
             classNamePrefix="custom-select"
+            menuPlacement={menuPlacement}
         />
     );
 };
