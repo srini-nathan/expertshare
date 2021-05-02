@@ -16,13 +16,14 @@ import {
     AppFormRadioSwitch,
     AppFormTextArea,
     AppLoader,
+    AppCard,
+    AppFormInput,
+    AppFormCheckBox,
 } from "../../../AppModule/components";
 import { ListResponse } from "../../../AppModule/models";
 import { sweetSuccess } from "../../../AppModule/components/Util";
 import { ContainerApi } from "../../apis/ContainerApi";
 import { errorToast, validation } from "../../../AppModule/utils";
-import { AppFormInput } from "../../../AppModule/components/AppFormInput";
-import { AppFormCheckBox } from "../../../AppModule/components/AppFormCheckBox";
 import "./assets/scss/container_add_edit_style.scss";
 
 const validationSchema = Yup.object().shape({
@@ -325,83 +326,111 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                 onSubmit={handleSubmit(onSubmit)}
                                 onReset={reset}
                             >
-                                <Form.Row>
-                                    <AppFormInput
-                                        name={"domain"}
-                                        label={"Domain"}
-                                        required={true}
-                                        withCounter={true}
-                                        {...validation(
-                                            "domain",
-                                            formState,
-                                            !isAddMode
-                                        )}
-                                        errorMessage={errors.domain?.message}
-                                        value={container.domain}
-                                        control={control}
-                                    />
-                                    <AppFormInput
-                                        name={"containerGroup"}
-                                        label={"Container Group"}
-                                        required={true}
-                                        withCounter={true}
-                                        {...validation(
-                                            "containerGroup",
-                                            formState,
-                                            !isAddMode
-                                        )}
-                                        errorMessage={
-                                            errors.containerGroup?.message
-                                        }
-                                        value={container.containerGroup}
-                                        control={control}
-                                    />
-                                    <AppFormTextArea
-                                        name={"notes"}
-                                        label={"Notes"}
-                                        required={false}
-                                        withCounter={true}
-                                        {...validation(
-                                            "notes",
-                                            formState,
-                                            !isAddMode
-                                        )}
-                                        errorMessage={errors.notes?.message}
-                                        value={container.notes}
-                                        control={control}
-                                    />
-                                </Form.Row>
-                                <Form.Row>
-                                    <AppFormCheckBox
-                                        className="container-checkbox"
-                                        name={"isActive"}
-                                        label={"Active"}
-                                        labelPosition={"top"}
-                                        value={1}
-                                        defaultChecked={true}
-                                        register={register}
-                                    />
-                                </Form.Row>
-                                <hr className="col-12 mb-5" />
-                                <div className="row m-0 px-0 px-xl-3 d-flex align-items-start container">
-                                    <AppFormRadioSwitch
-                                        fieldName={"storage"}
-                                        radioValue={"S3"}
-                                        control={control}
-                                        label={"AWS S3 Bucket"}
-                                    />
-                                    <AppFormRadioSwitch
-                                        fieldName={"storage"}
-                                        radioValue={"Local"}
-                                        control={control}
-                                        label={"Local"}
-                                        defaultChecked={true}
-                                    />
-                                </div>
-                                {storage === "S3" ? (
-                                    <>
-                                        <div className="row m-0 px-0 mt-2 d-flex align-items-start container">
+                                <AppCard title="Details">
+                                    <Form.Row>
+                                        <Col md={6} sm={12}>
                                             <AppFormInput
+                                                className="pl-0"
+                                                md={12}
+                                                lg={12}
+                                                sm={12}
+                                                xl={12}
+                                                name={"domain"}
+                                                label={"Domain"}
+                                                required={true}
+                                                withCounter={true}
+                                                {...validation(
+                                                    "domain",
+                                                    formState,
+                                                    !isAddMode
+                                                )}
+                                                errorMessage={
+                                                    errors.domain?.message
+                                                }
+                                                value={container.domain}
+                                                control={control}
+                                            />
+                                            <AppFormInput
+                                                className="pl-0"
+                                                md={12}
+                                                lg={12}
+                                                sm={12}
+                                                xl={12}
+                                                name={"containerGroup"}
+                                                label={"Container Group"}
+                                                required={true}
+                                                withCounter={true}
+                                                {...validation(
+                                                    "containerGroup",
+                                                    formState,
+                                                    !isAddMode
+                                                )}
+                                                errorMessage={
+                                                    errors.containerGroup
+                                                        ?.message
+                                                }
+                                                value={container.containerGroup}
+                                                control={control}
+                                            />
+                                        </Col>
+                                        <Col md={6} sm={12}>
+                                            <AppFormCheckBox
+                                                className="container-checkbox"
+                                                name={"isActive"}
+                                                label={"Active"}
+                                                labelPosition={"top"}
+                                                value={1}
+                                                defaultChecked={true}
+                                                register={register}
+                                            />
+                                            <AppFormTextArea
+                                                className="pr-0"
+                                                md={12}
+                                                lg={12}
+                                                sm={12}
+                                                xl={12}
+                                                name={"notes"}
+                                                label={"Notes"}
+                                                required={false}
+                                                withCounter={true}
+                                                {...validation(
+                                                    "notes",
+                                                    formState,
+                                                    !isAddMode
+                                                )}
+                                                errorMessage={
+                                                    errors.notes?.message
+                                                }
+                                                value={container.notes}
+                                                control={control}
+                                            />
+                                        </Col>
+                                    </Form.Row>
+                                </AppCard>
+                                <AppCard title="Storage">
+                                    <Row className="p-3">
+                                        <AppFormRadioSwitch
+                                            fieldName={"storage"}
+                                            radioValue={"S3"}
+                                            control={control}
+                                            label={"AWS S3 Bucket"}
+                                            md={"2"}
+                                        />
+                                        <AppFormRadioSwitch
+                                            fieldName={"storage"}
+                                            radioValue={"Local"}
+                                            control={control}
+                                            label={"Local"}
+                                            defaultChecked={true}
+                                            md={"2"}
+                                        />
+                                    </Row>
+                                    {storage === "S3" ? (
+                                        <Row className="mt-2">
+                                            <AppFormInput
+                                                md={"6"}
+                                                lg={"6"}
+                                                xl={"6"}
                                                 name={"bucketKey"}
                                                 label={"AWS S3 Bucket Key"}
                                                 required={true}
@@ -419,6 +448,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                             />
 
                                             <AppFormInput
+                                                md={"6"}
+                                                lg={"6"}
+                                                xl={"6"}
                                                 name={"bucketSecret"}
                                                 label={"AWS S3 Bucket Secret"}
                                                 required={true}
@@ -436,6 +468,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                             />
 
                                             <AppFormInput
+                                                md={"6"}
+                                                lg={"6"}
+                                                xl={"6"}
                                                 name={"bucketName"}
                                                 label={"AWS S3 Bucket Name"}
                                                 required={true}
@@ -451,62 +486,51 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                                 value={container.bucketName}
                                                 control={control}
                                             />
-                                        </div>
-                                    </>
-                                ) : (
-                                    <></>
-                                )}
-                                <hr className="col-12 my-5" />
-                                <div className="row mx-0 mb-2">
-                                    <div className="col-12 mt-2 px-0 pl-xl-3">
-                                        <div className="col-12 light-label theme-label-clr px-0 pb-1 mb-3">
-                                            Default Packages
-                                        </div>
-                                    </div>
-                                    <div className="edit-client-packages w-100">
-                                        <div className="d-flex flex-wrap">
-                                            {packages.map((e) => {
-                                                return (
-                                                    <AppFormCheckBox
-                                                        key={e.id}
-                                                        name={e.packageKey.replace(
-                                                            ".",
-                                                            "_"
-                                                        )}
-                                                        label={e.packageKey}
-                                                        labelPosition={"left"}
-                                                        value={String(e.id)}
-                                                        register={register}
-                                                    />
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="row mx-0">
-                                    <div className="col-12 pl-xl-0">
-                                        <div className="edit-client-footer-wrap">
-                                            <div className="edit-client-footer w-100 d-flex flex-column flex-sm-row align-items-center justify-content-end">
-                                                <Link
-                                                    to={isAddMode ? "." : ".."}
-                                                    className="btn m-2 btn-secondary"
-                                                >
-                                                    Cancel
-                                                </Link>
-                                                <button
-                                                    type="submit"
-                                                    disabled={
-                                                        formState.isSubmitting
-                                                    }
-                                                    className="btn m-2 btn-primary"
-                                                >
-                                                    {formState.isSubmitting && (
-                                                        <span className="spinner-border spinner-border-sm mr-1" />
+                                        </Row>
+                                    ) : (
+                                        <></>
+                                    )}
+                                </AppCard>
+                                <AppCard title="Packages">
+                                    <Form.Row>
+                                        {packages.map((e) => {
+                                            return (
+                                                <AppFormCheckBox
+                                                    key={e.id}
+                                                    name={e.packageKey.replace(
+                                                        ".",
+                                                        "_"
                                                     )}
-                                                    Save
-                                                </button>
-                                            </div>
-                                        </div>
+                                                    label={e.packageKey.replace(
+                                                        ".",
+                                                        " "
+                                                    )}
+                                                    labelPosition={"left"}
+                                                    value={String(e.id)}
+                                                    register={register}
+                                                />
+                                            );
+                                        })}
+                                    </Form.Row>
+                                </AppCard>
+                                <div className="edit-client-footer-wrap p-0 w-100 ">
+                                    <div className="edit-client-footer py-4 w-100 d-flex flex-column flex-sm-row align-items-center justify-content-end">
+                                        <Link
+                                            to={isAddMode ? "." : ".."}
+                                            className="btn btn-secondary col-auto mr-0 ml-auto"
+                                        >
+                                            Cancel
+                                        </Link>
+                                        <button
+                                            type="submit"
+                                            disabled={formState.isSubmitting}
+                                            className="btn btn-primary col-auto ml-3 mr-2"
+                                        >
+                                            {formState.isSubmitting && (
+                                                <span className="spinner-border spinner-border-sm mr-1" />
+                                            )}
+                                            Save
+                                        </button>
                                     </div>
                                 </div>
                             </Form>

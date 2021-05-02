@@ -8,6 +8,9 @@ input.form-control {
     color: var(--input-fg-clr);
     border: 1px solid var(--input-border-clr);
     border-radius: var(--border-radius);
+    height: 36px;
+    font-size: 14px;
+    font-weight: 400;
 
     &:focus {
         background-color: var(--input-bg-clr);
@@ -24,8 +27,8 @@ input.form-control {
     position: relative;
     padding-bottom: 3px;
     font-size: 12px;
-    font-weight: 400;
-    color: var(--secondary-70);
+    font-weight: 700;
+    color: var(--secondary);
 }
 
 .required {

@@ -9,6 +9,7 @@ import {
     AppTagSelect,
     AppFormTextArea,
     AppLoader,
+    AppCard,
     AppFormInputPassword,
 } from "../../components";
 import { SimpleObject } from "../../../AdminModule/models";
@@ -123,6 +124,14 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     isInvalid={true}
                     control={control}
                 />
+                <hr className="col-12" />
+
+                <AppCard
+                    title="Card Title"
+                    subtitle="This is bootstrap subtitle"
+                >
+                    <p>hello this is children</p>
+                </AppCard>
                 <hr className="col-12" />
                 {/* <AppFormRadioSwitch */}
                 {/*    required */}
