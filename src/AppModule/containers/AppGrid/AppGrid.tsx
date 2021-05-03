@@ -99,7 +99,7 @@ export const AppGrid: FC<AppGridProps> = ({
                 </div>
                 <br />
                 <Row>
-                    <Col>
+                    <Col md={3}>
                         <AppFormDropdown
                             id={"pageSize"}
                             defaultValue={defaultPageSize()}
