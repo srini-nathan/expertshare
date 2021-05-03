@@ -26,10 +26,11 @@
         align-items: center;
         text-align: right;
 
-        div.actions {
+        .actions {
             display: flex;
 
-            a {
+            a,
+            button {
                 display: flex;
                 align-items: center;
                 justify-content: center;

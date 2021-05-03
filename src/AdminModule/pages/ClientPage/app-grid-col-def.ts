@@ -1,10 +1,9 @@
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
-import { AppGridColDefParams } from "../../../AppModule/models";
-import { ClientApi } from "../../apis";
+import { CellActionParams } from "../LanguagePage";
 
 export const appGridColDef = ({
     onPressDelete,
-}: AppGridColDefParams): ColDef[] => [
+}: CellActionParams): ColDef[] => [
     {
         headerName: "Client",
         field: "name",
@@ -27,12 +26,7 @@ export const appGridColDef = ({
         resizable: false,
         maxWidth: 215,
         cellRendererParams: {
-            callback: onPressDelete,
-            editLink: ClientApi.CLIENT_LIST_PAGE_PATH,
-            addLink: ClientApi.CLIENT_NEW_PAGE_PATH,
-            listTree: true,
-            listTreeSubUrl: "container",
-            ui: "Client",
+            onPressDelete,
         },
     },
 ];

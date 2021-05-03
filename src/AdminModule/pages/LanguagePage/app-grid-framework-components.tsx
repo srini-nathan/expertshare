@@ -4,11 +4,12 @@ import {
     AppRadio,
     AppSwitch,
     AppGridAction,
+    AppGridActionProps,
 } from "../../../AppModule/components";
 import { Language } from "../../models";
 import { LanguageApi } from "../../apis";
 import { errorToast, successToast } from "../../../AppModule/utils";
-import { AppGridActionParams } from "../../../AppModule/models";
+import { CellActionWithRenderParams } from "./app-grid-action";
 
 export const appGridFrameworkComponents = {
     appSwitch: (params: ICellRendererParams): ReactElement => {
@@ -53,32 +54,26 @@ export const appGridFrameworkComponents = {
             ></AppRadio>
         );
     },
-    appGridActionRenderer: (params: AppGridActionParams): ReactElement => {
-        const {
-            value,
-            callback,
-            editLink,
-            addLink,
-            listTree,
-            listTreeSubUrl,
-            ui,
-            ...restProps
-        } = params;
-        const { data } = restProps;
-        const { isDefault } = data as Language;
+    appGridActionRenderer: (
+        params: CellActionWithRenderParams
+    ): ReactElement => {
+        const { data, onPressDelete } = params;
+        const { id, isDefault } = data as Language;
 
-        return (
-            <AppGridAction
-                value={value}
-                callback={callback}
-                editLink={editLink}
-                addLink={addLink}
-                listTree={listTree}
-                listTreeSubUrl={listTreeSubUrl}
-                ui={ui}
-                enableDelete={!isDefault}
-                {...restProps}
-            />
-        );
+        const props: AppGridActionProps = {
+            editAction: {
+                disable: isDefault,
+                url: `/admin/languages/${id}`,
+            },
+            deleteAction: {
+                disable: isDefault,
+                confirmation: "Are you sure want to delete ?",
+                onClick: () => {
+                    onPressDelete(id);
+                },
+            },
+        };
+
+        return <AppGridAction {...props} />;
     },
 };

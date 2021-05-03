@@ -7,16 +7,14 @@ interface AppModalProps {
     show: boolean;
     handleClose: () => void;
     handleDelete: () => void;
-    id: number;
-    ui: string;
     title?: string;
+    bodyContent: string;
 }
 export const AppModal: FC<AppModalProps> = ({
     show,
     handleClose,
     handleDelete,
-    id,
-    ui,
+    bodyContent,
     title = "Delete Action",
 }): JSX.Element => {
     return (
@@ -29,9 +27,7 @@ export const AppModal: FC<AppModalProps> = ({
             <Modal.Header closeButton>
                 <Modal.Title>{title}</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
-                Are you sure you want to delete the {ui} with id: {id}
-            </Modal.Body>
+            <Modal.Body>{bodyContent}</Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
                     No

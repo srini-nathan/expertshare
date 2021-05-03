@@ -1,7 +1,11 @@
 import React, { ReactElement } from "react";
 import { Badge } from "react-bootstrap";
 import { UserGroup } from "../../models";
-import { AppGridAction } from "../../../AppModule/components/AppGridAction";
+import {
+    AppGridAction,
+    AppGridActionProps,
+} from "../../../AppModule/components/AppGridAction";
+import { CellActionWithRenderParams } from "../LanguagePage";
 
 export const appGridFrameworkComponents = {
     appBooleanRender: (params: never): ReactElement => {
@@ -21,5 +25,24 @@ export const appGridFrameworkComponents = {
             </div>
         );
     },
-    appGridActionRenderer: AppGridAction,
+    appGridActionRenderer: (
+        params: CellActionWithRenderParams
+    ): ReactElement => {
+        const { data, onPressDelete } = params;
+        const { id } = data as UserGroup;
+
+        const props: AppGridActionProps = {
+            editAction: {
+                url: `/admin/user-groups/${id}`,
+            },
+            deleteAction: {
+                confirmation: "Are you sure want to delete ?",
+                onClick: () => {
+                    onPressDelete(id);
+                },
+            },
+        };
+
+        return <AppGridAction {...props} />;
+    },
 };

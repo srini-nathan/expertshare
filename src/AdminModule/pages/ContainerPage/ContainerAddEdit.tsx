@@ -252,7 +252,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         };
         await ContainerApi.create<Container, ContainerRequestData>(includeData);
         await sweetSuccess({ text: "Client saved successfully " });
-        await navigate(`/admin/client/${clientId}/container`);
+        await navigate(`/admin/clients/${clientId}/containers`);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

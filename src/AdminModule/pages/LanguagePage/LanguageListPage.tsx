@@ -103,8 +103,6 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
                         frameworkComponents={appGridFrameworkComponents}
                         columnDef={appGridColDef({
                             onPressDelete: handleDelete,
-                            editLink: "/admin/languages/",
-                            addLink: "/admin/languages/add",
                         })}
                         dataSource={getDataSource()}
                         totalItems={totalItems}

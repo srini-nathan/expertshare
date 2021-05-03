@@ -102,8 +102,6 @@ export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
                         frameworkComponents={appGridFrameworkComponents}
                         columnDef={appGridColDef({
                             onPressDelete: handleDelete,
-                            editLink: "/admin/user-groups/",
-                            ui: "User Group",
                         })}
                         dataSource={getDataSource()}
                         totalItems={totalItems}

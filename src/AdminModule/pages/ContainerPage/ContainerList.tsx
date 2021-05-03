@@ -114,7 +114,7 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
             <AppPageHeader
                 title={"Container"}
                 createLabel={"Create Container"}
-                createLink={"container/new"}
+                createLink={`/admin/clients/${clientId}/containers/new`}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}
                 showToolbar
@@ -126,7 +126,7 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
                         frameworkComponents={appGridFrameworkComponents}
                         columnDef={appGridColDef({
                             onPressDelete: handleDelete,
-                            editLink: `${ClientApi.CLIENT_LIST_PAGE_PATH}${clientId}/container/`,
+                            parentId: clientId,
                         })}
                         dataSource={getDataSource()}
                         totalItems={totalItems}

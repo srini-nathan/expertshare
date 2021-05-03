@@ -1,10 +1,10 @@
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
-import { AppGridColDefParams } from "../../../AppModule/models";
+import { CellActionParams } from "../LanguagePage";
 
 export const appGridColDef = ({
     onPressDelete,
-    editLink,
-}: AppGridColDefParams): ColDef[] => [
+    parentId,
+}: CellActionParams): ColDef[] => [
     {
         headerName: "Domain",
         field: "domain",
@@ -26,10 +26,8 @@ export const appGridColDef = ({
         headerClass: "action-header",
         maxWidth: 120,
         cellRendererParams: {
-            callback: onPressDelete,
-            addLink: undefined,
-            editLink,
-            ui: "Container",
+            onPressDelete,
+            parentId,
         },
     },
 ];

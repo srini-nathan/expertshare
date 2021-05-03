@@ -93,7 +93,7 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
             <AppPageHeader
                 title={"Clients"}
                 createLabel={"Create Client"}
-                createLink={"/admin/client/new"}
+                createLink={"/admin/clients/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}
                 showToolbar
