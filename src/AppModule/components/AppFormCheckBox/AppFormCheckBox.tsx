@@ -14,7 +14,7 @@ export interface AppFormCheckBoxProps {
 export const AppFormCheckBox: FC<AppFormCheckBoxProps> = ({
     label,
     name,
-    labelPosition,
+    labelPosition = "left",
     className,
     register,
     defaultChecked,
@@ -25,24 +25,31 @@ export const AppFormCheckBox: FC<AppFormCheckBoxProps> = ({
                 return "custom-checkbox d-flex flex-column align-items-center align-items-sm-start mb-3";
             case "left":
             default:
-                return "custom-checkbox theme-checkbox-block-bg-clr theme-checkbox-block-border-radius d-flex flex-column justify-content-end h-100 flex-sm-row text-center justify-content-sm-between align-items-center";
+                return "custom-checkbox d-flex flex-column  h-100 flex-sm-row text-center align-items-center";
         }
     };
 
     return (
-        <div className={`col-6 col-xl-4 pr-xl-5 mb-4 ${className}`}>
+        <div className={`col-6 mb-3 ${className}`}>
             <div className={renderClass()}>
-                <div className="normal-label theme-label-clr mb-1 mb-sm-0">
-                    {label}
-                </div>
+                {labelPosition === "top" && (
+                    <div className="normal-label theme-label-clr mb-1 mb-sm-0">
+                        {label}
+                    </div>
+                )}
                 <input
-                    className="d-none theme-checkbox-bg-clr"
+                    className="d-none"
                     type="checkbox"
                     id={name}
                     {...register(name)}
                     defaultChecked={defaultChecked}
                 />
                 <label className="position-relative mb-0" htmlFor={name} />
+                {labelPosition === "left" && (
+                    <div className="normal-label ml-3 mb-1 mb-sm-0">
+                        {label}
+                    </div>
+                )}
             </div>
         </div>
     );

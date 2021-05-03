@@ -18,6 +18,7 @@ export interface AppFormInputProps {
     label?: string;
     description?: string;
     errorMessage?: string;
+    className?: string;
     isInvalid?: boolean;
     isValid?: boolean;
     withCounter?: boolean;
@@ -33,6 +34,7 @@ export const AppFormInput: FC<AppFormInputProps> = ({
     errorMessage,
     label = "",
     type = "text",
+    className = "",
     description,
     sm = 12,
     md = 6,
@@ -66,6 +68,7 @@ export const AppFormInput: FC<AppFormInputProps> = ({
             lg={lg}
             xl={xl}
             controlId={controlId}
+            className={className}
         >
             {label?.length > 0 ? (
                 <Form.Label>

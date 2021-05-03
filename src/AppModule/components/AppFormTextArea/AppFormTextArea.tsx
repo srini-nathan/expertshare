@@ -13,6 +13,7 @@ export interface AppFormTextAreaProps {
     xl?: string | number;
     value?: string;
     placeholder?: string | boolean;
+    className?: string;
     required?: boolean;
     label?: string;
     description?: string;
@@ -32,6 +33,7 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
     placeholder,
     errorMessage,
     label = "",
+    className = "",
     description,
     sm = 12,
     md = 6,
@@ -65,6 +67,7 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
             sm={sm}
             lg={lg}
             xl={xl}
+            className={className}
             controlId={controlId}
         >
             {label?.length > 0 ? (
