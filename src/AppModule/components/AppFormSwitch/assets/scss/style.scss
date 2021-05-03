@@ -4,65 +4,79 @@
 .custom-switch {
     display: flex !important;
     padding-left: 0 !important;
-    &.lg  {
-        label{
-            width: 74px;
-            height: 44px;
-        }
-        [type="checkbox"] + label::before {
-            width: 34px;
+
+    &.lg {
+        label {
+            width: 70px;
             height: 36px;
         }
+
+        [type="checkbox"]+label::before {
+            width: 28px;
+            height: 28px;
+        }
     }
-    &.sm  {
-        label{
+
+    &.sm {
+        label {
             width: 40px;
             height: 24px;
         }
-        [type="checkbox"] + label::before {
+
+        [type="checkbox"]+label::before {
             top: 2px;
             width: 20px;
             height: 20px;
         }
-        [type="checkbox"]:checked + label::before{
+
+        [type="checkbox"]:checked+label::before {
             transform: translateX(54px);
         }
-        [type="checkbox"]:not(:checked) + label::before {
+
+        [type="checkbox"]:not(:checked)+label::before {
             transform: translateX(38px);
         }
     }
+
     label {
         margin: auto 0;
         cursor: pointer;
-        border-radius: $checkbox-block-border-radius;
+        border-radius: var(--border-radius);
         transition: all .2s;
     }
-    [type="checkbox"] + label::before {
+
+    [type="checkbox"]+label::before {
         position: absolute;
         display: block;
         content: "";
         border: none;
-        border-radius: $checkbox-block-border-radius;
+        border-radius: var(--border-radius);
         transition: all .2s;
         appearance: none;
     }
-    [type="checkbox"]:not(:checked) + label::before {
+
+    [type="checkbox"]:not(:checked)+label::before {
         transform: translateX(40px);
+        background-color: var(--primary-50);
     }
-    [type="checkbox"]:not(:checked) + label {
-        background-color: $checkbox-not-checked-bg;
+
+    [type="checkbox"]:not(:checked)+label {
+        background-color: var(--primary-20);
     }
+
     [type="checkbox"]:checked {
-        & + label{
-            background-color: $checkbox-checked-bg;
+        &+label {
+            background-color: var(--primary-20);
         }
-        & + label::before {
-            background-color: $checkbox-toggler-checked-clr;
+
+        &+label::before {
+            background-color: var(--primary);
             transform: translateX(72px);
         }
     }
+
     label::after,
-    [type="checkbox"]:checked + label::after{
+    [type="checkbox"]:checked+label::after {
         background-color: unset !important;
     }
 }

@@ -1,4 +1,4 @@
-@import "./../../assets/scss/variables";
+@import "../../../../assets/scss/variables";
 
 .custom-checkbox {
     display: flex;
@@ -7,6 +7,7 @@
     &.flex-sm-row {
         height: 61px;
         padding: 14px;
+        background-color: #fff;
         border-radius: 5px;
         box-shadow: 0 3px 9px var(--secondary-10);
 
