@@ -1,0 +1,10 @@
+@import "../../../../assets/scss/variables";
+
+.footer-action {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 -7px 40px var(--secondary-20);
+
+}
