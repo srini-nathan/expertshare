@@ -272,30 +272,24 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="row mx-0">
-                                    <div className="col-12 pl-xl-0">
-                                        <div className="edit-client-footer-wrap">
-                                            <div className="edit-client-footer w-100 d-flex flex-column flex-sm-row align-items-center justify-content-end">
-                                                <Link
-                                                    to={isAddMode ? "." : ".."}
-                                                    className="btn m-2 btn-secondary"
-                                                >
-                                                    Cancel
-                                                </Link>
-                                                <button
-                                                    type="submit"
-                                                    disabled={
-                                                        formState.isSubmitting
-                                                    }
-                                                    className="btn m-2 btn-primary"
-                                                >
-                                                    {formState.isSubmitting && (
-                                                        <span className="spinner-border spinner-border-sm mr-1" />
-                                                    )}
-                                                    Save
-                                                </button>
-                                            </div>
-                                        </div>
+                                <div className="edit-client-footer-wrap p-0 w-100 ">
+                                    <div className="edit-client-footer py-4 w-100 d-flex flex-column flex-sm-row align-items-center justify-content-end">
+                                        <Link
+                                            to={isAddMode ? "." : ".."}
+                                            className="btn m-2 btn-secondary"
+                                        >
+                                            Cancel
+                                        </Link>
+                                        <button
+                                            type="submit"
+                                            disabled={formState.isSubmitting}
+                                            className="btn m-2 btn-primary"
+                                        >
+                                            {formState.isSubmitting && (
+                                                <span className="spinner-border spinner-border-sm mr-1" />
+                                            )}
+                                            Save
+                                        </button>
                                     </div>
                                 </div>
                             </Form>
