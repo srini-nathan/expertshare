@@ -9,7 +9,6 @@ import {
     AppPageHeader,
     AppBreadcrumb,
     AppLoader,
-    AppFormSwitch,
     AppFormActions,
 } from "../../../AppModule/components";
 import { UserGroupEntity } from "../../models";
@@ -20,7 +19,6 @@ import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 
 const schema = yup.object().shape({
     name: yup.string().min(2).required(),
-    isGenerated: yup.boolean(),
 });
 
 export const UserGroupAddEditPage: FC<RouteComponentProps> = ({
@@ -114,14 +112,6 @@ export const UserGroupAddEditPage: FC<RouteComponentProps> = ({
                                 {...validation("name", formState, isEditMode)}
                                 errorMessage={errors.name?.message}
                                 value={data.name}
-                                control={control}
-                            />
-                            <AppFormSwitch
-                                name={"isGenerated"}
-                                label={"Is Generated ?"}
-                                {...validation("locale", formState, isEditMode)}
-                                errorMessage={errors.isGenerated?.message}
-                                value={data.isGenerated}
                                 control={control}
                             />
                         </Form.Row>
