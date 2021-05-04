@@ -1,0 +1,25 @@
+@import "../../../../assets/scss/variables";
+
+.nav-tabs {
+    border-bottom: unset !important;
+
+    a {
+        &.nav-item {
+            border-radius: var(--border-radius);
+            background-color: #fff;
+            margin: 3px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--secondary);
+            box-shadow: 0 3px 9px var(--secondary-10);
+
+            &:hover,
+            &.active {
+                background-color: var(--primary-20);
+                color: var(--primary);
+                border-radius: var(--border-radius);
+                border-color: transparent;
+            }
+        }
+    }
+}

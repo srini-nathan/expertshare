@@ -37,6 +37,7 @@ export const AppFormSwitch: FC<AppFormSwitchProps> = ({
     control,
     isValid,
     isInvalid,
+    defaultChecked = false,
 }): JSX.Element => {
     const controlId = id || name;
 
@@ -67,10 +68,11 @@ export const AppFormSwitch: FC<AppFormSwitchProps> = ({
             </Form.Label>
             <Controller
                 name={name}
-                defaultValue={value}
                 control={control}
+                defaultValue={value}
                 render={({ field }) => (
                     <FormCheck
+                        defaultChecked={defaultChecked}
                         inline={true}
                         type="switch"
                         className={classes}

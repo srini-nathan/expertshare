@@ -12,6 +12,7 @@ import {
     ContainerList,
     UserGroupListPage,
     UserGroupAddEditPage,
+    AdministrationGeneralSetting,
 } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
 import { ContainerAddEdit } from "./pages/ContainerPage/ContainerAddEdit";
@@ -26,7 +27,7 @@ export const routers: ModuleRouter[] = [
                 <Router>
                     <IndexPage path={"/"} />
                     <DesignPage path={"design"} />
-                    <SettingPage path={"settings"} />
+                    <SettingPage path={"setting"} />
                     <TranslationAddEdit path={"translations"} />
                     <ClientList path={"clients"} />
                     <ClientAddEdit path={"clients/new"} />
@@ -44,6 +45,7 @@ export const routers: ModuleRouter[] = [
                     <UserGroupListPage path={"user-groups"} />
                     <UserGroupAddEditPage path={"user-groups/new"} />
                     <UserGroupAddEditPage path={"user-groups/:id"} />
+                    <AdministrationGeneralSetting path={"settings"} />
                 </Router>
             );
         },

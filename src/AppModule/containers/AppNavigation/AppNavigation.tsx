@@ -34,7 +34,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const [subMenuItems] = useState<AppSubNavigationItemProps[]>([
         {
             label: "General Settings",
-            path: "#",
+            path: "/admin/settings",
             isActive: false,
             icon: {
                 name: "",
