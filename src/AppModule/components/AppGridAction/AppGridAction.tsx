@@ -98,7 +98,7 @@ const ClickAction: FC<ClickActionProps> = ({
             ) : null}
             <a
                 href="#"
-                className={disable ? "" : "disabled text-muted"}
+                className={disable ? "disabled text-muted" : ""}
                 onClick={(event) => {
                     event.preventDefault();
                     event.stopPropagation();
