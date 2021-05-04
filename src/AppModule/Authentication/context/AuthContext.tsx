@@ -6,7 +6,8 @@ import { AuthApi, LoginResponse } from "../../../SecurityModule/apis/AuthApi";
 import { AUTH_TOKEN_KEY, AUTH_USER_KEY } from "../../config/app-env";
 import { UserApi } from "../../apis/UserApi";
 
-interface IAuthSate {
+// @TODO: move this to separate file
+export interface IAuthSate {
     isAuthenticated: boolean | null;
     loginSuccess: boolean;
     showLogin: boolean;
@@ -16,7 +17,9 @@ interface IAuthSate {
     sessionFetched: boolean;
     ip: string | null;
     roles: string[];
+    // @TODO: rename this key to clientId
     cid: number | null;
+    // @TODO: rename this key to containerId
     cntid: number | null;
 }
 
