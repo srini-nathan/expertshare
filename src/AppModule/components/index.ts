@@ -21,4 +21,5 @@ export * from "./AppGridNoRowsOverlay";
 export * from "./AppGridPagination";
 export * from "./AppGridAction";
 export * from "./AppCard";
+export * from "./AppVimeoFrame";
 export * from "./AppFormCheckBox";

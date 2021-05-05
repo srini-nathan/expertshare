@@ -11,6 +11,7 @@ import {
     AppLoader,
     AppCard,
     AppFormInputPassword,
+    AppVimeoFrame,
 } from "../../components";
 import { SimpleObject } from "../../../AdminModule/models";
 
@@ -157,6 +158,10 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                         spinnerVariant="primary"
                     />
                 </div>
+            </Row>
+            <hr className="col-12" />
+            <Row>
+                <AppVimeoFrame url="https://vimeo.com/544191717" />
             </Row>
         </Fragment>
     );
