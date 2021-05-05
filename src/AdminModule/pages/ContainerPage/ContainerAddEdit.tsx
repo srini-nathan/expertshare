@@ -28,6 +28,7 @@ import "./assets/scss/container_add_edit_style.scss";
 
 const validationSchema = Yup.object().shape({
     domain: Yup.string().required("Domain is Required"),
+    name: Yup.string().required("Name is Required"),
     containerGroup: Yup.string().optional(),
     notes: Yup.string().optional(),
     bucketKey: Yup.string().when("storage", {
@@ -78,6 +79,8 @@ export interface ContainerRequestData {
 export class ContainerEntity {
     domain: string;
 
+    name: string;
+
     containerGroup?: string;
 
     storage: string;
@@ -100,6 +103,7 @@ export class ContainerEntity {
 
     constructor() {
         this.domain = "";
+        this.name = "";
         this.storage = "Local";
         this.packages = [];
     }
@@ -329,6 +333,27 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                 <AppCard title="Details">
                                     <Form.Row>
                                         <Col md={6} sm={12}>
+                                            <AppFormInput
+                                                className="pl-0"
+                                                md={12}
+                                                lg={12}
+                                                sm={12}
+                                                xl={12}
+                                                name={"name"}
+                                                label={"Name"}
+                                                required={true}
+                                                withCounter={true}
+                                                {...validation(
+                                                    "name",
+                                                    formState,
+                                                    !isAddMode
+                                                )}
+                                                errorMessage={
+                                                    errors.name?.message
+                                                }
+                                                value={container.name}
+                                                control={control}
+                                            />
                                             <AppFormInput
                                                 className="pl-0"
                                                 md={12}

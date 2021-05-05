@@ -27,8 +27,8 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             <AppFormInput
                 md={"6"}
                 sm={"12"}
-                lg={"6"}
-                xl={"6"}
+                lg={"4"}
+                xl={"4"}
                 name={properties.title}
                 value={defaultValue}
                 {...prps}
@@ -44,8 +44,8 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             <AppFormSwitch
                 md={"6"}
                 sm={"12"}
-                lg={"6"}
-                xl={"6"}
+                lg={"4"}
+                xl={"4"}
                 name={properties.title}
                 {...prps}
                 defaultChecked={defaultValue}
@@ -53,23 +53,39 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             />
         );
     };
+
+    const renderSection = () => {
+        return (
+            <Col className="section-title mb-3" sm={12}>
+                <h3>{items.label}</h3>
+            </Col>
+        );
+    };
+
+    const renderSeperator = () => {
+        return (
+            <Col className="section-title mb-3" sm={12}>
+                <hr />
+            </Col>
+        );
+    };
+    const renderBlank = () => {
+        return <Col md={6} sm={12} lg={4} xl={4}></Col>;
+    };
     const renderDropDown = () => {
         const dropDownOptions: PrimitiveObject[] = [];
         let dropDownDefaultValue = {};
 
         Object.keys(items.options.choices).forEach((key) => {
             dropDownOptions.push({
-                label: key,
+                label: items.options.choices[key],
                 name: properties.title,
-                value: items.options.choices[key],
+                value: key,
             });
-            if (
-                items.options.defaultValue.toUpperCase() ===
-                items.options.choices[key].toUpperCase()
-            )
+            if (items.options.defaultValue.toUpperCase() === key.toUpperCase())
                 dropDownDefaultValue = {
-                    label: key,
-                    value: items.options.choices[key],
+                    label: items.options.choices[key],
+                    value: key,
                 };
         });
         const prps = {
@@ -79,10 +95,10 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
         return (
             <Form.Group
                 as={Col}
-                md={6}
-                sm={12}
-                lg={6}
-                xl={6}
+                md={"6"}
+                sm={"12"}
+                lg={"4"}
+                xl={"4"}
                 controlId={properties.title}
             >
                 <Form.Label>{items.label}</Form.Label>
@@ -99,8 +115,14 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                 return renderDropDown();
             case "SWITCH":
                 return renderSwitch();
+            case "SECTION":
+                return renderSection();
+            case "SEPERATOR":
+                return renderSeperator();
+            case "BLANK":
+                return renderBlank();
             default:
-                return <Col md={6} sm={12} lg={6} xl={6}></Col>;
+                return <></>;
         }
     };
 

@@ -1,5 +1,6 @@
 import { BaseEntity } from "../../../AppModule/models";
 import { Package } from "./Package";
+import { ContainerConfiguration } from "./ContainerConfiguration";
 
 export interface Container extends BaseEntity {
     domain: string;
@@ -11,5 +12,8 @@ export interface Container extends BaseEntity {
     isActive: boolean;
     client: string;
     configuration: string[];
+    designConfiguration: string[];
+    configurationTypes: ContainerConfiguration;
+    designConfigurationTypes: ContainerConfiguration;
     packages: Package[];
 }

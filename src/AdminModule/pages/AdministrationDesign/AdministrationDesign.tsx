@@ -7,8 +7,6 @@ import * as Yup from "yup";
 import {
     AppPageHeader,
     AppCard,
-    AppTabs,
-    AppTab,
     AppFormElementGenerator,
 } from "../../../AppModule/components";
 import { AuthContext } from "../../../AppModule/Authentication/context/AuthContext";
@@ -19,16 +17,11 @@ import { sweetSuccess } from "../../../AppModule/components/Util";
 const parseData = (data: ContainerConfiguration) => {
     const items: any = [];
     Object.keys(data).forEach((key) => {
-        const objects: any = [];
         Object.keys(data[key]).forEach((subkey) => {
-            objects.push({
+            items.push({
                 title: subkey,
                 items: data[key][subkey],
             });
-        });
-        items.push({
-            title: key,
-            fields: objects,
         });
     });
     return items;
@@ -36,28 +29,27 @@ const parseData = (data: ContainerConfiguration) => {
 const validationSchema = Yup.object().shape({});
 
 class ContainerEntity {
-    configuration?: ContainerFormType;
+    designConfiguration?: ContainerFormType;
 
     constructor() {
-        this.configuration = {};
+        this.designConfiguration = {};
     }
 }
 interface ContainerRequestData {
-    configuration?: ContainerFormType;
+    designConfiguration?: ContainerFormType;
 }
 
 interface ContainerFormType {
     [key: string]: string | boolean;
 }
 
-export const AdministrationGeneralSetting: FC<RouteComponentProps> = (): JSX.Element => {
+export const AdministrationDesign: FC<RouteComponentProps> = (): JSX.Element => {
     const { state } = React.useContext(AuthContext);
     const { cntid } = state;
     const [configuration, setConfiguration] = React.useState<any>();
     const [containerConfiguration, setContainerConfiguration] = React.useState<
         string[]
     >();
-    const [activeTab, setActiveTab] = React.useState<string>("");
 
     const { control, handleSubmit, formState } = useForm({
         resolver: yupResolver(validationSchema),
@@ -65,7 +57,7 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = (): JSX.Ele
     });
 
     const buildContainer = (data: ContainerFormType): ContainerRequestData => {
-        return { configuration: data };
+        return { designConfiguration: data };
     };
     const onSubmit = async (formData: ContainerFormType) => {
         await ContainerApi.update<ContainerEntity, ContainerRequestData>(
@@ -78,64 +70,49 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = (): JSX.Ele
     useEffect(() => {
         if (cntid) {
             ContainerApi.findById<Container>(cntid).then((res) => {
-                setContainerConfiguration(res.configuration);
-                setConfiguration(parseData(res.configurationTypes));
+                setContainerConfiguration(res.designConfiguration);
+                setConfiguration(parseData(res.designConfigurationTypes));
             });
         }
     }, []);
 
-    const renderTabs = () => {
-        if (configuration?.length > 0 && activeTab === "")
-            setActiveTab(`${configuration[0].title}_key`);
-
+    const renderConfigs = () => {
         return (
-            configuration &&
-            configuration.map((e: any) => {
-                return (
-                    <AppTab eventKey={`${e.title}_key`} title={e.title}>
-                        <Col md={12} className="p-0 mt-4">
-                            <AppCard>
-                                <Row>
-                                    {e.fields &&
-                                        e.fields.map((j: any) => {
-                                            let defaultValue = "";
-                                            if (
-                                                containerConfiguration &&
-                                                j.title in
-                                                    containerConfiguration
-                                            )
-                                                defaultValue =
-                                                    containerConfiguration[
-                                                        j.title
-                                                    ];
-                                            return (
-                                                <AppFormElementGenerator
-                                                    properties={j}
-                                                    defaultValue={defaultValue}
-                                                    control={control}
-                                                />
-                                            );
-                                        })}
-                                </Row>
-                            </AppCard>
-                        </Col>
-                    </AppTab>
-                );
-            })
+            <Col md={12} className="p-0">
+                <AppCard>
+                    <Row>
+                        {configuration &&
+                            configuration.map((j: any) => {
+                                let defaultValue = "";
+                                if (
+                                    containerConfiguration &&
+                                    j.title in containerConfiguration
+                                )
+                                    defaultValue =
+                                        containerConfiguration[j.title];
+                                return (
+                                    <AppFormElementGenerator
+                                        properties={j}
+                                        defaultValue={defaultValue}
+                                        control={control}
+                                    />
+                                );
+                            })}
+                    </Row>
+                </AppCard>
+            </Col>
         );
     };
     return (
         <Fragment>
-            <AppPageHeader title={"Administration"} />
-            <Row className="pb-5">
+            <AppPageHeader title={"Design"} />
+            <Row>
                 <Form
                     noValidate
                     onSubmit={handleSubmit(onSubmit)}
                     className="w-100"
                 >
-                    <AppTabs onSelect={setActiveTab} activeKey={activeTab}>
-                        {renderTabs()}
-                    </AppTabs>
+                    {renderConfigs()}
                     <div className="edit-client-footer-wrap p-0 w-100 ">
                         <div className="edit-client-footer py-4 w-100 d-flex flex-column flex-sm-row align-items-center justify-content-end">
                             <button

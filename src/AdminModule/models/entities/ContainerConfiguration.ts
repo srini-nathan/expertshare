@@ -1,5 +1,5 @@
 export interface ContainerConfiguration {
-    [key: string]: any;
+    [key: string]: TabItem;
 }
 
 export interface TabItem {

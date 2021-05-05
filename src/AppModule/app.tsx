@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { Redirect, RouteComponentProps, Router, navigate } from "@reach/router";
 import { appRouters } from "./bootstrap";
 import { DashboardLayout } from "./layouts/DashboardLayout";
+import { AppConfiguration } from "./layouts/AppConfiguration";
 import { AuthLayout } from "./layouts/AuthLayout";
 import { ModuleRouter } from "./models";
 import {
@@ -47,15 +48,17 @@ const App = (): JSX.Element => {
 
     if (state.isAuthenticated) {
         return (
-            <DashboardLayout>
-                <Router>
-                    <Redirect from="/" to="home" noThrow />
-                    <Home path="home" />
-                    {dashboardRoutes.map(({ RouterPlug, key, path }) => {
-                        return <RouterPlug key={key} path={path} />;
-                    })}
-                </Router>
-            </DashboardLayout>
+            <AppConfiguration state={state}>
+                <DashboardLayout>
+                    <Router>
+                        <Redirect from="/" to="home" noThrow />
+                        <Home path="home" />
+                        {dashboardRoutes.map(({ RouterPlug, key, path }) => {
+                            return <RouterPlug key={key} path={path} />;
+                        })}
+                    </Router>
+                </DashboardLayout>
+            </AppConfiguration>
         );
     }
 
