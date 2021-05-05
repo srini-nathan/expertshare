@@ -22,3 +22,4 @@ export * from "./AppGridPagination";
 export * from "./AppGridAction";
 export * from "./AppCard";
 export * from "./AppFormCheckBox";
+export * from "./AppYoutubeFrame";

@@ -11,6 +11,7 @@ import {
     AppLoader,
     AppCard,
     AppFormInputPassword,
+    AppYoutubeFrame,
 } from "../../components";
 import { SimpleObject } from "../../../AdminModule/models";
 
@@ -157,6 +158,10 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                         spinnerVariant="primary"
                     />
                 </div>
+            </Row>
+            <hr className="col-12" />
+            <Row>
+                <AppYoutubeFrame incomeString="https://www.youtube.com/watch?v=y9j-BL5ocW8" />
             </Row>
         </Fragment>
     );
