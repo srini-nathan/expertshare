@@ -102,30 +102,54 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                 <AppButton block={true} type={"submit"}>
                                     Login
                                 </AppButton>
-                                <a
-                                    className={"btn btn-secondary"}
-                                    href={
-                                        "http://api.expertshare.site:8091/social/connect/google"
-                                    }
-                                >
-                                    Google
-                                </a>
-                                <a
-                                    className={"btn btn-secondary"}
-                                    href={
-                                        "http://api.expertshare.site:8091/social/connect/azure"
-                                    }
-                                >
-                                    Azure
-                                </a>
-                                <a
-                                    className={"btn btn-secondary"}
-                                    href={
-                                        "http://api.expertshare.site:8091/social/connect/linkedin"
-                                    }
-                                >
-                                    LinkedIn
-                                </a>
+                                <Row className={"mt-3"}>
+                                    <Col
+                                        sm={12}
+                                        className={
+                                            "text-center mb-3 normal-label"
+                                        }
+                                    >
+                                        <span>Or login with</span>
+                                    </Col>
+
+                                    <Col md={4} xl={4} lg={4} sm={12}>
+                                        <a
+                                            className={
+                                                "btn mb-3 btn-secondary justify-content-center social-media-button" +
+                                                " google"
+                                            }
+                                            href={
+                                                "http://api.expertshare.site:8091/social/connect/google"
+                                            }
+                                        >
+                                            Google
+                                        </a>
+                                    </Col>
+                                    <Col md={4} xl={4} lg={4} sm={12}>
+                                        <a
+                                            className={
+                                                "btn mb-3 btn-secondary justify-content-center social-media-button linkedin"
+                                            }
+                                            href={
+                                                "http://api.expertshare.site:8091/social/connect/linkedin"
+                                            }
+                                        >
+                                            LinkedIn
+                                        </a>
+                                    </Col>
+                                    <Col md={4} xl={4} lg={4} sm={12}>
+                                        <a
+                                            className={
+                                                "btn mb-3 btn-secondary justify-content-center social-media-button azure"
+                                            }
+                                            href={
+                                                "http://api.expertshare.site:8091/social/connect/azure"
+                                            }
+                                        >
+                                            Azure
+                                        </a>
+                                    </Col>
+                                </Row>
                             </Form>
                         </Col>
                     </div>
