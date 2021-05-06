@@ -11,6 +11,7 @@ import {
     AppLoader,
     AppCard,
     AppFormInputPassword,
+    AppDacastFrame,
 } from "../../components";
 import { SimpleObject } from "../../../AdminModule/models";
 
@@ -157,6 +158,15 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                         spinnerVariant="primary"
                     />
                 </div>
+            </Row>
+            <hr className="col-12" />
+            <Row>
+                <AppDacastFrame
+                    id="1552_f_297509"
+                    provider="dacast"
+                    width={640}
+                    height={390}
+                />
             </Row>
         </Fragment>
     );
