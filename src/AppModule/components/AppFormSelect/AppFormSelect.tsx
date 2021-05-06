@@ -3,6 +3,7 @@ import Select, { MenuPlacement } from "react-select";
 import { ActionMeta, ValueType } from "react-select/src/types";
 import { PrimitiveObject } from "../../models";
 import "bootstrap/dist/css/bootstrap.css";
+import "./assets/scss/style.scss";
 
 export interface AppFormSelectProps {
     id: string;
@@ -14,6 +15,7 @@ export interface AppFormSelectProps {
     ) => void;
     size?: "lg" | "sm";
     options: PrimitiveObject[];
+    value:any;
     menuPlacement?: MenuPlacement;
 }
 const customStyles = {
@@ -41,6 +43,7 @@ export const AppFormSelect: FC<AppFormSelectProps> = ({
     placeholder = "",
     onChange = () => {},
     options,
+    value,
     menuPlacement = "auto",
 }): JSX.Element => {
     return (
@@ -50,9 +53,10 @@ export const AppFormSelect: FC<AppFormSelectProps> = ({
             defaultValue={defaultValue}
             id={id}
             onChange={onChange}
+            value={value}
             placeholder={placeholder}
             styles={customStyles}
-            className="col-xl-12 col-lg-12 col-md-12 col-sm-12 form-control selectpicker mt-2 mb-2 ml-3"
+            className="col-xl-12 col-lg-12 col-md-12 col-sm-12 form-control custom-select mt-2 mb-2 ml-3"
             classNamePrefix="custom-select"
             menuPlacement={menuPlacement}
         />

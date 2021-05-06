@@ -12,7 +12,7 @@ import {
     AppFormActions,
     AppFormTextArea,
 } from "../../../AppModule/components";
-import { EmailEntity } from "../../models";
+import { Email, EmailEntity } from "../../models";
 import { EmailApi } from "../../apis";
 import { errorToast, successToast, validation } from "../../../AppModule/utils";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
@@ -53,9 +53,7 @@ export const EmailAddEditPage: FC<RouteComponentProps> = ({
 
     const [data, setData] = useState<EmailEntity>(new EmailEntity());
     const [themeList, setThemeList] = useState(defaultThemeList);
-    const [selectedTheme, setSelectedTheme] = useState<any>(
-        defaultThemeList[0]
-    );
+    const [selectedTheme, setSelectedTheme] = useState<any>(themeList[0]);
     const [loading, setLoading] = useState<boolean>(isEditMode);
 
     const {
@@ -86,11 +84,6 @@ export const EmailAddEditPage: FC<RouteComponentProps> = ({
                 } else if (errorMessage) {
                     errorToast(errorMessage);
                 } else {
-                    setThemeList(
-                        defaultThemeList.slice(
-                            defaultThemeList.indexOf(selectedTheme, 1)
-                        )
-                    );
                     nav("..").then(() => {
                         successToast(
                             isEditMode
@@ -104,6 +97,28 @@ export const EmailAddEditPage: FC<RouteComponentProps> = ({
     };
 
     useEffect(() => {
+        EmailApi.find<Email>().then(
+            ({ response, isNotFound, errorMessage }) => {
+                if (errorMessage) {
+                    errorToast(errorMessage);
+                } else if (isNotFound) {
+                    errorToast("Email template not exist");
+                } else if (response !== null) {
+                    const items = [...themeList];
+                    response.items.forEach((item) => {
+                        const obj = items.find(
+                            (itm) => itm.value === item.etKey
+                        ) || { id: "", value: "", label: "" };
+                        const index = items.indexOf(obj);
+                        if (index !== -1) {
+                            items.splice(index, 1);
+                        }
+                    });
+                    setThemeList(items);
+                }
+                setLoading(false);
+            }
+        );
         if (isEditMode) {
             EmailApi.getById<EmailEntity>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
@@ -113,7 +128,10 @@ export const EmailAddEditPage: FC<RouteComponentProps> = ({
                         errorToast("Email template not exist");
                     } else if (response !== null) {
                         setData(response);
-                        trigger();
+                        const val = defaultThemeList.find(
+                            (item) => response?.etKey === item.value
+                        ) || { id: "", value: "", label: "" };
+                        setThemeList([...themeList, val]);
                     }
                     setLoading(false);
                 }
@@ -165,6 +183,7 @@ export const EmailAddEditPage: FC<RouteComponentProps> = ({
                             }
                             placeholder={"Theme"}
                             options={themeList}
+                            value={selectedTheme}
                             onChange={(selectedValue) => {
                                 setSelectedTheme(selectedValue);
                             }}
