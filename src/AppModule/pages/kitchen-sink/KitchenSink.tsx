@@ -11,6 +11,7 @@ import {
     AppLoader,
     AppCard,
     AppFormInputPassword,
+    AppKnovioPlayer,
 } from "../../components";
 import { SimpleObject } from "../../../AdminModule/models";
 
@@ -157,6 +158,13 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                         spinnerVariant="primary"
                     />
                 </div>
+            </Row>
+            <Row>
+                <AppKnovioPlayer
+                    linkUrl="https://view.knowledgevision.com/presentation/e31fff7a14ee4a9aa82dca008384c32a"
+                    height={390}
+                    width={640}
+                />
             </Row>
         </Fragment>
     );
