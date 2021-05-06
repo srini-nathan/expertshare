@@ -1,6 +1,6 @@
 export * from "./IndexPage";
 export * from "./DesignPage";
-export * from "./SettingPage";
+export { SettingPage, EmailAddEditPage, EmailListPage } from "./SettingPage";
 export * from "./TranslationPage";
 export * from "./ClientPage";
 export * from "./LanguagePage";

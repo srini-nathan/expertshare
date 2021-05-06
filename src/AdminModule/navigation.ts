@@ -16,6 +16,13 @@ export const navigation: AppNavigationItemProps[] = [
         },
     },
     {
+        label: "Admin - Email",
+        path: "/admin/templates",
+        icon: {
+            name: "administrator",
+        },
+    },
+    {
         label: "Admin - Languages",
         path: "/admin/languages",
         icon: {
