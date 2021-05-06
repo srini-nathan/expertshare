@@ -13,6 +13,7 @@ import { AppAuthHeader, AppAuthFooter } from "../../components";
 import "./assets/scss/styles.scss";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { validation } from "../../../AppModule/utils";
+import { API_HOST } from "../../../AppModule/config/app-env";
 
 type LoginForm = {
     email: string;
@@ -25,6 +26,8 @@ const schema = yup.object().shape({
 });
 
 export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
+    // eslint-disable-next-line no-console
+    console.log(API_HOST);
     const { control, handleSubmit, formState } = useForm<LoginForm>({
         resolver: yupResolver(schema),
         mode: "all",
@@ -99,6 +102,30 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                 <AppButton block={true} type={"submit"}>
                                     Login
                                 </AppButton>
+                                <a
+                                    className={"btn btn-secondary"}
+                                    href={
+                                        "http://api.expertshare.site:8091/social/connect/google"
+                                    }
+                                >
+                                    Google
+                                </a>
+                                <a
+                                    className={"btn btn-secondary"}
+                                    href={
+                                        "http://api.expertshare.site:8091/social/connect/azure"
+                                    }
+                                >
+                                    Azure
+                                </a>
+                                <a
+                                    className={"btn btn-secondary"}
+                                    href={
+                                        "http://api.expertshare.site:8091/social/connect/linkedin"
+                                    }
+                                >
+                                    LinkedIn
+                                </a>
                             </Form>
                         </Col>
                     </div>
