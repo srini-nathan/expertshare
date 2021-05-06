@@ -56,16 +56,12 @@ export const EmailAddEditPage: FC<RouteComponentProps> = ({
     const [selectedTheme, setSelectedTheme] = useState<any>(themeList[0]);
     const [loading, setLoading] = useState<boolean>(isEditMode);
 
-    const {
-        control,
-        handleSubmit,
-        formState,
-        setError,
-        trigger,
-    } = useForm<EmailEntity>({
-        resolver: yupResolver(schema),
-        mode: "all",
-    });
+    const { control, handleSubmit, formState, setError } = useForm<EmailEntity>(
+        {
+            resolver: yupResolver(schema),
+            mode: "all",
+        }
+    );
 
     const onSubmit = (formData: EmailEntity) => {
         alert(JSON.stringify(formData));
@@ -133,13 +129,18 @@ export const EmailAddEditPage: FC<RouteComponentProps> = ({
                             (item) => response?.etKey === item.value
                         ) || { id: "", value: "", label: "" };
                         setSelectedTheme(val);
-                        trigger();
-                        const thm = [...themeList];
-                        if (thm.indexOf(val) === -1) {
-                            thm.push(val);
+                        if (themeList.indexOf(val) !== -1) {
+                            const thm = themeList.splice(
+                                themeList.indexOf(val),
+                                1
+                            );
+                            setTimeout(() => {
+                                setThemeList(thm);
+                            });
                         }
-                        alert(JSON.stringify(thm));
-                        setThemeList(thm);
+                        setTimeout(() => {
+                            setThemeList([...themeList, val]);
+                        });
                     }
                     setLoading(false);
                 }
