@@ -10,6 +10,7 @@ import {
     AppBreadcrumb,
     AppLoader,
     AppFormActions,
+    AppCard,
 } from "../../../AppModule/components";
 import { UserGroupEntity } from "../../models";
 import { UserGroupApi } from "../../apis";
@@ -103,18 +104,24 @@ export const UserGroupAddEditPage: FC<RouteComponentProps> = ({
             <Row>
                 <Col>
                     <Form onSubmit={handleSubmit(onSubmit)}>
-                        <Form.Row>
-                            <AppFormInput
-                                name={"name"}
-                                label={"Name"}
-                                required={true}
-                                withCounter={true}
-                                {...validation("name", formState, isEditMode)}
-                                errorMessage={errors.name?.message}
-                                value={data.name}
-                                control={control}
-                            />
-                        </Form.Row>
+                        <AppCard>
+                            <Form.Row>
+                                <AppFormInput
+                                    name={"name"}
+                                    label={"Name"}
+                                    required={true}
+                                    withCounter={true}
+                                    {...validation(
+                                        "name",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.name?.message}
+                                    value={data.name}
+                                    control={control}
+                                />
+                            </Form.Row>
+                        </AppCard>
                         <AppFormActions
                             isEditMode={isEditMode}
                             navigation={nav}
