@@ -161,7 +161,11 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
             </Row>
             <hr className="col-12" />
             <Row>
-                <AppVimeoFrame url="https://vimeo.com/544191717" />
+                <AppVimeoFrame
+                    url="https://vimeo.com/544191717"
+                    height="390"
+                    width="640"
+                />
             </Row>
         </Fragment>
     );
