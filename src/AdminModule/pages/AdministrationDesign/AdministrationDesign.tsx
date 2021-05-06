@@ -7,14 +7,14 @@ import * as Yup from "yup";
 import {
     AppPageHeader,
     AppCard,
+    AppLoader,
     AppFormElementGenerator,
 } from "../../../AppModule/components";
-import { AuthContext } from "../../../AppModule/Authentication/context/AuthContext";
+import { AppContext } from "../../../AppModule/Contexts/AppContext";
 import { ContainerApi } from "../../apis";
-import { Container, ContainerConfiguration } from "../../models";
-import { errorToast, successToast } from "../../../AppModule/utils";
+import { successToast } from "../../../AppModule/utils";
 
-const parseData = (data: ContainerConfiguration) => {
+const parseData = (data: any) => {
     const items: any = [];
     Object.keys(data).forEach((key) => {
         Object.keys(data[key]).forEach((subkey) => {
@@ -44,8 +44,8 @@ interface ContainerFormType {
 }
 
 export const AdministrationDesign: FC<RouteComponentProps> = (): JSX.Element => {
-    const { state } = React.useContext(AuthContext);
-    const { cntid } = state;
+    const { state } = React.useContext(AppContext);
+    const { isLoading, ContainerState } = state;
     const [configuration, setConfiguration] = React.useState<any>();
     const [containerConfiguration, setContainerConfiguration] = React.useState<
         string[]
@@ -61,29 +61,19 @@ export const AdministrationDesign: FC<RouteComponentProps> = (): JSX.Element => 
     };
     const onSubmit = async (formData: ContainerFormType) => {
         await ContainerApi.update<ContainerEntity, ContainerRequestData>(
-            cntid,
+            ContainerState.id,
             buildContainer(formData)
         );
         await successToast("Configuration updated successfully");
     };
     useEffect(() => {
-        if (cntid) {
-            ContainerApi.getById<Container>(cntid).then(
-                ({ response, isNotFound, errorMessage }) => {
-                    if (errorMessage) {
-                        errorToast(errorMessage);
-                    } else if (isNotFound) {
-                        errorToast("Client not exist");
-                    } else if (response !== null) {
-                        setContainerConfiguration(response.designConfiguration);
-                        setConfiguration(
-                            parseData(response.designConfigurationTypes)
-                        );
-                    }
-                }
+        if (!isLoading && ContainerState) {
+            setContainerConfiguration(ContainerState.designConfiguration);
+            setConfiguration(
+                parseData(ContainerState.designConfigurationTypes)
             );
         }
-    }, []);
+    }, [ContainerState]);
 
     const renderConfigs = () => {
         return (
@@ -115,29 +105,33 @@ export const AdministrationDesign: FC<RouteComponentProps> = (): JSX.Element => 
     return (
         <Fragment>
             <AppPageHeader title={"Design"} />
-            <Row>
-                <Form
-                    noValidate
-                    onSubmit={handleSubmit(onSubmit)}
-                    className="w-100"
-                >
-                    {renderConfigs()}
-                    <div className="edit-client-footer-wrap p-0 w-100 ">
-                        <div className="edit-client-footer py-4 w-100 d-flex flex-column flex-sm-row align-items-center justify-content-end">
-                            <button
-                                type="submit"
-                                disabled={formState.isSubmitting}
-                                className="btn btn-primary col-auto ml-3 mr-2"
-                            >
-                                {formState.isSubmitting && (
-                                    <span className="spinner-border spinner-border-sm mr-1" />
-                                )}
-                                Save
-                            </button>
+            {isLoading ? (
+                <AppLoader />
+            ) : (
+                <Row>
+                    <Form
+                        noValidate
+                        onSubmit={handleSubmit(onSubmit)}
+                        className="w-100"
+                    >
+                        {renderConfigs()}
+                        <div className="edit-client-footer-wrap p-0 w-100 ">
+                            <div className="edit-client-footer py-4 w-100 d-flex flex-column flex-sm-row align-items-center justify-content-end">
+                                <button
+                                    type="submit"
+                                    disabled={formState.isSubmitting}
+                                    className="btn btn-primary col-auto ml-3 mr-2"
+                                >
+                                    {formState.isSubmitting && (
+                                        <span className="spinner-border spinner-border-sm mr-1" />
+                                    )}
+                                    Save
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </Form>
-            </Row>
+                    </Form>
+                </Row>
+            )}
         </Fragment>
     );
 };

@@ -4,8 +4,11 @@ import { Container } from "../../../AdminModule/models";
 import { ContainerApi } from "../../../AdminModule/apis";
 import { errorToast } from "../../utils";
 import { AuthContext } from "../../Authentication/context/AuthContext";
+import { AppContext } from "../../Contexts/AppContext";
+import { ContainerTypes } from "../../Contexts/Types";
 
 export const AppConfiguration: FC = ({ children }) => {
+    const { dispatch } = React.useContext(AppContext);
     const { state } = React.useContext(AuthContext);
     const { cntid } = state;
     const [
@@ -15,6 +18,9 @@ export const AppConfiguration: FC = ({ children }) => {
 
     useEffect(() => {
         if (cntid) {
+            dispatch({
+                type: ContainerTypes.LOADING,
+            });
             ContainerApi.getById<Container>(cntid).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
@@ -23,6 +29,10 @@ export const AppConfiguration: FC = ({ children }) => {
                         errorToast("Container not exist");
                     } else if (response !== null) {
                         setContainerConfiguration(response.configuration);
+                        dispatch({
+                            type: ContainerTypes.SUCCESS,
+                            payload: response,
+                        });
                     }
                 }
             );
