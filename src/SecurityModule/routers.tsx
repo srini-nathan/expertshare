@@ -8,6 +8,7 @@ import {
     ResetPasswordPage,
 } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
+import { SocialLoginRedirectPage } from "./pages/SocialLoginRedirectPage/SocialLoginRedirectPage";
 
 export const routers: ModuleRouter[] = [
     {
@@ -19,6 +20,7 @@ export const routers: ModuleRouter[] = [
                 <Router>
                     <Redirect from={"/"} to={"login"} noThrow />
                     <LoginPage path={"login"} />
+                    <SocialLoginRedirectPage path={"jwt/:token"} />
                     <RegisterPage path={"register"} />
                     <ForgotPasswordPage path={"forgot-password"} />
                     <ForgotPasswordConfirmationPage

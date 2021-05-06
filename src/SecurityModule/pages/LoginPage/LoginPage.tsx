@@ -13,7 +13,6 @@ import { AppAuthHeader, AppAuthFooter } from "../../components";
 import "./assets/scss/styles.scss";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { validation } from "../../../AppModule/utils";
-import { API_HOST } from "../../../AppModule/config/app-env";
 
 type LoginForm = {
     email: string;
@@ -26,8 +25,6 @@ const schema = yup.object().shape({
 });
 
 export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
-    // eslint-disable-next-line no-console
-    console.log(API_HOST);
     const { control, handleSubmit, formState } = useForm<LoginForm>({
         resolver: yupResolver(schema),
         mode: "all",

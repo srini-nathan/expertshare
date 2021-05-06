@@ -131,6 +131,58 @@ export interface JWT {
     cid: number;
     cntid: number;
 }
+
+export const socialLogin = async (
+    token: string,
+    dispatch: React.Dispatch<IAuthAction>
+): Promise<void> => {
+    try {
+        if (token) {
+            const { ip, roles, cid, cntid }: JWT = await jwtDecode(token);
+            await localStorage.setItem(AUTH_TOKEN_KEY, token);
+            const user = await UserApi.me();
+            await localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+            dispatch({
+                type: AuthActionTypes.LOGIN_SUCCESS,
+                payload: {
+                    ip,
+                    roles,
+                    isAuthenticated: true,
+                    token,
+                    showLogin: false,
+                    loginSuccess: true,
+                    user,
+                    loginError: null,
+                    sessionFetched: true,
+                    cid,
+                    cntid,
+                },
+            });
+            await navigate("/home");
+        }
+    } catch (err) {
+        if (localStorage.getItem(AUTH_TOKEN_KEY)) {
+            await localStorage.removeItem(AUTH_TOKEN_KEY);
+            dispatch({
+                type: AuthActionTypes.LOGIN_ERROR,
+                payload: {
+                    isAuthenticated: true,
+                    showLogin: false,
+                    loginSuccess: true,
+                    user: null,
+                    loginError: null,
+                    token: null,
+                    sessionFetched: false,
+                    ip: null,
+                    roles: [],
+                    cntid: null,
+                    cid: null,
+                },
+            });
+        }
+    }
+};
+
 export const loginAction = async (
     username: string,
     password: string,

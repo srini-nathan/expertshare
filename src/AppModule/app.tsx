@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Redirect, RouteComponentProps, Router, navigate } from "@reach/router";
+import { Redirect, RouteComponentProps, Router } from "@reach/router";
 import { appRouters } from "./bootstrap";
 import { DashboardLayout } from "./layouts/DashboardLayout";
 import { AuthLayout } from "./layouts/AuthLayout";
@@ -44,6 +44,9 @@ const App = (): JSX.Element => {
             </div>
         );
     }
+    // if (!state.isAuthenticated) {
+    //     navigate("/auth/login").then();
+    // }
 
     if (state.isAuthenticated) {
         return (
@@ -57,10 +60,6 @@ const App = (): JSX.Element => {
                 </Router>
             </DashboardLayout>
         );
-    }
-
-    if (!state.isAuthenticated) {
-        navigate("/auth/login").then();
     }
 
     return (
