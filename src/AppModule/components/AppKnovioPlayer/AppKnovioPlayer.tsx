@@ -1,5 +1,4 @@
 import React, { FC, useEffect, CSSProperties } from "react";
-import "./assets/scss/style.scss";
 
 export interface AppKnovioPlayerProps {
     linkUrl: string;
