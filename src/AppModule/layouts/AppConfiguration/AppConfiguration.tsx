@@ -2,6 +2,7 @@ import React, { FC, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { Container } from "../../../AdminModule/models";
 import { ContainerApi } from "../../../AdminModule/apis";
+import { errorToast } from "../../utils";
 
 export interface AppConfigurationProps {
     state: any;
@@ -15,9 +16,17 @@ export const AppConfiguration: FC<AppConfigurationProps> = (props) => {
 
     useEffect(() => {
         if (cntid) {
-            ContainerApi.findById<Container>(cntid).then((res) => {
-                setContainerConfiguration(res.configuration);
-            });
+            ContainerApi.getById<Container>(cntid).then(
+                ({ response, isNotFound, errorMessage }) => {
+                    if (errorMessage) {
+                        errorToast(errorMessage);
+                    } else if (isNotFound) {
+                        errorToast("Client not exist");
+                    } else if (response !== null) {
+                        setContainerConfiguration(response.configuration);
+                    }
+                }
+            );
         }
     }, []);
 

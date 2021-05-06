@@ -14,7 +14,7 @@ import {
 import { AuthContext } from "../../../AppModule/Authentication/context/AuthContext";
 import { ContainerApi } from "../../apis";
 import { Container, ContainerConfiguration } from "../../models";
-import { sweetSuccess } from "../../../AppModule/components/Util";
+import { errorToast, successToast } from "../../../AppModule/utils";
 
 const parseData = (data: ContainerConfiguration) => {
     const items: any = [];
@@ -72,15 +72,25 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = (): JSX.Ele
             cntid,
             buildContainer(formData)
         );
-        await sweetSuccess({ text: "Client updated successfully " });
+        await successToast("Client updated successfully ");
     };
 
     useEffect(() => {
         if (cntid) {
-            ContainerApi.findById<Container>(cntid).then((res) => {
-                setContainerConfiguration(res.configuration);
-                setConfiguration(parseData(res.configurationTypes));
-            });
+            ContainerApi.getById<Container>(cntid).then(
+                ({ response, isNotFound, errorMessage }) => {
+                    if (errorMessage) {
+                        errorToast(errorMessage);
+                    } else if (isNotFound) {
+                        errorToast("Client not exist");
+                    } else if (response !== null) {
+                        setContainerConfiguration(response.configuration);
+                        setConfiguration(
+                            parseData(response.configurationTypes)
+                        );
+                    }
+                }
+            );
         }
     }, []);
 
