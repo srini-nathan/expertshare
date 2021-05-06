@@ -68,6 +68,7 @@ export const EmailAddEditPage: FC<RouteComponentProps> = ({
     });
 
     const onSubmit = (formData: EmailEntity) => {
+        alert(JSON.stringify(formData));
         formData.etKey = selectedTheme.value;
         formData.container = "/api/containers/1";
         EmailApi.createOrUpdate<EmailEntity>(id, formData).then(
@@ -131,7 +132,14 @@ export const EmailAddEditPage: FC<RouteComponentProps> = ({
                         const val = defaultThemeList.find(
                             (item) => response?.etKey === item.value
                         ) || { id: "", value: "", label: "" };
-                        setThemeList([...themeList, val]);
+                        setSelectedTheme(val);
+                        trigger();
+                        const thm = [...themeList];
+                        if (thm.indexOf(val) === -1) {
+                            thm.push(val);
+                        }
+                        alert(JSON.stringify(thm));
+                        setThemeList(thm);
                     }
                     setLoading(false);
                 }
@@ -172,21 +180,22 @@ export const EmailAddEditPage: FC<RouteComponentProps> = ({
                         />
                         <AppFormSelect
                             id={"ddTheme"}
-                            defaultValue={
-                                isEditMode
-                                    ? themeList.filter(
-                                          (item) =>
-                                              item.value.indexOf(data.etKey) !==
-                                              -1
-                                      )
-                                    : themeList[0]
-                            }
+                            name={"etKey"}
+                            label={"Select template"}
+                            md={12}
+                            lg={12}
+                            sm={12}
+                            xl={12}
+                            required={true}
+                            {...validation("etKey", formState, isEditMode)}
+                            defaultValue={data.etKey}
                             placeholder={"Theme"}
                             options={themeList}
                             value={selectedTheme}
                             onChange={(selectedValue) => {
                                 setSelectedTheme(selectedValue);
                             }}
+                            control={control}
                         />
                         <AppFormInput
                             name={"subject"}
