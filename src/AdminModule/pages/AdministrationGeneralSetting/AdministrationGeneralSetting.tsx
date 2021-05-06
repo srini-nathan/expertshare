@@ -72,7 +72,7 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = (): JSX.Ele
             cntid,
             buildContainer(formData)
         );
-        await successToast("Client updated successfully ");
+        await successToast("Configuration updated successfully ");
     };
 
     useEffect(() => {

@@ -3,16 +3,15 @@ import { Helmet } from "react-helmet";
 import { Container } from "../../../AdminModule/models";
 import { ContainerApi } from "../../../AdminModule/apis";
 import { errorToast } from "../../utils";
+import { AuthContext } from "../../Authentication/context/AuthContext";
 
-export interface AppConfigurationProps {
-    state: any;
-}
-export const AppConfiguration: FC<AppConfigurationProps> = (props) => {
+export const AppConfiguration: FC = ({ children }) => {
+    const { state } = React.useContext(AuthContext);
+    const { cntid } = state;
     const [
         containerConfiguration,
         setContainerConfiguration,
     ] = React.useState<any>();
-    const { cntid } = props.state;
 
     useEffect(() => {
         if (cntid) {
@@ -21,7 +20,7 @@ export const AppConfiguration: FC<AppConfigurationProps> = (props) => {
                     if (errorMessage) {
                         errorToast(errorMessage);
                     } else if (isNotFound) {
-                        errorToast("Client not exist");
+                        errorToast("Container not exist");
                     } else if (response !== null) {
                         setContainerConfiguration(response.configuration);
                     }
@@ -59,7 +58,7 @@ export const AppConfiguration: FC<AppConfigurationProps> = (props) => {
     return (
         <>
             {renderScripts()}
-            {props.children}
+            {children}
         </>
     );
 };

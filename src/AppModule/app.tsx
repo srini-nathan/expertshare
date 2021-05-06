@@ -48,7 +48,7 @@ const App = (): JSX.Element => {
 
     if (state.isAuthenticated) {
         return (
-            <AppConfiguration state={state}>
+            <AppConfiguration>
                 <DashboardLayout>
                     <Router>
                         <Redirect from="/" to="home" noThrow />
