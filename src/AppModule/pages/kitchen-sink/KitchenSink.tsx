@@ -12,6 +12,7 @@ import {
     AppCard,
     AppFormInputPassword,
     AppYoutubeFrame,
+    AppVimeoFrame,
 } from "../../components";
 import { SimpleObject } from "../../../AdminModule/models";
 
@@ -166,6 +167,11 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     height="390"
                     width="640"
                     configuration={{ autoplay: 1 }}
+                />
+                <AppVimeoFrame
+                    url="https://vimeo.com/544191717"
+                    height="390"
+                    width="640"
                 />
             </Row>
         </Fragment>
