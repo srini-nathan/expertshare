@@ -11,6 +11,7 @@ import {
     AppLoader,
     AppFormSwitch,
     AppFormActions,
+    AppCard,
 } from "../../../AppModule/components";
 import { LanguageEntity } from "../../models";
 import { LanguageApi } from "../../apis";
@@ -103,42 +104,56 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
             />
             <Row>
                 <Col>
-                    <Form noValidate onSubmit={handleSubmit(onSubmit)}>
-                        <Form.Row>
-                            <AppFormInput
-                                name={"name"}
-                                label={"Name"}
-                                required={true}
-                                withCounter={true}
-                                {...validation("name", formState, isEditMode)}
-                                errorMessage={errors.name?.message}
-                                value={data.name}
-                                control={control}
+                    <AppCard>
+                        <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+                            <Form.Row>
+                                <AppFormInput
+                                    name={"name"}
+                                    label={"Name"}
+                                    required={true}
+                                    withCounter={true}
+                                    {...validation(
+                                        "name",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.name?.message}
+                                    value={data.name}
+                                    control={control}
+                                />
+                                <AppFormInput
+                                    name={"locale"}
+                                    label={"Locale"}
+                                    required={true}
+                                    withCounter={true}
+                                    {...validation(
+                                        "locale",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.locale?.message}
+                                    value={data.locale}
+                                    control={control}
+                                />
+                                <AppFormSwitch
+                                    name={"isActive"}
+                                    label={"Is Active ?"}
+                                    {...validation(
+                                        "locale",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.isActive?.message}
+                                    value={data.isActive}
+                                    control={control}
+                                />
+                            </Form.Row>
+                            <AppFormActions
+                                isEditMode={isEditMode}
+                                navigation={nav}
                             />
-                            <AppFormInput
-                                name={"locale"}
-                                label={"Locale"}
-                                required={true}
-                                withCounter={true}
-                                {...validation("locale", formState, isEditMode)}
-                                errorMessage={errors.locale?.message}
-                                value={data.locale}
-                                control={control}
-                            />
-                            <AppFormSwitch
-                                name={"isActive"}
-                                label={"Is Active ?"}
-                                {...validation("locale", formState, isEditMode)}
-                                errorMessage={errors.isActive?.message}
-                                value={data.isActive}
-                                control={control}
-                            />
-                        </Form.Row>
-                        <AppFormActions
-                            isEditMode={isEditMode}
-                            navigation={nav}
-                        />
-                    </Form>
+                        </Form>
+                    </AppCard>
                 </Col>
             </Row>
         </Fragment>

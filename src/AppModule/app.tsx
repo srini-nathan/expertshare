@@ -2,12 +2,14 @@ import React, { FC } from "react";
 import { Redirect, RouteComponentProps, Router, navigate } from "@reach/router";
 import { appRouters } from "./bootstrap";
 import { DashboardLayout } from "./layouts/DashboardLayout";
+import { AppConfiguration } from "./layouts/AppConfiguration";
 import { AuthLayout } from "./layouts/AuthLayout";
 import { ModuleRouter } from "./models";
+import AppProvider from "./Contexts/AppContext";
 import {
     AuthContext,
     logoutAction,
-} from "./Authentication/context/AuthContext";
+} from "../SecurityModule/context/AuthContext";
 import { AppLoader } from "./components";
 
 import "./assets/scss/bootstrap.scss";
@@ -47,15 +49,21 @@ const App = (): JSX.Element => {
 
     if (state.isAuthenticated) {
         return (
-            <DashboardLayout>
-                <Router>
-                    <Redirect from="/" to="home" noThrow />
-                    <Home path="home" />
-                    {dashboardRoutes.map(({ RouterPlug, key, path }) => {
-                        return <RouterPlug key={key} path={path} />;
-                    })}
-                </Router>
-            </DashboardLayout>
+            <AppProvider>
+                <AppConfiguration>
+                    <DashboardLayout>
+                        <Router>
+                            <Redirect from="/" to="home" noThrow />
+                            <Home path="home" />
+                            {dashboardRoutes.map(
+                                ({ RouterPlug, key, path }) => {
+                                    return <RouterPlug key={key} path={path} />;
+                                }
+                            )}
+                        </Router>
+                    </DashboardLayout>
+                </AppConfiguration>
+            </AppProvider>
         );
     }
 
