@@ -165,7 +165,7 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     url="https://www.youtube.com/watch?v=y9j-BL5ocW8"
                     height="390"
                     width="640"
-                    configuration={{autoplay: 1}}
+                    configuration={{ autoplay: 1 }}
                 />
             </Row>
         </Fragment>
