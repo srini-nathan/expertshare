@@ -5,10 +5,7 @@ import { Container, Row, Col, Form } from "react-bootstrap";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AppButton } from "../../../AppModule/components/AppButton";
-import {
-    AuthContext,
-    loginAction,
-} from "../../../AppModule/Authentication/context/AuthContext";
+import { AuthContext, loginAction } from "../../context/AuthContext";
 import { AppAuthHeader, AppAuthFooter } from "../../components";
 import "./assets/scss/styles.scss";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
