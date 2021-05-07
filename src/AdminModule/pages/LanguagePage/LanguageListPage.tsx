@@ -24,7 +24,7 @@ import "./assets/scss/list.scss";
 import {
     AuthContext,
     IAuthSate,
-} from "../../../AppModule/Authentication/context/AuthContext";
+} from "../../../SecurityModule/context/AuthContext";
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
