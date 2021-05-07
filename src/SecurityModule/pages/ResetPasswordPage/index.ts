@@ -1,2 +1,2 @@
 export * from "./ResetPasswordPage";
-export * from "./ResetPasswordPageConfirmation";
+export * from "./ResetPasswordConfirmationPage";

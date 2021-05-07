@@ -4,7 +4,7 @@ import { Container, Row, Col } from "react-bootstrap";
 import { AppAuthHeader, AppAuthFooter } from "../../components";
 import "./assets/scss/styles.scss";
 
-export const ResetPasswordPageConfirmation: FC<RouteComponentProps> = (): JSX.Element => {
+export const ResetPasswordConfirmationPage: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Container fluid className="active-account auth-container">
             <div className="auth-container--box">

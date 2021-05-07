@@ -6,7 +6,7 @@ import {
     ForgotPasswordPage,
     ForgotPasswordConfirmationPage,
     ResetPasswordPage,
-    ResetPasswordPageConfirmation,
+    ResetPasswordConfirmationPage,
 } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
 
@@ -26,7 +26,7 @@ export const routers: ModuleRouter[] = [
                         path={"forgot-password-email-confirmation"}
                     />
                     <ResetPasswordPage path={"reset-password"} />
-                    <ResetPasswordPageConfirmation
+                    <ResetPasswordConfirmationPage
                         path={"reset-password-confirmation"}
                     />
                 </Router>
