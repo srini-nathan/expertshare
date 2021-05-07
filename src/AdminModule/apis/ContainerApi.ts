@@ -6,4 +6,6 @@ export abstract class ContainerApi extends EntityAPI {
     static CONTAINER_LIST_PAGE_PATH = "/admin/container/";
 
     static CONTAINER_NEW_PAGE_PATH = "/admin/container/new";
+
+    static CONFIGURATION_TYPE = "configuration-type";
 }

@@ -168,6 +168,9 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     width="640"
                     configuration={{ autoplay: 1 }}
                 />
+            </Row>
+            <hr className="col-12" />
+            <Row>
                 <AppVimeoFrame
                     url="https://vimeo.com/544191717"
                     height="390"

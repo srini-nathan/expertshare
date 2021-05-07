@@ -7,9 +7,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { AppButton } from "../../../AppModule/components/AppButton";
 import { AuthContext, loginAction } from "../../context/AuthContext";
 import { AppAuthHeader, AppAuthFooter } from "../../components";
-import "./assets/scss/styles.scss";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { validation } from "../../../AppModule/utils";
+import "./assets/scss/styles.scss";
 
 type LoginForm = {
     email: string;
