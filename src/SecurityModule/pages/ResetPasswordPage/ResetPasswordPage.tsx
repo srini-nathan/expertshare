@@ -1,7 +1,7 @@
 import React, { FC } from "react";
 import { RouteComponentProps, useLocation } from "@reach/router";
 import { useForm } from "react-hook-form";
-import { parse } from "query-string";
+import { parse } from "qs";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import * as yup from "yup";
 import { forEach as _forEach } from "lodash";
@@ -49,7 +49,9 @@ export const ResetPasswordPage: FC<RouteComponentProps> = ({
     const { errors } = formState;
     const location = useLocation();
     const onSubmit = async ({ password }: RestPasswordForm) => {
-        const searchParams = parse(location.search);
+        const searchParams = parse(location.search, {
+            ignoreQueryPrefix: true,
+        });
         const { token } = searchParams;
         if (token) {
             isLoading(true);
@@ -138,7 +140,7 @@ export const ResetPasswordPage: FC<RouteComponentProps> = ({
                                 >
                                     {loading
                                         ? "Please wait..."
-                                        : "Resset Password"}
+                                        : "Reset Password"}
                                 </AppButton>
                             </Form>
                         </Col>
