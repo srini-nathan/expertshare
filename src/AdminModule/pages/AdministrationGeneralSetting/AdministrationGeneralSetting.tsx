@@ -51,6 +51,7 @@ interface ContainerFormType {
 }
 
 export const AdministrationGeneralSetting: FC<RouteComponentProps> = (): JSX.Element => {
+    // @TODO: instead of use from context use API to fetch data
     const { state } = React.useContext(AppContext);
     const { isLoading, ContainerState } = state;
     const [configuration, setConfiguration] = React.useState<any>();
