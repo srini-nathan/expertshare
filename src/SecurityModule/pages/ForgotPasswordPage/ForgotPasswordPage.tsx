@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { useForm } from "react-hook-form";
+import { forEach as _forEach } from "lodash";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,7 +9,13 @@ import { AppButton } from "../../../AppModule/components/AppButton";
 import { AppAuthHeader, AppAuthFooter } from "../../components";
 import "./assets/scss/styles.scss";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
-import { validation } from "../../../AppModule/utils";
+import { ResetPasswordRequestApi } from "../../apis";
+import { errorToast, validation } from "../../../AppModule/utils";
+import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
+
+type ForgotPassword = {
+    [key: string]: any;
+};
 
 type ForgotPasswordForm = {
     email: string;
@@ -21,18 +28,40 @@ const schema = yup.object().shape({
 export const ForgotPasswordPage: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
-    const { control, handleSubmit, formState } = useForm<ForgotPasswordForm>({
+    const {
+        control,
+        handleSubmit,
+        setError,
+        formState,
+    } = useForm<ForgotPasswordForm>({
         resolver: yupResolver(schema),
         mode: "all",
     });
+    const [loading, isLoading] = React.useState<boolean>(false);
     const { errors } = formState;
 
-    const onSubmit = async ({ email }: ForgotPasswordForm) => {
-        // I just add the email to alert fo future changes
-        alert(email);
-        if (navigate) {
-            navigate("/auth/forgot-password-email-confirmation");
-        }
+    const onSubmit = async (dataForm: ForgotPasswordForm) => {
+        isLoading(true);
+        ResetPasswordRequestApi.create<ForgotPasswordForm, ForgotPassword>(
+            dataForm
+        ).then(({ error, errorMessage }) => {
+            isLoading(false);
+
+            if (error instanceof UnprocessableEntityErrorResponse) {
+                const { violations } = error;
+                _forEach(violations, (value: string, key: string) => {
+                    const propertyName = key as keyof ForgotPasswordForm;
+                    setError(propertyName, {
+                        type: "backend",
+                        message: value,
+                    });
+                });
+            } else if (errorMessage) {
+                errorToast(errorMessage);
+            } else if (navigate) {
+                navigate("/auth/forgot-password-email-confirmation");
+            }
+        });
     };
     return (
         <Container fluid className="active-account auth-container">
@@ -68,8 +97,14 @@ export const ForgotPasswordPage: FC<RouteComponentProps> = ({
                                     </Form.Row>
                                 </Form.Group>
 
-                                <AppButton block={true} type={"submit"}>
-                                    Reset Password
+                                <AppButton
+                                    disabled={loading}
+                                    block={true}
+                                    type={"submit"}
+                                >
+                                    {loading
+                                        ? "Please wait..."
+                                        : "Resset Password"}
                                 </AppButton>
                             </Form>
                         </Col>

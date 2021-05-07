@@ -1,11 +1,12 @@
 import React from "react";
-import { Redirect, Router } from "@reach/router";
+import { Router } from "@reach/router";
 import {
     LoginPage,
     RegisterPage,
     ForgotPasswordPage,
     ForgotPasswordConfirmationPage,
     ResetPasswordPage,
+    ResetPasswordPageConfirmation,
 } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
 
@@ -17,7 +18,6 @@ export const routers: ModuleRouter[] = [
         RouterPlug: (): JSX.Element => {
             return (
                 <Router>
-                    <Redirect from={"/"} to={"login"} noThrow />
                     <LoginPage path={"login"} />
                     <RegisterPage path={"register"} />
                     <ForgotPasswordPage path={"forgot-password"} />
@@ -25,6 +25,9 @@ export const routers: ModuleRouter[] = [
                         path={"forgot-password-email-confirmation"}
                     />
                     <ResetPasswordPage path={"reset-password"} />
+                    <ResetPasswordPageConfirmation
+                        path={"reset-password-confirmation"}
+                    />
                 </Router>
             );
         },

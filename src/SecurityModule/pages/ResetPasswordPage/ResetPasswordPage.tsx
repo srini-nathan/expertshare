@@ -1,18 +1,28 @@
 import React, { FC } from "react";
-import { RouteComponentProps } from "@reach/router";
+import { RouteComponentProps, useLocation } from "@reach/router";
 import { useForm } from "react-hook-form";
+import { parse } from "query-string";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import * as yup from "yup";
+import { forEach as _forEach } from "lodash";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AppButton } from "../../../AppModule/components/AppButton";
 import { AppAuthHeader, AppAuthFooter } from "../../components";
 import "./assets/scss/styles.scss";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
-import { validation } from "../../../AppModule/utils";
+import { validation, errorToast } from "../../../AppModule/utils";
+import { ResetPasswordApi } from "../../apis";
+import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
+
+type RestPassword = {
+    [key: string]: any;
+};
 
 type RestPasswordForm = {
-    password: string;
-    confirmPassword: string;
+    password?: string;
+    confirmPassword?: string;
+    plainPassword?: string;
+    token?: string;
 };
 
 const schema = yup.object().shape({
@@ -22,15 +32,49 @@ const schema = yup.object().shape({
         .oneOf([yup.ref("password"), null], "Passwords must be match"),
 });
 
-export const ResetPasswordPage: FC<RouteComponentProps> = (): JSX.Element => {
-    const { control, handleSubmit, formState } = useForm<RestPasswordForm>({
+export const ResetPasswordPage: FC<RouteComponentProps> = ({
+    navigate,
+}): JSX.Element => {
+    const {
+        control,
+        handleSubmit,
+        formState,
+        setError,
+    } = useForm<RestPasswordForm>({
         resolver: yupResolver(schema),
         mode: "all",
     });
-    const { errors } = formState;
+    const [loading, isLoading] = React.useState<boolean>(false);
 
+    const { errors } = formState;
+    const location = useLocation();
     const onSubmit = async ({ password }: RestPasswordForm) => {
-        alert(password);
+        const searchParams = parse(location.search);
+        const { token } = searchParams;
+        if (token) {
+            isLoading(true);
+            ResetPasswordApi.create<RestPasswordForm, RestPassword>({
+                plainPassword: password,
+                token,
+            }).then(({ error, errorMessage }) => {
+                isLoading(false);
+
+                if (error instanceof UnprocessableEntityErrorResponse) {
+                    const { violations } = error;
+                    _forEach(violations, (value: string, key: string) => {
+                        const propertyName = key as keyof RestPasswordForm;
+                        setError(propertyName, {
+                            type: "backend",
+                            message: value,
+                        });
+                    });
+                } else if (errorMessage) {
+                    errorToast(errorMessage);
+                } else if (navigate) {
+                    navigate("/auth/reset-password-confirmation");
+                }
+            });
+        }
     };
     return (
         <Container fluid className="active-account auth-container">
@@ -87,8 +131,14 @@ export const ResetPasswordPage: FC<RouteComponentProps> = (): JSX.Element => {
                                     </Form.Row>
                                 </Form.Group>
 
-                                <AppButton block={true} type={"submit"}>
-                                    Resset Password
+                                <AppButton
+                                    block={true}
+                                    disabled={loading}
+                                    type={"submit"}
+                                >
+                                    {loading
+                                        ? "Please wait..."
+                                        : "Resset Password"}
                                 </AppButton>
                             </Form>
                         </Col>
