@@ -11,6 +11,7 @@ import {
     AppLoader,
     AppCard,
     AppFormInputPassword,
+    AppDacastFrame,
     AppYoutubeFrame,
     AppVimeoFrame,
 } from "../../components";
@@ -161,6 +162,14 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                 </div>
             </Row>
             <hr className="col-12" />
+            <Row>
+                <AppDacastFrame
+                    id="1552_f_297509"
+                    provider="dacast"
+                    width={640}
+                    height={390}
+                />
+            </Row>
             <Row>
                 <AppYoutubeFrame
                     url="https://www.youtube.com/watch?v=y9j-BL5ocW8"

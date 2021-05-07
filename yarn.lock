@@ -16000,6 +16000,11 @@ use-latest@^1.0.0:
   dependencies:
     use-isomorphic-layout-effect "^1.0.0"
 
+use-player@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/use-player/-/use-player-0.2.0.tgz#8f2c43ffa2a35ad5f01ee04aa844d27f24d076e9"
+  integrity sha512-WGd7Rl8hVpCjS7p0Ej881hMGYz0geTUxYEjUs4JOdm5MtZQ67UMFoDdU6ksxQoqpd+Tr49A2vbMEiex+/UTASQ==
+
 use@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"
