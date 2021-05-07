@@ -66,7 +66,7 @@ export const AdministrationDesign: FC<RouteComponentProps> = (): JSX.Element => 
         );
         await successToast("Configuration updated successfully");
     };
-    //TODO: Add different Api to get types
+    // @TODO: Add different Api to get types
     useEffect(() => {
         if (!isLoading && ContainerState) {
             setContainerConfiguration(ContainerState.designConfiguration);
