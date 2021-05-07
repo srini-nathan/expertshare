@@ -1,13 +1,10 @@
 import React, { createContext, useEffect } from "react";
 import { navigate } from "@reach/router";
 import jwtDecode from "jwt-decode";
-import { User } from "../../../AppModule/models";
-import { AuthApi, LoginResponse } from "../../apis/AuthApi";
-import {
-    AUTH_TOKEN_KEY,
-    AUTH_USER_KEY,
-} from "../../../AppModule/config/app-env";
-import { UserApi } from "../../../AppModule/apis/UserApi";
+import { User } from "../../AppModule/models";
+import { AuthApi, LoginResponse } from "../apis/AuthApi";
+import { AUTH_TOKEN_KEY, AUTH_USER_KEY } from "../../AppModule/config/app-env";
+import { UserApi } from "../../AppModule/apis/UserApi";
 
 interface IAuthSate {
     isAuthenticated: boolean | null;

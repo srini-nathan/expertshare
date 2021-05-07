@@ -7,7 +7,7 @@ import { ModuleRouter } from "./models";
 import {
     AuthContext,
     logoutAction,
-} from "../SecurityModule/Authentication/context/AuthContext";
+} from "../SecurityModule/context/AuthContext";
 import { AppLoader } from "./components";
 
 import "./assets/scss/bootstrap.scss";
