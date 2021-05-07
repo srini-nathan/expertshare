@@ -3,7 +3,7 @@ import { Helmet } from "react-helmet";
 import { Container } from "../../../AdminModule/models";
 import { ContainerApi } from "../../../AdminModule/apis";
 import { errorToast } from "../../utils";
-import { AuthContext } from "../../Authentication/context/AuthContext";
+import { AuthContext } from "../../../SecurityModule/context/AuthContext";
 import { AppContext } from "../../Contexts/AppContext";
 import { ContainerTypes } from "../../Contexts/Types";
 
