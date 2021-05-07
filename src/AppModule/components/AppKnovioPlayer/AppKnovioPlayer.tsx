@@ -1,23 +1,11 @@
-import React, { FC, useEffect, CSSProperties } from "react";
+import React, { FC, CSSProperties } from "react";
+import { Helmet } from "react-helmet";
 
 export interface AppKnovioPlayerProps {
     linkUrl: string;
     height: number;
     width: number;
 }
-
-const useScript = (url: string) => {
-    useEffect(() => {
-        const script = document.createElement("script");
-        script.src = url;
-        script.type = "text/javascript";
-
-        document.body.appendChild(script);
-        return () => {
-            document.removeChild(script);
-        };
-    }, [url]);
-};
 
 export const AppKnovioPlayer: FC<AppKnovioPlayerProps> = ({
     linkUrl,
@@ -28,9 +16,14 @@ export const AppKnovioPlayer: FC<AppKnovioPlayerProps> = ({
     const myStyles: CSSProperties = {
         ...props,
     };
-    useScript(`${baseUrl}embed/${id}.js`);
     return (
         <div style={myStyles}>
+            <Helmet>
+                <script
+                    type="text/javascript"
+                    src={`${baseUrl}embed/${id}.js`}
+                ></script>
+            </Helmet>
             <div
                 id={`KnowledgeVisionEmbeddedContent${id}`}
                 className="KnowledgeVisionEmbeddedContent"

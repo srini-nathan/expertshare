@@ -90,6 +90,15 @@ export abstract class EntityAPI extends API {
         return res.data;
     }
 
+    public static async response<E>(
+        data: any
+    ): Promise<FinalResponse<ListResponse<E> | null>> {
+        const list = this.acceptHydra
+            ? onFindAllResponseHydra<E>(data)
+            : onFindAllResponseJson<E>(data);
+        return Promise.resolve(new FinalResponse<ListResponse<E>>(list));
+    }
+
     public static async find<E>(
         page = 1,
         extraParams = {},

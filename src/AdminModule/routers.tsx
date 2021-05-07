@@ -2,8 +2,6 @@ import React from "react";
 import { Router } from "@reach/router";
 import {
     IndexPage,
-    DesignPage,
-    SettingPage,
     TranslationAddEdit,
     ClientList,
     ClientAddEdit,
@@ -12,6 +10,8 @@ import {
     ContainerList,
     UserGroupListPage,
     UserGroupAddEditPage,
+    AdministrationGeneralSetting,
+    AdministrationDesign,
 } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
 import { ContainerAddEdit } from "./pages/ContainerPage/ContainerAddEdit";
@@ -25,8 +25,6 @@ export const routers: ModuleRouter[] = [
             return (
                 <Router>
                     <IndexPage path={"/"} />
-                    <DesignPage path={"design"} />
-                    <SettingPage path={"settings"} />
                     <TranslationAddEdit path={"translations"} />
                     <ClientList path={"clients"} />
                     <ClientAddEdit path={"clients/new"} />
@@ -44,6 +42,8 @@ export const routers: ModuleRouter[] = [
                     <UserGroupListPage path={"user-groups"} />
                     <UserGroupAddEditPage path={"user-groups/new"} />
                     <UserGroupAddEditPage path={"user-groups/:id"} />
+                    <AdministrationGeneralSetting path={"settings"} />
+                    <AdministrationDesign path={"design"} />
                 </Router>
             );
         },

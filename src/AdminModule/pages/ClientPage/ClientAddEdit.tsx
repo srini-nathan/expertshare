@@ -16,7 +16,11 @@ import { ClientApi, PackageApi } from "../../apis";
 
 import { ListResponse } from "../../../AppModule/models";
 import { sweetSuccess } from "../../../AppModule/components/Util";
-import { AppFormTextArea, AppLoader } from "../../../AppModule/components";
+import {
+    AppFormTextArea,
+    AppLoader,
+    AppCard,
+} from "../../../AppModule/components";
 import { errorToast, validation } from "../../../AppModule/utils";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { AppFormCheckBox } from "../../../AppModule/components/AppFormCheckBox";
@@ -206,72 +210,65 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                 onSubmit={handleSubmit(onSubmit)}
                                 onReset={reset}
                             >
-                                <div className="row m-0 px-0 px-xl-3 d-flex align-items-start">
-                                    <AppFormInput
-                                        name={"name"}
-                                        label={"Name"}
-                                        required={true}
-                                        withCounter={true}
-                                        {...validation(
-                                            "name",
-                                            formState,
-                                            !isAddMode
-                                        )}
-                                        errorMessage={errors.name?.message}
-                                        value={client.name}
-                                        control={control}
-                                    />
-                                </div>
-                                <div className="row mx-0 mb-2">
-                                    <div className="col-12 mt-2 px-0 pl-xl-3">
-                                        <div className="col-12 light-label theme-label-clr px-0 pb-1 mb-3">
-                                            Default Packages
-                                        </div>
-                                    </div>
-                                    <div className="edit-client-packages w-100">
-                                        <div className="d-flex flex-wrap">
-                                            {packages.map((e) => {
-                                                return (
-                                                    <AppFormCheckBox
-                                                        key={e.id}
-                                                        name={e.packageKey.replace(
-                                                            ".",
-                                                            "_"
-                                                        )}
-                                                        label={e.packageKey}
-                                                        labelPosition={"left"}
-                                                        value={String(e.id)}
-                                                        register={register}
-                                                    />
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="row mx-0 pr-xl-3">
-                                    <div className="col-12 px-0 px-xl-3">
-                                        <div className="pr-xl-3">
-                                            <div className="col-12 d-flex p-0 flex-wrap justify-content-between">
-                                                <AppFormTextArea
-                                                    name={"notes"}
-                                                    label={"Notes"}
-                                                    required={false}
-                                                    withCounter={true}
-                                                    {...validation(
-                                                        "notes",
-                                                        formState,
-                                                        !isAddMode
+                                <AppCard>
+                                    <Row>
+                                        <AppFormInput
+                                            md={6}
+                                            lg={6}
+                                            xl={6}
+                                            sm={12}
+                                            name={"name"}
+                                            label={"Name"}
+                                            required={true}
+                                            withCounter={true}
+                                            {...validation(
+                                                "name",
+                                                formState,
+                                                !isAddMode
+                                            )}
+                                            errorMessage={errors.name?.message}
+                                            value={client.name}
+                                            control={control}
+                                        />
+                                        <AppFormTextArea
+                                            md={6}
+                                            lg={6}
+                                            xl={6}
+                                            sm={12}
+                                            name={"notes"}
+                                            label={"Notes"}
+                                            required={false}
+                                            withCounter={true}
+                                            {...validation(
+                                                "notes",
+                                                formState,
+                                                !isAddMode
+                                            )}
+                                            errorMessage={errors.notes?.message}
+                                            value={client.notes}
+                                            control={control}
+                                        />
+                                    </Row>
+                                </AppCard>
+                                <AppCard title="Default Packages">
+                                    <Row>
+                                        {packages.map((e) => {
+                                            return (
+                                                <AppFormCheckBox
+                                                    key={e.id}
+                                                    name={e.packageKey.replace(
+                                                        ".",
+                                                        "_"
                                                     )}
-                                                    errorMessage={
-                                                        errors.notes?.message
-                                                    }
-                                                    value={client.notes}
-                                                    control={control}
+                                                    label={e.packageKey}
+                                                    labelPosition={"left"}
+                                                    value={String(e.id)}
+                                                    register={register}
                                                 />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                            );
+                                        })}
+                                    </Row>
+                                </AppCard>
                                 <div className="edit-client-footer-wrap p-0 w-100 ">
                                     <div className="edit-client-footer py-4 w-100 d-flex flex-column flex-sm-row align-items-center justify-content-end">
                                         <Link

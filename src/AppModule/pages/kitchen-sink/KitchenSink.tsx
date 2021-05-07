@@ -12,6 +12,8 @@ import {
     AppCard,
     AppFormInputPassword,
     AppKnovioPlayer,
+    AppYoutubeFrame,
+    AppVimeoFrame,
 } from "../../components";
 import { SimpleObject } from "../../../AdminModule/models";
 
@@ -164,6 +166,22 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     linkUrl="https://view.knowledgevision.com/presentation/e31fff7a14ee4a9aa82dca008384c32a"
                     height={390}
                     width={640}
+                />
+            </Row>
+            <Row>
+                <AppYoutubeFrame
+                    url="https://www.youtube.com/watch?v=y9j-BL5ocW8"
+                    height="390"
+                    width="640"
+                    configuration={{ autoplay: 1 }}
+                />
+            </Row>
+            <hr className="col-12" />
+            <Row>
+                <AppVimeoFrame
+                    url="https://vimeo.com/544191717"
+                    height="390"
+                    width="640"
                 />
             </Row>
         </Fragment>
