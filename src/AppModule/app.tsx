@@ -62,7 +62,8 @@ const App = (): JSX.Element => {
     return (
         <AuthLayout>
             <Router>
-                <Redirect from="/" to="/auth/login" noThrow />
+                <Redirect from="/home" to="/auth" />
+                <Redirect from="/" to="/auth" noThrow />
                 {authRoutes.map(({ RouterPlug, key, path }) => {
                     return <RouterPlug key={key} path={path} />;
                 })}
