@@ -30,7 +30,7 @@ const validationSchema = Yup.object().shape({
     domain: Yup.string().required("Domain is Required"),
     name: Yup.string().required("Name is Required"),
     containerGroup: Yup.string().optional(),
-    notes: Yup.string().optional(),
+    description: Yup.string().optional(),
     bucketKey: Yup.string().when("storage", {
         is: "S3",
         then: Yup.string().required("Bucket Key is Required"),
@@ -43,6 +43,11 @@ const validationSchema = Yup.object().shape({
         is: "S3",
         then: Yup.string().required("Bucket Name is Required"),
     }),
+
+    bucketRegion: Yup.string().when("storage", {
+        is: "S3",
+        then: Yup.string().required("Bucket Region is Required"),
+    }),
 });
 
 function getProperty<T, K extends keyof T>(obj: T, key: K) {
@@ -50,28 +55,32 @@ function getProperty<T, K extends keyof T>(obj: T, key: K) {
 }
 
 export type ContainerFormType = {
+    name: string;
     domain: string;
     containerGroup: string;
     storage: string;
     bucketKey: string;
     bucketSecret: string;
     bucketName: string;
+    bucketRegion: string;
     isActive: string;
     client: string;
-    notes: string;
+    description: string;
     [key: string]: string | boolean;
 };
 
 export interface ContainerRequestData {
     domain: string;
+    name: string;
     containerGroup?: string;
     storage: string;
     bucketKey?: string;
     bucketSecret?: string;
     bucketName?: string;
+    bucketRegion?: string;
     isActive?: boolean;
     client?: string;
-    notes?: string;
+    description?: string;
     packages: string[];
     configuration?: string[];
 }
@@ -91,11 +100,13 @@ export class ContainerEntity {
 
     bucketName?: string;
 
+    bucketRegion?: string;
+
     isActive?: boolean;
 
     client?: string;
 
-    notes?: string;
+    description?: string;
 
     packages: Package[];
 
@@ -191,14 +202,16 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                 });
 
                 const fields: string[] = [
+                    "name",
                     "domain",
                     "containerGroup",
                     "storage",
                     "bucketKey",
                     "bucketSecret",
                     "bucketName",
+                    "bucketREgion",
                     "isActive",
-                    // "notes",
+                    "description",
                 ];
                 fields.forEach((field) =>
                     setValue(
@@ -238,6 +251,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
             {
                 configuration: [],
                 domain: "",
+                name: "",
                 storage: "",
                 packages: [],
             }
@@ -248,7 +262,6 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     async function createContainer(data: ContainerFormType) {
         const keys = Object.keys(data);
         const result = buildPackageArray(keys, data);
-        delete result.notes;
         delete result.configuration;
         const includeData = {
             ...result,
@@ -264,7 +277,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     async function updateContainer(data: ContainerFormType) {
         const keys = Object.keys(data);
         const result = buildPackageArray(keys, data);
-        delete result.notes;
+        delete result.description;
         delete result.configuration;
         const includeData = {
             ...result,
@@ -414,19 +427,19 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                                 lg={12}
                                                 sm={12}
                                                 xl={12}
-                                                name={"notes"}
-                                                label={"Notes"}
+                                                name={"description"}
+                                                label={"Description"}
                                                 required={false}
                                                 withCounter={true}
                                                 {...validation(
-                                                    "notes",
+                                                    "description",
                                                     formState,
                                                     !isAddMode
                                                 )}
                                                 errorMessage={
-                                                    errors.notes?.message
+                                                    errors.description?.message
                                                 }
-                                                value={container.notes}
+                                                value={container.description}
                                                 control={control}
                                             />
                                         </Col>
@@ -509,6 +522,25 @@ export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                                     errors.bucketName?.message
                                                 }
                                                 value={container.bucketName}
+                                                control={control}
+                                            />
+                                            <AppFormInput
+                                                md={"6"}
+                                                lg={"6"}
+                                                xl={"6"}
+                                                name={"bucketRegion"}
+                                                label={"AWS S3 Bucket Region"}
+                                                required={true}
+                                                withCounter={true}
+                                                {...validation(
+                                                    "bucketRegion",
+                                                    formState,
+                                                    !isAddMode
+                                                )}
+                                                errorMessage={
+                                                    errors.bucketRegion?.message
+                                                }
+                                                value={container.bucketRegion}
                                                 control={control}
                                             />
                                         </Row>
