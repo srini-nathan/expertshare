@@ -124,6 +124,7 @@ export const logoutAction = async (
             cid: null,
         },
     });
+    await navigate("/");
 };
 export interface JWT {
     ip: string | null;

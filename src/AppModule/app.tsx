@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Redirect, RouteComponentProps, Router, navigate } from "@reach/router";
+import { Redirect, RouteComponentProps, Router } from "@reach/router";
 import { appRouters } from "./bootstrap";
 import { DashboardLayout } from "./layouts/DashboardLayout";
 import { AppConfiguration } from "./layouts/AppConfiguration";
@@ -67,13 +67,11 @@ const App = (): JSX.Element => {
         );
     }
 
-    if (!state.isAuthenticated) {
-        navigate("/auth/login").then();
-    }
-
     return (
         <AuthLayout>
             <Router>
+                <Redirect from="/home" to="/auth" />
+                <Redirect from="/" to="/auth" noThrow />
                 {authRoutes.map(({ RouterPlug, key, path }) => {
                     return <RouterPlug key={key} path={path} />;
                 })}
