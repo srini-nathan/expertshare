@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 import { Form, Col } from "react-bootstrap";
-import "./assets/scss/style.scss";
 import { Control, Controller, useWatch } from "react-hook-form";
 import { isString as _isString, startCase as _startCase } from "lodash";
+import "./assets/scss/style.scss";
 
 export interface AppFormInputProps {
     id?: string;
@@ -58,7 +58,7 @@ export const AppFormInput: FC<AppFormInputProps> = ({
     const fieldValue = useWatch({
         control,
         name,
-        defaultValue: value,
+        defaultValue: "",
     });
     return (
         <Form.Group
