@@ -1,9 +1,6 @@
 import React, { FC } from "react";
 import { RouteComponentProps, useParams } from "@reach/router";
-import {
-    AuthContext,
-    socialLogin,
-} from "../../../AppModule/Authentication/context/AuthContext";
+import { AuthContext, socialLogin } from "../../context/AuthContext";
 import { AppLoader } from "../../../AppModule/components";
 
 export const SocialLoginRedirectPage: FC<RouteComponentProps> = (): JSX.Element => {
