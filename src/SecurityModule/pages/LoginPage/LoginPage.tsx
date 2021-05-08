@@ -9,6 +9,7 @@ import { AuthContext, loginAction } from "../../context/AuthContext";
 import { AppAuthHeader, AppAuthFooter } from "../../components";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { validation } from "../../../AppModule/utils";
+import { API_HOST } from "../../../AppModule/config/app-env";
 import "./assets/scss/styles.scss";
 
 type LoginForm = {
@@ -112,9 +113,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                                 "btn mb-3 btn-secondary justify-content-center social-media-button" +
                                                 " google"
                                             }
-                                            href={
-                                                "http://api.expertshare.site:8091/social/connect/google"
-                                            }
+                                            href={`${API_HOST}/social/connect/google`}
                                         >
                                             Google
                                         </a>
@@ -124,9 +123,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                             className={
                                                 "btn mb-3 btn-secondary justify-content-center social-media-button linkedin"
                                             }
-                                            href={
-                                                "http://api.expertshare.site:8091/social/connect/linkedin"
-                                            }
+                                            href={`${API_HOST}/social/connect/linkedin`}
                                         >
                                             LinkedIn
                                         </a>
@@ -136,9 +133,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                             className={
                                                 "btn mb-3 btn-secondary justify-content-center social-media-button azure"
                                             }
-                                            href={
-                                                "http://api.expertshare.site:8091/social/connect/azure"
-                                            }
+                                            href={`${API_HOST}/social/connect/azure`}
                                         >
                                             Azure
                                         </a>
