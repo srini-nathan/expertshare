@@ -6,3 +6,17 @@ export interface Client extends BaseEntity {
     notes: string;
     packages: Package[];
 }
+
+export class ClientEntity {
+    name: string;
+
+    notes: string;
+
+    packages: Package[];
+
+    constructor() {
+        this.name = "";
+        this.notes = "";
+        this.packages = [];
+    }
+}
