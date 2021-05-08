@@ -12,6 +12,7 @@ import {
     AppCard,
     AppFormInputPassword,
     AppDacastFrame,
+    AppKnovioPlayer,
     AppYoutubeFrame,
     AppVimeoFrame,
 } from "../../components";
@@ -161,7 +162,13 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     />
                 </div>
             </Row>
-            <hr className="col-12" />
+            <Row>
+                <AppKnovioPlayer
+                    linkUrl="https://view.knowledgevision.com/presentation/e31fff7a14ee4a9aa82dca008384c32a"
+                    height={390}
+                    width={640}
+                />
+            </Row>
             <Row>
                 <AppDacastFrame
                     id="1552_f_297509"

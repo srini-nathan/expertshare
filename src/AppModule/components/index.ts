@@ -24,6 +24,7 @@ export * from "./AppCard";
 export * from "./AppVimeoFrame";
 export * from "./AppFormCheckBox";
 export * from "./AppDacastFrame";
+export * from "./AppKnovioPlayer";
 export * from "./AppYoutubeFrame";
 export * from "./AppFormElementGenerator";
 export * from "./AppTabs";
