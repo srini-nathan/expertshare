@@ -9,7 +9,6 @@ import {
 } from "ag-grid-community";
 import { ColumnApi } from "ag-grid-community/dist/lib/columnController/columnApi";
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
-import { Col, Row } from "react-bootstrap";
 import {
     AppGridPagination,
     AppGridNoRowsOverlay,
@@ -98,35 +97,31 @@ export const AppGrid: FC<AppGridProps> = ({
                     />
                 </div>
                 <br />
-                <Row>
-                    <Col>
-                        <div className="d-flex flex-row">
-                            <div className="pagination-container">
-                                <AppFormDropdown
-                                    id={"pageSize"}
-                                    defaultValue={defaultPageSize()}
-                                    options={pageSizeOptions()}
-                                    menuPlacement={"top"}
-                                    onChange={(selectedValue) => {
-                                        const {
-                                            value,
-                                        } = selectedValue as AppGridPageSizeOption;
-                                        gridApi?.paginationSetPageSize(value);
-                                        setPageSize(value);
-                                    }}
-                                />
-                            </div>
-                            <AppGridPagination
-                                itemsPerPage={pageSize}
-                                totalItems={totalItems}
-                                active={active}
-                                onClick={(pageNumber) => {
-                                    gridApi?.paginationGoToPage(pageNumber - 1);
-                                }}
-                            />
-                        </div>
-                    </Col>
-                </Row>
+                <div className="d-flex flex-row app-grid-action">
+                    <div className="pagination-container mr-3">
+                        <AppFormDropdown
+                            id={"pageSize"}
+                            defaultValue={defaultPageSize()}
+                            options={pageSizeOptions()}
+                            menuPlacement={"top"}
+                            onChange={(selectedValue) => {
+                                const {
+                                    value,
+                                } = selectedValue as AppGridPageSizeOption;
+                                gridApi?.paginationSetPageSize(value);
+                                setPageSize(value);
+                            }}
+                        />
+                    </div>
+                    <AppGridPagination
+                        itemsPerPage={pageSize}
+                        totalItems={totalItems}
+                        active={active}
+                        onClick={(pageNumber) => {
+                            gridApi?.paginationGoToPage(pageNumber - 1);
+                        }}
+                    />
+                </div>
             </div>
         </React.Fragment>
     );
