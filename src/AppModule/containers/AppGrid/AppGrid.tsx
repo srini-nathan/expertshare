@@ -99,30 +99,32 @@ export const AppGrid: FC<AppGridProps> = ({
                 </div>
                 <br />
                 <Row>
-                    <Col md={3}>
-                        <AppFormDropdown
-                            id={"pageSize"}
-                            defaultValue={defaultPageSize()}
-                            options={pageSizeOptions()}
-                            menuPlacement={"top"}
-                            onChange={(selectedValue) => {
-                                const {
-                                    value,
-                                } = selectedValue as AppGridPageSizeOption;
-                                gridApi?.paginationSetPageSize(value);
-                                setPageSize(value);
-                            }}
-                        />
-                    </Col>
                     <Col>
-                        <AppGridPagination
-                            itemsPerPage={pageSize}
-                            totalItems={totalItems}
-                            active={active}
-                            onClick={(pageNumber) => {
-                                gridApi?.paginationGoToPage(pageNumber - 1);
-                            }}
-                        />
+                        <div className="d-flex flex-row">
+                            <div className="pagination-container">
+                                <AppFormDropdown
+                                    id={"pageSize"}
+                                    defaultValue={defaultPageSize()}
+                                    options={pageSizeOptions()}
+                                    menuPlacement={"top"}
+                                    onChange={(selectedValue) => {
+                                        const {
+                                            value,
+                                        } = selectedValue as AppGridPageSizeOption;
+                                        gridApi?.paginationSetPageSize(value);
+                                        setPageSize(value);
+                                    }}
+                                />
+                            </div>
+                            <AppGridPagination
+                                itemsPerPage={pageSize}
+                                totalItems={totalItems}
+                                active={active}
+                                onClick={(pageNumber) => {
+                                    gridApi?.paginationGoToPage(pageNumber - 1);
+                                }}
+                            />
+                        </div>
                     </Col>
                 </Row>
             </div>

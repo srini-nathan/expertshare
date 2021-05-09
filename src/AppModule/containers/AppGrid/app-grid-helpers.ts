@@ -53,6 +53,10 @@ export const pageSizeOptions = (): AppGridPageSizeOption[] => [
         value: 10,
     },
     {
+        label: 20,
+        value: 20,
+    },
+    {
         label: 30,
         value: 30,
     },
@@ -63,10 +67,6 @@ export const pageSizeOptions = (): AppGridPageSizeOption[] => [
     {
         label: 100,
         value: 100,
-    },
-    {
-        label: 200,
-        value: 200,
     },
 ];
 
