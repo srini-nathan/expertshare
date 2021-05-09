@@ -1,6 +1,6 @@
 {
     "workbench.settings.editor": "json",
-    "editor.formatOnSave": false,
+    "editor.formatOnSave": true,
     "javascript.format.enable": false,
     "css.validate": false,
     "eslint.packageManager": "yarn",
