@@ -27,11 +27,11 @@ import { ClientApi } from "../../apis";
 import { errorToast, successToast } from "../../../AppModule/utils";
 
 export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
-    const { clientId } = useParams();
     const [totalItems, setTotalItems] = useState<number>(0);
-    const [client, setClient] = useState<Client>();
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
+    const { clientId } = useParams();
+    const [client, setClient] = useState<Client>();
 
     useEffect(() => {
         ClientApi.getById<Client>(clientId).then(
