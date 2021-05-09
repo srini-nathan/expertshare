@@ -1,63 +1,40 @@
 import React, { FC } from "react";
 import Select, { MenuPlacement } from "react-select";
-import { ActionMeta, ValueType } from "react-select/src/types";
 import { Control, Controller } from "react-hook-form";
 import { Form, Col } from "react-bootstrap";
 import { PrimitiveObject } from "../../models";
-import "bootstrap/dist/css/bootstrap.css";
+
 import "./assets/scss/style.scss";
 
 export interface AppFormSelectProps {
     id: string;
     name: string;
-    defaultValue: any;
+    defaultValue: string | number;
     placeholder?: string;
     label?: string;
-    onChange?: (
-        value: ValueType<PrimitiveObject, boolean>,
-        actionMeta: ActionMeta<PrimitiveObject>
-    ) => void;
     size?: "lg" | "sm";
     sm?: string | number;
     md?: string | number;
     lg?: string | number;
     xl?: string | number;
     options: PrimitiveObject[];
-    value: any;
     menuPlacement?: MenuPlacement;
     required?: boolean;
     className?: string;
     description?: string;
     errorMessage?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     control?: Control<any>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    transform?: any;
 }
-const customStyles = {
-    option: (provided: any, state: any) => ({
-        ...provided,
-        borderBottom: "2px dotted #373943",
-        color: state.isSelected ? "rgb(229,240,240)" : "black",
-        backgroundColor: state.isSelected ? "#30B7A7" : "white",
-    }),
-    control: (provided: any) => ({
-        ...provided,
-        margin: "-8px",
-    }),
-    "single-value": (provided: any) => ({
-        ...provided,
-        display: "relative",
-    }),
-    indicator: (provided: any) => ({
-        ...provided,
-    }),
-};
+
 export const AppFormSelect: FC<AppFormSelectProps> = ({
     id,
     name,
     defaultValue,
     placeholder = "",
-    onChange = () => {},
     options,
-    value,
     menuPlacement = "auto",
     className = "",
     control,
@@ -69,10 +46,10 @@ export const AppFormSelect: FC<AppFormSelectProps> = ({
     required = false,
     errorMessage,
     label = "",
+    transform,
 }): JSX.Element => {
     const controlId = id || name;
     return (
-        // Todo: fixing the colro issues
         <Form.Group
             as={Col}
             md={md}
@@ -98,22 +75,18 @@ export const AppFormSelect: FC<AppFormSelectProps> = ({
             ) : null}
             <Controller
                 name={name}
-                defaultValue={value}
+                defaultValue={defaultValue}
                 control={control}
                 render={({ field }) => (
                     <Select
                         {...field}
                         options={options}
-                        defaultValue={defaultValue}
-                        id={id}
-                        name={name}
-                        onChange={onChange}
-                        value={value}
                         placeholder={placeholder}
-                        styles={customStyles}
-                        className="col-xl-12 col-lg-12 col-md-12 col-sm-12 form-control mt-2 mb-2"
+                        className="custom-select-container form-control"
                         classNamePrefix="custom-select"
                         menuPlacement={menuPlacement}
+                        onChange={(e) => field.onChange(transform.output(e))}
+                        value={transform.input(field.value)}
                     />
                 )}
             />
