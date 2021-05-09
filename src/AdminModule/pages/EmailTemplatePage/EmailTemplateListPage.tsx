@@ -20,13 +20,12 @@ import {
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
 import { errorToast, successToast } from "../../../AppModule/utils";
-import "./assets/scss/list.scss";
 import {
     AuthContext,
     IAuthSate,
 } from "../../../AppModule/Authentication/context/AuthContext";
 
-export const EmailListPage: FC<RouteComponentProps> = (): JSX.Element => {
+export const EmailTemplateListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
@@ -97,9 +96,9 @@ export const EmailListPage: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Fragment>
             <AppPageHeader
-                title={"Email template list"}
-                createLabel={"Create"}
-                createLink={"templates/new"}
+                title={"Email Templates"}
+                createLabel={"Create Email Template"}
+                createLink={"/admin/email-templates/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}
                 showToolbar

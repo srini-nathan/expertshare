@@ -15,7 +15,7 @@ export const appGridFrameworkComponents = {
 
         const props: AppGridActionProps = {
             editAction: {
-                url: `/admin/templates/${id}`,
+                url: `/admin/email-templates/${id}`,
             },
             deleteAction: {
                 confirmation: "Are you sure want to delete the template ?",
