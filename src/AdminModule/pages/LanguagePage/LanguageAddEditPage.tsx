@@ -88,7 +88,7 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
                 }
             );
         }
-    }, [id, isEditMode]);
+    }, [id, isEditMode, trigger]);
 
     if (loading) {
         return <AppLoader />;
