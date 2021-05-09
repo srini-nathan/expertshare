@@ -36,35 +36,42 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             label: "Admin - Settings",
             path: "/admin/settings",
             icon: {
-                name: "administrator",
+                name: "",
             },
         },
         {
             label: "Admin - Design",
             path: "/admin/design",
             icon: {
-                name: "administrator",
+                name: "",
             },
         },
         {
             label: "Admin - Languages",
             path: "/admin/languages",
             icon: {
-                name: "administrator",
+                name: "",
             },
         },
         {
             label: "Admin - Clients",
             path: "/admin/clients",
             icon: {
-                name: "administrator",
+                name: "",
             },
         },
         {
             label: "Admin - User Groups",
             path: "/admin/user-groups",
             icon: {
-                name: "Users",
+                name: "",
+            },
+        },
+        {
+            label: "Admin - Email Templates",
+            path: "/admin/email-templates",
+            icon: {
+                name: "",
             },
         },
     ]);

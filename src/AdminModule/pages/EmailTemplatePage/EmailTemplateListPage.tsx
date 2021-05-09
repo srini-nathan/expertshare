@@ -23,7 +23,7 @@ import { errorToast, successToast } from "../../../AppModule/utils";
 import {
     AuthContext,
     IAuthSate,
-} from "../../../AppModule/Authentication/context/AuthContext";
+} from "../../../SecurityModule/context/AuthContext";
 
 export const EmailTemplateListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);

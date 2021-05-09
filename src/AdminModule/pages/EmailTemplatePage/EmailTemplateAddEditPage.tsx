@@ -5,8 +5,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { forEach as _forEach, find as _find } from "lodash";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { DevTool } from "@hookform/devtools";
 import {
     AppPageHeader,
     AppBreadcrumb,
@@ -26,7 +24,7 @@ import { AppFormSelect } from "../../../AppModule/components/AppFormSelect";
 import {
     AuthContext,
     IAuthSate,
-} from "../../../AppModule/Authentication/context/AuthContext";
+} from "../../../SecurityModule/context/AuthContext";
 import { ContainerApi } from "../../apis/ContainerApi";
 
 const schema = yup.object().shape({
@@ -138,7 +136,6 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
             />
             <Row>
                 <Col md="12">
-                    <DevTool control={control} />
                     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                         <Form.Row>
                             <AppFormInput
