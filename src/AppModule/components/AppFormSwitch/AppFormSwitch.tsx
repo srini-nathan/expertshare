@@ -80,7 +80,10 @@ export const AppFormSwitch: FC<AppFormSwitchProps> = ({
                         type="switch"
                         className={classes}
                         {...field}
-                        onChange={onChange}
+                        onChange={(e) => {
+                            onChange(e);
+                            return field.onChange(e);
+                        }}
                     />
                 )}
             />
