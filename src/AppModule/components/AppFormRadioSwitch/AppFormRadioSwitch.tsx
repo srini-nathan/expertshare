@@ -4,11 +4,12 @@ import { Control, Controller } from "react-hook-form";
 import "./assets/scss/style.scss";
 
 export interface AppFormRadioSwitchProps {
-    sm?: string;
-    md?: string;
-    lg?: string;
-    xl?: string;
+    sm?: string | number;
+    md?: string | number;
+    lg?: string | number;
+    xl?: string | number;
     label: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     control: Control<any>;
     fieldName: string;
     radioValue: string;
