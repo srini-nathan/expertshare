@@ -55,7 +55,7 @@ const schema = Yup.object().shape({
 export const ContainerAddEdit: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
-    const { clientId, id = null } = useParams();
+    const { clientId = null, id = null } = useParams();
     const isEditMode: boolean = id !== null;
     const hookNav = useNavigate();
     const nav = navigate ?? hookNav;
@@ -76,6 +76,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         setError,
         trigger,
         watch,
+        setValue,
     } = useForm({
         resolver: yupResolver(schema),
         mode: "all",
@@ -114,13 +115,15 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                 PackageApi.toResourceUrl(packId)
                             ),
                         });
+                        setValue("name", response.name);
+                        setValue("domain", response.domain);
                         trigger();
                     }
                     setLoading(false);
                 }
             );
         }
-    }, [id, isEditMode, trigger]);
+    }, [id, isEditMode]);
 
     const onSubmit = (formData: ContainerEntity) => {
         ContainerApi.createOrUpdate<ContainerEntity>(id, {
@@ -215,7 +218,6 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         xl={12}
                                         name={"containerGroup"}
                                         label={"Container Group"}
-                                        required={true}
                                         withCounter={true}
                                         {...validation(
                                             "containerGroup",
@@ -225,7 +227,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         errorMessage={
                                             errors.containerGroup?.message
                                         }
-                                        value={data.containerGroup || ""}
+                                        value={data.containerGroup}
                                         control={control}
                                     />
                                 </Col>
@@ -256,7 +258,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         errorMessage={
                                             errors.description?.message
                                         }
-                                        value={data.description || ""}
+                                        value={data.description}
                                         control={control}
                                     />
                                 </Col>
@@ -296,7 +298,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                             isEditMode
                                         )}
                                         errorMessage={errors.bucketKey?.message}
-                                        value={data.bucketKey || ""}
+                                        value={data.bucketKey}
                                         control={control}
                                     />
 
@@ -316,7 +318,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         errorMessage={
                                             errors.bucketSecret?.message
                                         }
-                                        value={data.bucketSecret || ""}
+                                        value={data.bucketSecret}
                                         control={control}
                                     />
 
@@ -336,7 +338,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         errorMessage={
                                             errors.bucketName?.message
                                         }
-                                        value={data.bucketName || ""}
+                                        value={data.bucketName}
                                         control={control}
                                     />
                                     <AppFormInput
@@ -355,7 +357,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         errorMessage={
                                             errors.bucketRegion?.message
                                         }
-                                        value={data.bucketRegion || ""}
+                                        value={data.bucketRegion}
                                         control={control}
                                     />
                                 </Row>
