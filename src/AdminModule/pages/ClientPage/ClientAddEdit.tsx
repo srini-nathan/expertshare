@@ -1,102 +1,86 @@
-import React, { FC, useEffect, useState } from "react";
-import {
-    Link,
-    RouteComponentProps,
-    useNavigate,
-    useParams,
-} from "@reach/router";
+import React, { FC, Fragment, useEffect, useRef, useState } from "react";
+import { RouteComponentProps, useNavigate, useParams } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import "./assets/scss/client_add_edit_style.scss";
+import { forEach as _forEach, isString as _isString } from "lodash";
 import { Col, Form, Row } from "react-bootstrap";
-import { Client, Package } from "../../models";
-import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHeader";
+import { Canceler } from "axios";
+import { ClientEntity, Package } from "../../models";
 import { ClientApi, PackageApi } from "../../apis";
-
-import { ListResponse } from "../../../AppModule/models";
-import { sweetSuccess } from "../../../AppModule/components/Util";
 import {
     AppFormTextArea,
     AppLoader,
     AppCard,
+    AppBreadcrumb,
+    AppPageHeader,
+    AppFormActions,
+    AppFormSwitch,
 } from "../../../AppModule/components";
-import { errorToast, validation } from "../../../AppModule/utils";
+import {
+    checkAndAdd,
+    checkAndRemove,
+    errorToast,
+    successToast,
+    validation,
+} from "../../../AppModule/utils";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
-import { AppFormCheckBox } from "../../../AppModule/components/AppFormCheckBox";
+import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
 
-const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Name is Required"),
-    notes: Yup.string().optional(),
+const schema = Yup.object().shape({
+    name: Yup.string().required(),
+    notes: Yup.string().nullable(),
 });
 
-function getProperty<T, K extends keyof T>(obj: T, key: K) {
-    return obj[key];
-}
+export const ClientAddEdit: FC<RouteComponentProps> = ({
+    navigate,
+}): JSX.Element => {
+    const { id = null } = useParams();
+    const isEditMode: boolean = id !== null;
+    const hookNav = useNavigate();
+    const nav = navigate ?? hookNav;
 
-export type ClientFormType = {
-    name: string;
-    notes: string;
-    [key: string]: string | boolean;
-};
-
-export interface ClientRequestData {
-    name: string;
-    notes: string;
-    packages: string[];
-}
-
-export class ClientEntity {
-    name: string;
-
-    notes: string;
-
-    packages: Package[];
-
-    constructor() {
-        this.name = "";
-        this.notes = "";
-        this.packages = [];
-    }
-}
-
-export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
-    const { id } = useParams();
-    const isAddMode = !id;
-    const navigate = useNavigate();
+    const [data, setData] = React.useState<ClientEntity>(new ClientEntity());
     const [packages, setPackages] = React.useState<Package[]>([]);
-    const [client, setClient] = React.useState<ClientEntity>(
-        new ClientEntity()
-    );
-    const [loading, setLoading] = useState<boolean>(!isAddMode);
+    const [loading, setLoading] = useState<boolean>(isEditMode);
+    const [loadingPackages, setLoadingPackages] = useState<boolean>(true);
+    const cancelTokenSourceRef = useRef<Canceler>();
 
     const {
         control,
         handleSubmit,
         formState,
+        setError,
         trigger,
-        setValue,
-        reset,
-        register,
-    } = useForm({
-        resolver: yupResolver(validationSchema),
+    } = useForm<ClientEntity>({
+        resolver: yupResolver(schema),
         mode: "all",
     });
 
-    const [packageKeys, setPackageKeys] = useState<string[]>();
+    useEffect(() => {
+        setLoadingPackages(true);
+        PackageApi.find<Package>(1, {}, (c) => {
+            cancelTokenSourceRef.current = c;
+        }).then(({ response, error }) => {
+            setLoadingPackages(false);
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                }
+            } else if (response !== null) {
+                setPackages(response.items);
+            }
+        });
+        const cancelPendingCall = cancelTokenSourceRef.current;
+        return () => {
+            if (cancelPendingCall) {
+                cancelPendingCall();
+            }
+        };
+    }, []);
 
     useEffect(() => {
-        PackageApi.findAll<Package>().then(
-            ({ items }: ListResponse<Package>) => {
-                setPackageKeys(
-                    items
-                        .map((p) => p.packageKey)
-                        .map((key) => key.replace(".", "_"))
-                );
-                setPackages(items);
-            }
-        );
-        if (!isAddMode) {
+        if (isEditMode) {
             ClientApi.getById<ClientEntity>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
@@ -104,196 +88,149 @@ export const ClientAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                     } else if (isNotFound) {
                         errorToast("Client not exist");
                     } else if (response !== null) {
-                        const fetchedClientPackagesKeys = response.packages.map(
-                            (item) => {
-                                const key = item.packageKey.replace(".", "_");
-                                return { key, value: item.id };
-                            }
-                        );
-
-                        const fields: string[] = ["name", "notes"];
-                        fields.forEach((field) =>
-                            setValue(
-                                field,
-                                getProperty(
-                                    response,
-                                    field as keyof ClientEntity
-                                )
-                            )
-                        );
-                        fetchedClientPackagesKeys.forEach((pk) =>
-                            setValue(pk.key, pk.value)
-                        );
-                        setClient(response);
+                        const packs = response.packages as Package[];
+                        setData({
+                            ...response,
+                            packages: packs.map(({ id: packId }) =>
+                                PackageApi.toResourceUrl(packId)
+                            ),
+                        });
                         trigger();
                     }
                     setLoading(false);
                 }
             );
         }
-    }, [id, isAddMode]);
-    function buildPackageArray(keys: string[], data: ClientFormType) {
-        return keys.reduce<ClientRequestData>(
-            (acc, item) => {
-                if (packageKeys?.includes(item)) {
-                    if (data[item] !== false) {
-                        const newPackageString = `/api/packages/${data[item]}`;
-                        const newPackageArray = [
-                            ...acc.packages,
-                            newPackageString,
-                        ];
-                        return { ...acc, packages: newPackageArray };
-                    }
-                    return acc;
-                }
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                acc[item] = data[item];
-                return acc;
-            },
-            { name: "", notes: "", packages: [] }
-        );
-    }
+    }, [id, isEditMode, trigger]);
 
-    async function createClient(data: ClientFormType) {
-        const keys = Object.keys(data);
-        const result = buildPackageArray(keys, data);
-        await ClientApi.create<Client, ClientRequestData>(result);
-        await sweetSuccess({ text: "Client saved successfully " });
-        await navigate(ClientApi.CLIENT_LIST_PAGE_PATH);
-    }
-
-    async function updateClient(data: ClientFormType) {
-        const keys = Object.keys(data);
-        const result = buildPackageArray(keys, data);
-        await ClientApi.update<Client, ClientRequestData>(id, result);
-        await sweetSuccess({ text: "Client updated successfully " });
-        await navigate(ClientApi.CLIENT_LIST_PAGE_PATH);
-    }
-
-    const onSubmit = async (data: ClientFormType) => {
-        if (isAddMode) {
-            await createClient(data);
-        } else {
-            await updateClient(data);
-        }
+    const onSubmit = (formData: ClientEntity) => {
+        ClientApi.createOrUpdate<ClientEntity>(id, {
+            ...formData,
+            packages: data.packages,
+        }).then(({ error, errorMessage }) => {
+            if (error instanceof UnprocessableEntityErrorResponse) {
+                const { violations } = error;
+                _forEach(violations, (value: string, key: string) => {
+                    const propertyName = key as keyof ClientEntity;
+                    setError(propertyName, {
+                        type: "backend",
+                        message: value,
+                    });
+                });
+            } else if (errorMessage) {
+                errorToast(errorMessage);
+            } else {
+                nav("..").then(() => {
+                    successToast(
+                        isEditMode ? "Client updated" : "Client created"
+                    );
+                });
+            }
+        });
     };
 
-    if (loading) {
-        return (
+    if (loading || loadingPackages) {
+        return <AppLoader />;
+    }
+
+    const { errors } = formState;
+
+    const isPackageActive = (resourceUrl: string): boolean => {
+        const packs = data.packages as string[];
+        return packs.indexOf(resourceUrl) > -1;
+    };
+
+    return (
+        <Fragment>
+            <AppBreadcrumb linkText={"Client"} linkUrl={".."} />
+            <AppPageHeader title={isEditMode ? "Edit Client" : "Add Client"} />
             <Row>
-                <Col md={12} className="vh-100">
-                    <AppLoader
-                        spinnerAnimation="border"
-                        spinnerVariant="primary"
-                    />
+                <Col>
+                    <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+                        <AppCard>
+                            <Form.Row>
+                                <AppFormInput
+                                    lg={6}
+                                    xl={6}
+                                    name={"name"}
+                                    label={"Name"}
+                                    required={true}
+                                    withCounter={true}
+                                    {...validation(
+                                        "name",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.name?.message}
+                                    value={data.name}
+                                    control={control}
+                                />
+                                <AppFormTextArea
+                                    lg={6}
+                                    xl={6}
+                                    name={"notes"}
+                                    label={"Notes"}
+                                    required={false}
+                                    withCounter={true}
+                                    {...validation(
+                                        "notes",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.notes?.message}
+                                    value={data.notes || ""}
+                                    control={control}
+                                />
+                            </Form.Row>
+                        </AppCard>
+                        <AppCard title="Default Packages">
+                            <Form.Row>
+                                {packages.map(({ packageKey, id: packId }) => {
+                                    const name = packageKey.replace(".", "_");
+                                    const resourceUrl = PackageApi.toResourceUrl(
+                                        packId
+                                    );
+                                    return (
+                                        <AppFormSwitch
+                                            key={name}
+                                            name={name}
+                                            label={packageKey}
+                                            control={control}
+                                            defaultChecked={isPackageActive(
+                                                resourceUrl
+                                            )}
+                                            onChange={(event) => {
+                                                const packs = data.packages as string[];
+                                                if (
+                                                    event.currentTarget.checked
+                                                ) {
+                                                    checkAndAdd<string>(
+                                                        packs,
+                                                        resourceUrl
+                                                    );
+                                                } else {
+                                                    checkAndRemove<string>(
+                                                        packs,
+                                                        resourceUrl
+                                                    );
+                                                }
+                                                setData({
+                                                    ...data,
+                                                    packages: packs,
+                                                });
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </Form.Row>
+                        </AppCard>
+                        <AppFormActions
+                            isEditMode={isEditMode}
+                            navigation={nav}
+                        />
+                    </Form>
                 </Col>
             </Row>
-        );
-    }
-    const { errors } = formState;
-    return (
-        <div className="theme-primary-clr theme-primary-font">
-            <div className="container-fluid p-0 mb-5">
-                <div className="row m-0">
-                    <PageHeader
-                        linkText={"Client"}
-                        linkUrl={".."}
-                        pageHeader={
-                            isAddMode ? "Add new Client" : "Edit Client"
-                        }
-                    />
-                    <div className="app-container center-block col-12">
-                        <div className="edit-client">
-                            <Form
-                                noValidate
-                                onSubmit={handleSubmit(onSubmit)}
-                                onReset={reset}
-                            >
-                                <AppCard>
-                                    <Row>
-                                        <AppFormInput
-                                            md={6}
-                                            lg={6}
-                                            xl={6}
-                                            sm={12}
-                                            name={"name"}
-                                            label={"Name"}
-                                            required={true}
-                                            withCounter={true}
-                                            {...validation(
-                                                "name",
-                                                formState,
-                                                !isAddMode
-                                            )}
-                                            errorMessage={errors.name?.message}
-                                            value={client.name}
-                                            control={control}
-                                        />
-                                        <AppFormTextArea
-                                            md={6}
-                                            lg={6}
-                                            xl={6}
-                                            sm={12}
-                                            name={"notes"}
-                                            label={"Notes"}
-                                            required={false}
-                                            withCounter={true}
-                                            {...validation(
-                                                "notes",
-                                                formState,
-                                                !isAddMode
-                                            )}
-                                            errorMessage={errors.notes?.message}
-                                            value={client.notes}
-                                            control={control}
-                                        />
-                                    </Row>
-                                </AppCard>
-                                <AppCard title="Default Packages">
-                                    <Row>
-                                        {packages.map((e) => {
-                                            return (
-                                                <AppFormCheckBox
-                                                    key={e.id}
-                                                    name={e.packageKey.replace(
-                                                        ".",
-                                                        "_"
-                                                    )}
-                                                    label={e.packageKey}
-                                                    labelPosition={"left"}
-                                                    value={String(e.id)}
-                                                    register={register}
-                                                />
-                                            );
-                                        })}
-                                    </Row>
-                                </AppCard>
-                                <div className="edit-client-footer-wrap p-0 w-100 ">
-                                    <div className="edit-client-footer py-4 w-100 d-flex flex-column flex-sm-row align-items-center justify-content-end">
-                                        <Link
-                                            to={isAddMode ? "." : ".."}
-                                            className="btn m-2 btn-secondary"
-                                        >
-                                            Cancel
-                                        </Link>
-                                        <button
-                                            type="submit"
-                                            disabled={formState.isSubmitting}
-                                            className="btn m-2 btn-primary"
-                                        >
-                                            {formState.isSubmitting && (
-                                                <span className="spinner-border spinner-border-sm mr-1" />
-                                            )}
-                                            Save
-                                        </button>
-                                    </div>
-                                </div>
-                            </Form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </Fragment>
     );
 };
