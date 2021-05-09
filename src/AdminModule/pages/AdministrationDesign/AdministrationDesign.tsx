@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useEffect } from "react";
-import { RouteComponentProps } from "@reach/router";
+import { RouteComponentProps, useNavigate } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,6 +9,7 @@ import {
     AppCard,
     AppLoader,
     AppFormElementGenerator,
+    AppFormActions,
 } from "../../../AppModule/components";
 import { AppContext } from "../../../AppModule/Contexts/AppContext";
 import { ContainerApi } from "../../apis";
@@ -43,7 +44,9 @@ interface ContainerFormType {
     [key: string]: string | boolean;
 }
 
-export const AdministrationDesign: FC<RouteComponentProps> = (): JSX.Element => {
+export const AdministrationDesign: FC<RouteComponentProps> = ({
+    navigate,
+}): JSX.Element => {
     const { state } = React.useContext(AppContext);
     const { isLoading, ContainerState } = state;
     const [configuration, setConfiguration] = React.useState<any>();
@@ -51,7 +54,10 @@ export const AdministrationDesign: FC<RouteComponentProps> = (): JSX.Element => 
         string[]
     >();
 
-    const { control, handleSubmit, formState } = useForm({
+    const hookNav = useNavigate();
+    const nav = navigate ?? hookNav;
+
+    const { control, handleSubmit } = useForm({
         resolver: yupResolver(validationSchema),
         mode: "all",
     });
@@ -116,20 +122,7 @@ export const AdministrationDesign: FC<RouteComponentProps> = (): JSX.Element => 
                         className="w-100"
                     >
                         {renderConfigs()}
-                        <div className="edit-client-footer-wrap p-0 w-100 ">
-                            <div className="edit-client-footer py-4 w-100 d-flex flex-column flex-sm-row align-items-center justify-content-end">
-                                <button
-                                    type="submit"
-                                    disabled={formState.isSubmitting}
-                                    className="btn btn-primary col-auto ml-3 mr-2"
-                                >
-                                    {formState.isSubmitting && (
-                                        <span className="spinner-border spinner-border-sm mr-1" />
-                                    )}
-                                    Save
-                                </button>
-                            </div>
-                        </div>
+                        <AppFormActions isEditMode={true} navigation={nav} />
                     </Form>
                 </Row>
             )}
