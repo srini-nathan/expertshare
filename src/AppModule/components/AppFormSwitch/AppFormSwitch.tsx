@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, ChangeEventHandler } from "react";
 import { Form, Col, FormCheck } from "react-bootstrap";
 import { Control, Controller } from "react-hook-form";
 import "./assets/scss/style.scss";
@@ -18,8 +18,10 @@ export interface AppFormSwitchProps {
     errorMessage?: string;
     isInvalid?: boolean;
     isValid?: boolean;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     control?: Control<any>;
     defaultChecked?: boolean;
+    onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
 export const AppFormSwitch: FC<AppFormSwitchProps> = ({
@@ -38,6 +40,7 @@ export const AppFormSwitch: FC<AppFormSwitchProps> = ({
     isValid,
     isInvalid,
     defaultChecked = false,
+    onChange = () => {},
 }): JSX.Element => {
     const controlId = id || name;
 
@@ -77,6 +80,7 @@ export const AppFormSwitch: FC<AppFormSwitchProps> = ({
                         type="switch"
                         className={classes}
                         {...field}
+                        onChange={onChange}
                     />
                 )}
             />
