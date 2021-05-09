@@ -269,4 +269,8 @@ export abstract class EntityAPI extends API {
 
         return config;
     }
+
+    public static toResourceUrl(id: number): string {
+        return `${this.PATH}/${id}`;
+    }
 }
