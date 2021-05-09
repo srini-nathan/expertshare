@@ -12,6 +12,8 @@ import {
     UserGroupAddEditPage,
     AdministrationGeneralSetting,
     AdministrationDesign,
+    EmailTemplateListPage,
+    EmailTemplateAddEditPage,
 } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
 import { ContainerAddEdit } from "./pages/ContainerPage/ContainerAddEdit";
@@ -44,6 +46,9 @@ export const routers: ModuleRouter[] = [
                     <UserGroupAddEditPage path={"user-groups/:id"} />
                     <AdministrationGeneralSetting path={"settings"} />
                     <AdministrationDesign path={"design"} />
+                    <EmailTemplateListPage path={"email-templates"} />
+                    <EmailTemplateAddEditPage path={"email-templates/new"} />
+                    <EmailTemplateAddEditPage path={"email-templates/:id"} />
                 </Router>
             );
         },

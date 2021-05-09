@@ -8,3 +8,4 @@ export * from "./ContainerPage";
 export * from "./UserGroupPage";
 export * from "./AdministrationGeneralSetting";
 export * from "./AdministrationDesign";
+export * from "./EmailTemplatePage";
