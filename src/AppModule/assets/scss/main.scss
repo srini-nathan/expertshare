@@ -5,3 +5,15 @@
 body {
     background-color: var(--body-bg-clr);
 }
+
+// forms
+.was-validated .form-control:valid,
+.form-control.is-valid{
+    background-image: none;
+    border-color: inherit;
+}
+.was-validated .form-control:valid:focus,
+.form-control.is-valid:focus{
+    border-color: inherit;
+    box-shadow: inherit;
+}
