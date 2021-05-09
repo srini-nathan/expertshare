@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Redirect, RouteComponentProps, Router } from "@reach/router";
+import { Redirect, RouteComponentProps, Router, Location } from "@reach/router";
 import { appRouters } from "./bootstrap";
 import { DashboardLayout } from "./layouts/DashboardLayout";
 import { AppConfiguration } from "./layouts/AppConfiguration";
@@ -14,6 +14,36 @@ import { AppLoader } from "./components";
 
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
+
+interface Props {
+    location: {
+        pathname: string;
+    };
+    action: () => void;
+}
+class OnRouteChangeWorker extends React.Component<Props> {
+    componentDidUpdate(prevProps: Props) {
+        if (this.props.location.pathname !== prevProps.location.pathname) {
+            this.props.action();
+        }
+    }
+
+    // eslint-disable-next-line class-methods-use-this
+    render() {
+        return null;
+    }
+}
+
+interface Props2 {
+    action: () => void;
+}
+const OnRouteChange = ({ action }: Props2) => (
+    <Location>
+        {({ location }) => (
+            <OnRouteChangeWorker location={location} action={action} />
+        )}
+    </Location>
+);
 
 const Home: FC<RouteComponentProps> = (): JSX.Element => {
     const { dispatch } = React.useContext(AuthContext);
@@ -57,7 +87,7 @@ const App = (): JSX.Element => {
             <AppProvider>
                 <AppConfiguration>
                     <DashboardLayout>
-                        <Router>
+                        <Router primary={false}>
                             <Redirect from="/" to="home" noThrow />
                             <Home path="home" />
                             {dashboardRoutes.map(
@@ -66,6 +96,11 @@ const App = (): JSX.Element => {
                                 }
                             )}
                         </Router>
+                        <OnRouteChange
+                            action={() => {
+                                window.scrollTo(0, 0);
+                            }}
+                        />
                     </DashboardLayout>
                 </AppConfiguration>
             </AppProvider>
@@ -74,7 +109,7 @@ const App = (): JSX.Element => {
 
     return (
         <AuthLayout>
-            <Router>
+            <Router primary={false}>
                 <Redirect from="/home" to="/auth" />
                 <Redirect from="/" to="/auth" noThrow />
                 {authRoutes.map(({ RouterPlug, key, path }) => {
