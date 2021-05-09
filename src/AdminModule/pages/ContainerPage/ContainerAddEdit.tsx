@@ -1,16 +1,13 @@
-import React, { FC, useEffect, useState } from "react";
-import {
-    RouteComponentProps,
-    useNavigate,
-    useParams,
-    Link,
-} from "@reach/router";
+import React, { FC, Fragment, useEffect, useState } from "react";
+import { RouteComponentProps, useNavigate, useParams } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import { forEach as _forEach } from "lodash";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { DevTool } from "@hookform/devtools";
 import { Col, Form, Row } from "react-bootstrap";
-import { Client, Container, Package } from "../../models";
-import { PageHeader } from "../../../SharedModule/components/PageHeader/PageHeader";
+import { ClientEntity, ContainerEntity, Package } from "../../models";
 import { ClientApi, PackageApi } from "../../apis";
 import {
     AppFormRadioSwitch,
@@ -19,14 +16,22 @@ import {
     AppCard,
     AppFormInput,
     AppFormCheckBox,
+    AppFormActions,
+    AppBreadcrumb,
+    AppPageHeader,
+    AppFormSwitch,
 } from "../../../AppModule/components";
-import { ListResponse } from "../../../AppModule/models";
-import { sweetSuccess } from "../../../AppModule/components/Util";
+import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
 import { ContainerApi } from "../../apis/ContainerApi";
-import { errorToast, validation } from "../../../AppModule/utils";
-import "./assets/scss/container_add_edit_style.scss";
+import {
+    checkAndAdd,
+    checkAndRemove,
+    errorToast,
+    successToast,
+    validation,
+} from "../../../AppModule/utils";
 
-const validationSchema = Yup.object().shape({
+const schema = Yup.object().shape({
     domain: Yup.string().required("Domain is Required"),
     name: Yup.string().required("Name is Required"),
     containerGroup: Yup.string().optional(),
@@ -43,558 +48,372 @@ const validationSchema = Yup.object().shape({
         is: "S3",
         then: Yup.string().required("Bucket Name is Required"),
     }),
-
     bucketRegion: Yup.string().when("storage", {
         is: "S3",
         then: Yup.string().required("Bucket Region is Required"),
     }),
 });
 
-function getProperty<T, K extends keyof T>(obj: T, key: K) {
-    return obj[key];
-}
+export const ContainerAddEdit: FC<RouteComponentProps> = ({
+    navigate,
+}): JSX.Element => {
+    const { clientId, id = null } = useParams();
+    const isEditMode: boolean = id !== null;
+    const hookNav = useNavigate();
+    const nav = navigate ?? hookNav;
 
-export type ContainerFormType = {
-    name: string;
-    domain: string;
-    containerGroup: string;
-    storage: string;
-    bucketKey: string;
-    bucketSecret: string;
-    bucketName: string;
-    bucketRegion: string;
-    isActive: string;
-    client: string;
-    description: string;
-    [key: string]: string | boolean;
-};
-
-export interface ContainerRequestData {
-    domain: string;
-    name: string;
-    containerGroup?: string;
-    storage: string;
-    bucketKey?: string;
-    bucketSecret?: string;
-    bucketName?: string;
-    bucketRegion?: string;
-    isActive?: boolean;
-    client?: string;
-    description?: string;
-    packages: string[];
-    configuration?: string[];
-}
-
-export class ContainerEntity {
-    domain: string;
-
-    name: string;
-
-    containerGroup?: string;
-
-    storage: string;
-
-    bucketKey?: string;
-
-    bucketSecret?: string;
-
-    bucketName?: string;
-
-    bucketRegion?: string;
-
-    isActive?: boolean;
-
-    client?: string;
-
-    description?: string;
-
-    packages: Package[];
-
-    configuration?: string[];
-
-    constructor() {
-        this.domain = "";
-        this.name = "";
-        this.storage = "Local";
-        this.packages = [];
-    }
-}
-export const ContainerAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
-    const { clientId, id } = useParams();
-    const isAddMode = !id;
-    const navigate = useNavigate();
+    const [data, setData] = React.useState<ContainerEntity>(
+        new ContainerEntity(ClientApi.toResourceUrl(clientId))
+    );
+    const [client, setClient] = React.useState<ClientEntity>();
     const [packages, setPackages] = React.useState<Package[]>([]);
-    const [client, setClient] = React.useState<Client>();
+    const [loading, setLoading] = useState<boolean>(isEditMode);
+    const [loadingClient, setLoadingClient] = useState<boolean>(true);
+
     const {
+        register,
         control,
         handleSubmit,
         formState,
+        setError,
         trigger,
-        setValue,
-        reset,
-        register,
         watch,
     } = useForm({
-        resolver: yupResolver(validationSchema),
+        resolver: yupResolver(schema),
         mode: "all",
     });
-    const [clientFetched, setClientFetched] = useState(false);
-    const [containerFetched, setContainerFetched] = useState(false);
-    const [packageKeys, setPackageKeys] = useState<string[]>();
-    const storage = watch("storage");
-    const [container, setContainer] = React.useState<ContainerEntity>(
-        new ContainerEntity()
-    );
-    // const [loading, setLoading] = useState<boolean>(!isAddMode);
-    const { errors } = formState;
+
     useEffect(() => {
-        PackageApi.findAll<Package>().then(
-            ({ items }: ListResponse<Package>) => {
-                setPackageKeys(
-                    items
-                        .map((p) => p.packageKey)
-                        .map((key) => key.replace(".", "_"))
-                );
-                setPackages(items);
+        ClientApi.getById<ClientEntity>(clientId).then(
+            ({ response, isNotFound, errorMessage }) => {
+                if (errorMessage) {
+                    errorToast(errorMessage);
+                } else if (isNotFound) {
+                    errorToast("Client not exist");
+                } else if (response !== null) {
+                    setClient(response);
+                    const packs = response.packages as Package[];
+                    setPackages(packs);
+                }
+                setLoadingClient(false);
             }
         );
-        if (isAddMode) {
-            ClientApi.getById<Client>(clientId).then(
+    }, [clientId, isEditMode]);
+
+    useEffect(() => {
+        if (isEditMode) {
+            ContainerApi.getById<ContainerEntity>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);
                     } else if (isNotFound) {
-                        errorToast("Client not exist");
+                        errorToast("Container not exist");
                     } else if (response !== null) {
-                        setClient(response);
-                        const fetchedClientPackagesKeys = response.packages.map(
-                            (item) => {
-                                const key = item.packageKey.replace(".", "_");
-                                return { key, value: item.id };
-                            }
-                        );
-                        fetchedClientPackagesKeys.forEach((pk) =>
-                            setValue(pk.key, pk.value)
-                        );
+                        const packs = response.packages as Package[];
+                        setData({
+                            ...response,
+                            packages: packs.map(({ id: packId }) =>
+                                PackageApi.toResourceUrl(packId)
+                            ),
+                        });
                         trigger();
                     }
-                    setClientFetched(true);
+                    setLoading(false);
                 }
             );
-
-            // ClientApi.getById<Client>(clientId).then((res) => {
-            //     setClient(res);
-            //     const fetchedClientPackagesKeys = res.packages.map((item) => {
-            //         const key = item.packageKey.replace(".", "_");
-            //         return { key, value: item.id };
-            //     });
-            //     fetchedClientPackagesKeys.forEach((pk) =>
-            //         setValue(pk.key, pk.value)
-            //     );
-            //     setClientFetched(true);
-            // });
         }
-        if (!isAddMode) {
-            ContainerApi.findById<ContainerEntity>(id).then((res) => {
-                const fetchedClientPackagesKeys = res.packages.map((item) => {
-                    const key = item.packageKey.replace(".", "_");
-                    return { key, value: item.id };
+    }, [id, isEditMode, trigger]);
+
+    const onSubmit = (formData: ContainerEntity) => {
+        ContainerApi.createOrUpdate<ContainerEntity>(id, {
+            ...formData,
+            packages: data.packages,
+        }).then(({ error, errorMessage }) => {
+            if (error instanceof UnprocessableEntityErrorResponse) {
+                const { violations } = error;
+                _forEach(violations, (value: string, key: string) => {
+                    const propertyName = key as keyof ContainerEntity;
+                    setError(propertyName, {
+                        type: "backend",
+                        message: value,
+                    });
                 });
-
-                const fields: string[] = [
-                    "name",
-                    "domain",
-                    "containerGroup",
-                    "storage",
-                    "bucketKey",
-                    "bucketSecret",
-                    "bucketName",
-                    "bucketREgion",
-                    "isActive",
-                    "description",
-                ];
-                fields.forEach((field) =>
-                    setValue(
-                        field,
-                        getProperty(res, field as keyof ContainerEntity)
-                    )
-                );
-                fetchedClientPackagesKeys.forEach((pk) =>
-                    setValue(pk.key, pk.value)
-                );
-                setClientFetched(true);
-                setContainer(res);
-                setContainerFetched(true);
-            });
-        }
-    }, [id, isAddMode, clientFetched, setValue, clientId]);
-
-    function buildPackageArray(keys: string[], data: ContainerFormType) {
-        return keys.reduce<ContainerRequestData>(
-            (acc, item) => {
-                if (packageKeys?.includes(item)) {
-                    if (data[item] !== false) {
-                        const newPackageString = `/api/packages/${data[item]}`;
-                        const newPackageArray = [
-                            ...acc.packages,
-                            newPackageString,
-                        ];
-                        return { ...acc, packages: newPackageArray };
-                    }
-                    return acc;
-                }
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                acc[item] = data[item];
-                return acc;
-            },
-            {
-                configuration: [],
-                domain: "",
-                name: "",
-                storage: "",
-                packages: [],
+            } else if (errorMessage) {
+                errorToast(errorMessage);
+            } else {
+                nav("..").then(() => {
+                    successToast(
+                        isEditMode ? "Container updated" : "Container created"
+                    );
+                });
             }
-        );
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async function createContainer(data: ContainerFormType) {
-        const keys = Object.keys(data);
-        const result = buildPackageArray(keys, data);
-        delete result.configuration;
-        const includeData = {
-            ...result,
-            client: `/api/clients/${client?.id}`,
-            isActive: data.isActive === "1",
-        };
-        await ContainerApi.create<Container, ContainerRequestData>(includeData);
-        await sweetSuccess({ text: "Client saved successfully " });
-        await navigate(`/admin/clients/${clientId}/containers`);
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    async function updateContainer(data: ContainerFormType) {
-        const keys = Object.keys(data);
-        const result = buildPackageArray(keys, data);
-        delete result.description;
-        delete result.configuration;
-        const includeData = {
-            ...result,
-            client: `/api/clients/${client?.id}`,
-            isActive: data.isActive === "1",
-        };
-        await ContainerApi.update<Container, ContainerRequestData>(
-            id,
-            includeData
-        );
-        await sweetSuccess({ text: "Client updated successfully " });
-        await navigate(`/admin/client/${clientId}/container`);
-    }
-
-    const onSubmit = async (data: ContainerFormType) => {
-        if (isAddMode) {
-            await createContainer(data);
-        } else {
-            await updateContainer(data);
-        }
+        });
     };
-    if (!isAddMode && !containerFetched) {
-        return (
-            <Row>
-                <Col md={12} className="vh-100">
-                    <AppLoader
-                        spinnerAnimation="border"
-                        spinnerVariant="primary"
-                    />
-                </Col>
-            </Row>
-        );
+
+    if (loading && loadingClient) {
+        return <AppLoader />;
     }
 
-    if (!clientFetched) {
-        return (
-            <Row>
-                <Col md={12} className="vh-100">
-                    <AppLoader
-                        spinnerAnimation="border"
-                        spinnerVariant="primary"
-                    />
-                </Col>
-            </Row>
-        );
-    }
+    const { errors } = formState;
+    const storage = watch("storage");
+
+    const isPackageActive = (resourceUrl: string): boolean => {
+        const packs = client?.packages as string[];
+        return packs.indexOf(resourceUrl) > -1;
+    };
 
     return (
-        <div className="theme-primary-clr theme-primary-font">
-            <div className="container-fluid p-0 mb-5">
-                <div className="row m-0">
-                    <PageHeader
-                        linkText={"Client"}
-                        linkUrl={ClientApi.CLIENT_LIST_PAGE_PATH}
-                        pageHeader={
-                            isAddMode ? "Add Container" : "Edit Container"
-                        }
-                    />
-                    <div className="app-container center-block col-12">
-                        <div className="edit-client">
-                            <Form
-                                noValidate
-                                onSubmit={handleSubmit(onSubmit)}
-                                onReset={reset}
-                            >
-                                <AppCard title="Details">
-                                    <Form.Row>
-                                        <Col md={6} sm={12}>
-                                            <AppFormInput
-                                                className="pl-0"
-                                                md={12}
-                                                lg={12}
-                                                sm={12}
-                                                xl={12}
-                                                name={"name"}
-                                                label={"Name"}
-                                                required={true}
-                                                withCounter={true}
-                                                {...validation(
-                                                    "name",
-                                                    formState,
-                                                    !isAddMode
-                                                )}
-                                                errorMessage={
-                                                    errors.name?.message
-                                                }
-                                                value={container.name}
-                                                control={control}
-                                            />
-                                            <AppFormInput
-                                                className="pl-0"
-                                                md={12}
-                                                lg={12}
-                                                sm={12}
-                                                xl={12}
-                                                name={"domain"}
-                                                label={"Domain"}
-                                                required={true}
-                                                withCounter={true}
-                                                {...validation(
-                                                    "domain",
-                                                    formState,
-                                                    !isAddMode
-                                                )}
-                                                errorMessage={
-                                                    errors.domain?.message
-                                                }
-                                                value={container.domain}
-                                                control={control}
-                                            />
-                                            <AppFormInput
-                                                className="pl-0"
-                                                md={12}
-                                                lg={12}
-                                                sm={12}
-                                                xl={12}
-                                                name={"containerGroup"}
-                                                label={"Container Group"}
-                                                required={true}
-                                                withCounter={true}
-                                                {...validation(
-                                                    "containerGroup",
-                                                    formState,
-                                                    !isAddMode
-                                                )}
-                                                errorMessage={
-                                                    errors.containerGroup
-                                                        ?.message
-                                                }
-                                                value={container.containerGroup}
-                                                control={control}
-                                            />
-                                        </Col>
-                                        <Col md={6} sm={12}>
-                                            <AppFormCheckBox
-                                                className="container-checkbox"
-                                                name={"isActive"}
-                                                label={"Active"}
-                                                labelPosition={"top"}
-                                                value={1}
-                                                defaultChecked={true}
-                                                register={register}
-                                            />
-                                            <AppFormTextArea
-                                                className="pr-0"
-                                                md={12}
-                                                lg={12}
-                                                sm={12}
-                                                xl={12}
-                                                name={"description"}
-                                                label={"Description"}
-                                                required={false}
-                                                withCounter={true}
-                                                {...validation(
-                                                    "description",
-                                                    formState,
-                                                    !isAddMode
-                                                )}
-                                                errorMessage={
-                                                    errors.description?.message
-                                                }
-                                                value={container.description}
-                                                control={control}
-                                            />
-                                        </Col>
-                                    </Form.Row>
-                                </AppCard>
-                                <AppCard title="Storage">
-                                    <Row className="p-3">
-                                        <AppFormRadioSwitch
-                                            fieldName={"storage"}
-                                            radioValue={"S3"}
-                                            control={control}
-                                            label={"AWS S3 Bucket"}
-                                            md={"2"}
-                                        />
-                                        <AppFormRadioSwitch
-                                            fieldName={"storage"}
-                                            radioValue={"Local"}
-                                            control={control}
-                                            label={"Local"}
-                                            defaultChecked={true}
-                                            md={"2"}
-                                        />
-                                    </Row>
-                                    {storage === "S3" ? (
-                                        <Row className="mt-2">
-                                            <AppFormInput
-                                                md={"6"}
-                                                lg={"6"}
-                                                xl={"6"}
-                                                name={"bucketKey"}
-                                                label={"AWS S3 Bucket Key"}
-                                                required={true}
-                                                withCounter={true}
-                                                {...validation(
-                                                    "bucketKey",
-                                                    formState,
-                                                    !isAddMode
-                                                )}
-                                                errorMessage={
-                                                    errors.bucketKey?.message
-                                                }
-                                                value={container.bucketKey}
-                                                control={control}
-                                            />
+        <Fragment>
+            <AppBreadcrumb linkText={"Container"} linkUrl={".."} />
+            <AppPageHeader
+                title={isEditMode ? "Edit Container" : "Add Container"}
+            />
+            <Row>
+                <Col>
+                    <DevTool control={control} />
+                    <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+                        <AppCard title="Details">
+                            <Form.Row>
+                                <Col md={6} sm={12}>
+                                    <AppFormInput
+                                        className="pl-0"
+                                        md={12}
+                                        lg={12}
+                                        xl={12}
+                                        name={"name"}
+                                        label={"Name"}
+                                        required={true}
+                                        withCounter={true}
+                                        {...validation(
+                                            "name",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={errors.name?.message}
+                                        value={data.name}
+                                        control={control}
+                                    />
+                                    <AppFormInput
+                                        className="pl-0"
+                                        md={12}
+                                        lg={12}
+                                        xl={12}
+                                        name={"domain"}
+                                        label={"Domain"}
+                                        required={true}
+                                        withCounter={true}
+                                        {...validation(
+                                            "domain",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={errors.domain?.message}
+                                        value={data.domain}
+                                        control={control}
+                                    />
+                                    <AppFormInput
+                                        className="pl-0"
+                                        md={12}
+                                        lg={12}
+                                        xl={12}
+                                        name={"containerGroup"}
+                                        label={"Container Group"}
+                                        required={true}
+                                        withCounter={true}
+                                        {...validation(
+                                            "containerGroup",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={
+                                            errors.containerGroup?.message
+                                        }
+                                        value={data.containerGroup || ""}
+                                        control={control}
+                                    />
+                                </Col>
+                                <Col md={6} sm={12}>
+                                    <AppFormCheckBox
+                                        className="container-checkbox"
+                                        name={"isActive"}
+                                        label={"Active"}
+                                        labelPosition={"top"}
+                                        value={1}
+                                        defaultChecked={true}
+                                        register={register}
+                                    />
+                                    <AppFormTextArea
+                                        className="pr-0"
+                                        md={12}
+                                        lg={12}
+                                        xl={12}
+                                        name={"description"}
+                                        label={"Description"}
+                                        required={false}
+                                        withCounter={true}
+                                        {...validation(
+                                            "description",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={
+                                            errors.description?.message
+                                        }
+                                        value={data.description || ""}
+                                        control={control}
+                                    />
+                                </Col>
+                            </Form.Row>
+                        </AppCard>
+                        <AppCard title="Storage">
+                            <Row className="p-3">
+                                <AppFormRadioSwitch
+                                    fieldName={"storage"}
+                                    radioValue={"S3"}
+                                    control={control}
+                                    label={"AWS S3 Bucket"}
+                                    md={"2"}
+                                />
+                                <AppFormRadioSwitch
+                                    fieldName={"storage"}
+                                    radioValue={"Local"}
+                                    control={control}
+                                    label={"Local"}
+                                    defaultChecked={true}
+                                    md={"2"}
+                                />
+                            </Row>
+                            {storage === "S3" ? (
+                                <Row className="mt-2">
+                                    <AppFormInput
+                                        md={"6"}
+                                        lg={"6"}
+                                        xl={"6"}
+                                        name={"bucketKey"}
+                                        label={"AWS S3 Bucket Key"}
+                                        required={true}
+                                        withCounter={true}
+                                        {...validation(
+                                            "bucketKey",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={errors.bucketKey?.message}
+                                        value={data.bucketKey || ""}
+                                        control={control}
+                                    />
 
-                                            <AppFormInput
-                                                md={"6"}
-                                                lg={"6"}
-                                                xl={"6"}
-                                                name={"bucketSecret"}
-                                                label={"AWS S3 Bucket Secret"}
-                                                required={true}
-                                                withCounter={true}
-                                                {...validation(
-                                                    "bucketSecret",
-                                                    formState,
-                                                    !isAddMode
-                                                )}
-                                                errorMessage={
-                                                    errors.bucketSecret?.message
-                                                }
-                                                value={container.bucketSecret}
-                                                control={control}
-                                            />
+                                    <AppFormInput
+                                        md={"6"}
+                                        lg={"6"}
+                                        xl={"6"}
+                                        name={"bucketSecret"}
+                                        label={"AWS S3 Bucket Secret"}
+                                        required={true}
+                                        withCounter={true}
+                                        {...validation(
+                                            "bucketSecret",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={
+                                            errors.bucketSecret?.message
+                                        }
+                                        value={data.bucketSecret || ""}
+                                        control={control}
+                                    />
 
-                                            <AppFormInput
-                                                md={"6"}
-                                                lg={"6"}
-                                                xl={"6"}
-                                                name={"bucketName"}
-                                                label={"AWS S3 Bucket Name"}
-                                                required={true}
-                                                withCounter={true}
-                                                {...validation(
-                                                    "bucketName",
-                                                    formState,
-                                                    !isAddMode
-                                                )}
-                                                errorMessage={
-                                                    errors.bucketName?.message
-                                                }
-                                                value={container.bucketName}
-                                                control={control}
-                                            />
-                                            <AppFormInput
-                                                md={"6"}
-                                                lg={"6"}
-                                                xl={"6"}
-                                                name={"bucketRegion"}
-                                                label={"AWS S3 Bucket Region"}
-                                                required={true}
-                                                withCounter={true}
-                                                {...validation(
-                                                    "bucketRegion",
-                                                    formState,
-                                                    !isAddMode
-                                                )}
-                                                errorMessage={
-                                                    errors.bucketRegion?.message
-                                                }
-                                                value={container.bucketRegion}
-                                                control={control}
-                                            />
-                                        </Row>
-                                    ) : (
-                                        <></>
-                                    )}
-                                </AppCard>
-                                <AppCard title="Packages">
-                                    <Form.Row>
-                                        {packages.map((e) => {
-                                            return (
-                                                <AppFormCheckBox
-                                                    key={e.id}
-                                                    name={e.packageKey.replace(
-                                                        ".",
-                                                        "_"
-                                                    )}
-                                                    label={e.packageKey.replace(
-                                                        ".",
-                                                        " "
-                                                    )}
-                                                    labelPosition={"left"}
-                                                    value={String(e.id)}
-                                                    register={register}
-                                                />
-                                            );
-                                        })}
-                                    </Form.Row>
-                                </AppCard>
-                                <div className="edit-client-footer-wrap p-0 w-100 ">
-                                    <div className="edit-client-footer py-4 w-100 d-flex flex-column flex-sm-row align-items-center justify-content-end">
-                                        <Link
-                                            to={isAddMode ? "." : ".."}
-                                            className="btn btn-secondary col-auto mr-0 ml-auto"
-                                        >
-                                            Cancel
-                                        </Link>
-                                        <button
-                                            type="submit"
-                                            disabled={formState.isSubmitting}
-                                            className="btn btn-primary col-auto ml-3 mr-2"
-                                        >
-                                            {formState.isSubmitting && (
-                                                <span className="spinner-border spinner-border-sm mr-1" />
+                                    <AppFormInput
+                                        md={"6"}
+                                        lg={"6"}
+                                        xl={"6"}
+                                        name={"bucketName"}
+                                        label={"AWS S3 Bucket Name"}
+                                        required={true}
+                                        withCounter={true}
+                                        {...validation(
+                                            "bucketName",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={
+                                            errors.bucketName?.message
+                                        }
+                                        value={data.bucketName || ""}
+                                        control={control}
+                                    />
+                                    <AppFormInput
+                                        md={"6"}
+                                        lg={"6"}
+                                        xl={"6"}
+                                        name={"bucketRegion"}
+                                        label={"AWS S3 Bucket Region"}
+                                        required={true}
+                                        withCounter={true}
+                                        {...validation(
+                                            "bucketRegion",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={
+                                            errors.bucketRegion?.message
+                                        }
+                                        value={data.bucketRegion || ""}
+                                        control={control}
+                                    />
+                                </Row>
+                            ) : (
+                                <></>
+                            )}
+                        </AppCard>
+                        <AppCard title="Packages">
+                            <Form.Row>
+                                {packages.map(({ packageKey, id: packId }) => {
+                                    const name = packageKey.replace(".", "_");
+                                    const resourceUrl = PackageApi.toResourceUrl(
+                                        packId
+                                    );
+                                    return (
+                                        <AppFormSwitch
+                                            key={name}
+                                            name={name}
+                                            label={packageKey}
+                                            control={control}
+                                            defaultChecked={isPackageActive(
+                                                resourceUrl
                                             )}
-                                            Save
-                                        </button>
-                                    </div>
-                                </div>
-                            </Form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                                            onChange={(event) => {
+                                                const packs = data.packages as string[];
+                                                if (
+                                                    event.currentTarget.checked
+                                                ) {
+                                                    checkAndAdd<string>(
+                                                        packs,
+                                                        resourceUrl
+                                                    );
+                                                } else {
+                                                    checkAndRemove<string>(
+                                                        packs,
+                                                        resourceUrl
+                                                    );
+                                                }
+                                                setData({
+                                                    ...data,
+                                                    packages: packs,
+                                                });
+                                            }}
+                                        />
+                                    );
+                                })}
+                            </Form.Row>
+                        </AppCard>
+                        <AppFormActions
+                            isEditMode={isEditMode}
+                            navigation={nav}
+                        />
+                    </Form>
+                </Col>
+            </Row>
+        </Fragment>
     );
 };
