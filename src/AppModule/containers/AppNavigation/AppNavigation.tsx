@@ -33,115 +33,38 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     });
     const [subMenuItems] = useState<AppSubNavigationItemProps[]>([
         {
-            label: "General Settings",
+            label: "Admin - Settings",
             path: "/admin/settings",
-            isActive: false,
             icon: {
-                name: "",
+                name: "administrator",
             },
         },
         {
-            label: "3D Setings",
-            path: "#",
-            isActive: false,
-            icon: {
-                name: "",
-            },
-        },
-        {
-            label: "Email",
-            path: "#",
-            isActive: false,
-            icon: {
-                name: "",
-            },
-        },
-        {
-            label: "Tags",
-            path: "#",
-            isActive: false,
-            icon: {
-                name: "",
-            },
-        },
-        {
-            label: "Categories",
-            path: "#",
-            isActive: false,
-            icon: {
-                name: "",
-            },
-        },
-        {
-            label: "Rooms",
-            path: "#",
-            isActive: false,
-            icon: {
-                name: "",
-            },
-        },
-        {
-            label: "Session Colors",
-            path: "#",
-            isActive: false,
-            icon: {
-                name: "",
-            },
-        },
-        {
-            label: "Design",
+            label: "Admin - Design",
             path: "/admin/design",
-            isActive: false,
             icon: {
-                name: "",
+                name: "administrator",
             },
         },
         {
-            label: "Users",
-            path: "#",
-            isActive: false,
+            label: "Admin - Languages",
+            path: "/admin/languages",
             icon: {
-                name: "",
+                name: "administrator",
             },
         },
         {
-            label: "Sponsers",
-            path: "#",
-            isActive: false,
+            label: "Admin - Clients",
+            path: "/admin/clients",
             icon: {
-                name: "",
+                name: "administrator",
             },
         },
         {
-            label: "Forms",
-            path: "#",
-            isActive: false,
+            label: "Admin - User Groups",
+            path: "/admin/user-groups",
             icon: {
-                name: "",
-            },
-        },
-        {
-            label: "Exporter",
-            path: "#",
-            isActive: false,
-            icon: {
-                name: "",
-            },
-        },
-        {
-            label: "Importer",
-            path: "#",
-            isActive: false,
-            icon: {
-                name: "",
-            },
-        },
-        {
-            label: "Jobs Queue",
-            path: "#",
-            isActive: false,
-            icon: {
-                name: "",
+                name: "Users",
             },
         },
     ]);
