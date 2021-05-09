@@ -104,10 +104,8 @@ type Props = {
 export const logoutAction = async (
     dispatch: React.Dispatch<IAuthAction>
 ): Promise<void> => {
-    if (localStorage.getItem(AUTH_TOKEN_KEY)) {
-        await localStorage.removeItem(AUTH_TOKEN_KEY);
-        await localStorage.removeItem(AUTH_USER_KEY);
-    }
+    localStorage.removeItem(AUTH_TOKEN_KEY);
+    localStorage.removeItem(AUTH_USER_KEY);
     dispatch({
         type: AuthActionTypes.LOGOUT,
         payload: {
