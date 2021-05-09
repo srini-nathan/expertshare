@@ -46,10 +46,19 @@ export class ContainerEntity {
 
     configuration?: string[];
 
-    constructor() {
+    constructor(client: string) {
+        this.client = client;
         this.domain = "";
         this.name = "";
         this.storage = "Local";
         this.packages = [];
+        this.isActive = true;
+        this.containerGroup = "";
+        this.bucketKey = "";
+        this.bucketSecret = "";
+        this.bucketName = "";
+        this.bucketRegion = "";
+        this.description = "";
+        this.configuration = [];
     }
 }
