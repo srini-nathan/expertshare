@@ -12,7 +12,7 @@ export class ClientEntity {
 
     notes: string;
 
-    packages: Package[];
+    packages: string[] | Package[];
 
     constructor() {
         this.name = "";
