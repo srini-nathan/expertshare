@@ -10,6 +10,7 @@ import {
 import { Col, Row } from "react-bootstrap";
 import { Canceler } from "axios";
 import {
+    AppBreadcrumb,
     AppClientInformation,
     AppPageHeader,
 } from "../../../AppModule/components";
@@ -111,6 +112,7 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <Fragment>
+            <AppBreadcrumb linkText={"Client"} linkUrl={"../.."} />
             <AppPageHeader
                 title={"Container"}
                 createLabel={"Create Container"}
