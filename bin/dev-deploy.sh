@@ -1,5 +1,3 @@
 #!/bin/bash
-
-git pull
-yarn install
+bash ${PWD}/bin/dev-prepare.sh
 yarn build

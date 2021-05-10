@@ -59,6 +59,7 @@
     "build-storybook": "build-storybook -s public",
     "fix:code": "prettier-eslint --write src/**/*.{js,jsx,ts,tsx}",
     "fix:styles": "stylelint --fix src/**/*.{css,scss}",
+    "fix:config": "prettier --write src/config/*.json",
     "lint": "yarn lint:ts && yarn lint:code && yarn lint:styles",
     "lint:ts": "tsc --noEmit && eslint src/**/*.ts{,x}",
     "lint:code": "eslint src/**/*.{js,jsx,ts,tsx}",

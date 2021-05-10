@@ -1,0 +1,11 @@
+{
+    "Container": {
+        "STORAGE": { "STORAGE_LOCAL": "Local", "STORAGE_S3": "S3" }
+    },
+    "Package": {
+        "PACKAGE": {
+            "PACKAGE_CUSTOM_DESIGN": "custom.design",
+            "PACKAGE_STREAMING": "streaming"
+        }
+    }
+}
