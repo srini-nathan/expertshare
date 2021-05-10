@@ -1,4 +1,5 @@
 @import "./variables";
+@import "./screens-sizes";
 @import "./fonts";
 @import "~@sweetalert2/theme-bootstrap-4/bootstrap-4";
 
@@ -6,14 +7,49 @@ body {
     background-color: var(--body-bg-clr);
 }
 
+.right-container {
+    @include media("mobile") {
+        width: 100%;
+    }
+
+    @include media("lr-1") {
+        width: 75%;
+    }
+
+    @include media("lr-2") {
+        width: 80%;
+    }
+
+    @include media("lr-3") {
+        width: 83%;
+    }
+
+    @include media("lr-4") {
+        width: 84%;
+    }
+
+    @include media("lr-5") {
+        width: 87%;
+    }
+
+    @include media("lr-6") {
+        width: 90%;
+    }
+
+    @include media("lr-7") {
+        width: 92%;
+    }
+}
+
 // forms
 .was-validated .form-control:valid,
-.form-control.is-valid{
+.form-control.is-valid {
     background-image: none;
     border-color: inherit;
 }
+
 .was-validated .form-control:valid:focus,
-.form-control.is-valid:focus{
+.form-control.is-valid:focus {
     border-color: inherit;
     box-shadow: inherit;
 }

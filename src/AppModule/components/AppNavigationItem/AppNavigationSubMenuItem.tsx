@@ -13,7 +13,7 @@ export const AppNavigationSubMenuItem: FC<AppSubNavigationItemProps> = ({
             {(props) => {
                 return (
                     <ListGroupItem
-                        className={`nav-item pt-2 pr-3 pl-3 p-2 ${className} ${
+                        className={`nav-item py-2 mb-2 px-lg-4 ${className} ${
                             props.location.pathname.includes(path)
                                 ? "active"
                                 : ""
