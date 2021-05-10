@@ -12,4 +12,6 @@ yarn install
 wget $GENERATE_ROUTES -O "$CONFIG_DUMP_PATH/routes.json"
 wget $GENERATE_CONSTANTS -O "$CONFIG_DUMP_PATH/constants.json"
 
+sed -i 's/.{_format}//g' "$CONFIG_DUMP_PATH/routes.json"
+
 yarn run fix:config
