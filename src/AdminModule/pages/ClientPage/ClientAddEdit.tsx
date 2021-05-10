@@ -15,17 +15,11 @@ import {
     AppBreadcrumb,
     AppPageHeader,
     AppFormActions,
-    AppFormSwitch,
 } from "../../../AppModule/components";
-import {
-    checkAndAdd,
-    checkAndRemove,
-    errorToast,
-    successToast,
-    validation,
-} from "../../../AppModule/utils";
+import { errorToast, successToast, validation } from "../../../AppModule/utils";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
+import { AppPackageSwitches } from "../../components";
 
 const schema = Yup.object().shape({
     name: Yup.string().required(),
@@ -135,11 +129,6 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
 
     const { errors } = formState;
 
-    const isPackageActive = (resourceUrl: string): boolean => {
-        const packs = data.packages as string[];
-        return packs.indexOf(resourceUrl) > -1;
-    };
-
     return (
         <Fragment>
             <AppBreadcrumb linkText={"Client"} linkUrl={".."} />
@@ -185,43 +174,17 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
                         </AppCard>
                         <AppCard title="Default Packages">
                             <Form.Row>
-                                {packages.map(({ packageKey, id: packId }) => {
-                                    const name = packageKey.replace(".", "_");
-                                    const resourceUrl = PackageApi.toResourceUrl(
-                                        packId
-                                    );
-                                    return (
-                                        <AppFormSwitch
-                                            key={name}
-                                            name={name}
-                                            label={packageKey}
-                                            control={control}
-                                            defaultChecked={isPackageActive(
-                                                resourceUrl
-                                            )}
-                                            onChange={(event) => {
-                                                const packs = data.packages as string[];
-                                                if (
-                                                    event.currentTarget.checked
-                                                ) {
-                                                    checkAndAdd<string>(
-                                                        packs,
-                                                        resourceUrl
-                                                    );
-                                                } else {
-                                                    checkAndRemove<string>(
-                                                        packs,
-                                                        resourceUrl
-                                                    );
-                                                }
-                                                setData({
-                                                    ...data,
-                                                    packages: packs,
-                                                });
-                                            }}
-                                        />
-                                    );
-                                })}
+                                <AppPackageSwitches
+                                    packages={packages}
+                                    control={control}
+                                    activePacks={data.packages as string[]}
+                                    onChange={(activePacks) => {
+                                        setData({
+                                            ...data,
+                                            packages: activePacks,
+                                        });
+                                    }}
+                                />
                             </Form.Row>
                         </AppCard>
                         <AppFormActions
