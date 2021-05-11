@@ -193,8 +193,10 @@
 .app-grid-action {
     position: fixed;
     bottom: 0;
+    width: 100%;
+    background-color: var(--body-bg-clr);
 
-    .pagination-container{
-        width: 80px;
+    .pagination-container {
+        width: 130px;
     }
 }
