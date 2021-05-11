@@ -119,15 +119,15 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                 <hr className="col-12" />
 
                 <AppFormRadioSwitch
-                    required
+                    required={true}
                     sm="6"
                     name="radio_switch"
                     label="Success Calculated By"
                     options={options}
                     description="hello this is descriprion"
                     errorMessage="This field is required"
-                    isInvalid={true}
                     defaultValue="chocolate"
+                    control={control}
                 />
 
                 <hr className="col-12" />
