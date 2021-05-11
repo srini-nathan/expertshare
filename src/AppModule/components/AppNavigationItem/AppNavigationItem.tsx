@@ -18,14 +18,14 @@ export const AppNavigationItem: FC<AppNavigationItemProps> = ({
             {(props) => {
                 return (
                     <ListGroupItem
-                        className={`nav-item pt-2 pr-3 pl-3 p-2 ${className} ${
+                        className={`nav-item py-2 mb-2 px-lg-4 ${className} ${
                             props.location.pathname.includes(path)
                                 ? "active"
                                 : ""
                         }`}
                     >
                         <Link to={path} className="nav-link">
-                            <div className="nav-icon">
+                            <div className="nav-icon ml-lg-2">
                                 <IconWrapper {...icon} />
                             </div>
                             <span>{label}</span>

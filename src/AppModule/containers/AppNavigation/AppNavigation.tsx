@@ -1,5 +1,11 @@
 import React, { FC, useEffect, useState, useRef } from "react";
-import { ListGroup, ListGroupItem, Nav, Navbar } from "react-bootstrap";
+import {
+    ListGroup,
+    Accordion,
+    ListGroupItem,
+    Nav,
+    Navbar,
+} from "react-bootstrap";
 import { Link } from "@reach/router";
 import { AppIcon } from "../../components/AppIcon";
 import {
@@ -11,7 +17,7 @@ import {
 } from "../../components/AppNavigationItem";
 import "./assets/scss/style.scss";
 import FooterLogo from "./assets/images/expertshare_logo_footer.svg";
-import { useWindowSize } from "../../hooks";
+import { useWindowSize, useWindowLocation } from "../../hooks";
 
 interface AppNavigationProps {
     items: AppNavigationItemProps[];
@@ -21,16 +27,6 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const [overflowItems, setOverflowItems] = useState<
         AppNavigationItemProps[] | AppSubNavigationItemProps[]
     >([]);
-    const [
-        activeMenuItem,
-        setActiveMenuItem,
-    ] = useState<AppNavigationItemProps>({
-        label: "",
-        path: "",
-        icon: {
-            name: "",
-        },
-    });
     const [subMenuItems] = useState<AppSubNavigationItemProps[]>([
         {
             label: "Admin - Settings",
@@ -76,7 +72,9 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         },
     ]);
     const [showSubMenuItems, isSubMenuItems] = useState<boolean>(false);
+    const [showMore, isShowMore] = useState<boolean>(false);
     const { width, height } = useWindowSize();
+    const { location } = useWindowLocation();
     const logoHolder = useRef<HTMLDivElement>(null);
     const bottomMenu = useRef<HTMLAnchorElement>(null);
 
@@ -89,20 +87,16 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
 
         if (bottomMenu && bottomMenu.current)
             bottomMenuHeight = bottomMenu.current.clientHeight;
-        return height - logoHeight - bottomMenuHeight - 58;
+        return height - logoHeight - bottomMenuHeight - 66;
     };
     const updateScreenSize = () => {
         if (width > 767) {
             let numberOfMenusToShow = 0;
 
-            numberOfMenusToShow = Math.floor(getMenuItemsHeight() / 58 - 1);
+            numberOfMenusToShow = Math.floor(getMenuItemsHeight() / 66);
             const oItems = [];
-            for (
-                let i = numberOfMenusToShow;
-                i < (showSubMenuItems ? subMenuItems.length : items.length);
-                i += 1
-            ) {
-                oItems.push(showSubMenuItems ? subMenuItems[i] : items[i]);
+            for (let i = numberOfMenusToShow; i < items.length; i += 1) {
+                oItems.push(items[i]);
             }
             setOverflowItems(oItems);
         }
@@ -111,14 +105,77 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         updateScreenSize();
     }, [width, height, showSubMenuItems]);
 
+    useEffect(() => {
+        if (subMenuItems.some((e) => e.path === location)) {
+            isSubMenuItems(true);
+        }
+    }, []);
+    useEffect(() => {
+        if (overflowItems.some((e) => e.path === location)) {
+            isShowMore(true);
+        }
+    }, [overflowItems]);
+
+    const renderMoreMenu = () => {
+        return (
+            overflowItems.length > 0 && (
+                <Accordion activeKey={showMore ? "0" : ""}>
+                    <Accordion.Collapse eventKey="0">
+                        <ListGroup>
+                            {overflowItems.map(
+                                (
+                                    e:
+                                        | AppNavigationItemProps
+                                        | AppSubNavigationItemProps
+                                ) => {
+                                    if (e)
+                                        return showSubMenuItems ? (
+                                            <AppNavigationSubMenuItem
+                                                label={e.label}
+                                                path={e.path}
+                                                key={e.label}
+                                                icon={e.icon}
+                                            />
+                                        ) : (
+                                            <AppNavigationItem
+                                                label={e.label}
+                                                path={e.path}
+                                                icon={e.icon}
+                                                key={e.label}
+                                            />
+                                        );
+                                    return "";
+                                }
+                            )}
+                        </ListGroup>
+                    </Accordion.Collapse>
+                    <Accordion.Toggle
+                        as={ListGroupItem}
+                        className={`nav-item py-2 mb-2 px-lg-4`}
+                        eventKey="0"
+                    >
+                        <div
+                            onClick={() => isShowMore(!showMore)}
+                            className="nav-link show-more"
+                        >
+                            <div className="nav-icon ml-lg-2">
+                                <AppIcon name="Menu" />
+                            </div>
+                            <span>{!showMore ? "More" : "Less"}</span>
+                        </div>
+                    </Accordion.Toggle>
+                </Accordion>
+            )
+        );
+    };
     const renderMenu = () => {
         if (showSubMenuItems) {
             return (
                 <>
                     <AppNavigationItem
-                        label={activeMenuItem.label}
-                        path={activeMenuItem.path}
-                        icon={activeMenuItem.icon}
+                        label={"Administration"}
+                        path={""}
+                        icon={{ name: "Settings" }}
                         className="active main-menu "
                     />
                     {subMenuItems
@@ -152,58 +209,14 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                             />
                         );
                     })}
+                {renderMoreMenu()}
             </>
-        );
-    };
-    const renderMoreMenu = () => {
-        return (
-            overflowItems.length > 0 && (
-                <ListGroupItem
-                    className={`nav-item item-more dropright pt-2 pr-3 pl-3 p-2 `}
-                >
-                    <div className="nav-link show-more">
-                        <div className="nav-icon">
-                            <AppIcon name="Menu" />
-                        </div>
-                        <span>More</span>
-                    </div>
-                    <div className="more-menu">
-                        <ListGroup>
-                            {overflowItems.map(
-                                (
-                                    e:
-                                        | AppNavigationItemProps
-                                        | AppSubNavigationItemProps
-                                ) => {
-                                    if (e)
-                                        return showSubMenuItems ? (
-                                            <AppNavigationSubMenuItem
-                                                label={e.label}
-                                                path={e.path}
-                                                key={e.label}
-                                                icon={e.icon}
-                                            />
-                                        ) : (
-                                            <AppNavigationItem
-                                                label={e.label}
-                                                path={e.path}
-                                                icon={e.icon}
-                                                key={e.label}
-                                            />
-                                        );
-                                    return "";
-                                }
-                            )}
-                        </ListGroup>
-                    </div>
-                </ListGroupItem>
-            )
         );
     };
     return (
         <aside
             className={
-                "left-sidebar d-block navbar-expand-md sidebar col-sm-12 col-md-3 col-xl-2 p-0"
+                "left-sidebar left-container d-block navbar-expand-md sidebar"
             }
         >
             <Navbar className="row m-0 p-0 mb-md-4 d-block" expand="lg">
@@ -222,32 +235,29 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="w-100">
                         <ListGroup>
-                            {renderMenu()}
-                            {renderMoreMenu()}
+                            <div className="main-menu-container">
+                                {renderMenu()}
+                            </div>
                             <ListGroupItem
                                 ref={bottomMenu}
                                 className={`bottom-menu p-0`}
                             >
                                 <ListGroup>
                                     <ListGroupItem
-                                        className={`nav-item pt-2 pr-3 pl-3 p-2`}
+                                        className={`seperator mb-1 p-0 mx-4`}
+                                    ></ListGroupItem>
+                                    <ListGroupItem
+                                        className={`nav-item py-2 mb-2 px-lg-4`}
                                     >
                                         <div
                                             onClick={() => {
-                                                setActiveMenuItem({
-                                                    label: "Administration",
-                                                    path: "#",
-                                                    icon: {
-                                                        name: "Settings",
-                                                    },
-                                                });
                                                 isSubMenuItems(
                                                     !showSubMenuItems
                                                 );
                                             }}
                                             className="nav-link"
                                         >
-                                            <div className="nav-icon">
+                                            <div className="nav-icon ml-lg-2">
                                                 <AppIcon
                                                     name={
                                                         showSubMenuItems
@@ -264,7 +274,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                         </div>
                                     </ListGroupItem>
                                     <ListGroupItem
-                                        className={`nav-item pt-2 pr-3 pl-3 p-2`}
+                                        className={`nav-item py-2 mb-2 px-lg-4`}
                                     >
                                         <AppNavigationDropDown
                                             className="language"
@@ -282,22 +292,20 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                     </ListGroupItem>
 
                                     <ListGroupItem
-                                        className={`nav-item pt-2 pr-3 pl-3 p-2`}
+                                        className={`nav-item py-2 mb-2 px-lg-4`}
                                     >
                                         <Link to={"#"} className="nav-link">
-                                            <div className="nav-icon img-container">
+                                            <div className="nav-icon ml-lg-2 img-container">
                                                 <i className="profile-picture"></i>
                                             </div>
                                             <span>Account</span>
                                         </Link>
                                     </ListGroupItem>
 
-                                    <ListGroupItem
-                                        className={`nav-item pt-2 pr-3 pl-3 p-2`}
-                                    >
+                                    <ListGroupItem className={`px-0 py-1`}>
                                         <Link
                                             to={"#"}
-                                            className="nav-link copyright"
+                                            className="nav-link text-center copyright"
                                         >
                                             <span>
                                                 Virtual event platform by

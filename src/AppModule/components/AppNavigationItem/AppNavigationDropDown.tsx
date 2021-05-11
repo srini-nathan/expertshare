@@ -18,7 +18,7 @@ export const AppNavigationDropDown: FC<AppNavigationDropDownProps> = ({
 }) => {
     const navDropdownTitle = (
         <>
-            <div className="nav-icon img-container">
+            <div className="nav-icon ml-lg-2 img-container">
                 <i className={`${iconClassName}`}></i>
             </div>
             <span>{label}</span>
