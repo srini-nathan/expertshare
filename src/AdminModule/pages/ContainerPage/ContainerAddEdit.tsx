@@ -168,7 +168,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
             />
             <Row>
                 <Col>
-                    <DevTool control={control} />
+                    <DevTool control={control} placement={"bottom-left"} />
                     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                         <AppCard title="Details">
                             <Form.Row>

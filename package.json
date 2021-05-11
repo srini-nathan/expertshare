@@ -38,7 +38,7 @@
     "react-datepicker": "^3.7.0",
     "react-dom": "16",
     "react-helmet": "^6.1.0",
-    "react-hook-form": "^7.2.1",
+    "react-hook-form": "^7.5.2",
     "react-i18next": "^11.8.7",
     "react-select": "^4.3.0",
     "react-youtube": "^7.13.1",
@@ -89,7 +89,7 @@
   "devDependencies": {
     "@babel/core": "^7.12.17",
     "@craco/craco": "^5.6.4",
-    "@hookform/devtools": "^3.0.0-rc.2",
+    "@hookform/devtools": "^3.1.0",
     "@storybook/addon-actions": "^6.1.18",
     "@storybook/addon-essentials": "^6.1.18",
     "@storybook/addon-links": "^6.1.18",
