@@ -5,6 +5,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { forEach as _forEach } from "lodash";
 import { Col, Form, Row } from "react-bootstrap";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { DevTool } from "@hookform/devtools";
 import { ClientEntity, ContainerEntity, Package } from "../../models";
 import { ClientApi, PackageApi } from "../../apis";
 import {
@@ -76,10 +78,11 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         setError,
         trigger,
         getValues,
-        setValue,
+        reset,
     } = useForm({
         resolver: yupResolver(schema),
         mode: "all",
+        defaultValues: data,
     });
 
     useEffect(() => {
@@ -96,7 +99,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                 setLoadingClient(false);
             }
         );
-    }, [clientId, isEditMode]);
+    }, [clientId]);
 
     useEffect(() => {
         if (isEditMode) {
@@ -108,23 +111,20 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                         errorToast("Container not exist");
                     } else if (response !== null) {
                         const packs = response.packages as Package[];
+                        reset();
                         setData({
                             ...response,
                             packages: packs.map(({ id: packId }) =>
                                 PackageApi.toResourceUrl(packId)
                             ),
                         });
-                        // @TODO: without setting value, it should work
-                        setValue("name", response.name);
-                        setValue("domain", response.domain);
-                        setValue("storage", response.storage);
                         trigger();
                     }
                     setLoading(false);
                 }
             );
         }
-    }, [id, isEditMode, setValue, trigger]);
+    }, [id, isEditMode, reset, trigger]);
 
     const onSubmit = (formData: ContainerEntity) => {
         ContainerApi.createOrUpdate<ContainerEntity>(id, {
@@ -158,7 +158,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
 
     const { errors } = formState;
 
-    const isS3 = STORAGE_S3 === getValues<string>("storage");
+    const isS3 = STORAGE_S3 === getValues("storage");
 
     return (
         <Fragment>
@@ -168,6 +168,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
             />
             <Row>
                 <Col>
+                    <DevTool control={control} />
                     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                         <AppCard title="Details">
                             <Form.Row>
@@ -187,7 +188,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                             isEditMode
                                         )}
                                         errorMessage={errors.name?.message}
-                                        value={data.name}
+                                        value={data?.name}
                                         control={control}
                                     />
                                     <AppFormInput
@@ -304,6 +305,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     errorMessage={errors.bucketKey?.message}
                                     value={data.bucketKey || ""}
                                     control={control}
+                                    key={"bucketKey"}
                                 />
 
                                 <AppFormInput
@@ -322,6 +324,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     errorMessage={errors.bucketSecret?.message}
                                     value={data.bucketSecret || ""}
                                     control={control}
+                                    key={"bucketSecret"}
                                 />
 
                                 <AppFormInput
@@ -340,6 +343,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     errorMessage={errors.bucketName?.message}
                                     value={data.bucketName || ""}
                                     control={control}
+                                    key={"bucketName"}
                                 />
                                 <AppFormInput
                                     md={"6"}
@@ -357,6 +361,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     errorMessage={errors.bucketRegion?.message}
                                     value={data.bucketRegion || ""}
                                     control={control}
+                                    key={"bucketRegion"}
                                 />
                             </Row>
                         </AppCard>
