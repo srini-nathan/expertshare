@@ -1,57 +1,100 @@
 import React, { FC } from "react";
-import { Col, Form } from "react-bootstrap";
+import { Col, Form, ButtonGroup } from "react-bootstrap";
 import { Control, Controller } from "react-hook-form";
+import { SimpleObject } from "../../models";
 import "./assets/scss/style.scss";
 
 export interface AppFormRadioSwitchProps {
+    id?: string;
+    name: string;
+    // @TODO: make interface to handle common props
     sm?: string | number;
     md?: string | number;
     lg?: string | number;
     xl?: string | number;
-    label: string;
+    required?: boolean;
+    label?: string;
+    options: SimpleObject<string | number>[];
+    defaultValue?: string | number;
+    description?: string;
+    errorMessage?: string;
+    className?: string;
+    isInvalid?: boolean;
+    isValid?: boolean;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    control: Control<any>;
-    fieldName: string;
-    radioValue: string;
-    defaultChecked?: boolean;
+    control?: Control<any>;
 }
 
 export const AppFormRadioSwitch: FC<AppFormRadioSwitchProps> = ({
-    fieldName,
+    id,
+    name,
+    defaultValue = "",
+    errorMessage,
     label = "",
-    radioValue,
-    md,
-    sm,
-    lg,
-    xl,
+    className = "",
+    description,
+    sm = 12,
+    md = 6,
+    lg = 4,
+    xl = 4,
+    isInvalid,
+    isValid,
+    required = false,
+    options,
     control,
-    defaultChecked = false,
 }): JSX.Element => {
+    const controlId = id || name;
+
     return (
         <Form.Group
-            className="button-group p-0"
+            className={`button-group ${className}`}
             as={Col}
             md={md}
             sm={sm}
             lg={lg}
             xl={xl}
+            controlId={controlId}
         >
-            <Controller
-                control={control}
-                name={fieldName}
-                render={({ field: { onChange, name } }) => (
-                    <Form.Check id={`radioValue_${radioValue}`} type={"radio"}>
-                        <Form.Control
-                            onChange={onChange}
-                            value={radioValue}
-                            defaultChecked={defaultChecked}
-                            name={name}
-                            type={"radio"}
-                        />
-                        <Form.Check.Label>{label}</Form.Check.Label>
-                    </Form.Check>
-                )}
-            />
+            {label?.length > 0 ? (
+                <Form.Label>
+                    {label}
+                    {required && <span className="required">*</span>}
+                    {description && (
+                        <div className="custom-input-description">
+                            <span>i</span>
+                            <div className="custom-input-description-content">
+                                {description}
+                            </div>
+                        </div>
+                    )}
+                </Form.Label>
+            ) : null}
+            <ButtonGroup toggle>
+                {options.map(({ value, label: radioLabel }) => (
+                    <Controller
+                        key={value}
+                        name={name}
+                        defaultValue={defaultValue}
+                        control={control}
+                        render={({ field }) => (
+                            <Form.Check
+                                type="radio"
+                                id={`${controlId}_${value}`}
+                                required={required}
+                                label={radioLabel}
+                                {...field}
+                                value={value}
+                            />
+                        )}
+                    ></Controller>
+                ))}
+            </ButtonGroup>
+            <Form.Control.Feedback
+                type="invalid"
+                className={isInvalid && !isValid ? "d-inline" : ""}
+            >
+                {errorMessage}
+            </Form.Control.Feedback>
         </Form.Group>
     );
 };

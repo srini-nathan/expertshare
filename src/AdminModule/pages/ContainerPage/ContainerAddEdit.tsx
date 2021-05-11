@@ -8,7 +8,6 @@ import { Col, Form, Row } from "react-bootstrap";
 import { ClientEntity, ContainerEntity, Package } from "../../models";
 import { ClientApi, PackageApi } from "../../apis";
 import {
-    AppFormRadioSwitch,
     AppFormTextArea,
     AppLoader,
     AppCard,
@@ -17,37 +16,39 @@ import {
     AppFormActions,
     AppBreadcrumb,
     AppPageHeader,
-    AppFormSwitch,
+    AppFormRadioSwitch,
 } from "../../../AppModule/components";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
 import { ContainerApi } from "../../apis/ContainerApi";
-import {
-    checkAndAdd,
-    checkAndRemove,
-    errorToast,
-    successToast,
-    validation,
-} from "../../../AppModule/utils";
+import { errorToast, successToast, validation } from "../../../AppModule/utils";
+import { AppPackageSwitches } from "../../components";
+import { CONSTANTS } from "../../../config";
+
+const { Container } = CONSTANTS;
+const {
+    STORAGE: { STORAGE_S3, STORAGE_LOCAL },
+} = Container;
 
 const schema = Yup.object().shape({
     domain: Yup.string().required("Domain is Required"),
     name: Yup.string().required("Name is Required"),
     containerGroup: Yup.string().optional(),
     description: Yup.string().optional(),
+    storage: Yup.string().required(),
     bucketKey: Yup.string().when("storage", {
-        is: "S3",
+        is: STORAGE_S3,
         then: Yup.string().required("Bucket Key is Required"),
     }),
     bucketSecret: Yup.string().when("storage", {
-        is: "S3",
+        is: STORAGE_S3,
         then: Yup.string().required("Bucket Secret is Required"),
     }),
     bucketName: Yup.string().when("storage", {
-        is: "S3",
+        is: STORAGE_S3,
         then: Yup.string().required("Bucket Name is Required"),
     }),
     bucketRegion: Yup.string().when("storage", {
-        is: "S3",
+        is: STORAGE_S3,
         then: Yup.string().required("Bucket Region is Required"),
     }),
 });
@@ -63,7 +64,6 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
     const [data, setData] = React.useState<ContainerEntity>(
         new ContainerEntity(ClientApi.toResourceUrl(clientId))
     );
-    const [client, setClient] = React.useState<ClientEntity>();
     const [packages, setPackages] = React.useState<Package[]>([]);
     const [loading, setLoading] = useState<boolean>(isEditMode);
     const [loadingClient, setLoadingClient] = useState<boolean>(true);
@@ -75,7 +75,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         formState,
         setError,
         trigger,
-        watch,
+        getValues,
         setValue,
     } = useForm({
         resolver: yupResolver(schema),
@@ -90,7 +90,6 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                 } else if (isNotFound) {
                     errorToast("Client not exist");
                 } else if (response !== null) {
-                    setClient(response);
                     const packs = response.packages as Package[];
                     setPackages(packs);
                 }
@@ -115,15 +114,17 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                 PackageApi.toResourceUrl(packId)
                             ),
                         });
+                        // @TODO: without setting value, it should work
                         setValue("name", response.name);
                         setValue("domain", response.domain);
+                        setValue("storage", response.storage);
                         trigger();
                     }
                     setLoading(false);
                 }
             );
         }
-    }, [id, isEditMode]);
+    }, [id, isEditMode, setValue, trigger]);
 
     const onSubmit = (formData: ContainerEntity) => {
         ContainerApi.createOrUpdate<ContainerEntity>(id, {
@@ -156,12 +157,8 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
     }
 
     const { errors } = formState;
-    const storage = watch("storage");
 
-    const isPackageActive = (resourceUrl: string): boolean => {
-        const packs = client?.packages as string[];
-        return packs.indexOf(resourceUrl) > -1;
-    };
+    const isS3 = STORAGE_S3 === getValues<string>("storage");
 
     return (
         <Fragment>
@@ -267,143 +264,115 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                         <AppCard title="Storage">
                             <Row className="p-3">
                                 <AppFormRadioSwitch
-                                    fieldName={"storage"}
-                                    radioValue={"S3"}
+                                    name={"storage"}
+                                    defaultValue={data.storage}
+                                    label={"storage"}
                                     control={control}
-                                    label={"AWS S3 Bucket"}
-                                    md={"2"}
-                                />
-                                <AppFormRadioSwitch
-                                    fieldName={"storage"}
-                                    radioValue={"Local"}
-                                    control={control}
-                                    label={"Local"}
-                                    defaultChecked={true}
-                                    md={"2"}
+                                    required={true}
+                                    options={[
+                                        {
+                                            value: STORAGE_S3,
+                                            label: STORAGE_S3,
+                                        },
+                                        {
+                                            value: STORAGE_LOCAL,
+                                            label: STORAGE_LOCAL,
+                                        },
+                                    ]}
+                                    {...validation(
+                                        "storage",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.storage?.message}
                                 />
                             </Row>
-                            {storage === "S3" ? (
-                                <Row className="mt-2">
-                                    <AppFormInput
-                                        md={"6"}
-                                        lg={"6"}
-                                        xl={"6"}
-                                        name={"bucketKey"}
-                                        label={"AWS S3 Bucket Key"}
-                                        required={true}
-                                        withCounter={true}
-                                        {...validation(
-                                            "bucketKey",
-                                            formState,
-                                            isEditMode
-                                        )}
-                                        errorMessage={errors.bucketKey?.message}
-                                        value={data.bucketKey}
-                                        control={control}
-                                    />
+                            <Row className={isS3 ? "mt-2" : "d-none"}>
+                                <AppFormInput
+                                    md={"6"}
+                                    lg={"6"}
+                                    xl={"6"}
+                                    name={"bucketKey"}
+                                    label={"AWS S3 Bucket Key"}
+                                    required={true}
+                                    withCounter={true}
+                                    {...validation(
+                                        "bucketKey",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.bucketKey?.message}
+                                    value={data.bucketKey || ""}
+                                    control={control}
+                                />
 
-                                    <AppFormInput
-                                        md={"6"}
-                                        lg={"6"}
-                                        xl={"6"}
-                                        name={"bucketSecret"}
-                                        label={"AWS S3 Bucket Secret"}
-                                        required={true}
-                                        withCounter={true}
-                                        {...validation(
-                                            "bucketSecret",
-                                            formState,
-                                            isEditMode
-                                        )}
-                                        errorMessage={
-                                            errors.bucketSecret?.message
-                                        }
-                                        value={data.bucketSecret}
-                                        control={control}
-                                    />
+                                <AppFormInput
+                                    md={"6"}
+                                    lg={"6"}
+                                    xl={"6"}
+                                    name={"bucketSecret"}
+                                    label={"AWS S3 Bucket Secret"}
+                                    required={true}
+                                    withCounter={true}
+                                    {...validation(
+                                        "bucketSecret",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.bucketSecret?.message}
+                                    value={data.bucketSecret || ""}
+                                    control={control}
+                                />
 
-                                    <AppFormInput
-                                        md={"6"}
-                                        lg={"6"}
-                                        xl={"6"}
-                                        name={"bucketName"}
-                                        label={"AWS S3 Bucket Name"}
-                                        required={true}
-                                        withCounter={true}
-                                        {...validation(
-                                            "bucketName",
-                                            formState,
-                                            isEditMode
-                                        )}
-                                        errorMessage={
-                                            errors.bucketName?.message
-                                        }
-                                        value={data.bucketName}
-                                        control={control}
-                                    />
-                                    <AppFormInput
-                                        md={"6"}
-                                        lg={"6"}
-                                        xl={"6"}
-                                        name={"bucketRegion"}
-                                        label={"AWS S3 Bucket Region"}
-                                        required={true}
-                                        withCounter={true}
-                                        {...validation(
-                                            "bucketRegion",
-                                            formState,
-                                            isEditMode
-                                        )}
-                                        errorMessage={
-                                            errors.bucketRegion?.message
-                                        }
-                                        value={data.bucketRegion}
-                                        control={control}
-                                    />
-                                </Row>
-                            ) : (
-                                <></>
-                            )}
+                                <AppFormInput
+                                    md={"6"}
+                                    lg={"6"}
+                                    xl={"6"}
+                                    name={"bucketName"}
+                                    label={"AWS S3 Bucket Name"}
+                                    required={true}
+                                    withCounter={true}
+                                    {...validation(
+                                        "bucketName",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.bucketName?.message}
+                                    value={data.bucketName || ""}
+                                    control={control}
+                                />
+                                <AppFormInput
+                                    md={"6"}
+                                    lg={"6"}
+                                    xl={"6"}
+                                    name={"bucketRegion"}
+                                    label={"AWS S3 Bucket Region"}
+                                    required={true}
+                                    withCounter={true}
+                                    {...validation(
+                                        "bucketRegion",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.bucketRegion?.message}
+                                    value={data.bucketRegion || ""}
+                                    control={control}
+                                />
+                            </Row>
                         </AppCard>
                         <AppCard title="Packages">
                             <Form.Row>
-                                {packages.map(({ packageKey, id: packId }) => {
-                                    const name = packageKey.replace(".", "_");
-                                    const resourceUrl = PackageApi.toResourceUrl(
-                                        packId
-                                    );
-                                    return (
-                                        <AppFormSwitch
-                                            key={name}
-                                            name={name}
-                                            label={packageKey}
-                                            control={control}
-                                            defaultChecked={isPackageActive(
-                                                resourceUrl
-                                            )}
-                                            onChange={(event) => {
-                                                const packs = data.packages as string[];
-                                                if (
-                                                    event.currentTarget.checked
-                                                ) {
-                                                    checkAndAdd<string>(
-                                                        packs,
-                                                        resourceUrl
-                                                    );
-                                                } else {
-                                                    checkAndRemove<string>(
-                                                        packs,
-                                                        resourceUrl
-                                                    );
-                                                }
-                                                setData({
-                                                    ...data,
-                                                    packages: packs,
-                                                });
-                                            }}
-                                        />
-                                    );
-                                })}
+                                <AppPackageSwitches
+                                    packages={packages}
+                                    control={control}
+                                    activePacks={data.packages as string[]}
+                                    onChange={(activePacks) => {
+                                        setData({
+                                            ...data,
+                                            packages: activePacks,
+                                        });
+                                    }}
+                                />
                             </Form.Row>
                         </AppCard>
                         <AppFormActions

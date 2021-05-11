@@ -15,6 +15,7 @@ import {
     AppKnovioPlayer,
     AppYoutubeFrame,
     AppVimeoFrame,
+    AppFormRadioSwitch,
 } from "../../components";
 import { SimpleObject } from "../../../AdminModule/models";
 
@@ -102,7 +103,7 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     placeholder="hello"
                     description="hello this is description"
                     maxCount={150}
-                    //  rows={5}
+                    rows={5}
                     errorMessage="This field is required"
                     isInvalid={true}
                     control={control}
@@ -116,20 +117,18 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     <p>hello this is children</p>
                 </AppCard>
                 <hr className="col-12" />
-                {/* <AppFormRadioSwitch */}
-                {/*    required */}
-                {/*    sm="6" */}
-                {/*    fieldName="radio_switch" */}
-                {/*    label="Success Calculated By" */}
-                {/*    // values={[ */}
-                {/*    //     { label: "Overall", value: "overall" }, */}
-                {/*    //     { label: "Per Session", value: "per_session" }, */}
-                {/*    // ]} */}
-                {/*    description="hello this is descriprion" */}
-                {/*    errorMessage="This field is required" */}
-                {/*    invalid={true} */}
-                {/*    // defaultValue="overall" */}
-                {/* /> */}
+
+                <AppFormRadioSwitch
+                    required
+                    sm="6"
+                    name="radio_switch"
+                    label="Success Calculated By"
+                    options={options}
+                    description="hello this is descriprion"
+                    errorMessage="This field is required"
+                    isInvalid={true}
+                    defaultValue="chocolate"
+                />
 
                 <hr className="col-12" />
 
@@ -162,6 +161,7 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     />
                 </div>
             </Row>
+            <hr className="col-12" />
             <Row>
                 <AppKnovioPlayer
                     linkUrl="https://view.knowledgevision.com/presentation/e31fff7a14ee4a9aa82dca008384c32a"
@@ -169,6 +169,7 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     width={640}
                 />
             </Row>
+            <hr className="col-12" />
             <Row>
                 <AppDacastFrame
                     id="1552_f_297509"
@@ -177,6 +178,7 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     height={390}
                 />
             </Row>
+            <hr className="col-12" />
             <Row>
                 <AppYoutubeFrame
                     url="https://www.youtube.com/watch?v=y9j-BL5ocW8"
