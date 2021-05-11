@@ -7,5 +7,28 @@
             "PACKAGE_CUSTOM_DESIGN": "custom.design",
             "PACKAGE_STREAMING": "streaming"
         }
+    },
+    "Role": {
+        "ROLE": {
+            "ROLE_READER": "ROLE_READER",
+            "ROLE_USER": "ROLE_USER",
+            "ROLE_STAFF": "ROLE_STAFF",
+            "ROLE_RELATION_MANAGER": "ROLE_RELATION_MANAGER",
+            "ROLE_SPEAKER": "ROLE_SPEAKER",
+            "ROLE_MODERATOR": "ROLE_MODERATOR",
+            "ROLE_EXHIBITOR": "ROLE_EXHIBITOR",
+            "ROLE_OPERATOR": "ROLE_OPERATOR",
+            "ROLE_ADMIN": "ROLE_ADMIN",
+            "ROLE_SUPER_ADMIN": "ROLE_SUPER_ADMIN"
+        }
+    },
+    "UserField": {
+        "FIELDTYPE": {
+            "FIELDTYPE_TEXT": "TEXT",
+            "FIELDTYPE_TEXTAREA": "TEXTAREA",
+            "FIELDTYPE_SWITCH": "SWITCH",
+            "FIELDTYPE_CHOICE": "CHOICE",
+            "FIELDTYPE_DATE": "DATE"
+        }
     }
 }
