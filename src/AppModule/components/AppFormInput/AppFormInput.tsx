@@ -11,6 +11,7 @@ export interface AppFormInputProps {
     md?: string | number;
     lg?: string | number;
     xl?: string | number;
+    // @TODO: rename it defaultValue
     value?: string;
     type?: string;
     placeholder?: string | boolean;
@@ -23,6 +24,7 @@ export interface AppFormInputProps {
     isValid?: boolean;
     withCounter?: boolean;
     maxCount?: number;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     control?: Control<any>;
 }
 
