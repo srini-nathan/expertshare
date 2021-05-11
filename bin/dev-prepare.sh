@@ -2,8 +2,8 @@
 
 
 API_HOST=http://test1.localhost:8091
-GENERATE_ROUTES=http://test1.localhost:8091/generate/routes
-GENERATE_CONSTANTS=http://test1.localhost:8091/generate/constants
+GENERATE_ROUTES=$API_HOST/generate/routes
+GENERATE_CONSTANTS=$API_HOST/generate/constants
 CONFIG_DUMP_PATH=${PWD}/src/config
 
 git pull
