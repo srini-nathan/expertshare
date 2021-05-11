@@ -11,6 +11,7 @@ import {
     AppLoader,
     AppFormActions,
     AppFormTextArea,
+    AppCard,
 } from "../../../AppModule/components";
 import { EmailEntity } from "../../models";
 import { EmailApi } from "../../apis";
@@ -136,92 +137,102 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
             />
             <Row>
                 <Col md="12">
-                    <Form noValidate onSubmit={handleSubmit(onSubmit)}>
-                        <Form.Row>
-                            <AppFormInput
-                                name={"name"}
-                                label={"Email template name"}
-                                md={12}
-                                lg={12}
-                                sm={12}
-                                xl={12}
-                                required={true}
-                                withCounter={true}
-                                {...validation("name", formState, isEditMode)}
-                                errorMessage={errors.name?.message}
-                                value={data.name}
-                                control={control}
+                    <AppCard>
+                        <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+                            <Form.Row>
+                                <AppFormInput
+                                    name={"name"}
+                                    label={"Email template name"}
+                                    md={12}
+                                    lg={12}
+                                    sm={12}
+                                    xl={12}
+                                    required={true}
+                                    withCounter={true}
+                                    {...validation(
+                                        "name",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.name?.message}
+                                    value={data.name}
+                                    control={control}
+                                />
+                            </Form.Row>
+                            <Form.Row>
+                                {/* @TODO: validation not working */}
+                                <AppFormSelect
+                                    id={"ddTheme"}
+                                    name={"etKey"}
+                                    label={"Select template"}
+                                    md={12}
+                                    lg={12}
+                                    xl={12}
+                                    required={true}
+                                    {...validation(
+                                        "etKey",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    defaultValue={data.etKey}
+                                    placeholder={"Theme"}
+                                    options={defaultThemeList}
+                                    control={control}
+                                    transform={{
+                                        output: (template: PrimitiveObject) =>
+                                            template?.value,
+                                        input: (value: string) => {
+                                            return _find(defaultThemeList, {
+                                                value,
+                                            });
+                                        },
+                                    }}
+                                />
+                            </Form.Row>
+                            <Form.Row>
+                                <AppFormInput
+                                    name={"subject"}
+                                    label={"Email template Subject"}
+                                    md={12}
+                                    lg={12}
+                                    xl={12}
+                                    required={true}
+                                    withCounter={true}
+                                    {...validation(
+                                        "subject",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.subject?.message}
+                                    value={data.subject}
+                                    control={control}
+                                />
+                            </Form.Row>
+                            <Form.Row>
+                                <AppFormTextArea
+                                    name={"content"}
+                                    label={"Content"}
+                                    md={12}
+                                    lg={12}
+                                    xl={12}
+                                    required={true}
+                                    withCounter={true}
+                                    {...validation(
+                                        "content",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.content?.message}
+                                    value={data.content}
+                                    control={control}
+                                />
+                            </Form.Row>
+                            <AppFormActions
+                                isEditMode={isEditMode}
+                                navigation={nav}
                             />
-                        </Form.Row>
-                        <Form.Row>
-                            {/* @TODO: validation not working */}
-                            <AppFormSelect
-                                id={"ddTheme"}
-                                name={"etKey"}
-                                label={"Select template"}
-                                md={12}
-                                lg={12}
-                                xl={12}
-                                required={true}
-                                {...validation("etKey", formState, isEditMode)}
-                                defaultValue={data.etKey}
-                                placeholder={"Theme"}
-                                options={defaultThemeList}
-                                control={control}
-                                transform={{
-                                    output: (template: PrimitiveObject) =>
-                                        template?.value,
-                                    input: (value: string) => {
-                                        return _find(defaultThemeList, {
-                                            value,
-                                        });
-                                    },
-                                }}
-                            />
-                        </Form.Row>
-                        <Form.Row>
-                            <AppFormInput
-                                name={"subject"}
-                                label={"Email template Subject"}
-                                md={12}
-                                lg={12}
-                                xl={12}
-                                required={true}
-                                withCounter={true}
-                                {...validation(
-                                    "subject",
-                                    formState,
-                                    isEditMode
-                                )}
-                                errorMessage={errors.subject?.message}
-                                value={data.subject}
-                                control={control}
-                            />
-                        </Form.Row>
-                        <Form.Row>
-                            <AppFormTextArea
-                                name={"content"}
-                                label={"Content"}
-                                md={12}
-                                lg={12}
-                                xl={12}
-                                required={true}
-                                withCounter={true}
-                                {...validation(
-                                    "content",
-                                    formState,
-                                    isEditMode
-                                )}
-                                errorMessage={errors.content?.message}
-                                value={data.content}
-                                control={control}
-                            />
-                        </Form.Row>
-                        <AppFormActions
-                            isEditMode={isEditMode}
-                            navigation={nav}
-                        />
-                    </Form>
+                        </Form>
+                    </AppCard>
                 </Col>
             </Row>
         </Fragment>
