@@ -4,8 +4,10 @@ import { Control, Controller } from "react-hook-form";
 import { isString as _isString, startCase as _startCase } from "lodash";
 import FroalaEditor from "react-froala-wysiwyg";
 
+/* eslint-disable */
 import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
+/* eslint-enable */
 import "./assets/scss/style.scss";
 
 export interface AppFormRichTextAreaProps {
@@ -44,6 +46,7 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
     control,
 }): JSX.Element => {
     const [model, setModel] = useState<string>(value);
+
     const controlId = id || name;
     let placeholderText = "";
 
@@ -52,6 +55,7 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
             ? placeholder
             : `Enter ${_startCase(label) || _startCase(name)}`;
     }
+
     return (
         <Form.Group
             as={Col}
@@ -93,8 +97,10 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
                     />
                 )}
             />
-
-            <Form.Control.Feedback type="invalid">
+            <Form.Control.Feedback
+                type="invalid"
+                className={!model ? "show-field-error" : ""}
+            >
                 {errorMessage}
             </Form.Control.Feedback>
         </Form.Group>
