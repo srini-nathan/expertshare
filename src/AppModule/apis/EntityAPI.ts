@@ -22,14 +22,22 @@ export abstract class EntityAPI extends API {
         ACCEPTABLE_RESPONSE
     );
 
-    protected static PATH = "/";
+    protected static GET_ALL_PATH = "/";
+
+    protected static POST_ALL_PATH = "/";
+
+    protected static GET_BY_ID_PATH = "/";
+
+    protected static PUT_ITEM_PATH = "/";
+
+    protected static DELETE_ITEM_PATH = "/";
 
     /**
      * @deprecated
      */
     public static async findById<R>(id: number): Promise<R> {
         const res: AxiosResponse<R> = await this.makeGet<R>(
-            `${this.PATH}/${id}`
+            this.GET_BY_ID_PATH.replace("{id}", id.toString())
         );
         return res.data;
     }
@@ -37,7 +45,9 @@ export abstract class EntityAPI extends API {
     public static async getById<R>(
         id: number
     ): Promise<FinalResponse<R | null>> {
-        return this.makeGet<R>(`${this.PATH}/${id}`)
+        return this.makeGet<R>(
+            this.GET_BY_ID_PATH.replace("{id}", id.toString())
+        )
             .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
             .catch((error) => this.handleServerError(error))
             .catch((error) => {
@@ -80,7 +90,7 @@ export abstract class EntityAPI extends API {
         const res: AxiosResponse<ListResponse<R>> = await this.makeGet<
             ListResponse<R>
         >(
-            this.PATH,
+            this.GET_ALL_PATH,
             {
                 ...extraParams,
                 page,
@@ -111,7 +121,7 @@ export abstract class EntityAPI extends API {
         }
 
         return this.makeGet<E>(
-            this.PATH,
+            this.GET_ALL_PATH,
             {
                 ...extraParams,
                 page,
@@ -135,7 +145,9 @@ export abstract class EntityAPI extends API {
     }
 
     public static async delete(id: number): Promise<FinalResponse<null>> {
-        return this.makeDelete(`${this.PATH}/${id}`)
+        return this.makeDelete(
+            this.DELETE_ITEM_PATH.replace("{id}", id.toString())
+        )
             .then(() => Promise.resolve(new FinalResponse(null)))
             .catch((error: AxiosError | ServerError) => {
                 const { message } = error;
@@ -163,7 +175,7 @@ export abstract class EntityAPI extends API {
     public static async create<R, P>(
         entity: P
     ): Promise<FinalResponse<R | null>> {
-        return this.makePost<R, P>(this.PATH, entity)
+        return this.makePost<R, P>(this.GET_ALL_PATH, entity)
             .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
             .catch((error: AxiosError | ServerError) =>
                 this.handleErrorDuringCreatingOrUpdating(error)
@@ -177,7 +189,7 @@ export abstract class EntityAPI extends API {
         const config: AxiosRequestConfig = this.getPatchRequestConfig<P>();
 
         return this.makePatch<R, P>(
-            `${this.PATH}/${id}`,
+            this.PUT_ITEM_PATH.replace("{id}", id.toString()),
             JSON.stringify(entity),
             {},
             config
@@ -202,7 +214,10 @@ export abstract class EntityAPI extends API {
         id: number,
         entity: P
     ): Promise<FinalResponse<R | null>> {
-        return this.makePut<R, P>(`${this.PATH}/${id}`, entity)
+        return this.makePut<R, P>(
+            this.PUT_ITEM_PATH.replace("{id}", id.toString()),
+            entity
+        )
             .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
             .catch((error: AxiosError | ServerError) =>
                 this.handleErrorDuringCreatingOrUpdating(error)
@@ -271,6 +286,6 @@ export abstract class EntityAPI extends API {
     }
 
     public static toResourceUrl(id: number): string {
-        return `${this.PATH}/${id}`;
+        return this.PUT_ITEM_PATH.replace("{id}", id.toString());
     }
 }
