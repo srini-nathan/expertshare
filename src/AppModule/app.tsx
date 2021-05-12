@@ -76,11 +76,6 @@ const App = (): JSX.Element => {
             </div>
         );
     }
-    // TODO: need to redefine this flow, as we need a way to extract the location param so that we know where is the
-    //  request is coming from.
-    // if (!state.isAuthenticated) {
-    //     navigate("/auth/login").then();
-    // }
 
     if (state.isAuthenticated) {
         return (
