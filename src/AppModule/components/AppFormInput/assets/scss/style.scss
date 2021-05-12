@@ -2,30 +2,29 @@
 @import "../../../../assets/scss/variables";
 
 
-
 input.form-control {
-    background-color: var(--input-bg-clr);
-    color: var(--input-fg-clr);
-    border: 1px solid var(--input-border-clr);
-    border-radius: var(--border-radius);
     height: 36px;
     font-size: 14px;
     font-weight: 400;
+    color: var(--input-fg-clr);
+    background-color: var(--input-bg-clr);
+    border: 1px solid var(--input-border-clr);
+    border-radius: var(--border-radius);
 
     &:focus {
-        background-color: var(--input-bg-clr);
         color: var(--input-fg-clr);
+        background-color: var(--input-bg-clr);
         border-color: var(--input-border-clr);
         box-shadow: unset;
     }
 }
 
 .form-label {
+    position: relative;
     display: flex;
     align-items: center;
-    margin: 0;
-    position: relative;
     padding-bottom: 3px;
+    margin: 0;
     font-size: 12px;
     font-weight: 700;
     color: var(--secondary);
@@ -45,10 +44,10 @@ input.form-control {
 
 .custom-input {
     &-description {
-        cursor: pointer;
         position: relative;
+        cursor: pointer;
 
-        &:hover>&-content {
+        &:hover > &-content {
             display: block;
         }
 
@@ -68,18 +67,18 @@ input.form-control {
             left: 0;
             z-index: 1060;
             display: none;
+            min-width: 200px;
             max-width: 276px;
+            padding: .5rem .75rem;
+            font-size: .875rem;
             font-weight: 400;
             line-height: 1.5;
+            color: var(--secondary-90);
             text-align: left;
             text-align: start;
-            font-size: 0.875rem;
-            background-color: #fff;
-            border: 1px solid rgba(0, 0, 0, 0.2);
+            background-color: #FFF;
+            border: 1px solid rgba(0, 0, 0, .2);
             border-radius: var(--border-radius);
-            color: var(--secondary-90);
-            padding: 0.5rem 0.75rem;
-            min-width: 200px;
         }
     }
 }

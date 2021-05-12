@@ -3,8 +3,8 @@
 
 .card {
     background-color: var(--container-box-bg-clr) !important;
-    border-radius: var(--border-radius) !important;
     border: unset !important;
+    border-radius: var(--border-radius) !important;
 
     &-title {
         &.h5 {

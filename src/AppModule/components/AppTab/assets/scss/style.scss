@@ -5,20 +5,20 @@
 
     a {
         &.nav-item {
-            border-radius: var(--border-radius);
-            background-color: #fff;
             margin: 3px;
             font-size: 14px;
             font-weight: 500;
             color: var(--secondary);
+            background-color: #FFF;
+            border-radius: var(--border-radius);
             box-shadow: 0 3px 9px var(--secondary-10);
 
             &:hover,
             &.active {
-                background-color: var(--primary-20);
                 color: var(--primary);
-                border-radius: var(--border-radius);
+                background-color: var(--primary-20);
                 border-color: transparent;
+                border-radius: var(--border-radius);
             }
         }
     }

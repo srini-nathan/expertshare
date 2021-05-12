@@ -3,17 +3,17 @@
 .light-label {
     font-family: $font-family-sans-serif;
     font-size: 12px;
+    font-weight: 400;
     line-height: 13px;
     color: $secondary;
-    font-weight: 400;
-    opacity: 0.7;
+    opacity: .7;
 }
 
 .input-letter-counter {
     font-size: 12px;
     line-height: 13px;
     color: $secondary;
-    opacity: 0.5;
+    opacity: .5;
 }
 
 .input-wrap-pr {
@@ -25,12 +25,12 @@
         width: 100%;
         padding: 10px;
         margin: 10px 0;
-        border-radius: $border-radius;
-        border: 1px solid $input-border-clr;
-        background-color: $input-bg;
         color: $input-clr;
+        background-color: $input-bg;
+        border: 1px solid $input-border-clr;
+        border-radius: $border-radius;
         &:focus{
-            outline: unset !important
+            outline: unset !important;
         }
     }
 }
