@@ -21,17 +21,15 @@ import {
 import { appGridConfig } from "../../../AppModule/config";
 import { errorToast, successToast } from "../../../AppModule/utils";
 import "./assets/scss/list.scss";
-import {
-    AuthContext,
-    IAuthSate,
-} from "../../../SecurityModule/context/AuthContext";
+import { AuthContext } from "../../../SecurityModule/context/AuthContext";
+import { AuthSate } from "../../../SecurityModule/models/context/AuthSate";
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const { state } = React.useContext(AuthContext);
-    const { cntid } = state as IAuthSate;
+    const { cntid } = state as AuthSate;
 
     function getDataSource(): IServerSideDatasource {
         return {

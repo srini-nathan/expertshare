@@ -1,34 +1,17 @@
 import React, { createContext, useEffect } from "react";
 import { navigate } from "@reach/router";
 import jwtDecode from "jwt-decode";
-import { User } from "../../AppModule/models";
 import { AuthApi, LoginResponse } from "../apis/AuthApi";
 import { AUTH_TOKEN_KEY, AUTH_USER_KEY } from "../../AppModule/config/app-env";
 import { UserApi } from "../../AppModule/apis/UserApi";
-
-// @TODO: move this to separate file
-export interface IAuthSate {
-    isAuthenticated: boolean | null;
-    loginSuccess: boolean;
-    showLogin: boolean;
-    token: string | null;
-    user: User | null;
-    loginError: string | null;
-    sessionFetched: boolean;
-    ip: string | null;
-    roles: string[];
-    // @TODO: rename this key to clientId
-    cid: number | null;
-    // @TODO: rename this key to containerId
-    cntid: number | null;
-}
+import { AuthSate } from "../models/context/AuthSate";
 
 interface IAuthAction {
     type: AuthActionTypes;
-    payload: IAuthSate;
+    payload: AuthSate;
 }
 
-const initialState: IAuthSate = {
+const initialState: AuthSate = {
     isAuthenticated: null,
     loginSuccess: false,
     showLogin: true,
@@ -47,9 +30,9 @@ enum AuthActionTypes {
     LOGIN_ERROR,
     LOGOUT,
 }
-export const AuthContext = createContext<IAuthSate | any>(initialState);
+export const AuthContext = createContext<AuthSate | any>(initialState);
 
-function reducer(state: IAuthSate, action: IAuthAction): IAuthSate {
+function reducer(state: AuthSate, action: IAuthAction): AuthSate {
     switch (action.type) {
         case AuthActionTypes.LOGIN_SUCCESS:
             return {

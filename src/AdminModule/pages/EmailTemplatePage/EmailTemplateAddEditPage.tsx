@@ -22,11 +22,9 @@ import {
 } from "../../../AppModule/models";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { AppFormSelect } from "../../../AppModule/components/AppFormSelect";
-import {
-    AuthContext,
-    IAuthSate,
-} from "../../../SecurityModule/context/AuthContext";
+import { AuthContext } from "../../../SecurityModule/context/AuthContext";
 import { ContainerApi } from "../../apis/ContainerApi";
+import { AuthSate } from "../../../SecurityModule/models/context/AuthSate";
 
 const schema = yup.object().shape({
     name: yup.string().min(2).required(),
@@ -64,7 +62,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
     const [data, setData] = useState<EmailEntity>(new EmailEntity());
     const [loading, setLoading] = useState<boolean>(isEditMode);
     const { state } = React.useContext(AuthContext);
-    const { cntid } = state as IAuthSate;
+    const { cntid } = state as AuthSate;
 
     const { control, handleSubmit, formState, setError } = useForm<EmailEntity>(
         {
