@@ -21,14 +21,14 @@ import {
 import { appGridConfig } from "../../../AppModule/config";
 import { errorToast, successToast } from "../../../AppModule/utils";
 import { AuthContext } from "../../../SecurityModule/context/AuthContext";
-import { AuthSate } from "../../../SecurityModule/models/context/AuthSate";
+import { AuthState } from "../../../SecurityModule/models/context/AuthState";
 
 export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const { state } = React.useContext(AuthContext);
-    const { cid } = state as AuthSate;
+    const { clientId } = state as AuthState;
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -42,7 +42,7 @@ export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
                     {
                         order: buildSortParams(request),
                         ...buildFilterParams(request),
-                        "client.id": cid,
+                        "client.id": clientId,
                     },
                     (c) => {
                         cancelTokenSourcesRef.current.push(c);

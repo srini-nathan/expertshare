@@ -24,7 +24,7 @@ import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { AppFormSelect } from "../../../AppModule/components/AppFormSelect";
 import { AuthContext } from "../../../SecurityModule/context/AuthContext";
 import { ContainerApi } from "../../apis/ContainerApi";
-import { AuthSate } from "../../../SecurityModule/models/context/AuthSate";
+import { AuthState } from "../../../SecurityModule/models/context/AuthState";
 
 const schema = yup.object().shape({
     name: yup.string().min(2).required(),
@@ -62,7 +62,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
     const [data, setData] = useState<EmailEntity>(new EmailEntity());
     const [loading, setLoading] = useState<boolean>(isEditMode);
     const { state } = React.useContext(AuthContext);
-    const { cntid } = state as AuthSate;
+    const { containerId } = state as AuthState;
 
     const { control, handleSubmit, formState, setError } = useForm<EmailEntity>(
         {
@@ -72,10 +72,10 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
     );
 
     const onSubmit = (formData: EmailEntity) => {
-        if (cntid === null) {
+        if (containerId === null) {
             return;
         }
-        formData.container = ContainerApi.toResourceUrl(cntid);
+        formData.container = ContainerApi.toResourceUrl(containerId);
         EmailApi.createOrUpdate<EmailEntity>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {

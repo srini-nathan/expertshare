@@ -4,14 +4,14 @@ import jwtDecode from "jwt-decode";
 import { AuthApi, LoginResponse } from "../apis/AuthApi";
 import { AUTH_TOKEN_KEY, AUTH_USER_KEY } from "../../AppModule/config/app-env";
 import { UserApi } from "../../AppModule/apis/UserApi";
-import { AuthSate } from "../models/context/AuthSate";
+import { AuthState } from "../models/context/AuthState";
 
 interface IAuthAction {
     type: AuthActionTypes;
-    payload: AuthSate;
+    payload: AuthState;
 }
 
-const initialState: AuthSate = {
+const initialState: AuthState = {
     isAuthenticated: null,
     loginSuccess: false,
     showLogin: true,
@@ -21,8 +21,8 @@ const initialState: AuthSate = {
     sessionFetched: false,
     ip: null,
     roles: [],
-    cid: null,
-    cntid: null,
+    clientId: null,
+    containerId: null,
 };
 
 enum AuthActionTypes {
@@ -30,9 +30,9 @@ enum AuthActionTypes {
     LOGIN_ERROR,
     LOGOUT,
 }
-export const AuthContext = createContext<AuthSate | any>(initialState);
+export const AuthContext = createContext<AuthState | any>(initialState);
 
-function reducer(state: AuthSate, action: IAuthAction): AuthSate {
+function reducer(state: AuthState, action: IAuthAction): AuthState {
     switch (action.type) {
         case AuthActionTypes.LOGIN_SUCCESS:
             return {
@@ -44,8 +44,8 @@ function reducer(state: AuthSate, action: IAuthAction): AuthSate {
                 ip: action.payload.ip,
                 roles: action.payload.roles,
                 user: action.payload.user,
-                cid: action.payload.cid,
-                cntid: action.payload.cntid,
+                clientId: action.payload.clientId,
+                containerId: action.payload.containerId,
             };
         case AuthActionTypes.LOGIN_ERROR:
             return {
@@ -58,8 +58,8 @@ function reducer(state: AuthSate, action: IAuthAction): AuthSate {
                 token: action.payload.token,
                 ip: action.payload.ip,
                 roles: action.payload.roles,
-                cid: action.payload.cid,
-                cntid: action.payload.cntid,
+                clientId: action.payload.clientId,
+                containerId: action.payload.containerId,
             };
         case AuthActionTypes.LOGOUT:
             return {
@@ -72,8 +72,8 @@ function reducer(state: AuthSate, action: IAuthAction): AuthSate {
                 token: action.payload.token,
                 ip: action.payload.ip,
                 roles: action.payload.roles,
-                cid: action.payload.cid,
-                cntid: action.payload.cntid,
+                clientId: action.payload.clientId,
+                containerId: action.payload.containerId,
             };
         default:
             return state;
@@ -101,8 +101,8 @@ export const logoutAction = async (
             sessionFetched: false,
             ip: null,
             roles: [],
-            cntid: null,
-            cid: null,
+            containerId: null,
+            clientId: null,
         },
     });
     await navigate("/");
@@ -136,8 +136,8 @@ export const socialLogin = async (
                     user,
                     loginError: null,
                     sessionFetched: true,
-                    cid,
-                    cntid,
+                    clientId: cid,
+                    containerId: cntid,
                 },
             });
             await navigate("/home");
@@ -157,8 +157,8 @@ export const socialLogin = async (
                     sessionFetched: false,
                     ip: null,
                     roles: [],
-                    cntid: null,
-                    cid: null,
+                    containerId: null,
+                    clientId: null,
                 },
             });
         }
@@ -193,8 +193,8 @@ export const loginAction = async (
                     user,
                     loginError: null,
                     sessionFetched: true,
-                    cid,
-                    cntid,
+                    clientId: cid,
+                    containerId: cntid,
                 },
             });
             await navigate("/home");
@@ -214,8 +214,8 @@ export const loginAction = async (
                     sessionFetched: false,
                     ip: null,
                     roles: [],
-                    cntid: null,
-                    cid: null,
+                    containerId: null,
+                    clientId: null,
                 },
             });
         }
@@ -243,8 +243,8 @@ export default function AuthProvider({ children }: Props): JSX.Element {
                             user,
                             ip,
                             roles,
-                            cid,
-                            cntid,
+                            clientId: cid,
+                            containerId: cntid,
                         },
                     });
                 } catch (error) {
@@ -260,8 +260,8 @@ export default function AuthProvider({ children }: Props): JSX.Element {
                             user: null,
                             ip: null,
                             roles: [],
-                            cid: null,
-                            cntid: null,
+                            clientId: null,
+                            containerId: null,
                         },
                     });
                 }
@@ -279,8 +279,8 @@ export default function AuthProvider({ children }: Props): JSX.Element {
                     user: null,
                     ip: null,
                     roles: [],
-                    cid: null,
-                    cntid: null,
+                    clientId: null,
+                    containerId: null,
                 },
             });
         }

@@ -1,6 +1,6 @@
 import { User } from "../../../AppModule/models";
 
-export interface AuthSate {
+export interface AuthState {
     isAuthenticated: boolean | null;
     loginSuccess: boolean;
     showLogin: boolean;
@@ -10,8 +10,6 @@ export interface AuthSate {
     sessionFetched: boolean;
     ip: string | null;
     roles: string[];
-    // @TODO: rename this key to clientId
-    cid: number | null;
-    // @TODO: rename this key to containerId
-    cntid: number | null;
+    clientId: number | null;
+    containerId: number | null;
 }

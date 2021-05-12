@@ -6,22 +6,23 @@ import { errorToast } from "../../utils";
 import { AuthContext } from "../../../SecurityModule/context/AuthContext";
 import { AppContext } from "../../Contexts/AppContext";
 import { ContainerTypes } from "../../Contexts/Types";
+import { AuthState } from "../../../SecurityModule/models";
 
 export const AppConfiguration: FC = ({ children }) => {
     const { dispatch } = React.useContext(AppContext);
     const { state } = React.useContext(AuthContext);
-    const { cntid } = state;
+    const { containerId } = state as AuthState;
     const [
         containerConfiguration,
         setContainerConfiguration,
     ] = React.useState<any>();
 
     useEffect(() => {
-        if (cntid) {
+        if (containerId) {
             dispatch({
                 type: ContainerTypes.LOADING,
             });
-            ContainerApi.getById<Container>(cntid).then(
+            ContainerApi.getById<Container>(containerId).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);
@@ -37,7 +38,7 @@ export const AppConfiguration: FC = ({ children }) => {
                 }
             );
         }
-    }, []);
+    }, [containerId]);
 
     const renderScripts = () => {
         return (
