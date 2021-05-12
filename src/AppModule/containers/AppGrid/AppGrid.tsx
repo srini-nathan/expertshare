@@ -97,8 +97,17 @@ export const AppGrid: FC<AppGridProps> = ({
                     />
                 </div>
                 <br />
-                <div className="d-flex flex-row app-grid-action">
-                    <div className="pagination-container mr-3">
+                <div className="d-flex flex-row app-grid-action py-3">
+                    <AppGridPagination
+                        className="mr-3"
+                        itemsPerPage={pageSize}
+                        totalItems={totalItems}
+                        active={active}
+                        onClick={(pageNumber) => {
+                            gridApi?.paginationGoToPage(pageNumber - 1);
+                        }}
+                    />
+                    <div className="pagination-container">
                         <AppFormDropdown
                             id={"pageSize"}
                             defaultValue={defaultPageSize()}
@@ -113,14 +122,6 @@ export const AppGrid: FC<AppGridProps> = ({
                             }}
                         />
                     </div>
-                    <AppGridPagination
-                        itemsPerPage={pageSize}
-                        totalItems={totalItems}
-                        active={active}
-                        onClick={(pageNumber) => {
-                            gridApi?.paginationGoToPage(pageNumber - 1);
-                        }}
-                    />
                 </div>
             </div>
         </React.Fragment>

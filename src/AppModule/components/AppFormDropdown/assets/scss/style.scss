@@ -6,8 +6,9 @@
         background: var(--input-bg-clr) !important;
         border-radius: var(--border-radius);
         color: var(--input-fg-clr);
+        height: 36px;
         z-index: 2;
-
+        border: 1px solid var(--input-border-clr);
     }
 
     &__control {
@@ -40,7 +41,7 @@
 
     &__menu {
         border: 1px solid transparent !important;
-        padding: 0 ;
+        padding: 0;
 
         &-list {
             padding: 0;

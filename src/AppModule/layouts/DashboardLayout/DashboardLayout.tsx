@@ -10,7 +10,7 @@ export const DashboardLayout: FC = ({ children }) => {
                 <Col sm={12} md={3} xl={2} className={"p-0"}>
                     <AppNavigation items={appNavigations} />
                 </Col>
-                <Col md={9} xl={10} className={"p-5"}>
+                <Col md={9} xl={10} className={"p-5 mb-5"}>
                     {children}
                 </Col>
             </Row>

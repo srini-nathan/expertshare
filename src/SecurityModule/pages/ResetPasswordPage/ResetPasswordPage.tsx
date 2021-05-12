@@ -4,14 +4,14 @@ import { useForm } from "react-hook-form";
 import { parse } from "qs";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import * as yup from "yup";
-import { forEach as _forEach } from "lodash";
+import { forEach as _forEach, isString as _isString } from "lodash";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AppButton } from "../../../AppModule/components/AppButton";
 import { AppAuthHeader, AppAuthFooter } from "../../components";
 import "./assets/scss/styles.scss";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { validation, errorToast } from "../../../AppModule/utils";
-import { ResetPasswordApi } from "../../apis";
+import { AuthApi } from "../../apis";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
 
 type RestPassword = {
@@ -45,6 +45,7 @@ export const ResetPasswordPage: FC<RouteComponentProps> = ({
         mode: "all",
     });
     const [loading, isLoading] = React.useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = React.useState<string>("");
 
     const { errors } = formState;
     const location = useLocation();
@@ -53,14 +54,13 @@ export const ResetPasswordPage: FC<RouteComponentProps> = ({
             ignoreQueryPrefix: true,
         });
         const { token } = searchParams;
-        if (token) {
+        if (_isString(token)) {
             isLoading(true);
-            ResetPasswordApi.create<RestPasswordForm, RestPassword>({
+            AuthApi.resetPassword<RestPasswordForm, RestPassword>({
                 plainPassword: password,
                 token,
-            }).then(({ error, errorMessage }) => {
+            }).then((error) => {
                 isLoading(false);
-
                 if (error instanceof UnprocessableEntityErrorResponse) {
                     const { violations } = error;
                     _forEach(violations, (value: string, key: string) => {
@@ -70,8 +70,8 @@ export const ResetPasswordPage: FC<RouteComponentProps> = ({
                             message: value,
                         });
                     });
-                } else if (errorMessage) {
-                    errorToast(errorMessage);
+                    errorToast(error.title);
+                    setErrorMessage(error.description);
                 } else if (navigate) {
                     navigate("/auth/reset-password-confirmation");
                 }
@@ -84,6 +84,7 @@ export const ResetPasswordPage: FC<RouteComponentProps> = ({
                 <Row className="p-0 m-auto">
                     <AppAuthHeader
                         title="Resset Password"
+                        errorMessage={errorMessage}
                         desctiption="Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
             velit mollit. Exercitation veniam consequat sunt nostrud amet."
                     />

@@ -5,11 +5,13 @@ import "./assets/scss/styles.scss";
 export interface AppAuthHeaderProps {
     title: string;
     desctiption?: string;
+    errorMessage?: string;
 }
 
 export const AppAuthHeader: FunctionComponent<AppAuthHeaderProps> = ({
     title,
     desctiption = "",
+    errorMessage = "",
 }) => {
     return (
         <>
@@ -24,6 +26,10 @@ export const AppAuthHeader: FunctionComponent<AppAuthHeaderProps> = ({
             <div className="col-md-12 active-account-box--text-box">
                 <h2 className="mt-4 text-center">{title}</h2>
                 <p className="mt-2 mb-3 text-center">{desctiption}</p>
+
+                <div className="my-2 text-center">
+                    <b className="error-message">{errorMessage}</b>
+                </div>
             </div>
         </>
     );

@@ -9,8 +9,8 @@ import { AppButton } from "../../../AppModule/components/AppButton";
 import { AppAuthHeader, AppAuthFooter } from "../../components";
 import "./assets/scss/styles.scss";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
-import { ResetPasswordRequestApi } from "../../apis";
-import { errorToast, validation } from "../../../AppModule/utils";
+import { AuthApi } from "../../apis";
+import { validation, errorToast } from "../../../AppModule/utils";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
 
 type ForgotPassword = {
@@ -31,22 +31,22 @@ export const ForgotPasswordPage: FC<RouteComponentProps> = ({
     const {
         control,
         handleSubmit,
-        setError,
         formState,
+        setError,
     } = useForm<ForgotPasswordForm>({
         resolver: yupResolver(schema),
         mode: "all",
     });
     const [loading, isLoading] = React.useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = React.useState<string>("");
     const { errors } = formState;
 
     const onSubmit = async (dataForm: ForgotPasswordForm) => {
         isLoading(true);
-        ResetPasswordRequestApi.create<ForgotPasswordForm, ForgotPassword>(
+        AuthApi.resetPasswordRequest<ForgotPasswordForm, ForgotPassword>(
             dataForm
-        ).then(({ error, errorMessage }) => {
+        ).then((error) => {
             isLoading(false);
-
             if (error instanceof UnprocessableEntityErrorResponse) {
                 const { violations } = error;
                 _forEach(violations, (value: string, key: string) => {
@@ -56,8 +56,8 @@ export const ForgotPasswordPage: FC<RouteComponentProps> = ({
                         message: value,
                     });
                 });
-            } else if (errorMessage) {
-                errorToast(errorMessage);
+                errorToast(error.title);
+                setErrorMessage(error.description);
             } else if (navigate) {
                 navigate("/auth/forgot-password-email-confirmation");
             }
@@ -69,6 +69,7 @@ export const ForgotPasswordPage: FC<RouteComponentProps> = ({
                 <Row className="p-0 m-auto">
                     <AppAuthHeader
                         title="Forgot Password?"
+                        errorMessage={errorMessage}
                         desctiption="Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
             velit mollit. Exercitation veniam consequat sunt nostrud amet."
                     />
