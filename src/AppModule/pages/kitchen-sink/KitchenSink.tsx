@@ -16,6 +16,7 @@ import {
     AppYoutubeFrame,
     AppVimeoFrame,
     AppFormRadioSwitch,
+    AppUploader,
 } from "../../components";
 import { SimpleObject } from "../../../AdminModule/models";
 
@@ -194,6 +195,9 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     height="390"
                     width="640"
                 />
+            </Row>
+            <Row>
+                <AppUploader />
             </Row>
         </Fragment>
     );
