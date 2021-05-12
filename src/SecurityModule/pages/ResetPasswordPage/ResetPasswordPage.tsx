@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { parse } from "qs";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import * as yup from "yup";
-import { forEach as _forEach } from "lodash";
+import { forEach as _forEach, isString as _isString } from "lodash";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AppButton } from "../../../AppModule/components/AppButton";
 import { AppAuthHeader, AppAuthFooter } from "../../components";
@@ -54,7 +54,7 @@ export const ResetPasswordPage: FC<RouteComponentProps> = ({
             ignoreQueryPrefix: true,
         });
         const { token } = searchParams;
-        if (token) {
+        if (_isString(token)) {
             isLoading(true);
             AuthApi.resetPassword<RestPasswordForm, RestPassword>({
                 plainPassword: password,
