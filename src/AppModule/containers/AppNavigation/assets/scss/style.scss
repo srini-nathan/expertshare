@@ -117,14 +117,6 @@
         opacity: 1 !important;
     }
 
-    .language {
-        svg {
-            position: absolute;
-            top: 8px;
-            right: 0;
-        }
-    }
-
     .profile-picture,
     .languages {
         width: 24px;
@@ -355,6 +347,40 @@
                 width: 95%;
                 height: 60px;
                 background-position: left center;
+            }
+        }
+    }
+
+    .dropup {
+        .custom-dropdown-toggle {
+            width: 100%;
+            color: var(--primary);
+
+            svg {
+                position: absolute;
+                top: 15px;
+                right: 0;
+                height: 12px;
+            }
+        }
+
+        .dropdown-menu {
+            .dropdown-item {
+
+                &.active,
+                &:hover {
+                    background-color: var(--sidebar-item-hover-bg-clr);
+
+                    .nav-icon {
+                        color: var(--sidebar-hover-icon-clr);
+                    }
+
+                    span {
+                        color: var(--sidebar-hover-fg-clr);
+                    }
+
+                }
+
             }
         }
     }

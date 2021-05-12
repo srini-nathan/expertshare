@@ -6,10 +6,7 @@ import { AppConfiguration } from "./layouts/AppConfiguration";
 import { AuthLayout } from "./layouts/AuthLayout";
 import { ModuleRouter } from "./models";
 import AppProvider from "./Contexts/AppContext";
-import {
-    AuthContext,
-    logoutAction,
-} from "../SecurityModule/context/AuthContext";
+import { AuthContext } from "../SecurityModule/context/AuthContext";
 import { AppLoader } from "./components";
 
 import "./assets/scss/bootstrap.scss";
@@ -46,18 +43,10 @@ const OnRouteChange = ({ action }: Props2) => (
 );
 
 const Home: FC<RouteComponentProps> = (): JSX.Element => {
-    const { dispatch } = React.useContext(AuthContext);
+    const { state } = React.useContext(AuthContext);
+    const { user } = state;
 
-    const handleLogoutEvent = async () => {
-        await logoutAction(dispatch);
-    };
-
-    return (
-        <h2>
-            Hi Authenticated User
-            <button onClick={handleLogoutEvent}>Logout</button>
-        </h2>
-    );
+    return <h2>Hi {`${user.firstName} ${user.lastName}`}</h2>;
 };
 
 const App = (): JSX.Element => {
