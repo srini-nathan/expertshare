@@ -199,11 +199,11 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
             <Row>
                 <AppFormRichTextArea
                     id="richtext"
-                    required={false}
-                    md="4"
-                    sm="4"
-                    lg="4"
-                    xl="4"
+                    required
+                    md="12"
+                    sm="12"
+                    lg="12"
+                    xl="12"
                     name="richtext"
                     label="Rich Text Area"
                     value="hello"

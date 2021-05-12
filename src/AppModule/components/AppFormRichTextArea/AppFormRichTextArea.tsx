@@ -2,11 +2,12 @@ import React, { FC, useState } from "react";
 import { Form, Col } from "react-bootstrap";
 import { Control, Controller } from "react-hook-form";
 import { isString as _isString, startCase as _startCase } from "lodash";
-import FroalaEditor from "react-froala-wysiwyg";
 
 /* eslint-disable */
 import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
+import "froala-editor/js/plugins.pkgd.min.js";
+import FroalaEditorComponent from "react-froala-wysiwyg";
 /* eslint-enable */
 import "./assets/scss/style.scss";
 
@@ -84,7 +85,7 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
                 defaultValue={value}
                 control={control}
                 render={() => (
-                    <FroalaEditor
+                    <FroalaEditorComponent
                         model={model}
                         onModelChange={setModel}
                         tag="textarea"
@@ -99,7 +100,7 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
             />
             <Form.Control.Feedback
                 type="invalid"
-                className={!model ? "show-field-error" : ""}
+                className={required && !model ? "show-field-error" : ""}
             >
                 {errorMessage}
             </Form.Control.Feedback>

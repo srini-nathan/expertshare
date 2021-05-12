@@ -7577,10 +7577,10 @@ fresh@0.5.2:
   resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
   integrity sha1-PYyt2Q2XZWn6g1qx+OSyOhBWBac=
 
-froala-editor@3.2.6-1:
-  version "3.2.6-1"
-  resolved "https://registry.yarnpkg.com/froala-editor/-/froala-editor-3.2.6-1.tgz#b03feb2b076bc14b8f969a041e4122aab0eb29b3"
-  integrity sha512-PfUi3KwtYqPE9/fRJBhUAjOffUmVt2Bgd9XL1dcWkEZ9vgLaxQLau721xSy9tsZGc43GYoIlDo1jj9Mmdo3cDw==
+froala-editor@3.2.6:
+  version "3.2.6"
+  resolved "https://registry.yarnpkg.com/froala-editor/-/froala-editor-3.2.6.tgz#dbbe7dd2aa63a9ca1d17ecf8d88d331a9ff9b89b"
+  integrity sha512-y2nojLDb5fPQ25IHxnFRbPrzCF6MjujcnFU3vC7hBNkxQ6JPIgNaYbYm9LNQPuld0MIqG4Usk2EXt1MBwBLu8w==
 
 from2@^2.1.0:
   version "2.3.0"
@@ -13102,13 +13102,13 @@ react-fast-compare@^3.0.1, react-fast-compare@^3.1.1, react-fast-compare@^3.2.0:
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-3.2.0.tgz#641a9da81b6a6320f270e89724fb45a0b39e43bb"
   integrity sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==
 
-react-froala-wysiwyg@^3.2.6-1:
-  version "3.2.6-1"
-  resolved "https://registry.yarnpkg.com/react-froala-wysiwyg/-/react-froala-wysiwyg-3.2.6-1.tgz#94e8c9e44551686d02cd98f9cc01c67339e7a4e1"
-  integrity sha512-BjCTmk98ASz7m4SsJsNWIPtv7x0MkmYXY+mAlEo89lGttfX9Y82HyQ2JpduqHpb8dB0823jWhJYlrW39urP/Yw==
+react-froala-wysiwyg@^3.0.5:
+  version "3.2.6"
+  resolved "https://registry.yarnpkg.com/react-froala-wysiwyg/-/react-froala-wysiwyg-3.2.6.tgz#e00f302c16d4feebd4ffbf1ea125390f6ed6d9f7"
+  integrity sha512-VGr70g75bWvyZednqtfSLdkCuVLaeEg7llVIK7WujvxcSpeP6QBqGg80hULpLBMAxOxblwK9GmkwmGXDT8LbcQ==
   dependencies:
     create-react-class "^15.5.2"
-    froala-editor "3.2.6-1"
+    froala-editor "3.2.6"
 
 react-helmet-async@^1.0.2:
   version "1.0.9"
