@@ -52,7 +52,7 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
             </Row>
             <hr className="col-12" />
             <Row>
-                <Col md={6}>
+                <Col>
                     <AppTagSelect
                         options={options}
                         selectedItems={selectedItems}
@@ -70,68 +70,80 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                         }}
                     />
                 </Col>
-                <hr className="col-12" />
-
-                <AppFormInputPassword
-                    id="password"
-                    required
-                    md="4"
-                    sm="4"
-                    lg="4"
-                    xl="4"
-                    name="password"
-                    label="Password"
-                    placeholder="Input password"
-                    description="hello this is description"
-                    maxCount={150}
-                    errorMessage="This field is required"
-                    isValid={true}
-                    control={control}
-                />
-                <hr className="col-12" />
-
-                <AppFormTextArea
-                    id="textarea"
-                    required
-                    md="4"
-                    sm="4"
-                    lg="4"
-                    xl="4"
-                    name="textarea"
-                    label="Text Area"
-                    value="hello"
-                    placeholder="hello"
-                    description="hello this is description"
-                    maxCount={150}
-                    rows={5}
-                    errorMessage="This field is required"
-                    isInvalid={true}
-                    control={control}
-                />
-                <hr className="col-12" />
-
-                <AppCard
-                    title="Card Title"
-                    subtitle="This is bootstrap subtitle"
-                >
-                    <p>hello this is children</p>
-                </AppCard>
-                <hr className="col-12" />
-
-                <AppFormRadioSwitch
-                    required={true}
-                    sm="6"
-                    name="radio_switch"
-                    label="Success Calculated By"
-                    options={options}
-                    description="hello this is descriprion"
-                    errorMessage="This field is required"
-                    defaultValue="chocolate"
-                    control={control}
-                />
-
-                <hr className="col-12" />
-
+            </Row>
+            <hr className="col-12" />
+            <Row>
+                <Col>
+                    <AppFormInputPassword
+                        id="password"
+                        required
+                        md="4"
+                        sm="4"
+                        lg="4"
+                        xl="4"
+                        name="password"
+                        label="Password"
+                        placeholder="Input password"
+                        description="hello this is description"
+                        maxCount={150}
+                        errorMessage="This field is required"
+                        isValid={true}
+                        control={control}
+                    />
+                </Col>
+            </Row>
+            <hr className="col-12" />
+            <Row>
+                <Col>
+                    <AppFormTextArea
+                        id="textarea"
+                        required
+                        md="4"
+                        sm="4"
+                        lg="4"
+                        xl="4"
+                        name="textarea"
+                        label="Text Area"
+                        value="hello"
+                        placeholder="hello"
+                        description="hello this is description"
+                        maxCount={150}
+                        rows={5}
+                        errorMessage="This field is required"
+                        isInvalid={true}
+                        control={control}
+                    />
+                </Col>
+            </Row>
+            <hr className="col-12" />
+            <Row>
+                <Col>
+                    <AppCard
+                        title="Card Title"
+                        subtitle="This is bootstrap subtitle"
+                    >
+                        <p>hello this is children</p>
+                    </AppCard>
+                </Col>
+            </Row>
+            <hr className="col-12" />
+            <Row>
+                <Col>
+                    <AppFormRadioSwitch
+                        required={true}
+                        sm="6"
+                        name="radio_switch"
+                        label="Success Calculated By"
+                        options={options}
+                        description="hello this is descriprion"
+                        errorMessage="This field is required"
+                        defaultValue="chocolate"
+                        control={control}
+                    />
+                </Col>
+            </Row>
+            <hr className="col-12" />
+            <Row>
                 <div
                     className="col-md-12 vh-100"
                     style={{ border: "1px solid" }}
@@ -163,37 +175,45 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
             </Row>
             <hr className="col-12" />
             <Row>
-                <AppKnovioPlayer
-                    linkUrl="https://view.knowledgevision.com/presentation/e31fff7a14ee4a9aa82dca008384c32a"
-                    height={390}
-                    width={640}
-                />
+                <Col>
+                    <AppKnovioPlayer
+                        linkUrl="https://view.knowledgevision.com/presentation/e31fff7a14ee4a9aa82dca008384c32a"
+                        height={390}
+                        width={640}
+                    />
+                </Col>
             </Row>
             <hr className="col-12" />
             <Row>
-                <AppDacastFrame
-                    id="1552_f_297509"
-                    provider="dacast"
-                    width={640}
-                    height={390}
-                />
+                <Col>
+                    <AppDacastFrame
+                        id="1552_f_297509"
+                        provider="dacast"
+                        width={640}
+                        height={390}
+                    />
+                </Col>
             </Row>
             <hr className="col-12" />
             <Row>
-                <AppYoutubeFrame
-                    url="https://www.youtube.com/watch?v=y9j-BL5ocW8"
-                    height="390"
-                    width="640"
-                    configuration={{ autoplay: 1 }}
-                />
+                <Col>
+                    <AppYoutubeFrame
+                        url="https://www.youtube.com/watch?v=y9j-BL5ocW8"
+                        height="390"
+                        width="640"
+                        configuration={{ autoplay: 1 }}
+                    />
+                </Col>
             </Row>
             <hr className="col-12" />
             <Row>
-                <AppVimeoFrame
-                    url="https://vimeo.com/544191717"
-                    height="390"
-                    width="640"
-                />
+                <Col>
+                    <AppVimeoFrame
+                        url="https://vimeo.com/544191717"
+                        height="390"
+                        width="640"
+                    />
+                </Col>
             </Row>
         </Fragment>
     );
