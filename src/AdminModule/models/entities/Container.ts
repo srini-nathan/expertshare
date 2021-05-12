@@ -2,6 +2,7 @@ import { BaseEntity } from "../../../AppModule/models";
 import { Package } from "./Package";
 import { ContainerConfiguration } from "./ContainerConfiguration";
 import { ClientEntity } from "./Client";
+import { UserGroup } from "./UserGroup";
 
 export interface Container extends BaseEntity {
     domain: string;
@@ -45,6 +46,8 @@ export class ContainerEntity {
     packages: string[] | Package[];
 
     configuration?: string[];
+
+    userGroups?: string[] | UserGroup[];
 
     constructor(client: string) {
         this.client = client;

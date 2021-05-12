@@ -7,8 +7,13 @@ import { forEach as _forEach } from "lodash";
 import { Col, Form, Row } from "react-bootstrap";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { DevTool } from "@hookform/devtools";
-import { ClientEntity, ContainerEntity, Package } from "../../models";
-import { ClientApi, PackageApi } from "../../apis";
+import {
+    ClientEntity,
+    ContainerEntity,
+    Package,
+    UserGroup,
+} from "../../models";
+import { ClientApi, PackageApi, UserGroupApi } from "../../apis";
 import {
     AppFormTextArea,
     AppLoader,
@@ -34,24 +39,24 @@ const {
 const schema = Yup.object().shape({
     domain: Yup.string().required("Domain is Required"),
     name: Yup.string().required("Name is Required"),
-    containerGroup: Yup.string().optional(),
-    description: Yup.string().optional(),
+    containerGroup: Yup.string().optional().nullable(),
+    description: Yup.string().optional().nullable(),
     storage: Yup.string().required(),
     bucketKey: Yup.string().when("storage", {
         is: STORAGE_S3,
-        then: Yup.string().required("Bucket Key is Required"),
+        then: Yup.string().required("Bucket Key is Required").nullable(),
     }),
     bucketSecret: Yup.string().when("storage", {
         is: STORAGE_S3,
-        then: Yup.string().required("Bucket Secret is Required"),
+        then: Yup.string().required("Bucket Secret is Required").nullable(),
     }),
     bucketName: Yup.string().when("storage", {
         is: STORAGE_S3,
-        then: Yup.string().required("Bucket Name is Required"),
+        then: Yup.string().required("Bucket Name is Required").nullable(),
     }),
     bucketRegion: Yup.string().when("storage", {
         is: STORAGE_S3,
-        then: Yup.string().required("Bucket Region is Required"),
+        then: Yup.string().required("Bucket Region is Required").nullable(),
     }),
 });
 
@@ -82,7 +87,6 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
     } = useForm({
         resolver: yupResolver(schema),
         mode: "all",
-        defaultValues: data,
     });
 
     useEffect(() => {
@@ -111,14 +115,18 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                         errorToast("Container not exist");
                     } else if (response !== null) {
                         const packs = response.packages as Package[];
-                        reset();
-                        setData({
+                        const userGroups = response.userGroups as UserGroup[];
+                        const payload = {
                             ...response,
                             packages: packs.map(({ id: packId }) =>
                                 PackageApi.toResourceUrl(packId)
                             ),
-                        });
-                        trigger();
+                            userGroups: userGroups.map(({ id: ugId }) =>
+                                UserGroupApi.toResourceUrl(ugId)
+                            ),
+                        };
+                        setData(payload);
+                        reset(payload);
                     }
                     setLoading(false);
                 }
@@ -152,7 +160,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         });
     };
 
-    if (loading && loadingClient) {
+    if (loading || loadingClient) {
         return <AppLoader />;
     }
 
@@ -303,7 +311,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         isEditMode
                                     )}
                                     errorMessage={errors.bucketKey?.message}
-                                    value={data.bucketKey || ""}
+                                    value={data.bucketKey}
                                     control={control}
                                     key={"bucketKey"}
                                 />
@@ -322,7 +330,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         isEditMode
                                     )}
                                     errorMessage={errors.bucketSecret?.message}
-                                    value={data.bucketSecret || ""}
+                                    value={data.bucketSecret}
                                     control={control}
                                     key={"bucketSecret"}
                                 />
@@ -341,7 +349,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         isEditMode
                                     )}
                                     errorMessage={errors.bucketName?.message}
-                                    value={data.bucketName || ""}
+                                    value={data.bucketName}
                                     control={control}
                                     key={"bucketName"}
                                 />
@@ -359,7 +367,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         isEditMode
                                     )}
                                     errorMessage={errors.bucketRegion?.message}
-                                    value={data.bucketRegion || ""}
+                                    value={data.bucketRegion}
                                     control={control}
                                     key={"bucketRegion"}
                                 />
