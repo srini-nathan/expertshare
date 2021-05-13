@@ -172,6 +172,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                         formState,
                                         isEditMode
                                     )}
+                                    errorMessage={errors.etKey?.message}
                                     defaultValue={data.etKey}
                                     placeholder={"Theme"}
                                     options={defaultThemeList}
