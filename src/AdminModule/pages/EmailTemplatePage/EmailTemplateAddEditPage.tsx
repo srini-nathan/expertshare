@@ -29,7 +29,7 @@ import { AuthState } from "../../../SecurityModule/models/context/AuthState";
 const schema = yup.object().shape({
     name: yup.string().min(2).required(),
     subject: yup.string().min(2).required(),
-    etKey: yup.string(),
+    etKey: yup.string().required(),
     content: yup.string().required(),
 });
 
@@ -169,6 +169,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                         formState,
                                         isEditMode
                                     )}
+                                    errorMessage={errors.etKey?.message}
                                     defaultValue={data.etKey}
                                     placeholder={"Theme"}
                                     options={defaultThemeList}
