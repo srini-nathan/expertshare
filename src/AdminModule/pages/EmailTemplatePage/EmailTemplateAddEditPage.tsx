@@ -145,15 +145,13 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                     lg={12}
                                     sm={12}
                                     xl={12}
-                                    required={true}
-                                    withCounter={true}
                                     {...validation(
                                         "name",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.name?.message}
-                                    value={data.name}
+                                    defaultValue={data.name}
                                     control={control}
                                 />
                             </Form.Row>
@@ -166,7 +164,6 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                     md={12}
                                     lg={12}
                                     xl={12}
-                                    required={true}
                                     {...validation(
                                         "etKey",
                                         formState,
@@ -194,15 +191,13 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                     md={12}
                                     lg={12}
                                     xl={12}
-                                    required={true}
-                                    withCounter={true}
                                     {...validation(
                                         "subject",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.subject?.message}
-                                    value={data.subject}
+                                    defaultValue={data.subject}
                                     control={control}
                                 />
                             </Form.Row>
@@ -213,8 +208,6 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                     md={12}
                                     lg={12}
                                     xl={12}
-                                    required={true}
-                                    withCounter={true}
                                     {...validation(
                                         "content",
                                         formState,

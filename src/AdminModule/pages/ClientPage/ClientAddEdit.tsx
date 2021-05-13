@@ -143,15 +143,13 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
                                     xl={6}
                                     name={"name"}
                                     label={"Name"}
-                                    required={true}
-                                    withCounter={true}
                                     {...validation(
                                         "name",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.name?.message}
-                                    value={data.name}
+                                    defaultValue={data.name}
                                     control={control}
                                 />
                                 <AppFormTextArea
@@ -159,8 +157,6 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
                                     xl={6}
                                     name={"notes"}
                                     label={"Notes"}
-                                    required={false}
-                                    withCounter={true}
                                     {...validation(
                                         "notes",
                                         formState,

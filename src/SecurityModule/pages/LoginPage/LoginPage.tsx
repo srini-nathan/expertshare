@@ -61,7 +61,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                                 false
                                             )}
                                             errorMessage={errors.email?.message}
-                                            value={"admin@admin.com"}
+                                            defaultValue={"admin@admin.com"}
                                             control={control}
                                         />
                                     </Form.Row>
@@ -82,7 +82,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                             errorMessage={
                                                 errors.password?.message
                                             }
-                                            value={"123123"}
+                                            defaultValue={"123123"}
                                             control={control}
                                         />
                                     </Form.Row>

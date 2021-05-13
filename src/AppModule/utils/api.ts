@@ -1,6 +1,7 @@
-import { isString as _isString } from "lodash";
+import { forEach as _forEach, isString as _isString } from "lodash";
+import { UseFormSetError } from "react-hook-form/dist/types/form";
 import { randomAlphaNumeric } from "./random";
-import { SimpleObject } from "../models";
+import { SimpleObject, UnprocessableEntityErrorResponse } from "../models";
 
 export const generateKeyHeader = (saltLen = 6): string => {
     const { location } = window;
@@ -27,4 +28,17 @@ export const checkAndParseResponse = (
     }
 
     return parseData;
+};
+
+export const setViolations = <T>(
+    error: UnprocessableEntityErrorResponse,
+    setError: UseFormSetError<T>
+) => {
+    const { violations } = error;
+    _forEach(violations, (value: string, key: string) => {
+        setError(key as never, {
+            type: "backend",
+            message: value,
+        });
+    });
 };

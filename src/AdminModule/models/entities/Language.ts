@@ -1,26 +1,41 @@
-import { BaseEntity } from "../../../AppModule/models";
+import { BaseEntity, JsonResponseData } from "../../../AppModule/models";
 
-export interface Language extends BaseEntity {
+export class Language extends BaseEntity {
     name: string;
+
     locale: string;
+
     isActive: boolean;
+
     isDefault: boolean;
+
     container: string;
-}
 
-export class LanguageEntity {
-    name: string;
+    constructor(
+        container: string,
+        name = "",
+        locale = "",
+        isActive = true,
+        isDefault = false,
+        id?: number,
+        createdAt?: string | Date,
+        updatedAt?: string | Date
+    ) {
+        super(id, createdAt, updatedAt);
+        this.container = container;
+        this.name = name;
+        this.locale = locale;
+        this.isActive = isActive;
+        this.isDefault = isDefault;
+    }
 
-    locale: string;
-
-    isActive: boolean;
-
-    isDefault: boolean;
-
-    constructor() {
-        this.name = "";
-        this.locale = "";
-        this.isActive = false;
-        this.isDefault = false;
+    toJSON(addExtraData = false): JsonResponseData {
+        return {
+            ...super.toJSON(addExtraData),
+            name: this.name,
+            locale: this.locale,
+            isDefault: this.isDefault,
+            container: this.container,
+        };
     }
 }

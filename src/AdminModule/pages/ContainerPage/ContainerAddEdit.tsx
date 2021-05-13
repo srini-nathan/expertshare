@@ -188,15 +188,13 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         xl={12}
                                         name={"name"}
                                         label={"Name"}
-                                        required={true}
-                                        withCounter={true}
                                         {...validation(
                                             "name",
                                             formState,
                                             isEditMode
                                         )}
                                         errorMessage={errors.name?.message}
-                                        value={data?.name}
+                                        defaultValue={data?.name}
                                         control={control}
                                     />
                                     <AppFormInput
@@ -206,15 +204,13 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         xl={12}
                                         name={"domain"}
                                         label={"Domain"}
-                                        required={true}
-                                        withCounter={true}
                                         {...validation(
                                             "domain",
                                             formState,
                                             isEditMode
                                         )}
                                         errorMessage={errors.domain?.message}
-                                        value={data.domain}
+                                        defaultValue={data.domain}
                                         control={control}
                                     />
                                     <AppFormInput
@@ -224,7 +220,6 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         xl={12}
                                         name={"containerGroup"}
                                         label={"Container Group"}
-                                        withCounter={true}
                                         {...validation(
                                             "containerGroup",
                                             formState,
@@ -233,7 +228,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         errorMessage={
                                             errors.containerGroup?.message
                                         }
-                                        value={data.containerGroup}
+                                        defaultValue={data.containerGroup}
                                         control={control}
                                     />
                                 </Col>
@@ -255,7 +250,6 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         name={"description"}
                                         label={"Description"}
                                         required={false}
-                                        withCounter={true}
                                         {...validation(
                                             "description",
                                             formState,
@@ -303,15 +297,13 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     xl={"6"}
                                     name={"bucketKey"}
                                     label={"AWS S3 Bucket Key"}
-                                    required={true}
-                                    withCounter={true}
                                     {...validation(
                                         "bucketKey",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.bucketKey?.message}
-                                    value={data.bucketKey}
+                                    defaultValue={data.bucketKey}
                                     control={control}
                                     key={"bucketKey"}
                                 />
@@ -322,15 +314,13 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     xl={"6"}
                                     name={"bucketSecret"}
                                     label={"AWS S3 Bucket Secret"}
-                                    required={true}
-                                    withCounter={true}
                                     {...validation(
                                         "bucketSecret",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.bucketSecret?.message}
-                                    value={data.bucketSecret}
+                                    defaultValue={data.bucketSecret}
                                     control={control}
                                     key={"bucketSecret"}
                                 />
@@ -341,15 +331,13 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     xl={"6"}
                                     name={"bucketName"}
                                     label={"AWS S3 Bucket Name"}
-                                    required={true}
-                                    withCounter={true}
                                     {...validation(
                                         "bucketName",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.bucketName?.message}
-                                    value={data.bucketName}
+                                    defaultValue={data.bucketName}
                                     control={control}
                                     key={"bucketName"}
                                 />
@@ -359,15 +347,13 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     xl={"6"}
                                     name={"bucketRegion"}
                                     label={"AWS S3 Bucket Region"}
-                                    required={true}
-                                    withCounter={true}
                                     {...validation(
                                         "bucketRegion",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.bucketRegion?.message}
-                                    value={data.bucketRegion}
+                                    defaultValue={data.bucketRegion}
                                     control={control}
                                     key={"bucketRegion"}
                                 />

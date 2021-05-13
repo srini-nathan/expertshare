@@ -1,21 +1,39 @@
-import { BaseEntity } from "../../../AppModule/models";
+import { BaseEntity, JsonResponseData } from "../../../AppModule/models";
 
-export interface UserGroup extends BaseEntity {
-    client: string;
-    name: string;
-    isGenerated: boolean;
-}
-
-export class UserGroupEntity {
+export class UserGroup extends BaseEntity {
     client: string;
 
     name: string;
 
     isGenerated: boolean;
 
-    constructor() {
-        this.client = "";
-        this.name = "";
+    constructor(
+        client: string,
+        name = "",
+        id?: number,
+        createdAt?: string | Date,
+        updatedAt?: string | Date
+    ) {
+        super(id, createdAt, updatedAt);
+        this.client = client;
+        this.name = name;
         this.isGenerated = false;
+    }
+
+    toJSON(addExtraData = false): JsonResponseData {
+        let data: JsonResponseData = {
+            ...super.toJSON(addExtraData),
+            name: this.name,
+            client: this.client,
+        };
+
+        if (addExtraData) {
+            data = {
+                ...data,
+                isGenerated: this.isGenerated,
+            };
+        }
+
+        return data;
     }
 }

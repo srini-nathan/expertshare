@@ -20,7 +20,6 @@ export interface AppFormInputPasswordProps {
     errorMessage?: string;
     isInvalid?: boolean;
     isValid?: boolean;
-    withCounter?: boolean;
     maxCount?: number;
     control?: Control<any>;
 }
@@ -40,7 +39,6 @@ export const AppFormInputPassword: FC<AppFormInputPasswordProps> = ({
     isInvalid,
     isValid,
     required = false,
-    withCounter = false,
     maxCount = 25,
     control,
 }): JSX.Element => {
@@ -54,7 +52,7 @@ export const AppFormInputPassword: FC<AppFormInputPasswordProps> = ({
                 lg={12}
                 xl={12}
                 name={name}
-                value={value}
+                defaultValue={value}
                 type={showPass ? "text" : "password"}
                 placeholder={placeholder}
                 label={label}
@@ -63,7 +61,6 @@ export const AppFormInputPassword: FC<AppFormInputPasswordProps> = ({
                 isInvalid={isInvalid}
                 isValid={isValid}
                 required={required}
-                withCounter={withCounter}
                 maxCount={maxCount}
                 control={control}
             />

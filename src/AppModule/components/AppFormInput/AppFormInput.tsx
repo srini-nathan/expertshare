@@ -1,101 +1,85 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { Form, Col } from "react-bootstrap";
-import { Control, Controller, useWatch } from "react-hook-form";
-import { isString as _isString, startCase as _startCase } from "lodash";
+import { Control, Controller } from "react-hook-form";
 import "./assets/scss/style.scss";
+import { useInputPlaceholder } from "../../hooks";
+import { AppFormLabel } from "../AppFormLabel";
 
-export interface AppFormInputProps {
-    id?: string;
-    name: string;
+export interface LayoutProps {
     sm?: string | number;
     md?: string | number;
     lg?: string | number;
     xl?: string | number;
-    // @TODO: rename it defaultValue
-    value?: string;
-    type?: string;
+}
+
+export interface ReactHookFormProps {
+    name: string;
+    defaultValue?: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    control?: Control<any>;
+    isInvalid?: boolean;
+    isValid?: boolean;
+    errorMessage?: string;
+}
+
+export interface FormElementProps {
+    id?: string;
     placeholder?: string | boolean;
     required?: boolean;
     label?: string;
     description?: string;
-    errorMessage?: string;
     className?: string;
-    isInvalid?: boolean;
-    isValid?: boolean;
-    withCounter?: boolean;
+}
+
+export interface AppFormInputProps
+    extends FormElementProps,
+        LayoutProps,
+        ReactHookFormProps {
+    type?: string;
     maxCount?: number;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    control?: Control<any>;
 }
 
 export const AppFormInput: FC<AppFormInputProps> = ({
     id,
     name,
-    value = "",
+    defaultValue = "",
     placeholder,
     errorMessage,
     label = "",
     type = "text",
-    className = "",
     description,
-    sm = 12,
-    md = 6,
-    lg = 4,
-    xl = 4,
     isInvalid,
     isValid,
-    required = false,
-    withCounter = false,
-    maxCount = 25,
+    required = true,
+    maxCount,
     control,
+    ...props
 }): JSX.Element => {
+    const [data, setData] = useState<string>(defaultValue);
+    const placeholderText = useInputPlaceholder(name, placeholder, label);
     const controlId = id || name;
-    let placeholderText = "";
-
-    if (placeholder !== false) {
-        placeholderText = _isString(placeholder)
-            ? placeholder
-            : `Enter ${_startCase(label) || _startCase(name)}`;
-    }
-    const fieldValue = useWatch({
-        control,
-        name,
-        defaultValue: "",
-    });
+    const { sm = 12, md = 6, lg = 4, xl = 4, className = "" } = props;
+    const groupProps = { sm, md, lg, xl, controlId, className, as: Col };
     return (
-        <Form.Group
-            as={Col}
-            md={md}
-            sm={sm}
-            lg={lg}
-            xl={xl}
-            controlId={controlId}
-            className={className}
-        >
-            {label?.length > 0 ? (
-                <Form.Label>
-                    {label}
-                    {required && <span className="required">*</span>}
-                    {description && (
-                        <div className="custom-input-description">
-                            <span>i</span>
-                            <div className="custom-input-description-content">
-                                {description}
-                            </div>
-                        </div>
-                    )}
-                    {(withCounter || maxCount !== 25) && (
-                        <span className="counter">{`${fieldValue?.length}/${maxCount}`}</span>
-                    )}
-                </Form.Label>
-            ) : null}
+        <Form.Group {...groupProps}>
+            <AppFormLabel
+                label={label}
+                required={required}
+                counter={data?.length}
+                maxCount={maxCount}
+                description={description}
+            />
             <Controller
                 name={name}
-                defaultValue={value}
+                defaultValue={defaultValue}
                 control={control}
                 render={({ field }) => (
                     <Form.Control
                         {...field}
+                        onChange={(e) => {
+                            field.onChange(e);
+                            setData(e.target.value);
+                        }}
                         type={type}
                         placeholder={placeholderText}
                         isValid={isValid}

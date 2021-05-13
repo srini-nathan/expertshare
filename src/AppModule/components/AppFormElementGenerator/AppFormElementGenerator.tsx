@@ -30,7 +30,7 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                 lg={"4"}
                 xl={"4"}
                 name={properties.title}
-                value={defaultValue}
+                defaultValue={defaultValue}
                 {...prps}
                 control={control}
             />
