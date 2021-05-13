@@ -16,6 +16,7 @@ import {
     AppYoutubeFrame,
     AppVimeoFrame,
     AppFormRadioSwitch,
+    AppFormRichTextArea,
 } from "../../components";
 import { SimpleObject } from "../../../AdminModule/models";
 
@@ -214,6 +215,25 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                         width="640"
                     />
                 </Col>
+            </Row>
+            <Row>
+                <AppFormRichTextArea
+                    id="richtext"
+                    required
+                    md="12"
+                    sm="12"
+                    lg="12"
+                    xl="12"
+                    name="richtext"
+                    label="Rich Text Area"
+                    value="hello"
+                    placeholder="Rich Text Area"
+                    description="hello this is description"
+                    maxCount={150}
+                    withCounter={true}
+                    errorMessage="This field is required"
+                    control={control}
+                />
             </Row>
         </Fragment>
     );
