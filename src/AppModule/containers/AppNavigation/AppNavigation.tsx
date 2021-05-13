@@ -305,7 +305,12 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                         className={`nav-item py-2 mb-2 px-lg-4`}
                                     >
                                         <AppNavigationDropDown
-                                            label={`${user.firstName} ${user.lastName}`}
+                                            // @TODO: what to do with, if user is null
+                                            label={
+                                                user.firstName && user.lastName
+                                                    ? `${user.firstName} ${user.lastName}`
+                                                    : ""
+                                            }
                                             iconClassName="profile-picture"
                                             subDropDownItems={[
                                                 {

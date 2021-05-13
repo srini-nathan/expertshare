@@ -11,6 +11,7 @@ import { AppLoader } from "./components";
 
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
+import { AuthState } from "../SecurityModule/models";
 
 interface Props {
     location: {
@@ -44,9 +45,19 @@ const OnRouteChange = ({ action }: Props2) => (
 
 const Home: FC<RouteComponentProps> = (): JSX.Element => {
     const { state } = React.useContext(AuthContext);
-    const { user } = state;
+    const { user } = state as AuthState;
 
-    return <h2>Hi {`${user.firstName} ${user.lastName}`}</h2>;
+    return (
+        <h2>
+            Hi{" "}
+            {
+                // @TODO: what to do with, if user is null
+                user && user.firstName && user.lastName
+                    ? `${user.firstName} ${user.lastName}`
+                    : ""
+            }
+        </h2>
+    );
 };
 
 const App = (): JSX.Element => {
