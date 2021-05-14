@@ -87,6 +87,7 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                     } else if (isNotFound) {
                         errorToast("Email template not exist");
                     } else if (response !== null) {
+                        alert(JSON.stringify(response));
                         setData(response);
                     }
                     setLoading(false);
@@ -208,7 +209,7 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                                     label={"Active"}
                                     labelPosition={"top"}
                                     value={data.isActive === false ? 0 : 1}
-                                    defaultChecked={true}
+                                    defaultChecked={data.isActive}
                                     register={register}
                                 />
                                 <AppFormCheckBox
@@ -216,8 +217,8 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                                     name={"isExport"}
                                     label={"Export"}
                                     labelPosition={"top"}
-                                    value={data.isActive === false ? 0 : 1}
-                                    defaultChecked={true}
+                                    value={data.isExport === false ? 0 : 1}
+                                    defaultChecked={data.isExport}
                                     register={register}
                                 />
                                 <AppFormCheckBox
@@ -225,8 +226,8 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                                     name={"isImport"}
                                     label={"Import"}
                                     labelPosition={"top"}
-                                    value={data.isActive === false ? 0 : 1}
-                                    defaultChecked={true}
+                                    value={data.isImport === false ? 0 : 1}
+                                    defaultChecked={data.isImport}
                                     register={register}
                                 />
                                 <AppFormCheckBox
@@ -234,8 +235,8 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                                     name={"isVcf"}
                                     label={"Vcf"}
                                     labelPosition={"top"}
-                                    value={data.isActive === false ? 0 : 1}
-                                    defaultChecked={true}
+                                    value={data.isVcf === false ? 0 : 1}
+                                    defaultChecked={data.isVcf}
                                     register={register}
                                 />
                             </Form.Row>
