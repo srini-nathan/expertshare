@@ -90,9 +90,7 @@ export const AppFormSelect: FC<AppFormSelectProps> = ({
                     />
                 )}
             />
-            <Form.Control.Feedback type="invalid">
-                {errorMessage}
-            </Form.Control.Feedback>
+            {errorMessage && <span className="required">{errorMessage}</span>}
         </Form.Group>
     );
 };

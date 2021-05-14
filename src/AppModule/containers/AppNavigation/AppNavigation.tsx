@@ -70,6 +70,13 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 name: "",
             },
         },
+        {
+            label: "Admin - User Fields",
+            path: "/admin/user-fields",
+            icon: {
+                name: "",
+            },
+        },
     ]);
     const [showSubMenuItems, isSubMenuItems] = useState<boolean>(false);
     const [showMore, isShowMore] = useState<boolean>(false);

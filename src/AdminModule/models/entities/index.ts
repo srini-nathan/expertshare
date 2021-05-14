@@ -6,3 +6,4 @@ export * from "./Container";
 export * from "./UserGroup";
 export * from "./ContainerConfiguration";
 export * from "./Email";
+export * from "./UserFields";
