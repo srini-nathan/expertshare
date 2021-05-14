@@ -1,40 +1,20 @@
 import React, { FC, useState } from "react";
-import { Form, Col } from "react-bootstrap";
-import { Control, Controller } from "react-hook-form";
-import "./assets/scss/style.scss";
+import { Col, Form } from "react-bootstrap";
+import { Controller } from "react-hook-form";
 import { useInputPlaceholder } from "../../hooks";
 import { AppFormLabel } from "../AppFormLabel";
+import {
+    AppFormLayoutProps,
+    AppReactHookFormProps,
+    AppFormElementProps,
+} from "../../models/components";
 
-export interface LayoutProps {
-    sm?: string | number;
-    md?: string | number;
-    lg?: string | number;
-    xl?: string | number;
-}
-
-export interface ReactHookFormProps {
-    name: string;
-    defaultValue?: string;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    control?: Control<any>;
-    isInvalid?: boolean;
-    isValid?: boolean;
-    errorMessage?: string;
-}
-
-export interface FormElementProps {
-    id?: string;
-    placeholder?: string | boolean;
-    required?: boolean;
-    label?: string;
-    description?: string;
-    className?: string;
-}
+import "./assets/scss/style.scss";
 
 export interface AppFormInputProps
-    extends FormElementProps,
-        LayoutProps,
-        ReactHookFormProps {
+    extends AppFormElementProps,
+        AppFormLayoutProps,
+        AppReactHookFormProps {
     type?: string;
     maxCount?: number;
 }
