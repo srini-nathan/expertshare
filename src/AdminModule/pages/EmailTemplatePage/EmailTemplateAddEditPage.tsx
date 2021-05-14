@@ -215,7 +215,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                         isEditMode
                                     )}
                                     errorMessage={errors.content?.message}
-                                    value={data.content}
+                                    defaultValue={data.content}
                                     control={control}
                                 />
                             </Form.Row>
