@@ -56,8 +56,8 @@
     }
 
     [type="checkbox"]:not(:checked)+label::before {
-        transform: translateX(40px);
         background-color: var(--primary-50);
+        transform: translateX(40px);
     }
 
     [type="checkbox"]:not(:checked)+label {
@@ -72,6 +72,7 @@
         &+label::before {
             background-color: var(--primary);
             transform: translateX(72px);
+
         }
     }
 
@@ -79,4 +80,14 @@
     [type="checkbox"]:checked+label::after {
         background-color: unset !important;
     }
+}
+
+.custom-control-input:not(:disabled):active~.custom-control-label::before {
+    background-color: var(--primary) !important;
+    border-color: transparent !important;
+}
+
+.custom-control-input:focus:not(:checked)~.custom-control-label::before {
+    border-color: transparent !important;
+    outline: unset !important;
 }

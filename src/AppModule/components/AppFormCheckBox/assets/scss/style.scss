@@ -7,9 +7,9 @@
     &.flex-sm-row {
         height: 61px;
         padding: 14px;
-        background-color: #fff;
+        background-color: var(--light-clr);
         border-radius: 5px;
-        box-shadow: 0 3px 9px var(--secondary-10);
+        box-shadow: 0 3px 9px var(--box-shadow-box-clr);
 
         .normal-label {
             font-size: 14px;

@@ -7,7 +7,10 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { AppButton } from "../../../AppModule/components/AppButton";
 import { AuthContext, loginAction } from "../../context/AuthContext";
 import { AppAuthHeader, AppAuthFooter } from "../../components";
-import { AppFormInput } from "../../../AppModule/components/AppFormInput";
+import {
+    AppFormInput,
+    AppFormInputPassword,
+} from "../../../AppModule/components";
 import { validation } from "../../../AppModule/utils";
 import { API_HOST } from "../../../AppModule/config/app-env";
 import "./assets/scss/styles.scss";
@@ -66,11 +69,10 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                         />
                                     </Form.Row>
                                     <Form.Row>
-                                        <AppFormInput
+                                        <AppFormInputPassword
                                             md={12}
                                             lg={12}
                                             xl={12}
-                                            type={"password"}
                                             name={"password"}
                                             label={""}
                                             required={true}

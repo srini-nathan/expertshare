@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { Form, Col } from "react-bootstrap";
+import { Col } from "react-bootstrap";
 import "./assets/scss/style.scss";
 import { Control } from "react-hook-form";
 import { AppFormInput } from "../AppFormInput";
@@ -12,8 +12,8 @@ export interface AppFormInputPasswordProps {
     md?: string | number;
     lg?: string | number;
     xl?: string | number;
-    value?: string;
     placeholder?: string | boolean;
+    defaultValue?: string;
     required?: boolean;
     label?: string;
     description?: string;
@@ -27,7 +27,7 @@ export interface AppFormInputPasswordProps {
 export const AppFormInputPassword: FC<AppFormInputPasswordProps> = ({
     id,
     name,
-    value = "",
+    defaultValue = "",
     placeholder,
     errorMessage,
     label = "",
@@ -44,15 +44,16 @@ export const AppFormInputPassword: FC<AppFormInputPasswordProps> = ({
 }): JSX.Element => {
     const [showPass, isShowPass] = useState<boolean>(false);
     return (
-        <Form.Group as={Col} md={md} sm={sm} lg={lg} xl={xl} className="p-0">
+        <Col>
             <AppFormInput
                 id={id}
-                sm={12}
-                md={12}
-                lg={12}
-                xl={12}
+                md={md}
+                sm={sm}
+                lg={lg}
+                xl={xl}
                 name={name}
-                defaultValue={value}
+                className="p-0"
+                defaultValue={defaultValue}
                 type={showPass ? "text" : "password"}
                 placeholder={placeholder}
                 label={label}
@@ -65,13 +66,11 @@ export const AppFormInputPassword: FC<AppFormInputPasswordProps> = ({
                 control={control}
             />
             <div
-                className={`show-password ${
-                    (isValid || isInvalid) && "invalid"
-                }`}
+                className={`show-password ${isInvalid && "invalid"}`}
                 onClick={() => isShowPass(!showPass)}
             >
                 {showPass ? <AppIcon name="EyeOff" /> : <AppIcon name="Eye" />}
             </div>
-        </Form.Group>
+        </Col>
     );
 };

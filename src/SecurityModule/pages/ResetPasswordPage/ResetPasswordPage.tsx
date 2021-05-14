@@ -9,7 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { AppButton } from "../../../AppModule/components/AppButton";
 import { AppAuthHeader, AppAuthFooter } from "../../components";
 import "./assets/scss/styles.scss";
-import { AppFormInput } from "../../../AppModule/components/AppFormInput";
+import { AppFormInputPassword } from "../../../AppModule/components";
 import { validation, errorToast } from "../../../AppModule/utils";
 import { AuthApi } from "../../apis";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
@@ -93,11 +93,10 @@ export const ResetPasswordPage: FC<RouteComponentProps> = ({
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Form.Group>
                                     <Form.Row>
-                                        <AppFormInput
+                                        <AppFormInputPassword
                                             md={12}
                                             lg={12}
                                             xl={12}
-                                            type={"password"}
                                             name={"password"}
                                             label={""}
                                             required={true}
@@ -113,11 +112,10 @@ export const ResetPasswordPage: FC<RouteComponentProps> = ({
                                         />
                                     </Form.Row>
                                     <Form.Row>
-                                        <AppFormInput
+                                        <AppFormInputPassword
                                             md={12}
                                             lg={12}
                                             xl={12}
-                                            type={"password"}
                                             name={"confirmPassword"}
                                             label={""}
                                             required={true}

@@ -20,31 +20,31 @@ export const AppNavigationDropDown: FC<AppNavigationDropDownProps> = ({
 }) => {
     const navDropdownTitle = (
         <>
-            <div className="nav-icon ml-lg-2 img-container">
+            <div className="nav-icon img-container">
                 <i className={`${iconClassName}`}></i>
             </div>
             <span>{label}</span>
             <AppIcon name="ChevronUp" />
         </>
     );
-    // @TODO: FIX type issue
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-        <div
-            className="custom-dropdown-toggle d-flex"
-            // @TODO: FIX type issue
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            ref={ref}
-            onClick={(e) => {
-                e.preventDefault();
-                onClick(e);
-            }}
-        >
-            {children}
-        </div>
-    ));
+
+    type Props = {
+        onClick: () => void;
+        children: any;
+    };
+    type RefType = number;
+
+    const CustomToggle = React.forwardRef<RefType, Props>(
+        ({ children, onClick }, ref) => (
+            <div
+                className=" custom-dropdown-toggle d-flex"
+                ref={ref as React.RefObject<HTMLDivElement>}
+                onClick={onClick}
+            >
+                {children}
+            </div>
+        )
+    );
     return (
         <Dropdown
             className={`nav-link ${className}`}

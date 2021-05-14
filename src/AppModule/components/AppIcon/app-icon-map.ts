@@ -16,6 +16,8 @@ import {
     faThLarge,
     faArrowLeft,
     faSignOut,
+    faEye,
+    faEyeSlash,
 } from "@fortawesome/pro-regular-svg-icons";
 import { AppIconMap } from "../../models";
 
@@ -38,5 +40,7 @@ export const appIconMap: AppIconMap = {
     Search: faSearch,
     Menu: faBars,
     User: faUser,
+    Eye: faEye,
+    EyeOff: faEyeSlash,
     SignOut: faSignOut,
 };

@@ -1,9 +1,9 @@
 @import "../../../../assets/scss/variables";
 
 .btn {
+    padding: 0 20px !important;
     font-size: 14px !important;
     line-height: 36px !important;
-    padding: 0 20px !important;
 }
 
 .btn-secondary {
@@ -14,23 +14,17 @@
     font-weight: 500 !important;
     color: var(--btn-secondary-fg-clr) !important;
     background-color: var(--btn-secondary-bg-clr) !important;
-    border: none !important;
+    border: 1px solid var(--btn-secondary-border-clr) !important;
     border-radius: var(--border-radius) !important;
-    box-shadow: 0 -7px 40px var(--secondary-20);
+    box-shadow: 0 3px 9px var(--box-shadow-box-clr) !important;
 
+    &:focus,
+    &:active,
     &:hover {
-        color: var(--btn-secondary-fg-clr) !important;
-        background-color: var(--btn-secondary-bg-clr) !important;
-    }
-
-    &:active {
-        color: var(--btn-secondary-fg-clr) !important;
-        background-color: var(--btn-secondary-bg-clr) !important;
-    }
-
-    &:focus {
-        background-color: var(--btn-secondary-bg-clr) !important;
-        box-shadow: none !important;
+        color: var(--btn-hover-secondary-fg-clr) !important;
+        background-color: var(--btn-hover-secondary-bg-clr) !important;
+        border: 1px solid var(--btn-hover-secondary-border-clr) !important;
+        box-shadow: 0 3px 9px var(--box-shadow-box-clr);
     }
 }
 
@@ -39,15 +33,20 @@
     align-items: center;
     justify-content: center;
     height: 36px;
-    font-weight: 500;
-    color: var(--secondary);
-    border-radius: var(--border-radius);
-    box-shadow: 0 3px 9px var(--box-shadow-box-clr);
-    background-color: #fff;
     font-size: 14px !important;
+    font-weight: 500 !important;
     line-height: 10px !important;
+    color: var(--btn-fg-clr) !important;
+    background-color: var(--btn-bg-clr) !important;
+    border: 1px solid var(--btn-border-clr) !important;
+    border-radius: var(--border-radius) !important;
+    box-shadow: 0 3px 9px var(--box-shadow-box-clr) !important;
 
+    &:focus,
+    &:active,
     &:hover {
-        color: var(--secondary);
+        color: var(--btn-hover-fg-clr) !important;
+        background-color: var(--btn-hover-bg-clr) !important;
+        border: 1px solid var(--btn-hover-border-clr) !important;
     }
 }
