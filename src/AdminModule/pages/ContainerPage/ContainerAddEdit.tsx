@@ -90,7 +90,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
     });
 
     useEffect(() => {
-        ClientApi.getById<ClientEntity>(clientId).then(
+        ClientApi.findById<ClientEntity>(clientId).then(
             ({ response, isNotFound, errorMessage }) => {
                 if (errorMessage) {
                     errorToast(errorMessage);
@@ -107,7 +107,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (isEditMode) {
-            ContainerApi.getById<ContainerEntity>(id).then(
+            ContainerApi.findById<ContainerEntity>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);

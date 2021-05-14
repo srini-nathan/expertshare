@@ -5,7 +5,17 @@ import { checkAndParseResponse } from "../../AppModule/utils/api";
 import {
     UnprocessableEntityErrorResponse,
     SimpleObject,
+    User,
 } from "../../AppModule/models";
+
+const {
+    api_users_me_collection: API_ME,
+    api_reset_password_request_collection: API_RESET_PASSWORD_REQUEST,
+    api_reset_password_collection: API_RESET_PASSWORD,
+} = ROUTES;
+
+// @TODO: Missing URL from routes.json
+const API_LOGIN_CHECK = "/login_check";
 
 export interface LoginResponse {
     token: string;
@@ -44,17 +54,14 @@ export class AuthApi extends API {
         const res: AxiosResponse<LoginResponse> = await this.makePost<
             LoginResponse,
             LoginPayload
-        >("/login_check", credentials);
+        >(API_LOGIN_CHECK, credentials);
         return res.data;
     }
 
     static async resetPasswordRequest<T, R>(
         credentials: T
     ): Promise<R | ErrorResponse> {
-        return this.makePost<R, T>(
-            ROUTES.api_reset_password_request_collection,
-            credentials
-        )
+        return this.makePost<R, T>(API_RESET_PASSWORD_REQUEST, credentials)
             .then((res) => {
                 return res.data;
             })
@@ -66,15 +73,17 @@ export class AuthApi extends API {
     static async resetPassword<T, R>(
         credentials: T
     ): Promise<R | ErrorResponse> {
-        return this.makePost<R, T>(
-            ROUTES.api_reset_password_collection,
-            credentials
-        )
+        return this.makePost<R, T>(API_RESET_PASSWORD, credentials)
             .then((res) => {
                 return res.data;
             })
             .catch(({ response }) => {
                 return this.handleError<R>(response.data);
             });
+    }
+
+    public static async me(): Promise<User> {
+        const res: AxiosResponse<User> = await this.makeGet<User>(API_ME);
+        return res.data;
     }
 }

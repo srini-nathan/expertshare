@@ -1,16 +1,25 @@
 import { EntityAPI } from "../../AppModule/apis/EntityAPI";
 import { ROUTES } from "../../config";
 
+const {
+    api_clients_delete_item: API_DELETE_ITEM,
+    api_clients_get_item: API_GET_ITEM,
+    api_clients_get_collection: API_GET_COLLECTION,
+    api_clients_put_item: API_PUT_ITEM,
+    api_clients_patch_item: API_PATCH_ITEM,
+    api_clients_post_collection: API_POST_COLLECTION,
+} = ROUTES;
+
 export abstract class ClientApi extends EntityAPI {
-    protected static GET_ALL_PATH = ROUTES.api_clients_get_collection;
+    protected static GET_COLLECTION = API_GET_COLLECTION;
 
-    protected static GET_BY_ID_PATH = ROUTES.api_clients_get_item;
+    protected static POST_COLLECTION = API_POST_COLLECTION;
 
-    protected static DELETE_ITEM_PATH = ROUTES.api_clients_delete_item;
+    protected static GET_ITEM = API_GET_ITEM;
 
-    protected static PUT_ITEM_PATH = ROUTES.api_clients_put_item;
+    protected static PUT_ITEM = API_PUT_ITEM;
 
-    static CLIENT_LIST_PAGE_PATH = "/admin/clients/";
+    protected static PATCH_ITEM = API_PATCH_ITEM;
 
-    static CLIENT_NEW_PAGE_PATH = "/admin/clients/new";
+    protected static DELETE_ITEM = API_DELETE_ITEM;
 }

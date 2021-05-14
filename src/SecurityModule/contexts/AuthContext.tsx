@@ -3,7 +3,6 @@ import { navigate } from "@reach/router";
 import jwtDecode from "jwt-decode";
 import { AuthApi, LoginResponse } from "../apis/AuthApi";
 import { AUTH_TOKEN_KEY, AUTH_USER_KEY } from "../../AppModule/config/app-env";
-import { UserApi } from "../../AppModule/apis/UserApi";
 import { AuthState } from "../models/context/AuthState";
 
 interface IAuthAction {
@@ -122,7 +121,7 @@ export const socialLogin = async (
         if (token) {
             const { ip, roles, cid, cntid }: JWT = await jwtDecode(token);
             await localStorage.setItem(AUTH_TOKEN_KEY, token);
-            const user = await UserApi.me();
+            const user = await AuthApi.me();
             await localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
             dispatch({
                 type: AuthActionTypes.LOGIN_SUCCESS,
@@ -179,7 +178,7 @@ export const loginAction = async (
         if (token) {
             const { ip, roles, cid, cntid }: JWT = await jwtDecode(token);
             await localStorage.setItem(AUTH_TOKEN_KEY, token);
-            const user = await UserApi.me();
+            const user = await AuthApi.me();
             await localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
             dispatch({
                 type: AuthActionTypes.LOGIN_SUCCESS,
@@ -229,7 +228,7 @@ export default function AuthProvider({ children }: Props): JSX.Element {
             const token = localStorage.getItem(AUTH_TOKEN_KEY);
             if (token) {
                 try {
-                    const user = await UserApi.me();
+                    const user = await AuthApi.me();
                     const { ip, roles, cid, cntid }: JWT = jwtDecode(token);
                     dispatch({
                         type: AuthActionTypes.LOGIN_SUCCESS,

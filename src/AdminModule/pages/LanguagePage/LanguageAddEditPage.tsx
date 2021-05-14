@@ -72,7 +72,7 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (isEditMode) {
-            LanguageApi.getById<Language>(id).then(
+            LanguageApi.findById<Language>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);

@@ -14,7 +14,7 @@ import {
     AppCard,
 } from "../../../AppModule/components";
 import { EmailEntity } from "../../models";
-import { EmailApi } from "../../apis";
+import { EmailTemplate } from "../../apis";
 import { errorToast, successToast, validation } from "../../../AppModule/utils";
 import {
     PrimitiveObject,
@@ -76,7 +76,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
             return;
         }
         formData.container = ContainerApi.toResourceUrl(containerId);
-        EmailApi.createOrUpdate<EmailEntity>(id, formData).then(
+        EmailTemplate.createOrUpdate<EmailEntity>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
                     const { violations } = error;
@@ -104,7 +104,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (isEditMode) {
-            EmailApi.getById<EmailEntity>(id).then(
+            EmailTemplate.findById<EmailEntity>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);

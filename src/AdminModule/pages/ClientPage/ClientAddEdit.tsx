@@ -75,7 +75,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (isEditMode) {
-            ClientApi.getById<ClientEntity>(id).then(
+            ClientApi.findById<ClientEntity>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);

@@ -34,7 +34,7 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
     const [client, setClient] = useState<Client>();
 
     useEffect(() => {
-        ClientApi.getById<Client>(clientId).then(
+        ClientApi.findById<Client>(clientId).then(
             ({ response, isNotFound, errorMessage }) => {
                 if (errorMessage) {
                     errorToast(errorMessage);
@@ -86,7 +86,7 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
     }
 
     async function handleDelete(id: number) {
-        ContainerApi.delete(id).then(({ error }) => {
+        ContainerApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
