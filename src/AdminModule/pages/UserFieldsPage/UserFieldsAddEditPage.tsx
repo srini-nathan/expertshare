@@ -41,9 +41,12 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
 
     const [data, setData] = useState<UserFieldsEntity>(new UserFieldsEntity());
     const [loading, setLoading] = useState<boolean>(isEditMode);
-    const options = Object.entries(
-        CONSTANTS.UserField.FIELDTYPE
-    ).map(([key, value]) => ({ value, label: key }));
+    const { UserField } = CONSTANTS;
+    const { FIELDTYPE } = UserField;
+    const options = Object.entries(FIELDTYPE).map(([key, value]) => ({
+        value,
+        label: key,
+    }));
 
     const { register, control, handleSubmit, formState, setError } = useForm({
         resolver: yupResolver(schema),
@@ -51,7 +54,6 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
     });
 
     const onSubmit = (formData: UserFieldsEntity) => {
-        alert(JSON.stringify(formData));
         UserFieldsApi.createOrUpdate<UserFieldsEntity>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
@@ -87,7 +89,6 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                     } else if (isNotFound) {
                         errorToast("Email template not exist");
                     } else if (response !== null) {
-                        alert(JSON.stringify(response));
                         setData(response);
                     }
                     setLoading(false);
@@ -109,143 +110,161 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                 title={isEditMode ? "Edit User Fields" : "Add User Fields"}
             />
             <Row>
-                <Col md="12">
-                    <AppCard>
-                        <Form noValidate onSubmit={handleSubmit(onSubmit)}>
-                            <Form.Row>
-                                <AppFormInput
-                                    name={"name"}
-                                    label={"User Field Name"}
-                                    md={12}
-                                    lg={12}
-                                    sm={12}
-                                    xl={12}
-                                    required={true}
-                                    withCounter={true}
-                                    {...validation(
-                                        "name",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    errorMessage={errors.name?.message}
-                                    value={data.name}
-                                    control={control}
+                <Col md={12}>
+                    <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+                        <AppCard>
+                            <Row>
+                                <Col md={6} sm={12}>
+                                    <AppFormInput
+                                        name={"name"}
+                                        label={"User Field Name"}
+                                        md={12}
+                                        lg={12}
+                                        sm={12}
+                                        xl={12}
+                                        required={true}
+                                        withCounter={true}
+                                        {...validation(
+                                            "name",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={errors.name?.message}
+                                        value={data.name}
+                                        control={control}
+                                    />
+                                    <AppFormInput
+                                        name={"fieldKey"}
+                                        label={"User Field Key"}
+                                        md={12}
+                                        lg={12}
+                                        sm={12}
+                                        xl={12}
+                                        required={true}
+                                        withCounter={true}
+                                        {...validation(
+                                            "fieldKey",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={errors.fieldKey?.message}
+                                        value={data.fieldKey}
+                                        control={control}
+                                    />
+                                </Col>
+                                <Col md={6} sm={12}>
+                                    <AppFormInput
+                                        name={"labelKey"}
+                                        label={"User Label Key"}
+                                        md={12}
+                                        lg={12}
+                                        sm={12}
+                                        xl={12}
+                                        required={true}
+                                        withCounter={true}
+                                        {...validation(
+                                            "labelKey",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={errors.labelKey?.message}
+                                        value={data.labelKey}
+                                        control={control}
+                                    />
+                                    <AppFormSelect
+                                        id={"ddFieldType"}
+                                        name={"fieldType"}
+                                        label={"Select fieldType"}
+                                        md={12}
+                                        lg={12}
+                                        xl={12}
+                                        required={true}
+                                        {...validation(
+                                            "fieldType",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        defaultValue={data.fieldType}
+                                        placeholder={"Field Type"}
+                                        errorMessage={errors.fieldType?.message}
+                                        options={options}
+                                        control={control}
+                                        transform={{
+                                            output: (
+                                                template: PrimitiveObject
+                                            ) => template?.value,
+                                            input: (value: string) => {
+                                                return _find(options, {
+                                                    value,
+                                                });
+                                            },
+                                        }}
+                                    />
+                                </Col>
+                            </Row>
+                        </AppCard>
+                        <AppCard>
+                            <Row>
+                                <Col md={4} sm={6}>
+                                    <AppFormCheckBox
+                                        className="container-checkbox"
+                                        name={"isActive"}
+                                        label={"Active"}
+                                        labelPosition={"top"}
+                                        value={data.isActive === false ? 0 : 1}
+                                        defaultChecked={data.isActive}
+                                        register={register}
+                                    />
+                                    <AppFormCheckBox
+                                        className="container-checkbox"
+                                        name={"isExport"}
+                                        label={"Export"}
+                                        labelPosition={"top"}
+                                        value={data.isExport === false ? 0 : 1}
+                                        defaultChecked={data.isExport}
+                                        register={register}
+                                    />
+                                </Col>
+                                <Col md={4} sm={6}>
+                                    <AppFormCheckBox
+                                        className="container-checkbox"
+                                        name={"isImport"}
+                                        label={"Import"}
+                                        labelPosition={"top"}
+                                        value={data.isImport === false ? 0 : 1}
+                                        defaultChecked={data.isImport}
+                                        register={register}
+                                    />
+                                    <AppFormCheckBox
+                                        className="container-checkbox"
+                                        name={"isVcf"}
+                                        label={"Vcf"}
+                                        labelPosition={"top"}
+                                        value={data.isVcf === false ? 0 : 1}
+                                        defaultChecked={data.isVcf}
+                                        register={register}
+                                    />
+                                </Col>
+                                <Col md={4} sm={6}>
+                                    <AppFormCheckBox
+                                        className="container-checkbox"
+                                        name={"isRequired"}
+                                        label={"Required"}
+                                        labelPosition={"top"}
+                                        value={
+                                            data.isRequired === false ? 0 : 1
+                                        }
+                                        defaultChecked={data.isRequired}
+                                        register={register}
+                                    />
+                                </Col>
+                                <AppFormActions
+                                    isEditMode={isEditMode}
+                                    navigation={nav}
                                 />
-                            </Form.Row>
-                            <Form.Row>
-                                <AppFormInput
-                                    name={"fieldKey"}
-                                    label={"User Field Key"}
-                                    md={12}
-                                    lg={12}
-                                    sm={12}
-                                    xl={12}
-                                    required={true}
-                                    withCounter={true}
-                                    {...validation(
-                                        "fieldKey",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    errorMessage={errors.fieldKey?.message}
-                                    value={data.fieldKey}
-                                    control={control}
-                                />
-                            </Form.Row>
-                            <Form.Row>
-                                <AppFormInput
-                                    name={"labelKey"}
-                                    label={"User Label Key"}
-                                    md={12}
-                                    lg={12}
-                                    sm={12}
-                                    xl={12}
-                                    required={true}
-                                    withCounter={true}
-                                    {...validation(
-                                        "labelKey",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    errorMessage={errors.labelKey?.message}
-                                    value={data.labelKey}
-                                    control={control}
-                                />
-                            </Form.Row>
-                            <Form.Row>
-                                <AppFormSelect
-                                    id={"ddFieldType"}
-                                    name={"fieldType"}
-                                    label={"Select fieldType"}
-                                    md={12}
-                                    lg={12}
-                                    xl={12}
-                                    required={true}
-                                    {...validation(
-                                        "fieldType",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    defaultValue={data.fieldType}
-                                    placeholder={"Field Type"}
-                                    errorMessage={errors.fieldType?.message}
-                                    options={options}
-                                    control={control}
-                                    transform={{
-                                        output: (template: PrimitiveObject) =>
-                                            template?.value,
-                                        input: (value: string) => {
-                                            return _find(options, {
-                                                value,
-                                            });
-                                        },
-                                    }}
-                                />
-                            </Form.Row>
-                            <Form.Row>
-                                <AppFormCheckBox
-                                    className="container-checkbox"
-                                    name={"isActive"}
-                                    label={"Active"}
-                                    labelPosition={"top"}
-                                    value={data.isActive === false ? 0 : 1}
-                                    defaultChecked={data.isActive}
-                                    register={register}
-                                />
-                                <AppFormCheckBox
-                                    className="container-checkbox"
-                                    name={"isExport"}
-                                    label={"Export"}
-                                    labelPosition={"top"}
-                                    value={data.isExport === false ? 0 : 1}
-                                    defaultChecked={data.isExport}
-                                    register={register}
-                                />
-                                <AppFormCheckBox
-                                    className="container-checkbox"
-                                    name={"isImport"}
-                                    label={"Import"}
-                                    labelPosition={"top"}
-                                    value={data.isImport === false ? 0 : 1}
-                                    defaultChecked={data.isImport}
-                                    register={register}
-                                />
-                                <AppFormCheckBox
-                                    className="container-checkbox"
-                                    name={"isVcf"}
-                                    label={"Vcf"}
-                                    labelPosition={"top"}
-                                    value={data.isVcf === false ? 0 : 1}
-                                    defaultChecked={data.isVcf}
-                                    register={register}
-                                />
-                            </Form.Row>
-                            <AppFormActions
-                                isEditMode={isEditMode}
-                                navigation={nav}
-                            />
-                        </Form>
-                    </AppCard>
+                            </Row>
+                        </AppCard>
+                    </Form>
                 </Col>
             </Row>
         </Fragment>

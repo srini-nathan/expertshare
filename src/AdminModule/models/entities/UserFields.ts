@@ -9,6 +9,7 @@ export interface UserFields extends BaseEntity {
     isExport?: boolean;
     isImport?: boolean;
     isVcf?: boolean;
+    isRequired?: boolean;
     attr?: FieldsAttr;
     options?: FieldOptions;
 }
@@ -36,6 +37,8 @@ export class UserFieldsEntity {
 
     isVcf: boolean;
 
+    isRequired: boolean;
+
     constructor() {
         this.name = "";
         this.fieldKey = "";
@@ -45,5 +48,6 @@ export class UserFieldsEntity {
         this.isExport = false;
         this.isImport = false;
         this.isVcf = false;
+        this.isRequired = false;
     }
 }
