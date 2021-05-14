@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AuthContext } from "../../SecurityModule/context";
+import { AuthContext } from "../../SecurityModule/contexts";
 import { AuthState } from "../../SecurityModule/models";
 import { errorToast } from "../utils";
 import { ClientApi, ContainerApi } from "../../AdminModule/apis";

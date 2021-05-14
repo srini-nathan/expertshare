@@ -22,7 +22,7 @@ import {
 } from "../../../AppModule/models";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { AppFormSelect } from "../../../AppModule/components/AppFormSelect";
-import { AuthContext } from "../../../SecurityModule/context/AuthContext";
+import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { ContainerApi } from "../../apis/ContainerApi";
 import { AuthState } from "../../../SecurityModule/models/context/AuthState";
 

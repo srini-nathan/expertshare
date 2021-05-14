@@ -20,7 +20,7 @@ import FooterLogo from "./assets/images/expertshare_logo_footer.svg";
 import {
     AuthContext,
     logoutAction,
-} from "../../../SecurityModule/context/AuthContext";
+} from "../../../SecurityModule/contexts/AuthContext";
 import { useWindowSize, useWindowLocation } from "../../hooks";
 
 interface AppNavigationProps {

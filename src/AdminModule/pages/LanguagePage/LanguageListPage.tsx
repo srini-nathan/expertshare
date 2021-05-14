@@ -21,7 +21,7 @@ import {
 import { appGridConfig } from "../../../AppModule/config";
 import { errorToast, successToast } from "../../../AppModule/utils";
 import "./assets/scss/list.scss";
-import { AuthContext } from "../../../SecurityModule/context/AuthContext";
+import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models/context/AuthState";
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {

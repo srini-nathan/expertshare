@@ -13,7 +13,7 @@ import {
     AppFormElementGenerator,
     AppFormActions,
 } from "../../../AppModule/components";
-import { AppContext } from "../../../AppModule/Contexts/AppContext";
+import { AppContext } from "../../../AppModule/contexts/AppContext";
 import { ContainerApi } from "../../apis";
 import { successToast } from "../../../AppModule/utils";
 
@@ -54,7 +54,7 @@ interface ContainerFormType {
 export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
-    // @TODO: instead of use from context use API to fetch data
+    // @TODO: instead of use from contexts use API to fetch data
     const { state } = React.useContext(AppContext);
     const { isLoading, ContainerState } = state;
     const [configuration, setConfiguration] = React.useState<any>();
