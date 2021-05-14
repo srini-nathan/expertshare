@@ -69,7 +69,7 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     }
 
     async function handleDelete(id: number) {
-        LanguageApi.delete(id).then(({ error }) => {
+        LanguageApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);

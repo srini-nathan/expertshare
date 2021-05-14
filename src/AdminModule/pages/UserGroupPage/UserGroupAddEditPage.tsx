@@ -73,7 +73,7 @@ export const UserGroupAddEditPage: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (isEditMode) {
-            UserGroupApi.getById<UserGroup>(id).then(
+            UserGroupApi.findById<UserGroup>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);

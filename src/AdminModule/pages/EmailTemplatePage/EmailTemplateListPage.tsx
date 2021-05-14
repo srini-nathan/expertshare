@@ -10,7 +10,7 @@ import {
 import { Canceler } from "axios";
 import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
-import { EmailApi } from "../../apis";
+import { EmailTemplate } from "../../apis";
 import { Email } from "../../models";
 import { AppPageHeader } from "../../../AppModule/components";
 import {
@@ -37,7 +37,7 @@ export const EmailTemplateListPage: FC<RouteComponentProps> = (): JSX.Element =>
                 const { endRow } = request;
                 const pageNo = endRow / appGridConfig.pageSize;
                 api?.hideOverlay();
-                EmailApi.find<Email>(
+                EmailTemplate.find<Email>(
                     pageNo,
                     {
                         order: buildSortParams(request),
@@ -68,7 +68,7 @@ export const EmailTemplateListPage: FC<RouteComponentProps> = (): JSX.Element =>
     }
 
     async function handleDelete(id: number) {
-        EmailApi.delete(id).then(({ error }) => {
+        EmailTemplate.deleteById(id).then(({ error }) => {
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);

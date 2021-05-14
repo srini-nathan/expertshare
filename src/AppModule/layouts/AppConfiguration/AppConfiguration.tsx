@@ -22,7 +22,7 @@ export const AppConfiguration: FC = ({ children }) => {
             dispatch({
                 type: ContainerTypes.LOADING,
             });
-            ContainerApi.getById<Container>(containerId).then(
+            ContainerApi.findById<Container>(containerId).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);

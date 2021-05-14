@@ -68,7 +68,7 @@ export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
     }
 
     async function handleDelete(id: number) {
-        UserGroupApi.delete(id).then(({ error }) => {
+        UserGroupApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
