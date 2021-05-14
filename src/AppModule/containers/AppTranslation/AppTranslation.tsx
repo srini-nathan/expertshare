@@ -220,7 +220,7 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                                 xl={12}
                                                 control={control}
                                                 className="m-0 p-0"
-                                                value={groupName}
+                                                defaultValue={groupName}
                                                 name="GroupName"
                                             />
                                         </div>

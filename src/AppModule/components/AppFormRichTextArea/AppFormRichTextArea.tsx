@@ -100,7 +100,7 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
             />
             <Form.Control.Feedback
                 type="invalid"
-                className={required && !model ? "show-field-error" : ""}
+                className={required && !model ? "d-inline" : ""}
             >
                 {errorMessage}
             </Form.Control.Feedback>

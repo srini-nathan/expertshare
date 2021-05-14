@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { Form, Col } from "react-bootstrap";
 import "./assets/scss/style.scss";
+import { useInputPlaceholder } from "../../hooks";
 
 export interface AppTextAreaProps {
     sm?: string | number;
@@ -33,6 +34,7 @@ export const AppTextArea: FC<AppTextAreaProps> = ({
     xl = 4,
     rows = 5,
 }): JSX.Element => {
+    const placeholderText = useInputPlaceholder(name, placeholder, label);
     return (
         <Form.Group
             as={Col}
@@ -61,7 +63,7 @@ export const AppTextArea: FC<AppTextAreaProps> = ({
                 onChange={(e) => onChange(e.target.value)}
                 defaultValue={defaultValue}
                 as={"textarea"}
-                placeholder={placeholder}
+                placeholder={placeholderText}
                 rows={rows}
             />
         </Form.Group>
