@@ -1,69 +1,48 @@
 import React, { FC, useState } from "react";
-import { Col } from "react-bootstrap";
-import "./assets/scss/style.scss";
-import { Control } from "react-hook-form";
+import { Form, Col } from "react-bootstrap";
 import { AppFormInput } from "../AppFormInput";
 import { AppIcon } from "../AppIcon";
+import {
+    AppFormElementProps,
+    AppFormLayoutProps,
+    AppReactHookFormProps,
+} from "../../models";
 
-export interface AppFormInputPasswordProps {
-    id?: string;
-    name: string;
-    sm?: string | number;
-    md?: string | number;
-    lg?: string | number;
-    xl?: string | number;
-    placeholder?: string | boolean;
-    defaultValue?: string;
-    required?: boolean;
-    label?: string;
-    description?: string;
-    errorMessage?: string;
-    isInvalid?: boolean;
-    isValid?: boolean;
+import "./assets/scss/style.scss";
+
+export interface AppFormInputPasswordProps
+    extends AppFormElementProps,
+        AppFormLayoutProps,
+        AppReactHookFormProps {
     maxCount?: number;
-    control?: Control<any>;
 }
 
 export const AppFormInputPassword: FC<AppFormInputPasswordProps> = ({
-    id,
-    name,
-    defaultValue = "",
-    placeholder,
-    errorMessage,
-    label = "",
-    description,
     sm = 12,
     md = 6,
     lg = 4,
     xl = 4,
-    isInvalid,
-    isValid,
-    required = false,
-    maxCount = 25,
-    control,
+    className = "",
+    ...props
 }): JSX.Element => {
     const [showPass, isShowPass] = useState<boolean>(false);
+    const { isInvalid } = props;
     return (
-        <Col>
+        <Form.Group
+            as={Col}
+            md={md}
+            sm={sm}
+            lg={lg}
+            xl={xl}
+            className={`p-0 ${className}`}
+        >
             <AppFormInput
-                id={id}
-                md={md}
-                sm={sm}
-                lg={lg}
-                xl={xl}
-                name={name}
-                className="p-0"
-                defaultValue={defaultValue}
+                sm={12}
+                md={12}
+                lg={12}
+                xl={12}
                 type={showPass ? "text" : "password"}
-                placeholder={placeholder}
-                label={label}
-                errorMessage={errorMessage}
-                description={description}
-                isInvalid={isInvalid}
-                isValid={isValid}
-                required={required}
-                maxCount={maxCount}
-                control={control}
+                {...props}
             />
             <div
                 className={`show-password ${isInvalid && "invalid"}`}
@@ -71,6 +50,6 @@ export const AppFormInputPassword: FC<AppFormInputPasswordProps> = ({
             >
                 {showPass ? <AppIcon name="EyeOff" /> : <AppIcon name="Eye" />}
             </div>
-        </Col>
+        </Form.Group>
     );
 };
