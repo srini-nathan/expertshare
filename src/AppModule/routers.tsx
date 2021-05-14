@@ -1,6 +1,6 @@
 import React from "react";
 import { Router } from "@reach/router";
-import { KitchenSink } from "./pages/kitchen-sink";
+import { KitchenSink, KitchenSinkDani } from "./pages";
 import { ModuleRouter } from "./models";
 
 export const routers: ModuleRouter[] = [
@@ -12,6 +12,7 @@ export const routers: ModuleRouter[] = [
             return (
                 <Router>
                     <KitchenSink path={"/"} />
+                    <KitchenSinkDani path={"/dani"} />
                 </Router>
             );
         },

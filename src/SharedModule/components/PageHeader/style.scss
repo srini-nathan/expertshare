@@ -1,0 +1,19 @@
+@import "../../../SharedModule/assets/scss/screens-sizes";
+@import "../../../SharedModule/assets/scss/variables";
+
+.page-title {
+    margin: 0 0 20px;
+    font-weight: 700;
+
+    h1 {
+        margin-bottom: 0;
+        font-size: 42px;
+        font-weight: 700;
+        line-height: 50.4px;
+        color: var(--secondary);
+
+        @include media("lg") {
+            font-size: 2rem;
+        }
+    }
+}

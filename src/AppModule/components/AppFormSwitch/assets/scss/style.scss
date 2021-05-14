@@ -87,6 +87,11 @@
     border-color: transparent !important;
 }
 
+.custom-control-input:disabled~.custom-control-label::before {
+    background-color: var(--primary-50) !important;
+    border-color: transparent !important;
+}
+
 .custom-control-input:focus:not(:checked)~.custom-control-label::before {
     border-color: transparent !important;
     outline: unset !important;

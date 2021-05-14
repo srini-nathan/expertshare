@@ -25,9 +25,15 @@
     "UserField": {
         "FIELDTYPE": {
             "FIELDTYPE_TEXT": "TEXT",
+            "FIELDTYPE_TEXT_NUMBER": "TEXT_NUMBER",
+            "FIELDTYPE_TEXT_EMAIL": "TEXT_EMAIL",
+            "FIELDTYPE_TEXT_URL": "TEXT_URL",
             "FIELDTYPE_TEXTAREA": "TEXTAREA",
             "FIELDTYPE_SWITCH": "SWITCH",
-            "FIELDTYPE_CHOICE": "CHOICE",
+            "FIELDTYPE_SELECT": "SELECT",
+            "FIELDTYPE_MULTI_SELECT": "MULTI_SELECT",
+            "FIELDTYPE_RADIO_GROUP": "RADIO_GROUP",
+            "FIELDTYPE_CHECKBOX_GROUP": "CHECBOX_GROUP",
             "FIELDTYPE_DATE": "DATE"
         }
     }

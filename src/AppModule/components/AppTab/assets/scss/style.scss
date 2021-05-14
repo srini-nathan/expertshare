@@ -15,10 +15,10 @@
 
             &:hover,
             &.active {
-                background-color: var(--primary-20);
                 color: var(--primary);
-                border-radius: var(--border-radius);
+                background-color: var(--primary-20);
                 border-color: transparent;
+                border-radius: var(--border-radius);
             }
         }
     }
