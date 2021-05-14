@@ -1,5 +1,5 @@
 import React from "react";
-import { ContainerTypes } from "./Types";
+import { ContainerTypes } from "./types";
 
 export interface States {
     [key: string]: any;

@@ -11,7 +11,7 @@ import {
     AppFormElementGenerator,
     AppFormActions,
 } from "../../../AppModule/components";
-import { AppContext } from "../../../AppModule/Contexts/AppContext";
+import { AppContext } from "../../../AppModule/contexts/AppContext";
 import { ContainerApi } from "../../apis";
 import { successToast, errorToast } from "../../../AppModule/utils";
 import { AuthContext } from "../../../SecurityModule/context/AuthContext";

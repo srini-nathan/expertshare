@@ -13,12 +13,12 @@ import {
     AppFormElementGenerator,
     AppFormActions,
 } from "../../../AppModule/components";
-import { AppContext } from "../../../AppModule/Contexts/AppContext";
+import { AppContext } from "../../../AppModule/contexts/AppContext";
 import { ContainerApi } from "../../apis";
 import { successToast, errorToast } from "../../../AppModule/utils";
-import { AuthContext } from "../../../SecurityModule/context/AuthContext";
+import { AuthContext } from "../../../SecurityModule/contexts";
 import { AuthState } from "../../../SecurityModule/models";
-import { ContainerTypes } from "../../../AppModule/Contexts/Types";
+import { ContainerTypes } from "../../../AppModule/contexts";
 import { Container } from "../../models";
 
 const parseData = (data: any) => {

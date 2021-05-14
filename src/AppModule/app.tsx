@@ -5,8 +5,8 @@ import { DashboardLayout } from "./layouts/DashboardLayout";
 import { AppConfiguration } from "./layouts/AppConfiguration";
 import { AuthLayout } from "./layouts/AuthLayout";
 import { ModuleRouter } from "./models";
-import AppProvider from "./Contexts/AppContext";
-import { AuthContext } from "../SecurityModule/context/AuthContext";
+import AppProvider from "./contexts/AppContext";
+import { AuthContext } from "../SecurityModule/contexts/AuthContext";
 import { AppLoader } from "./components";
 
 import "./assets/scss/bootstrap.scss";
