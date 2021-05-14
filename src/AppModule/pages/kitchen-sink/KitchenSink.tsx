@@ -105,7 +105,7 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                         xl="4"
                         name="textarea"
                         label="Text Area"
-                        value="hello"
+                        defaultValue="hello"
                         placeholder="hello"
                         description="hello this is description"
                         maxCount={150}

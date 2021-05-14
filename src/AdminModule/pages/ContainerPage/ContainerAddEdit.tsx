@@ -258,7 +258,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         errorMessage={
                                             errors.description?.message
                                         }
-                                        value={data.description}
+                                        defaultValue={data.description}
                                         control={control}
                                     />
                                 </Col>

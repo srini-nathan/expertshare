@@ -40,19 +40,20 @@ export const AppFormInput: FC<AppFormInputProps> = ({
     const controlId = id || name;
     const { sm = 12, md = 6, lg = 4, xl = 4, className = "" } = props;
     const groupProps = { sm, md, lg, xl, controlId, className, as: Col };
+    const labelProps = { label, required, maxCount, description };
+    const controllerProps = { name, defaultValue, control };
+    const controlProps = {
+        placeholder: placeholderText,
+        isValid,
+        isInvalid,
+        type,
+    };
+
     return (
         <Form.Group {...groupProps}>
-            <AppFormLabel
-                label={label}
-                required={required}
-                counter={data?.length}
-                maxCount={maxCount}
-                description={description}
-            />
+            <AppFormLabel counter={data?.length} {...labelProps} />
             <Controller
-                name={name}
-                defaultValue={defaultValue}
-                control={control}
+                {...controllerProps}
                 render={({ field }) => (
                     <Form.Control
                         {...field}
@@ -60,10 +61,7 @@ export const AppFormInput: FC<AppFormInputProps> = ({
                             field.onChange(e);
                             setData(e.target.value);
                         }}
-                        type={type}
-                        placeholder={placeholderText}
-                        isValid={isValid}
-                        isInvalid={isInvalid}
+                        {...controlProps}
                     />
                 )}
             />

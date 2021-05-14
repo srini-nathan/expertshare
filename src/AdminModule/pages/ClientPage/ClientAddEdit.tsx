@@ -163,7 +163,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
                                         isEditMode
                                     )}
                                     errorMessage={errors.notes?.message}
-                                    value={data.notes || ""}
+                                    defaultValue={data.notes || ""}
                                     control={control}
                                 />
                             </Form.Row>
