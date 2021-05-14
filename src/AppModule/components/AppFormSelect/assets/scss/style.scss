@@ -4,27 +4,27 @@
 // @TODO: Duplicate style with AppFormDropdown
 .custom-select {
     &-container {
+        z-index: 2;
+        color: var(--input-fg-clr);
         background: var(--input-bg-clr) !important;
         border-radius: var(--border-radius);
-        color: var(--input-fg-clr);
-        z-index: 2;
 
     }
 
     &__control {
         background-color: unset !important;
         border-color: unset !important;
-        border-radius: unset !important;
         border-style: unset !important;
         border-width: unset !important;
+        border-radius: unset !important;
         box-shadow: unset !important;
 
         &:focus {
             background-color: unset !important;
             border-color: unset !important;
-            border-radius: unset !important;
             border-style: unset !important;
             border-width: unset !important;
+            border-radius: unset !important;
             box-shadow: unset !important;
         }
     }
@@ -40,8 +40,8 @@
     }
 
     &__menu {
+        padding: 0;
         border: 1px solid transparent !important;
-        padding: 0 ;
 
         &-list {
             padding: 0;

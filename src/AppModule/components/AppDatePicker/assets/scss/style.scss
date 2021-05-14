@@ -1,17 +1,17 @@
 .custom-datepicker {
     padding: 10px;
-    border-radius: var(--border-radius);
-    box-shadow: 0px 10px 20px var(--primary-20);
-    border: unset;
-    background-color: var(--widget-bg-color);
     font-family: var(--font-family-sans-serif);
+    background-color: var(--widget-bg-color);
+    border: unset;
+    border-radius: var(--border-radius);
+    box-shadow: 0 10px 20px var(--primary-20);
 
     .react-datepicker__navigation {
+        top: 38px;
+        width: 20px;
+        height: 30px;
         background-color: var(--btn-bg-clr);
         border: unset;
-        top: 38px;
-        height: 30px;
-        width: 20px;
 
         &:hover {
             background-color: var(--btn-hover-bg-clr);
@@ -20,37 +20,37 @@
         }
 
         &--previous {
-            -webkit-mask: url(../images/svg/left_arrow.svg) no-repeat;
-            -webkit-mask-size: 10px;
             left: 30px;
+            mask: url(../images/svg/left_arrow.svg) no-repeat;
+            mask-size: 10px;
         }
 
         &--next {
-            -webkit-mask: url(../images/svg/right_arrow.svg) no-repeat;
-            -webkit-mask-size: 10px;
             right: 22px;
+            mask: url(../images/svg/right_arrow.svg) no-repeat;
+            mask-size: 10px;
         }
     }
 
     .react-datepicker__header {
-        border-bottom: unset;
         background: unset;
+        border-bottom: unset;
 
         .react-datepicker__current-month {
             margin: 20px 0;
-            color: var(--primary);
             font-size: 14px;
             font-weight: 700;
+            color: var(--primary);
         }
 
         .react-datepicker__day-names {
             .react-datepicker__day-name {
-                margin: 0 10px;
                 width: 30px;
+                margin: 0 10px;
                 font-size: 10px;
                 font-weight: 700;
-                text-transform: uppercase;
                 color: var(--primary-90);
+                text-transform: uppercase;
             }
         }
     }
@@ -58,14 +58,14 @@
     .react-datepicker__month {
         .react-datepicker__week {
             div {
+                width: 30px;
+                height: 30px;
                 margin: 10px;
-                color: var(--secondary);
-                size: 14px;
                 font-weight: 400;
                 line-height: 33px;
-                height: 30px;
-                width: 30px;
+                color: var(--secondary);
                 border-radius: 50%;
+                size: 14px;
 
                 &:focus {
                     outline: unset;

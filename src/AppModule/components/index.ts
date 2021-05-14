@@ -7,6 +7,7 @@ export * from "./AppPageHeader";
 export * from "./AppListPageToolbar";
 export * from "./AppTagSelect";
 export * from "./AppFormTextArea";
+export * from "./AppTextArea";
 export * from "./AppFormRadioSwitch";
 export * from "./AppBreadcrumb";
 export * from "./AppButton";

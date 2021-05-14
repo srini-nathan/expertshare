@@ -51,26 +51,26 @@
             height: 100%;
 
             .accordion {
-                .collapse:not(.collapse.show)~.nav-item {
+                .collapse:not(.collapse.show) ~ .nav-item {
                     &::after {
-                        content: "\f078";
-                        font-family: "Font Awesome 5 pro";
-                        float: right;
-                        top: 20px;
                         position: absolute;
+                        top: 20px;
                         right: 24px;
+                        float: right;
+                        font-family: "Font Awesome 5 pro";
+                        content: "\f078";
                     }
                 }
 
-                .collapse~.nav-item {
+                .collapse ~ .nav-item {
                     &::after {
-                        font-family: "Font Awesome 5 pro";
-                        content: "\f077";
-                        font-size: 12px;
-                        float: right;
-                        top: 20px;
                         position: absolute;
+                        top: 20px;
                         right: 24px;
+                        float: right;
+                        font-family: "Font Awesome 5 pro";
+                        font-size: 12px;
+                        content: "\f077";
                     }
                 }
             }
@@ -86,7 +86,7 @@
             }
         }
 
-        &:hover>.more-menu {
+        &:hover > .more-menu {
             display: block;
         }
 
@@ -122,9 +122,9 @@
         width: 24px;
         height: 24px;
         margin: auto;
+        background: url("./../images/profile.jpg") no-repeat center;
         background-size: 24px;
         border-radius: 50%;
-        background: url("./../images/profile.jpg") no-repeat center;
 
 
         @include media("xl") {
@@ -183,9 +183,9 @@
                 width: 100%;
 
                 svg {
-                    color: var(--primary);
-                    height: 12px;
                     top: 15px;
+                    height: 12px;
+                    color: var(--primary);
                 }
             }
 
@@ -210,9 +210,9 @@
         padding: 0;
 
         .list-group-item {
+            cursor: pointer;
             background-color: unset;
             border: unset;
-            cursor: pointer;
 
             .dropdown-toggle::after {
                 display: none;
@@ -228,8 +228,8 @@
                 display: inline-flex;
                 width: 42px;
                 height: 42px;
-                border-radius: var(--border-radius);
                 color: var(--sidebar-icon-clr);
+                border-radius: var(--border-radius);
 
                 svg {
                     width: 20px;
@@ -239,8 +239,8 @@
             }
 
             &.sub-menu {
-                min-height: 58px;
                 display: flex;
+                min-height: 58px;
 
                 a.nav-link {
                     width: 100%;
@@ -251,7 +251,7 @@
             .seperator {
                 height: 1px;
                 background: var(--sidebar-fg-clr);
-                opacity: 0.2;
+                opacity: .2;
             }
 
             &.nav-item {
@@ -277,8 +277,8 @@
                     padding: 0;
                     padding-left: 15px;
                     font-size: 17px;
-                    line-height: 40px;
                     font-weight: 700;
+                    line-height: 40px;
 
                     @include media("mobile") {
                         padding-left: 0 !important;
@@ -298,7 +298,7 @@
                     }
 
                     @include media("md") {
-                        font-size: 0.8rem;
+                        font-size: .8rem;
 
                     }
 
@@ -315,8 +315,8 @@
     }
 
     .navbar-toggler {
-        border-color: transparent !important;
         background: unset;
+        border-color: transparent !important;
     }
 
     .main-logo-container {
