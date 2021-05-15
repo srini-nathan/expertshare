@@ -11,7 +11,7 @@ export const ForgotPasswordConfirmationPage: FC<RouteComponentProps> = (): JSX.E
                 <Row className="p-0 m-auto">
                     <AppAuthHeader
                         title="Confirmation"
-                        desctiption="An email has been sent that contains a link that you can click to reset your password. This link will expire in 2 hour(s)."
+                        description="An email has been sent that contains a link that you can click to reset your password. This link will expire in 2 hour(s)."
                     />
                     <span className="text-center p-3">
                         If you don't receive an email please check your spam

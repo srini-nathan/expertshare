@@ -1,7 +1,7 @@
-import React, { FunctionComponent } from "react";
+import React, { FC } from "react";
 import "./assets/scss/styles.scss";
 
-export const AppAuthFooter: FunctionComponent = () => {
+export const AppAuthFooter: FC = () => {
     return (
         <>
             <div className="auth-copyright-container pb-2">
@@ -9,7 +9,7 @@ export const AppAuthFooter: FunctionComponent = () => {
                     © Copyright 2020 – Expertshare
                 </div>
                 <div className="auth-copyright-container--create-content">
-                    Virtual event plattform created by
+                    Virtual event platform created by
                 </div>
                 <div className="auth-copyright-container--logo">
                     <a href="/">
