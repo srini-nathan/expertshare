@@ -14,9 +14,9 @@ import {
 import { AppContext } from "../../../AppModule/contexts/AppContext";
 import { ContainerApi } from "../../apis";
 import { successToast, errorToast } from "../../../AppModule/utils";
-import { AuthContext } from "../../../SecurityModule/context/AuthContext";
+import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models";
-import { ContainerTypes } from "../../../AppModule/Contexts/Types";
+import { ContainerTypes } from "../../../AppModule/contexts";
 import { Container } from "../../models";
 
 const parseData = (data: any) => {
@@ -94,7 +94,7 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
             dispatch({
                 type: ContainerTypes.LOADING,
             });
-            ContainerApi.getById<Container>(containerId).then(
+            ContainerApi.findById<Container>(containerId).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);

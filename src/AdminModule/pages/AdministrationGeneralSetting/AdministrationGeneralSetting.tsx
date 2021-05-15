@@ -51,16 +51,10 @@ interface ContainerFormType {
 export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
-<<<<<<< HEAD
-    // @TODO: instead of use from contexts use API to fetch data
-    const { state } = React.useContext(AppContext);
-    const { isLoading, ContainerState } = state;
-=======
     const { state, dispatch } = React.useContext(AppContext);
     const Auth = React.useContext(AuthContext);
     const { containerId } = Auth.state as AuthState;
     const { isLoading } = state;
->>>>>>> dev-danial/ER-301-refactoring-styles
     const [configuration, setConfiguration] = React.useState<any>();
     const [containerConfiguration, setContainerConfiguration] = React.useState<
         string[]
@@ -107,7 +101,7 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
             dispatch({
                 type: ContainerTypes.LOADING,
             });
-            ContainerApi.getById<Container>(containerId).then(
+            ContainerApi.findById<Container>(containerId).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);
