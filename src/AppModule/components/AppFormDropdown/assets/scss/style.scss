@@ -59,4 +59,12 @@
             background-color: var(--secondary-20);
         }
     }
+
+
+}
+
+.custom-select-container.form-control {
+    height: auto;
+    padding: 0;
+    border: 1px solid var(--input-border-clr);
 }

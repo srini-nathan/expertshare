@@ -26,7 +26,7 @@ export const AppFormInputPassword: FC<AppFormInputPasswordProps> = ({
     ...props
 }): JSX.Element => {
     const [showPass, isShowPass] = useState<boolean>(false);
-    const { isInvalid, isValid } = props;
+    const { isInvalid } = props;
     return (
         <Form.Group
             as={Col}
@@ -45,9 +45,7 @@ export const AppFormInputPassword: FC<AppFormInputPasswordProps> = ({
                 {...props}
             />
             <div
-                className={`show-password ${
-                    (isValid || isInvalid) && "invalid"
-                }`}
+                className={`show-password ${isInvalid && "invalid"}`}
                 onClick={() => isShowPass(!showPass)}
             >
                 {showPass ? <AppIcon name="EyeOff" /> : <AppIcon name="Eye" />}

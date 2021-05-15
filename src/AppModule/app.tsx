@@ -11,7 +11,6 @@ import { AppLoader } from "./components";
 
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
-import { AuthState } from "../SecurityModule/models";
 
 interface Props {
     location: {
@@ -44,20 +43,7 @@ const OnRouteChange = ({ action }: Props2) => (
 );
 
 const Home: FC<RouteComponentProps> = (): JSX.Element => {
-    const { state } = React.useContext(AuthContext);
-    const { user } = state as AuthState;
-
-    return (
-        <h2>
-            Hi{" "}
-            {
-                // @TODO: what to do with, if user is null
-                user && user.firstName && user.lastName
-                    ? `${user.firstName} ${user.lastName}`
-                    : ""
-            }
-        </h2>
-    );
+    return <h2>Hi</h2>;
 };
 
 const App = (): JSX.Element => {
@@ -105,11 +91,10 @@ const App = (): JSX.Element => {
     return (
         <AuthLayout>
             <Router primary={false}>
-                <Redirect from="/home" to="/auth" />
-                <Redirect from="/" to="/auth" noThrow />
                 {authRoutes.map(({ RouterPlug, key, path }) => {
                     return <RouterPlug key={key} path={path} />;
                 })}
+                <Redirect noThrow from="*" to="/auth" />
             </Router>
         </AuthLayout>
     );

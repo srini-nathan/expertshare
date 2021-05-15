@@ -1,5 +1,9 @@
 .custom-datepicker {
     padding: 10px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 3px 9px var(--box-shadow-box-clr);
+    border: unset;
+    background-color: var(--light-clr);
     font-family: var(--font-family-sans-serif);
     background-color: var(--widget-bg-color);
     border: unset;
@@ -15,8 +19,8 @@
 
         &:hover {
             background-color: var(--btn-hover-bg-clr);
-           
-            
+
+
         }
 
         &--previous {

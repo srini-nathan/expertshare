@@ -2,12 +2,21 @@
 
 .es-breadcrumb {
     margin-bottom: 29px;
-    font-family: $font-family-sans-serif;
+    font-family: var(--font-family-sans-serif);
     font-size: 16px;
     font-weight: 700;
-    color: $breadcrumbs-clr;
+    color: var(--primary) !important;
+
+    a {
+        color: var(--primary);
+
+        &:hover {
+            color: var(--primary);
+        }
+
+    }
 
     svg {
-        color: $primary;
+        color: var(--primary);
     }
 }

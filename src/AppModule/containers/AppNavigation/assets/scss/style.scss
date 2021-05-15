@@ -51,7 +51,7 @@
             height: 100%;
 
             .accordion {
-                .collapse:not(.collapse.show) ~ .nav-item {
+                .collapse:not(.collapse.show)~.nav-item {
                     &::after {
                         position: absolute;
                         top: 20px;
@@ -62,7 +62,7 @@
                     }
                 }
 
-                .collapse ~ .nav-item {
+                .collapse~.nav-item {
                     &::after {
                         position: absolute;
                         top: 20px;
@@ -86,7 +86,7 @@
             }
         }
 
-        &:hover > .more-menu {
+        &:hover>.more-menu {
             display: block;
         }
 
@@ -108,8 +108,14 @@
 
         span {
             padding: 10px 0;
+            font-size: 10px;
             font-weight: 700;
-            color: var(--secondary-80) !important;
+            color: var(--secondary-70) !important;
+
+            img {
+                margin-top: -5px;
+                margin-left: 5px;
+            }
         }
     }
 
@@ -160,6 +166,11 @@
             @include media("xl") {
                 top: 14px;
             }
+        }
+
+        .list-group-item.active {
+            margin-top: 0;
+            border-top-width: 0;
         }
 
         .list-group-item.bottom-menu {
@@ -235,6 +246,13 @@
                     width: 20px;
                     height: 20px;
                     margin: auto;
+
+                    &.back-to-menu {
+                        width: 36px;
+                        height: 36px;
+                        padding: 9px;
+                        color: var(--primary) !important;
+                    }
                 }
             }
 
@@ -256,6 +274,7 @@
 
             &.nav-item {
                 position: relative;
+                max-height: 58px;
 
                 &.active,
                 &:hover {
@@ -271,11 +290,20 @@
 
                 }
 
+                &.sub-menu {
+                    .nav-link {
+                        font-weight: 400;
+
+                        span {
+                            margin-left: 75px;
+                        }
+                    }
+                }
+
                 .nav-link {
                     display: flex;
                     align-items: center;
                     padding: 0;
-                    padding-left: 15px;
                     font-size: 17px;
                     font-weight: 700;
                     line-height: 40px;
@@ -285,13 +313,9 @@
                     }
 
                     @include media("xl") {
-                        padding-left: 15px;
                         font-size: 14px;
                     }
 
-                    @include media("lr-4") {
-                        padding-left: 8px;
-                    }
 
                     @include media("lg") {
                         font-size: 12px;
@@ -299,11 +323,15 @@
 
                     @include media("md") {
                         font-size: .8rem;
-
                     }
 
                     span {
-                        margin: 2px 0 auto 20px;
+                        margin: 2px 0 auto 15px;
+                        max-height: 40px;
+                        max-lines: 1;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
 
                         @include media("xl") {
                             margin: auto 0 auto 15px;
@@ -486,7 +514,7 @@
 
     .main-menu-container {
         @include media("not-mobile") {
-            height: calc(100% - 334px);
+            height: calc(100% - 365px);
             overflow: auto;
         }
 
@@ -495,11 +523,11 @@
         }
 
         &::-webkit-scrollbar-track {
-            background: var(--primary-20);
+            background: linear-gradient(270deg, rgba(0, 0, 0, 0) calc(50% - .78px), var(--secondary-50) calc(50%), rgba(0, 0, 0, 0) calc(50% + .78px));
         }
 
         &::-webkit-scrollbar-thumb {
-            background: var(--primary);
+            background: var(--secondary);
         }
 
         &::-webkit-scrollbar-thumb:hover {

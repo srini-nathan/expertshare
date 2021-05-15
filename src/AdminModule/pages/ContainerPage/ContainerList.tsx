@@ -1,7 +1,6 @@
 import React, { FC, Fragment, useEffect, useRef, useState } from "react";
 import { RouteComponentProps, useParams } from "@reach/router";
 import { isString as _isString } from "lodash";
-import "./assets/scss/style.scss";
 import {
     GridApi,
     IServerSideDatasource,

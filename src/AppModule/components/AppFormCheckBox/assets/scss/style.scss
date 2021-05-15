@@ -7,9 +7,9 @@
     &.flex-sm-row {
         height: 61px;
         padding: 14px;
-        background-color: #FFF;
+        background-color: var(--light-clr);
         border-radius: 5px;
-        box-shadow: 0 3px 9px var(--secondary-10);
+        box-shadow: 0 3px 9px var(--box-shadow-box-clr);
 
         .normal-label {
             font-size: 14px;
@@ -29,7 +29,7 @@
     }
 
     input {
-        & + label {
+        &+label {
             background-color: var(--primary-20);
 
             &::before {
@@ -37,7 +37,7 @@
             }
         }
 
-        &[type="checkbox"]:checked + label {
+        &[type="checkbox"]:checked+label {
             background-color: var(--primary-20);
 
             &::before {
@@ -54,7 +54,7 @@
         transition: all .2s;
     }
 
-    [type="checkbox"] + label::before {
+    [type="checkbox"]+label::before {
         position: absolute;
         top: 3px;
         display: block;
@@ -66,12 +66,12 @@
         appearance: none;
     }
 
-    [type="checkbox"]:not(:checked) + label::before {
+    [type="checkbox"]:not(:checked)+label::before {
         transform: translateX(3px);
     }
 
     [type="checkbox"]:checked {
-        & + label::before {
+        &+label::before {
             transform: translateX(36px);
         }
     }
