@@ -10,7 +10,7 @@ import "./assets/scss/style.scss";
 export interface AppFormElementGeneratorProps {
     properties: any;
     defaultValue: any;
-    control?: Control<any>;
+    control: Control<any>;
 }
 export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorProps> = ({
     properties,

@@ -4,7 +4,7 @@ import {
     AppIcon,
     AppButton,
     AppFormInput,
-    AppTextArea,
+    AppFormTextArea,
 } from "../../components";
 import "./assets/scss/style.scss";
 
@@ -93,11 +93,15 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                         {activeLanguages.map((e, j) => {
                             return (
                                 <div key={e.key} className="content--item--key">
-                                    <AppTextArea
+                                    <AppFormTextArea
                                         name={`item_key_${e.key}_${j}`}
                                         placeholder={e.name.toUpperCase()}
-                                        onChange={(value) => {
-                                            handleValueChange(value, i, j);
+                                        onChange={(event) => {
+                                            handleValueChange(
+                                                event.currentTarget.value,
+                                                i,
+                                                j
+                                            );
                                         }}
                                         md={12}
                                         sm={12}
@@ -105,6 +109,7 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                         xl={12}
                                         defaultValue={e.value}
                                         className="input-txarea w-100 m-0 p-0"
+                                        control={control}
                                     />
                                     <i className={`${e.key} flag`}></i>
                                 </div>
@@ -133,11 +138,11 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                         <div className="content--item--value w-100">
                             <div className="row m-0 p-0">
                                 <div className="content--item--value--key col-6 px-1">
-                                    <AppTextArea
+                                    <AppFormTextArea
                                         name={`item_key_${i}`}
-                                        onChange={(value) => {
+                                        onChange={(e) => {
                                             handlekeyChange(
-                                                value,
+                                                e.currentTarget.value,
                                                 i,
                                                 "itemKey"
                                             );
@@ -148,14 +153,15 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                         lg={12}
                                         xl={12}
                                         className="input-txarea w-100 m-0 p-0"
+                                        control={control}
                                     />
                                 </div>
                                 <div className="content--item--value--name col-6 px-1">
-                                    <AppTextArea
+                                    <AppFormTextArea
                                         name={`item_key_`}
-                                        onChange={(value) =>
+                                        onChange={(event) =>
                                             handlekeyChange(
-                                                value,
+                                                event.currentTarget.value,
                                                 i,
                                                 "itemDefaultValue"
                                             )
@@ -166,6 +172,7 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                         lg={12}
                                         xl={12}
                                         className="input-txarea w-100 m-0 p-0"
+                                        control={control}
                                     />
                                     <i className="fak fa-check-circle-regular"></i>
                                 </div>

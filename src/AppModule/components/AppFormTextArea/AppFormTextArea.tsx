@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { ChangeEventHandler, FC, useState } from "react";
 import { Col, Form } from "react-bootstrap";
 import { Controller } from "react-hook-form";
 import {
@@ -17,6 +17,9 @@ export interface AppFormTextAreaProps
         AppReactHookFormProps {
     maxCount?: number;
     rows?: number;
+    onChange?: ChangeEventHandler<
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >;
 }
 
 export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
@@ -33,6 +36,7 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
     maxCount,
     control,
     rows = 5,
+    onChange,
     ...props
 }): JSX.Element => {
     const [data, setData] = useState<string>(defaultValue);
@@ -59,6 +63,9 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
                         {...field}
                         as="textarea"
                         onChange={(e) => {
+                            if (onChange) {
+                                onChange(e);
+                            }
                             field.onChange(e);
                             setData(e.target.value);
                         }}
