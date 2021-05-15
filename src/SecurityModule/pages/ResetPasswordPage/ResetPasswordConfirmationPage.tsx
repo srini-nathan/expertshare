@@ -11,7 +11,7 @@ export const ResetPasswordConfirmationPage: FC<RouteComponentProps> = (): JSX.El
                 <Row className="p-0 m-auto">
                     <AppAuthHeader
                         title="Confirmation"
-                        desctiption="Your password has been changed. You can login with your Email address and your new Password."
+                        description="Your password has been changed. You can login with your Email address and your new Password."
                     />
                     <Col className="text-center p-3">
                         <Link to="/auth/login">
