@@ -73,8 +73,8 @@
     }
 
     &-container {
+        height: auto !important;
         border-radius: var(--border-radius);
-        height: auto;
 
         &-search {
             position: relative;
@@ -229,8 +229,6 @@
             content: "";
             border: solid var(--btn-fg-clr);
             border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
-            transform: rotate(45deg);
             transform: rotate(45deg);
         }
     }
