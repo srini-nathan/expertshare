@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 import { Link } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
-import "./assets/scss/style.scss";
 import { AppIcon } from "../AppIcon";
+import "./assets/scss/style.scss";
 
 export interface AppBreadcrumbProps {
     linkUrl: string;
@@ -18,7 +18,7 @@ export const AppBreadcrumb: FC<AppBreadcrumbProps> = ({
             <Col>
                 <nav className={"es-breadcrumb d-flex align-items-center"}>
                     <AppIcon name={"ChevronLeft"} />
-                    <Link to={linkUrl} className="theme-breadcrumbs-clr ml-2">
+                    <Link to={linkUrl} className="ml-2">
                         {linkText}
                     </Link>
                 </nav>
