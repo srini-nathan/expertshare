@@ -10,8 +10,8 @@ import {
 import { Canceler } from "axios";
 import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
-import { EmailTemplateApi } from "../../apis";
-import { EmailTemplate } from "../../models";
+import { UserFieldApi } from "../../apis";
+import { UserField } from "../../models";
 import { AppPageHeader } from "../../../AppModule/components";
 import {
     AppGrid,
@@ -20,13 +20,15 @@ import {
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
 import { errorToast, successToast } from "../../../AppModule/utils";
-import { useAuthState } from "../../../AppModule/hooks";
+import { AuthContext } from "../../../SecurityModule/contexts";
+import { AuthState } from "../../../SecurityModule/models";
 
-export const EmailTemplateListPage: FC<RouteComponentProps> = (): JSX.Element => {
+export const UserFieldListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
-    const { containerId } = useAuthState();
+    const { state } = React.useContext(AuthContext);
+    const { containerId } = state as AuthState;
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -35,7 +37,7 @@ export const EmailTemplateListPage: FC<RouteComponentProps> = (): JSX.Element =>
                 const { endRow } = request;
                 const pageNo = endRow / appGridConfig.pageSize;
                 api?.hideOverlay();
-                EmailTemplateApi.find<EmailTemplate>(
+                UserFieldApi.find<UserField>(
                     pageNo,
                     {
                         order: buildSortParams(request),
@@ -66,7 +68,7 @@ export const EmailTemplateListPage: FC<RouteComponentProps> = (): JSX.Element =>
     }
 
     async function handleDelete(id: number) {
-        EmailTemplateApi.deleteById(id).then(({ error }) => {
+        UserFieldApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
@@ -92,8 +94,8 @@ export const EmailTemplateListPage: FC<RouteComponentProps> = (): JSX.Element =>
     return (
         <Fragment>
             <AppPageHeader
-                title={"Email Templates"}
-                createLink={"/admin/email-templates/new"}
+                title={"User Fields"}
+                createLink={"/admin/user-fields/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}
                 showToolbar

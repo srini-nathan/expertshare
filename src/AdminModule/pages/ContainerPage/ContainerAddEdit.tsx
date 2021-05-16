@@ -1,18 +1,14 @@
-import React, { FC, Fragment, useEffect, useState } from "react";
-import { RouteComponentProps, useNavigate, useParams } from "@reach/router";
+import React, { FC, Fragment, useEffect, useRef, useState } from "react";
+import { RouteComponentProps, useParams } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { forEach as _forEach } from "lodash";
 import { Col, Form, Row } from "react-bootstrap";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { DevTool } from "@hookform/devtools";
-import {
-    ClientEntity,
-    ContainerEntity,
-    Package,
-    UserGroup,
-} from "../../models";
+import { Canceler } from "axios";
+import { isString as _isString } from "lodash";
+import { Client, Container, Package, UserGroup } from "../../models";
 import { ClientApi, PackageApi, UserGroupApi } from "../../apis";
 import {
     AppFormTextArea,
@@ -24,22 +20,38 @@ import {
     AppBreadcrumb,
     AppPageHeader,
     AppFormRadioSwitch,
+    AppTagSelect,
 } from "../../../AppModule/components";
-import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
+import {
+    SimpleObject,
+    UnprocessableEntityErrorResponse,
+} from "../../../AppModule/models";
 import { ContainerApi } from "../../apis/ContainerApi";
-import { errorToast, successToast, validation } from "../../../AppModule/utils";
+import {
+    errorToast,
+    setViolations,
+    successToast,
+    validation,
+} from "../../../AppModule/utils";
 import { AppPackageSwitches } from "../../components";
 import { CONSTANTS } from "../../../config";
+import {
+    useAuthState,
+    useNavigator,
+    useParamId,
+} from "../../../AppModule/hooks";
 
-const { Container } = CONSTANTS;
+const { Container: ContainerConstant } = CONSTANTS;
 const {
     STORAGE: { STORAGE_S3, STORAGE_LOCAL },
-} = Container;
+} = ContainerConstant;
+type PartialContainer = Partial<Container>;
 
 const schema = Yup.object().shape({
     domain: Yup.string().required("Domain is Required"),
     name: Yup.string().required("Name is Required"),
     containerGroup: Yup.string().optional().nullable(),
+    userGroups: Yup.array().optional(),
     description: Yup.string().optional().nullable(),
     storage: Yup.string().required(),
     bucketKey: Yup.string().when("storage", {
@@ -63,17 +75,24 @@ const schema = Yup.object().shape({
 export const ContainerAddEdit: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
-    const { clientId = null, id = null } = useParams();
-    const isEditMode: boolean = id !== null;
-    const hookNav = useNavigate();
-    const nav = navigate ?? hookNav;
-
-    const [data, setData] = React.useState<ContainerEntity>(
-        new ContainerEntity(ClientApi.toResourceUrl(clientId))
+    const { clientId: storageClientId } = useAuthState();
+    const { clientId = storageClientId } = useParams();
+    const { id, isEditMode } = useParamId();
+    const navigator = useNavigator(navigate);
+    const [data, setData] = React.useState<PartialContainer>(
+        new Container(ClientApi.toResourceUrl(clientId))
     );
     const [packages, setPackages] = React.useState<Package[]>([]);
+    const [userGroups, setUserGroups] = React.useState<SimpleObject<string>[]>(
+        []
+    );
+    const [selectedUserGroups, setSelectedUserGroups] = React.useState<
+        SimpleObject<string>[]
+    >([]);
     const [loading, setLoading] = useState<boolean>(isEditMode);
     const [loadingClient, setLoadingClient] = useState<boolean>(true);
+    const [loadingUserGroups, setLoadingUserGroups] = useState<boolean>(true);
+    const cancelTokenSourceRef = useRef<Canceler>();
 
     const {
         register,
@@ -90,7 +109,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
     });
 
     useEffect(() => {
-        ClientApi.findById<ClientEntity>(clientId).then(
+        ClientApi.findById<Client>(clientId).then(
             ({ response, isNotFound, errorMessage }) => {
                 if (errorMessage) {
                     errorToast(errorMessage);
@@ -107,7 +126,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (isEditMode) {
-            ContainerApi.findById<ContainerEntity>(id).then(
+            ContainerApi.findById<Container>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);
@@ -115,15 +134,19 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                         errorToast("Container not exist");
                     } else if (response !== null) {
                         const packs = response.packages as Package[];
-                        const userGroups = response.userGroups as UserGroup[];
+                        const groups = response.userGroups as UserGroup[];
                         const payload = {
                             ...response,
                             packages: packs.map(({ id: packId }) =>
                                 PackageApi.toResourceUrl(packId)
                             ),
-                            userGroups: userGroups.map(({ id: ugId }) =>
-                                UserGroupApi.toResourceUrl(ugId)
-                            ),
+                            userGroups: groups.map(({ id: ugId, name }) => {
+                                setSelectedUserGroups([
+                                    ...selectedUserGroups,
+                                    { label: name, value: `${ugId}` },
+                                ]);
+                                return UserGroupApi.toResourceUrl(ugId);
+                            }),
                         };
                         setData(payload);
                         reset(payload);
@@ -134,33 +157,56 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         }
     }, [id, isEditMode, reset, trigger]);
 
-    const onSubmit = (formData: ContainerEntity) => {
-        ContainerApi.createOrUpdate<ContainerEntity>(id, {
-            ...formData,
-            packages: data.packages,
-        }).then(({ error, errorMessage }) => {
-            if (error instanceof UnprocessableEntityErrorResponse) {
-                const { violations } = error;
-                _forEach(violations, (value: string, key: string) => {
-                    const propertyName = key as keyof ContainerEntity;
-                    setError(propertyName, {
-                        type: "backend",
-                        message: value,
-                    });
-                });
-            } else if (errorMessage) {
-                errorToast(errorMessage);
-            } else {
-                nav("..").then(() => {
-                    successToast(
-                        isEditMode ? "Container updated" : "Container created"
-                    );
-                });
+    useEffect(() => {
+        setLoadingUserGroups(true);
+        UserGroupApi.find<UserGroup>(1, {}, (c) => {
+            cancelTokenSourceRef.current = c;
+        }).then(({ response, error }) => {
+            setLoadingUserGroups(false);
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                }
+            } else if (response !== null) {
+                setUserGroups(
+                    response.items.map((user) => {
+                        return {
+                            label: user.name,
+                            value: `${user.id}`,
+                        };
+                    })
+                );
             }
         });
+        const cancelPendingCall = cancelTokenSourceRef.current;
+        return () => {
+            if (cancelPendingCall) {
+                cancelPendingCall();
+            }
+        };
+    }, []);
+
+    const onSubmit = (formData: Container) => {
+        ContainerApi.createOrUpdate<Container>(id, formData).then(
+            ({ error, errorMessage }) => {
+                if (error instanceof UnprocessableEntityErrorResponse) {
+                    setViolations<Partial<Container>>(error, setError);
+                } else if (errorMessage) {
+                    errorToast(errorMessage);
+                } else {
+                    navigator("..").then(() => {
+                        successToast(
+                            isEditMode
+                                ? "Container updated"
+                                : "Container created"
+                        );
+                    });
+                }
+            }
+        );
     };
 
-    if (loading || loadingClient) {
+    if (loading || loadingClient || loadingUserGroups) {
         return <AppLoader />;
     }
 
@@ -374,9 +420,33 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                 />
                             </Form.Row>
                         </AppCard>
+                        <AppCard title="User Groups">
+                            <Form.Row>
+                                <AppTagSelect
+                                    options={userGroups}
+                                    selectedItems={selectedUserGroups}
+                                    label="User Groups"
+                                    require
+                                    description="Hi this is description for this field"
+                                    onChange={(item) => {
+                                        const groups = selectedUserGroups;
+                                        const index = groups.indexOf(item);
+                                        if (index !== -1) {
+                                            delete groups[index];
+                                            setSelectedUserGroups(groups);
+                                        } else {
+                                            setSelectedUserGroups([
+                                                ...selectedUserGroups,
+                                                item,
+                                            ]);
+                                        }
+                                    }}
+                                ></AppTagSelect>
+                            </Form.Row>
+                        </AppCard>
                         <AppFormActions
                             isEditMode={isEditMode}
-                            navigation={nav}
+                            navigation={navigator}
                         />
                     </Form>
                 </Col>

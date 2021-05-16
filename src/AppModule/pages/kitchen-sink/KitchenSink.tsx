@@ -18,7 +18,7 @@ import {
     AppFormRadioSwitch,
     AppFormRichTextArea,
 } from "../../components";
-import { SimpleObject } from "../../../AdminModule/models";
+import { SimpleObject } from "../../models";
 
 const options = [
     { id: "1", value: "chocolate", label: "Chocolate" },
@@ -219,7 +219,7 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     xl="12"
                     name="richtext"
                     label="Rich Text Area"
-                    value="hello"
+                    defaultValue="hello"
                     placeholder="Rich Text Area"
                     description="hello this is description"
                     maxCount={150}

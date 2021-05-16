@@ -10,7 +10,7 @@ const {
     api_email_templates_post_collection: API_POST_COLLECTION,
 } = ROUTES;
 
-export abstract class EmailTemplate extends EntityAPI {
+export abstract class EmailTemplateApi extends EntityAPI {
     protected static GET_COLLECTION = API_GET_COLLECTION;
 
     protected static POST_COLLECTION = API_POST_COLLECTION;

@@ -2,8 +2,8 @@ import React, { ReactElement } from "react";
 import {
     AppGridAction,
     AppGridActionProps,
-} from "../../../AppModule/components/AppGridAction";
-import { Client } from "../../models";
+} from "../../../AppModule/components";
+import { UserField } from "../../models";
 import { AppCellActionWithRenderParams } from "../../../AppModule/models";
 
 export const appGridFrameworkComponents = {
@@ -11,20 +11,18 @@ export const appGridFrameworkComponents = {
         params: AppCellActionWithRenderParams
     ): ReactElement => {
         const { data, onPressDelete } = params;
-        const { id } = data as Client;
+        const { id } = data as UserField;
 
         const props: AppGridActionProps = {
             editAction: {
-                url: `/admin/clients/${id}`,
+                url: `/admin/user-fields/${id}`,
             },
             deleteAction: {
-                confirmation: "Are you sure want to delete ?",
+                confirmation:
+                    "Are you sure you want to delete the User Field ?",
                 onClick: () => {
                     onPressDelete(id);
                 },
-            },
-            treeAction: {
-                url: `/admin/clients/${id}/containers`,
             },
         };
 

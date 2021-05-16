@@ -1,10 +1,11 @@
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
-import { CellActionParams } from "../LanguagePage";
+import { AppCellActionWithCustom } from "./app-actions";
 
 export const appGridColDef = ({
     onPressDelete,
+    onPressClone,
     parentId,
-}: CellActionParams): ColDef[] => [
+}: AppCellActionWithCustom): ColDef[] => [
     {
         headerName: "Domain",
         field: "domain",
@@ -24,9 +25,10 @@ export const appGridColDef = ({
         cellRenderer: "appGridActionRenderer",
         cellClass: "text-right",
         headerClass: "action-header",
-        maxWidth: 120,
+        maxWidth: 180,
         cellRendererParams: {
             onPressDelete,
+            onPressClone,
             parentId,
         },
     },

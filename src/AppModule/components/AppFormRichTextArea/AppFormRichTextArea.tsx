@@ -2,12 +2,12 @@ import React, { FC, useState } from "react";
 import { Form, Col } from "react-bootstrap";
 import { Control, Controller } from "react-hook-form";
 import { isString as _isString, startCase as _startCase } from "lodash";
+import FroalaEditorComponent from "react-froala-wysiwyg";
 
 /* eslint-disable */
 import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
 import "froala-editor/js/plugins.pkgd.min.js";
-import FroalaEditorComponent from "react-froala-wysiwyg";
 /* eslint-enable */
 import "./assets/scss/style.scss";
 
@@ -18,7 +18,7 @@ export interface AppFormRichTextAreaProps {
     md?: string | number;
     lg?: string | number;
     xl?: string | number;
-    value?: string;
+    defaultValue?: string;
     placeholder?: string | boolean;
     required?: boolean;
     label?: string;
@@ -32,7 +32,7 @@ export interface AppFormRichTextAreaProps {
 export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
     id,
     name,
-    value = "",
+    defaultValue = "",
     placeholder,
     errorMessage,
     label = "",
@@ -46,7 +46,7 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
     maxCount = 25,
     control,
 }): JSX.Element => {
-    const [model, setModel] = useState<string>(value);
+    const [model, setModel] = useState<string>(defaultValue);
 
     const controlId = id || name;
     let placeholderText = "";
@@ -82,16 +82,19 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
             ) : null}
             <Controller
                 name={name}
-                defaultValue={value}
+                defaultValue={defaultValue}
                 control={control}
-                render={() => (
+                render={({ field }) => (
                     <FroalaEditorComponent
                         model={model}
-                        onModelChange={setModel}
+                        onModelChange={(e: string) => {
+                            field.onChange(e);
+                            setModel(e);
+                        }}
                         tag="textarea"
                         config={{
                             placeholderText,
-                            value,
+                            value: defaultValue,
                             charCounterCount: withCounter,
                             charCounterMax: maxCount,
                         }}

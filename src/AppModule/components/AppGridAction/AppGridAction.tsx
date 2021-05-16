@@ -9,6 +9,7 @@ export interface AppGridActionProps {
     editAction?: AppGridLinkAction;
     treeAction?: AppGridLinkAction;
     deleteAction?: AppGridClickAction;
+    customClickActions?: AppGridCustomClickAction[];
 }
 
 interface AppGridLinkAction {
@@ -20,6 +21,13 @@ interface AppGridClickAction {
     confirmation?: string;
     onClick?: () => void;
     disable?: boolean;
+}
+
+interface AppGridCustomClickAction {
+    confirmation?: string;
+    onClick?: () => void;
+    disable?: boolean;
+    icon: string;
 }
 
 interface ActionProps {
@@ -122,12 +130,16 @@ export const AppGridAction: FC<AppGridActionProps> = ({
     editAction,
     treeAction,
     deleteAction,
+    customClickActions = [],
 }): JSX.Element => {
     return (
         <div className="actions">
             <LinkAction icon={"add"} {...addAction}></LinkAction>
             <LinkAction icon={"edit"} {...editAction}></LinkAction>
             <LinkAction icon={"ListTree"} {...treeAction}></LinkAction>
+            {customClickActions.map(({ icon, ...rest }) => (
+                <ClickAction icon={icon} {...rest}></ClickAction>
+            ))}
             <ClickAction icon={"delete"} {...deleteAction}></ClickAction>
         </div>
     );

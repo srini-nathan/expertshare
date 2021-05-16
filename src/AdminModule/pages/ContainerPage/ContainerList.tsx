@@ -101,6 +101,27 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
         });
     }
 
+    async function handleClone(id: number) {
+        ContainerApi.clone<
+            Container,
+            {
+                cloneId: number;
+            }
+        >(id).then(({ error }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                }
+            } else {
+                successToast("Successfully cloned");
+                appGridApi.current?.refreshServerSideStore({
+                    purge: false,
+                    route: [],
+                });
+            }
+        });
+    }
+
     async function handleFilter(search: string) {
         appGridApi.current?.setFilterModel({
             domain: {
@@ -114,7 +135,6 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
             <AppBreadcrumb linkText={"Client"} linkUrl={"../.."} />
             <AppPageHeader
                 title={"Container"}
-                createLabel={"Create Container"}
                 createLink={`/admin/clients/${clientId}/containers/new`}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}
@@ -127,6 +147,7 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
                         frameworkComponents={appGridFrameworkComponents}
                         columnDef={appGridColDef({
                             onPressDelete: handleDelete,
+                            onPressClone: handleClone,
                             parentId: clientId,
                         })}
                         dataSource={getDataSource()}

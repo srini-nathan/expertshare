@@ -17,7 +17,7 @@ export interface AppPageHeaderProps {
 export const AppPageHeader: FC<AppPageHeaderProps> = ({
     title,
     createLink,
-    createLabel,
+    createLabel = "Create",
     showToolbar = false,
     customToolbar = false,
     onQuickFilterChange,
