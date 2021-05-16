@@ -5,15 +5,17 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { find as _find } from "lodash";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { DevTool } from "@hookform/devtools";
 import {
     AppPageHeader,
     AppBreadcrumb,
     AppLoader,
     AppFormActions,
-    AppFormTextArea,
     AppCard,
     AppFormInput,
     AppFormSelect,
+    AppFormRichTextArea,
 } from "../../../AppModule/components";
 import { EmailTemplate } from "../../models";
 import { EmailTemplateApi } from "../../apis";
@@ -133,6 +135,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
             <Row>
                 <Col md="12">
                     <AppCard>
+                        <DevTool control={control} />
                         <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                             <Form.Row>
                                 <AppFormInput
@@ -153,7 +156,6 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                 />
                             </Form.Row>
                             <Form.Row>
-                                {/* @TODO: validation not working */}
                                 <AppFormSelect
                                     id={"ddTheme"}
                                     name={"etKey"}
@@ -200,12 +202,13 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                 />
                             </Form.Row>
                             <Form.Row>
-                                <AppFormTextArea
+                                <AppFormRichTextArea
                                     name={"content"}
                                     label={"Content"}
                                     md={12}
                                     lg={12}
                                     xl={12}
+                                    required={true}
                                     {...validation(
                                         "content",
                                         formState,
