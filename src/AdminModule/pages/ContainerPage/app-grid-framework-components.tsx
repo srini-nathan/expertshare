@@ -4,13 +4,18 @@ import {
     AppGridActionProps,
 } from "../../../AppModule/components/AppGridAction";
 import { Container } from "../../models";
-import { AppCellActionWithRenderParams } from "../../../AppModule/models";
+import { AppCellActionWithRenderWithCustom } from "./app-actions";
 
 export const appGridFrameworkComponents = {
     appGridActionRenderer: (
-        params: AppCellActionWithRenderParams
+        params: AppCellActionWithRenderWithCustom
     ): ReactElement => {
-        const { data, onPressDelete, parentId: clientId } = params;
+        const {
+            data,
+            onPressDelete,
+            parentId: clientId,
+            onPressClone,
+        } = params;
         const { id } = data as Container;
 
         if (!clientId) {
@@ -27,6 +32,15 @@ export const appGridFrameworkComponents = {
                     onPressDelete(id);
                 },
             },
+            customClickActions: [
+                {
+                    icon: "Clone",
+                    confirmation: "Are you sure want to clone ?",
+                    onClick: () => {
+                        onPressClone(id);
+                    },
+                },
+            ],
         };
 
         return <AppGridAction {...props} />;
