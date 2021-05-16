@@ -18,7 +18,7 @@ import {
     AppFormRadioSwitch,
     AppFormRichTextArea,
 } from "../../components";
-import { SimpleObject } from "../../../AdminModule/models";
+import { SimpleObject } from "../../models";
 
 const options = [
     { id: "1", value: "chocolate", label: "Chocolate" },

@@ -1,10 +1,10 @@
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
-import { CellActionParams } from "../LanguagePage";
+import { AppCellActionParams } from "../../../AppModule/models";
 
 export const appGridColDef = ({
     onPressDelete,
     parentId,
-}: CellActionParams): ColDef[] => [
+}: AppCellActionParams): ColDef[] => [
     {
         headerName: "Domain",
         field: "domain",

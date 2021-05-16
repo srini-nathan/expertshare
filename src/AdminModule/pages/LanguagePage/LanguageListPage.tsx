@@ -95,8 +95,7 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Fragment>
             <AppPageHeader
-                title={"Language"}
-                createLabel={"Create Language"}
+                title={"Languages"}
                 createLink={"/admin/languages/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}

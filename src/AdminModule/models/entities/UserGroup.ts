@@ -1,4 +1,5 @@
 import { BaseEntity, JsonResponseData } from "../../../AppModule/models";
+import { UserGroupApi } from "../../apis";
 
 export class UserGroup extends BaseEntity {
     client: string;
@@ -9,15 +10,22 @@ export class UserGroup extends BaseEntity {
 
     constructor(
         client: string,
-        name = "",
-        id?: number,
-        createdAt?: string | Date,
-        updatedAt?: string | Date
+        {
+            name = "",
+            isGenerated = false,
+            id,
+            createdAt,
+            updatedAt,
+        }: Partial<UserGroup> = {}
     ) {
         super(id, createdAt, updatedAt);
         this.client = client;
         this.name = name;
-        this.isGenerated = false;
+        this.isGenerated = isGenerated;
+    }
+
+    toString(): string {
+        return UserGroupApi.toResourceUrl(this.id);
     }
 
     toJSON(addExtraData = false): JsonResponseData {

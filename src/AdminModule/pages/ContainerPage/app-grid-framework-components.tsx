@@ -3,12 +3,12 @@ import {
     AppGridAction,
     AppGridActionProps,
 } from "../../../AppModule/components/AppGridAction";
-import { CellActionWithRenderParams } from "../LanguagePage";
 import { Container } from "../../models";
+import { AppCellActionWithRenderParams } from "../../../AppModule/models";
 
 export const appGridFrameworkComponents = {
     appGridActionRenderer: (
-        params: CellActionWithRenderParams
+        params: AppCellActionWithRenderParams
     ): ReactElement => {
         const { data, onPressDelete, parentId: clientId } = params;
         const { id } = data as Container;

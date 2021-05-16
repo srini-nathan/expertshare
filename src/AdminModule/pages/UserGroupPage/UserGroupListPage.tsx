@@ -94,9 +94,8 @@ export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Fragment>
             <AppPageHeader
-                title={"User Group"}
+                title={"User Groups"}
                 showToolbar
-                createLabel={"Create User Group"}
                 createLink={"user-groups/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}

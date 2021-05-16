@@ -1,15 +1,15 @@
 import { BaseEntity, JsonResponseData } from "../../../AppModule/models";
-import { LanguageApi } from "../../apis";
 import { Container } from "./Container";
+import { EmailTemplateApi } from "../../apis";
 
-export class Language extends BaseEntity {
+export class EmailTemplate extends BaseEntity {
     name: string;
 
-    locale: string;
+    subject: string;
 
-    isActive: boolean;
+    etKey: string;
 
-    isDefault: boolean;
+    content: string;
 
     container: string | Container;
 
@@ -17,33 +17,33 @@ export class Language extends BaseEntity {
         container: string,
         {
             name = "",
-            locale = "",
-            isActive = true,
-            isDefault = false,
+            subject = "",
+            etKey = "",
+            content = "",
             id,
             createdAt,
             updatedAt,
-        }: Partial<Language> = {}
+        }: Partial<EmailTemplate> = {}
     ) {
         super(id, createdAt, updatedAt);
         this.container = container;
         this.name = name;
-        this.locale = locale;
-        this.isActive = isActive;
-        this.isDefault = isDefault;
+        this.subject = subject;
+        this.etKey = etKey;
+        this.content = content;
     }
 
     toString(): string {
-        return LanguageApi.toResourceUrl(this.id);
+        return EmailTemplateApi.toResourceUrl(this.id);
     }
 
     toJSON(addExtraData = false): JsonResponseData {
         return {
             ...super.toJSON(addExtraData),
             name: this.name,
-            locale: this.locale,
-            isActive: this.isActive,
-            isDefault: this.isDefault,
+            subject: this.subject,
+            etKey: this.etKey,
+            content: this.content,
             container: this.container.toString(),
         };
     }

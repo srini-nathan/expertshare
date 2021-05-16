@@ -4,8 +4,8 @@ import { UserGroup } from "../../models";
 import {
     AppGridAction,
     AppGridActionProps,
-} from "../../../AppModule/components/AppGridAction";
-import { CellActionWithRenderParams } from "../LanguagePage";
+} from "../../../AppModule/components";
+import { AppCellActionWithRenderParams } from "../../../AppModule/models";
 
 export const appGridFrameworkComponents = {
     appBooleanRender: (params: never): ReactElement => {
@@ -26,7 +26,7 @@ export const appGridFrameworkComponents = {
         );
     },
     appGridActionRenderer: (
-        params: CellActionWithRenderParams
+        params: AppCellActionWithRenderParams
     ): ReactElement => {
         const { data, onPressDelete } = params;
         const { id } = data as UserGroup;

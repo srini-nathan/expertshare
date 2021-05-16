@@ -114,7 +114,6 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
             <AppBreadcrumb linkText={"Client"} linkUrl={"../.."} />
             <AppPageHeader
                 title={"Container"}
-                createLabel={"Create Container"}
                 createLink={`/admin/clients/${clientId}/containers/new`}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}

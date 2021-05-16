@@ -1,18 +1,12 @@
 import React, { FC, Fragment, useEffect, useState } from "react";
-import { RouteComponentProps, useNavigate, useParams } from "@reach/router";
+import { RouteComponentProps, useParams } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { forEach as _forEach } from "lodash";
 import { Col, Form, Row } from "react-bootstrap";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { DevTool } from "@hookform/devtools";
-import {
-    ClientEntity,
-    ContainerEntity,
-    Package,
-    UserGroup,
-} from "../../models";
+import { Client, Container, Package, UserGroup } from "../../models";
 import { ClientApi, PackageApi, UserGroupApi } from "../../apis";
 import {
     AppFormTextArea,
@@ -27,14 +21,25 @@ import {
 } from "../../../AppModule/components";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
 import { ContainerApi } from "../../apis/ContainerApi";
-import { errorToast, successToast, validation } from "../../../AppModule/utils";
+import {
+    errorToast,
+    setViolations,
+    successToast,
+    validation,
+} from "../../../AppModule/utils";
 import { AppPackageSwitches } from "../../components";
 import { CONSTANTS } from "../../../config";
+import {
+    useAuthState,
+    useNavigator,
+    useParamId,
+} from "../../../AppModule/hooks";
 
-const { Container } = CONSTANTS;
+const { Container: ContainerConstant } = CONSTANTS;
 const {
     STORAGE: { STORAGE_S3, STORAGE_LOCAL },
-} = Container;
+} = ContainerConstant;
+type PartialContainer = Partial<Container>;
 
 const schema = Yup.object().shape({
     domain: Yup.string().required("Domain is Required"),
@@ -63,13 +68,12 @@ const schema = Yup.object().shape({
 export const ContainerAddEdit: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
-    const { clientId = null, id = null } = useParams();
-    const isEditMode: boolean = id !== null;
-    const hookNav = useNavigate();
-    const nav = navigate ?? hookNav;
-
-    const [data, setData] = React.useState<ContainerEntity>(
-        new ContainerEntity(ClientApi.toResourceUrl(clientId))
+    const { clientId: storageClientId } = useAuthState();
+    const { clientId = storageClientId } = useParams();
+    const { id, isEditMode } = useParamId();
+    const navigator = useNavigator(navigate);
+    const [data, setData] = React.useState<PartialContainer>(
+        new Container(ClientApi.toResourceUrl(clientId))
     );
     const [packages, setPackages] = React.useState<Package[]>([]);
     const [loading, setLoading] = useState<boolean>(isEditMode);
@@ -90,7 +94,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
     });
 
     useEffect(() => {
-        ClientApi.findById<ClientEntity>(clientId).then(
+        ClientApi.findById<Client>(clientId).then(
             ({ response, isNotFound, errorMessage }) => {
                 if (errorMessage) {
                     errorToast(errorMessage);
@@ -107,7 +111,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (isEditMode) {
-            ContainerApi.findById<ContainerEntity>(id).then(
+            ContainerApi.findById<Container>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);
@@ -134,30 +138,24 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         }
     }, [id, isEditMode, reset, trigger]);
 
-    const onSubmit = (formData: ContainerEntity) => {
-        ContainerApi.createOrUpdate<ContainerEntity>(id, {
-            ...formData,
-            packages: data.packages,
-        }).then(({ error, errorMessage }) => {
-            if (error instanceof UnprocessableEntityErrorResponse) {
-                const { violations } = error;
-                _forEach(violations, (value: string, key: string) => {
-                    const propertyName = key as keyof ContainerEntity;
-                    setError(propertyName, {
-                        type: "backend",
-                        message: value,
+    const onSubmit = (formData: Container) => {
+        ContainerApi.createOrUpdate<Container>(id, formData).then(
+            ({ error, errorMessage }) => {
+                if (error instanceof UnprocessableEntityErrorResponse) {
+                    setViolations<Partial<Container>>(error, setError);
+                } else if (errorMessage) {
+                    errorToast(errorMessage);
+                } else {
+                    navigator("..").then(() => {
+                        successToast(
+                            isEditMode
+                                ? "Container updated"
+                                : "Container created"
+                        );
                     });
-                });
-            } else if (errorMessage) {
-                errorToast(errorMessage);
-            } else {
-                nav("..").then(() => {
-                    successToast(
-                        isEditMode ? "Container updated" : "Container created"
-                    );
-                });
+                }
             }
-        });
+        );
     };
 
     if (loading || loadingClient) {
@@ -376,7 +374,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                         </AppCard>
                         <AppFormActions
                             isEditMode={isEditMode}
-                            navigation={nav}
+                            navigation={navigator}
                         />
                     </Form>
                 </Col>
