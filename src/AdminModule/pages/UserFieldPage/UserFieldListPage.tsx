@@ -10,8 +10,8 @@ import {
 import { Canceler } from "axios";
 import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
-import { UserFieldsApi } from "../../apis";
-import { UserFields } from "../../models";
+import { UserFieldApi } from "../../apis";
+import { UserField } from "../../models";
 import { AppPageHeader } from "../../../AppModule/components";
 import {
     AppGrid,
@@ -20,10 +20,10 @@ import {
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
 import { errorToast, successToast } from "../../../AppModule/utils";
-import { AuthContext } from "../../../SecurityModule/context/AuthContext";
-import { AuthState } from "../../../SecurityModule/models/context/AuthState";
+import { AuthContext } from "../../../SecurityModule/contexts";
+import { AuthState } from "../../../SecurityModule/models";
 
-export const UserFieldsListPage: FC<RouteComponentProps> = (): JSX.Element => {
+export const UserFieldListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
@@ -37,7 +37,7 @@ export const UserFieldsListPage: FC<RouteComponentProps> = (): JSX.Element => {
                 const { endRow } = request;
                 const pageNo = endRow / appGridConfig.pageSize;
                 api?.hideOverlay();
-                UserFieldsApi.find<UserFields>(
+                UserFieldApi.find<UserField>(
                     pageNo,
                     {
                         order: buildSortParams(request),
@@ -68,7 +68,7 @@ export const UserFieldsListPage: FC<RouteComponentProps> = (): JSX.Element => {
     }
 
     async function handleDelete(id: number) {
-        UserFieldsApi.delete(id).then(({ error }) => {
+        UserFieldApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);

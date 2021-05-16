@@ -1,10 +1,10 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
-import { RouteComponentProps, useNavigate, useParams } from "@reach/router";
+import { RouteComponentProps } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { forEach as _forEach, find as _find } from "lodash";
+import { find as _find } from "lodash";
 import { CONSTANTS } from "../../../config";
 import {
     AppPageHeader,
@@ -14,15 +14,25 @@ import {
     AppCard,
     AppFormCheckBox,
 } from "../../../AppModule/components";
-import { UserFieldsEntity } from "../../models";
-import { UserFieldsApi } from "../../apis";
-import { errorToast, successToast, validation } from "../../../AppModule/utils";
+import { UserField } from "../../models";
+import { UserFieldApi } from "../../apis";
+import {
+    errorToast,
+    setViolations,
+    successToast,
+    validation,
+} from "../../../AppModule/utils";
 import {
     PrimitiveObject,
     UnprocessableEntityErrorResponse,
 } from "../../../AppModule/models";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { AppFormSelect } from "../../../AppModule/components/AppFormSelect";
+import {
+    useAuthState,
+    useNavigator,
+    useParamId,
+} from "../../../AppModule/hooks";
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -31,44 +41,45 @@ const schema = yup.object().shape({
     fieldType: yup.string().required(),
 });
 
-export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
+const {
+    UserField: { FIELDTYPE },
+} = CONSTANTS;
+
+export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
-    const { id = null } = useParams();
-    const isEditMode: boolean = id !== null;
-    const hookNav = useNavigate();
-    const nav = navigate ?? hookNav;
-
-    const [data, setData] = useState<UserFieldsEntity>(new UserFieldsEntity());
+    const { id, isEditMode } = useParamId();
+    const navigator = useNavigator(navigate);
+    const { clientResourceId } = useAuthState();
+    const [data, setData] = useState<UserField>(
+        new UserField(clientResourceId)
+    );
     const [loading, setLoading] = useState<boolean>(isEditMode);
-    const { UserField } = CONSTANTS;
-    const { FIELDTYPE } = UserField;
     const options = Object.entries(FIELDTYPE).map(([key, value]) => ({
         value,
         label: key,
     }));
 
-    const { register, control, handleSubmit, formState, setError } = useForm({
+    const {
+        register,
+        control,
+        handleSubmit,
+        formState,
+        setError,
+    } = useForm<UserField>({
         resolver: yupResolver(schema),
         mode: "all",
     });
 
-    const onSubmit = (formData: UserFieldsEntity) => {
-        UserFieldsApi.createOrUpdate<UserFieldsEntity>(id, formData).then(
+    const onSubmit = (formData: UserField) => {
+        UserFieldApi.createOrUpdate<UserField>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
-                    const { violations } = error;
-                    _forEach(violations, (value: string, key: string) => {
-                        const propertyName = key as keyof UserFieldsEntity;
-                        setError(propertyName, {
-                            type: "backend",
-                            message: value,
-                        });
-                    });
+                    setViolations<UserField>(error, setError);
                 } else if (errorMessage) {
                     errorToast(errorMessage);
                 } else {
-                    nav("..").then(() => {
+                    navigator("..").then(() => {
                         successToast(
                             isEditMode
                                 ? "User Fields updated"
@@ -82,7 +93,7 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (isEditMode) {
-            UserFieldsApi.getById<UserFieldsEntity>(id).then(
+            UserFieldApi.findById<UserField>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);
@@ -123,14 +134,13 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                                         sm={12}
                                         xl={12}
                                         required={true}
-                                        withCounter={true}
                                         {...validation(
                                             "name",
                                             formState,
                                             isEditMode
                                         )}
                                         errorMessage={errors.name?.message}
-                                        value={data.name}
+                                        defaultValue={data.name}
                                         control={control}
                                     />
                                     <AppFormInput
@@ -140,15 +150,13 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                                         lg={12}
                                         sm={12}
                                         xl={12}
-                                        required={true}
-                                        withCounter={true}
                                         {...validation(
                                             "fieldKey",
                                             formState,
                                             isEditMode
                                         )}
                                         errorMessage={errors.fieldKey?.message}
-                                        value={data.fieldKey}
+                                        defaultValue={data.fieldKey}
                                         control={control}
                                     />
                                 </Col>
@@ -160,15 +168,13 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                                         lg={12}
                                         sm={12}
                                         xl={12}
-                                        required={true}
-                                        withCounter={true}
                                         {...validation(
                                             "labelKey",
                                             formState,
                                             isEditMode
                                         )}
                                         errorMessage={errors.labelKey?.message}
-                                        value={data.labelKey}
+                                        defaultValue={data.labelKey}
                                         control={control}
                                     />
                                     <AppFormSelect
@@ -260,7 +266,7 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                                 </Col>
                                 <AppFormActions
                                     isEditMode={isEditMode}
-                                    navigation={nav}
+                                    navigation={navigator}
                                 />
                             </Row>
                         </AppCard>

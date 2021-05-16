@@ -2,12 +2,12 @@ import React, { FC, useState } from "react";
 import { Form, Col } from "react-bootstrap";
 import { Control, Controller } from "react-hook-form";
 import { isString as _isString, startCase as _startCase } from "lodash";
+import FroalaEditorComponent from "react-froala-wysiwyg";
 
 /* eslint-disable */
 import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
 import "froala-editor/js/plugins.pkgd.min.js";
-import FroalaEditorComponent from "react-froala-wysiwyg";
 /* eslint-enable */
 import "./assets/scss/style.scss";
 

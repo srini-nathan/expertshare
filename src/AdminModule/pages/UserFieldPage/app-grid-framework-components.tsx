@@ -3,15 +3,15 @@ import {
     AppGridAction,
     AppGridActionProps,
 } from "../../../AppModule/components";
-import { Email } from "../../models";
-import { CellActionWithRenderParams } from "../LanguagePage/app-grid-action";
+import { UserField } from "../../models";
+import { AppCellActionWithRenderParams } from "../../../AppModule/models";
 
 export const appGridFrameworkComponents = {
     appGridActionRenderer: (
-        params: CellActionWithRenderParams
+        params: AppCellActionWithRenderParams
     ): ReactElement => {
         const { data, onPressDelete } = params;
-        const { id } = data as Email;
+        const { id } = data as UserField;
 
         const props: AppGridActionProps = {
             editAction: {
