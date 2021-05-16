@@ -1,7 +1,26 @@
 @import "../../../../assets/scss/screens-sizes";
 @import "./../../../../assets/scss/variables";
 
+
 .translation-super-admin--container {
+    position: relative;
+
+    .translation-loading {
+        position: absolute;
+        display: flex;
+        width: 100%;
+        height: 100%;
+        background-color: var(--primary-50);
+        z-index: 2;
+
+        .loaderContainer {
+            position: relative;
+            width: auto;
+            height: auto;
+            margin: auto;
+        }
+    }
+
     &--inner {
         .group-col {
             &--header {

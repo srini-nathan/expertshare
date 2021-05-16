@@ -20,6 +20,7 @@ export interface AppFormTextAreaProps
     onChange?: ChangeEventHandler<
         HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >;
+    onBlurHandler?: (value: React.FocusEvent<HTMLTextAreaElement>) => void;
 }
 
 export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
@@ -37,6 +38,7 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
     control,
     rows = 5,
     onChange,
+    onBlurHandler,
     ...props
 }): JSX.Element => {
     const [data, setData] = useState<string>(defaultValue);
@@ -68,6 +70,9 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
                             }
                             field.onChange(e);
                             setData(e.target.value);
+                        }}
+                        onBlur={(e: React.FocusEvent<HTMLTextAreaElement>) => {
+                            if (onBlurHandler) onBlurHandler(e);
                         }}
                         {...controlProps}
                     />

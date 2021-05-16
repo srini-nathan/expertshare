@@ -31,3 +31,4 @@ export * from "./AppTabs";
 export * from "./AppTab";
 export * from "./AppFormLabel";
 export * from "./AppFormRichTextArea";
+export * from "./AppModal";
