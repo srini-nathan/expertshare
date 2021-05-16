@@ -95,7 +95,6 @@ export const UserFieldsListPage: FC<RouteComponentProps> = (): JSX.Element => {
         <Fragment>
             <AppPageHeader
                 title={"User Fields"}
-                createLabel={"Create User Field"}
                 createLink={"/admin/user-fields/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}
