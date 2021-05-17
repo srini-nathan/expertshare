@@ -23,6 +23,7 @@ import {
 } from "../../../AppModule/models";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { AppFormSelect } from "../../../AppModule/components/AppFormSelect";
+import { AppFieldTypeElements } from "../../components/AppFieldTypeElements";
 
 const schema = yup.object().shape({
     name: yup.string().required(),
@@ -41,6 +42,9 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
 
     const [data, setData] = useState<UserFieldsEntity>(new UserFieldsEntity());
     const [loading, setLoading] = useState<boolean>(isEditMode);
+    const [selected, setSelected] = useState<any>();
+    const [attribs, setAttribs] = useState();
+    const [opts, setOpts] = useState();
     const { UserField } = CONSTANTS;
     const { FIELDTYPE } = UserField;
     const options = Object.entries(FIELDTYPE).map(([key, value]) => ({
@@ -54,6 +58,11 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
     });
 
     const onSubmit = (formData: UserFieldsEntity) => {
+        alert(JSON.stringify(attribs));
+        alert(JSON.stringify(opts));
+        formData.attr = attribs!;
+        formData.options = { choice: opts! };
+        alert(JSON.stringify(formData.options));
         UserFieldsApi.createOrUpdate<UserFieldsEntity>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
@@ -79,7 +88,24 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
             }
         );
     };
-
+    const onAttributeUpdate = (value: any) => {
+        setAttribs(value);
+    };
+    const onOptionsUpdate = (value: any) => {
+        setOpts(value);
+    };
+    const renderOptions = (type: any) => {
+        if (
+            type ===
+            (FIELDTYPE.FIELDTYPE_SELECT ||
+                FIELDTYPE.FIELDTYPE_MULTI_SELECT ||
+                FIELDTYPE.FIELDTYPE_CHECKBOX_GROUP ||
+                FIELDTYPE.FIELDTYPE_RADIO_GROUP)
+        ) {
+            return true;
+        }
+        return false;
+    };
     useEffect(() => {
         if (isEditMode) {
             UserFieldsApi.getById<UserFieldsEntity>(id).then(
@@ -90,6 +116,7 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                         errorToast("Email template not exist");
                     } else if (response !== null) {
                         setData(response);
+                        setSelected(response.fieldType);
                     }
                     setLoading(false);
                 }
@@ -123,7 +150,7 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                                         sm={12}
                                         xl={12}
                                         required={true}
-                                        withCounter={true}
+                                        withCounter={false}
                                         {...validation(
                                             "name",
                                             formState,
@@ -141,7 +168,7 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                                         sm={12}
                                         xl={12}
                                         required={true}
-                                        withCounter={true}
+                                        withCounter={false}
                                         {...validation(
                                             "fieldKey",
                                             formState,
@@ -161,7 +188,7 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                                         sm={12}
                                         xl={12}
                                         required={true}
-                                        withCounter={true}
+                                        withCounter={false}
                                         {...validation(
                                             "labelKey",
                                             formState,
@@ -191,8 +218,12 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                                         control={control}
                                         transform={{
                                             output: (
-                                                template: PrimitiveObject
-                                            ) => template?.value,
+                                                fieldType: PrimitiveObject
+                                            ) => {
+                                                alert(fieldType.value);
+                                                setSelected(fieldType.value);
+                                                return fieldType?.value;
+                                            },
                                             input: (value: string) => {
                                                 return _find(options, {
                                                     value,
@@ -202,6 +233,22 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                                     />
                                 </Col>
                             </Row>
+                            {selected && (
+                                <AppFieldTypeElements
+                                    header={"Attributes"}
+                                    onAttributeUpdate={onAttributeUpdate}
+                                    attrValue={data.attr}
+                                    isEditMode={isEditMode}
+                                />
+                            )}
+                            {renderOptions(selected) && (
+                                <AppFieldTypeElements
+                                    header={"Options"}
+                                    onAttributeUpdate={onOptionsUpdate}
+                                    optvalue={data.options}
+                                    isEditMode={isEditMode}
+                                />
+                            )}
                         </AppCard>
                         <AppCard>
                             <Row>
