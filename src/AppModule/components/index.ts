@@ -30,3 +30,4 @@ export * from "./AppFormElementGenerator";
 export * from "./AppTabs";
 export * from "./AppTab";
 export * from "./AppUploader";
+export * from "./AppCropper";

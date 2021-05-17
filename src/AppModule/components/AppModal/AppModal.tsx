@@ -8,7 +8,7 @@ interface AppModalProps {
     handleClose: () => void;
     handleDelete: () => void;
     title?: string;
-    bodyContent: string;
+    bodyContent?: any;
 }
 export const AppModal: FC<AppModalProps> = ({
     show,
