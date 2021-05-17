@@ -3,7 +3,7 @@ import {
     AppGridAction,
     AppGridActionProps,
 } from "../../../AppModule/components";
-import { UserField } from "../../models";
+import { UserFields } from "../../models";
 import { AppCellActionWithRenderParams } from "../../../AppModule/models";
 
 export const appGridFrameworkComponents = {
@@ -11,7 +11,8 @@ export const appGridFrameworkComponents = {
         params: AppCellActionWithRenderParams
     ): ReactElement => {
         const { data, onPressDelete } = params;
-        const { id } = data as UserField;
+
+        const { id } = data as UserFields;
 
         const props: AppGridActionProps = {
             editAction: {

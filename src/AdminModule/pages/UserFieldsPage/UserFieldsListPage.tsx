@@ -10,8 +10,8 @@ import {
 import { Canceler } from "axios";
 import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
-import { UserFieldApi } from "../../apis";
-import { UserField } from "../../models";
+import { UserFieldsApi } from "../../apis";
+import { UserFields } from "../../models";
 import { AppPageHeader } from "../../../AppModule/components";
 import {
     AppGrid,
@@ -20,15 +20,11 @@ import {
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
 import { errorToast, successToast } from "../../../AppModule/utils";
-import { AuthContext } from "../../../SecurityModule/contexts";
-import { AuthState } from "../../../SecurityModule/models";
 
-export const UserFieldListPage: FC<RouteComponentProps> = (): JSX.Element => {
+export const UserFieldsListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
-    const { state } = React.useContext(AuthContext);
-    const { containerId } = state as AuthState;
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -37,12 +33,11 @@ export const UserFieldListPage: FC<RouteComponentProps> = (): JSX.Element => {
                 const { endRow } = request;
                 const pageNo = endRow / appGridConfig.pageSize;
                 api?.hideOverlay();
-                UserFieldApi.find<UserField>(
+                UserFieldsApi.find<UserFields>(
                     pageNo,
                     {
                         order: buildSortParams(request),
                         ...buildFilterParams(request),
-                        "container.id": containerId,
                     },
                     (c) => {
                         cancelTokenSourcesRef.current.push(c);
@@ -68,7 +63,7 @@ export const UserFieldListPage: FC<RouteComponentProps> = (): JSX.Element => {
     }
 
     async function handleDelete(id: number) {
-        UserFieldApi.deleteById(id).then(({ error }) => {
+        UserFieldsApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
