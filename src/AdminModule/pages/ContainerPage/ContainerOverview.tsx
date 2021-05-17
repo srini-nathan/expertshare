@@ -15,14 +15,14 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
             content:
                 " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Est ultrices sapien id  elementum, semper urna a arcu ipsum. Nunc  sollicitudin semper neque adipiscing ornare nec",
             imageUrl:
-                "http://html.srmedia.ch//v2/assets/images/oveview_banner/ov-banner-1.png",
+                "http://html.srmedia.ch/v2/assets/images/oveview_banner/ov-banner-1.png",
         },
         {
             title: "Global Forum 2021",
             content:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Est ultrices sapien id  elementum, semper urna a arcu ipsum. Nunc  sollicitudin semper neque adipiscing ornare nec",
             imageUrl:
-                "http://html.srmedia.ch//v2/assets/images/oveview_banner/ov-banner-1.png",
+                "http://html.srmedia.ch/v2/assets/images/oveview_banner/ov-banner-2.png",
         },
     ];
     async function handleFilter(search: string) {
@@ -41,7 +41,7 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 cancelTokenSources={cancelTokenSourcesRef.current}
                 showToolbar
             />
-            <Row>
+            <Row style={{ margin: "0 auto" }}>
                 <AppContainerComponent
                     containers={initValueForContainer}
                 ></AppContainerComponent>
