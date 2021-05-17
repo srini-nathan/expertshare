@@ -2,11 +2,29 @@ import React, { FC, Fragment, useRef } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Canceler } from "axios";
 import { GridApi } from "ag-grid-community";
+import { Row } from "react-bootstrap";
 import { AppPageHeader } from "../../../AppModule/components";
+import { AppContainerComponent } from "../../components/AppContainerComponent";
 
 export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const appGridApi = useRef<GridApi>();
+    const initValueForContainer = [
+        {
+            title: "Global Forum 2021",
+            content:
+                " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Est ultrices sapien id  elementum, semper urna a arcu ipsum. Nunc  sollicitudin semper neque adipiscing ornare nec",
+            imageUrl:
+                "http://html.srmedia.ch//v2/assets/images/oveview_banner/ov-banner-1.png",
+        },
+        {
+            title: "Global Forum 2021",
+            content:
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Est ultrices sapien id  elementum, semper urna a arcu ipsum. Nunc  sollicitudin semper neque adipiscing ornare nec",
+            imageUrl:
+                "http://html.srmedia.ch//v2/assets/images/oveview_banner/ov-banner-1.png",
+        },
+    ];
     async function handleFilter(search: string) {
         appGridApi.current?.setFilterModel({
             name: {
@@ -23,6 +41,11 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 cancelTokenSources={cancelTokenSourcesRef.current}
                 showToolbar
             />
+            <Row>
+                <AppContainerComponent
+                    containers={initValueForContainer}
+                ></AppContainerComponent>
+            </Row>
         </Fragment>
     );
 };

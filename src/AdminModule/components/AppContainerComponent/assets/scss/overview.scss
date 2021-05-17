@@ -1,0 +1,81 @@
+.container-overview--container {
+    &--item {
+        margin-bottom: 30px;
+        .inner-container {
+            box-shadow: 0 3px 9px var(--secondary-10);
+            &--banner {
+                display: flex;
+                height: 270px;
+                background-repeat: no-repeat;
+                background-size: cover;
+                border-radius: var(--border-radius) var(--border-radius) 0 0;
+                &--button {
+                    margin-top: 8px;
+                    margin-right: auto;
+                    margin-left: 8px;
+                }
+                &--icons {
+                    margin-top: 8px;
+                    margin-right: 8px;
+                    margin-left: auto;
+                    a {
+                        margin-left: 6px;
+                        i {
+                            display: inline-flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: 36px;
+                            height: 36px;
+                            padding-bottom: 2px;
+                            font-size: 17px;
+                            font-weight: 600;
+                            color: var(--btn-secondary-fg-clr);
+                            background-color: var(--btn-secondary-bg-clr);
+                            border: 1px solid var(--btn-secondary-border-clr);
+                            border-radius: var(--border-radius);
+                            box-shadow: 0 3px 9px var(--secondary-10);
+                        }
+                        &.add-favorite {
+                            &.active {
+                                i {
+                                    color: var(--primary);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            &--det {
+                margin-top: -40px;
+                background-color: var(--widget-bg-clr);
+                border-radius: var(--border-radius) var(--border-radius) 0 0;
+                &--title {
+                    h2 {
+                        display: -webkit-box;
+                        height: 60px;
+                        overflow: hidden;
+                        font-size: 20px;
+                        font-weight: 700;
+                        line-height: 28px;
+                        color: var(--secondary);
+                        -webkit-box-orient: vertical;
+                        -webkit-line-clamp: 2;
+                    }
+                }
+                &--desc {
+                    p {
+                        display: -webkit-box;
+                        height: 85px;
+                        overflow: hidden;
+                        font-size: 14px;
+                        font-weight: 400;
+                        line-height: 21px;
+                        color: var(--secondary-70);
+                        -webkit-box-orient: vertical;
+                        -webkit-line-clamp: 4;
+                    }
+                }
+            }
+        }
+    }
+}
