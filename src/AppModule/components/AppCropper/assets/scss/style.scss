@@ -3,7 +3,7 @@
 
 .cropper-modal-dialog {
     .modal-dialog {
-        max-width: 700px;
+        max-width: 850px;
         .modal-header {
             background: none;
             padding-bottom: 0;
@@ -22,5 +22,35 @@
 
     .text-reset {
         padding-left: 1em;
+    }
+
+    .text-cancel {
+        padding-left: 1em;
+    }
+
+    .input-range {
+        height: 0;
+        width: 125px;
+    }
+    .input-range__label {
+        display: none;
+    }
+
+    .input-range__slider {
+        background: #7ebde9;
+        border: 1px solid #7ebde9;
+    }
+
+    .input-range__track--active {
+        background: #7ebde9;
+    }
+
+    .btn-minus {
+        margin-right: 1em;
+        margin-left: 2em;
+    }
+
+    .btn-plus {
+        margin-left: 1em;
     }
 }

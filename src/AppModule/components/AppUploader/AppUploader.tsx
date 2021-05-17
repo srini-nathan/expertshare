@@ -23,10 +23,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
     const [showCropModal, setShowCropModal] = useState<boolean>(false);
     const [cropUrl, setCropUrl] = useState<string>("");
 
-    const [imageToUpload, setImageToUpload] = useState<string>();
-
-    // eslint-disable-next-line no-console
-    console.log(imageToUpload);
+    const [, setImageToUpload] = useState<string>(); // Output image for uploading on server
 
     const {
         getRootProps,
@@ -124,6 +121,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
                     <AppCropper
                         show={showCropModal}
                         image={files}
+                        initialAspectRatio={16 / 9}
                         handleClose={() => {
                             setShowCropModal(false);
                             setCropUrl(files[0].preview);
