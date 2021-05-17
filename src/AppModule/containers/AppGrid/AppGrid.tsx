@@ -107,21 +107,23 @@ export const AppGrid: FC<AppGridProps> = ({
                             gridApi?.paginationGoToPage(pageNumber - 1);
                         }}
                     />
-                    <div className="pagination-container">
-                        <AppFormDropdown
-                            id={"pageSize"}
-                            defaultValue={defaultPageSize()}
-                            options={pageSizeOptions()}
-                            menuPlacement={"top"}
-                            onChange={(selectedValue) => {
-                                const {
-                                    value,
-                                } = selectedValue as AppGridPageSizeOption;
-                                gridApi?.paginationSetPageSize(value);
-                                setPageSize(value);
-                            }}
-                        />
-                    </div>
+                    {totalItems > 0 ? (
+                        <div className="pagination-container">
+                            <AppFormDropdown
+                                id={"pageSize"}
+                                defaultValue={defaultPageSize()}
+                                options={pageSizeOptions()}
+                                menuPlacement={"top"}
+                                onChange={(selectedValue) => {
+                                    const {
+                                        value,
+                                    } = selectedValue as AppGridPageSizeOption;
+                                    gridApi?.paginationSetPageSize(value);
+                                    setPageSize(value);
+                                }}
+                            />
+                        </div>
+                    ) : null}
                 </div>
             </div>
         </React.Fragment>

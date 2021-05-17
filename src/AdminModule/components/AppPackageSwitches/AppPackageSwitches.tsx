@@ -29,7 +29,7 @@ export const AppPackageSwitches: FC<AppPackageSwitchesProps> = ({
         <Fragment>
             {packages.map(({ packageKey, id: packId }) => {
                 const name = packageKey.replace(".", "_");
-                const resourceUrl = PackageApi.toResourceUrl(packId);
+                const resourceUrl = PackageApi.toResourceUrl(packId as number);
                 return (
                     <AppFormSwitch
                         key={name}

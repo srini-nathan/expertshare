@@ -4,17 +4,17 @@
 .button-group {
 
     &-buttons {
+        flex-wrap: nowrap !important;
         border: 1px solid var(--input-border-clr);
         border-radius: var(--border-radius);
-        flex-wrap: nowrap !important;
     }
 
     .btn-group {
-        background-color: var(--input-bg-color);
-        color: var(--input-fg-color);
-        box-shadow: 0 3px 9px var(--secondary-10);
-        border-radius: var(--border-radius);
         height: 36px;
+        color: var(--input-fg-color);
+        box-shadow: 0 3px 9px var(--box-shadow-box-clr);
+        background-color: var(--input-bg-color);
+        border-radius: var(--border-radius);
     }
 
     .form-check {
@@ -34,13 +34,14 @@
             }
         }
 
-        width: 100%;
-        text-align: center;
-        background-color: var(--input-bg-color);
         display: flex;
         align-items: center;
         justify-content: center;
+
+        width: 100%;
         padding: 0;
+        text-align: center;
+        background-color: var(--input-bg-color);
 
         input {
             display: none;
@@ -52,12 +53,12 @@
         }
 
         label {
+            top: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             width: 100%;
             height: 36px;
-            top: 6px;
             padding: 0 30px;
             font-size: 14px;
             font-weight: 400;

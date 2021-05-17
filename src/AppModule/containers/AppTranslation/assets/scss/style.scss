@@ -1,0 +1,222 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "./../../../../assets/scss/variables";
+
+.translation-super-admin--container {
+    &--inner {
+        .group-col {
+            &--header {
+                display: flex;
+
+                &--offset {
+                    display: inline-block;
+                    width: 70px;
+                }
+
+                &--value {
+                    &--item {
+                        label {
+                            font-size: 12px;
+                            font-weight: 400;
+                            color: var(--secondary-70);
+                        }
+                    }
+                }
+            }
+
+            &--item {
+                margin-bottom: 10px;
+
+                &--container {
+                    padding: 10px 0 8px 10px;
+                    background-color: var(--secondary-10);
+                    border-right: 1px solid var(--secondary-20);
+                    border-radius: var(--border-radius) 0 0 var(--border-radius);
+
+                    .header {
+                        margin-bottom: 10px;
+
+                        &--delete,
+                        &--add {
+                            .btn {
+                                width: 36px;
+                                height: 36px;
+                                padding: 13px !important;
+                                font-size: 17px;
+                                font-weight: 600;
+                            }
+                        }
+
+                        &--name {
+                            input {
+                                padding-left: 10px;
+                            }
+                        }
+                    }
+
+                    .content {
+                        &--item {
+                            padding: 10px 5px 10px 10px;
+                            margin-bottom: 4px;
+                            background-color: var(--widget-bg-clr);
+                            border-radius: var(--border-radius) 0 0 var(--border-radius);
+
+                            &--delete {
+                                margin-right: 5px;
+
+                                .btn {
+                                    width: 36px;
+                                    height: 36px;
+                                    padding: 13px !important;
+                                    font-size: 17px;
+                                    font-weight: 600;
+                                    box-shadow: 0 3px 9px var(--secondary-20);
+                                }
+                            }
+
+                            &--value {
+                                &--key {
+                                    display: flex;
+                                    align-items: center;
+
+                                    textarea {
+                                        padding: 7px;
+                                        font-weight: 400;
+                                        resize: none;
+                                    }
+                                }
+
+                                &--name {
+                                    display: flex;
+                                    align-items: center;
+
+                                    textarea {
+                                        padding: 8px 8px 8px 30px;
+                                    }
+
+                                    i {
+                                        position: absolute;
+                                        top: 7px;
+                                        left: 15px;
+                                        color: var(--input-fg-clr);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .value-col {
+            overflow: auto;
+            cursor: pointer;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            &--inner {
+                width: fit-content;
+
+                &--header {
+                    padding-left: 10px;
+
+                    &--item {
+                        width: 262px;
+
+                        @include media("tsa-1") {
+                            width: 210px;
+                        }
+
+                        label {
+                            font-size: 12px;
+                            font-weight: 400;
+                            color: var(--secondary-70);
+                            text-transform: capitalize;
+                        }
+                    }
+                }
+
+                &--value {
+                    padding: 10px 10px 8px 0;
+                    margin-bottom: 10px;
+                    background-color: var(--secondary-10);
+                    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+
+                    .header {
+                        height: 36px;
+                        margin-bottom: 10px;
+                        text-transform: uppercase;
+                    }
+
+                    .content {
+                        &--item {
+                            padding: 10px 5px 10px 10px;
+                            margin-bottom: 4px;
+                            background-color: var(--widget-bg-clr);
+                            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+
+                            &--key {
+                                position: relative;
+                                display: flex;
+                                align-items: center;
+                                width: 262px;
+                                padding-right: 10px;
+
+                                @include media("tsa-1") {
+                                    width: 210px;
+                                }
+
+                                textarea {
+                                    padding: 8px 8px 8px 30px;
+                                    font-weight: 400;
+                                }
+
+                                i {
+                                    position: absolute;
+                                    top: 6px;
+                                    left: 8px;
+                                    width: 18px;
+                                    height: 18px;
+                                    border-radius: 50%;
+
+                                    &.en {
+                                        background-image: url(../images/en_flag.png);
+                                        background-repeat: no-repeat;
+                                        background-size: contain;
+                                    }
+
+                                    &.fr {
+                                        background-image: url(../images/fr_flag.png);
+                                        background-repeat: no-repeat;
+                                        background-size: contain;
+                                    }
+
+                                    &.de {
+                                        background-image: url(../images/germany.png);
+                                        background-repeat: no-repeat;
+                                        background-size: contain;
+                                    }
+
+                                    &.it {
+                                        background-image: url(../images/italian.jpg);
+                                        background-repeat: no-repeat;
+                                        background-size: contain;
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        textarea {
+            height: 68px !important;
+            min-height: 68px !important;
+            font-weight: 500;
+            resize: none;
+        }
+    }
+}

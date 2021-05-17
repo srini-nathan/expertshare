@@ -16,8 +16,9 @@ import {
     AppYoutubeFrame,
     AppVimeoFrame,
     AppFormRadioSwitch,
+    AppFormRichTextArea,
 } from "../../components";
-import { SimpleObject } from "../../../AdminModule/models";
+import { SimpleObject } from "../../models";
 
 const options = [
     { id: "1", value: "chocolate", label: "Chocolate" },
@@ -73,47 +74,43 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
             </Row>
             <hr className="col-12" />
             <Row>
-                <Col>
-                    <AppFormInputPassword
-                        id="password"
-                        required
-                        md="4"
-                        sm="4"
-                        lg="4"
-                        xl="4"
-                        name="password"
-                        label="Password"
-                        placeholder="Input password"
-                        description="hello this is description"
-                        maxCount={150}
-                        errorMessage="This field is required"
-                        isValid={true}
-                        control={control}
-                    />
-                </Col>
+                <AppFormInputPassword
+                    id="password"
+                    required
+                    md="4"
+                    sm="4"
+                    lg="4"
+                    xl="4"
+                    name="password"
+                    label="Password"
+                    placeholder="Input password"
+                    description="hello this is description"
+                    maxCount={150}
+                    errorMessage="This field is required"
+                    isValid={true}
+                    control={control}
+                />
             </Row>
             <hr className="col-12" />
             <Row>
-                <Col>
-                    <AppFormTextArea
-                        id="textarea"
-                        required
-                        md="4"
-                        sm="4"
-                        lg="4"
-                        xl="4"
-                        name="textarea"
-                        label="Text Area"
-                        value="hello"
-                        placeholder="hello"
-                        description="hello this is description"
-                        maxCount={150}
-                        rows={5}
-                        errorMessage="This field is required"
-                        isInvalid={true}
-                        control={control}
-                    />
-                </Col>
+                <AppFormTextArea
+                    id="textarea"
+                    required
+                    md="4"
+                    sm="4"
+                    lg="4"
+                    xl="4"
+                    name="textarea"
+                    label="Text Area"
+                    defaultValue="hello"
+                    placeholder="hello"
+                    description="hello this is description"
+                    maxCount={150}
+                    rows={5}
+                    errorMessage="This field is required"
+                    isInvalid={true}
+                    control={control}
+                />
             </Row>
             <hr className="col-12" />
             <Row>
@@ -128,19 +125,17 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
             </Row>
             <hr className="col-12" />
             <Row>
-                <Col>
-                    <AppFormRadioSwitch
-                        required={true}
-                        sm="6"
-                        name="radio_switch"
-                        label="Success Calculated By"
-                        options={options}
-                        description="hello this is descriprion"
-                        errorMessage="This field is required"
-                        defaultValue="chocolate"
-                        control={control}
-                    />
-                </Col>
+                <AppFormRadioSwitch
+                    required={true}
+                    sm="6"
+                    name="radio_switch"
+                    label="Success Calculated By"
+                    options={options}
+                    description="hello this is descriprion"
+                    errorMessage="This field is required"
+                    defaultValue="chocolate"
+                    control={control}
+                />
             </Row>
             <hr className="col-12" />
             <Row>
@@ -175,13 +170,11 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
             </Row>
             <hr className="col-12" />
             <Row>
-                <Col>
-                    <AppKnovioPlayer
-                        linkUrl="https://view.knowledgevision.com/presentation/e31fff7a14ee4a9aa82dca008384c32a"
-                        height={390}
-                        width={640}
-                    />
-                </Col>
+                <AppKnovioPlayer
+                    linkUrl="https://view.knowledgevision.com/presentation/e31fff7a14ee4a9aa82dca008384c32a"
+                    height={390}
+                    width={640}
+                />
             </Row>
             <hr className="col-12" />
             <Row>
@@ -214,6 +207,26 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                         width="640"
                     />
                 </Col>
+            </Row>
+            <hr className="col-12" />
+            <Row>
+                <AppFormRichTextArea
+                    id="richtext"
+                    required
+                    md="12"
+                    sm="12"
+                    lg="12"
+                    xl="12"
+                    name="richtext"
+                    label="Rich Text Area"
+                    defaultValue="hello"
+                    placeholder="Rich Text Area"
+                    description="hello this is description"
+                    maxCount={150}
+                    withCounter={true}
+                    errorMessage="This field is required"
+                    control={control}
+                />
             </Row>
         </Fragment>
     );

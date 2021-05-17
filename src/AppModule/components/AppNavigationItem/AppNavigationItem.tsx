@@ -25,7 +25,7 @@ export const AppNavigationItem: FC<AppNavigationItemProps> = ({
                         }`}
                     >
                         <Link to={path} className="nav-link">
-                            <div className="nav-icon ml-lg-2">
+                            <div className="nav-icon">
                                 <IconWrapper {...icon} />
                             </div>
                             <span>{label}</span>

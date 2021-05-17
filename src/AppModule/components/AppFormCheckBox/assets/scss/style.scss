@@ -7,9 +7,9 @@
     &.flex-sm-row {
         height: 61px;
         padding: 14px;
-        background-color: #fff;
+        background-color: var(--light-clr);
         border-radius: 5px;
-        box-shadow: 0 3px 9px var(--secondary-10);
+        box-shadow: 0 3px 9px var(--box-shadow-box-clr);
 
         .normal-label {
             font-size: 14px;
@@ -51,7 +51,7 @@
         height: 36px;
         cursor: pointer;
         border-radius: 5px;
-        transition: all 0.2s;
+        transition: all .2s;
     }
 
     [type="checkbox"]+label::before {
@@ -62,7 +62,7 @@
         height: 30px;
         content: "";
         border-radius: 4px;
-        transition: all 0.2s;
+        transition: all .2s;
         appearance: none;
     }
 

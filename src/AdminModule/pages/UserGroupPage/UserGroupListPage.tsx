@@ -20,7 +20,7 @@ import {
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
 import { errorToast, successToast } from "../../../AppModule/utils";
-import { AuthContext } from "../../../SecurityModule/context/AuthContext";
+import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models/context/AuthState";
 
 export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
@@ -68,7 +68,7 @@ export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
     }
 
     async function handleDelete(id: number) {
-        UserGroupApi.delete(id).then(({ error }) => {
+        UserGroupApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
@@ -94,9 +94,8 @@ export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Fragment>
             <AppPageHeader
-                title={"User Group"}
+                title={"User Groups"}
                 showToolbar
-                createLabel={"Create User Group"}
                 createLink={"user-groups/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}

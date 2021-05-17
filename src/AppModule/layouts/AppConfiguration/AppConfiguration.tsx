@@ -3,9 +3,9 @@ import { Helmet } from "react-helmet";
 import { Container } from "../../../AdminModule/models";
 import { ContainerApi } from "../../../AdminModule/apis";
 import { errorToast } from "../../utils";
-import { AuthContext } from "../../../SecurityModule/context/AuthContext";
-import { AppContext } from "../../Contexts/AppContext";
-import { ContainerTypes } from "../../Contexts/Types";
+import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
+import { AppContext } from "../../contexts/AppContext";
+import { ContainerTypes } from "../../contexts/types";
 import { AuthState } from "../../../SecurityModule/models";
 
 export const AppConfiguration: FC = ({ children }) => {
@@ -22,7 +22,7 @@ export const AppConfiguration: FC = ({ children }) => {
             dispatch({
                 type: ContainerTypes.LOADING,
             });
-            ContainerApi.getById<Container>(containerId).then(
+            ContainerApi.findById<Container>(containerId).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);

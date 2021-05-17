@@ -9,7 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { AppButton } from "../../../AppModule/components/AppButton";
 import { AppAuthHeader, AppAuthFooter } from "../../components";
 import "./assets/scss/styles.scss";
-import { AppFormInput } from "../../../AppModule/components/AppFormInput";
+import { AppFormInputPassword } from "../../../AppModule/components";
 import { validation, errorToast } from "../../../AppModule/utils";
 import { AuthApi } from "../../apis";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
@@ -85,7 +85,7 @@ export const ResetPasswordPage: FC<RouteComponentProps> = ({
                     <AppAuthHeader
                         title="Resset Password"
                         errorMessage={errorMessage}
-                        desctiption="Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
+                        description="Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
             velit mollit. Exercitation veniam consequat sunt nostrud amet."
                     />
                     <div className="active-account-box">
@@ -93,11 +93,10 @@ export const ResetPasswordPage: FC<RouteComponentProps> = ({
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Form.Group>
                                     <Form.Row>
-                                        <AppFormInput
+                                        <AppFormInputPassword
                                             md={12}
                                             lg={12}
                                             xl={12}
-                                            type={"password"}
                                             name={"password"}
                                             label={""}
                                             required={true}
@@ -113,11 +112,10 @@ export const ResetPasswordPage: FC<RouteComponentProps> = ({
                                         />
                                     </Form.Row>
                                     <Form.Row>
-                                        <AppFormInput
+                                        <AppFormInputPassword
                                             md={12}
                                             lg={12}
                                             xl={12}
-                                            type={"password"}
                                             name={"confirmPassword"}
                                             label={""}
                                             required={true}

@@ -13,9 +13,13 @@ import {
     AppFormElementGenerator,
     AppFormActions,
 } from "../../../AppModule/components";
-import { AppContext } from "../../../AppModule/Contexts/AppContext";
+import { AppContext } from "../../../AppModule/contexts/AppContext";
 import { ContainerApi } from "../../apis";
-import { successToast } from "../../../AppModule/utils";
+import { successToast, errorToast } from "../../../AppModule/utils";
+import { AuthContext } from "../../../SecurityModule/contexts";
+import { AuthState } from "../../../SecurityModule/models";
+import { ContainerTypes } from "../../../AppModule/contexts";
+import { Container } from "../../models";
 
 const parseData = (data: any) => {
     const items: any = [];
@@ -36,13 +40,6 @@ const parseData = (data: any) => {
 };
 const validationSchema = Yup.object().shape({});
 
-class ContainerEntity {
-    configuration?: ContainerFormType;
-
-    constructor() {
-        this.configuration = {};
-    }
-}
 interface ContainerRequestData {
     configuration?: ContainerFormType;
 }
@@ -54,9 +51,10 @@ interface ContainerFormType {
 export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
-    // @TODO: instead of use from context use API to fetch data
-    const { state } = React.useContext(AppContext);
-    const { isLoading, ContainerState } = state;
+    const { state, dispatch } = React.useContext(AppContext);
+    const Auth = React.useContext(AuthContext);
+    const { containerId } = Auth.state as AuthState;
+    const { isLoading } = state;
     const [configuration, setConfiguration] = React.useState<any>();
     const [containerConfiguration, setContainerConfiguration] = React.useState<
         string[]
@@ -74,20 +72,55 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
         return { configuration: data };
     };
     const onSubmit = async (formData: ContainerFormType) => {
-        await ContainerApi.update<ContainerEntity, ContainerRequestData>(
-            ContainerState.id,
+        let container = 0;
+        if (containerId) container = containerId;
+        dispatch({
+            type: ContainerTypes.LOADING,
+        });
+        await ContainerApi.update<Container, ContainerRequestData>(
+            container,
             buildContainer(formData)
-        );
-        await successToast("Configuration updated successfully ");
+        ).then(({ response, isNotFound, errorMessage }) => {
+            if (errorMessage) {
+                errorToast(errorMessage);
+            } else if (isNotFound) {
+                errorToast("Container not exist");
+            } else if (response !== null) {
+                setContainerConfiguration(response.configuration);
+                setConfiguration(parseData(response.configurationTypes));
+                dispatch({
+                    type: ContainerTypes.SUCCESS,
+                    payload: response,
+                });
+                successToast("Configuration updated successfully");
+            }
+        });
     };
-    // @TODO: Add different Api to get types
     useEffect(() => {
-        if (!isLoading && ContainerState) {
-            setContainerConfiguration(ContainerState.configuration);
-            setConfiguration(parseData(ContainerState.configurationTypes));
+        if (containerId) {
+            dispatch({
+                type: ContainerTypes.LOADING,
+            });
+            ContainerApi.findById<Container>(containerId).then(
+                ({ response, isNotFound, errorMessage }) => {
+                    if (errorMessage) {
+                        errorToast(errorMessage);
+                    } else if (isNotFound) {
+                        errorToast("Container not exist");
+                    } else if (response !== null) {
+                        setContainerConfiguration(response.configuration);
+                        setConfiguration(
+                            parseData(response.configurationTypes)
+                        );
+                        dispatch({
+                            type: ContainerTypes.SUCCESS,
+                            payload: response,
+                        });
+                    }
+                }
+            );
         }
-    }, [ContainerState]);
-
+    }, [containerId]);
     const renderTabs = () => {
         if (configuration?.length > 0 && activeTab === "")
             setActiveTab(`${configuration[0].title}_key`);

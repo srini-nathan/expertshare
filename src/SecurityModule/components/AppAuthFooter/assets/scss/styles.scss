@@ -31,8 +31,6 @@
         font-size: 14px;
         font-weight: 300;
         color: var(--sub-text-fg-clr);
-
-        label {}
     }
 
     &--logo {
@@ -45,8 +43,7 @@
             width: 127px;
             height: 29px;
             margin: auto;
-            background-image: url(../images/main_logo.png);
-            background-repeat: no-repeat;
+            background: url("../images/main_logo.png") no-repeat;
             background-size: cover;
         }
     }

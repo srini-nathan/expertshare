@@ -21,7 +21,7 @@ import {
 import { appGridConfig } from "../../../AppModule/config";
 import { errorToast, successToast } from "../../../AppModule/utils";
 import "./assets/scss/list.scss";
-import { AuthContext } from "../../../SecurityModule/context/AuthContext";
+import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models/context/AuthState";
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
@@ -69,7 +69,7 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     }
 
     async function handleDelete(id: number) {
-        LanguageApi.delete(id).then(({ error }) => {
+        LanguageApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
@@ -95,8 +95,7 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Fragment>
             <AppPageHeader
-                title={"Language"}
-                createLabel={"Create Language"}
+                title={"Languages"}
                 createLink={"/admin/languages/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}

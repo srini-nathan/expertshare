@@ -65,7 +65,7 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     }
 
     async function handleDelete(id: number) {
-        ClientApi.delete(id).then(({ error }) => {
+        ClientApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
@@ -92,7 +92,6 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
         <Fragment>
             <AppPageHeader
                 title={"Clients"}
-                createLabel={"Create Client"}
                 createLink={"/admin/clients/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}

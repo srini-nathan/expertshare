@@ -3,13 +3,21 @@
 .form-group {
     .show-password {
         position: absolute;
-        top: 31px;
-        right: 30px;
+        top: 0;
+        right: 10px;
+        display: flex;
+        width: 36px;
+        height: 36px;
         color: var(--input-fg-clr);
-        opacity: .6;
+        cursor: pointer;
+
+        svg {
+            margin: auto;
+            color: var(--input-fg-clr);
+        }
     }
 
     .show-password.invalid {
-        right: 55px;
+        right: 30px;
     }
 }

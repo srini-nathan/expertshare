@@ -1,4 +1,4 @@
-import { AxiosError, AxiosRequestConfig, AxiosResponse, Canceler } from "axios";
+import { AxiosError, AxiosRequestConfig, Canceler } from "axios";
 import { API } from "./API";
 import { ACCEPTABLE_RESPONSE } from "../config/app-env";
 import {
@@ -13,91 +13,27 @@ import {
     onFindAllResponseHydra,
     onFindAllResponseJson,
     onUpdateRequestHydra,
+    onAddEditErrorResponseHydra,
+    onAddEditErrorResponseJson,
 } from "./transformer";
-import { onAddEditErrorResponseHydra } from "./transformer/on-add-edit-error-response-hydra";
-import { onAddEditErrorResponseJson } from "./transformer/on-add-edit-error-response-json";
+import { route } from "../../config";
 
 export abstract class EntityAPI extends API {
     protected static acceptHydra = AcceptableResponse.isHydra(
         ACCEPTABLE_RESPONSE
     );
 
-    protected static PATH = "/";
+    protected static GET_COLLECTION = "/";
 
-    /**
-     * @deprecated
-     */
-    public static async findById<R>(id: number): Promise<R> {
-        const res: AxiosResponse<R> = await this.makeGet<R>(
-            `${this.PATH}/${id}`
-        );
-        return res.data;
-    }
+    protected static POST_COLLECTION = "/";
 
-    public static async getById<R>(
-        id: number
-    ): Promise<FinalResponse<R | null>> {
-        return this.makeGet<R>(`${this.PATH}/${id}`)
-            .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
-            .catch((error) => this.handleServerError(error))
-            .catch((error) => {
-                const { response } = error as AxiosError;
-                if (response) {
-                    const { status } = response;
-                    if (status === 404) {
-                        return Promise.resolve(
-                            new FinalResponse(
-                                null,
-                                new EntityNotFoundErrorResponse()
-                            )
-                        );
-                    }
-                }
-                return Promise.reject(error);
-            })
-            .catch((error) => this.handleUnknownError(error));
-    }
+    protected static GET_ITEM = "/";
 
-    /**
-     * @deprecated
-     */
-    public static async findAll<R>(
-        page = 1,
-        extraParams = {}
-    ): Promise<ListResponse<R>> {
-        let config: AxiosRequestConfig;
+    protected static PUT_ITEM = "/";
 
-        if (AcceptableResponse.isHydra(ACCEPTABLE_RESPONSE)) {
-            config = {
-                transformResponse: [(data) => onFindAllResponseHydra<R>(data)],
-            };
-        } else {
-            config = {
-                transformResponse: [(data) => onFindAllResponseJson<R>(data)],
-            };
-        }
+    protected static PATCH_ITEM = "/";
 
-        const res: AxiosResponse<ListResponse<R>> = await this.makeGet<
-            ListResponse<R>
-        >(
-            this.PATH,
-            {
-                ...extraParams,
-                page,
-            },
-            config
-        );
-        return res.data;
-    }
-
-    public static async response<E>(
-        data: any
-    ): Promise<FinalResponse<ListResponse<E> | null>> {
-        const list = this.acceptHydra
-            ? onFindAllResponseHydra<E>(data)
-            : onFindAllResponseJson<E>(data);
-        return Promise.resolve(new FinalResponse<ListResponse<E>>(list));
-    }
+    protected static DELETE_ITEM = "/";
 
     public static async find<E>(
         page = 1,
@@ -111,7 +47,7 @@ export abstract class EntityAPI extends API {
         }
 
         return this.makeGet<E>(
-            this.PATH,
+            this.GET_COLLECTION,
             {
                 ...extraParams,
                 page,
@@ -134,8 +70,33 @@ export abstract class EntityAPI extends API {
             });
     }
 
-    public static async delete(id: number): Promise<FinalResponse<null>> {
-        return this.makeDelete(`${this.PATH}/${id}`)
+    public static async findById<R>(
+        id: number
+    ): Promise<FinalResponse<R | null>> {
+        const path = route(this.GET_ITEM, { id });
+        return this.makeGet<R>(path)
+            .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
+            .catch((error) => this.handleServerError(error))
+            .catch((error) => {
+                const { response } = error as AxiosError;
+                if (response) {
+                    const { status } = response;
+                    if (status === 404) {
+                        return Promise.resolve(
+                            new FinalResponse(
+                                null,
+                                new EntityNotFoundErrorResponse()
+                            )
+                        );
+                    }
+                }
+                return Promise.reject(error);
+            })
+            .catch((error) => this.handleUnknownError(error));
+    }
+
+    public static async deleteById(id: number): Promise<FinalResponse<null>> {
+        return this.makeDelete(route(this.DELETE_ITEM, { id }))
             .then(() => Promise.resolve(new FinalResponse(null)))
             .catch((error: AxiosError | ServerError) => {
                 const { message } = error;
@@ -163,7 +124,7 @@ export abstract class EntityAPI extends API {
     public static async create<R, P>(
         entity: P
     ): Promise<FinalResponse<R | null>> {
-        return this.makePost<R, P>(this.PATH, entity)
+        return this.makePost<R, P>(this.POST_COLLECTION, entity)
             .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
             .catch((error: AxiosError | ServerError) =>
                 this.handleErrorDuringCreatingOrUpdating(error)
@@ -177,7 +138,7 @@ export abstract class EntityAPI extends API {
         const config: AxiosRequestConfig = this.getPatchRequestConfig<P>();
 
         return this.makePatch<R, P>(
-            `${this.PATH}/${id}`,
+            route(this.PATCH_ITEM, { id }),
             JSON.stringify(entity),
             {},
             config
@@ -202,7 +163,7 @@ export abstract class EntityAPI extends API {
         id: number,
         entity: P
     ): Promise<FinalResponse<R | null>> {
-        return this.makePut<R, P>(`${this.PATH}/${id}`, entity)
+        return this.makePut<R, P>(route(this.PUT_ITEM, { id }), entity)
             .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
             .catch((error: AxiosError | ServerError) =>
                 this.handleErrorDuringCreatingOrUpdating(error)
@@ -271,6 +232,6 @@ export abstract class EntityAPI extends API {
     }
 
     public static toResourceUrl(id: number): string {
-        return `${this.PATH}/${id}`;
+        return route(this.GET_ITEM, { id });
     }
 }

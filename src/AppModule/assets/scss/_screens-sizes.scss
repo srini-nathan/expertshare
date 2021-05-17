@@ -1,17 +1,18 @@
 $site-content-width: 1024px;
 
-$media-queries: ("mobile" : "only screen and (max-width: 767px)",
+$media-queries: (
+    "mobile": "only screen and (max-width: 767px)",
     "not-mobile" : "(min-width: 767px)",
-    "tablet" : "only screen and (min-width: 668px) and (max-width: $site-content-width)",
-    "md" : "only screen and (max-width: 900px)",
-    "desktop" : "only screen and (min-width: ($site-content-width + 1))",
-    "lg" : "only screen and (max-width: 1370px)",
-    "xl" : "only screen and (max-width: 1550px)",
-    "xll" : "only screen and (max-width: 1980px)",
-    "retina2" : "only screen and (-webkit-min-device-pixel-ratio: 2) and (min-resolution: 192dpi)",
-    "retina3" : "only screen and (-webkit-min-device-pixel-ratio: 3) and (min-resolution: 288dpi)",
-    "landscape" : "screen and (orientation:landscape) ",
-    "portrait" : "screen and (orientation:portrait) ",
+    "tablet": "only screen and (min-width: 668px) and (max-width: $site-content-width)",
+    "md": "only screen and (max-width: 900px)",
+    "desktop": "only screen and (min-width: ($site-content-width + 1))",
+    "lg": "only screen and (max-width: 1370px)",
+    "xl": "only screen and (max-width: 1550px)",
+    "xll": "only screen and (max-width: 1980px)",
+    "retina2": "only screen and (-webkit-min-device-pixel-ratio: 2) and (min-resolution: 192dpi)",
+    "retina3": "only screen and (-webkit-min-device-pixel-ratio: 3) and (min-resolution: 288dpi)",
+    "landscape": "screen and (orientation:landscape) ",
+    "portrait": "screen and (orientation:portrait) ",
     "laptop-laptopl": "(max-width: 1460px) and (min-width: 992px)",
     "container-b-l": "only screen and (max-width: 992px)",
     "container-b-lw": "(max-width: 1142px) and (min-width: 992px)",
@@ -20,42 +21,45 @@ $media-queries: ("mobile" : "only screen and (max-width: 767px)",
     "lgv2": "only screen and (max-width: 1200px)",
     "fabuplap": "(max-width: 1640px) and (min-width: 1200px)",
     "fabuplap2": "(max-width: 1370px) and (min-width: 1200px)",
-    "tabtomob" : "(max-width: 1100px) and (min-width: 576px)",
-    "mobtosmall" : "only screen and (max-width: 576px)",
-    "mobtoinf" : "only screen and (min-width: 575px)",
-    "lapto4k" : "only screen and (min-width: 1550px)",
-    "tabtolap2" : "(max-width: 1220px) and (min-width: 769px)",
-    "smallmob" : "only screen and (max-width: 460px)",
-    "smallmob2" : "only screen and (max-width: 374px)",
+    "tabtomob": "(max-width: 1100px) and (min-width: 576px)",
+    "mobtosmall": "only screen and (max-width: 576px)",
+    "mobtoinf": "only screen and (min-width: 575px)",
+    "lapto4k": "only screen and (min-width: 1550px)",
+    "tabtolap2": "(max-width: 1220px) and (min-width: 769px)",
+    "smallmob": "only screen and (max-width: 460px)",
+    "smallmob2": "only screen and (max-width: 374px)",
     //custom for spec code
-    "csc-1" : "(min-width: 1200px) and (max-width: 1212px)",
-    "csc-2" : "(min-width: 1200px) and (max-width: 1350px)",
-    "csc-3" : "(min-width: 768px) and (max-width: 1450px)",
-    "csc-4" : "(min-width: 767px) and (max-width: 1212px)",
+    "csc-1": "(min-width: 1200px) and (max-width: 1212px)",
+    "csc-2": "(min-width: 1200px) and (max-width: 1350px)",
+    "csc-3": "(min-width: 768px) and (max-width: 1450px)",
+    "csc-4": "(min-width: 767px) and (max-width: 1212px)",
     "csc-5": "only screen and (max-width: 590px)",
-
     //custom for left and right container
-    "lr-0" : "only screen and (min-width: 767px) and (max-width: 767.9px)",
-    "lr-1" : "only screen and (min-width: 768px) and (max-width: 992px)",
-    "lr-2" : "only screen and (min-width: 993px) and (max-width: 1200px)",
-    "lr-3" : "only screen and (min-width: 1201px) and (max-width: 1371px)",
-    "lr-4" : "only screen and (min-width: 1371px) and (max-width: 1980px)",
-    "lr-5" : "only screen and (min-width: 1981px) and (max-width: 2200px)",
-    "lr-6" : "only screen and (min-width: 2201px) and (max-width: 2800px)",
-    "lr-7" : "only screen and (min-width: 2801px)",
+    "lr-0": "only screen and (min-width: 767px) and (max-width: 767.9px)",
+    "lr-1": "only screen and (min-width: 768px) and (max-width: 992px)",
+    "lr-2": "only screen and (min-width: 993px) and (max-width: 1200px)",
+    "lr-3": "only screen and (min-width: 1201px) and (max-width: 1371px)",
+    "lr-4": "only screen and (min-width: 1371px) and (max-width: 1980px)",
+    "lr-5": "only screen and (min-width: 1981px) and (max-width: 2200px)",
+    "lr-6": "only screen and (min-width: 2201px) and (max-width: 2800px)",
+    "lr-7": "only screen and (min-width: 2801px)",
+    //custom for left and right container
+    "mb-1": "only screen and (max-width: 1100px)",
+    //custom for attendees grid 
+    "ag-1": "only screen and (min-width: 767px) and (max-width: 997px)",
+    "ag-2": "only screen and (min-width: 998px) and (max-width: 1383px)",
+    "ag-3": "only screen and (min-width: 1384px) and (max-width: 1824px)",
+    //custom for translation super admin
+    "tsa-1": "only screen and (max-width: 1200px)",
 );
 
 @mixin media($breakpoints) {
     $conditions: ();
-
     @each $breakpoint in $breakpoints {
-        $conditions: append($conditions,
-            #{map-get($media-queries, $breakpoint)},
-            comma);
+        $conditions: append($conditions, #{map-get($media-queries, $breakpoint)}, comma);
     }
 
     @media #{$conditions} {
         @content;
     }
-
 }

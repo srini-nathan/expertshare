@@ -14,9 +14,9 @@ export interface AppLoaderProps {
 }
 
 export const AppLoader: FC<AppLoaderProps> = ({
-    containerClassName,
+    containerClassName = "",
     containerStyle,
-    spinnerClassName,
+    spinnerClassName = "",
     spinnerContainerStyle,
     spinnerAnimation = "border",
     spinnerVariant = "primary",

@@ -108,7 +108,7 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
     };
     useEffect(() => {
         if (isEditMode) {
-            UserFieldsApi.getById<UserFieldsEntity>(id).then(
+            UserFieldsApi.findById<UserFieldsEntity>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);
@@ -150,14 +150,13 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                                         sm={12}
                                         xl={12}
                                         required={true}
-                                        withCounter={false}
                                         {...validation(
                                             "name",
                                             formState,
                                             isEditMode
                                         )}
                                         errorMessage={errors.name?.message}
-                                        value={data.name}
+                                        defaultValue={data.name}
                                         control={control}
                                     />
                                     <AppFormInput
@@ -168,14 +167,13 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                                         sm={12}
                                         xl={12}
                                         required={true}
-                                        withCounter={false}
                                         {...validation(
                                             "fieldKey",
                                             formState,
                                             isEditMode
                                         )}
                                         errorMessage={errors.fieldKey?.message}
-                                        value={data.fieldKey}
+                                        defaultValue={data.fieldKey}
                                         control={control}
                                     />
                                 </Col>
@@ -188,14 +186,13 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                                         sm={12}
                                         xl={12}
                                         required={true}
-                                        withCounter={false}
                                         {...validation(
                                             "labelKey",
                                             formState,
                                             isEditMode
                                         )}
                                         errorMessage={errors.labelKey?.message}
-                                        value={data.labelKey}
+                                        defaultValue={data.labelKey}
                                         control={control}
                                     />
                                     <AppFormSelect

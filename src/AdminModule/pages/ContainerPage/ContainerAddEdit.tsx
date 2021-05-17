@@ -1,18 +1,12 @@
 import React, { FC, Fragment, useEffect, useState } from "react";
-import { RouteComponentProps, useNavigate, useParams } from "@reach/router";
+import { RouteComponentProps, useParams } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { forEach as _forEach } from "lodash";
 import { Col, Form, Row } from "react-bootstrap";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { DevTool } from "@hookform/devtools";
-import {
-    ClientEntity,
-    ContainerEntity,
-    Package,
-    UserGroup,
-} from "../../models";
+import { Client, Container, Package, UserGroup } from "../../models";
 import { ClientApi, PackageApi, UserGroupApi } from "../../apis";
 import {
     AppFormTextArea,
@@ -27,14 +21,25 @@ import {
 } from "../../../AppModule/components";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
 import { ContainerApi } from "../../apis/ContainerApi";
-import { errorToast, successToast, validation } from "../../../AppModule/utils";
+import {
+    errorToast,
+    setViolations,
+    successToast,
+    validation,
+} from "../../../AppModule/utils";
 import { AppPackageSwitches } from "../../components";
 import { CONSTANTS } from "../../../config";
+import {
+    useAuthState,
+    useNavigator,
+    useParamId,
+} from "../../../AppModule/hooks";
 
-const { Container } = CONSTANTS;
+const { Container: ContainerConstant } = CONSTANTS;
 const {
     STORAGE: { STORAGE_S3, STORAGE_LOCAL },
-} = Container;
+} = ContainerConstant;
+type PartialContainer = Partial<Container>;
 
 const schema = Yup.object().shape({
     domain: Yup.string().required("Domain is Required"),
@@ -63,13 +68,12 @@ const schema = Yup.object().shape({
 export const ContainerAddEdit: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
-    const { clientId = null, id = null } = useParams();
-    const isEditMode: boolean = id !== null;
-    const hookNav = useNavigate();
-    const nav = navigate ?? hookNav;
-
-    const [data, setData] = React.useState<ContainerEntity>(
-        new ContainerEntity(ClientApi.toResourceUrl(clientId))
+    const { clientId: storageClientId } = useAuthState();
+    const { clientId = storageClientId } = useParams();
+    const { id, isEditMode } = useParamId();
+    const navigator = useNavigator(navigate);
+    const [data, setData] = React.useState<PartialContainer>(
+        new Container(ClientApi.toResourceUrl(clientId))
     );
     const [packages, setPackages] = React.useState<Package[]>([]);
     const [loading, setLoading] = useState<boolean>(isEditMode);
@@ -90,7 +94,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
     });
 
     useEffect(() => {
-        ClientApi.getById<ClientEntity>(clientId).then(
+        ClientApi.findById<Client>(clientId).then(
             ({ response, isNotFound, errorMessage }) => {
                 if (errorMessage) {
                     errorToast(errorMessage);
@@ -107,7 +111,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (isEditMode) {
-            ContainerApi.getById<ContainerEntity>(id).then(
+            ContainerApi.findById<Container>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);
@@ -134,30 +138,24 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         }
     }, [id, isEditMode, reset, trigger]);
 
-    const onSubmit = (formData: ContainerEntity) => {
-        ContainerApi.createOrUpdate<ContainerEntity>(id, {
-            ...formData,
-            packages: data.packages,
-        }).then(({ error, errorMessage }) => {
-            if (error instanceof UnprocessableEntityErrorResponse) {
-                const { violations } = error;
-                _forEach(violations, (value: string, key: string) => {
-                    const propertyName = key as keyof ContainerEntity;
-                    setError(propertyName, {
-                        type: "backend",
-                        message: value,
+    const onSubmit = (formData: Container) => {
+        ContainerApi.createOrUpdate<Container>(id, formData).then(
+            ({ error, errorMessage }) => {
+                if (error instanceof UnprocessableEntityErrorResponse) {
+                    setViolations<Partial<Container>>(error, setError);
+                } else if (errorMessage) {
+                    errorToast(errorMessage);
+                } else {
+                    navigator("..").then(() => {
+                        successToast(
+                            isEditMode
+                                ? "Container updated"
+                                : "Container created"
+                        );
                     });
-                });
-            } else if (errorMessage) {
-                errorToast(errorMessage);
-            } else {
-                nav("..").then(() => {
-                    successToast(
-                        isEditMode ? "Container updated" : "Container created"
-                    );
-                });
+                }
             }
-        });
+        );
     };
 
     if (loading || loadingClient) {
@@ -188,15 +186,13 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         xl={12}
                                         name={"name"}
                                         label={"Name"}
-                                        required={true}
-                                        withCounter={true}
                                         {...validation(
                                             "name",
                                             formState,
                                             isEditMode
                                         )}
                                         errorMessage={errors.name?.message}
-                                        value={data?.name}
+                                        defaultValue={data?.name}
                                         control={control}
                                     />
                                     <AppFormInput
@@ -206,15 +202,13 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         xl={12}
                                         name={"domain"}
                                         label={"Domain"}
-                                        required={true}
-                                        withCounter={true}
                                         {...validation(
                                             "domain",
                                             formState,
                                             isEditMode
                                         )}
                                         errorMessage={errors.domain?.message}
-                                        value={data.domain}
+                                        defaultValue={data.domain}
                                         control={control}
                                     />
                                     <AppFormInput
@@ -224,7 +218,6 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         xl={12}
                                         name={"containerGroup"}
                                         label={"Container Group"}
-                                        withCounter={true}
                                         {...validation(
                                             "containerGroup",
                                             formState,
@@ -233,7 +226,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         errorMessage={
                                             errors.containerGroup?.message
                                         }
-                                        value={data.containerGroup}
+                                        defaultValue={data.containerGroup}
                                         control={control}
                                     />
                                 </Col>
@@ -255,7 +248,6 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         name={"description"}
                                         label={"Description"}
                                         required={false}
-                                        withCounter={true}
                                         {...validation(
                                             "description",
                                             formState,
@@ -264,7 +256,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         errorMessage={
                                             errors.description?.message
                                         }
-                                        value={data.description}
+                                        defaultValue={data.description}
                                         control={control}
                                     />
                                 </Col>
@@ -303,15 +295,13 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     xl={"6"}
                                     name={"bucketKey"}
                                     label={"AWS S3 Bucket Key"}
-                                    required={true}
-                                    withCounter={true}
                                     {...validation(
                                         "bucketKey",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.bucketKey?.message}
-                                    value={data.bucketKey}
+                                    defaultValue={data.bucketKey}
                                     control={control}
                                     key={"bucketKey"}
                                 />
@@ -322,15 +312,13 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     xl={"6"}
                                     name={"bucketSecret"}
                                     label={"AWS S3 Bucket Secret"}
-                                    required={true}
-                                    withCounter={true}
                                     {...validation(
                                         "bucketSecret",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.bucketSecret?.message}
-                                    value={data.bucketSecret}
+                                    defaultValue={data.bucketSecret}
                                     control={control}
                                     key={"bucketSecret"}
                                 />
@@ -341,15 +329,13 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     xl={"6"}
                                     name={"bucketName"}
                                     label={"AWS S3 Bucket Name"}
-                                    required={true}
-                                    withCounter={true}
                                     {...validation(
                                         "bucketName",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.bucketName?.message}
-                                    value={data.bucketName}
+                                    defaultValue={data.bucketName}
                                     control={control}
                                     key={"bucketName"}
                                 />
@@ -359,15 +345,13 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     xl={"6"}
                                     name={"bucketRegion"}
                                     label={"AWS S3 Bucket Region"}
-                                    required={true}
-                                    withCounter={true}
                                     {...validation(
                                         "bucketRegion",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.bucketRegion?.message}
-                                    value={data.bucketRegion}
+                                    defaultValue={data.bucketRegion}
                                     control={control}
                                     key={"bucketRegion"}
                                 />
@@ -390,7 +374,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                         </AppCard>
                         <AppFormActions
                             isEditMode={isEditMode}
-                            navigation={nav}
+                            navigation={navigator}
                         />
                     </Form>
                 </Col>

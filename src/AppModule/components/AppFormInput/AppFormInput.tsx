@@ -1,105 +1,67 @@
-import React, { FC } from "react";
-import { Form, Col } from "react-bootstrap";
-import { Control, Controller, useWatch } from "react-hook-form";
-import { isString as _isString, startCase as _startCase } from "lodash";
+import React, { FC, useState } from "react";
+import { Col, Form } from "react-bootstrap";
+import { Controller } from "react-hook-form";
+import { useInputPlaceholder } from "../../hooks";
+import { AppFormLabel } from "../AppFormLabel";
+import {
+    AppFormLayoutProps,
+    AppReactHookFormProps,
+    AppFormElementProps,
+} from "../../models/components";
+
 import "./assets/scss/style.scss";
 
-export interface AppFormInputProps {
-    id?: string;
-    name: string;
-    sm?: string | number;
-    md?: string | number;
-    lg?: string | number;
-    xl?: string | number;
-    // @TODO: rename it defaultValue
-    value?: string;
+export interface AppFormInputProps
+    extends AppFormElementProps,
+        AppFormLayoutProps,
+        AppReactHookFormProps {
     type?: string;
-    placeholder?: string | boolean;
-    required?: boolean;
-    label?: string;
-    description?: string;
-    errorMessage?: string;
-    className?: string;
-    isInvalid?: boolean;
-    isValid?: boolean;
-    withCounter?: boolean;
     maxCount?: number;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    control?: Control<any>;
 }
 
 export const AppFormInput: FC<AppFormInputProps> = ({
     id,
     name,
-    value = "",
+    defaultValue = "",
     placeholder,
     errorMessage,
     label = "",
     type = "text",
-    className = "",
     description,
-    sm = 12,
-    md = 6,
-    lg = 4,
-    xl = 4,
     isInvalid,
     isValid,
-    required = false,
-    withCounter = false,
-    maxCount = 25,
+    required = true,
+    maxCount,
     control,
+    ...props
 }): JSX.Element => {
+    const [data, setData] = useState<string>(defaultValue);
+    const placeholderText = useInputPlaceholder(name, placeholder, label);
     const controlId = id || name;
-    let placeholderText = "";
+    const { sm = 12, md = 6, lg = 4, xl = 4, className = "" } = props;
+    const groupProps = { sm, md, lg, xl, controlId, className, as: Col };
+    const labelProps = { label, required, maxCount, description };
+    const controllerProps = { name, defaultValue, control };
+    const controlProps = {
+        placeholder: placeholderText,
+        isValid,
+        isInvalid,
+        type,
+    };
 
-    if (placeholder !== false) {
-        placeholderText = _isString(placeholder)
-            ? placeholder
-            : `Enter ${_startCase(label) || _startCase(name)}`;
-    }
-    const fieldValue = useWatch({
-        control,
-        name,
-        defaultValue: "",
-    });
     return (
-        <Form.Group
-            as={Col}
-            md={md}
-            sm={sm}
-            lg={lg}
-            xl={xl}
-            controlId={controlId}
-            className={className}
-        >
-            {label?.length > 0 ? (
-                <Form.Label>
-                    {label}
-                    {required && <span className="required">*</span>}
-                    {description && (
-                        <div className="custom-input-description">
-                            <span>i</span>
-                            <div className="custom-input-description-content">
-                                {description}
-                            </div>
-                        </div>
-                    )}
-                    {(withCounter || maxCount !== 25) && (
-                        <span className="counter">{`${fieldValue?.length}/${maxCount}`}</span>
-                    )}
-                </Form.Label>
-            ) : null}
+        <Form.Group {...groupProps}>
+            <AppFormLabel counter={data?.length} {...labelProps} />
             <Controller
-                name={name}
-                defaultValue={value}
-                control={control}
+                {...controllerProps}
                 render={({ field }) => (
                     <Form.Control
                         {...field}
-                        type={type}
-                        placeholder={placeholderText}
-                        isValid={isValid}
-                        isInvalid={isInvalid}
+                        onChange={(e) => {
+                            field.onChange(e);
+                            setData(e.target.value);
+                        }}
+                        {...controlProps}
                     />
                 )}
             />

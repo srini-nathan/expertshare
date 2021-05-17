@@ -17,6 +17,10 @@ import {
 } from "../../components/AppNavigationItem";
 import "./assets/scss/style.scss";
 import FooterLogo from "./assets/images/expertshare_logo_footer.svg";
+import {
+    AuthContext,
+    logoutAction,
+} from "../../../SecurityModule/contexts/AuthContext";
 import { useWindowSize, useWindowLocation } from "../../hooks";
 
 interface AppNavigationProps {
@@ -24,47 +28,49 @@ interface AppNavigationProps {
 }
 
 const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
+    const { dispatch, state } = React.useContext(AuthContext);
+    const { user } = state;
     const [overflowItems, setOverflowItems] = useState<
         AppNavigationItemProps[] | AppSubNavigationItemProps[]
     >([]);
     const [subMenuItems] = useState<AppSubNavigationItemProps[]>([
         {
-            label: "Admin - Settings",
+            label: "Settings",
             path: "/admin/settings",
             icon: {
                 name: "",
             },
         },
         {
-            label: "Admin - Design",
+            label: "Design",
             path: "/admin/design",
             icon: {
                 name: "",
             },
         },
         {
-            label: "Admin - Languages",
+            label: "Languages",
             path: "/admin/languages",
             icon: {
                 name: "",
             },
         },
         {
-            label: "Admin - Clients",
+            label: "Clients",
             path: "/admin/clients",
             icon: {
                 name: "",
             },
         },
         {
-            label: "Admin - User Groups",
+            label: "User Groups",
             path: "/admin/user-groups",
             icon: {
                 name: "",
             },
         },
         {
-            label: "Admin - Email Templates",
+            label: "Email Templates",
             path: "/admin/email-templates",
             icon: {
                 name: "",
@@ -84,6 +90,10 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const { location } = useWindowLocation();
     const logoHolder = useRef<HTMLDivElement>(null);
     const bottomMenu = useRef<HTMLAnchorElement>(null);
+
+    const handleLogoutEvent = async (): Promise<void> => {
+        await logoutAction(dispatch);
+    };
 
     const getMenuItemsHeight = () => {
         let logoHeight = 0;
@@ -113,12 +123,12 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     }, [width, height, showSubMenuItems]);
 
     useEffect(() => {
-        if (subMenuItems.some((e) => e.path === location)) {
+        if (subMenuItems.some((e) => e && e.path === location)) {
             isSubMenuItems(true);
         }
     }, []);
     useEffect(() => {
-        if (overflowItems.some((e) => e.path === location)) {
+        if (overflowItems.some((e) => e && e.path === location)) {
             isShowMore(true);
         }
     }, [overflowItems]);
@@ -165,7 +175,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                             onClick={() => isShowMore(!showMore)}
                             className="nav-link show-more"
                         >
-                            <div className="nav-icon ml-lg-2">
+                            <div className="nav-icon">
                                 <AppIcon name="Menu" />
                             </div>
                             <span>{!showMore ? "More" : "Less"}</span>
@@ -231,7 +241,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                     <div className="logo-holder row">
                         <div
                             ref={logoHolder}
-                            className="main-logo-container  m-0 p-md-4"
+                            className="main-logo-container m-0 my-2 p-md-4"
                         >
                             <a href="#" className="main-logo col-xl-9"></a>
                         </div>
@@ -264,18 +274,23 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                             }}
                                             className="nav-link"
                                         >
-                                            <div className="nav-icon ml-lg-2">
+                                            <div className="nav-icon">
                                                 <AppIcon
                                                     name={
                                                         showSubMenuItems
-                                                            ? "ArrowLeft"
+                                                            ? "ChevronLeft"
                                                             : "Settings"
+                                                    }
+                                                    className={
+                                                        showSubMenuItems
+                                                            ? "btn-secondary back-to-menu"
+                                                            : ""
                                                     }
                                                 />
                                             </div>
                                             <span>
                                                 {showSubMenuItems
-                                                    ? "Back to Menu"
+                                                    ? "Back to App"
                                                     : "Administration"}
                                             </span>
                                         </div>
@@ -301,12 +316,27 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                     <ListGroupItem
                                         className={`nav-item py-2 mb-2 px-lg-4`}
                                     >
-                                        <Link to={"#"} className="nav-link">
-                                            <div className="nav-icon ml-lg-2 img-container">
-                                                <i className="profile-picture"></i>
-                                            </div>
-                                            <span>Account</span>
-                                        </Link>
+                                        <AppNavigationDropDown
+                                            label={
+                                                user.firstName && user.lastName
+                                                    ? `${user.firstName} ${user.lastName}`
+                                                    : "Acount"
+                                            }
+                                            iconClassName="profile-picture"
+                                            subDropDownItems={[
+                                                {
+                                                    label: "Profile",
+                                                    path: "#",
+                                                    icon: "User",
+                                                },
+                                                {
+                                                    label: "Log out",
+                                                    action: handleLogoutEvent,
+                                                    icon: "SignOut",
+                                                    path: "#",
+                                                },
+                                            ]}
+                                        />
                                     </ListGroupItem>
 
                                     <ListGroupItem className={`px-0 py-1`}>

@@ -1,10 +1,8 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
-import { RouteComponentProps, useNavigate, useParams } from "@reach/router";
+import { RouteComponentProps } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { forEach as _forEach } from "lodash";
 import {
     AppPageHeader,
     AppBreadcrumb,
@@ -12,28 +10,35 @@ import {
     AppFormSwitch,
     AppFormActions,
     AppCard,
+    AppFormInput,
 } from "../../../AppModule/components";
-import { LanguageEntity } from "../../models";
+import { Language } from "../../models";
 import { LanguageApi } from "../../apis";
-import { errorToast, successToast, validation } from "../../../AppModule/utils";
+import {
+    errorToast,
+    setViolations,
+    successToast,
+    validation,
+} from "../../../AppModule/utils";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
-import { AppFormInput } from "../../../AppModule/components/AppFormInput";
+import {
+    useParamId,
+    useNavigator,
+    useAuthState,
+} from "../../../AppModule/hooks";
+import { schema, validations } from "./schema";
 
-const schema = yup.object().shape({
-    name: yup.string().min(2).required(),
-    locale: yup.string().min(2).required(),
-    isActive: yup.boolean(),
-});
+const { name, locale } = validations;
 
 export const LanguageAddEditPage: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
-    const { id = null } = useParams();
-    const isEditMode: boolean = id !== null;
-    const hookNav = useNavigate();
-    const nav = navigate ?? hookNav;
-
-    const [data, setData] = useState<LanguageEntity>(new LanguageEntity());
+    const { id, isEditMode } = useParamId();
+    const navigator = useNavigator(navigate);
+    const { containerResourceId } = useAuthState();
+    const [data, setData] = useState<Language>(
+        new Language(containerResourceId)
+    );
     const [loading, setLoading] = useState<boolean>(isEditMode);
 
     const {
@@ -42,27 +47,20 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
         formState,
         setError,
         trigger,
-    } = useForm<LanguageEntity>({
+    } = useForm<Language>({
         resolver: yupResolver(schema),
         mode: "all",
     });
 
-    const onSubmit = (formData: LanguageEntity) => {
-        LanguageApi.createOrUpdate<LanguageEntity>(id, formData).then(
+    const onSubmit = (formData: Language) => {
+        LanguageApi.createOrUpdate<Language>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
-                    const { violations } = error;
-                    _forEach(violations, (value: string, key: string) => {
-                        const propertyName = key as keyof LanguageEntity;
-                        setError(propertyName, {
-                            type: "backend",
-                            message: value,
-                        });
-                    });
+                    setViolations<Language>(error, setError);
                 } else if (errorMessage) {
                     errorToast(errorMessage);
                 } else {
-                    nav("..").then(() => {
+                    navigator("..").then(() => {
                         successToast(
                             isEditMode ? "Language updated" : "Language created"
                         );
@@ -74,7 +72,7 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (isEditMode) {
-            LanguageApi.getById<LanguageEntity>(id).then(
+            LanguageApi.findById<Language>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);
@@ -110,29 +108,27 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
                                 <AppFormInput
                                     name={"name"}
                                     label={"Name"}
-                                    required={true}
-                                    withCounter={true}
+                                    maxCount={name.max}
                                     {...validation(
                                         "name",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.name?.message}
-                                    value={data.name}
+                                    defaultValue={data.name}
                                     control={control}
                                 />
                                 <AppFormInput
                                     name={"locale"}
                                     label={"Locale"}
-                                    required={true}
-                                    withCounter={true}
+                                    maxCount={locale.max}
                                     {...validation(
                                         "locale",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.locale?.message}
-                                    value={data.locale}
+                                    defaultValue={data.locale}
                                     control={control}
                                 />
                                 <AppFormSwitch
@@ -150,7 +146,7 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
                             </Form.Row>
                             <AppFormActions
                                 isEditMode={isEditMode}
-                                navigation={nav}
+                                navigation={navigator}
                             />
                         </Form>
                     </AppCard>

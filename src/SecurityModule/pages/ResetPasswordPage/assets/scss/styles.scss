@@ -10,15 +10,15 @@
         box-sizing: border-box;
         display: inline-table;
         width: 550px;
-        height: -moz-min-content;
+        height: min-content;
         padding: 30px;
         margin: 40px auto;
+        user-select: none;
+        user-select: none;
+        user-select: none;
         background-color: var(--container-box-bg-clr);
         border-radius: var(--border-radius);
-        -webkit-user-select: none;
-        -moz-user-select: none;
         -webkit-touch-callout: none;
-        user-select: none;
 
         @include media("mobile") {
             width: 90%;
@@ -131,10 +131,10 @@
                     cursor: pointer;
                     opacity: 0;
 
-                    &:checked~.custom-checkbox {
+                    &:checked ~ .custom-checkbox {
                         background-color: var(--primary);
 
-                        &:after {
+                        &::after {
                             display: block;
                         }
                     }
@@ -159,8 +159,8 @@
                         content: "";
                         border: solid var(--i-fg-clr);
                         border-width: 0 2px 2px 0;
-                        -webkit-transform: rotate(45deg);
-                        -ms-transform: rotate(45deg);
+                        transform: rotate(45deg);
+                        transform: rotate(45deg);
                         transform: rotate(45deg);
                     }
                 }
