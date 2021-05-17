@@ -21,17 +21,15 @@ import {
 import { appGridConfig } from "../../../AppModule/config";
 import { errorToast, successToast } from "../../../AppModule/utils";
 import "./assets/scss/list.scss";
-import {
-    AuthContext,
-    IAuthSate,
-} from "../../../SecurityModule/context/AuthContext";
+import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
+import { AuthState } from "../../../SecurityModule/models/context/AuthState";
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const { state } = React.useContext(AuthContext);
-    const { cntid } = state as IAuthSate;
+    const { containerId } = state as AuthState;
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -45,7 +43,7 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
                     {
                         order: buildSortParams(request),
                         ...buildFilterParams(request),
-                        "container.id": cntid,
+                        "container.id": containerId,
                     },
                     (c) => {
                         cancelTokenSourcesRef.current.push(c);
@@ -71,7 +69,7 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     }
 
     async function handleDelete(id: number) {
-        LanguageApi.delete(id).then(({ error }) => {
+        LanguageApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
@@ -97,8 +95,7 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Fragment>
             <AppPageHeader
-                title={"Language"}
-                createLabel={"Create Language"}
+                title={"Languages"}
                 createLink={"/admin/languages/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}

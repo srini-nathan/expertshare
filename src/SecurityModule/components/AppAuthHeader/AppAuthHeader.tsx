@@ -1,15 +1,17 @@
-import React, { FunctionComponent } from "react";
+import React, { FC } from "react";
 import { Col } from "react-bootstrap";
 import "./assets/scss/styles.scss";
 
 export interface AppAuthHeaderProps {
     title: string;
-    desctiption?: string;
+    description?: string;
+    errorMessage?: string;
 }
 
-export const AppAuthHeader: FunctionComponent<AppAuthHeaderProps> = ({
+export const AppAuthHeader: FC<AppAuthHeaderProps> = ({
     title,
-    desctiption = "",
+    description = "",
+    errorMessage = "",
 }) => {
     return (
         <>
@@ -23,7 +25,11 @@ export const AppAuthHeader: FunctionComponent<AppAuthHeaderProps> = ({
             </Col>
             <div className="col-md-12 active-account-box--text-box">
                 <h2 className="mt-4 text-center">{title}</h2>
-                <p className="mt-2 mb-3 text-center">{desctiption}</p>
+                <p className="mt-2 mb-3 text-center">{description}</p>
+
+                <div className="my-2 text-center">
+                    <b className="error-message">{errorMessage}</b>
+                </div>
             </div>
         </>
     );

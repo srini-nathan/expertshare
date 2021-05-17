@@ -1,2 +1,1 @@
-export * from "./ResetPasswordApi";
-export * from "./ResetPasswordRequestApi";
+export * from "./AuthApi";

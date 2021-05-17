@@ -1,10 +1,8 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
-import { RouteComponentProps, useNavigate, useParams } from "@reach/router";
+import { RouteComponentProps } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { forEach as _forEach } from "lodash";
 import {
     AppPageHeader,
     AppBreadcrumb,
@@ -12,25 +10,34 @@ import {
     AppFormActions,
     AppCard,
 } from "../../../AppModule/components";
-import { UserGroupEntity } from "../../models";
+import { UserGroup } from "../../models";
 import { UserGroupApi } from "../../apis";
-import { errorToast, successToast, validation } from "../../../AppModule/utils";
+import {
+    errorToast,
+    setViolations,
+    successToast,
+    validation,
+} from "../../../AppModule/utils";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
+import { schema, validations } from "./schema";
+import {
+    useAuthState,
+    useNavigator,
+    useParamId,
+} from "../../../AppModule/hooks";
 
-const schema = yup.object().shape({
-    name: yup.string().min(2).required(),
-});
+const { name } = validations;
 
 export const UserGroupAddEditPage: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
-    const { id = null } = useParams();
-    const isEditMode: boolean = id !== null;
-    const hookNav = useNavigate();
-    const nav = navigate ?? hookNav;
-
-    const [data, setData] = useState<UserGroupEntity>(new UserGroupEntity());
+    const { id, isEditMode } = useParamId();
+    const navigator = useNavigator(navigate);
+    const { clientResourceId } = useAuthState();
+    const [data, setData] = useState<UserGroup>(
+        new UserGroup(clientResourceId)
+    );
     const [loading, setLoading] = useState<boolean>(isEditMode);
 
     const {
@@ -39,27 +46,20 @@ export const UserGroupAddEditPage: FC<RouteComponentProps> = ({
         formState,
         setError,
         trigger,
-    } = useForm<UserGroupEntity>({
+    } = useForm<UserGroup>({
         resolver: yupResolver(schema),
         mode: "all",
     });
 
-    const onSubmit = (formData: UserGroupEntity) => {
-        UserGroupApi.createOrUpdate<UserGroupEntity>(id, formData).then(
+    const onSubmit = (formData: UserGroup) => {
+        UserGroupApi.createOrUpdate<UserGroup>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
-                    const { violations } = error;
-                    _forEach(violations, (value: string, key: string) => {
-                        const propertyName = key as keyof UserGroupEntity;
-                        setError(propertyName, {
-                            type: "backend",
-                            message: value,
-                        });
-                    });
+                    setViolations<UserGroup>(error, setError);
                 } else if (errorMessage) {
                     errorToast(errorMessage);
                 } else {
-                    nav("..").then(() => {
+                    navigator("..").then(() => {
                         successToast(
                             isEditMode
                                 ? "User Group updated"
@@ -73,7 +73,7 @@ export const UserGroupAddEditPage: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (isEditMode) {
-            UserGroupApi.getById<UserGroupEntity>(id).then(
+            UserGroupApi.findById<UserGroup>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);
@@ -109,22 +109,21 @@ export const UserGroupAddEditPage: FC<RouteComponentProps> = ({
                                 <AppFormInput
                                     name={"name"}
                                     label={"Name"}
-                                    required={true}
-                                    withCounter={true}
+                                    maxCount={name.max}
                                     {...validation(
                                         "name",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.name?.message}
-                                    value={data.name}
+                                    defaultValue={data.name}
                                     control={control}
                                 />
                             </Form.Row>
                         </AppCard>
                         <AppFormActions
                             isEditMode={isEditMode}
-                            navigation={nav}
+                            navigation={navigator}
                         />
                     </Form>
                 </Col>

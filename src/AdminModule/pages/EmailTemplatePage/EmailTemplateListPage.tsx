@@ -10,8 +10,8 @@ import {
 import { Canceler } from "axios";
 import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
-import { EmailApi } from "../../apis";
-import { Email } from "../../models";
+import { EmailTemplateApi } from "../../apis";
+import { EmailTemplate } from "../../models";
 import { AppPageHeader } from "../../../AppModule/components";
 import {
     AppGrid,
@@ -20,17 +20,13 @@ import {
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
 import { errorToast, successToast } from "../../../AppModule/utils";
-import {
-    AuthContext,
-    IAuthSate,
-} from "../../../SecurityModule/context/AuthContext";
+import { useAuthState } from "../../../AppModule/hooks";
 
 export const EmailTemplateListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
-    const { state } = React.useContext(AuthContext);
-    const { cntid } = state as IAuthSate;
+    const { containerId } = useAuthState();
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -39,12 +35,12 @@ export const EmailTemplateListPage: FC<RouteComponentProps> = (): JSX.Element =>
                 const { endRow } = request;
                 const pageNo = endRow / appGridConfig.pageSize;
                 api?.hideOverlay();
-                EmailApi.find<Email>(
+                EmailTemplateApi.find<EmailTemplate>(
                     pageNo,
                     {
                         order: buildSortParams(request),
                         ...buildFilterParams(request),
-                        "container.id": cntid,
+                        "container.id": containerId,
                     },
                     (c) => {
                         cancelTokenSourcesRef.current.push(c);
@@ -70,7 +66,7 @@ export const EmailTemplateListPage: FC<RouteComponentProps> = (): JSX.Element =>
     }
 
     async function handleDelete(id: number) {
-        EmailApi.delete(id).then(({ error }) => {
+        EmailTemplateApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
@@ -97,7 +93,6 @@ export const EmailTemplateListPage: FC<RouteComponentProps> = (): JSX.Element =>
         <Fragment>
             <AppPageHeader
                 title={"Email Templates"}
-                createLabel={"Create Email Template"}
                 createLink={"/admin/email-templates/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}

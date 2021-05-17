@@ -19,16 +19,16 @@
 
     &-header {
         background-color: var(--widget-bg-clr);
+        border-bottom: unset !important;
         border-top-left-radius: var(--border-radius) !important;
         border-top-right-radius: var(--border-radius) !important;
-        border-bottom: unset !important;
 
         .close {
-            color: var(--primary);
+            padding: 0 !important;
+            margin: auto 5px !important;
             font-size: 50px;
             font-weight: 400;
-            margin: auto 5px !important;
-            padding: 0 !important;
+            color: var(--primary);
             opacity: 1 !important;
 
             &:hover {
@@ -48,15 +48,15 @@
 
     &-body {
         padding: 3rem 1rem !important;
-        text-align: center;
+        font-size: 16px;
         font-weight: 400;
         color: var(--secondary);
-        font-size: 16px;
+        text-align: center;
 
     }
 
     &-footer {
-        border-color: var(--secondary-20) !important;
         margin: 0 10px;
+        border-color: var(--secondary-20) !important;
     }
 }

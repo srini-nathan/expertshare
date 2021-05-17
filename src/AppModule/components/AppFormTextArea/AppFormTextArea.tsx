@@ -1,104 +1,75 @@
-import React, { FC } from "react";
-import { Form, Col } from "react-bootstrap";
-import { Control, Controller, useWatch } from "react-hook-form";
-import { isString as _isString, startCase as _startCase } from "lodash";
-import "./assets/scss/style.scss";
+import React, { ChangeEventHandler, FC, useState } from "react";
+import { Col, Form } from "react-bootstrap";
+import { Controller } from "react-hook-form";
+import {
+    AppFormElementProps,
+    AppFormLayoutProps,
+    AppReactHookFormProps,
+} from "../../models";
 
-export interface AppFormTextAreaProps {
-    id?: string;
-    name: string;
-    sm?: string | number;
-    md?: string | number;
-    lg?: string | number;
-    xl?: string | number;
-    value?: string;
-    placeholder?: string | boolean;
-    className?: string;
-    required?: boolean;
-    label?: string;
-    description?: string;
-    errorMessage?: string;
-    isInvalid?: boolean;
-    isValid?: boolean;
-    withCounter?: boolean;
+import "./assets/scss/style.scss";
+import { useInputPlaceholder } from "../../hooks";
+import { AppFormLabel } from "../AppFormLabel";
+
+export interface AppFormTextAreaProps
+    extends AppFormElementProps,
+        AppFormLayoutProps,
+        AppReactHookFormProps {
     maxCount?: number;
-    control?: Control<any>;
     rows?: number;
+    onChange?: ChangeEventHandler<
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >;
 }
 
 export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
     id,
     name,
-    value = "",
+    defaultValue = "",
     placeholder,
     errorMessage,
     label = "",
-    className = "",
     description,
-    sm = 12,
-    md = 6,
-    lg = 4,
-    xl = 4,
     isInvalid,
     isValid,
-    required = false,
-    withCounter = false,
-    maxCount = 25,
+    required = true,
+    maxCount,
     control,
     rows = 5,
+    onChange,
+    ...props
 }): JSX.Element => {
+    const [data, setData] = useState<string>(defaultValue);
+    const placeholderText = useInputPlaceholder(name, placeholder, label);
     const controlId = id || name;
-    let placeholderText = "";
+    const { sm = 12, md = 6, lg = 4, xl = 4, className = "" } = props;
+    const groupProps = { sm, md, lg, xl, controlId, className, as: Col };
+    const labelProps = { label, required, maxCount, description };
+    const controllerProps = { name, defaultValue, control };
+    const controlProps = {
+        placeholder: placeholderText,
+        isValid,
+        isInvalid,
+        rows,
+    };
 
-    if (placeholder !== false) {
-        placeholderText = _isString(placeholder)
-            ? placeholder
-            : `Enter ${_startCase(label) || _startCase(name)}`;
-    }
-    const fieldValue = useWatch({
-        control,
-        name,
-        defaultValue: "",
-    });
     return (
-        <Form.Group
-            as={Col}
-            md={md}
-            sm={sm}
-            lg={lg}
-            xl={xl}
-            className={className}
-            controlId={controlId}
-        >
-            {label?.length > 0 ? (
-                <Form.Label>
-                    {label}
-                    {required && <span className="required">*</span>}
-                    {description && (
-                        <div className="custom-input-description">
-                            <span>i</span>
-                            <div className="custom-input-description-content">
-                                {description}
-                            </div>
-                        </div>
-                    )}
-                    {(withCounter || maxCount !== 25) && (
-                        <span className="counter">{`${fieldValue?.length}/${maxCount}`}</span>
-                    )}
-                </Form.Label>
-            ) : null}
+        <Form.Group {...groupProps}>
+            <AppFormLabel counter={data?.length} {...labelProps} />
             <Controller
-                name={name}
-                defaultValue={value}
-                control={control}
+                {...controllerProps}
                 render={({ field }) => (
                     <Form.Control
                         {...field}
-                        as={"textarea"}
-                        placeholder={placeholderText}
-                        isValid={isValid}
-                        isInvalid={isInvalid}
-                        rows={rows}
+                        as="textarea"
+                        onChange={(e) => {
+                            if (onChange) {
+                                onChange(e);
+                            }
+                            field.onChange(e);
+                            setData(e.target.value);
+                        }}
+                        {...controlProps}
                     />
                 )}
             />

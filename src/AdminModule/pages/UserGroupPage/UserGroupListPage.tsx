@@ -20,17 +20,15 @@ import {
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
 import { errorToast, successToast } from "../../../AppModule/utils";
-import {
-    AuthContext,
-    IAuthSate,
-} from "../../../SecurityModule/context/AuthContext";
+import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
+import { AuthState } from "../../../SecurityModule/models/context/AuthState";
 
 export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const { state } = React.useContext(AuthContext);
-    const { cid } = state as IAuthSate;
+    const { clientId } = state as AuthState;
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -44,7 +42,7 @@ export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
                     {
                         order: buildSortParams(request),
                         ...buildFilterParams(request),
-                        "client.id": cid,
+                        "client.id": clientId,
                     },
                     (c) => {
                         cancelTokenSourcesRef.current.push(c);
@@ -70,7 +68,7 @@ export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
     }
 
     async function handleDelete(id: number) {
-        UserGroupApi.delete(id).then(({ error }) => {
+        UserGroupApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
@@ -96,9 +94,8 @@ export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Fragment>
             <AppPageHeader
-                title={"User Group"}
+                title={"User Groups"}
                 showToolbar
-                createLabel={"Create User Group"}
                 createLink={"user-groups/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}

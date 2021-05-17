@@ -114,5 +114,5 @@ export const AppGridPagination: FC<AppGridPaginationProps> = ({
         );
     }
 
-    return <Pagination className={className}>{pages}</Pagination>;
+    return <Pagination className={`mb-0 ${className}`}>{pages}</Pagination>;
 };

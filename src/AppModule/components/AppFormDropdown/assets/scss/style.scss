@@ -3,27 +3,28 @@
 
 .custom-select {
     &-container {
-        background: var(--input-bg-clr) !important;
-        border-radius: var(--border-radius);
-        color: var(--input-fg-clr);
         z-index: 2;
-
+        height: 36px;
+        color: var(--input-fg-clr);
+        background: var(--input-bg-clr) !important;
+        border: 1px solid var(--input-border-clr);
+        border-radius: var(--border-radius);
     }
 
     &__control {
         background-color: unset !important;
         border-color: unset !important;
-        border-radius: unset !important;
         border-style: unset !important;
         border-width: unset !important;
+        border-radius: unset !important;
         box-shadow: unset !important;
 
         &:focus {
             background-color: unset !important;
             border-color: unset !important;
-            border-radius: unset !important;
             border-style: unset !important;
             border-width: unset !important;
+            border-radius: unset !important;
             box-shadow: unset !important;
         }
     }
@@ -39,8 +40,8 @@
     }
 
     &__menu {
+        padding: 0;
         border: 1px solid transparent !important;
-        padding: 0 ;
 
         &-list {
             padding: 0;
@@ -58,4 +59,12 @@
             background-color: var(--secondary-20);
         }
     }
+
+
+}
+
+.custom-select-container.form-control {
+    height: auto;
+    padding: 0;
+    border: 1px solid var(--input-border-clr);
 }

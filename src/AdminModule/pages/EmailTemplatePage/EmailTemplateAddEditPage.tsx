@@ -1,37 +1,44 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
-import { RouteComponentProps, useNavigate, useParams } from "@reach/router";
+import { RouteComponentProps } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { forEach as _forEach, find as _find } from "lodash";
+import { find as _find } from "lodash";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { DevTool } from "@hookform/devtools";
 import {
     AppPageHeader,
     AppBreadcrumb,
     AppLoader,
     AppFormActions,
-    AppFormTextArea,
     AppCard,
+    AppFormInput,
+    AppFormSelect,
+    AppFormRichTextArea,
 } from "../../../AppModule/components";
-import { EmailEntity } from "../../models";
-import { EmailApi } from "../../apis";
-import { errorToast, successToast, validation } from "../../../AppModule/utils";
+import { EmailTemplate } from "../../models";
+import { EmailTemplateApi } from "../../apis";
+import {
+    errorToast,
+    setViolations,
+    successToast,
+    validation,
+} from "../../../AppModule/utils";
 import {
     PrimitiveObject,
     UnprocessableEntityErrorResponse,
 } from "../../../AppModule/models";
-import { AppFormInput } from "../../../AppModule/components/AppFormInput";
-import { AppFormSelect } from "../../../AppModule/components/AppFormSelect";
 import {
-    AuthContext,
-    IAuthSate,
-} from "../../../SecurityModule/context/AuthContext";
-import { ContainerApi } from "../../apis/ContainerApi";
+    useAuthState,
+    useNavigator,
+    useParamId,
+} from "../../../AppModule/hooks";
 
 const schema = yup.object().shape({
     name: yup.string().min(2).required(),
     subject: yup.string().min(2).required(),
-    etKey: yup.string(),
+    etKey: yup.string().required(),
     content: yup.string().required(),
 });
 
@@ -56,43 +63,33 @@ const defaultThemeList: PrimitiveObject[] = [
 export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
-    const { id = null } = useParams();
-    const isEditMode: boolean = id !== null;
-    const hookNav = useNavigate();
-    const nav = navigate ?? hookNav;
-
-    const [data, setData] = useState<EmailEntity>(new EmailEntity());
-    const [loading, setLoading] = useState<boolean>(isEditMode);
-    const { state } = React.useContext(AuthContext);
-    const { cntid } = state as IAuthSate;
-
-    const { control, handleSubmit, formState, setError } = useForm<EmailEntity>(
-        {
-            resolver: yupResolver(schema),
-            mode: "all",
-        }
+    const { id, isEditMode } = useParamId();
+    const navigator = useNavigator(navigate);
+    const { containerResourceId } = useAuthState();
+    const [data, setData] = useState<EmailTemplate>(
+        new EmailTemplate(containerResourceId)
     );
+    const [loading, setLoading] = useState<boolean>(isEditMode);
 
-    const onSubmit = (formData: EmailEntity) => {
-        if (cntid === null) {
-            return;
-        }
-        formData.container = ContainerApi.toResourceUrl(cntid);
-        EmailApi.createOrUpdate<EmailEntity>(id, formData).then(
+    const {
+        control,
+        handleSubmit,
+        formState,
+        setError,
+    } = useForm<EmailTemplate>({
+        resolver: yupResolver(schema),
+        mode: "all",
+    });
+
+    const onSubmit = (formData: EmailTemplate) => {
+        EmailTemplateApi.createOrUpdate<EmailTemplate>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
-                    const { violations } = error;
-                    _forEach(violations, (value: string, key: string) => {
-                        const propertyName = key as keyof EmailEntity;
-                        setError(propertyName, {
-                            type: "backend",
-                            message: value,
-                        });
-                    });
+                    setViolations<EmailTemplate>(error, setError);
                 } else if (errorMessage) {
                     errorToast(errorMessage);
                 } else {
-                    nav("..").then(() => {
+                    navigator("..").then(() => {
                         successToast(
                             isEditMode
                                 ? "Email template updated"
@@ -106,7 +103,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (isEditMode) {
-            EmailApi.getById<EmailEntity>(id).then(
+            EmailTemplateApi.findById<EmailTemplate>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);
@@ -138,6 +135,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
             <Row>
                 <Col md="12">
                     <AppCard>
+                        <DevTool control={control} />
                         <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                             <Form.Row>
                                 <AppFormInput
@@ -147,20 +145,17 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                     lg={12}
                                     sm={12}
                                     xl={12}
-                                    required={true}
-                                    withCounter={true}
                                     {...validation(
                                         "name",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.name?.message}
-                                    value={data.name}
+                                    defaultValue={data.name}
                                     control={control}
                                 />
                             </Form.Row>
                             <Form.Row>
-                                {/* @TODO: validation not working */}
                                 <AppFormSelect
                                     id={"ddTheme"}
                                     name={"etKey"}
@@ -168,12 +163,12 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                     md={12}
                                     lg={12}
                                     xl={12}
-                                    required={true}
                                     {...validation(
                                         "etKey",
                                         formState,
                                         isEditMode
                                     )}
+                                    errorMessage={errors.etKey?.message}
                                     defaultValue={data.etKey}
                                     placeholder={"Theme"}
                                     options={defaultThemeList}
@@ -196,40 +191,37 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                     md={12}
                                     lg={12}
                                     xl={12}
-                                    required={true}
-                                    withCounter={true}
                                     {...validation(
                                         "subject",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.subject?.message}
-                                    value={data.subject}
+                                    defaultValue={data.subject}
                                     control={control}
                                 />
                             </Form.Row>
                             <Form.Row>
-                                <AppFormTextArea
+                                <AppFormRichTextArea
                                     name={"content"}
                                     label={"Content"}
                                     md={12}
                                     lg={12}
                                     xl={12}
                                     required={true}
-                                    withCounter={true}
                                     {...validation(
                                         "content",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.content?.message}
-                                    value={data.content}
+                                    defaultValue={data.content}
                                     control={control}
                                 />
                             </Form.Row>
                             <AppFormActions
                                 isEditMode={isEditMode}
-                                navigation={nav}
+                                navigation={navigator}
                             />
                         </Form>
                     </AppCard>

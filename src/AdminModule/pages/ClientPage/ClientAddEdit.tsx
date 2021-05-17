@@ -1,12 +1,12 @@
 import React, { FC, Fragment, useEffect, useRef, useState } from "react";
-import { RouteComponentProps, useNavigate, useParams } from "@reach/router";
+import { RouteComponentProps } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { forEach as _forEach, isString as _isString } from "lodash";
+import { isString as _isString } from "lodash";
 import { Col, Form, Row } from "react-bootstrap";
 import { Canceler } from "axios";
-import { ClientEntity, Package } from "../../models";
+import { Client, Package } from "../../models";
 import { ClientApi, PackageApi } from "../../apis";
 import {
     AppFormTextArea,
@@ -16,10 +16,18 @@ import {
     AppPageHeader,
     AppFormActions,
 } from "../../../AppModule/components";
-import { errorToast, successToast, validation } from "../../../AppModule/utils";
+import {
+    errorToast,
+    setViolations,
+    successToast,
+    validation,
+} from "../../../AppModule/utils";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
 import { AppPackageSwitches } from "../../components";
+import { useNavigator, useParamId } from "../../../AppModule/hooks";
+
+type PartialClient = Partial<Client>;
 
 const schema = Yup.object().shape({
     name: Yup.string().required(),
@@ -29,12 +37,10 @@ const schema = Yup.object().shape({
 export const ClientAddEdit: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
-    const { id = null } = useParams();
-    const isEditMode: boolean = id !== null;
-    const hookNav = useNavigate();
-    const nav = navigate ?? hookNav;
+    const { id, isEditMode } = useParamId();
+    const navigator = useNavigator(navigate);
 
-    const [data, setData] = React.useState<ClientEntity>(new ClientEntity());
+    const [data, setData] = React.useState<PartialClient>(new Client());
     const [packages, setPackages] = React.useState<Package[]>([]);
     const [loading, setLoading] = useState<boolean>(isEditMode);
     const [loadingPackages, setLoadingPackages] = useState<boolean>(true);
@@ -46,7 +52,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
         formState,
         setError,
         trigger,
-    } = useForm<ClientEntity>({
+    } = useForm<PartialClient>({
         resolver: yupResolver(schema),
         mode: "all",
     });
@@ -75,7 +81,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (isEditMode) {
-            ClientApi.getById<ClientEntity>(id).then(
+            ClientApi.findById<Client>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);
@@ -97,30 +103,22 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
         }
     }, [id, isEditMode, trigger]);
 
-    const onSubmit = (formData: ClientEntity) => {
-        ClientApi.createOrUpdate<ClientEntity>(id, {
-            ...formData,
-            packages: data.packages,
-        }).then(({ error, errorMessage }) => {
-            if (error instanceof UnprocessableEntityErrorResponse) {
-                const { violations } = error;
-                _forEach(violations, (value: string, key: string) => {
-                    const propertyName = key as keyof ClientEntity;
-                    setError(propertyName, {
-                        type: "backend",
-                        message: value,
+    const onSubmit = (formData: Client) => {
+        ClientApi.createOrUpdate<Client>(id, formData).then(
+            ({ error, errorMessage }) => {
+                if (error instanceof UnprocessableEntityErrorResponse) {
+                    setViolations<PartialClient>(error, setError);
+                } else if (errorMessage) {
+                    errorToast(errorMessage);
+                } else {
+                    navigator("..").then(() => {
+                        successToast(
+                            isEditMode ? "Client updated" : "Client created"
+                        );
                     });
-                });
-            } else if (errorMessage) {
-                errorToast(errorMessage);
-            } else {
-                nav("..").then(() => {
-                    successToast(
-                        isEditMode ? "Client updated" : "Client created"
-                    );
-                });
+                }
             }
-        });
+        );
     };
 
     if (loading || loadingPackages) {
@@ -143,15 +141,13 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
                                     xl={6}
                                     name={"name"}
                                     label={"Name"}
-                                    required={true}
-                                    withCounter={true}
                                     {...validation(
                                         "name",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.name?.message}
-                                    value={data.name}
+                                    defaultValue={data.name}
                                     control={control}
                                 />
                                 <AppFormTextArea
@@ -159,15 +155,13 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
                                     xl={6}
                                     name={"notes"}
                                     label={"Notes"}
-                                    required={false}
-                                    withCounter={true}
                                     {...validation(
                                         "notes",
                                         formState,
                                         isEditMode
                                     )}
                                     errorMessage={errors.notes?.message}
-                                    value={data.notes || ""}
+                                    defaultValue={data.notes || ""}
                                     control={control}
                                 />
                             </Form.Row>
@@ -189,7 +183,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
                         </AppCard>
                         <AppFormActions
                             isEditMode={isEditMode}
-                            navigation={nav}
+                            navigation={navigator}
                         />
                     </Form>
                 </Col>

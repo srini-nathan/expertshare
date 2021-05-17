@@ -5,11 +5,8 @@ import { DashboardLayout } from "./layouts/DashboardLayout";
 import { AppConfiguration } from "./layouts/AppConfiguration";
 import { AuthLayout } from "./layouts/AuthLayout";
 import { ModuleRouter } from "./models";
-import AppProvider from "./Contexts/AppContext";
-import {
-    AuthContext,
-    logoutAction,
-} from "../SecurityModule/context/AuthContext";
+import AppProvider from "./contexts/AppContext";
+import { AuthContext } from "../SecurityModule/contexts/AuthContext";
 import { AppLoader } from "./components";
 
 import "./assets/scss/bootstrap.scss";
@@ -46,18 +43,7 @@ const OnRouteChange = ({ action }: Props2) => (
 );
 
 const Home: FC<RouteComponentProps> = (): JSX.Element => {
-    const { dispatch } = React.useContext(AuthContext);
-
-    const handleLogoutEvent = async () => {
-        await logoutAction(dispatch);
-    };
-
-    return (
-        <h2>
-            Hi Authenticated User
-            <button onClick={handleLogoutEvent}>Logout</button>
-        </h2>
-    );
+    return <h2>Hi</h2>;
 };
 
 const App = (): JSX.Element => {
@@ -76,11 +62,6 @@ const App = (): JSX.Element => {
             </div>
         );
     }
-    // TODO: need to redefine this flow, as we need a way to extract the location param so that we know where is the
-    //  request is coming from.
-    // if (!state.isAuthenticated) {
-    //     navigate("/auth/login").then();
-    // }
 
     if (state.isAuthenticated) {
         return (
@@ -110,11 +91,10 @@ const App = (): JSX.Element => {
     return (
         <AuthLayout>
             <Router primary={false}>
-                <Redirect from="/home" to="/auth" />
-                <Redirect from="/" to="/auth" noThrow />
                 {authRoutes.map(({ RouterPlug, key, path }) => {
                     return <RouterPlug key={key} path={path} />;
                 })}
+                <Redirect noThrow from="*" to="/auth" />
             </Router>
         </AuthLayout>
     );

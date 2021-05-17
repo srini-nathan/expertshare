@@ -5,9 +5,12 @@ import { Container, Row, Col, Form } from "react-bootstrap";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AppButton } from "../../../AppModule/components/AppButton";
-import { AuthContext, loginAction } from "../../context/AuthContext";
+import { AuthContext, loginAction } from "../../contexts/AuthContext";
 import { AppAuthHeader, AppAuthFooter } from "../../components";
-import { AppFormInput } from "../../../AppModule/components/AppFormInput";
+import {
+    AppFormInput,
+    AppFormInputPassword,
+} from "../../../AppModule/components";
 import { validation } from "../../../AppModule/utils";
 import { API_HOST } from "../../../AppModule/config/app-env";
 import "./assets/scss/styles.scss";
@@ -39,7 +42,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                 <Row className="p-0 m-auto">
                     <AppAuthHeader
                         title="Log In"
-                        desctiption="Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
+                        description="Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
             velit mollit. Exercitation veniam consequat sunt nostrud amet."
                     />
                     <div className="active-account-box">
@@ -61,16 +64,15 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                                 false
                                             )}
                                             errorMessage={errors.email?.message}
-                                            value={"admin@admin.com"}
+                                            defaultValue={"admin@admin.com"}
                                             control={control}
                                         />
                                     </Form.Row>
                                     <Form.Row>
-                                        <AppFormInput
+                                        <AppFormInputPassword
                                             md={12}
                                             lg={12}
                                             xl={12}
-                                            type={"password"}
                                             name={"password"}
                                             label={""}
                                             required={true}
@@ -82,7 +84,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                             errorMessage={
                                                 errors.password?.message
                                             }
-                                            value={"123123"}
+                                            defaultValue={"123123"}
                                             control={control}
                                         />
                                     </Form.Row>

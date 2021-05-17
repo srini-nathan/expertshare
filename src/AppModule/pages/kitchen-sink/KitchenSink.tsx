@@ -17,8 +17,9 @@ import {
     AppVimeoFrame,
     AppFormRadioSwitch,
     AppUploader,
+    AppFormRichTextArea,
 } from "../../components";
-import { SimpleObject } from "../../../AdminModule/models";
+import { SimpleObject } from "../../models";
 
 const options = [
     { id: "1", value: "chocolate", label: "Chocolate" },
@@ -53,7 +54,7 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
             </Row>
             <hr className="col-12" />
             <Row>
-                <Col md={6}>
+                <Col>
                     <AppTagSelect
                         options={options}
                         selectedItems={selectedItems}
@@ -71,8 +72,9 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                         }}
                     />
                 </Col>
-                <hr className="col-12" />
-
+            </Row>
+            <hr className="col-12" />
+            <Row>
                 <AppFormInputPassword
                     id="password"
                     required
@@ -89,8 +91,9 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     isValid={true}
                     control={control}
                 />
-                <hr className="col-12" />
-
+            </Row>
+            <hr className="col-12" />
+            <Row>
                 <AppFormTextArea
                     id="textarea"
                     required
@@ -100,7 +103,7 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     xl="4"
                     name="textarea"
                     label="Text Area"
-                    value="hello"
+                    defaultValue="hello"
                     placeholder="hello"
                     description="hello this is description"
                     maxCount={150}
@@ -109,16 +112,20 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     isInvalid={true}
                     control={control}
                 />
-                <hr className="col-12" />
-
-                <AppCard
-                    title="Card Title"
-                    subtitle="This is bootstrap subtitle"
-                >
-                    <p>hello this is children</p>
-                </AppCard>
-                <hr className="col-12" />
-
+            </Row>
+            <hr className="col-12" />
+            <Row>
+                <Col>
+                    <AppCard
+                        title="Card Title"
+                        subtitle="This is bootstrap subtitle"
+                    >
+                        <p>hello this is children</p>
+                    </AppCard>
+                </Col>
+            </Row>
+            <hr className="col-12" />
+            <Row>
                 <AppFormRadioSwitch
                     required={true}
                     sm="6"
@@ -130,9 +137,9 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     defaultValue="chocolate"
                     control={control}
                 />
-
-                <hr className="col-12" />
-
+            </Row>
+            <hr className="col-12" />
+            <Row>
                 <div
                     className="col-md-12 vh-100"
                     style={{ border: "1px solid" }}
@@ -172,28 +179,54 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
             </Row>
             <hr className="col-12" />
             <Row>
-                <AppDacastFrame
-                    id="1552_f_297509"
-                    provider="dacast"
-                    width={640}
-                    height={390}
-                />
+                <Col>
+                    <AppDacastFrame
+                        id="1552_f_297509"
+                        provider="dacast"
+                        width={640}
+                        height={390}
+                    />
+                </Col>
             </Row>
             <hr className="col-12" />
             <Row>
-                <AppYoutubeFrame
-                    url="https://www.youtube.com/watch?v=y9j-BL5ocW8"
-                    height="390"
-                    width="640"
-                    configuration={{ autoplay: 1 }}
-                />
+                <Col>
+                    <AppYoutubeFrame
+                        url="https://www.youtube.com/watch?v=y9j-BL5ocW8"
+                        height="390"
+                        width="640"
+                        configuration={{ autoplay: 1 }}
+                    />
+                </Col>
             </Row>
             <hr className="col-12" />
             <Row>
-                <AppVimeoFrame
-                    url="https://vimeo.com/544191717"
-                    height="390"
-                    width="640"
+                <Col>
+                    <AppVimeoFrame
+                        url="https://vimeo.com/544191717"
+                        height="390"
+                        width="640"
+                    />
+                </Col>
+            </Row>
+            <hr className="col-12" />
+            <Row>
+                <AppFormRichTextArea
+                    id="richtext"
+                    required
+                    md="12"
+                    sm="12"
+                    lg="12"
+                    xl="12"
+                    name="richtext"
+                    label="Rich Text Area"
+                    defaultValue="hello"
+                    placeholder="Rich Text Area"
+                    description="hello this is description"
+                    maxCount={150}
+                    withCounter={true}
+                    errorMessage="This field is required"
+                    control={control}
                 />
             </Row>
             <Row>

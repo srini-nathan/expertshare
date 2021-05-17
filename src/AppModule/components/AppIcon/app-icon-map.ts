@@ -1,7 +1,9 @@
 import {
     faChevronLeft,
+    faUser,
     faChevronRight,
     faChevronDown,
+    faChevronUp,
     faCog,
     faUserFriends,
     faBars,
@@ -13,12 +15,17 @@ import {
     faSearch,
     faThLarge,
     faArrowLeft,
+    faSignOut,
+    faEye,
+    faEyeSlash,
+    faClone,
 } from "@fortawesome/pro-regular-svg-icons";
 import { AppIconMap } from "../../models";
 
 export const appIconMap: AppIconMap = {
     ChevronLeft: faChevronLeft,
     ChevronDown: faChevronDown,
+    ChevronUp: faChevronUp,
     ArrowLeft: faArrowLeft,
     back: faChevronLeft,
     next: faChevronRight,
@@ -33,4 +40,10 @@ export const appIconMap: AppIconMap = {
     X: faTimes,
     Search: faSearch,
     Menu: faBars,
+    User: faUser,
+    Eye: faEye,
+    EyeOff: faEyeSlash,
+    SignOut: faSignOut,
+    faClone,
+    Clone: faClone,
 };

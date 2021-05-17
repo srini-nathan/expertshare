@@ -97,23 +97,9 @@ export const AppGrid: FC<AppGridProps> = ({
                     />
                 </div>
                 <br />
-                <div className="d-flex flex-row app-grid-action">
-                    <div className="pagination-container mr-3">
-                        <AppFormDropdown
-                            id={"pageSize"}
-                            defaultValue={defaultPageSize()}
-                            options={pageSizeOptions()}
-                            menuPlacement={"top"}
-                            onChange={(selectedValue) => {
-                                const {
-                                    value,
-                                } = selectedValue as AppGridPageSizeOption;
-                                gridApi?.paginationSetPageSize(value);
-                                setPageSize(value);
-                            }}
-                        />
-                    </div>
+                <div className="d-flex flex-row app-grid-action py-3">
                     <AppGridPagination
+                        className="mr-3"
                         itemsPerPage={pageSize}
                         totalItems={totalItems}
                         active={active}
@@ -121,6 +107,23 @@ export const AppGrid: FC<AppGridProps> = ({
                             gridApi?.paginationGoToPage(pageNumber - 1);
                         }}
                     />
+                    {totalItems > 0 ? (
+                        <div className="pagination-container">
+                            <AppFormDropdown
+                                id={"pageSize"}
+                                defaultValue={defaultPageSize()}
+                                options={pageSizeOptions()}
+                                menuPlacement={"top"}
+                                onChange={(selectedValue) => {
+                                    const {
+                                        value,
+                                    } = selectedValue as AppGridPageSizeOption;
+                                    gridApi?.paginationSetPageSize(value);
+                                    setPageSize(value);
+                                }}
+                            />
+                        </div>
+                    ) : null}
                 </div>
             </div>
         </React.Fragment>

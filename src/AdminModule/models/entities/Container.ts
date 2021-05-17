@@ -1,64 +1,115 @@
-import { BaseEntity } from "../../../AppModule/models";
+import { BaseEntity, JsonResponseData } from "../../../AppModule/models";
 import { Package } from "./Package";
-import { ContainerConfiguration } from "./ContainerConfiguration";
-import { ClientEntity } from "./Client";
+import { Client } from "./Client";
+import { UserGroup } from "./UserGroup";
+import { CONSTANTS } from "../../../config";
+import { ContainerApi } from "../../apis";
 
-export interface Container extends BaseEntity {
-    domain: string;
-    containerGroup: string;
-    storage: string;
-    bucketKey: string;
-    bucketSecret: string;
-    bucketName: string;
-    isActive: boolean;
-    client: string;
-    configuration: string[];
-    designConfiguration: string[];
-    configurationTypes: ContainerConfiguration;
-    designConfigurationTypes: ContainerConfiguration;
-    packages: Package[];
-}
-
-export class ContainerEntity {
+export class Container extends BaseEntity {
     domain: string;
 
     name: string;
 
-    containerGroup?: string;
+    containerGroup: string;
 
     storage: string;
 
-    bucketKey?: string;
+    bucketKey: string;
 
-    bucketSecret?: string;
+    bucketSecret: string;
 
-    bucketName?: string;
+    bucketName: string;
 
-    bucketRegion?: string;
+    bucketRegion: string;
 
-    isActive?: boolean;
+    isActive: boolean;
 
-    client?: string | ClientEntity;
+    description: string;
 
-    description?: string;
+    configuration: string[];
+
+    configurationTypes: string[];
+
+    designConfiguration: string[];
+
+    designConfigurationTypes: string[];
+
+    client: string | Client;
 
     packages: string[] | Package[];
 
-    configuration?: string[];
+    userGroups: string[] | UserGroup[];
 
-    constructor(client: string) {
+    constructor(
+        client: string,
+        {
+            domain = "",
+            name = "",
+            storage = CONSTANTS.Container.STORAGE.STORAGE_LOCAL,
+            packages = [],
+            isActive = true,
+            containerGroup = "",
+            bucketKey = "",
+            bucketSecret = "",
+            bucketName = "",
+            bucketRegion = "",
+            description = "",
+            configuration = [],
+            configurationTypes = [],
+            designConfiguration = [],
+            designConfigurationTypes = [],
+            userGroups = [],
+            id,
+            createdAt,
+            updatedAt,
+        }: Partial<Container> = {}
+    ) {
+        super(id, createdAt, updatedAt);
         this.client = client;
-        this.domain = "";
-        this.name = "";
-        this.storage = "Local";
-        this.packages = [];
-        this.isActive = true;
-        this.containerGroup = "";
-        this.bucketKey = "";
-        this.bucketSecret = "";
-        this.bucketName = "";
-        this.bucketRegion = "";
-        this.description = "";
-        this.configuration = [];
+        this.domain = domain;
+        this.name = name;
+        this.storage = storage;
+        this.packages = packages;
+        this.isActive = isActive;
+        this.containerGroup = containerGroup;
+        this.userGroups = userGroups;
+        this.bucketKey = bucketKey;
+        this.bucketSecret = bucketSecret;
+        this.bucketName = bucketName;
+        this.bucketRegion = bucketRegion;
+        this.description = description;
+        this.configuration = configuration;
+        this.configurationTypes = configurationTypes;
+        this.designConfiguration = designConfiguration;
+        this.designConfigurationTypes = designConfigurationTypes;
+    }
+
+    toString(): string {
+        return ContainerApi.toResourceUrl(this.id);
+    }
+
+    toJSON(addExtraData = false): JsonResponseData {
+        return {
+            ...super.toJSON(addExtraData),
+            name: this.name,
+            client: this.client.toString(),
+            domain: this.domain,
+            storage: this.storage,
+            packages: this.packages.map((p: string | Package) => p.toString()),
+            isActive: this.isActive,
+            containerGroup: this.containerGroup,
+            userGroups: this.userGroups.map((p: string | UserGroup) =>
+                p.toString()
+            ),
+            bucketKey: this.bucketKey,
+            bucketSecret: this.bucketSecret,
+            bucketName: this.bucketName,
+            bucketRegion: this.bucketRegion,
+            description: this.description,
+            configuration: this.configuration,
+            configurationTypes: this.configurationTypes,
+            designConfiguration: this.designConfiguration,
+            designConfigurationTypes: this.designConfigurationTypes,
+        };
     }
 }
