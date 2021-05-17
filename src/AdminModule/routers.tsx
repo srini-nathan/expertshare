@@ -17,7 +17,10 @@ import {
 } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
 import { ContainerAddEdit } from "./pages/ContainerPage/ContainerAddEdit";
-import { UserFieldAddEditPage, UserFieldListPage } from "./pages/UserFieldPage";
+import {
+    UserFieldAddEditPage,
+    UserFieldListPage,
+} from "./pages/UserFieldsPage";
 
 export const routers: ModuleRouter[] = [
     {
