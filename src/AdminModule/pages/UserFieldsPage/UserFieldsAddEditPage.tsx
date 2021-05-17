@@ -58,11 +58,8 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
     });
 
     const onSubmit = (formData: UserFieldsEntity) => {
-        alert(JSON.stringify(attribs));
-        alert(JSON.stringify(opts));
         formData.attr = attribs!;
         formData.options = { choice: opts! };
-        alert(JSON.stringify(formData.options));
         UserFieldsApi.createOrUpdate<UserFieldsEntity>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
@@ -217,7 +214,6 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
                                             output: (
                                                 fieldType: PrimitiveObject
                                             ) => {
-                                                alert(fieldType.value);
                                                 setSelected(fieldType.value);
                                                 return fieldType?.value;
                                             },
