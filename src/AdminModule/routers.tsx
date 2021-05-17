@@ -18,8 +18,8 @@ import {
 import { ModuleRouter } from "../AppModule/models";
 import { ContainerAddEdit } from "./pages/ContainerPage/ContainerAddEdit";
 import {
-    UserFieldAddEditPage,
-    UserFieldListPage,
+    UserFieldsAddEditPage,
+    UserFieldsListPage,
 } from "./pages/UserFieldsPage";
 
 export const routers: ModuleRouter[] = [
@@ -53,9 +53,9 @@ export const routers: ModuleRouter[] = [
                     <EmailTemplateListPage path={"email-templates"} />
                     <EmailTemplateAddEditPage path={"email-templates/new"} />
                     <EmailTemplateAddEditPage path={"email-templates/:id"} />
-                    <UserFieldListPage path={"user-fields"} />
-                    <UserFieldAddEditPage path={"user-fields/new"} />
-                    <UserFieldAddEditPage path={"user-fields/:id"} />
+                    <UserFieldsListPage path={"user-fields"} />
+                    <UserFieldsAddEditPage path={"user-fields/new"} />
+                    <UserFieldsAddEditPage path={"user-fields/:id"} />
                 </Router>
             );
         },
