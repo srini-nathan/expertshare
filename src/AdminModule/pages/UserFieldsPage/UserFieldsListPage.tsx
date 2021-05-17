@@ -20,15 +20,11 @@ import {
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
 import { errorToast, successToast } from "../../../AppModule/utils";
-import { AuthContext } from "../../../SecurityModule/context/AuthContext";
-import { AuthState } from "../../../SecurityModule/models/context/AuthState";
 
 export const UserFieldsListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
-    const { state } = React.useContext(AuthContext);
-    const { containerId } = state as AuthState;
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -42,7 +38,6 @@ export const UserFieldsListPage: FC<RouteComponentProps> = (): JSX.Element => {
                     {
                         order: buildSortParams(request),
                         ...buildFilterParams(request),
-                        "container.id": containerId,
                     },
                     (c) => {
                         cancelTokenSourcesRef.current.push(c);
@@ -68,7 +63,7 @@ export const UserFieldsListPage: FC<RouteComponentProps> = (): JSX.Element => {
     }
 
     async function handleDelete(id: number) {
-        UserFieldsApi.delete(id).then(({ error }) => {
+        UserFieldsApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
