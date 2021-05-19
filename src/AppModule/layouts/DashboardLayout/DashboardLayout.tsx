@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import { appNavigations } from "../../bootstrap";
 import AppNavigation from "../../containers/AppNavigation/AppNavigation";
+import { AppMessageBox } from "../../containers/AppMessageBox/AppMessageBox";
 
 export const DashboardLayout: FC = ({ children }) => {
     return (
@@ -13,6 +14,7 @@ export const DashboardLayout: FC = ({ children }) => {
                 <Col md={9} xl={10} className={"p-5 mb-5"}>
                     {children}
                 </Col>
+                <AppMessageBox />
             </Row>
         </Container>
     );

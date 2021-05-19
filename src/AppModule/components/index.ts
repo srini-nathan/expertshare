@@ -32,3 +32,5 @@ export * from "./AppTab";
 export * from "./AppFormLabel";
 export * from "./AppFormRichTextArea";
 export * from "./AppFormSelect";
+export * from "./AppDetailsAction";
+export * from "./AppMessageItem";

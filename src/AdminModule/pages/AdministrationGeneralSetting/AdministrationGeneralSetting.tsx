@@ -167,7 +167,7 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
             {isLoading ? (
                 <AppLoader />
             ) : (
-                <Row className="pb-5">
+                <Row className="pb-12">
                     <Form
                         noValidate
                         onSubmit={handleSubmit(onSubmit)}
