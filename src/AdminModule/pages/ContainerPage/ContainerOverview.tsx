@@ -1,30 +1,19 @@
-import React, { FC, Fragment, useRef } from "react";
+import React, { FC, Fragment, useEffect, useRef, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Canceler } from "axios";
 import { GridApi } from "ag-grid-community";
 import { Row } from "react-bootstrap";
+import { isString as _isString } from "lodash";
+import { errorToast } from "../../../AppModule/utils";
 import { AppPageHeader } from "../../../AppModule/components";
 import { AppContainerComponent } from "../../components/AppContainerComponent";
+import { ContainerOverviewApi } from "../../apis/OverviewApi";
+import { ContainerView } from "../../models/entities/ContainerView";
 
 export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const appGridApi = useRef<GridApi>();
-    const initValueForContainer = [
-        {
-            title: "Global Forum 2021",
-            content:
-                " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Est ultrices sapien id  elementum, semper urna a arcu ipsum. Nunc  sollicitudin semper neque adipiscing ornare nec",
-            imageUrl:
-                "http://html.srmedia.ch/v2/assets/images/oveview_banner/ov-banner-1.png",
-        },
-        {
-            title: "Global Forum 2021",
-            content:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Est ultrices sapien id  elementum, semper urna a arcu ipsum. Nunc  sollicitudin semper neque adipiscing ornare nec",
-            imageUrl:
-                "http://html.srmedia.ch/v2/assets/images/oveview_banner/ov-banner-2.png",
-        },
-    ];
+    const [overviews, setOverviews] = useState<ContainerView[]>([]);
     async function handleFilter(search: string) {
         appGridApi.current?.setFilterModel({
             name: {
@@ -32,6 +21,20 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
             },
         });
     }
+    useEffect(() => {
+        ContainerOverviewApi.find<ContainerView>(1, {}, (c) => {
+            cancelTokenSourcesRef.current.push(c);
+        }).then(({ response, error }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                }
+            } else if (response !== null) {
+                alert(JSON.stringify(response));
+                setOverviews(response.items);
+            }
+        });
+    }, []);
     return (
         <Fragment>
             <AppPageHeader
@@ -43,7 +46,7 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
             />
             <Row style={{ margin: "0 auto" }}>
                 <AppContainerComponent
-                    containers={initValueForContainer}
+                    containers={overviews}
                 ></AppContainerComponent>
             </Row>
         </Fragment>

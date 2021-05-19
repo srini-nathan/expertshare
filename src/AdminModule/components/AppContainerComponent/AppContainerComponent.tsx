@@ -1,9 +1,10 @@
 import React, { FC } from "react";
 import { Row, Col } from "react-bootstrap";
+import { ContainerView } from "../../models/entities/ContainerView";
 import "./assets/scss/overview.scss";
 
 export interface AppContainerComponentProps {
-    containers: any[];
+    containers: ContainerView[];
 }
 
 export const AppContainerComponent: FC<AppContainerComponentProps> = ({
@@ -23,7 +24,7 @@ export const AppContainerComponent: FC<AppContainerComponentProps> = ({
                         <div
                             className="inner-container--banner"
                             style={{
-                                backgroundImage: `url(${container.imageUrl})`,
+                                backgroundImage: `url(${container.imageName})`,
                             }}
                         >
                             <div className="inner-container--banner--icons">
@@ -38,11 +39,11 @@ export const AppContainerComponent: FC<AppContainerComponentProps> = ({
                         <div className="inner-container--det p-3 mx-2">
                             <div className="inner-container--det--title">
                                 <a href="#">
-                                    <h2>{container.title}</h2>
+                                    <h2>{container.name}</h2>
                                 </a>
                             </div>
                             <div className="inner-container--det--desc">
-                                <p className="mb-0">{container.content}</p>
+                                <p className="mb-0">{container.description}</p>
                             </div>
                         </div>
                     </div>
