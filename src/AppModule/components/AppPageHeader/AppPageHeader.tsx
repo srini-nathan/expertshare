@@ -26,11 +26,11 @@ export const AppPageHeader: FC<AppPageHeaderProps> = ({
 }): JSX.Element => {
     return (
         <Row>
-            <Col md={6} className="page-title">
+            <Col md={5} className="page-title">
                 <h1>{title}</h1>
             </Col>
             {showToolbar && (
-                <Col md={6}>
+                <Col md={7}>
                     <AppListPageToolbar
                         createLabel={createLabel}
                         createLink={createLink}
@@ -39,7 +39,7 @@ export const AppPageHeader: FC<AppPageHeaderProps> = ({
                     />
                 </Col>
             )}
-            {customToolbar && <Col md={6}>{children}</Col>}
+            {customToolbar && <Col md={7}>{children}</Col>}
         </Row>
     );
 };

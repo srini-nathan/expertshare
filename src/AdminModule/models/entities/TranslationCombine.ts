@@ -5,9 +5,13 @@ import { TranslationGroup } from "./TranslationGroup";
 export interface TranslationCombine {
     tKey: string;
 
+    itemKey?: any;
+
+    defaultValue: string;
+
     id: number;
 
-    translation: Translation;
+    translation?: Translation;
 
     translationGroup: TranslationGroup;
 

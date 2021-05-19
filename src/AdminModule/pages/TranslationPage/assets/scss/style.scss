@@ -1,0 +1,28 @@
+@import "../../../../../AppModule/assets/scss/variables";
+
+.translation-page {
+    .custom-select-container {
+        height: 36px !important;
+    }
+
+    .input-group {
+        input {
+            border-right: 1px solid var(--input-border-clr) !important;
+            border-left: 0 !important;
+
+        }
+
+        .input-group-text {
+            padding: 9px;
+            color: var(--input-fg-clr) !important;
+            background-color: var(--input-bg-clr) !important;
+            border-right: 0 !important;
+            border-left: 1px solid var(--input-border-clr) !important;
+            border-top-left-radius: var(--border-radius) !important;
+            border-top-right-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
+            border-bottom-left-radius: var(--border-radius) !important;
+
+        }
+    }
+}

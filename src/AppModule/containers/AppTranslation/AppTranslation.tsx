@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { isString as _isString } from "lodash";
 import {
@@ -6,8 +6,6 @@ import {
     AppButton,
     AppFormInput,
     AppFormTextArea,
-    // AppModal,
-    // AppLoader,
 } from "../../components";
 import "./assets/scss/style.scss";
 import {
@@ -49,164 +47,192 @@ export const AppTranslation: FC<AppTranslationProps> = ({
     items,
 }) => {
     const { control } = useForm();
-    const [languages, setLanguages] = useState<Translation[] | undefined>(
+    const [translation, setTransalations] = useState<Translation[] | undefined>(
         items
     );
     const [translationGroupName, setTranslationGroup] = useState<
-        TranslationGroup | undefined
+        TranslationGroup | undefined | null
     >(translationGroup);
-    const [, isLoading] = useState<boolean>(false);
     const { state } = React.useContext(AuthContext);
     const { containerId } = state as AuthState;
 
-    useEffect(() => {
-        // LanguageApi.find<Language>(1, { "container.id": containerId }).then(
-        //     ({ error, response }) => {
-        //         if (error !== null) {
-        //             if (_isString(error)) {
-        //                 errorToast(error);
-        //             }
-        //         } else if (response !== null) {
-        //             /* eslint-disable no-console */
-        //             setLanguages(response.items);
-        //             /* eslint-enable no-console */
-        //         }
-        //     }
-        // );
-        /* eslint-disable no-console */
-        console.log(translationGroupName);
-        /* eslint-enable no-console */
-    }, [translationGroupName]);
-
     const addNewItem = () => {
-        if (languages)
-            setLanguages([
-                ...languages,
+        if (translation)
+            setTransalations([
                 {
-                    id: -1,
+                    id: null,
+                    defaultValue: "",
                     tKey: "",
+                    itemKey:
+                        Math.floor(Math.random() * 10000 + 1000) *
+                        Math.floor(Math.random() * 10000 + 1000),
                     translationGroupId: translationGroupName?.id,
                     translationGroup: translationGroupName?.tgKey
                         ? translationGroupName?.tgKey
                         : "",
                 },
+                ...translation,
             ]);
         else
-            setLanguages([
+            setTransalations([
                 {
-                    id: -1,
+                    id: null,
+                    defaultValue: "",
                     tKey: "",
+                    itemKey:
+                        Math.floor(Math.random() * 10000 + 1000) *
+                        Math.floor(Math.random() * 10000 + 1000),
                     translationGroupId: translationGroupName?.id,
                     translationGroup: translationGroupName?.tgKey
                         ? translationGroupName?.tgKey
                         : "",
                 },
             ]);
-
-        /* eslint-disable no-console */
-        console.log(languages);
-        /* eslint-enable no-console */
     };
 
-    const removeTranslation = (id: number) => {
-        TranslationApi.deleteById(id).then(({ error }) => {
-            if (error !== null) {
-                if (_isString(error)) {
-                    errorToast(error);
+    const removeTranslation = (index: number) => {
+        const id = translation && translation[index].id;
+
+        if (id === null && translation) {
+            setTransalations([
+                ...translation.splice(0, index),
+                ...translation.splice(index + 1),
+            ]);
+        } else
+            TranslationApi.deleteById(id as number).then(({ error }) => {
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    }
+                } else {
+                    successToast("Successfully deleted");
+                    const newTranslations = translation?.filter(
+                        (e) => e.id !== id
+                    );
+                    setTransalations(newTranslations);
                 }
-            } else {
-                successToast("Successfully deleted");
-            }
-        });
+            });
     };
 
-    // const removeItem = (index: number) => {
-    //     const newItems = languages.filter((item, i) => {
-    //         return i !== index;
-    //     });
-
-    //     setLanguages(newItems);
-    // };
+    const removeTranslationGroup = () => {
+        if (translationGroupName === undefined) {
+            setTranslationGroup(null);
+            successToast("Successfully deleted");
+        } else if (translationGroupName) {
+            const id = translationGroupName.id ? translationGroupName.id : 0;
+            TranslationGroupApi.deleteById(id).then(({ error }) => {
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    }
+                } else {
+                    successToast("Successfully deleted");
+                    setTranslationGroup(null);
+                }
+            });
+        }
+    };
 
     const handleGroupName = async (name: string) => {
-        isLoading(true);
         const data: TranslationGroup = {
             name,
             tgKey: name,
         };
-        TranslationGroupApi.create<TranslationGroup, TranslationGroup>(
-            data
-        ).then(({ error, errorMessage, response }) => {
-            isLoading(false);
-            if (error !== null) {
-                if (_isString(error)) {
-                    errorToast(error);
-                } else {
-                    errorToast(errorMessage);
+        const id =
+            translationGroupName && translationGroupName.id
+                ? translationGroupName.id
+                : null;
+        TranslationGroupApi.createOrUpdate<TranslationGroup>(id, data).then(
+            ({ error, errorMessage, response }) => {
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    } else {
+                        errorToast(errorMessage);
+                    }
+                } else if (response !== null) {
+                    setTranslationGroup(response);
+                    /* eslint-disable no-console */
+                    console.log(response, translationGroup);
+                    /* eslint-enable no-console */
                 }
-            } else if (response !== null) {
-                setTranslationGroup(response);
-                /* eslint-disable no-console */
-                console.log(response, translationGroup);
-                /* eslint-enable no-console */
             }
-        });
+        );
         // await successToast("Configuration updated successfully");
     };
 
-    const handleDefaultValue = (value: string, index: number) => {
-        /* eslint-disable no-console */
-        console.log(translationGroupName, value);
-        /* eslint-enable no-console */
+    const handleDefaultValue = (
+        value: string,
+        index: number,
+        name: "tKey" | "defaultValue"
+    ) => {
         if (translationGroupName) {
-            isLoading(true);
-            const data: Translation = {
-                tKey: value,
+            let id = translation && translation[index].id;
+            if (id === undefined) id = null;
+            let data: Translation = {
                 translationGroup: `/api/translation_groups/${translationGroupName.id}`,
             };
-            TranslationApi.create<Translation, Translation>(data).then(
-                ({ error, errorMessage, response }) => {
-                    isLoading(false);
-                    if (error !== null) {
-                        if (_isString(error)) {
-                            errorToast(error);
-                        } else {
-                            errorToast(errorMessage);
-                        }
-                    } else if (response !== null) {
-                        /* eslint-disable no-console */
-                        console.log(response);
-                        /* eslint-enable no-console */
-                        const translationItems = languages;
-                        if (translationItems)
-                            translationItems[index] = {
-                                ...translationItems[index],
-                                id: response.id,
-                                tKey: response.tKey,
-                            };
-                        setLanguages(translationItems);
+            if (name === "tKey")
+                data = {
+                    ...data,
+                    tKey: value,
+                };
+            else
+                data = {
+                    ...data,
+                    defaultValue: value,
+                };
+            TranslationApi.createOrUpdate<Translation>(
+                id,
+                data as Translation
+            ).then(({ error, errorMessage, response }) => {
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    } else {
+                        errorToast(errorMessage);
                     }
+                } else if (response !== null) {
+                    const translationItems = translation;
+                    if (translationItems)
+                        translationItems[index] = {
+                            ...translationItems[index],
+                            id: response.id,
+                            tKey: response.tKey,
+                        };
+                    setTransalations(translationItems);
                 }
-            );
+            });
         }
     };
 
     const handleTranslationValue = (
         val: string,
         locale: string,
-        translationId: number
+        index: number,
+        id: number | null
     ) => {
-        isLoading(true);
+        let valueId = id;
+
+        if (!valueId) {
+            if (translation && translation[index].items) {
+                const item = translation[index].items.filter(
+                    (e: any) => e.locale === locale
+                );
+                if (item && item.length > 0) valueId = item[0].id;
+            }
+        }
+        const translationId = translation && translation[index].id;
         const data: TranslationValue = {
             val,
             locale,
             translation: `/api/translations/${translationId}`,
             container: `/api/containers/${containerId}`,
         };
-        TranslationValueApi.create<TranslationValue, TranslationValue>(
+        TranslationValueApi.createOrUpdate<TranslationValue>(
+            valueId,
             data
         ).then(({ error, errorMessage, response }) => {
-            isLoading(false);
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
@@ -214,9 +240,24 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                     errorToast(errorMessage);
                 }
             } else if (response !== null) {
-                /* eslint-disable no-console */
-                console.log(response);
-                /* eslint-enable no-console */
+                const translationItems = translation;
+                if (translationItems) {
+                    const temp = translationItems[index].items
+                        ? translationItems[index].items
+                        : [];
+                    translationItems[index] = {
+                        ...translationItems[index],
+                        items: [
+                            ...temp,
+                            {
+                                id: response.id,
+                                locale,
+                            },
+                        ],
+                    };
+                }
+
+                setTransalations(translationItems);
             }
         });
     };
@@ -239,27 +280,33 @@ export const AppTranslation: FC<AppTranslationProps> = ({
 
     const renderLanguages = () => {
         return (
-            languages &&
-            languages.map((item: any, i: number) => {
+            translation &&
+            translation.map((item: any, i: number) => {
                 return (
-                    <div className="content--item d-flex">
-                        {activeLanguages.map((e: any, j: number) => {
+                    <div
+                        key={`${item.itemKey}_value`}
+                        className="content--item d-flex"
+                    >
+                        {activeLanguages.map((e: any) => {
                             let defaultValue = "";
+                            let id: number | null = null;
                             const defVal =
                                 item.translationValues &&
                                 item.translationValues.filter((val: any) => {
                                     return val.locale === e.locale;
                                 });
-                            if (defVal && defVal.length > 0)
+                            if (defVal && defVal.length > 0) {
+                                id = defVal[0].id;
                                 defaultValue = defVal[0].val;
+                            }
 
                             return (
                                 <div
-                                    key={e.locale}
+                                    key={`${item.tKey}_${e.locale}`}
                                     className="content--item--key"
                                 >
                                     <AppFormTextArea
-                                        name={`item_key_${e.locale}_${j}`}
+                                        name={`value_${e.locale}_${item.itemKey}`}
                                         placeholder={e.name.toUpperCase()}
                                         onBlurHandler={(
                                             value: React.FocusEvent<HTMLTextAreaElement>
@@ -267,7 +314,8 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                             handleTranslationValue(
                                                 value.target.value,
                                                 e.locale,
-                                                item.id
+                                                i,
+                                                id
                                             );
                                         }}
                                         md={12}
@@ -290,13 +338,16 @@ export const AppTranslation: FC<AppTranslationProps> = ({
 
     const renderItemsKey = () => {
         return (
-            languages &&
-            languages.map((item: any, i: number) => {
+            translation &&
+            translation.map((item: any, i: number) => {
                 return (
-                    <div className="content--item d-flex">
+                    <div
+                        key={`${item.itemKey}_key`}
+                        className="content--item d-flex"
+                    >
                         <div className="content--item--delete">
                             <AppButton
-                                onClick={() => removeTranslation(item.id)}
+                                onClick={() => removeTranslation(i)}
                                 variant="secondary"
                             >
                                 <AppIcon name="delete" />
@@ -306,13 +357,14 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                             <div className="row m-0 p-0">
                                 <div className="content--item--value--key col-6 px-1">
                                     <AppFormTextArea
-                                        name={`item_key_${i}`}
+                                        name={`translation_key_${item.itemKey}`}
                                         onBlurHandler={(
                                             value: React.FocusEvent<HTMLTextAreaElement>
                                         ) => {
                                             handleDefaultValue(
                                                 value.target.value,
-                                                i
+                                                i,
+                                                "tKey"
                                             );
                                         }}
                                         placeholder="Item Key"
@@ -327,13 +379,23 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                 </div>
                                 <div className="content--item--value--name col-6 px-1">
                                     <AppFormTextArea
-                                        name={`item_key_`}
+                                        name={`translation_default_value_${item.itemKey}`}
                                         placeholder="Default Value"
+                                        onBlurHandler={(
+                                            value: React.FocusEvent<HTMLTextAreaElement>
+                                        ) => {
+                                            handleDefaultValue(
+                                                value.target.value,
+                                                i,
+                                                "defaultValue"
+                                            );
+                                        }}
                                         md={12}
                                         sm={12}
                                         lg={12}
                                         xl={12}
                                         className="input-txarea w-100 m-0 p-0"
+                                        defaultValue={item.defaultValue}
                                         control={control}
                                     />
                                     <i className="fak fa-check-circle-regular"></i>
@@ -346,22 +408,11 @@ export const AppTranslation: FC<AppTranslationProps> = ({
         );
     };
 
+    if (translationGroupName === null) return <></>;
+
     return (
         <React.Fragment>
-            {/* {
-                <AppModal
-                show={show}
-                handleClose={handleNegative}
-                handleDelete={handlePositive}
-                bodyContent={confirmation}
-            />
-            } */}
             <div className="translation-super-admin--container col-12 mt-4 px-0">
-                {/* {loading && (
-                    <div className="translation-loading">
-                        <AppLoader />
-                    </div>
-                )} */}
                 <div className="translation-super-admin--container--inner">
                     <div className="row p-0 m-0">
                         <div className="group-col col-8 col-sm-7 col-md-6 col-xl-5 px-0">
@@ -383,7 +434,7 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                     <div className="header d-flex">
                                         <div className="header--delete pl-0 pr-1">
                                             <AppButton
-                                                disabled={!translationGroupName}
+                                                onClick={removeTranslationGroup}
                                                 variant="secondary"
                                             >
                                                 <AppIcon name="delete" />
@@ -408,8 +459,9 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                                 className="m-0 p-0"
                                                 name="GroupName"
                                                 defaultValue={
-                                                    translationGroupName &&
-                                                    translationGroupName.tgKey
+                                                    translationGroupName
+                                                        ? translationGroupName.tgKey
+                                                        : ""
                                                 }
                                                 onBlurHandler={(
                                                     value: React.FocusEvent<HTMLInputElement>
