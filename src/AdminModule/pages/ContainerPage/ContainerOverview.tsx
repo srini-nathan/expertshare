@@ -9,11 +9,13 @@ import { AppPageHeader } from "../../../AppModule/components";
 import { AppContainerComponent } from "../../components/AppContainerComponent";
 import { ContainerOverviewApi } from "../../apis/OverviewApi";
 import { ContainerView } from "../../models/entities/ContainerView";
+import { useAuthState } from "../../../AppModule/hooks";
 
 export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const appGridApi = useRef<GridApi>();
     const [overviews, setOverviews] = useState<ContainerView[]>([]);
+    const { clientId: storageClientId } = useAuthState();
     async function handleFilter(search: string) {
         appGridApi.current?.setFilterModel({
             name: {
@@ -22,9 +24,13 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
         });
     }
     useEffect(() => {
-        ContainerOverviewApi.find<ContainerView>(1, {}, (c) => {
-            cancelTokenSourcesRef.current.push(c);
-        }).then(({ response, error }) => {
+        ContainerOverviewApi.find<ContainerView>(
+            1,
+            { "client.id": storageClientId },
+            (c) => {
+                cancelTokenSourcesRef.current.push(c);
+            }
+        ).then(({ response, error }) => {
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
