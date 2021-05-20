@@ -4,7 +4,7 @@ import { AppCropper } from "../AppCropper";
 import { AppButton } from "../AppButton";
 import { bytesToSize } from "./bytes-to-size";
 import { errorToast, successToast } from "../../utils";
-import { UloadAPI } from "../../apis/uploadAPI";
+import { UploadAPI } from "../../apis/uploadAPI";
 import "./assets/scss/style.scss";
 
 export interface AppFile {
@@ -53,14 +53,11 @@ export const AppUploader: FC<AppUploaderProps> = ({
     });
 
     const uploadHandler = () => {
-        // Example request
-        const resource = {
-            file: croperFile || files[0],
-            fileType: "jpg",
-            container: "CONTAINER_POSTER",
-        };
+        const fd = new FormData();
+        fd.set("file", croperFile || files[0], croperFile.name);
+        fd.set("fileType", "CONTAINER_POSTER");
 
-        UloadAPI.createResource(resource).then(({ error, errorMessage }) => {
+        UploadAPI.createResource(fd).then(({ error, errorMessage }) => {
             // eslint-disable-next-line no-console
             console.error(error);
             if (errorMessage) {

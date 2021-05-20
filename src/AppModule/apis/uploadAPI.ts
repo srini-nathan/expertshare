@@ -1,13 +1,18 @@
 import { AxiosError } from "axios";
 import { API } from "./API";
 import { ACCEPTABLE_RESPONSE } from "../config/app-env";
-import { AcceptableResponse, FinalResponse, ServerError } from "../models";
+import {
+    AcceptableResponse,
+    FinalResponse,
+    ServerError,
+    SimpleObject,
+} from "../models";
 import {
     onAddEditErrorResponseHydra,
     onAddEditErrorResponseJson,
 } from "./transformer";
 
-export abstract class UloadAPI extends API {
+export abstract class UploadAPI extends API {
     protected static acceptHydra = AcceptableResponse.isHydra(
         ACCEPTABLE_RESPONSE
     );
@@ -48,7 +53,19 @@ export abstract class UloadAPI extends API {
     public static async createResource<R, P>(
         resource: P
     ): Promise<FinalResponse<R | null>> {
-        return this.makePost<R, P>(this.POST_RESOURSE, resource)
+        return this.makePost<R, P>(
+            this.POST_RESOURSE,
+            resource,
+            {},
+            {
+                transformRequest: [
+                    (payload: P, headers: SimpleObject<string>) => {
+                        headers["Content-Type"] = "multipart/form-data";
+                        return payload;
+                    },
+                ],
+            }
+        )
             .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
             .catch((error: AxiosError | ServerError) =>
                 this.handleErrorDuringCreatingOrUpdating(error)
