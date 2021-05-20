@@ -1,10 +1,11 @@
 import React, { FC, useState } from "react";
-import { Row, Form, Col, Button, ListGroup } from "react-bootstrap";
+import { Row, Form, Col, ListGroup } from "react-bootstrap";
 import {
     AppTabs,
     AppTab,
     AppDetailsAction,
     AppMessageItem,
+    AppChatList,
 } from "../../components";
 import "./assets/scss/style.scss";
 
@@ -12,9 +13,11 @@ import "./assets/scss/style.scss";
 
 import { getMessagesArrayMock } from "../../../_mock_/mock-generator";
 
-// export interface AppMessageBoxProps {}
+export interface AppMessageBoxProps {
+    userChatID: (m: string) => void;
+}
 
-export const AppMessageBox: FC = () => {
+export const AppMessageBox: FC<AppMessageBoxProps> = () => {
     const messagesMockData = getMessagesArrayMock();
 
     // eslint-disable-next-line no-console
@@ -27,10 +30,43 @@ export const AppMessageBox: FC = () => {
         setSearch(event.currentTarget.value);
     };
 
+    const messageBoxSingle = () => {
+        return (
+            <Row className="row m-0 px-0 pt-1 pb-3">
+                <Col className="chat-list col-auto p-0 w-100">
+                    <AppChatList />
+                </Col>
+            </Row>
+        );
+    };
+
+    const appMessageItems = (message: any) => {
+        return (
+            <AppMessageItem
+                id={message.id}
+                name={message.name}
+                imageURL={message.imageURL}
+                newMessages={message.lastMessage.newMessages}
+                message={message.lastMessage.message}
+                lastMessageTime={message.lastMessage.time}
+                online={message.lastMessage.online}
+                messageIdHandler={() => {}}
+            />
+        );
+    };
+
     return (
         <React.Fragment>
             <div className="message-box">
                 <div className="message-box--container">
+                    <div className="message-box--single">
+                        <AppDetailsAction
+                            newMessagesCount={messagesMockData.mewMessages}
+                            avatarImg={messagesMockData.avatarUrl}
+                            isPTOP
+                        />
+                        {messageBoxSingle()}
+                    </div>
                     <div className="message-box--index">
                         <AppDetailsAction
                             newMessagesCount={messagesMockData.mewMessages}
@@ -65,9 +101,9 @@ export const AppMessageBox: FC = () => {
                                         : { color: "#444" }
                                 }
                             ></i>
-                            <Button className="filter" variant="link">
+                            {/* <Button className="filter" variant="link">
                                 <i className="fak fa-filter-light"></i>
-                            </Button>
+                            </Button> */}
                             <AppTabs
                                 onSelect={setActiveTab}
                                 activeKey={activeTab}
@@ -77,35 +113,8 @@ export const AppMessageBox: FC = () => {
                                         <Row className="m-0 p-0">
                                             <ListGroup defaultActiveKey="#link1">
                                                 {messagesMockData.messages.map(
-                                                    (message: any) => (
-                                                        <AppMessageItem
-                                                            id={message.id}
-                                                            name={message.name}
-                                                            imageURL={
-                                                                message.imageURL
-                                                            }
-                                                            newMessages={
-                                                                message
-                                                                    .lastMessage
-                                                                    .newMessages
-                                                            }
-                                                            message={
-                                                                message
-                                                                    .lastMessage
-                                                                    .message
-                                                            }
-                                                            lastMessageTime={
-                                                                message
-                                                                    .lastMessage
-                                                                    .time
-                                                            }
-                                                            online={
-                                                                message
-                                                                    .lastMessage
-                                                                    .online
-                                                            }
-                                                        />
-                                                    )
+                                                    (message: any) =>
+                                                        appMessageItems(message)
                                                 )}
                                             </ListGroup>
                                         </Row>
@@ -119,35 +128,8 @@ export const AppMessageBox: FC = () => {
                                         <Row className="m-0 p-0">
                                             <ListGroup defaultActiveKey="#link1">
                                                 {messagesMockData.messages.map(
-                                                    (message: any) => (
-                                                        <AppMessageItem
-                                                            id={message.id}
-                                                            name={message.name}
-                                                            imageURL={
-                                                                message.imageURL
-                                                            }
-                                                            newMessages={
-                                                                message
-                                                                    .lastMessage
-                                                                    .newMessages
-                                                            }
-                                                            message={
-                                                                message
-                                                                    .lastMessage
-                                                                    .message
-                                                            }
-                                                            lastMessageTime={
-                                                                message
-                                                                    .lastMessage
-                                                                    .time
-                                                            }
-                                                            online={
-                                                                message
-                                                                    .lastMessage
-                                                                    .online
-                                                            }
-                                                        />
-                                                    )
+                                                    (message: any) =>
+                                                        appMessageItems(message)
                                                 )}
                                             </ListGroup>
                                         </Row>

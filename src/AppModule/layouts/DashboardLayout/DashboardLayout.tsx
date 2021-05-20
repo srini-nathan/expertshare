@@ -14,7 +14,7 @@ export const DashboardLayout: FC = ({ children }) => {
                 <Col md={9} xl={10} className={"p-5 mb-5"}>
                     {children}
                 </Col>
-                <AppMessageBox />
+                <AppMessageBox userChatID={() => {}} />
             </Row>
         </Container>
     );

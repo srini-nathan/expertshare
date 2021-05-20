@@ -7,11 +7,13 @@ export interface AppDetailsActionProps {
     defaultAvatar?: string;
     newMessagesCount?: number;
     avatarImg?: string;
+    isPTOP?: boolean;
 }
 export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
     defaultAvatar = DefaultAvatar,
     newMessagesCount = 0,
     avatarImg,
+    isPTOP,
 }) => {
     return (
         <Row className="m-0 px-3 pt-3 pb-2">
@@ -25,14 +27,25 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                             })`,
                         }}
                     ></i>
-                    <h2 className="details--content--title">
-                        Messages
-                        {newMessagesCount > 0 && (
-                            <span className="details--content--title--count">
-                                {newMessagesCount}
-                            </span>
-                        )}
-                    </h2>
+                    {!isPTOP ? (
+                        <h2 className="details--content--title">
+                            Messages
+                            {newMessagesCount > 0 && (
+                                <span className="details--content--title--count">
+                                    {newMessagesCount}
+                                </span>
+                            )}
+                        </h2>
+                    ) : (
+                        <div className="name pl-2">
+                            <div className="name--sender">
+                                <h3>Jane Cooper</h3>
+                            </div>
+                            <div className="name--comment">
+                                <span>Product Development @Snapchat</span>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </Col>
             <Col className="action col-auto p-0 mr-0 ml-auto">

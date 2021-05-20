@@ -10,6 +10,7 @@ export interface MessageItemProps {
     message: string;
     lastMessageTime: string;
     online: boolean;
+    messageIdHandler: (m: string) => void;
 }
 export const AppMessageItem: FunctionComponent<MessageItemProps> = ({
     id,
@@ -18,9 +19,19 @@ export const AppMessageItem: FunctionComponent<MessageItemProps> = ({
     newMessages,
     lastMessageTime,
     message,
+    messageIdHandler,
 }) => {
+    const handleMessageClick = (event: any) => {
+        messageIdHandler(event.currentTarget.getAttribute("data-rb-event-key"));
+    };
+
     return (
-        <ListGroup.Item action className="message-container" key={id}>
+        <ListGroup.Item
+            action
+            className="message-container"
+            eventKey={id}
+            onClick={(event) => handleMessageClick(event)}
+        >
             <div className="content">
                 <div className="avatar">
                     <i
@@ -41,9 +52,11 @@ export const AppMessageItem: FunctionComponent<MessageItemProps> = ({
                     </div>
                 </div>
             </div>
-            <div className="count">
-                <span>{newMessages}</span>
-            </div>
+            {newMessages > 0 && (
+                <div className="count">
+                    <span>{newMessages}</span>
+                </div>
+            )}
         </ListGroup.Item>
     );
 };

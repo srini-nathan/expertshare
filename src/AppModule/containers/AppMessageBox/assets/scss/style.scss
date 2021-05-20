@@ -81,7 +81,7 @@
         }
 
         a:first-of-type {
-            margin-left: 1em;
+            margin-left: 1.2em;
         }
 
         .fa-user-friends-light {
@@ -143,6 +143,40 @@
         .list-group {
             border-top: 1px solid var(--secondary-20);
             width: 100%;
+        }
+    }
+
+    &--single {
+        width: 384px;
+        margin-top: auto;
+        margin-right: 15px;
+        margin-bottom: 0;
+        background-color: var(--widget-bg-clr);
+        border-radius: var(--border-radius);
+        box-shadow: 0 -7px 40px var(--secondary-30);
+        @include media("mb-1") {
+            display: none;
+        }
+    }
+
+    .chat-list {
+        height: 320px;
+        overflow: auto;
+        border-top: 1px solid var(--secondary-20);
+        border-bottom: 1px solid var(--secondary-20);
+        scrollbar-color: var(--secondary) var(--secondary-10);
+        scrollbar-width: thin;
+        &::-webkit-scrollbar {
+            width: 4px;
+        }
+        &::-webkit-scrollbar-track {
+            background: var(--secondary-10);
+        }
+        &::-webkit-scrollbar-thumb {
+            background: var(--secondary);
+        }
+        &::-webkit-scrollbar-thumb:hover {
+            opacity: 50%;
         }
     }
 }

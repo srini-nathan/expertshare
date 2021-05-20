@@ -40,7 +40,7 @@ export const getMessagesArrayMock: any = () => {
                 },
             },
             {
-                id: 12,
+                id: 13,
                 name: "Yauheni Maretski",
                 imageURL: "https://i.pravatar.cc/75",
                 lastMessage: {
