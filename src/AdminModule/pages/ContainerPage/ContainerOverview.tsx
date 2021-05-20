@@ -30,7 +30,6 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
                     errorToast(error);
                 }
             } else if (response !== null) {
-                alert(JSON.stringify(response));
                 setOverviews(response.items);
             }
         });
