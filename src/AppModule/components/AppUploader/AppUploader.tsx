@@ -3,12 +3,13 @@ import { useDropzone } from "react-dropzone";
 import { AppCropper } from "../AppCropper";
 import { AppButton } from "../AppButton";
 import { bytesToSize } from "./bytes-to-size";
+import { errorToast, successToast } from "../../utils";
+import { UloadAPI } from "../../apis/uploadAPI";
 import "./assets/scss/style.scss";
 
 export interface AppFile {
     preview: string;
 }
-
 export interface AppUploaderProps {
     maxSize?: number;
     minSize?: number;
@@ -25,12 +26,10 @@ export const AppUploader: FC<AppUploaderProps> = ({
     withCropper,
 }): JSX.Element => {
     const [files, setFiles] = useState<AppFile[]>([]);
-    // eslint-disable-next-line no-console
-    console.log(files);
+    const [croperFile, setCropperFile] = useState<any>(undefined);
+
     const [showCropModal, setShowCropModal] = useState<boolean>(false);
     const [cropUrl, setCropUrl] = useState<string>("");
-
-    const [, setImageToUpload] = useState<string>(); // Output image for uploading on server
 
     const {
         getRootProps,
@@ -53,9 +52,29 @@ export const AppUploader: FC<AppUploaderProps> = ({
         },
     });
 
+    const uploadHandler = () => {
+        // Example request
+        const resource = {
+            file: croperFile || files[0],
+            fileType: "jpg",
+            container: "CONTAINER_POSTER",
+        };
+
+        UloadAPI.createResource(resource).then(({ error, errorMessage }) => {
+            // eslint-disable-next-line no-console
+            console.error(error);
+            if (errorMessage) {
+                errorToast(errorMessage);
+            } else {
+                successToast("Image updated");
+            }
+        });
+    };
+
     const acceptedFileItems = acceptedFiles.map((file) => (
         <li key={file.name}>
-            File Name: {file.name} <br /> Size: {bytesToSize(file.size)}
+            File Name: {file.name} <br /> Size:{" "}
+            {bytesToSize(croperFile ? croperFile.size : file.size)}
         </li>
     ));
 
@@ -85,6 +104,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
             // Make sure to revoke the data uris to avoid memory leaks
             files.forEach((f: any) => URL.revokeObjectURL(f.preview));
             setCropUrl("");
+            setCropperFile(undefined);
         },
         [files]
     );
@@ -120,7 +140,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
                         variant="primary"
                         className="ml-3"
                         handleClick={() => {
-                            setImageToUpload(cropUrl || files[0].preview);
+                            uploadHandler();
                         }}
                     >
                         Save
@@ -137,6 +157,9 @@ export const AppUploader: FC<AppUploaderProps> = ({
                         handleSave={(url) => {
                             setShowCropModal(false);
                             setCropUrl(url);
+                        }}
+                        handleBlob={(blob) => {
+                            setCropperFile(blob);
                         }}
                     />
                 </div>

@@ -13,6 +13,7 @@ interface AppCropperProps {
     show: boolean;
     handleClose: () => void;
     handleSave: (url: string) => void;
+    handleBlob: (blog: any) => void;
     title?: string;
     image?: any;
     initialAspectRatio: number;
@@ -24,6 +25,7 @@ export const AppCropper: FC<AppCropperProps> = ({
     show,
     handleClose,
     handleSave,
+    handleBlob,
     title = "Crop Image",
     initialAspectRatio,
     maxZoomLevel = 5,
@@ -35,6 +37,7 @@ export const AppCropper: FC<AppCropperProps> = ({
         if (typeof cropper !== "undefined") {
             cropper.getCroppedCanvas().toBlob(
                 (blob: any) => {
+                    handleBlob(blob);
                     handleSave(URL.createObjectURL(blob));
                 },
                 "image/jpeg",
