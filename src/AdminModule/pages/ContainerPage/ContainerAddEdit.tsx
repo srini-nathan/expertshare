@@ -187,6 +187,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
     }, []);
 
     const onSubmit = (formData: Container) => {
+        formData.client = ClientApi.toResourceUrl(clientId);
         ContainerApi.createOrUpdate<Container>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
