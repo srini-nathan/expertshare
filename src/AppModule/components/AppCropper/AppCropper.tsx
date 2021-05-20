@@ -1,14 +1,9 @@
 import React, { FC, useState } from "react";
 import Cropper from "react-cropper";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import InputRange from "react-input-range";
+import { AppButton } from "../AppButton";
 
-import RotateLeft from "./assets/images/Rotate-Left.svg";
-import RotateRight from "./assets/images/Rotate-Right.svg";
-import Minus from "./assets/images/minus.svg";
-import Plus from "./assets/images/plus.svg";
-import CloseIcon from "./assets/images/close-icon.svg";
-import Done from "./assets/images/done.svg";
 import "./assets/scss/style.scss";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import "cropperjs/dist/cropper.css";
@@ -33,14 +28,13 @@ export const AppCropper: FC<AppCropperProps> = ({
     initialAspectRatio,
     maxZoomLevel = 5,
 }): JSX.Element => {
-    const [cropper, setCropper] = useState<any>();
-    const [zoomValue, setZoomValue] = useState<number | any>(0);
+    const [cropper, setCropper] = useState<Cropper>();
+    const [zoomValue, setZoomValue] = useState<number>(0);
 
     const onCrop = () => {
         if (typeof cropper !== "undefined") {
             cropper.getCroppedCanvas().toBlob(
                 (blob: any) => {
-                    // eslint-disable-next-line no-console
                     handleSave(URL.createObjectURL(blob));
                 },
                 "image/jpeg",
@@ -76,77 +70,81 @@ export const AppCropper: FC<AppCropperProps> = ({
                 )}
             </Modal.Body>
             <Modal.Footer>
-                <Button
+                <AppButton
                     variant="secondary"
                     onClick={() => {
-                        cropper.rotate(-90);
+                        cropper?.rotate(-90);
                     }}
                 >
-                    <img src={RotateLeft}></img>
-                </Button>
-                <Button
+                    <i className="fa fa-rotate-left"></i>
+                </AppButton>
+                <AppButton
                     variant="secondary"
                     onClick={() => {
-                        cropper.rotate(+90);
+                        cropper?.rotate(+90);
                     }}
                 >
-                    <img src={RotateRight}></img>
-                </Button>
+                    <i className="fa fa-rotate-right"></i>
+                </AppButton>
 
-                <Button
+                <AppButton
                     variant="secondary"
                     disabled={zoomValue === 0}
                     className="btn-minus"
                     onClick={() => {
-                        setZoomValue(zoomValue > 0 && zoomValue - 0.1);
-                        cropper.zoom(zoomValue > 0 && -0.1);
+                        setZoomValue(
+                            zoomValue > 0 ? zoomValue - 0.1 : maxZoomLevel
+                        );
+                        cropper?.zoom(zoomValue > 0 ? -0.1 : maxZoomLevel);
                     }}
                 >
-                    <img src={Minus}></img>
-                </Button>
+                    <i className="fas fa-minus"></i>
+                </AppButton>
                 <InputRange
                     maxValue={5}
                     minValue={0}
                     step={0.1}
                     value={zoomValue}
                     onChange={(value: any) => {
-                        // eslint-disable-next-line no-console
-                        // console.log(value.toFixed(1));
                         setZoomValue(Number(value.toFixed(1)));
-                        cropper.zoomTo(value.toFixed(1));
+                        cropper?.zoomTo(value.toFixed(1));
                     }}
                 />
-                <Button
+                <AppButton
                     variant="secondary"
                     className="btn-plus"
                     disabled={zoomValue === maxZoomLevel}
                     onClick={() => {
                         setZoomValue(
-                            zoomValue < maxZoomLevel && zoomValue + 0.1
+                            zoomValue < maxZoomLevel
+                                ? zoomValue + 0.1
+                                : maxZoomLevel
                         );
-                        cropper.zoom(zoomValue < maxZoomLevel && +0.1);
+                        cropper?.zoom(
+                            zoomValue < maxZoomLevel ? +0.1 : maxZoomLevel
+                        );
                     }}
                 >
-                    <img src={Plus}></img>
-                </Button>
-                <Button
+                    <i className="fas fa-plus"></i>
+                </AppButton>
+                <AppButton
                     variant="secondary"
                     onClick={() => {
-                        cropper.reset();
+                        cropper?.reset();
                         setZoomValue(0);
                     }}
                 >
-                    <img src={RotateRight}></img>
+                    <i className="fa fa-rotate-right"></i>
                     <span className="text-reset">Reset</span>
-                </Button>
-                <Button variant="secondary" onClick={handleClose}>
-                    <img src={CloseIcon}></img>
+                </AppButton>
+                <AppButton variant="secondary" onClick={handleClose}>
+                    <i className="fas fa-times"></i>
                     <span className="text-cancel">Cancel</span>
-                </Button>
-                <Button variant="primary" onClick={onCrop}>
-                    <img src={Done}></img>
+                </AppButton>
+                <AppButton variant="primary" onClick={onCrop}>
+                    <i className="fas fa-check white"></i>
                     <span className="text-cancel">Done</span>
-                </Button>
+                </AppButton>
             </Modal.Footer>
         </Modal>
     );

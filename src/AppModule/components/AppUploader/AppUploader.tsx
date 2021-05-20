@@ -1,8 +1,13 @@
 import React, { FC, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { Button } from "react-bootstrap";
 import { AppCropper } from "../AppCropper";
+import { AppButton } from "../AppButton";
+import { bytesToSize } from "./bytes-to-size";
 import "./assets/scss/style.scss";
+
+export interface AppFile {
+    preview: string;
+}
 
 export interface AppUploaderProps {
     maxSize?: number;
@@ -13,13 +18,15 @@ export interface AppUploaderProps {
 }
 
 export const AppUploader: FC<AppUploaderProps> = ({
-    accept = "image/*, video/*, audio/*",
+    accept = ["image/*", "video/*", "audio/*"],
     maxFiles = 1,
     maxSize = Infinity,
     minSize = 0,
     withCropper,
 }): JSX.Element => {
-    const [files, setFiles] = useState<any>([]);
+    const [files, setFiles] = useState<AppFile[]>([]);
+    // eslint-disable-next-line no-console
+    console.log(files);
     const [showCropModal, setShowCropModal] = useState<boolean>(false);
     const [cropUrl, setCropUrl] = useState<string>("");
 
@@ -48,7 +55,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
 
     const acceptedFileItems = acceptedFiles.map((file) => (
         <li key={file.name}>
-            {file.name} - {file.size} bytes
+            File Name: {file.name} <br /> Size: {bytesToSize(file.size)}
         </li>
     ));
 
@@ -83,7 +90,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
     );
 
     return (
-        <section className="container-dropzone">
+        <section className="app-uploader">
             <div {...getRootProps({ className: "dropzone" })}>
                 <input {...getInputProps()} />
                 <p className="drag-text">
@@ -101,22 +108,23 @@ export const AppUploader: FC<AppUploaderProps> = ({
             </div>
             {acceptedFiles.length > 0 && withCropper && (
                 <div className="d-flex w-100 justify-content-start">
-                    <Button
-                        onClick={() => {
+                    <AppButton
+                        handleClick={() => {
                             setShowCropModal(true);
                         }}
                         variant="secondary"
                     >
                         Edit image
-                    </Button>
-                    <Button
-                        variant="primary ml-2"
-                        onClick={() => {
+                    </AppButton>
+                    <AppButton
+                        variant="primary"
+                        className="ml-3"
+                        handleClick={() => {
                             setImageToUpload(cropUrl || files[0].preview);
                         }}
                     >
                         Save
-                    </Button>
+                    </AppButton>
 
                     <AppCropper
                         show={showCropModal}
