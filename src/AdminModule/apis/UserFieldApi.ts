@@ -10,7 +10,7 @@ const {
     api_user_fields_post_collection: API_POST_COLLECTION,
 } = ROUTES;
 
-export abstract class UserFieldsApi extends EntityAPI {
+export abstract class UserFieldApi extends EntityAPI {
     protected static GET_COLLECTION = API_GET_COLLECTION;
 
     protected static POST_COLLECTION = API_POST_COLLECTION;

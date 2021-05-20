@@ -14,8 +14,8 @@ import {
     AppCard,
     AppFormCheckBox,
 } from "../../../AppModule/components";
-import { UserFieldsEntity } from "../../models";
-import { UserFieldsApi } from "../../apis";
+import { UserFieldEntity } from "../../models";
+import { UserFieldApi } from "../../apis";
 import { errorToast, successToast, validation } from "../../../AppModule/utils";
 import {
     PrimitiveObject,
@@ -32,7 +32,7 @@ const schema = yup.object().shape({
     fieldType: yup.string().required(),
 });
 
-export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
+export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
     const { id = null } = useParams();
@@ -40,7 +40,7 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
     const hookNav = useNavigate();
     const nav = navigate ?? hookNav;
 
-    const [data, setData] = useState<UserFieldsEntity>(new UserFieldsEntity());
+    const [data, setData] = useState<UserFieldEntity>(new UserFieldEntity());
     const [loading, setLoading] = useState<boolean>(isEditMode);
     const [selected, setSelected] = useState<any>();
     const [attribs, setAttribs] = useState();
@@ -57,15 +57,15 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
         mode: "all",
     });
 
-    const onSubmit = (formData: UserFieldsEntity) => {
+    const onSubmit = (formData: UserFieldEntity) => {
         formData.attr = attribs!;
         formData.options = { choice: opts! };
-        UserFieldsApi.createOrUpdate<UserFieldsEntity>(id, formData).then(
+        UserFieldApi.createOrUpdate<UserFieldEntity>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
                     const { violations } = error;
                     _forEach(violations, (value: string, key: string) => {
-                        const propertyName = key as keyof UserFieldsEntity;
+                        const propertyName = key as keyof UserFieldEntity;
                         setError(propertyName, {
                             type: "backend",
                             message: value,
@@ -105,7 +105,7 @@ export const UserFieldsAddEditPage: FC<RouteComponentProps> = ({
     };
     useEffect(() => {
         if (isEditMode) {
-            UserFieldsApi.findById<UserFieldsEntity>(id).then(
+            UserFieldApi.findById<UserFieldEntity>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);

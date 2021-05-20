@@ -1,6 +1,6 @@
 import { BaseEntity } from "../../../AppModule/models";
 
-export interface UserFields extends BaseEntity {
+export interface UserField extends BaseEntity {
     name: string;
     fieldKey: string;
     labelKey: string;
@@ -20,7 +20,7 @@ export interface FieldsAttr {
 export interface FieldOptions {
     choice: { [key: string]: string };
 }
-export class UserFieldsEntity {
+export class UserFieldEntity {
     name: string;
 
     fieldKey: string;
