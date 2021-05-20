@@ -83,6 +83,13 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 name: "",
             },
         },
+        {
+            label: "Container - Overview",
+            path: "/admin/containers/overview",
+            icon: {
+                name: "",
+            },
+        },
     ]);
     const [showSubMenuItems, isSubMenuItems] = useState<boolean>(false);
     const [showMore, isShowMore] = useState<boolean>(false);
