@@ -34,6 +34,7 @@ export const AppFormDropdown: FC<AppFormDropdownProps> = ({
             defaultValue={defaultValue}
             id={id}
             name={name}
+            menuColor="red"
             onChange={onChange}
             placeholder={placeholder}
             className="custom-select-container"

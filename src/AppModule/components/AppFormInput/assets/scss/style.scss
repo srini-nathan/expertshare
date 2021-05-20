@@ -1,6 +1,9 @@
 @import "../../../../assets/scss/screens-sizes";
 @import "../../../../assets/scss/variables";
 
+.invalid-feedback {
+    min-height: 19px;
+}
 
 input.form-control {
     height: 36px;
@@ -8,13 +11,14 @@ input.form-control {
     font-weight: 400;
     color: var(--input-fg-clr);
     background-color: var(--input-bg-clr);
-    border: 1px solid var(--input-border-clr);
+    border: 1px solid var(--input-border-clr) !important;
     border-radius: var(--border-radius);
 
-    &:focus {
+    &:focus,
+    &:active {
         color: var(--input-fg-clr);
         background-color: var(--input-bg-clr);
-        border-color: var(--input-border-clr);
+        border-color: var(--input-border-clr) !important;
         box-shadow: unset;
     }
 }

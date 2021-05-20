@@ -1,15 +1,18 @@
 @import "../../../../assets/scss/variables";
 @import "../../../../assets/scss/screen_sizes";
-.social-media-button{
-    &.google{
+
+.social-media-button {
+    &.google {
         background: url("../image/google_icon.svg") no-repeat;
         background-position: 8px center;
     }
-    &.linkedin{
+
+    &.linkedin {
         background: url("../image/linked_in.svg") no-repeat;
         background-position: 8px 7px;
     }
-    &.azure{
+
+    &.azure {
         background: url("../image/azure.svg") no-repeat;
         background-position: 8px 7px;
     }
@@ -21,10 +24,11 @@
     background-color: var(--body-bg-clr);
 
     .normal-label {
-        span{
+        span {
             color: var(--secondary-80);
         }
     }
+
     &--box {
         box-sizing: border-box;
         display: inline-table;
@@ -90,6 +94,7 @@
 
             .forgot-password {
                 display: flex;
+                margin-top: -10px;
                 font-size: 14px;
                 font-weight: 700;
                 color: var(--primary);
@@ -150,7 +155,7 @@
                     cursor: pointer;
                     opacity: 0;
 
-                    &:checked ~ .custom-checkbox {
+                    &:checked~.custom-checkbox {
                         background-color: var(--primary);
 
                         &::after {

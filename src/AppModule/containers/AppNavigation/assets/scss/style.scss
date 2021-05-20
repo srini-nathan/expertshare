@@ -179,6 +179,86 @@
             width: 100%;
             background-color: var(--sidebar-bg-clr);
 
+            .nav-item.collapseable {
+                max-height: unset;
+
+                &:hover {
+                    background: unset;
+
+                    span {
+                        color: var(--secondary) !important;
+
+                    }
+                }
+
+                .nav-link {
+
+                    &.active,
+                    &:hover {
+                        background-color: var(--sidebar-item-hover-bg-clr) !important;
+
+                        .nav-icon {
+                            color: var(--sidebar-hover-icon-clr) !important;
+                        }
+
+                        span {
+                            color: var(--sidebar-hover-fg-clr) !important;
+                        }
+
+                    }
+                }
+
+                .sub-list {
+                    max-height: 150px;
+                    overflow-y: auto;
+
+                    .list-group-item {
+                        padding-left: 65px;
+                        display: flex;
+                        height: 50px;
+
+                        &.active,
+                        &:hover {
+                            background-color: var(--sidebar-item-hover-bg-clr) !important;
+
+                            .nav-icon {
+                                color: var(--sidebar-hover-icon-clr) !important;
+                            }
+
+                            span {
+                                color: var(--sidebar-hover-fg-clr) !important;
+                            }
+
+                        }
+
+                        .nav-icon {
+                            height: 25px;
+                            color: var(--sidebar-fg-clr) !important;
+                        }
+
+                        span {
+                            margin: auto 0;
+                        }
+                    }
+
+                    &::-webkit-scrollbar {
+                        width: 3px;
+                    }
+
+                    &::-webkit-scrollbar-track {
+                        background: linear-gradient(270deg, rgba(0, 0, 0, 0) calc(50% - .78px), var(--secondary-50) calc(50%), rgba(0, 0, 0, 0) calc(50% + .78px));
+                    }
+
+                    &::-webkit-scrollbar-thumb {
+                        background: var(--secondary);
+                    }
+
+                    &::-webkit-scrollbar-thumb:hover {
+                        opacity: 50%;
+                    }
+                }
+            }
+
             @include media("mobile") {
                 position: relative;
             }
@@ -263,6 +343,7 @@
                 a.nav-link {
                     width: 100%;
                     padding: 0;
+
                 }
             }
 
@@ -291,11 +372,14 @@
                 }
 
                 &.sub-menu {
+                    min-height: 50px !important;
+                    height: 50px;
+
                     .nav-link {
                         font-weight: 400;
 
                         span {
-                            margin-left: 75px;
+                            margin: 0 0 0 75px;
                         }
                     }
                 }
@@ -326,7 +410,7 @@
                     }
 
                     span {
-                        margin: 2px 0 auto 15px;
+                        margin: 2px 0 auto 10px;
                         max-height: 40px;
                         max-lines: 1;
                         overflow: hidden;
@@ -379,15 +463,15 @@
         }
     }
 
-    .dropup {
+    .accordion {
         .custom-dropdown-toggle {
             width: 100%;
             color: var(--primary);
 
             svg {
                 position: absolute;
-                top: 15px;
-                right: 0;
+                top: 22px;
+                right: 25px;
                 height: 12px;
             }
         }

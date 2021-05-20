@@ -131,7 +131,7 @@
                     cursor: pointer;
                     opacity: 0;
 
-                    &:checked ~ .custom-checkbox {
+                    &:checked~.custom-checkbox {
                         background-color: var(--primary);
 
                         &::after {

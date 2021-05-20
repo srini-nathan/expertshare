@@ -103,7 +103,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                     <Col
                                         sm={12}
                                         className={
-                                            "text-center mb-3 normal-label"
+                                            "text-center my-4 normal-label"
                                         }
                                     >
                                         <span>Or login with</span>
