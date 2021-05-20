@@ -4,47 +4,64 @@ import {
     AppFormDropdown,
     AppButton,
     AppIcon,
+    AppTagSelectDropDown,
 } from "../../../AppModule/components";
+import { Language } from "../../models";
+import { SimpleObject } from "../../../AppModule/models";
+
 import "./assets/scss/style.scss";
 
 export interface AppTranslationToolbarProps {
     onCreateNew: () => void;
+    label?: string;
+    description?: string;
+    options: Language[];
+    selectedItems: Language[];
+    onChangeSelect: (item: SimpleObject<string>) => void;
 }
 
 export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
     onCreateNew,
+    options,
+    label,
+    selectedItems,
+    onChangeSelect,
 }): JSX.Element => {
+    const values: SimpleObject<string>[] = options.map((e) => {
+        return {
+            id: e.locale,
+            value: e.name,
+            label: e.name,
+        };
+    });
+    const selectedValues: SimpleObject<string>[] = selectedItems.map((e) => {
+        return {
+            id: e.locale,
+            value: e.name,
+            label: e.name,
+        };
+    });
+
     return (
         <Col className={" p-0 translation-page"}>
             <Form className="w-100">
                 <Form.Row>
                     <Col md="4">
-                        <AppFormDropdown
-                            id="language-filter"
-                            defaultValue={{
-                                label: "Included Language (8)",
-                                value: 0,
-                            }}
-                            options={[
-                                {
-                                    label: "Included Language (8)",
-                                    value: 0,
-                                },
-                            ]}
+                        <AppTagSelectDropDown
+                            options={values}
+                            selectedItems={selectedValues}
+                            label={label}
+                            onChange={onChangeSelect}
                         />
                     </Col>
                     <Col md="2">
                         <AppFormDropdown
                             id="where-filter"
                             defaultValue={{
-                                label: "Everywhere",
-                                value: "1",
+                                label: "Translation Key",
+                                value: "2",
                             }}
                             options={[
-                                {
-                                    label: "Everywhere",
-                                    value: "1",
-                                },
                                 {
                                     label: "Translation Group",
                                     value: "2",

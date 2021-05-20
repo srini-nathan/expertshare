@@ -12,9 +12,9 @@
     .btn-group {
         height: 36px;
         color: var(--input-fg-color);
-        box-shadow: 0 3px 9px var(--box-shadow-box-clr);
-        background-color: var(--input-bg-color);
+        background-color: var(--input-bg-clr);
         border-radius: var(--border-radius);
+        box-shadow: 0 3px 9px var(--box-shadow-box-clr);
     }
 
     .form-check {

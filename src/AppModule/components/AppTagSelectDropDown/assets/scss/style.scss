@@ -1,0 +1,32 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+#dropdown-button-drop-down {
+    .custom-dropdown-toggle {
+        height: 36px;
+        padding: 5px 10px;
+        color: var(--input-fg-clr);
+        cursor: pointer;
+        background-color: var(--input-bg-clr);
+        border: 1px solid var(--input-border-clr);
+        border-radius: var(--border-radius);
+
+        svg {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    }
+
+
+    .custom-drop-down-menu {
+        width: 280%;
+        background: unset !important;
+        border: unset !important;
+        transform: translate(0, 35px) !important;
+
+        @include media("mobile") {
+            width: 100%;
+        }
+    }
+}

@@ -17,9 +17,10 @@ import {
 import {
     TranslationGroupApi,
     TranslationValueApi,
+    ContainerApi,
     TranslationApi,
 } from "../../../AdminModule/apis";
-import { errorToast, successToast } from "../../utils";
+import { errorToast, successToast, randomInteger } from "../../utils";
 import { AuthState } from "../../../SecurityModule/models/context/AuthState";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 
@@ -63,9 +64,7 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                     id: null,
                     defaultValue: "",
                     tKey: "",
-                    itemKey:
-                        Math.floor(Math.random() * 10000 + 1000) *
-                        Math.floor(Math.random() * 10000 + 1000),
+                    itemKey: randomInteger(),
                     translationGroupId: translationGroupName?.id,
                     translationGroup: translationGroupName?.tgKey
                         ? translationGroupName?.tgKey
@@ -79,9 +78,7 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                     id: null,
                     defaultValue: "",
                     tKey: "",
-                    itemKey:
-                        Math.floor(Math.random() * 10000 + 1000) *
-                        Math.floor(Math.random() * 10000 + 1000),
+                    itemKey: randomInteger(),
                     translationGroupId: translationGroupName?.id,
                     translationGroup: translationGroupName?.tgKey
                         ? translationGroupName?.tgKey
@@ -152,13 +149,9 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                     }
                 } else if (response !== null) {
                     setTranslationGroup(response);
-                    /* eslint-disable no-console */
-                    console.log(response, translationGroup);
-                    /* eslint-enable no-console */
                 }
             }
         );
-        // await successToast("Configuration updated successfully");
     };
 
     const handleDefaultValue = (
@@ -170,7 +163,9 @@ export const AppTranslation: FC<AppTranslationProps> = ({
             let id = translation && translation[index].id;
             if (id === undefined) id = null;
             let data: Translation = {
-                translationGroup: `/api/translation_groups/${translationGroupName.id}`,
+                translationGroup: TranslationGroupApi.toResourceUrl(
+                    translationGroupName.id ? translationGroupName.id : 0
+                ),
             };
             if (name === "tKey")
                 data = {
@@ -222,12 +217,20 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                 if (item && item.length > 0) valueId = item[0].id;
             }
         }
-        const translationId = translation && translation[index].id;
+        let translationId = 0;
+        if (
+            translation &&
+            translation[index].id &&
+            translation[index].id !== null &&
+            translation[index].id !== undefined
+        )
+            translationId = translation[index].id as number;
+
         const data: TranslationValue = {
             val,
             locale,
-            translation: `/api/translations/${translationId}`,
-            container: `/api/containers/${containerId}`,
+            translation: TranslationApi.toResourceUrl(translationId),
+            container: ContainerApi.toResourceUrl(containerId as number),
         };
         TranslationValueApi.createOrUpdate<TranslationValue>(
             valueId,

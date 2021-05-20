@@ -7,6 +7,7 @@ import {
     AppFormDropdown,
     AppPageHeader,
     AppTagSelect,
+    AppTagSelectDropDown,
     AppFormTextArea,
     AppLoader,
     AppCard,
@@ -26,6 +27,9 @@ const options = [
     { id: "3", value: "vanilla", label: "Vanilla" },
     { id: "4", value: "apple", label: "Apple" },
     { id: "5", value: "orange", label: "Orange" },
+    { id: "7", value: "pinapple", label: "Pineapple" },
+    { id: "8", value: "banana", label: "Banana" },
+    { id: "9", value: "lemon", label: "Lemon" },
 ];
 
 export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
@@ -48,6 +52,27 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
             <hr className="col-12" />
             <Row>
                 <Col>
+                    <AppTagSelectDropDown
+                        options={options}
+                        selectedItems={selectedItems}
+                        label="Category"
+                        required
+                        description="Hi this is description for this field"
+                        onChange={(item) => {
+                            const index = selectedItems.indexOf(item);
+                            if (index !== -1) {
+                                setSelectedItem([
+                                    ...selectedItems.slice(0, index),
+                                    ...selectedItems.slice(index + 1),
+                                ]);
+                            } else setSelectedItem([...selectedItems, item]);
+                        }}
+                    />
+                </Col>
+            </Row>
+            <hr className="col-12" />
+            <Row>
+                <Col>
                     <AppDatePicker value={new Date()} onChange={() => {}} />
                 </Col>
             </Row>
@@ -58,7 +83,7 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                         options={options}
                         selectedItems={selectedItems}
                         label="Category"
-                        require
+                        required
                         description="Hi this is description for this field"
                         onChange={(item) => {
                             const index = selectedItems.indexOf(item);

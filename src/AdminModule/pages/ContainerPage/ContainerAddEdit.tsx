@@ -426,7 +426,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     options={userGroups}
                                     selectedItems={selectedUserGroups}
                                     label="User Groups"
-                                    require
+                                    required
                                     description="Hi this is description for this field"
                                     onChange={(item) => {
                                         const groups = selectedUserGroups;

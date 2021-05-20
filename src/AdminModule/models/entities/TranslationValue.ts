@@ -1,5 +1,5 @@
 export class TranslationValue {
-    id?: number | undefined;
+    id?: number;
 
     val: string;
 

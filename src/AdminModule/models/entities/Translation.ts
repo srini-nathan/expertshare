@@ -3,7 +3,7 @@ export class Translation {
 
     translationGroup: string;
 
-    translationGroupId?: number | undefined;
+    translationGroupId?: number;
 
     tKey?: string;
 

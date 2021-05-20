@@ -1,5 +1,5 @@
 export class TranslationGroup {
-    id?: number | undefined;
+    id?: number;
 
     name: string;
 

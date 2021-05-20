@@ -6,6 +6,7 @@ export * from "./AppFormDropdown";
 export * from "./AppPageHeader";
 export * from "./AppListPageToolbar";
 export * from "./AppTagSelect";
+export * from "./AppTagSelectDropDown";
 export * from "./AppFormTextArea";
 export * from "./AppFormRadioSwitch";
 export * from "./AppBreadcrumb";

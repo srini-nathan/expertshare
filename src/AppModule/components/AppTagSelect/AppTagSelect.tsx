@@ -2,19 +2,20 @@ import React, { FC } from "react";
 import { SimpleObject } from "../../models";
 import "./assets/scss/style.scss";
 import { AppIcon } from "../AppIcon";
+import { AppFormLabel } from "../AppFormLabel";
 
 export interface AppTagSelectProps {
-    label: string;
+    label?: string;
     description?: string;
     options: SimpleObject<string>[];
     selectedItems: SimpleObject<string>[];
-    require?: boolean;
+    required?: boolean;
     onChange: (item: SimpleObject<string>) => void;
 }
 
 export const AppTagSelect: FC<AppTagSelectProps> = ({
-    label,
-    require,
+    label = "",
+    required = false,
     description,
     options,
     selectedItems,
@@ -30,8 +31,13 @@ export const AppTagSelect: FC<AppTagSelectProps> = ({
                     .includes(searchText.trim().toLowerCase(), 0)
             )
             .map((e, i) => {
-                const checked = selectedItems.indexOf(e) >= 0;
-
+                let checked = false;
+                selectedItems.filter((item) => {
+                    if (item.id === e.id) {
+                        checked = true;
+                    }
+                    return item;
+                });
                 return (
                     <li className="list-group-item" key={i}>
                         <label className="checkbox-label-container">
@@ -51,11 +57,11 @@ export const AppTagSelect: FC<AppTagSelectProps> = ({
     const renderSelectedItems = () => {
         return selectedItems.map((e, i) => {
             return (
-                <div className="list-item" key={i}>
-                    <span>{e.label}</span>
+                <div className="list-item m-2" key={i}>
                     <span onClick={() => onChange(e)}>
                         <AppIcon name={"X"} />
                     </span>
+                    <span>{e.label}</span>
                 </div>
             );
         });
@@ -63,31 +69,25 @@ export const AppTagSelect: FC<AppTagSelectProps> = ({
 
     return (
         <div className="custom-select-tag">
-            <span className="custom-select-title">
-                {label}
-                {require && <span className="custom-select-required">*</span>}
-                {description && (
-                    <div className="custom-select-description">
-                        <span>i</span>
-                        <div className="custom-select-description-content">
-                            <h3>Category</h3>
-                            <div>{description}</div>
-                        </div>
-                    </div>
-                )}
+            <span className="custom-select-tag-title">
+                <AppFormLabel
+                    label={label}
+                    required={required}
+                    description={description}
+                />
             </span>
 
-            <div className="custom-select-container">
-                <div className="custom-select-container-search">
+            <div className="custom-select-tag-container py-3">
+                <div className="custom-select-tag-container-search px-3">
                     <AppIcon name={"Search"} />
                     <input
-                        className="custom-select-container-search-input form-control"
+                        className="custom-select-tag-container-search-input form-control"
                         value={searchText}
                         onChange={(e) => setSearchText(e.target.value)}
-                        placeholder="Quick Sreach..."
+                        placeholder="Sreach..."
                     />
                 </div>
-                <ul className="list-group">{renderOptions()}</ul>
+                <ul className="list-group mx-3">{renderOptions()}</ul>
                 <div className="selected-item-container row">
                     {renderSelectedItems()}
                 </div>

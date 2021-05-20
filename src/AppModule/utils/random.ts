@@ -12,3 +12,10 @@ export const randomAlphaNumeric = (max = 6): string => {
 
     return result;
 };
+
+export const randomInteger = (): number => {
+    return (
+        Math.floor(Math.random() * 10000 + 1000) *
+        Math.floor(Math.random() * 10000 + 1000)
+    );
+};
