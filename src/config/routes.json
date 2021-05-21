@@ -104,6 +104,7 @@
     "api_users_post_collection": "/api/users",
     "api_users_get_collection": "/api/users",
     "api_users_get_attendee_list_collection": "/api/users/attendee-list",
+    "api_users_get_attendee_view_collection": "/api/users/{id}/attendee-view",
     "api_users_get_item": "/api/users/{id}",
     "api_users_put_item": "/api/users/{id}",
     "api_users_patch_item": "/api/users/{id}",

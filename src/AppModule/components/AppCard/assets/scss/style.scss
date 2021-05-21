@@ -5,6 +5,7 @@
     background-color: var(--container-box-bg-clr) !important;
     border: unset !important;
     border-radius: var(--border-radius) !important;
+    box-shadow: 0 3px 9px var(--box-shadow-box-clr);
 
     &-title {
         &.h5 {

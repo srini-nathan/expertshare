@@ -7,15 +7,17 @@ export interface AppCardProps {
     children: JSX.Element[] | JSX.Element;
     title?: string;
     subtitle?: string;
+    className?: string;
 }
 
 export const AppCard: FC<AppCardProps> = ({
     children,
     title,
     subtitle,
+    className = "mt-2 p-4",
 }): JSX.Element => {
     return (
-        <Card className="col-12 mb-3 mb-lg-4 mt-2 p-4">
+        <Card className={`col-12 mb-3 mb-lg-4 ${className}`}>
             {title && title?.length > 0 && (
                 <Card.Title className="mb-2">{title}</Card.Title>
             )}

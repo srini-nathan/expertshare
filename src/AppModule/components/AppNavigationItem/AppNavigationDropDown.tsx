@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { Accordion, ListGroupItem, ListGroup } from "react-bootstrap";
+import { Link, Match } from "@reach/router";
 import { AppIcon } from "../AppIcon";
 
 interface AppNavigationDropDownProps {
@@ -41,6 +42,41 @@ export const AppNavigationDropDown: FC<AppNavigationDropDownProps> = ({
                 <ListGroup className="sub-list  ">
                     {subDropDownItems &&
                         subDropDownItems.map((e) => {
+                            if (e.path)
+                                return (
+                                    <Match path={e.path}>
+                                        {(props) => {
+                                            return (
+                                                <Link to={e.path as string}>
+                                                    <ListGroupItem
+                                                        className={`nav-item px-lg-4 ${className} ${
+                                                            props.location.pathname.includes(
+                                                                e.path as string
+                                                            )
+                                                                ? "active"
+                                                                : ""
+                                                        }`}
+                                                    >
+                                                        <div className="nav-icon img-container">
+                                                            {e.icon ? (
+                                                                <AppIcon
+                                                                    name={
+                                                                        e.icon
+                                                                    }
+                                                                />
+                                                            ) : (
+                                                                <i
+                                                                    className={`${e.iconClassName}`}
+                                                                ></i>
+                                                            )}
+                                                        </div>
+                                                        <span>{e.label}</span>
+                                                    </ListGroupItem>
+                                                </Link>
+                                            );
+                                        }}
+                                    </Match>
+                                );
                             return (
                                 <ListGroupItem
                                     onClick={e.action && e.action}
