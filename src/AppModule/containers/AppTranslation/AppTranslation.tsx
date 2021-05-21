@@ -482,20 +482,23 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                 </div>
                             </div>
                         </div>
-                        <div className="value-col col-4 col-sm-5 col-md-6 col-xl-7 px-0 value-carousel">
-                            <div className="value-col--inner">
-                                <div className="value-col--inner--header d-flex">
-                                    {renderLanguagesHeader()}
-                                </div>
 
-                                <div className="value-col--inner--value">
-                                    <div className="header"></div>
-                                    <div className="content">
-                                        {renderLanguages()}
+                        {activeLanguages && activeLanguages.length > 0 && (
+                            <div className="value-col col-4 col-sm-5 col-md-6 col-xl-7 px-0 value-carousel">
+                                <div className="value-col--inner">
+                                    <div className="value-col--inner--header d-flex">
+                                        {renderLanguagesHeader()}
+                                    </div>
+
+                                    <div className="value-col--inner--value">
+                                        <div className="header"></div>
+                                        <div className="content">
+                                            {renderLanguages()}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>
