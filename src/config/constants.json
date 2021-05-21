@@ -27,8 +27,10 @@
             "FILETYPE_CONTAINER_POSTER": "CONTAINER_POSTER",
             "FILETYPE_CONFERENCE_POSTER": "CONFERENCE_POSTER",
             "FILETYPE_SESSION_POSTER": "SESSION_POSTER",
-            "FILETYPE_USER_PROFILE": "USER_PROFILE",
-            "FILETYPE_INFO_CONTAINER_POSTER": {
+            "FILETYPE_USER_PROFILE": "USER_PROFILE"
+        },
+        "FILETYPEINFO": {
+            "FILETYPEINFO_CONTAINER_POSTER": {
                 "key": "CONTAINER_POSTER",
                 "width": "",
                 "height": "",

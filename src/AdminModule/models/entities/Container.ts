@@ -40,6 +40,8 @@ export class Container extends BaseEntity {
 
     userGroups: string[] | UserGroup[];
 
+    imageName: string;
+
     constructor(
         client: string,
         {
@@ -59,6 +61,7 @@ export class Container extends BaseEntity {
             designConfiguration = [],
             designConfigurationTypes = [],
             userGroups = [],
+            imageName = "",
             id,
             createdAt,
             updatedAt,
@@ -82,6 +85,7 @@ export class Container extends BaseEntity {
         this.configurationTypes = configurationTypes;
         this.designConfiguration = designConfiguration;
         this.designConfigurationTypes = designConfigurationTypes;
+        this.imageName = imageName;
     }
 
     toString(): string {
@@ -110,6 +114,9 @@ export class Container extends BaseEntity {
             configurationTypes: this.configurationTypes,
             designConfiguration: this.designConfiguration,
             designConfigurationTypes: this.designConfigurationTypes,
+            imageName: this.imageName,
         };
     }
 }
+
+export type PContainer = Partial<Container>;
