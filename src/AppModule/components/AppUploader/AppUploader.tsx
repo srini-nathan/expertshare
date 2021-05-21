@@ -9,6 +9,7 @@ import "./assets/scss/style.scss";
 
 export interface AppFile {
     preview: string;
+    name: string;
 }
 export interface AppUploaderProps {
     maxSize?: number;
@@ -53,9 +54,14 @@ export const AppUploader: FC<AppUploaderProps> = ({
     });
 
     const uploadHandler = () => {
-        const fd = new FormData();
-        fd.set("file", croperFile || files[0], croperFile.name);
+        const fd: any = new FormData();
+        fd.set("file", croperFile || files[0], files[0].name);
         fd.set("fileType", "CONTAINER_POSTER");
+
+        // eslint-disable-next-line no-console
+        console.log(fd.get("file"));
+        // eslint-disable-next-line no-console
+        console.log(fd.get("fileType"));
 
         UploadAPI.createResource(fd).then(({ error, errorMessage }) => {
             // eslint-disable-next-line no-console
