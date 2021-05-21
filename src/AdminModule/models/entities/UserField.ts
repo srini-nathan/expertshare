@@ -18,7 +18,7 @@ export interface FieldsAttr {
     [key: string]: string;
 }
 export interface FieldOptions {
-    choice: { [key: string]: string };
+    choice: FieldsAttr[];
 }
 export class UserFieldEntity {
     name: string;
@@ -39,7 +39,7 @@ export class UserFieldEntity {
 
     isRequired: boolean;
 
-    attr?: FieldsAttr;
+    attr?: FieldsAttr[];
 
     options?: FieldOptions;
 

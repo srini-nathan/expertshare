@@ -43,8 +43,8 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
     const [data, setData] = useState<UserFieldEntity>(new UserFieldEntity());
     const [loading, setLoading] = useState<boolean>(isEditMode);
     const [selected, setSelected] = useState<any>();
-    const [attribs, setAttribs] = useState();
-    const [opts, setOpts] = useState();
+    const [attribs, setAttribs] = useState([]);
+    const [opts, setOpts] = useState<any[]>([]);
     const { UserField } = CONSTANTS;
     const { FIELDTYPE } = UserField;
     const options = Object.entries(FIELDTYPE).map(([key, value]) => ({
