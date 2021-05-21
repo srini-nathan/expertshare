@@ -15,10 +15,7 @@ export const AppContainerOverview: FC<AppContainerOverviewProps> = ({
                 <div
                     className="inner-container--banner"
                     style={{
-                        backgroundImage: `url(${
-                            container.imageName ||
-                            "http://placehold.jp/250x250.jpg"
-                        })`,
+                        backgroundImage: `url(${container.imageName})`,
                     }}
                 >
                     <div className="inner-container--banner--icons">
