@@ -10,7 +10,7 @@
 
     .ag-center-cols-viewport {
         overflow: hidden;
-        background-color: var(--body-bg-clr);
+        background-color: var(--light-clr);
 
         @include media("lg") {
             overflow: auto;
@@ -18,7 +18,7 @@
     }
 
     .ag-body-horizontal-scroll {
-        background-color: var(--body-bg-clr);
+        background-color: var(--light-clr);
     }
 
     .ag-cell {
@@ -42,6 +42,7 @@
                 width: 44px !important;
                 height: 44px !important;
                 margin: auto !important;
+                background-color: var(--btn-secondary-bg-clr);
 
                 svg {
                     display: flex;
@@ -50,7 +51,7 @@
                     width: 36px;
                     height: 36px;
                     padding: 8px;
-                    color: var(--secondary);
+                    color: var(--btn-secondary-fg-clr);
                     border-radius: var(--border-radius);
                     box-shadow: 0 3px 9px var(--box-shadow-box-clr);
                 }
@@ -60,6 +61,10 @@
     }
 
     .ag-theme-alpine {
+
+        padding: 5px 15px;
+        background-color: var(--light-clr);
+        border-radius: var(--border-radius);
 
         .ag-sort-ascending-icon,
         .ag-sort-descending-icon {
@@ -73,13 +78,13 @@
         }
 
         .ag-sort-ascending-icon:not(.ag-hidden) {
-            & + .ag-hidden {
+            &+.ag-hidden {
                 color: var(--primary) !important;
             }
         }
 
         .ag-sort-descending-icon:not(.ag-hidden) {
-            & + .ag-hidden {
+            &+.ag-hidden {
                 color: var(--primary) !important;
             }
         }
@@ -124,7 +129,11 @@
         .ag-center-cols-container {
             .ag-row {
                 &:hover {
-                    background-color: var(--container-box-bg-clr);
+                    background-color: var(--light-clr);
+                }
+
+                &:last-child {
+                    border-width: 0;
                 }
 
                 //height: 60px !important;
@@ -133,7 +142,7 @@
                     line-height: 60px;
 
                     &:focus {
-                        border-color: var(--container-box-bg-clr);
+                        border-color: var(--light-clr);
                     }
 
                     a {
@@ -144,7 +153,7 @@
                 }
 
                 .ag-cell-focus {
-                    border-color: var(--container-box-bg-clr) !important;
+                    border-color: var(--light-clr) !important;
                 }
 
                 .ag-cell:first-child {
@@ -168,7 +177,7 @@
         }
 
         .ag-header {
-            background-color: var(--body-bg-clr);
+            background-color: var(--light-clr);
             border-bottom: unset;
 
             .ag-header-cell {

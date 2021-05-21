@@ -1,10 +1,10 @@
 $site-content-width: 1024px;
 
-$media-queries: (
-    "mobile": "only screen and (max-width: 767px)",
+$media-queries: ("mobile": "only screen and (max-width: 767px)",
     "not-mobile" : "(min-width: 767px)",
     "tablet": "only screen and (min-width: 668px) and (max-width: $site-content-width)",
     "md": "only screen and (max-width: 900px)",
+    "md2": "only screen and (max-width: 999px)",
     "desktop": "only screen and (min-width: ($site-content-width + 1))",
     "lg": "only screen and (max-width: 1370px)",
     "xl": "only screen and (max-width: 1550px)",
@@ -55,6 +55,7 @@ $media-queries: (
 
 @mixin media($breakpoints) {
     $conditions: ();
+
     @each $breakpoint in $breakpoints {
         $conditions: append($conditions, #{map-get($media-queries, $breakpoint)}, comma);
     }

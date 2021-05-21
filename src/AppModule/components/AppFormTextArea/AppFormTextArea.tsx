@@ -43,7 +43,7 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
     const placeholderText = useInputPlaceholder(name, placeholder, label);
     const controlId = id || name;
     const { sm = 12, md = 6, lg = 4, xl = 4, className = "" } = props;
-    const groupProps = { sm, md, lg, xl, controlId, className, as: Col };
+    const groupProps = { sm, md, lg, xl, controlId, as: Col };
     const labelProps = { label, required, maxCount, description };
     const controllerProps = { name, defaultValue, control };
     const controlProps = {
@@ -54,7 +54,7 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
     };
 
     return (
-        <Form.Group {...groupProps}>
+        <Form.Group {...groupProps} className={`mb-0 ${className}`}>
             <AppFormLabel counter={data?.length} {...labelProps} />
             <Controller
                 {...controllerProps}

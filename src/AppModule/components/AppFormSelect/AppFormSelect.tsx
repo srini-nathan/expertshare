@@ -57,7 +57,7 @@ export const AppFormSelect: FC<AppFormSelectProps> = ({
             lg={lg}
             xl={xl}
             controlId={controlId}
-            className={className}
+            className={`mb-0 ${className}`}
         >
             {label?.length > 0 ? (
                 <Form.Label>
@@ -90,7 +90,9 @@ export const AppFormSelect: FC<AppFormSelectProps> = ({
                     />
                 )}
             />
-            {errorMessage && <span className="required">{errorMessage}</span>}
+            <span className="invalid-feedback d-block">
+                {errorMessage && errorMessage}
+            </span>
         </Form.Group>
     );
 };

@@ -85,6 +85,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         },
     ]);
     const [showSubMenuItems, isSubMenuItems] = useState<boolean>(false);
+
     const [showMore, isShowMore] = useState<boolean>(false);
     const { width, height } = useWindowSize();
     const { location } = useWindowLocation();
@@ -105,6 +106,22 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         if (bottomMenu && bottomMenu.current)
             bottomMenuHeight = bottomMenu.current.clientHeight;
         return height - logoHeight - bottomMenuHeight - 66;
+    };
+    const getMenuHeightStyle = () => {
+        if (width > 767) {
+            let logoHeight = 0;
+            let bottomMenuHeight = 0;
+
+            if (logoHolder && logoHolder.current)
+                logoHeight = logoHolder.current.clientHeight;
+
+            if (bottomMenu && bottomMenu.current)
+                bottomMenuHeight = bottomMenu.current.clientHeight;
+            return {
+                height: `calc(100% - ${logoHeight + bottomMenuHeight + 30}px)`,
+            };
+        }
+        return {};
     };
     const updateScreenSize = () => {
         if (width > 767) {
@@ -168,7 +185,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                     </Accordion.Collapse>
                     <Accordion.Toggle
                         as={ListGroupItem}
-                        className={`nav-item py-2 mb-2 px-lg-4`}
+                        className={`nav-item py-2 px-lg-4`}
                         eventKey="0"
                     >
                         <div
@@ -252,7 +269,10 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="w-100">
                         <ListGroup>
-                            <div className="main-menu-container">
+                            <div
+                                className="main-menu-container"
+                                style={getMenuHeightStyle()}
+                            >
                                 {renderMenu()}
                             </div>
                             <ListGroupItem
@@ -261,10 +281,10 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                             >
                                 <ListGroup>
                                     <ListGroupItem
-                                        className={`seperator mb-1 p-0 mx-4`}
+                                        className={`seperator  p-0 mx-4`}
                                     ></ListGroupItem>
                                     <ListGroupItem
-                                        className={`nav-item py-2 mb-2 px-lg-4`}
+                                        className={`nav-item py-2 px-lg-4`}
                                     >
                                         <div
                                             onClick={() => {
@@ -296,9 +316,14 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                         </div>
                                     </ListGroupItem>
                                     <ListGroupItem
-                                        className={`nav-item py-2 mb-2 px-lg-4`}
+                                        className={`nav-item collapseable p-0`}
                                     >
                                         <AppNavigationDropDown
+                                            action={() => {
+                                                setTimeout(() => {
+                                                    updateScreenSize();
+                                                }, 300);
+                                            }}
                                             className="language"
                                             label="English"
                                             iconClassName="languages en"
@@ -314,9 +339,17 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                     </ListGroupItem>
 
                                     <ListGroupItem
-                                        className={`nav-item py-2 mb-2 px-lg-4`}
+                                        className={`nav-item collapseable p-0`}
                                     >
                                         <AppNavigationDropDown
+                                            action={() => {
+                                                /* eslint-disable no-console */
+                                                console.log("clciked");
+                                                /* eslint-enable no-console */
+                                                setTimeout(() => {
+                                                    updateScreenSize();
+                                                }, 300);
+                                            }}
                                             label={
                                                 user.firstName && user.lastName
                                                     ? `${user.firstName} ${user.lastName}`
