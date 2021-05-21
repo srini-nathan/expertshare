@@ -1,7 +1,15 @@
-import { AxiosError } from "axios";
+import { AxiosError, Canceler } from "axios";
 import { EntityAPI } from "../../AppModule/apis/EntityAPI";
 import { ROUTES } from "../../config";
-import { FinalResponse, ServerError } from "../../AppModule/models";
+import {
+    FinalResponse,
+    ListResponse,
+    ServerError,
+} from "../../AppModule/models";
+import {
+    onFindAllResponseHydra,
+    onFindAllResponseJson,
+} from "../../AppModule/apis/transformer";
 
 const {
     api_containers_delete_item: API_DELETE_ITEM,
@@ -11,6 +19,7 @@ const {
     api_containers_patch_item: API_PATCH_ITEM,
     api_containers_post_collection: API_POST_COLLECTION,
     api_containers_clone_collection: API_CLONE_COLLECTION,
+    api_containers_get_overview_collection: API_GET_OVERVIEW_COLLECTION,
 } = ROUTES;
 
 export abstract class ContainerApi extends EntityAPI {
@@ -36,5 +45,41 @@ export abstract class ContainerApi extends EntityAPI {
             .catch((error: AxiosError | ServerError) =>
                 this.handleErrorDuringCreatingOrUpdating(error)
             );
+    }
+
+    public static async overview<R>(
+        page = 1,
+        extraParams = {},
+        cancelToken?: (c: Canceler) => void
+    ): Promise<FinalResponse<ListResponse<R> | null>> {
+        const source = this.createCancelTokenSource();
+
+        if (cancelToken) {
+            cancelToken(source.cancel);
+        }
+
+        return this.makeGet<R>(
+            API_GET_OVERVIEW_COLLECTION,
+            {
+                ...extraParams,
+                page,
+            },
+            {
+                cancelToken: source.token,
+            }
+        )
+            .then(({ data }) => {
+                // @TODO: create method to handle it, to reduce duplicate code
+                const list = this.acceptHydra
+                    ? onFindAllResponseHydra<R>(data)
+                    : onFindAllResponseJson<R>(data);
+                return Promise.resolve(
+                    new FinalResponse<ListResponse<R>>(list)
+                );
+            })
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
     }
 }
