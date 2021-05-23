@@ -10,7 +10,7 @@ const {
     api_users_put_item: API_PUT_ITEM,
     api_users_patch_item: API_PATCH_ITEM,
     api_users_post_collection: API_POST_COLLECTION,
-    api_users_get_attendee_view_collection: API_GET_ATTENDEE_COLLECTION,
+    api_users_get_attendee_view_item: API_GET_ATTENDEE_COLLECTION,
 } = ROUTES;
 
 export abstract class UserApi extends EntityAPI {

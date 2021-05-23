@@ -159,7 +159,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         setLoadingUserGroups(true);
-        UserGroupApi.find<UserGroup>(1, {}, (c) => {
+        UserGroupApi.find<UserGroup>(1, { "client.id": clientId }, (c) => {
             cancelTokenSourceRef.current = c;
         }).then(({ response, error }) => {
             setLoadingUserGroups(false);
