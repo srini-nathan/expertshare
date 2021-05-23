@@ -8,6 +8,7 @@ export interface AppPageHeaderProps {
     title: string;
     createLink?: string;
     showToolbar?: boolean;
+    customToolbar?: boolean;
     createLabel?: string;
     onQuickFilterChange?: (s: string) => void;
     cancelTokenSources?: Canceler[];
@@ -18,16 +19,18 @@ export const AppPageHeader: FC<AppPageHeaderProps> = ({
     createLink,
     createLabel = "Create",
     showToolbar = false,
+    customToolbar = false,
     onQuickFilterChange,
     cancelTokenSources,
+    children,
 }): JSX.Element => {
     return (
         <Row>
-            <Col md={6} className="page-title">
+            <Col md={5} className="page-title">
                 <h1>{title}</h1>
             </Col>
             {showToolbar && (
-                <Col md={6}>
+                <Col md={7}>
                     <AppListPageToolbar
                         createLabel={createLabel}
                         createLink={createLink}
@@ -36,6 +39,7 @@ export const AppPageHeader: FC<AppPageHeaderProps> = ({
                     />
                 </Col>
             )}
+            {customToolbar && <Col md={7}>{children}</Col>}
         </Row>
     );
 };

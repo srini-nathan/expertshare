@@ -17,6 +17,7 @@ export interface AppFormInputProps
         AppReactHookFormProps {
     type?: string;
     maxCount?: number;
+    onBlurHandler?: (value: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 export const AppFormInput: FC<AppFormInputProps> = ({
@@ -33,6 +34,7 @@ export const AppFormInput: FC<AppFormInputProps> = ({
     required = true,
     maxCount,
     control,
+    onBlurHandler,
     ...props
 }): JSX.Element => {
     const [data, setData] = useState<string>(defaultValue);
@@ -60,6 +62,9 @@ export const AppFormInput: FC<AppFormInputProps> = ({
                         onChange={(e) => {
                             field.onChange(e);
                             setData(e.target.value);
+                        }}
+                        onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+                            if (onBlurHandler) onBlurHandler(e);
                         }}
                         {...controlProps}
                     />

@@ -20,6 +20,8 @@ export interface AppFormTextAreaProps
     onChange?: ChangeEventHandler<
         HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >;
+    disabled?: boolean;
+    onBlurHandler?: (value: React.FocusEvent<HTMLTextAreaElement>) => void;
 }
 
 export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
@@ -30,6 +32,7 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
     errorMessage,
     label = "",
     description,
+    disabled = false,
     isInvalid,
     isValid,
     required = true,
@@ -37,6 +40,7 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
     control,
     rows = 5,
     onChange,
+    onBlurHandler,
     ...props
 }): JSX.Element => {
     const [data, setData] = useState<string>(defaultValue);
@@ -62,12 +66,16 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
                     <Form.Control
                         {...field}
                         as="textarea"
+                        disabled={disabled}
                         onChange={(e) => {
                             if (onChange) {
                                 onChange(e);
                             }
                             field.onChange(e);
                             setData(e.target.value);
+                        }}
+                        onBlur={(e: React.FocusEvent<HTMLTextAreaElement>) => {
+                            if (onBlurHandler) onBlurHandler(e);
                         }}
                         {...controlProps}
                     />

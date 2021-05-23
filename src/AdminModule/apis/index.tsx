@@ -4,5 +4,8 @@ export * from "./EmailTemplateApi";
 export * from "./LanguageApi";
 export * from "./PackageApi";
 export * from "./UserGroupApi";
+export * from "./TranslationGroupApi";
+export * from "./TranslationApi";
+export * from "./TranslationValueApi";
 export * from "./UserFieldApi";
 export * from "./UserApi";

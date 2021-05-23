@@ -5,4 +5,7 @@ export * from "./Container";
 export * from "./UserGroup";
 export * from "./EmailTemplate";
 export * from "./ContainerConfiguration";
+export * from "./TranslationGroup";
+export * from "./Translation";
+export * from "./TranslationValue";
 export * from "./UserField";

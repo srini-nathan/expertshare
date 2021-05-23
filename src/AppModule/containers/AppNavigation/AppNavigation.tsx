@@ -56,6 +56,13 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             },
         },
         {
+            label: "Translations",
+            path: "/admin/translations",
+            icon: {
+                name: "",
+            },
+        },
+        {
             label: "Clients",
             path: "/admin/clients",
             icon: {

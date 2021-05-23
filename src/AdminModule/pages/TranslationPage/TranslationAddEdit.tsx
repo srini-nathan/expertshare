@@ -1,214 +1,213 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
+import { isString as _isString } from "lodash";
 import {
-    Col,
-    Container,
-    Row,
-    Table,
-    FormControl,
-    Tabs,
-    Tab,
-} from "react-bootstrap";
+    AppPageHeader,
+    AppLoader,
+    AppGridPagination,
+    AppFormDropdown,
+} from "../../../AppModule/components";
+import { AppTranslation } from "../../../AppModule/containers/AppTranslation";
+import { LanguageApi, TranslationApi } from "../../apis";
+import { Language, TranslationGroup } from "../../models";
+import { TranslationCombine } from "../../models/entities/TranslationCombine";
+import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
+import { AuthState } from "../../../SecurityModule/models/context/AuthState";
+import { errorToast, randomInteger } from "../../../AppModule/utils";
+import {
+    defaultPageSize,
+    pageSizeOptions,
+} from "../../../AppModule/containers/AppGrid/app-grid-helpers";
+import { AppTranslationToolbar } from "./AppTranslationToolbar";
+import "./assets/scss/style.scss";
 
-const enabledLanguages = ["de", "fr", "gj"];
-const TranslationTableHeaders: FC = () => (
-    <thead>
-        <tr>
-            <th>Key</th>
-            <th>Default</th>
-            {enabledLanguages.map((locale) => (
-                <th key={locale}>{locale.toUpperCase()}</th>
-            ))}
-        </tr>
-    </thead>
-);
-
-interface TranslationGroup {
-    name: string;
-    translations: {
-        [translationKey: string]: {
-            [locale: string]: string;
-        };
-    };
+export interface TranslationCombineList {
+    translationGroup?: TranslationGroup | undefined;
+    itemKey?: any;
+    items?: TranslationCombine[] | undefined;
 }
 
-const translationGroups: { [key: string]: TranslationGroup } = {
-    "global-text": {
-        name: "Global Text",
-        translations: {
-            ok: {
-                default: "OK",
-                de: "De - OK",
-                fr: "De - OK",
-                gj: "De - OK",
-            },
-            cancel: {
-                default: "Cancel",
-                de: "De - Cancel",
-                fr: "De - Cancel",
-                gj: "De - Cancel",
-            },
-        },
-    },
-    "global-form-validation": {
-        name: "Global Form Validation",
-        translations: {
-            "field-is-required": {
-                default: "%fieldName% is required",
-                de: "De - %fieldName% is required",
-                fr: "De - %fieldName% is required",
-                gj: "De - %fieldName% is required",
-            },
-            "accept-term-and-conditions": {
-                default: "You must accept our terms & conditions",
-                de: "De - You must accept our terms & conditions",
-                fr: "De - You must accept our terms & conditions",
-                gj: "De - You must accept our terms & conditions",
-            },
-        },
-    },
-    "page-login": {
-        name: "Login Page",
-        translations: {
-            username: {
-                default: "Username",
-                de: "De - Username",
-                fr: "De - Username",
-                gj: "De - Username",
-            },
-            password: {
-                default: "Password",
-                de: "De - Password",
-                fr: "De - Password",
-                gj: "De - Password",
-            },
-        },
-    },
-    "page-register": {
-        name: "Register Page",
-        translations: {
-            "first-name": {
-                default: "Username",
-                de: "DE - Username",
-                fr: "FR - Username",
-                gj: "GJ - Username",
-            },
-            "last-name": {
-                default: "Password",
-                de: "DE - Password",
-                fr: "FR - Password",
-                gj: "GJ - Password",
-            },
-        },
-    },
-    "page-forgot-password": {
-        name: "Forgot Password Page",
-        translations: {
-            "click-here-resend-email": {
-                default: "Click here to resend email",
-                de: "DE - Click here to resend email",
-                fr: "FR - Click here to resend email",
-                gj: "GJ - Click here to resend email",
-            },
-        },
-    },
-    "page-dashboard": {
-        name: "Dashboard",
-        translations: {
-            "greeting-message": {
-                default: "Welcome %name ",
-                de: "DE - Welcome %name ",
-                fr: "FR - Welcome %name ",
-                gj: "GJ - Welcome %name ",
-            },
-        },
-    },
-};
-
-const getName = (key: string): string => {
-    return translationGroups[key].name;
-};
-
-// const updateTranslationValue = (
-//     groupKey: string,
-//     translationKey: string,
-//     locale: string,
-//     value: string
-// ): void => {
-//     translationGroups[groupKey].translations[translationKey][locale] = [value];
-// };
-
 export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
-    const [activeGroupKey, setActiveGroupKey] = useState<string | null>(
-        "global-text"
-    );
+    const [totalItems, setTotalItems] = useState<number>(0);
+    const [pageSize] = useState<number>(30);
+
+    const [translataionCombines, setTranslationCombines] = useState<
+        TranslationCombineList[]
+    >([]);
+    const [languages, setLanguages] = useState<Language[]>([]);
+    const [selectedLanguages, setSelectedLanguages] = useState<Language[]>([]);
+    const [loading, isLoading] = useState<boolean>(false);
+    const { state } = React.useContext(AuthContext);
+    const { containerId } = state as AuthState;
+
+    useEffect(() => {
+        isLoading(true);
+        LanguageApi.find<Language>(1, { "container.id": containerId }).then(
+            ({ error, response }) => {
+                isLoading(false);
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    }
+                } else if (response !== null) {
+                    setLanguages(response.items);
+                    setSelectedLanguages(response.items);
+                }
+            }
+        );
+    }, [containerId]);
+
+    useEffect(() => {
+        isLoading(false);
+    }, [translataionCombines]);
+
+    const fetchData = (page = 1) => {
+        isLoading(true);
+        TranslationApi.find<TranslationCombine>(page).then(
+            ({ error, response }) => {
+                isLoading(false);
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    }
+                } else if (response !== null) {
+                    let groups: TranslationCombineList[] = [];
+
+                    response.items.forEach((e) => {
+                        const index = groups.findIndex(
+                            (item) =>
+                                item.translationGroup &&
+                                item.translationGroup.tgKey ===
+                                    e.translationGroup.tgKey
+                        );
+
+                        if (index !== -1) {
+                            let items: any = [];
+                            if (groups[index]) items = groups[index].items;
+                            groups = [
+                                ...groups.slice(0, index),
+                                {
+                                    ...groups[index],
+                                    items: [
+                                        ...items,
+                                        {
+                                            itemKey: randomInteger(),
+                                            tKey: e.tKey,
+                                            defaultValue: e.defaultValue,
+                                            id: e.id,
+                                            translationGroup:
+                                                e.translationGroup,
+                                            translationValues:
+                                                e.translationValues,
+                                        },
+                                    ],
+                                },
+                                ...groups.slice(index + 1),
+                            ];
+                        } else {
+                            groups.push({
+                                translationGroup: e.translationGroup,
+                                itemKey: randomInteger(),
+                                items: [
+                                    {
+                                        itemKey: randomInteger(),
+                                        tKey: e.tKey,
+                                        defaultValue: e.defaultValue,
+                                        id: e.id,
+                                        translationGroup: e.translationGroup,
+                                        translationValues: e.translationValues,
+                                    },
+                                ],
+                            });
+                        }
+                    });
+                    setTranslationCombines(groups);
+                    setTotalItems(response.totalItems);
+                }
+            }
+        );
+    };
+    useEffect(() => {
+        fetchData();
+    }, [languages]);
+    const renderTranslations = () => {
+        return (
+            translataionCombines &&
+            translataionCombines.map((e) => {
+                return (
+                    <AppTranslation
+                        key={e.itemKey}
+                        translationGroup={e.translationGroup}
+                        items={e.items}
+                        activeLanguages={selectedLanguages}
+                    />
+                );
+            })
+        );
+    };
+
+    if (loading) return <AppLoader />;
 
     return (
-        <Container fluid={true} className="pt-4">
-            <Row>
-                <Col xs={12} xl={12}>
-                    <Tabs
-                        id="controlled-translation-group-tabs"
-                        activeKey={activeGroupKey}
-                        onSelect={(k) => setActiveGroupKey(k)}
-                    >
-                        {Object.keys(translationGroups).map((key: string) => {
-                            const { translations } = translationGroups[key];
-                            const translationKeys = Object.keys(translations);
-                            return (
-                                <Tab eventKey={key} title={getName(key)}>
-                                    <Table striped bordered hover responsive>
-                                        <TranslationTableHeaders />
-                                        <tbody>
-                                            {translationKeys.map(
-                                                (translationKey) => {
-                                                    const defaultValue =
-                                                        translations[
-                                                            translationKey
-                                                        ].default;
-                                                    return (
-                                                        <tr
-                                                            key={translationKey}
-                                                        >
-                                                            <th>
-                                                                {translationKey}
-                                                            </th>
-                                                            <td>
-                                                                {defaultValue}
-                                                            </td>
-                                                            {enabledLanguages.map(
-                                                                (locale) => {
-                                                                    const localeValue =
-                                                                        translations[
-                                                                            translationKey
-                                                                        ][
-                                                                            locale
-                                                                        ];
-                                                                    return (
-                                                                        <td
-                                                                            key={`${key}${translationKey}${locale}`}
-                                                                        >
-                                                                            <FormControl
-                                                                                value={
-                                                                                    localeValue
-                                                                                }
-                                                                            />
-                                                                        </td>
-                                                                    );
-                                                                }
-                                                            )}
-                                                        </tr>
-                                                    );
-                                                }
-                                            )}
-                                        </tbody>
-                                    </Table>
-                                </Tab>
+        <>
+            <AppPageHeader customToolbar title={"Administration"}>
+                <AppTranslationToolbar
+                    options={languages}
+                    selectedItems={selectedLanguages}
+                    label={`Included Languages (${selectedLanguages.length})`}
+                    onChangeSelect={(item: any) => {
+                        let index = -1;
+                        selectedLanguages.filter((e, i) => {
+                            if (e.locale === item.id) {
+                                index = i;
+                            }
+                            return e;
+                        });
+                        if (index !== -1) {
+                            setSelectedLanguages([
+                                ...selectedLanguages.slice(0, index),
+                                ...selectedLanguages.slice(index + 1),
+                            ]);
+                        } else {
+                            const selected = languages.filter(
+                                (e) => e.locale === item.id
                             );
-                        })}
-                    </Tabs>
-                </Col>
-            </Row>
-        </Container>
+                            setSelectedLanguages([
+                                ...selectedLanguages,
+                                selected[0],
+                            ]);
+                        }
+                    }}
+                    onCreateNew={() => {
+                        setTranslationCombines([
+                            {
+                                translationGroup: undefined,
+                                itemKey: randomInteger(),
+                                items: undefined,
+                            },
+                            ...translataionCombines,
+                        ]);
+                    }}
+                />
+            </AppPageHeader>
+            {renderTranslations()}
+            <div className="d-flex flex-row app-grid-action py-3">
+                <AppGridPagination
+                    className="mr-3"
+                    itemsPerPage={pageSize}
+                    totalItems={totalItems}
+                />
+                {totalItems > 0 ? (
+                    <div className="pagination-container">
+                        <AppFormDropdown
+                            id={"pageSize"}
+                            defaultValue={defaultPageSize()}
+                            options={pageSizeOptions()}
+                            menuPlacement={"top"}
+                        />
+                    </div>
+                ) : null}
+            </div>
+        </>
     );
 };

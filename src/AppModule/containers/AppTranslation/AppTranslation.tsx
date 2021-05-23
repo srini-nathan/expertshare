@@ -1,5 +1,6 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import { useForm } from "react-hook-form";
+import { isString as _isString } from "lodash";
 import {
     AppIcon,
     AppButton,
@@ -7,111 +8,328 @@ import {
     AppFormTextArea,
 } from "../../components";
 import "./assets/scss/style.scss";
+import {
+    TranslationGroup,
+    Translation,
+    Language,
+    TranslationValue,
+} from "../../../AdminModule/models";
+import {
+    TranslationGroupApi,
+    TranslationValueApi,
+    ContainerApi,
+    TranslationApi,
+} from "../../../AdminModule/apis";
+import { errorToast, successToast, randomInteger } from "../../utils";
+import { AuthState } from "../../../SecurityModule/models/context/AuthState";
+import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 
 export interface AppTranslationProps {
-    activeLanguages: ActiveLanguages[];
-    groupName: string;
+    activeLanguages: Language[];
+    translationGroup?: TranslationGroup;
+    items?: any;
 }
 
 export interface ActiveLanguages {
     name: string;
-    key: string;
-    value?: string;
+    locale: string;
+    container?: string;
+    val?: string;
 }
 
 export interface Items {
-    itemKey: string;
-    itemDefaultValue: string;
-    itemLanguages: ActiveLanguages[];
+    id: number | undefined;
+    tKey: string;
 }
 
 export const AppTranslation: FC<AppTranslationProps> = ({
-    activeLanguages = [{ name: "english", key: "en" }],
-    groupName,
+    activeLanguages,
+    translationGroup,
+    items,
 }) => {
     const { control } = useForm();
-    const [languages, setLanguages] = useState<Items[]>([]);
+    const [translation, setTransalations] = useState<Translation[] | undefined>(
+        items
+    );
+    const [translationGroupName, setTranslationGroup] = useState<
+        TranslationGroup | undefined | null
+    >(translationGroup);
+    const { state } = React.useContext(AuthContext);
+    const { containerId } = state as AuthState;
 
     const addNewItem = () => {
-        const activeLangs: ActiveLanguages[] = [];
-        activeLanguages.forEach((e) => {
-            activeLangs.push({
-                name: e.name,
-                key: e.key,
-                value: "",
+        if (translation)
+            setTransalations([
+                {
+                    id: null,
+                    defaultValue: "",
+                    tKey: "",
+                    itemKey: randomInteger(),
+                    translationGroupId: translationGroupName?.id,
+                    translationGroup: translationGroupName?.tgKey
+                        ? translationGroupName?.tgKey
+                        : "",
+                },
+                ...translation,
+            ]);
+        else
+            setTransalations([
+                {
+                    id: null,
+                    defaultValue: "",
+                    tKey: "",
+                    itemKey: randomInteger(),
+                    translationGroupId: translationGroupName?.id,
+                    translationGroup: translationGroupName?.tgKey
+                        ? translationGroupName?.tgKey
+                        : "",
+                },
+            ]);
+    };
+
+    const removeTranslation = (index: number) => {
+        const id = translation && translation[index].id;
+
+        if (id === null && translation) {
+            setTransalations([
+                ...translation.splice(0, index),
+                ...translation.splice(index + 1),
+            ]);
+        } else
+            TranslationApi.deleteById(id as number).then(({ error }) => {
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    }
+                } else {
+                    successToast("Successfully deleted");
+                    const newTranslations = translation?.filter(
+                        (e) => e.id !== id
+                    );
+                    setTransalations(newTranslations);
+                }
             });
-        });
-        setLanguages([
-            ...languages,
-            {
-                itemKey: "",
-                itemDefaultValue: "",
-                itemLanguages: activeLangs,
-            },
-        ]);
     };
 
-    const removeItem = (index: number) => {
-        const newItems = languages.filter((item, i) => {
-            return i !== index;
-        });
+    const removeTranslationGroup = () => {
+        if (translationGroupName === undefined) {
+            setTranslationGroup(null);
+            successToast("Successfully deleted");
+        } else if (translationGroupName) {
+            const id = translationGroupName.id ? translationGroupName.id : 0;
+            TranslationGroupApi.deleteById(id).then(({ error }) => {
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    }
+                } else {
+                    successToast("Successfully deleted");
+                    setTranslationGroup(null);
+                }
+            });
+        }
+    };
 
-        setLanguages(newItems);
+    const handleGroupName = async (name: string) => {
+        const data: TranslationGroup = {
+            name,
+            tgKey: name,
+        };
+        const id =
+            translationGroupName && translationGroupName.id
+                ? translationGroupName.id
+                : null;
+        TranslationGroupApi.createOrUpdate<TranslationGroup>(id, data).then(
+            ({ error, errorMessage, response }) => {
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    } else {
+                        errorToast(errorMessage);
+                    }
+                } else if (response !== null) {
+                    setTranslationGroup(response);
+                }
+            }
+        );
     };
-    const handlekeyChange = (value: string, index: number, name: string) => {
-        const items = languages;
-        const item = { ...languages[index], [name]: value };
-        items[index] = item;
-        setLanguages(items);
-    };
-    const handleValueChange = (
+
+    const handleDefaultValue = (
         value: string,
-        itemIndex: number,
-        index: number
+        index: number,
+        name: "tKey" | "defaultValue"
     ) => {
-        const items = languages;
-        items[itemIndex].itemLanguages[index].value = value;
-
-        setLanguages(items);
+        if (translationGroupName) {
+            let id = translation && translation[index].id;
+            if (id === undefined) id = null;
+            let data: Translation = {
+                translationGroup: TranslationGroupApi.toResourceUrl(
+                    translationGroupName.id ? translationGroupName.id : 0
+                ),
+            };
+            if (name === "tKey")
+                data = {
+                    ...data,
+                    tKey: value,
+                };
+            else
+                data = {
+                    ...data,
+                    defaultValue: value,
+                };
+            TranslationApi.createOrUpdate<Translation>(
+                id,
+                data as Translation
+            ).then(({ error, errorMessage, response }) => {
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    } else {
+                        errorToast(errorMessage);
+                    }
+                } else if (response !== null) {
+                    const translationItems = translation;
+                    if (translationItems)
+                        translationItems[index] = {
+                            ...translationItems[index],
+                            id: response.id,
+                            tKey: response.tKey,
+                        };
+                    setTransalations(translationItems);
+                }
+            });
+        }
     };
-    useEffect(() => {}, [languages]);
-    const renderLanguagesHeader = () => {
-        return activeLanguages.map((e) => {
-            return (
-                <div key={e.key} className="value-col--inner--header--item">
-                    <label>{e.name}</label>
-                </div>
-            );
+
+    const handleTranslationValue = (
+        val: string,
+        locale: string,
+        index: number,
+        id: number | null
+    ) => {
+        let valueId = id;
+
+        if (!valueId) {
+            if (translation && translation[index].items) {
+                const item = translation[index].items.filter(
+                    (e: any) => e.locale === locale
+                );
+                if (item && item.length > 0) valueId = item[0].id;
+            }
+        }
+        let translationId = 0;
+        if (
+            translation &&
+            translation[index].id &&
+            translation[index].id !== null &&
+            translation[index].id !== undefined
+        )
+            translationId = translation[index].id as number;
+
+        const data: TranslationValue = {
+            val,
+            locale,
+            translation: TranslationApi.toResourceUrl(translationId),
+            container: ContainerApi.toResourceUrl(containerId as number),
+        };
+        TranslationValueApi.createOrUpdate<TranslationValue>(
+            valueId,
+            data
+        ).then(({ error, errorMessage, response }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                } else {
+                    errorToast(errorMessage);
+                }
+            } else if (response !== null) {
+                const translationItems = translation;
+                if (translationItems) {
+                    const temp = translationItems[index].items
+                        ? translationItems[index].items
+                        : [];
+                    translationItems[index] = {
+                        ...translationItems[index],
+                        items: [
+                            ...temp,
+                            {
+                                id: response.id,
+                                locale,
+                            },
+                        ],
+                    };
+                }
+
+                setTransalations(translationItems);
+            }
         });
     };
+
+    const renderLanguagesHeader = () => {
+        return (
+            activeLanguages &&
+            activeLanguages.map((e) => {
+                return (
+                    <div
+                        key={e.locale}
+                        className="value-col--inner--header--item"
+                    >
+                        <label>{e.name}</label>
+                    </div>
+                );
+            })
+        );
+    };
+
     const renderLanguages = () => {
         return (
-            languages &&
-            languages.map((item, i) => {
+            translation &&
+            translation.map((item: any, i: number) => {
                 return (
-                    <div className="content--item d-flex">
-                        {activeLanguages.map((e, j) => {
+                    <div
+                        key={`${item.itemKey}_value`}
+                        className="content--item d-flex"
+                    >
+                        {activeLanguages.map((e: any) => {
+                            let defaultValue = "";
+                            let id: number | null = null;
+                            const defVal =
+                                item.translationValues &&
+                                item.translationValues.filter((val: any) => {
+                                    return val.locale === e.locale;
+                                });
+                            if (defVal && defVal.length > 0) {
+                                id = defVal[0].id;
+                                defaultValue = defVal[0].val;
+                            }
+
                             return (
-                                <div key={e.key} className="content--item--key">
+                                <div
+                                    key={`${item.tKey}_${e.locale}`}
+                                    className="content--item--key"
+                                >
                                     <AppFormTextArea
-                                        name={`item_key_${e.key}_${j}`}
+                                        name={`value_${e.locale}_${item.itemKey}`}
                                         placeholder={e.name.toUpperCase()}
-                                        onChange={(event) => {
-                                            handleValueChange(
-                                                event.currentTarget.value,
+                                        onBlurHandler={(
+                                            value: React.FocusEvent<HTMLTextAreaElement>
+                                        ) => {
+                                            handleTranslationValue(
+                                                value.target.value,
+                                                e.locale,
                                                 i,
-                                                j
+                                                id
                                             );
                                         }}
                                         md={12}
                                         sm={12}
                                         lg={12}
                                         xl={12}
-                                        defaultValue={e.value}
+                                        defaultValue={defaultValue}
                                         className="input-txarea w-100 m-0 p-0"
                                         control={control}
                                     />
-                                    <i className={`${e.key} flag`}></i>
+                                    <i className={`${e.locale} flag`}></i>
                                 </div>
                             );
                         })}
@@ -123,13 +341,16 @@ export const AppTranslation: FC<AppTranslationProps> = ({
 
     const renderItemsKey = () => {
         return (
-            languages &&
-            languages.map((item, i) => {
+            translation &&
+            translation.map((item: any, i: number) => {
                 return (
-                    <div className="content--item d-flex">
+                    <div
+                        key={`${item.itemKey}_key`}
+                        className="content--item d-flex"
+                    >
                         <div className="content--item--delete">
                             <AppButton
-                                onClick={() => removeItem(i)}
+                                onClick={() => removeTranslation(i)}
                                 variant="secondary"
                             >
                                 <AppIcon name="delete" />
@@ -139,12 +360,14 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                             <div className="row m-0 p-0">
                                 <div className="content--item--value--key col-6 px-1">
                                     <AppFormTextArea
-                                        name={`item_key_${i}`}
-                                        onChange={(e) => {
-                                            handlekeyChange(
-                                                e.currentTarget.value,
+                                        name={`translation_key_${item.itemKey}`}
+                                        onBlurHandler={(
+                                            value: React.FocusEvent<HTMLTextAreaElement>
+                                        ) => {
+                                            handleDefaultValue(
+                                                value.target.value,
                                                 i,
-                                                "itemKey"
+                                                "tKey"
                                             );
                                         }}
                                         placeholder="Item Key"
@@ -152,26 +375,30 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                         sm={12}
                                         lg={12}
                                         xl={12}
+                                        defaultValue={item.tKey}
                                         className="input-txarea w-100 m-0 p-0"
                                         control={control}
                                     />
                                 </div>
                                 <div className="content--item--value--name col-6 px-1">
                                     <AppFormTextArea
-                                        name={`item_key_`}
-                                        onChange={(event) =>
-                                            handlekeyChange(
-                                                event.currentTarget.value,
-                                                i,
-                                                "itemDefaultValue"
-                                            )
-                                        }
+                                        name={`translation_default_value_${item.itemKey}`}
                                         placeholder="Default Value"
+                                        onBlurHandler={(
+                                            value: React.FocusEvent<HTMLTextAreaElement>
+                                        ) => {
+                                            handleDefaultValue(
+                                                value.target.value,
+                                                i,
+                                                "defaultValue"
+                                            );
+                                        }}
                                         md={12}
                                         sm={12}
                                         lg={12}
                                         xl={12}
                                         className="input-txarea w-100 m-0 p-0"
+                                        defaultValue={item.defaultValue}
                                         control={control}
                                     />
                                     <i className="fak fa-check-circle-regular"></i>
@@ -183,6 +410,8 @@ export const AppTranslation: FC<AppTranslationProps> = ({
             })
         );
     };
+
+    if (translationGroupName === null) return <></>;
 
     return (
         <React.Fragment>
@@ -207,7 +436,10 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                 <div className="group-col--item--container">
                                     <div className="header d-flex">
                                         <div className="header--delete pl-0 pr-1">
-                                            <AppButton variant="secondary">
+                                            <AppButton
+                                                onClick={removeTranslationGroup}
+                                                variant="secondary"
+                                            >
                                                 <AppIcon name="delete" />
                                             </AppButton>
                                         </div>
@@ -215,6 +447,7 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                             <AppButton
                                                 onClick={addNewItem}
                                                 variant="secondary"
+                                                disabled={!translationGroupName}
                                             >
                                                 <AppIcon name="add" />
                                             </AppButton>
@@ -227,8 +460,19 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                                 xl={12}
                                                 control={control}
                                                 className="m-0 p-0"
-                                                defaultValue={groupName}
                                                 name="GroupName"
+                                                defaultValue={
+                                                    translationGroupName
+                                                        ? translationGroupName.tgKey
+                                                        : ""
+                                                }
+                                                onBlurHandler={(
+                                                    value: React.FocusEvent<HTMLInputElement>
+                                                ) => {
+                                                    handleGroupName(
+                                                        value.target.value
+                                                    );
+                                                }}
                                             />
                                         </div>
                                     </div>
@@ -238,19 +482,23 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                 </div>
                             </div>
                         </div>
-                        <div className="value-col col-4 col-sm-5 col-md-6 col-xl-7 px-0 value-carousel">
-                            <div className="value-col--inner">
-                                <div className="value-col--inner--header d-flex">
-                                    {renderLanguagesHeader()}
-                                </div>
-                                <div className="value-col--inner--value">
-                                    <div className="header"></div>
-                                    <div className="content">
-                                        {renderLanguages()}
+
+                        {activeLanguages && activeLanguages.length > 0 && (
+                            <div className="value-col col-4 col-sm-5 col-md-6 col-xl-7 px-0 value-carousel">
+                                <div className="value-col--inner">
+                                    <div className="value-col--inner--header d-flex">
+                                        {renderLanguagesHeader()}
+                                    </div>
+
+                                    <div className="value-col--inner--value">
+                                        <div className="header"></div>
+                                        <div className="content">
+                                            {renderLanguages()}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        )}
                     </div>
                 </div>
             </div>
