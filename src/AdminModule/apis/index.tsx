@@ -8,3 +8,4 @@ export * from "./TranslationGroupApi";
 export * from "./TranslationApi";
 export * from "./TranslationValueApi";
 export * from "./UserFieldApi";
+export * from "./UserApi";

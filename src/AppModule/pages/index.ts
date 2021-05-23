@@ -1,2 +1,3 @@
 export * from "./kitchen-sink";
-export * from "./kitchen-sink-dani";
+export * from "./MyProfilePage";
+export * from "./UserProfilePage";

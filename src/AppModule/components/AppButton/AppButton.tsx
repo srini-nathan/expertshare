@@ -28,11 +28,13 @@ export interface AppButtonProps extends ButtonProps {
     size?: "sm" | "lg";
     block?: boolean;
     disabled?: boolean;
+    handleClick?: () => void;
 }
 export const AppButton: FunctionComponent<AppButtonProps> = ({
     submit = false,
     reset = false,
     type = "button",
+    handleClick,
     ...props
 }) => {
     let btnType = type;
@@ -44,7 +46,7 @@ export const AppButton: FunctionComponent<AppButtonProps> = ({
     }
 
     return (
-        <Button type={btnType} {...props}>
+        <Button type={btnType} onClick={handleClick} {...props}>
             {props.children}
         </Button>
     );

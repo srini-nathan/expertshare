@@ -22,6 +22,41 @@
             "ROLE_SUPER_ADMIN": "ROLE_SUPER_ADMIN"
         }
     },
+    "Upload": {
+        "FILETYPE": {
+            "FILETYPE_CONTAINER_POSTER": "CONTAINER_POSTER",
+            "FILETYPE_CONFERENCE_POSTER": "CONFERENCE_POSTER",
+            "FILETYPE_SESSION_POSTER": "SESSION_POSTER",
+            "FILETYPE_USER_PROFILE": "USER_PROFILE"
+        },
+        "FILETYPEINFO": {
+            "FILETYPEINFO_CONTAINER_POSTER": {
+                "key": "CONTAINER_POSTER",
+                "width": "",
+                "height": "",
+                "ratio": "",
+                "maxSize": "",
+                "allowType": [],
+                "isSecure": false,
+                "path": "container"
+            },
+            "FILETYPE_INFO_CONFERENCE_POSTER": {
+                "key": "CONFERENCE_POSTER",
+                "isSecure": false,
+                "path": "conference"
+            },
+            "FILETYPE_INFO_SESSION_POSTER": {
+                "key": "SESSION_POSTER",
+                "isSecure": false,
+                "path": "session"
+            },
+            "FILETYPE_INFO_USER_PROFILE": {
+                "key": "USER_PROFILE",
+                "isSecure": false,
+                "path": "user"
+            }
+        }
+    },
     "UserField": {
         "FIELDTYPE": {
             "FIELDTYPE_TEXT": "TEXT",
@@ -33,7 +68,7 @@
             "FIELDTYPE_SELECT": "SELECT",
             "FIELDTYPE_MULTI_SELECT": "MULTI_SELECT",
             "FIELDTYPE_RADIO_GROUP": "RADIO_GROUP",
-            "FIELDTYPE_CHECKBOX_GROUP": "CHECBOX_GROUP",
+            "FIELDTYPE_CHECKBOX_GROUP": "CHECKBOX_GROUP",
             "FIELDTYPE_DATE": "DATE"
         }
     }

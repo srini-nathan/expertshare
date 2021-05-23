@@ -17,6 +17,7 @@ import {
     AppYoutubeFrame,
     AppVimeoFrame,
     AppFormRadioSwitch,
+    AppUploader,
     AppFormRichTextArea,
 } from "../../components";
 import { SimpleObject } from "../../models";
@@ -251,6 +252,12 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                     withCounter={true}
                     errorMessage="This field is required"
                     control={control}
+                />
+            </Row>
+            <Row>
+                <AppUploader
+                    accept="image/*" // For more information see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Input
+                    withCropper
                 />
             </Row>
         </Fragment>

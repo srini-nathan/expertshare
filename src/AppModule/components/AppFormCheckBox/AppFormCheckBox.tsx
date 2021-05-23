@@ -22,7 +22,7 @@ export const AppFormCheckBox: FC<AppFormCheckBoxProps> = ({
     const renderClass = () => {
         switch (labelPosition) {
             case "top":
-                return "custom-checkbox d-flex flex-column align-items-center align-items-sm-start mb-3";
+                return "custom-checkbox d-flex flex-column align-items-center align-items-sm-start mb-4";
             case "left":
             default:
                 return "custom-checkbox d-flex flex-column  h-100 flex-sm-row text-center align-items-center";
