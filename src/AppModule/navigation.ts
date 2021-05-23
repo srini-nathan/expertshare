@@ -8,6 +8,13 @@ export const navigation: AppNavigationItemProps[] = [
             name: "dashboard",
         },
     },
+    {
+        label: "Container",
+        path: "/admin/containers/overview",
+        icon: {
+            name: "container",
+        },
+    },
 ];
 
 export default navigation;

@@ -19,11 +19,13 @@ import {
     faEye,
     faEyeSlash,
     faClone,
+    faBox,
 } from "@fortawesome/pro-regular-svg-icons";
 import { AppIconMap } from "../../models";
 
 export const appIconMap: AppIconMap = {
     ChevronLeft: faChevronLeft,
+    container: faBox,
     ChevronDown: faChevronDown,
     ChevronUp: faChevronUp,
     ArrowLeft: faArrowLeft,

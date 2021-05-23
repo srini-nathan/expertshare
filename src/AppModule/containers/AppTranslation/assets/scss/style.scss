@@ -66,6 +66,10 @@
                         }
 
                         &--name {
+                            .invalid-feedback {
+                                display: none !important;
+                            }
+
                             input {
                                 padding-left: 10px;
                             }

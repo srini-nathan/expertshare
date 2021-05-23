@@ -84,15 +84,8 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             },
         },
         {
-            label: "Admin - User Fields",
+            label: "User Fields",
             path: "/admin/user-fields",
-            icon: {
-                name: "",
-            },
-        },
-        {
-            label: "Container - Overview",
-            path: "/admin/containers/overview",
             icon: {
                 name: "",
             },

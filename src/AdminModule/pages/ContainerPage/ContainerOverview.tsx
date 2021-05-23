@@ -46,7 +46,7 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
             />
             <Row>
                 {overviews.map((container: PContainer) => (
-                    <Col xs={12} sm={6} md={4} key={container.id}>
+                    <Col xs={12} sm={4} md={3} key={container.id}>
                         <AppContainerOverview container={container} />
                     </Col>
                 ))}
