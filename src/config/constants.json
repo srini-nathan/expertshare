@@ -22,6 +22,13 @@
             "ROLE_SUPER_ADMIN": "ROLE_SUPER_ADMIN"
         }
     },
+    "SessionComment": {
+        "STATUS": {
+            "STATUS_NEW": "NEW",
+            "STATUS_ACCEPTED": "ACCEPTED",
+            "STATUS_REJECTED": "REJECTED"
+        }
+    },
     "Upload": {
         "FILETYPE": {
             "FILETYPE_CONTAINER_POSTER": "CONTAINER_POSTER",
@@ -40,17 +47,17 @@
                 "isSecure": false,
                 "path": "container"
             },
-            "FILETYPE_INFO_CONFERENCE_POSTER": {
+            "FILETYPEINFO_CONFERENCE_POSTER": {
                 "key": "CONFERENCE_POSTER",
                 "isSecure": false,
                 "path": "conference"
             },
-            "FILETYPE_INFO_SESSION_POSTER": {
+            "FILETYPEINFO_SESSION_POSTER": {
                 "key": "SESSION_POSTER",
                 "isSecure": false,
                 "path": "session"
             },
-            "FILETYPE_INFO_USER_PROFILE": {
+            "FILETYPEINFO_USER_PROFILE": {
                 "key": "USER_PROFILE",
                 "isSecure": false,
                 "path": "user"
