@@ -5,3 +5,4 @@ export * from "./LanguageApi";
 export * from "./PackageApi";
 export * from "./UserGroupApi";
 export * from "./UserFieldApi";
+export * from "./UserApi";

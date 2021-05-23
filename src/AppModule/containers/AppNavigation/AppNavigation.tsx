@@ -323,6 +323,9 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                         </div>
                                     </ListGroupItem>
                                     <ListGroupItem
+                                        className={`seperator  p-0 mx-4`}
+                                    ></ListGroupItem>
+                                    <ListGroupItem
                                         className={`nav-item collapseable p-0`}
                                     >
                                         <AppNavigationDropDown
@@ -339,20 +342,18 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                     label: "German",
                                                     iconClassName:
                                                         "languages de",
-                                                    path: "#",
                                                 },
                                             ]}
                                         />
                                     </ListGroupItem>
-
+                                    <ListGroupItem
+                                        className={`seperator  p-0 mx-4`}
+                                    ></ListGroupItem>
                                     <ListGroupItem
                                         className={`nav-item collapseable p-0`}
                                     >
                                         <AppNavigationDropDown
                                             action={() => {
-                                                /* eslint-disable no-console */
-                                                console.log("clciked");
-                                                /* eslint-enable no-console */
                                                 setTimeout(() => {
                                                     updateScreenSize();
                                                 }, 300);
@@ -366,14 +367,13 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                             subDropDownItems={[
                                                 {
                                                     label: "Profile",
-                                                    path: "#",
+                                                    path: "/my-profile",
                                                     icon: "User",
                                                 },
                                                 {
                                                     label: "Log out",
                                                     action: handleLogoutEvent,
                                                     icon: "SignOut",
-                                                    path: "#",
                                                 },
                                             ]}
                                         />

@@ -217,8 +217,12 @@
                     max-height: 150px;
                     overflow-y: auto;
 
+                    a {
+                        text-decoration: none;
+                    }
+
                     .list-group-item {
-                        padding-left: 65px;
+                        padding-left: 25px !important;
                         display: flex;
                         height: 50px;
 
@@ -242,7 +246,7 @@
                         }
 
                         span {
-                            margin: auto 0;
+                            margin: auto 9px 0;
                         }
                     }
 
@@ -384,7 +388,7 @@
                         font-weight: 400;
 
                         span {
-                            margin: 0 0 0 75px;
+                            margin: 0 0 0 60px;
                         }
                     }
                 }
