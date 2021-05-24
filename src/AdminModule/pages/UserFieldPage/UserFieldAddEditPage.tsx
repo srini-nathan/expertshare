@@ -23,13 +23,34 @@ import {
 } from "../../../AppModule/models";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { AppFormSelect } from "../../../AppModule/components/AppFormSelect";
-import { AppFieldTypeElements } from "../../components/AppFieldTypeElements";
+import { AppFieldTypeElement } from "../../components";
+
+const { UserField } = CONSTANTS;
+const { FIELDTYPE } = UserField;
 
 const schema = yup.object().shape({
     name: yup.string().required(),
     fieldKey: yup.string().required(),
     labelKey: yup.string().required(),
     fieldType: yup.string().required(),
+    attr: yup.array().optional().nullable(),
+    options: yup.array().when("fieldType", {
+        is:
+            FIELDTYPE.FIELDTYPE_SELECT ||
+            FIELDTYPE.FIELDTYPE_MULTI_SELECT ||
+            FIELDTYPE.FIELDTYPE_RADIO_GROUP ||
+            FIELDTYPE.FIELDTYPE_CHECKBOX_GROUP,
+        then: yup
+            .array()
+            .min(1, "Enter a option")
+            .of(
+                yup.object().shape({
+                    key: yup.string().required(),
+                    value: yup.string().required(),
+                })
+            )
+            .required(),
+    }),
 });
 
 export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
@@ -43,23 +64,24 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
     const [data, setData] = useState<UserFieldEntity>(new UserFieldEntity());
     const [loading, setLoading] = useState<boolean>(isEditMode);
     const [selected, setSelected] = useState<any>();
-    const [attribs, setAttribs] = useState([]);
-    const [opts, setOpts] = useState<any[]>([]);
-    const { UserField } = CONSTANTS;
-    const { FIELDTYPE } = UserField;
     const options = Object.entries(FIELDTYPE).map(([key, value]) => ({
         value,
         label: key,
     }));
 
-    const { register, control, handleSubmit, formState, setError } = useForm({
+    const {
+        register,
+        control,
+        handleSubmit,
+        formState,
+        setError,
+        setValue,
+    } = useForm({
         resolver: yupResolver(schema),
         mode: "all",
     });
 
     const onSubmit = (formData: UserFieldEntity) => {
-        formData.attr = attribs!;
-        formData.options = { choice: opts! };
         UserFieldApi.createOrUpdate<UserFieldEntity>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
@@ -84,12 +106,6 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                 }
             }
         );
-    };
-    const onAttributeUpdate = (value: any) => {
-        setAttribs(value);
-    };
-    const onOptionsUpdate = (value: any) => {
-        setOpts(value);
     };
     const renderOptions = (type: any) => {
         if (
@@ -227,19 +243,27 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                                 </Col>
                             </Row>
                             {selected && (
-                                <AppFieldTypeElements
+                                <AppFieldTypeElement
+                                    name={"attr"}
                                     header={"Attributes"}
-                                    onAttributeUpdate={onAttributeUpdate}
-                                    attrValue={data.attr}
                                     isEditMode={isEditMode}
+                                    control={control}
+                                    defaultValue={data.attr}
+                                    setValue={setValue}
+                                    required={false}
+                                    errorMessage={errors.attr?.message}
                                 />
                             )}
                             {renderOptions(selected) && (
-                                <AppFieldTypeElements
+                                <AppFieldTypeElement
+                                    name={"options"}
                                     header={"Options"}
-                                    onAttributeUpdate={onOptionsUpdate}
-                                    optvalue={data.options}
                                     isEditMode={isEditMode}
+                                    control={control}
+                                    defaultValue={data.attr}
+                                    setValue={setValue}
+                                    required={true}
+                                    errorMessage={errors.options?.message}
                                 />
                             )}
                         </AppCard>
