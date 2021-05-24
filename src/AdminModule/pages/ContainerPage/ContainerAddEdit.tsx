@@ -135,19 +135,22 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                     } else if (response !== null) {
                         const packs = response.packages as Package[];
                         const groups = response.userGroups as UserGroup[];
+                        const selected = [] as SimpleObject<string>[];
                         const payload = {
                             ...response,
                             packages: packs.map(({ id: packId }) =>
                                 PackageApi.toResourceUrl(packId)
                             ),
                             userGroups: groups.map(({ id: ugId, name }) => {
-                                setSelectedUserGroups([
-                                    ...selectedUserGroups,
-                                    { label: name, value: `${ugId}` },
-                                ]);
+                                selected.push({
+                                    label: name,
+                                    value: `${ugId}`,
+                                    id: `${ugId}`,
+                                });
                                 return UserGroupApi.toResourceUrl(ugId);
                             }),
                         };
+                        setSelectedUserGroups(selected);
                         setData(payload);
                         reset(payload);
                     }
@@ -173,6 +176,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                         return {
                             label: user.name,
                             value: `${user.id}`,
+                            id: `${user.id}`,
                         };
                     })
                 );
@@ -187,7 +191,11 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
     }, []);
 
     const onSubmit = (formData: Container) => {
+        const userGroupsSelectedItems = selectedUserGroups.map((e) => {
+            return UserGroupApi.toResourceUrl(parseInt(e.id, 10));
+        });
         formData.client = ClientApi.toResourceUrl(clientId);
+        formData.userGroups = userGroupsSelectedItems;
         ContainerApi.createOrUpdate<Container>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
@@ -430,11 +438,23 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     required
                                     description="Hi this is description for this field"
                                     onChange={(item) => {
-                                        const groups = selectedUserGroups;
-                                        const index = groups.indexOf(item);
+                                        let index = -1;
+                                        selectedUserGroups.filter((e, i) => {
+                                            if (e.id === item.id) {
+                                                index = i;
+                                            }
+                                            return e;
+                                        });
                                         if (index !== -1) {
-                                            delete groups[index];
-                                            setSelectedUserGroups(groups);
+                                            setSelectedUserGroups([
+                                                ...selectedUserGroups.slice(
+                                                    0,
+                                                    index
+                                                ),
+                                                ...selectedUserGroups.slice(
+                                                    index + 1
+                                                ),
+                                            ]);
                                         } else {
                                             setSelectedUserGroups([
                                                 ...selectedUserGroups,

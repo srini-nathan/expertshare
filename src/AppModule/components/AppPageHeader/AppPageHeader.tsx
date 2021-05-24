@@ -25,7 +25,7 @@ export const AppPageHeader: FC<AppPageHeaderProps> = ({
     children,
 }): JSX.Element => {
     return (
-        <Row>
+        <Row className="pt-sm-3">
             <Col md={5} className="page-title">
                 <h1>{title}</h1>
             </Col>

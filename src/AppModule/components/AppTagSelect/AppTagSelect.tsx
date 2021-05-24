@@ -36,6 +36,7 @@ export const AppTagSelect: FC<AppTagSelectProps> = ({
                     if (item.id === e.id) {
                         checked = true;
                     }
+
                     return item;
                 });
                 return (
