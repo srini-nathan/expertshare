@@ -1,30 +1,30 @@
 import React, { FC, useState } from "react";
-import { Row, Form, Col, ListGroup } from "react-bootstrap";
-import {
-    AppTabs,
-    AppTab,
-    AppDetailsAction,
-    AppMessageItem,
-    AppChatList,
-} from "../../components";
+import { Row, Form, Col } from "react-bootstrap";
+import { AppDetailsAction, AppChatList } from "../../components";
+import { Messages } from "./messages";
+import { PTOPMessages } from "./ptopmessages";
 import "./assets/scss/style.scss";
 
 // export getMessagesArrayMock should be removed
-
 import { getMessagesArrayMock } from "../../../_mock_/mock-generator";
 
 export interface AppMessageBoxProps {
     userChatID: (m: string) => void;
+    showMessages?: boolean;
 }
 
-export const AppMessageBox: FC<AppMessageBoxProps> = () => {
+export const AppMessageBox: FC<AppMessageBoxProps> = ({
+    showMessages = true,
+}) => {
     const messagesMockData = getMessagesArrayMock();
+    const [showMessagesWrapper, setShowMessagesWrapper] = useState(
+        showMessages
+    );
 
     // eslint-disable-next-line no-console
     console.log(messagesMockData.avatarUrl);
 
     const [, setSearch] = useState<string>("");
-    const [activeTab, setActiveTab] = React.useState<string>("All Users");
 
     const handleQuickSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(event.currentTarget.value);
@@ -40,37 +40,36 @@ export const AppMessageBox: FC<AppMessageBoxProps> = () => {
         );
     };
 
-    const appMessageItems = (message: any) => {
-        return (
-            <AppMessageItem
-                id={message.id}
-                name={message.name}
-                imageURL={message.imageURL}
-                newMessages={message.lastMessage.newMessages}
-                message={message.lastMessage.message}
-                lastMessageTime={message.lastMessage.time}
-                online={message.lastMessage.online}
-                messageIdHandler={() => {}}
-            />
-        );
-    };
-
     return (
         <React.Fragment>
             <div className="message-box">
                 <div className="message-box--container">
                     <div className="message-box--single">
-                        <AppDetailsAction
-                            newMessagesCount={messagesMockData.mewMessages}
-                            avatarImg={messagesMockData.avatarUrl}
-                            isPTOP
-                        />
-                        {messageBoxSingle()}
+                        <div className="tabs m-0 pt-1 pb-2">
+                            <AppDetailsAction
+                                newMessagesCount={messagesMockData.mewMessages}
+                                avatarImg={messagesMockData.avatarUrl}
+                                isPTOP
+                                handleCloseMessages={() => {}}
+                            />
+                            {messageBoxSingle()}
+                            <PTOPMessages activeTab="Text"></PTOPMessages>
+                        </div>
                     </div>
-                    <div className="message-box--index">
+                    <div
+                        className="message-box--index"
+                        style={
+                            showMessagesWrapper
+                                ? { display: "block" }
+                                : { display: "none" }
+                        }
+                    >
                         <AppDetailsAction
                             newMessagesCount={messagesMockData.mewMessages}
                             avatarImg={messagesMockData.avatarUrl}
+                            handleCloseMessages={() => {
+                                setShowMessagesWrapper(false);
+                            }}
                         />
                         <Row className="row m-0 px-3 pt-3 pb-1">
                             <Col className="search col-12 p-0">
@@ -85,10 +84,10 @@ export const AppMessageBox: FC<AppMessageBoxProps> = () => {
                             </Col>
                         </Row>
                         <Row className="tabs row m-0 pt-1 pb-2">
-                            <i
+                            {/* <i
                                 className="fak fa-user-friends-light"
                                 style={
-                                    activeTab === "All Users"
+                                    activeTab === "Chat"
                                         ? { color: "#30B7A7" }
                                         : { color: "#444" }
                                 }
@@ -96,46 +95,19 @@ export const AppMessageBox: FC<AppMessageBoxProps> = () => {
                             <i
                                 className="fak fa-live"
                                 style={
-                                    activeTab !== "All Users"
+                                    activeTab !== "Chat"
                                         ? { color: "#30B7A7" }
                                         : { color: "#444" }
                                 }
-                            ></i>
+                            ></i> */}
                             {/* <Button className="filter" variant="link">
                                 <i className="fak fa-filter-light"></i>
                             </Button> */}
-                            <AppTabs
-                                onSelect={setActiveTab}
-                                activeKey={activeTab}
-                            >
-                                <AppTab eventKey="All Users" title="All Users">
-                                    <div className="message mt-2">
-                                        <Row className="m-0 p-0">
-                                            <ListGroup defaultActiveKey="#link1">
-                                                {messagesMockData.messages.map(
-                                                    (message: any) =>
-                                                        appMessageItems(message)
-                                                )}
-                                            </ListGroup>
-                                        </Row>
-                                    </div>
-                                </AppTab>
-                                <AppTab
-                                    eventKey="Online Only"
-                                    title="Online Only"
-                                >
-                                    <div className="message mt-2">
-                                        <Row className="m-0 p-0">
-                                            <ListGroup defaultActiveKey="#link1">
-                                                {messagesMockData.messages.map(
-                                                    (message: any) =>
-                                                        appMessageItems(message)
-                                                )}
-                                            </ListGroup>
-                                        </Row>
-                                    </div>
-                                </AppTab>
-                            </AppTabs>
+
+                            <Messages
+                                activeTab="Chat"
+                                data={messagesMockData}
+                            />
                         </Row>
                     </div>
                 </div>

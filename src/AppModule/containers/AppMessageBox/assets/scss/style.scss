@@ -28,6 +28,10 @@
         @include media("mobile") {
             width: 100%;
         }
+        .nav-tabs {
+            width: 100%;
+            padding: 0 15px;
+        }
     }
 
     .search {
@@ -69,7 +73,8 @@
         a {
             display: flex;
             align-items: center;
-            justify-content: flex-start;
+            width: 31.5%;
+            justify-content: center;
             height: 36px;
             font-size: 14px;
             font-weight: 500;
@@ -77,12 +82,11 @@
             background-color: var(--btn-secondary-bg-clr);
             border-radius: var(--border-radius);
             box-shadow: 0 3px 9px var(--secondary-10);
-            padding-left: 42px;
         }
 
-        a:first-of-type {
-            margin-left: 1.2em;
-        }
+        // a:first-of-type {
+        //     margin-left: 1.2em;
+        // }
 
         .fa-user-friends-light {
             position: absolute;
@@ -156,6 +160,10 @@
         box-shadow: 0 -7px 40px var(--secondary-30);
         @include media("mb-1") {
             display: none;
+        }
+        .nav-tabs {
+            width: 100%;
+            padding: 0 15px;
         }
     }
 

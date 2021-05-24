@@ -8,13 +8,21 @@ export interface AppDetailsActionProps {
     newMessagesCount?: number;
     avatarImg?: string;
     isPTOP?: boolean;
+    handleCloseMessages: () => void;
 }
 export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
     defaultAvatar = DefaultAvatar,
     newMessagesCount = 0,
     avatarImg,
     isPTOP,
+    handleCloseMessages,
 }) => {
+    const handleCloseWindow = () => {
+        if (!isPTOP) {
+            handleCloseMessages();
+        }
+    };
+
     return (
         <Row className="m-0 px-3 pt-3 pb-2">
             <Col className="details col-auto p-0">
@@ -62,7 +70,7 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                         className="btn-close col-auto px-1 p-0 pl-2"
                         id="btn-close-index"
                     >
-                        <Button variant="link">
+                        <Button variant="link" onClick={handleCloseWindow}>
                             <i className="fak fa-times-light"></i>
                         </Button>
                     </Col>

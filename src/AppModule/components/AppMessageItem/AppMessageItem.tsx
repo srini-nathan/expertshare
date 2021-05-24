@@ -22,6 +22,8 @@ export const AppMessageItem: FunctionComponent<MessageItemProps> = ({
     messageIdHandler,
 }) => {
     const handleMessageClick = (event: any) => {
+        // eslint-disable-next-line no-console
+        console.log(event.currentTarget.getAttribute("data-rb-event-key"));
         messageIdHandler(event.currentTarget.getAttribute("data-rb-event-key"));
     };
 

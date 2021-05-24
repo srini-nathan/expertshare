@@ -75,8 +75,9 @@
             border-radius: 20px;
         }
     }
-    .list-group-item.active {
-        background-color: transparent;
-        margin: 0;
-    }
+}
+
+.list-group-item.active {
+    background-color: transparent !important;
+    border: none;
 }
