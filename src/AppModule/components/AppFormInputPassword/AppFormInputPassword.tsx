@@ -75,7 +75,7 @@ export const AppFormInputPassword: FC<AppFormInputPasswordProps> = ({
                     </InputGroup.Text>
                 </InputGroup.Append>
             </InputGroup>
-            <Form.Control.Feedback type="invalid">
+            <Form.Control.Feedback className={"d-block"} type="invalid">
                 {errorMessage}
             </Form.Control.Feedback>
         </Form.Group>
