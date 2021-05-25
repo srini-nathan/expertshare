@@ -1,90 +1,23 @@
-import React, { FC, Fragment, useRef, useState } from "react";
+import React, { FC, Fragment, useRef } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
-import {
-    GridApi,
-    IServerSideDatasource,
-    IServerSideGetRowsParams,
-} from "ag-grid-community";
-import { isString as _isString } from "lodash";
+import { GridApi } from "ag-grid-community";
 import { Canceler } from "axios";
-import { appGridColDef } from "./app-grid-col-def";
-import { appGridFrameworkComponents } from "./app-grid-framework-components";
-import { UserGroupApi } from "../../apis";
-import { UserGroup } from "../../models";
-import { AppPageHeader } from "../../../AppModule/components";
-import {
-    AppGrid,
-    buildFilterParams,
-    buildSortParams,
-} from "../../../AppModule/containers/AppGrid";
-import { appGridConfig } from "../../../AppModule/config";
-import { errorToast, successToast } from "../../../AppModule/utils";
-import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
-import { AuthState } from "../../../SecurityModule/models/context/AuthState";
+import { AppPageHeader, AppTabs, AppTab } from "../../../AppModule/components";
+import { UserGroupList } from "./UserGroupList";
 
 export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
-    const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
+    const appGridApiGenerated = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
-    const { state } = React.useContext(AuthContext);
-    const { clientId } = state as AuthState;
-
-    function getDataSource(): IServerSideDatasource {
-        return {
-            getRows(params: IServerSideGetRowsParams) {
-                const { request, api } = params;
-                const { endRow } = request;
-                const pageNo = endRow / appGridConfig.pageSize;
-                api?.hideOverlay();
-                UserGroupApi.find<UserGroup>(
-                    pageNo,
-                    {
-                        order: buildSortParams(request),
-                        ...buildFilterParams(request),
-                        "client.id": clientId,
-                    },
-                    (c) => {
-                        cancelTokenSourcesRef.current.push(c);
-                    }
-                ).then(({ error, response }) => {
-                    if (error !== null) {
-                        if (_isString(error)) {
-                            errorToast(error);
-                        }
-                    } else if (response !== null) {
-                        if (response.items.length === 0) {
-                            api?.showNoRowsOverlay();
-                        }
-                        setTotalItems(response.totalItems);
-                        params.successCallback(
-                            response.items,
-                            response.totalItems
-                        );
-                    }
-                });
-            },
-        };
-    }
-
-    async function handleDelete(id: number) {
-        UserGroupApi.deleteById(id).then(({ error }) => {
-            if (error !== null) {
-                if (_isString(error)) {
-                    errorToast(error);
-                }
-            } else {
-                successToast("Successfully deleted");
-                appGridApi.current?.refreshServerSideStore({
-                    purge: false,
-                    route: [],
-                });
-            }
-        });
-    }
 
     async function handleFilter(search: string) {
         appGridApi.current?.setFilterModel({
+            name: {
+                filter: search,
+            },
+        });
+        appGridApiGenerated.current?.setFilterModel({
             name: {
                 filter: search,
             },
@@ -100,20 +33,25 @@ export const UserGroupListPage: FC<RouteComponentProps> = (): JSX.Element => {
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}
             />
-            <Row>
-                <Col>
-                    <AppGrid
-                        frameworkComponents={appGridFrameworkComponents}
-                        columnDef={appGridColDef({
-                            onPressDelete: handleDelete,
-                        })}
-                        dataSource={getDataSource()}
-                        totalItems={totalItems}
-                        onReady={(event) => {
-                            appGridApi.current = event.api;
-                        }}
-                    />
-                </Col>
+            <Row className="m-0">
+                <AppTabs defaultKeyValue="custom">
+                    <AppTab eventKey="custom" title="Custom">
+                        <Col className="p-0 mt-4">
+                            <UserGroupList
+                                appGridApi={appGridApi}
+                                isGenerated={false}
+                            />
+                        </Col>
+                    </AppTab>
+                    <AppTab eventKey="generated" title="Generated">
+                        <Col className="p-0  mt-4">
+                            <UserGroupList
+                                appGridApi={appGridApiGenerated}
+                                isGenerated={true}
+                            />
+                        </Col>
+                    </AppTab>
+                </AppTabs>
             </Row>
         </Fragment>
     );
