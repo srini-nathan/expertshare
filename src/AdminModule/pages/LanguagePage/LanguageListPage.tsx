@@ -19,6 +19,7 @@ import {
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
+import { useDownloadFile } from "../../../AppModule/hooks";
 import { errorToast, successToast } from "../../../AppModule/utils";
 import "./assets/scss/list.scss";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
@@ -30,6 +31,7 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const { state } = React.useContext(AuthContext);
     const { containerId } = state as AuthState;
+    const [updateLink] = useDownloadFile();
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -83,6 +85,17 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
             }
         });
     }
+    async function handleExport(locale: string) {
+        LanguageApi.exportLanguage(containerId as number, `${locale}.csv`).then(
+            (reponse) => {
+                updateLink({
+                    name: `${locale}.csv`,
+                    type: "file/csv",
+                    file: reponse,
+                });
+            }
+        );
+    }
 
     async function handleFilter(search: string) {
         appGridApi.current?.setFilterModel({
@@ -107,6 +120,7 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
                         frameworkComponents={appGridFrameworkComponents}
                         columnDef={appGridColDef({
                             onPressDelete: handleDelete,
+                            onPressExport: handleExport,
                         })}
                         dataSource={getDataSource()}
                         totalItems={totalItems}

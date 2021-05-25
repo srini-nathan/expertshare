@@ -9,7 +9,7 @@ import {
 import { Language } from "../../models";
 import { LanguageApi } from "../../apis";
 import { errorToast, successToast } from "../../../AppModule/utils";
-import { AppCellActionWithRenderParams } from "../../../AppModule/models";
+import { AppCellActionWithRenderWithCustom } from "./app-actions";
 
 export const appGridFrameworkComponents = {
     appSwitch: (params: ICellRendererParams): ReactElement => {
@@ -55,10 +55,10 @@ export const appGridFrameworkComponents = {
         );
     },
     appGridActionRenderer: (
-        params: AppCellActionWithRenderParams
+        params: AppCellActionWithRenderWithCustom
     ): ReactElement => {
-        const { data, onPressDelete } = params;
-        const { id, isDefault } = data as Language;
+        const { data, onPressDelete, onPressExport } = params;
+        const { id, isDefault, locale } = data as Language;
 
         const props: AppGridActionProps = {
             editAction: {
@@ -72,6 +72,15 @@ export const appGridFrameworkComponents = {
                     onPressDelete(id);
                 },
             },
+            customClickActions: [
+                {
+                    icon: "CloudDownload",
+                    disable: false,
+                    onClick: () => {
+                        onPressExport(locale);
+                    },
+                },
+            ],
         };
 
         return <AppGridAction {...props} />;

@@ -11,6 +11,7 @@ const {
     api_languages_patch_item: API_PATCH_ITEM,
     api_languages_post_collection: API_POST_COLLECTION,
     api_language_set_default_collection: API_SET_DEFAULT,
+    api_translations_export_collection: API_EXPORT,
 } = ROUTES;
 
 export abstract class LanguageApi extends EntityAPI {
@@ -40,5 +41,19 @@ export abstract class LanguageApi extends EntityAPI {
             .catch((error: AxiosError | ServerError) =>
                 this.handleErrorDuringCreatingOrUpdating(error)
             );
+    }
+
+    public static async exportLanguage(
+        containerId: number,
+        locale: string
+    ): Promise<any> {
+        return this.makeGet<any>(route(API_EXPORT, { containerId, locale }))
+            .then(({ data }) => {
+                return data;
+            })
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
     }
 }
