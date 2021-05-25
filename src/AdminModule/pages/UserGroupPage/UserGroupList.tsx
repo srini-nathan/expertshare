@@ -6,7 +6,6 @@ import {
 import { isString as _isString } from "lodash";
 import { Canceler } from "axios";
 import { appGridColDef } from "./app-grid-col-def";
-import { appGridColDefGenerated } from "./app-grid-col-def-generated";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { UserGroupApi } from "../../apis";
 import { UserGroup } from "../../models";
@@ -91,13 +90,9 @@ export const UserGroupList: FC<UserGroupListProps> = ({
     return (
         <AppGrid
             frameworkComponents={appGridFrameworkComponents}
-            columnDef={
-                isGenerated
-                    ? appGridColDefGenerated()
-                    : appGridColDef({
-                          onPressDelete: handleDelete,
-                      })
-            }
+            columnDef={appGridColDef({
+                onPressDelete: handleDelete,
+            })}
             dataSource={getDataSource()}
             totalItems={totalItems}
             onReady={(event) => {
