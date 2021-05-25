@@ -38,3 +38,4 @@ export * from "./AppFormRichTextArea";
 export * from "./AppModal";
 export * from "./AppFormSelect";
 export * from "./AppTabWithIcon";
+export * from "./AppFormSelectCreatable";

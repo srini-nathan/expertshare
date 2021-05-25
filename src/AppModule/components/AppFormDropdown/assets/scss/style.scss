@@ -3,10 +3,10 @@
 
 .form-group {
     .custom-select-container {
-        height: 36px !important;
+        min-height: 36px !important;
 
         .custom-select__control {
-            height: 36px !important;
+            min-height: 36px !important;
 
         }
     }
@@ -37,6 +37,25 @@
             border-width: unset !important;
             border-radius: unset !important;
             box-shadow: unset !important;
+        }
+    }
+
+    &__multi-value {
+        margin-top: -1px !important;
+        background-color: var(--primary-20) !important;
+
+        &__label {
+            color: var(--primary) !important;
+
+        }
+
+        &__remove {
+            color: var(--primary) !important;
+
+            &:hover {
+                background-color: var(--primary-20) !important;
+                cursor: pointer;
+            }
         }
     }
 

@@ -9,3 +9,4 @@ export * from "./TranslationApi";
 export * from "./TranslationValueApi";
 export * from "./UserFieldApi";
 export * from "./UserApi";
+export * from "./UserTagApi";
