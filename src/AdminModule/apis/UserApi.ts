@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import { AxiosError, AxiosRequestConfig } from "axios";
 import { EntityAPI } from "../../AppModule/apis/EntityAPI";
 import { FinalResponse, ServerError } from "../../AppModule/models";
 import { route, ROUTES } from "../../config";
@@ -11,6 +11,8 @@ const {
     api_users_patch_item: API_PATCH_ITEM,
     api_users_post_collection: API_POST_COLLECTION,
     api_users_get_attendee_view_item: API_GET_ATTENDEE_COLLECTION,
+    api_users_change_password_item: API_CHANGE_PASSWORD_COLLECTION,
+    api_users_change_profile_item: API_UPDATE_PROFILE_COLLECTION,
 } = ROUTES;
 
 export abstract class UserApi extends EntityAPI {
@@ -30,6 +32,42 @@ export abstract class UserApi extends EntityAPI {
         id: number
     ): Promise<FinalResponse<R | null>> {
         return this.makeGet<R>(route(API_GET_ATTENDEE_COLLECTION, { id }))
+            .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
+            .catch((error: AxiosError | ServerError) =>
+                this.handleErrorDuringCreatingOrUpdating(error)
+            );
+    }
+
+    public static async changePassword<R, P>(
+        id: number,
+        entity: P
+    ): Promise<FinalResponse<R | null>> {
+        const config: AxiosRequestConfig = this.getPatchRequestConfig<P>();
+
+        return this.makePatch<R, P>(
+            route(API_CHANGE_PASSWORD_COLLECTION, { id }),
+            JSON.stringify(entity),
+            {},
+            config
+        )
+            .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
+            .catch((error: AxiosError | ServerError) =>
+                this.handleErrorDuringCreatingOrUpdating(error)
+            );
+    }
+
+    public static async updateProfile<R, P>(
+        id: number,
+        entity: P
+    ): Promise<FinalResponse<R | null>> {
+        const config: AxiosRequestConfig = this.getPatchRequestConfig<P>();
+
+        return this.makePatch<R, P>(
+            route(API_UPDATE_PROFILE_COLLECTION, { id }),
+            JSON.stringify(entity),
+            {},
+            config
+        )
             .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
             .catch((error: AxiosError | ServerError) =>
                 this.handleErrorDuringCreatingOrUpdating(error)

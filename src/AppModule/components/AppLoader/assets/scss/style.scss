@@ -6,6 +6,13 @@
     width: 97%;
     height: 76vh;
 
+    &.custom-btn-loader {
+        position: relative;
+        display: block;
+        width: unset;
+        height: unset;
+    }
+
     .appLoader {
         margin: auto;
     }

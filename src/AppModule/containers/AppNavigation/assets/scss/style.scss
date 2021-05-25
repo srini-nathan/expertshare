@@ -425,6 +425,7 @@
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;
+                        max-width: 70%;
 
                         @include media("xl") {
                             margin: auto 0 auto 15px;

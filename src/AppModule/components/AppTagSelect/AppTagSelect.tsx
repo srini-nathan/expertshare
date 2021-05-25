@@ -11,6 +11,7 @@ export interface AppTagSelectProps {
     selectedItems: SimpleObject<string>[];
     required?: boolean;
     onChange: (item: SimpleObject<string>) => void;
+    onBlurHandler?: (value: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 export const AppTagSelect: FC<AppTagSelectProps> = ({
@@ -20,6 +21,7 @@ export const AppTagSelect: FC<AppTagSelectProps> = ({
     options,
     selectedItems,
     onChange,
+    onBlurHandler,
 }): JSX.Element => {
     const [searchText, setSearchText] = React.useState<string>("");
     const renderOptions = () => {
@@ -86,6 +88,9 @@ export const AppTagSelect: FC<AppTagSelectProps> = ({
                         value={searchText}
                         onChange={(e) => setSearchText(e.target.value)}
                         placeholder="Sreach..."
+                        onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
+                            if (onBlurHandler) onBlurHandler(e);
+                        }}
                     />
                 </div>
                 <ul className="list-group mx-3">{renderOptions()}</ul>

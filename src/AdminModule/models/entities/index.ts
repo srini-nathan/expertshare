@@ -9,3 +9,4 @@ export * from "./TranslationGroup";
 export * from "./Translation";
 export * from "./TranslationValue";
 export * from "./UserField";
+export * from "./UserTag";
