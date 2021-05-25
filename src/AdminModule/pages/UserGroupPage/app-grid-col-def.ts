@@ -10,12 +10,6 @@ export const appGridColDef = ({
         filter: "text",
     },
     {
-        headerName: "Is Generated",
-        field: "isGenerated",
-        sortable: false,
-        cellRenderer: "appBooleanRender",
-    },
-    {
         headerName: "Actions",
         field: "id",
         sortable: false,
