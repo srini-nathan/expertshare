@@ -10,3 +10,4 @@ export * from "./AdministrationGeneralSetting";
 export * from "./AdministrationDesign";
 export * from "./EmailTemplatePage";
 export * from "./UserFieldPage";
+export * from "./UserListPage";

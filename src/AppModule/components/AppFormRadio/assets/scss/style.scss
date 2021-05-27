@@ -4,21 +4,21 @@
 .form-check {
     padding-left: 0 !important;
 
-    .form-check-input {
+    .form-check-input[type="radio"] {
         position: relative;
         display: none;
         margin-left: 0 !important;
 
-        &:checked ~ .form-check-label::after {
+        &:checked~.form-check-label::after {
             background-image: url(../images/svg/circle_radio.svg);
         }
 
-        &:checked ~ .form-check-label::before {
+        &:checked~.form-check-label::before {
             background-color: unset;
             border-color: var(--primary);
         }
 
-        &:focus ~ .form-check-label::before {
+        &:focus~.form-check-label::before {
             box-shadow: unset;
         }
     }

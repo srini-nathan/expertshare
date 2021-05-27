@@ -1,0 +1,41 @@
+.ag-theme-alpine {
+    margin-bottom: 120px;
+
+    .ag-react-container {
+        display: flex;
+    }
+}
+
+.role-container {
+    z-index: 5;
+}
+
+.list-deopdown {
+    min-width: 130px;
+    height: 36px;
+    margin: auto 0;
+    background-color: var(--light-clr);
+    border: none;
+    box-shadow: 0 3px 9px var(--box-shadow-box-clr);
+    padding: 5px;
+
+    &:focus {
+        outline: none;
+        border: none;
+    }
+
+}
+
+.list-checkbox {
+    margin: auto;
+    padding-left: 0;
+    height: 20px;
+}
+
+.bulk-menu {
+    position: fixed;
+    bottom: 80px;
+    width: content;
+    background-color: var(--light-clr);
+    box-shadow: 0 3px 9px var(--box-shadow-box-clr);
+}

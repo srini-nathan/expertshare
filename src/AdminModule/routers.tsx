@@ -15,6 +15,8 @@ import {
     EmailTemplateListPage,
     EmailTemplateAddEditPage,
     ContainerOverview,
+    UserListPage,
+    UserAddEditPage,
 } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
 import { ContainerAddEdit } from "./pages/ContainerPage/ContainerAddEdit";
@@ -57,6 +59,9 @@ export const routers: ModuleRouter[] = [
                     <ContainerOverview
                         path={"containers/overview"}
                     ></ContainerOverview>
+                    <UserListPage path={"users"} />
+                    <UserAddEditPage path={"users/new"} />
+                    <UserAddEditPage path={"users/:id"} />
                 </Router>
             );
         },

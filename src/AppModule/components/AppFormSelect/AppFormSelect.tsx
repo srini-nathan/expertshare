@@ -75,11 +75,11 @@ export const AppFormSelect: FC<AppFormSelectProps> = ({
             ) : null}
             <Controller
                 name={name}
-                defaultValue={defaultValue}
                 control={control}
                 render={({ field }) => (
                     <Select
                         {...field}
+                        defaultValue={defaultValue}
                         options={options}
                         placeholder={placeholder}
                         className="custom-select-container form-control"

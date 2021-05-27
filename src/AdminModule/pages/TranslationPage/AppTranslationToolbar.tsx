@@ -43,9 +43,9 @@ export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
     });
 
     return (
-        <Col className={" p-0 translation-page"}>
+        <Col className={" p-0 my-auto translation-page"}>
             <Form className="w-100">
-                <Form.Row>
+                <Form.Row className="justify-content-end">
                     <Col md="4">
                         <AppTagSelectDropDown
                             options={values}

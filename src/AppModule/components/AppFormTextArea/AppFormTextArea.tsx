@@ -81,7 +81,7 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
                     />
                 )}
             />
-            <Form.Control.Feedback type="invalid">
+            <Form.Control.Feedback className=" d-block" type="invalid">
                 {errorMessage}
             </Form.Control.Feedback>
         </Form.Group>

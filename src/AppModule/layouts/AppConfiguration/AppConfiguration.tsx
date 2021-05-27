@@ -1,7 +1,7 @@
 import React, { FC, useEffect } from "react";
 import { Helmet } from "react-helmet";
-import { Container } from "../../../AdminModule/models";
-import { ContainerApi } from "../../../AdminModule/apis";
+import { Container, Role } from "../../../AdminModule/models";
+import { ContainerApi, RoleApi } from "../../../AdminModule/apis";
 import { errorToast } from "../../utils";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AppContext } from "../../contexts/AppContext";
@@ -39,6 +39,26 @@ export const AppConfiguration: FC = ({ children }) => {
             );
         }
     }, [containerId]);
+
+    useEffect(() => {
+        const roles = localStorage.getItem("roles");
+        if (!roles) {
+            RoleApi.find<Role>().then(
+                ({ response, isNotFound, errorMessage }) => {
+                    if (errorMessage) {
+                        errorToast(errorMessage);
+                    } else if (isNotFound) {
+                        errorToast("Container not exist");
+                    } else if (response !== null) {
+                        localStorage.setItem(
+                            "roles",
+                            JSON.stringify(response.items)
+                        );
+                    }
+                }
+            );
+        }
+    }, []);
 
     const renderScripts = () => {
         return (
