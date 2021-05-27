@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from "react";
 import { ListGroup } from "react-bootstrap";
+import { AppButton } from "../AppButton";
 import "./assets/scss/style.scss";
 
 export interface MessageItemProps {
@@ -11,6 +12,8 @@ export interface MessageItemProps {
     lastMessageTime: string;
     online: boolean;
     messageIdHandler: (m: string) => void;
+    group: boolean;
+    active?: boolean;
 }
 export const AppMessageItem: FunctionComponent<MessageItemProps> = ({
     id,
@@ -20,17 +23,33 @@ export const AppMessageItem: FunctionComponent<MessageItemProps> = ({
     lastMessageTime,
     message,
     messageIdHandler,
+    group,
+    active,
 }) => {
     const handleMessageClick = (event: any) => {
-        // eslint-disable-next-line no-console
-        console.log(event.currentTarget.getAttribute("data-rb-event-key"));
         messageIdHandler(event.currentTarget.getAttribute("data-rb-event-key"));
+    };
+
+    const groupOrButtonRender = (g: boolean) => {
+        if (g) {
+            return (
+                <AppButton className="more" variant="light">
+                    <i className="fal fa-plus-circle btn-icon"></i>
+                </AppButton>
+            );
+        }
+        return (
+            <AppButton className="more" variant="light">
+                <i className="fas fa-ellipsis-h btn-icon"></i>
+            </AppButton>
+        );
     };
 
     return (
         <ListGroup.Item
+            disabled={active && true}
             action
-            className="message-container"
+            className="message-group-container"
             eventKey={id}
             onClick={(event) => handleMessageClick(event)}
         >
@@ -54,10 +73,12 @@ export const AppMessageItem: FunctionComponent<MessageItemProps> = ({
                     </div>
                 </div>
             </div>
-            {newMessages > 0 && (
+            {!group && newMessages > 0 ? (
                 <div className="count">
                     <span>{newMessages}</span>
                 </div>
+            ) : (
+                groupOrButtonRender(group)
             )}
         </ListGroup.Item>
     );

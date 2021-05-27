@@ -8,6 +8,7 @@
     z-index: 3;
     &--container {
         display: flex;
+        align-items: flex-end;
         @include media("mobile") {
             height: 100%;
         }
@@ -31,6 +32,13 @@
         .nav-tabs {
             width: 100%;
             padding: 0 15px;
+        }
+    }
+
+    &--block {
+        display: none;
+        &--show {
+            display: block;
         }
     }
 

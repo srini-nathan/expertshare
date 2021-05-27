@@ -35,3 +35,4 @@ export * from "./AppFormSelect";
 export * from "./AppDetailsAction";
 export * from "./AppMessageItem";
 export * from "./AppChatList";
+export * from "./AppGroupWindow";

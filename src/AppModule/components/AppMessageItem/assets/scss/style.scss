@@ -1,8 +1,9 @@
 @import "../../../../assets/scss/variables";
 
-.message-container {
+.message-group-container {
     border: none !important;
     border-bottom: 1px solid var(--secondary-20) !important;
+
     .content {
         display: flex;
         align-items: center;
@@ -67,7 +68,7 @@
             justify-content: center;
             width: 17px;
             height: 17px;
-            padding-top: 2px;
+            padding-top: 1px;
             font-size: 12px;
             font-weight: 500;
             color: white;
@@ -75,9 +76,30 @@
             border-radius: 20px;
         }
     }
+    .more {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        background: white;
+        width: 45px;
+        -webkit-box-shadow: 3px 3px 8px 0px rgba(155, 167, 186, 0.2);
+        -moz-box-shadow: 3px 3px 8px 0px rgba(155, 167, 186, 0.2);
+        box-shadow: 3px 3px 8px 0px rgba(155, 167, 186, 0.2);
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        .btn-icon {
+            font-size: 19px;
+            padding-top: 12px;
+        }
+    }
 }
 
 .list-group-item.active {
     background-color: transparent !important;
     border: none;
+}
+
+.list-group-item.disabled,
+.list-group-item:disabled {
+    background-color: var(--primary-20) !important;
 }
