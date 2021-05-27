@@ -72,7 +72,7 @@ export const AppFieldTypeElement: FC<AppFieldTypeElementProps> = ({
                                             errors[name]?.[index]?.key
                                         )}
                                         errorMessage={
-                                            errors[name]?.[index]?.key.message
+                                            errors[name]?.[index]?.key?.message
                                         }
                                         defaultValue={item.key}
                                         control={control}
@@ -98,7 +98,8 @@ export const AppFieldTypeElement: FC<AppFieldTypeElementProps> = ({
                                             errors[name]?.[index]?.value
                                         )}
                                         errorMessage={
-                                            errors[name]?.[index]?.value.message
+                                            errors[name]?.[index]?.value
+                                                ?.message
                                         }
                                         placeholder={`${header.replace(
                                             /s([^s]*)$/,
