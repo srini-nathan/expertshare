@@ -2,6 +2,7 @@ import React, { FC, useState } from "react";
 import { Row, Form, Col, ListGroup } from "react-bootstrap";
 import { AppDetailsAction } from "../AppDetailsAction";
 import { AppMessageItem } from "../AppMessageItem";
+import { AppButton } from "../AppButton";
 import "./assets/scss/style.scss";
 
 export interface AppGroupWindowProps {
@@ -29,8 +30,6 @@ export const AppGroupWindow: FC<AppGroupWindowProps> = ({
         const newGroups = [...groupItems];
         newGroups[index].active = true;
         setGroupItems(newGroups);
-
-        // console.log(item, index);
     };
 
     // eslint-disable-next-line no-console
@@ -93,6 +92,32 @@ export const AppGroupWindow: FC<AppGroupWindowProps> = ({
                                 />
                             ))}
                         </ListGroup>
+                    </div>
+                    <div className="create-group">
+                        <div className="group--container">
+                            <Form.Control
+                                onChange={() => {}}
+                                placeholder="Enter Group Name"
+                                type={"name"}
+                            ></Form.Control>
+                        </div>
+                        <div className="group-users">
+                            <span>Users</span>
+                            {/* <span className="count">0/99</span> */}
+                        </div>
+                    </div>
+                    <div className="group-buttons">
+                        <AppButton className="btn-group-cancel" variant="light">
+                            <i className="fas fa-times"></i>
+                            <span>Cancel</span>
+                        </AppButton>
+                        <AppButton
+                            className="btn btn-light btn-group-create"
+                            variant="light"
+                        >
+                            <i className="fas fa-check"></i>
+                            <span>Create</span>
+                        </AppButton>
                     </div>
                 </div>
             )}

@@ -34,5 +34,63 @@
             width: 100%;
             padding: 0 15px;
         }
+
+        .create-group {
+            border-top: 1px solid var(--secondary-70);
+            padding: 1em;
+            .group--container {
+                height: 36px;
+                border: 1px solid var(--input-border-clr);
+                border-radius: var(--border-radius);
+                input {
+                    height: inherit;
+                    font-size: 14px;
+                    font-weight: 300;
+                    color: var(--secondary);
+                    background-color: unset;
+                    border: none;
+                    padding-bottom: 7px;
+                }
+            }
+            .group-users {
+                margin-top: 0.5em;
+                font-size: 12px;
+                display: flex;
+                justify-content: space-between;
+                height: 200px;
+                span {
+                    font-weight: 700;
+                }
+                .count {
+                    font-weight: 500;
+                    color: #7ebde9;
+                }
+            }
+        }
+        .group-buttons {
+            border-top: 1px solid #ccc;
+            padding: 1em;
+            display: flex;
+            justify-content: space-between;
+            span {
+                font-size: 16px;
+            }
+            i {
+                font-size: 18px;
+                padding-right: 1em;
+            }
+            .btn-group-cancel {
+                box-shadow: 0 3px 9px var(--secondary-10);
+                height: 36px;
+                width: 158px;
+                background-color: white !important;
+            }
+            .btn-group-create {
+                box-shadow: 0 3px 9px var(--secondary-10);
+                height: 36px;
+                width: 158px;
+                background-color: white !important;
+            }
+        }
     }
 }
