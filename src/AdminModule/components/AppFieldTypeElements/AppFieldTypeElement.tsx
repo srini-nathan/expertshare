@@ -5,6 +5,7 @@ import {
     AppButton,
     AppFormInput,
     AppFormLabel,
+    AppIcon,
 } from "../../../AppModule/components";
 
 export interface AppFieldTypeElementProps {
@@ -14,7 +15,7 @@ export interface AppFieldTypeElementProps {
     control: any;
     defaultValue: any;
     setValue: any;
-    errorMessage?: any;
+    errors?: any;
     required: boolean;
 }
 
@@ -25,18 +26,19 @@ export const AppFieldTypeElement: FC<AppFieldTypeElementProps> = ({
     setValue,
     defaultValue,
     isEditMode,
-    errorMessage,
+    errors,
     required,
 }): JSX.Element => {
-    const { fields, append } = useFieldArray({
+    const { fields, append, remove } = useFieldArray({
         control,
         name,
     });
-
-    const addInput = () => {
-        append({ key: "", value: "" });
+    const isValidCheck = (value: any) => {
+        if (value) {
+            return true;
+        }
+        return false;
     };
-
     useEffect(() => {
         if (isEditMode) {
             setValue(name, defaultValue);
@@ -66,6 +68,12 @@ export const AppFieldTypeElement: FC<AppFieldTypeElementProps> = ({
                                             /s([^s]*)$/,
                                             "$1"
                                         )} key`}
+                                        isInvalid={isValidCheck(
+                                            errors[name]?.[index]?.key
+                                        )}
+                                        errorMessage={
+                                            errors[name]?.[index]?.key.message
+                                        }
                                         defaultValue={item.key}
                                         control={control}
                                     />
@@ -86,6 +94,12 @@ export const AppFieldTypeElement: FC<AppFieldTypeElementProps> = ({
                                         lg={12}
                                         sm={12}
                                         xl={12}
+                                        isInvalid={isValidCheck(
+                                            errors[name]?.[index]?.value
+                                        )}
+                                        errorMessage={
+                                            errors[name]?.[index]?.value.message
+                                        }
                                         placeholder={`${header.replace(
                                             /s([^s]*)$/,
                                             "$1"
@@ -94,12 +108,22 @@ export const AppFieldTypeElement: FC<AppFieldTypeElementProps> = ({
                                 )}
                             />
                         </Col>
-                        <Col md={1} className="p-0">
-                            <AppButton onClick={addInput}>+</AppButton>
+                        <Col md={1}>
+                            {index === 0 && (
+                                <AppButton
+                                    onClick={() =>
+                                        append({ key: "", value: "" })
+                                    }
+                                >
+                                    <AppIcon name="add"></AppIcon>
+                                </AppButton>
+                            )}
+                            {index !== 0 && (
+                                <AppButton onClick={() => remove(index)}>
+                                    <AppIcon name="delete"></AppIcon>
+                                </AppButton>
+                            )}
                         </Col>
-                        {errorMessage && (
-                            <div style={{ color: "red" }}>{errorMessage}</div>
-                        )}
                     </Row>
                 );
             })}

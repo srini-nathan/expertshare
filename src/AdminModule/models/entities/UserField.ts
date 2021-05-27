@@ -15,7 +15,7 @@ export interface UserField extends BaseEntity {
 }
 
 export interface FieldsAttr {
-    type: string;
+    key: string;
     value: string;
 }
 export interface FieldOptions {

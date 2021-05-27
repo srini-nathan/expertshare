@@ -42,14 +42,16 @@ const schema = yup.object().shape({
             FIELDTYPE.FIELDTYPE_CHECKBOX_GROUP,
         then: yup
             .array()
-            .min(1, "Enter a option")
             .of(
                 yup.object().shape({
-                    key: yup.string().required(),
-                    value: yup.string().required(),
+                    key: yup.string().trim().required("option key is required"),
+                    value: yup
+                        .string()
+                        .trim()
+                        .required("option value is required"),
                 })
             )
-            .required(),
+            .min(1, "Minimum of 1 option"),
     }),
 });
 
@@ -251,7 +253,7 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                                     defaultValue={data.attr}
                                     setValue={setValue}
                                     required={false}
-                                    errorMessage={errors.attr?.message}
+                                    errors={errors}
                                 />
                             )}
                             {renderOptions(selected) && (
@@ -260,13 +262,14 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                                     header={"Options"}
                                     isEditMode={isEditMode}
                                     control={control}
-                                    defaultValue={data.attr}
+                                    defaultValue={data.options}
                                     setValue={setValue}
                                     required={true}
-                                    errorMessage={errors.options?.message}
+                                    errors={errors}
                                 />
                             )}
                         </AppCard>
+
                         <AppCard>
                             <Row>
                                 <Col md={4} sm={6}>
