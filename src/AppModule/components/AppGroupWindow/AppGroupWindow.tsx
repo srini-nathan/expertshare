@@ -114,6 +114,7 @@ export const AppGroupWindow: FC<AppGroupWindowProps> = ({
                         <AppButton
                             className="btn btn-light btn-group-create"
                             variant="light"
+                            disabled
                         >
                             <i className="fas fa-check"></i>
                             <span>Create</span>
