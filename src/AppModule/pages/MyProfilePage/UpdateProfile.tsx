@@ -43,22 +43,19 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     >([]);
     const [userFields, setUserFields] = useState<UserField[]>([]);
 
-    let validationShape = {
+    const validationShape = {
         firstName: Yup.string().min(2).required(),
         lastName: Yup.string().min(2).required(),
     };
-    userFields.forEach((e) => {
-        if (e.isActive && e.isRequired)
-            validationShape = {
-                ...validationShape,
-                [UserFieldApi.toResourceUrl(e.id)]: Yup.string().required(),
-            };
-    });
+    // userFields.forEach((e) => {
+    //     if (e.isActive && e.isRequired)
+    //         validationShape = {
+    //             ...validationShape,
+    //             [UserFieldApi.toResourceUrl(e.id)]: Yup.string().required(),
+    //         };
+    // });
     const validationSchema = Yup.object().shape(validationShape);
 
-    /* eslint-disable no-console */
-    console.log(validationShape);
-    /* eslint-enable no-console */
     const { control, handleSubmit, formState, setError } = useForm({
         resolver: yupResolver(validationSchema),
         mode: "all",

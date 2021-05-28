@@ -27,10 +27,6 @@ export const AppFormRadioGroup: FC<AppFormRadioGroupProps> = ({
     label = "",
     control,
 }): JSX.Element => {
-    /* eslint-disable no-console */
-    console.log(defaultChecked);
-    /* eslint-enable no-console */
-
     let props: any = {
         id,
         label,

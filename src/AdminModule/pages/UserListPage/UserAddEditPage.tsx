@@ -74,7 +74,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         setError,
         trigger,
     } = useForm<User>({
-        resolver: yupResolver(schema(isEditMode, userFields)),
+        resolver: yupResolver(schema(isEditMode)),
         mode: "all",
     });
 
@@ -104,9 +104,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
     };
     const getDynamicFileds = (userField: any[]) => {
         const userFieldValues: any[] = [];
-        /* eslint-disable no-console */
-        console.log(userField);
-        /* eslint-enable no-console */
+
         Object.keys(userField).forEach((key: any) => {
             let value: any = userField[key];
             if (value instanceof Date) value = value.toISOString().slice(0, 10);
@@ -120,9 +118,6 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                 userField: key,
             });
         });
-        /* eslint-disable no-console */
-        console.log(userFieldValues);
-        /* eslint-enable no-console */
         return userFieldValues;
     };
     const onSubmit = (formData: UpdateProfileForm<any>) => {
