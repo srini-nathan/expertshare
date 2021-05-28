@@ -1,0 +1,109 @@
+{
+    "AFramePanel": {
+        "REMOTE": {
+            "REMOTE_ANIMATION_GLOWING": "glowing",
+            "REMOTE_ANIMATION_SHAKING": "shaking",
+            "REMOTE_ANIMATION_BLINKING": "blinking"
+        },
+        "TARGET": {
+            "TARGET_TYPE_ROOM": "room",
+            "TARGET_TYPE_IFRAME": "iframe",
+            "TARGET_TYPE_BILLBOARD": "billboard",
+            "TARGET_TYPE_PROJECTOR": "projector",
+            "TARGET_ACTION_ENTER": "enter",
+            "TARGET_ACTION_EXIT": "exit",
+            "TARGET_ACTION_OPEN": "open",
+            "TARGET_ACTION_CLOSE": "close",
+            "TARGET_ACTION_ZOOM_IN": "zoom_in",
+            "TARGET_ACTION_ZOOM_OUT": "zoom_out",
+            "TARGET_ACTION_START": "start",
+            "TARGET_ACTION_STOP": "stop"
+        },
+        "TYPE": {
+            "TYPE_DOOR": "door",
+            "TYPE_SCREEN": "screen",
+            "TYPE_BILLBOARD": "billboard",
+            "TYPE_PROJECTOR": "projector"
+        }
+    },
+    "Container": {
+        "STORAGE": { "STORAGE_LOCAL": "Local", "STORAGE_S3": "S3" }
+    },
+    "Package": {
+        "PACKAGE": {
+            "PACKAGE_CUSTOM_DESIGN": "custom.design",
+            "PACKAGE_STREAMING": "streaming"
+        }
+    },
+    "Role": {
+        "ROLE": {
+            "ROLE_READER": "ROLE_READER",
+            "ROLE_USER": "ROLE_USER",
+            "ROLE_STAFF": "ROLE_STAFF",
+            "ROLE_RELATION_MANAGER": "ROLE_RELATION_MANAGER",
+            "ROLE_SPEAKER": "ROLE_SPEAKER",
+            "ROLE_MODERATOR": "ROLE_MODERATOR",
+            "ROLE_EXHIBITOR": "ROLE_EXHIBITOR",
+            "ROLE_OPERATOR": "ROLE_OPERATOR",
+            "ROLE_ADMIN": "ROLE_ADMIN",
+            "ROLE_SUPER_ADMIN": "ROLE_SUPER_ADMIN"
+        }
+    },
+    "SessionComment": {
+        "STATUS": {
+            "STATUS_NEW": "NEW",
+            "STATUS_ACCEPTED": "ACCEPTED",
+            "STATUS_REJECTED": "REJECTED"
+        }
+    },
+    "Upload": {
+        "FILETYPE": {
+            "FILETYPE_CONTAINER_POSTER": "CONTAINER_POSTER",
+            "FILETYPE_CONFERENCE_POSTER": "CONFERENCE_POSTER",
+            "FILETYPE_SESSION_POSTER": "SESSION_POSTER",
+            "FILETYPE_USER_PROFILE": "USER_PROFILE"
+        },
+        "FILETYPEINFO": {
+            "FILETYPEINFO_CONTAINER_POSTER": {
+                "key": "CONTAINER_POSTER",
+                "width": "",
+                "height": "",
+                "ratio": "",
+                "maxSize": "",
+                "allowType": [],
+                "isSecure": false,
+                "path": "container"
+            },
+            "FILETYPEINFO_CONFERENCE_POSTER": {
+                "key": "CONFERENCE_POSTER",
+                "isSecure": false,
+                "path": "conference"
+            },
+            "FILETYPEINFO_SESSION_POSTER": {
+                "key": "SESSION_POSTER",
+                "isSecure": false,
+                "path": "session"
+            },
+            "FILETYPEINFO_USER_PROFILE": {
+                "key": "USER_PROFILE",
+                "isSecure": false,
+                "path": "user"
+            }
+        }
+    },
+    "UserField": {
+        "FIELDTYPE": {
+            "FIELDTYPE_TEXT": "TEXT",
+            "FIELDTYPE_TEXT_NUMBER": "TEXT_NUMBER",
+            "FIELDTYPE_TEXT_EMAIL": "TEXT_EMAIL",
+            "FIELDTYPE_TEXT_URL": "TEXT_URL",
+            "FIELDTYPE_TEXTAREA": "TEXTAREA",
+            "FIELDTYPE_SWITCH": "SWITCH",
+            "FIELDTYPE_SELECT": "SELECT",
+            "FIELDTYPE_MULTI_SELECT": "MULTI_SELECT",
+            "FIELDTYPE_RADIO_GROUP": "RADIO_GROUP",
+            "FIELDTYPE_CHECKBOX_GROUP": "CHECKBOX_GROUP",
+            "FIELDTYPE_DATE": "DATE"
+        }
+    }
+}
