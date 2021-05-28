@@ -9,7 +9,7 @@ import "./assets/scss/style.scss";
 export interface AppFormSelectProps {
     id: string;
     name: string;
-    defaultValue: string | number;
+    defaultValue: PrimitiveObject | string | number;
     placeholder?: string;
     label?: string;
     size?: "lg" | "sm";
@@ -76,6 +76,11 @@ export const AppFormSelect: FC<AppFormSelectProps> = ({
             <Controller
                 name={name}
                 control={control}
+                defaultValue={
+                    defaultValue instanceof Object
+                        ? defaultValue.value
+                        : defaultValue
+                }
                 render={({ field }) => (
                     <Select
                         {...field}

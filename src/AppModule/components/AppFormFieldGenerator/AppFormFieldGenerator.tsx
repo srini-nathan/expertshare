@@ -6,22 +6,26 @@ import { AppFormInput } from "../AppFormInput";
 import { AppFormTextArea } from "../AppFormTextArea";
 import { AppFormSwitch } from "../AppFormSwitch";
 import { AppFormSelect } from "../AppFormSelect";
-import { AppFormRadio } from "../AppFormRadio";
+import { AppFormRadioGroup } from "../AppFormRadioGroup";
 import { AppFormLabel } from "../AppFormLabel";
 import { AppDatePicker } from "../AppDatePicker";
-import { AppFormCheckBox2 } from "../AppFormCheckBox2";
+import { AppFormCheckBoxGroup } from "../AppFormCheckBoxGroup";
 import { PrimitiveObject } from "../../models";
 import "./assets/scss/style.scss";
 
 export interface AppFormFieldGeneratorProps {
     properties: any;
     defaultValue?: any;
+    errorMessage?: any;
     control: Control<any>;
+    validation: any;
 }
 export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps> = ({
     properties,
     defaultValue,
     control,
+    validation,
+    errorMessage,
 }) => {
     const { items } = properties;
     const renderText = (type: string) => {
@@ -38,6 +42,8 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                 defaultValue={defaultValue ? defaultValue.value : ""}
                 {...properties.attr}
                 control={control}
+                {...validation}
+                errorMessage={errorMessage}
             />
         );
     };
@@ -45,6 +51,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
         return (
             <AppFormTextArea
                 md={"6"}
+                {...validation}
                 sm={"12"}
                 lg={"6"}
                 xl={"6"}
@@ -58,9 +65,6 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
         );
     };
     const renderDate = () => {
-        /* eslint-disable no-console */
-        console.log(defaultValue);
-        /* eslint-enable no-console */
         return (
             <Col className="react-datepicker-container">
                 <AppFormLabel
@@ -71,11 +75,14 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                     md={"6"}
                     sm={"12"}
                     lg={"6"}
+                    {...validation}
                     xl={"6"}
                     label={properties.labelKey}
                     required={properties.isRequired}
                     name={`userField./api/user_fields/${properties.id}`}
-                    defaultValue={defaultValue ? defaultValue.value : ""}
+                    defaultValue={
+                        defaultValue ? new Date(defaultValue.value) : null
+                    }
                     {...properties.attr}
                     control={control}
                 />
@@ -106,7 +113,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                 label: properties.options.choice[key],
                 name: `userField./api/user_fields/${properties.id}`,
                 value: key,
-                defaultCheck: defaultValue && defaultValue.value === key,
+                defaultCheck: defaultValue ? defaultValue.value === key : false,
             });
         });
 
@@ -119,16 +126,13 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                 <Row className="m-0">
                     {options.map((e: any) => {
                         return (
-                            <AppFormRadio
+                            <AppFormRadioGroup
                                 key={e.value}
-                                md={"6"}
-                                name={e.name}
                                 id={e.value}
+                                name={e.name}
                                 value={e.value}
+                                {...validation}
                                 label={e.label}
-                                sm={"12"}
-                                lg={"6"}
-                                xl={"6"}
                                 {...properties.attr}
                                 defaultChecked={e.defaultCheck}
                                 control={control}
@@ -142,14 +146,15 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
 
     const renderCheckBox = () => {
         const options: PrimitiveObject[] = [];
-        // const defVal: string[] = defaultValue
-        //     ? JSON.parse(defaultValue.value)
-        //     : [];
+        const defVal: string[] = defaultValue
+            ? JSON.parse(defaultValue.value)
+            : [];
         Object.keys(properties.options.choice).forEach((key) => {
             options.push({
                 label: properties.options.choice[key],
-                name: `userField./api/user_fields/${properties.id}[]`,
+                name: `userField./api/user_fields/${properties.id}.${key}`,
                 value: key,
+                defaultCheck: defVal && defVal.includes(key),
             });
         });
         return (
@@ -159,13 +164,20 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                     required={properties.isRequired}
                 />
                 <Row className="m-0">
-                    <AppFormCheckBox2
-                        name={`userField./api/user_fields/${properties.id}`}
-                        id={`userField./api/user_fields/${properties.id}`}
-                        options={options}
-                        {...properties.attr}
-                        control={control}
-                    />
+                    {options.map((e: any) => {
+                        return (
+                            <AppFormCheckBoxGroup
+                                name={e.name}
+                                id={e.value}
+                                {...validation}
+                                value={e.value}
+                                label={e.label}
+                                {...properties.attr}
+                                defaultChecked={e.defaultCheck}
+                                control={control}
+                            />
+                        );
+                    })}
                 </Row>
             </Col>
         );
@@ -224,6 +236,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                 name={`userField./api/user_fields/${properties.id}`}
                 id={properties.labelKey}
                 {...prps}
+                {...validation}
                 {...properties.attr}
                 control={control}
                 transform={{

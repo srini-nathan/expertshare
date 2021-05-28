@@ -242,8 +242,8 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
                                 {selectedUsers.length} users selected
                             </span>
                             <select
-                                onChange={(e: any) => {
-                                    handlleRoleChangeGroup(e.target.value);
+                                onChange={() => {
+                                    handlleRoleChangeGroup();
                                 }}
                                 className="ml-3 list-deopdown"
                             >

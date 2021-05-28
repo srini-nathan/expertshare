@@ -36,6 +36,8 @@ export class User extends BaseEntity {
 
     userFieldValues?: SimpleObject<string | number>[] | string[];
 
+    userField?: SimpleObject<any>[];
+
     constructor({
         email = "",
         plainPassword = "",
@@ -52,6 +54,7 @@ export class User extends BaseEntity {
         roles = [],
         userGroups = [],
         userFieldValues = [],
+        userField = [],
         id,
         createdAt,
         updatedAt,
@@ -59,6 +62,7 @@ export class User extends BaseEntity {
         super(id, createdAt, updatedAt);
         this.firstName = firstName;
         this.lastName = lastName;
+        this.userField = userField;
         this.locale = locale;
         this.jobTitle = jobTitle;
         this.client = client;

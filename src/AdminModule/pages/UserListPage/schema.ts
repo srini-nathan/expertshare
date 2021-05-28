@@ -1,4 +1,6 @@
 import * as yup from "yup";
+import { UserField } from "../../models";
+import { UserFieldApi } from "../../apis";
 
 const validations = {
     firstName: {
@@ -18,7 +20,7 @@ const validations = {
     },
 };
 
-const schema = (isEditMode: boolean) => {
+const schema = (isEditMode: boolean, fields: UserField[]) => {
     let validationShape = {
         firstName: yup.string().min(validations.firstName.min).required(),
         lastName: yup.string().min(validations.lastName.min).required(),
@@ -33,6 +35,15 @@ const schema = (isEditMode: boolean) => {
             .string()
             .oneOf([yup.ref("plainPassword"), null], "Passwords must be match"),
     };
+
+    fields.forEach((e) => {
+        if (e.isActive && e.isRequired)
+            validationShape = {
+                ...validationShape,
+                [UserFieldApi.toResourceUrl(e.id)]: yup.string().required(),
+            };
+    });
+
     if (!isEditMode) {
         validationShape = {
             ...validationShape,

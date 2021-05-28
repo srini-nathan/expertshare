@@ -71,9 +71,9 @@ export const AppFormSwitch: FC<AppFormSwitchProps> = ({
             <Controller
                 name={name}
                 control={control}
+                defaultValue={defaultChecked}
                 render={({ field }) => (
                     <FormCheck
-                        defaultChecked={defaultChecked}
                         inline={true}
                         type="switch"
                         className={classes}

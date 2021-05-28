@@ -74,7 +74,7 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
             <hr className="col-12" />
             <Row>
                 <Col>
-                    <AppDatePicker value={new Date()} onChange={() => {}} />
+                    <AppDatePicker defaultValue={new Date()} />
                 </Col>
             </Row>
             <hr className="col-12" />

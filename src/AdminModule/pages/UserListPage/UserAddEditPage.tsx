@@ -40,18 +40,6 @@ import {
 import { schema } from "./schema";
 
 type UpdateProfileForm<T> = {
-    // firstName: string;
-    // lastName: string;
-    // company?: string;
-    // jobTitle?: string;
-    // role: string;
-    // userTags?: any;
-    // userGroups?: any;
-    // plainPassword: string;
-    // locale: string;
-    // email: string;
-    // image_name: string;
-    // status: string;
     [key: string]: T;
 };
 
@@ -86,7 +74,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         setError,
         trigger,
     } = useForm<User>({
-        resolver: yupResolver(schema(isEditMode)),
+        resolver: yupResolver(schema(isEditMode, userFields)),
         mode: "all",
     });
 
@@ -121,9 +109,11 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         /* eslint-enable no-console */
         Object.keys(userField).forEach((key: any) => {
             let value: any = userField[key];
-            if (value instanceof Date) value = value.toString();
+            if (value instanceof Date) value = value.toISOString().slice(0, 10);
             else if (value instanceof Object)
-                value = JSON.stringify(Object.keys(value));
+                value = JSON.stringify(
+                    Object.keys(value).filter((item) => value[item])
+                );
             else if (value === undefined) value = "false";
             userFieldValues.push({
                 value: `${value}`,
@@ -267,6 +257,12 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         }
     }, [id, isEditMode, trigger]);
 
+    if (loading) {
+        return <AppLoader />;
+    }
+
+    const { errors } = formState;
+
     const renderUserFields = () => {
         return userFields.map((e) => {
             let defaultValue: any = null;
@@ -278,16 +274,17 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                     defaultValue={defaultValue}
                     properties={e}
                     control={control}
+                    validation={{
+                        ...validation(
+                            UserFieldApi.toResourceUrl(e.id),
+                            formState,
+                            isEditMode
+                        ),
+                    }}
                 />
             );
         });
     };
-
-    if (loading) {
-        return <AppLoader />;
-    }
-
-    const { errors } = formState;
 
     return (
         <Fragment>
@@ -308,7 +305,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     {...validation(
                                         "firstName",
                                         formState,
-                                        true
+                                        isEditMode
                                     )}
                                     errorMessage={errors.firstName?.message}
                                     control={control}
@@ -320,7 +317,11 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     defaultValue={data.lastName}
                                     label={"Last Name"}
                                     required={true}
-                                    {...validation("lastName", formState, true)}
+                                    {...validation(
+                                        "lastName",
+                                        formState,
+                                        isEditMode
+                                    )}
                                     errorMessage={errors.lastName?.message}
                                     control={control}
                                 />
@@ -332,7 +333,11 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     defaultValue={data.company}
                                     label={"Company"}
                                     required={true}
-                                    {...validation("company", formState, true)}
+                                    {...validation(
+                                        "company",
+                                        formState,
+                                        isEditMode
+                                    )}
                                     errorMessage={errors.company?.message}
                                     control={control}
                                 />
@@ -343,7 +348,11 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     name={"jobTitle"}
                                     label={"Job Title"}
                                     required={true}
-                                    {...validation("jobTitle", formState, true)}
+                                    {...validation(
+                                        "jobTitle",
+                                        formState,
+                                        isEditMode
+                                    )}
                                     errorMessage={errors.jobTitle?.message}
                                     control={control}
                                 />
@@ -354,7 +363,11 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     name={"email"}
                                     label={"Email"}
                                     required={true}
-                                    {...validation("email", formState, true)}
+                                    {...validation(
+                                        "email",
+                                        formState,
+                                        isEditMode
+                                    )}
                                     errorMessage={errors.email?.message}
                                     control={control}
                                 />
@@ -365,7 +378,11 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     name={"locale"}
                                     label={"Locale"}
                                     required={true}
-                                    {...validation("locale", formState, true)}
+                                    {...validation(
+                                        "locale",
+                                        formState,
+                                        isEditMode
+                                    )}
                                     errorMessage={errors.locale?.message}
                                     control={control}
                                 />
@@ -380,7 +397,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                         {...validation(
                                             "plainPassword",
                                             formState,
-                                            true
+                                            isEditMode
                                         )}
                                         errorMessage={
                                             errors.plainPassword?.message
@@ -397,7 +414,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                         {...validation(
                                             "confirmPassword",
                                             formState,
-                                            true
+                                            isEditMode
                                         )}
                                         errorMessage={
                                             errors.confirmPassword?.message

@@ -40,4 +40,5 @@ export * from "./AppFormSelect";
 export * from "./AppTabWithIcon";
 export * from "./AppFormSelectCreatable";
 export * from "./AppFormFieldGenerator";
-export * from "./AppFormCheckBox2";
+export * from "./AppFormCheckBoxGroup";
+export * from "./AppFormRadioGroup";

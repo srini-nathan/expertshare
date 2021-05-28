@@ -5,7 +5,7 @@ import { Controller, Control } from "react-hook-form";
 import { Form } from "react-bootstrap";
 import "./assets/scss/style.scss";
 
-export interface AppFormCheckBox2Props {
+export interface AppFormCheckBoxGroupProps {
     id: string;
     name: string;
     value?: string;
@@ -17,33 +17,22 @@ export interface AppFormCheckBox2Props {
         rules?: RegisterOptions
     ): void;
     control: Control<any>;
-    options: any[];
 }
 
-export const AppFormCheckBox2: FC<AppFormCheckBox2Props> = ({
+export const AppFormCheckBoxGroup: FC<AppFormCheckBoxGroupProps> = ({
+    id,
     name,
-    value,
+    defaultChecked = false,
+    label = "",
     control,
-    options,
 }): JSX.Element => {
     return (
         <Controller
             control={control}
-            name={`${name}`}
-            defaultValue={value}
+            name={name}
+            defaultValue={defaultChecked}
             render={({ field }) => (
-                <>
-                    {options.map((e) => {
-                        return (
-                            <Form.Check
-                                id={e.value}
-                                {...field}
-                                defaultChecked={e.defaultChecked}
-                                label={e.label}
-                            />
-                        );
-                    })}
-                </>
+                <Form.Check id={id} type="checkbox" {...field} label={label} />
             )}
         />
     );
