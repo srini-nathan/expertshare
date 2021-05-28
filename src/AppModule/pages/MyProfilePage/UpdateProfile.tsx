@@ -149,10 +149,21 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                     Object.keys(value).filter((item) => value[item])
                 );
             else if (value === undefined) value = "false";
-            userFieldValues.push({
-                value: `${value}`,
-                userField: key,
-            });
+
+            if (user?.userFieldValues && user?.userFieldValues.length > 0) {
+                user?.userFieldValues?.forEach((e: any) => {
+                    if (e.userField["@id"] === key) {
+                        userFieldValues.push({
+                            value: `${value}`,
+                            userField: key,
+                        });
+                    }
+                });
+            } else
+                userFieldValues.push({
+                    value: `${value}`,
+                    userField: key,
+                });
         });
         return userFieldValues;
     };

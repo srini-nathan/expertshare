@@ -107,16 +107,30 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
 
         Object.keys(userField).forEach((key: any) => {
             let value: any = userField[key];
+
             if (value instanceof Date) value = value.toISOString().slice(0, 10);
             else if (value instanceof Object)
                 value = JSON.stringify(
                     Object.keys(value).filter((item) => value[item])
                 );
             else if (value === undefined) value = "false";
-            userFieldValues.push({
-                value: `${value}`,
-                userField: key,
-            });
+
+            if (isEditMode) {
+                data.userFieldValues?.forEach((e: any) => {
+                    if (e.userField["@id"] === key) {
+                        userFieldValues.push({
+                            value: `${value}`,
+                            userField: key,
+                            id: e.id,
+                            user_id: data.id,
+                        });
+                    }
+                });
+            } else
+                userFieldValues.push({
+                    value: `${value}`,
+                    userField: key,
+                });
         });
         return userFieldValues;
     };
