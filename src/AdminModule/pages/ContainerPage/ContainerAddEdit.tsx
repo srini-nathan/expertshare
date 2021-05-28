@@ -46,31 +46,9 @@ const {
     STORAGE: { STORAGE_S3, STORAGE_LOCAL },
 } = ContainerConstant;
 type PartialContainer = Partial<Container>;
-
-const schema = Yup.object().shape({
-    domain: Yup.string().required("Domain is Required"),
-    name: Yup.string().required("Name is Required"),
-    containerGroup: Yup.string().optional().nullable(),
-    userGroups: Yup.array().optional(),
-    description: Yup.string().optional().nullable(),
-    storage: Yup.string().required(),
-    bucketKey: Yup.string().when("storage", {
-        is: STORAGE_S3,
-        then: Yup.string().required("Bucket Key is Required").nullable(),
-    }),
-    bucketSecret: Yup.string().when("storage", {
-        is: STORAGE_S3,
-        then: Yup.string().required("Bucket Secret is Required").nullable(),
-    }),
-    bucketName: Yup.string().when("storage", {
-        is: STORAGE_S3,
-        then: Yup.string().required("Bucket Name is Required").nullable(),
-    }),
-    bucketRegion: Yup.string().when("storage", {
-        is: STORAGE_S3,
-        then: Yup.string().required("Bucket Region is Required").nullable(),
-    }),
-});
+//  /* eslint-disable no-console */
+//  console.log(e.target.value);
+//  /* eslint-enable no-console */
 
 export const ContainerAddEdit: FC<RouteComponentProps> = ({
     navigate,
@@ -90,10 +68,33 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         SimpleObject<string>[]
     >([]);
     const [loading, setLoading] = useState<boolean>(isEditMode);
+    const [storageType, setStorageType] = useState<string>("Local");
     const [loadingClient, setLoadingClient] = useState<boolean>(true);
     const [loadingUserGroups, setLoadingUserGroups] = useState<boolean>(true);
     const cancelTokenSourceRef = useRef<Canceler>();
 
+    let schema = {
+        domain: Yup.string().required("Domain is Required"),
+        name: Yup.string().required("Name is Required"),
+        containerGroup: Yup.string().optional().nullable(),
+        userGroups: Yup.array().optional(),
+        description: Yup.string().optional().nullable(),
+        storage: Yup.string().required(),
+        bucketKey: Yup.string(),
+        bucketSecret: Yup.string(),
+        bucketName: Yup.string(),
+        bucketRegion: Yup.string(),
+    };
+
+    if (storageType === STORAGE_S3) {
+        schema = {
+            ...schema,
+            bucketKey: Yup.string().required("Bucket Key is Required"),
+            bucketSecret: Yup.string().required("Bucket Secret is Required"),
+            bucketName: Yup.string().required("Bucket Name is Required"),
+            bucketRegion: Yup.string().required("Bucket Region is Required"),
+        };
+    }
     const {
         register,
         control,
@@ -101,10 +102,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         formState,
         setError,
         trigger,
-        getValues,
         reset,
     } = useForm({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(Yup.object().shape(schema)),
         mode: "all",
     });
 
@@ -151,6 +151,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                             }),
                         };
                         setSelectedUserGroups(selected);
+                        setStorageType(response.storage);
                         setData(payload);
                         reset(payload);
                     }
@@ -196,6 +197,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         });
         formData.client = ClientApi.toResourceUrl(clientId);
         formData.userGroups = userGroupsSelectedItems;
+        formData.storage = storageType;
         ContainerApi.createOrUpdate<Container>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
@@ -220,8 +222,6 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
     }
 
     const { errors } = formState;
-
-    const isS3 = STORAGE_S3 === getValues("storage");
 
     return (
         <Fragment>
@@ -273,6 +273,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         md={12}
                                         lg={12}
                                         xl={12}
+                                        required={false}
                                         name={"containerGroup"}
                                         label={"Container Group"}
                                         {...validation(
@@ -326,6 +327,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     defaultValue={data.storage}
                                     label={"storage"}
                                     control={control}
+                                    onChange={setStorageType}
                                     required={true}
                                     options={[
                                         {
@@ -345,7 +347,13 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     errorMessage={errors.storage?.message}
                                 />
                             </Row>
-                            <Row className={isS3 ? "mt-2" : "d-none"}>
+                            <Row
+                                className={
+                                    storageType === STORAGE_S3
+                                        ? "mt-2"
+                                        : "d-none"
+                                }
+                            >
                                 <AppFormInput
                                     md={"6"}
                                     lg={"6"}

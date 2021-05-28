@@ -34,7 +34,7 @@ export const AppTagSelectDropDown: FC<AppTagSelectDropDownProps> = ({
                 onClick={onClick}
             >
                 <AppIcon name="ChevronDown" />
-                {children}
+                <span>{children}</span>
             </div>
         )
     );

@@ -29,7 +29,8 @@ export interface TranslationCombineList {
 
 export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
-    const [pageSize] = useState<number>(30);
+    const [pageSize, setPageSize] = useState<number>(30);
+    const [active, setActive] = useState<number>(1);
 
     const [translataionCombines, setTranslationCombines] = useState<
         TranslationCombineList[]
@@ -61,9 +62,9 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         isLoading(false);
     }, [translataionCombines]);
 
-    const fetchData = (page = 1) => {
+    const fetchData = () => {
         isLoading(true);
-        TranslationApi.find<TranslationCombine>(page).then(
+        TranslationApi.find<TranslationCombine>(active).then(
             ({ error, response }) => {
                 isLoading(false);
                 if (error !== null) {
@@ -129,7 +130,8 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     };
     useEffect(() => {
         fetchData();
-    }, [languages]);
+    }, [languages, active, pageSize]);
+
     const renderTranslations = () => {
         return (
             translataionCombines &&
@@ -196,6 +198,8 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                     className="mr-3"
                     itemsPerPage={pageSize}
                     totalItems={totalItems}
+                    active={active}
+                    onClick={setActive}
                 />
                 {totalItems > 0 ? (
                     <div className="pagination-container">
@@ -203,6 +207,7 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                             id={"pageSize"}
                             defaultValue={defaultPageSize()}
                             options={pageSizeOptions()}
+                            onChange={(e: any) => setPageSize(e.value)}
                             menuPlacement={"top"}
                         />
                     </div>

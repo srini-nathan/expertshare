@@ -23,6 +23,7 @@ export interface AppFormRadioSwitchProps {
     isValid?: boolean;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     control?: Control<any>;
+    onChange?: (value: string) => void;
 }
 
 export const AppFormRadioSwitch: FC<AppFormRadioSwitchProps> = ({
@@ -42,12 +43,13 @@ export const AppFormRadioSwitch: FC<AppFormRadioSwitchProps> = ({
     required = false,
     options,
     control,
+    onChange = () => {},
 }): JSX.Element => {
     const controlId = id || name;
 
     return (
         <Form.Group
-            className={`button-group ${className}`}
+            className={`button-group p-0 ${className}`}
             as={Col}
             md={md}
             sm={sm}
@@ -74,7 +76,6 @@ export const AppFormRadioSwitch: FC<AppFormRadioSwitchProps> = ({
                     <Controller
                         key={value}
                         name={name}
-                        defaultValue={defaultValue}
                         control={control}
                         render={({ field }) => (
                             <Form.Check
@@ -83,7 +84,11 @@ export const AppFormRadioSwitch: FC<AppFormRadioSwitchProps> = ({
                                 required={required}
                                 label={radioLabel}
                                 {...field}
+                                defaultChecked={defaultValue === value}
                                 value={value}
+                                onChange={(e) => {
+                                    onChange(e.target.value);
+                                }}
                             />
                         )}
                     ></Controller>

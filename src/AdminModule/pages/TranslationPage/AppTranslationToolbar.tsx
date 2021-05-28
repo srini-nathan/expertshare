@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Form, Col, InputGroup } from "react-bootstrap";
+import { Row, Col, Form, InputGroup } from "react-bootstrap";
 import {
     AppFormDropdown,
     AppButton,
@@ -43,60 +43,63 @@ export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
     });
 
     return (
-        <Col className={" p-0 translation-page"}>
-            <Form className="w-100">
-                <Form.Row>
-                    <Col md="4">
-                        <AppTagSelectDropDown
-                            options={values}
-                            selectedItems={selectedValues}
-                            label={label}
-                            onChange={onChangeSelect}
-                        />
-                    </Col>
-                    <Col md="2">
-                        <AppFormDropdown
-                            id="where-filter"
-                            defaultValue={{
-                                label: "Translation Key",
+        <Col className={"  translation-page mt-2 "}>
+            <Row>
+                <Col md={3} sm={6} className="px-1">
+                    <AppTagSelectDropDown
+                        options={values}
+                        selectedItems={selectedValues}
+                        label={label}
+                        onChange={onChangeSelect}
+                    />
+                </Col>
+                <Col md={3} sm={6} className="px-1">
+                    <AppFormDropdown
+                        id="where-filter"
+                        defaultValue={{
+                            label: "Translation Key",
+                            value: "2",
+                        }}
+                        options={[
+                            {
+                                label: "Translation Group",
                                 value: "2",
-                            }}
-                            options={[
-                                {
-                                    label: "Translation Group",
-                                    value: "2",
-                                },
-                                {
-                                    label: "Translation Key",
-                                    value: "3",
-                                },
-                                {
-                                    label: "Translation Value",
-                                    value: "4",
-                                },
-                            ]}
-                        />
-                    </Col>
-                    <Col md="auto">
-                        <InputGroup>
-                            <InputGroup.Prepend>
-                                <InputGroup.Text id="basic-addon1">
-                                    <AppIcon name="Search" />
-                                </InputGroup.Text>
-                            </InputGroup.Prepend>
-                            <Form.Control
-                                placeholder="Search ..."
-                                type={"search"}
-                            ></Form.Control>
-                        </InputGroup>
-                    </Col>
-                    <Col md="auto">
-                        <AppButton variant={"secondary"} onClick={onCreateNew}>
-                            + New Group Key
-                        </AppButton>
-                    </Col>
-                </Form.Row>
-            </Form>
+                            },
+                            {
+                                label: "Translation Key",
+                                value: "3",
+                            },
+                            {
+                                label: "Translation Value",
+                                value: "4",
+                            },
+                        ]}
+                    />
+                </Col>
+                <Col md={3} sm={6} className="px-1 mt-sm-2 mt-md-0">
+                    <InputGroup>
+                        <InputGroup.Prepend>
+                            <InputGroup.Text id="basic-addon1">
+                                <AppIcon name="Search" />
+                            </InputGroup.Text>
+                        </InputGroup.Prepend>
+                        <Form.Control
+                            placeholder="Search ..."
+                            type={"search"}
+                        ></Form.Control>
+                    </InputGroup>
+                </Col>
+                <Col md={3} sm={6} className="px-1 mt-sm-2  mt-md-0">
+                    <AppButton
+                        variant={"secondary"}
+                        className="justify-content-center p-1"
+                        block
+                        onClick={onCreateNew}
+                    >
+                        + New Group Key
+                    </AppButton>
+                </Col>
+            </Row>
         </Col>
     );
 };

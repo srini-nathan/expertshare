@@ -69,7 +69,7 @@ export const AppListPageToolbar: FC<AppListPageToolbarProps> = ({
                                 </InputGroup.Prepend>
                             </InputGroup>
                         </Col>
-                        <Col md="auto">
+                        <Col md="auto" className=" my-2 my-md-0">
                             {createLink ? (
                                 <AppButton
                                     variant={"secondary"}
