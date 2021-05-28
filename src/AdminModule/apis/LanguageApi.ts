@@ -12,6 +12,7 @@ const {
     api_languages_post_collection: API_POST_COLLECTION,
     api_language_set_default_collection: API_SET_DEFAULT,
     api_translations_export_collection: API_EXPORT,
+    api_translations_import_collection: API_IMPORT,
 } = ROUTES;
 
 export abstract class LanguageApi extends EntityAPI {
@@ -48,6 +49,28 @@ export abstract class LanguageApi extends EntityAPI {
         locale: string
     ): Promise<any> {
         return this.makeGet<any>(route(API_EXPORT, { containerId, locale }))
+            .then(({ data }) => {
+                return data;
+            })
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
+    }
+
+    public static async importLanguage(
+        containerId: number,
+        locale: string,
+        entity: any
+    ): Promise<any> {
+        const config: AxiosRequestConfig = this.getPostMultiPartRequestConfig();
+
+        return this.makePost<any, any>(
+            route(API_IMPORT, { containerId, locale }),
+            entity,
+            {},
+            config
+        )
             .then(({ data }) => {
                 return data;
             })

@@ -4,6 +4,7 @@ import { AppCellActionWithCustom } from "./app-actions";
 export const appGridColDef = ({
     onPressDelete,
     onPressExport,
+    onPressImport,
 }: AppCellActionWithCustom): ColDef[] => [
     {
         headerName: "Language",
@@ -38,13 +39,14 @@ export const appGridColDef = ({
         headerName: "Actions",
         field: "id",
         sortable: false,
-        maxWidth: 160,
+        maxWidth: 210,
         cellClass: "text-right",
         headerClass: "action-header",
         cellRenderer: "appGridActionRenderer",
         cellRendererParams: {
             onPressDelete,
             onPressExport,
+            onPressImport,
         },
     },
 ];

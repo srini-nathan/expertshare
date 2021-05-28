@@ -7,7 +7,6 @@ const {
     api_users_delete_item: API_DELETE_ITEM,
     api_users_get_item: API_GET_ITEM,
     api_users_get_collection: API_GET_COLLECTION,
-    api_users_put_item: API_PUT_ITEM,
     api_users_patch_item: API_PATCH_ITEM,
     api_users_post_collection: API_POST_COLLECTION,
     api_users_get_attendee_view_item: API_GET_ATTENDEE_COLLECTION,
@@ -21,8 +20,6 @@ export abstract class UserApi extends EntityAPI {
     protected static POST_COLLECTION = API_POST_COLLECTION;
 
     protected static GET_ITEM = API_GET_ITEM;
-
-    protected static PUT_ITEM = API_PUT_ITEM;
 
     protected static PATCH_ITEM = API_PATCH_ITEM;
 

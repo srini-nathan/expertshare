@@ -5,6 +5,7 @@
     display: flex;
     width: 97%;
     height: 76vh;
+    z-index: 10;
 
     &.custom-btn-loader {
         position: relative;

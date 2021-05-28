@@ -57,7 +57,7 @@ export const appGridFrameworkComponents = {
     appGridActionRenderer: (
         params: AppCellActionWithRenderWithCustom
     ): ReactElement => {
-        const { data, onPressDelete, onPressExport } = params;
+        const { data, onPressDelete, onPressExport, onPressImport } = params;
         const { id, isDefault, locale } = data as Language;
 
         const props: AppGridActionProps = {
@@ -78,6 +78,13 @@ export const appGridFrameworkComponents = {
                     disable: false,
                     onClick: () => {
                         onPressExport(locale);
+                    },
+                },
+                {
+                    icon: "CloudUpload",
+                    disable: false,
+                    onClick: () => {
+                        onPressImport(locale);
                     },
                 },
             ],
