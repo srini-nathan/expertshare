@@ -20,15 +20,11 @@ import {
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
 import { errorToast, successToast } from "../../../AppModule/utils";
-import { AuthContext } from "../../../SecurityModule/contexts";
-import { AuthState } from "../../../SecurityModule/models";
 
 export const UserFieldListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
-    const { state } = React.useContext(AuthContext);
-    const { containerId } = state as AuthState;
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -42,7 +38,6 @@ export const UserFieldListPage: FC<RouteComponentProps> = (): JSX.Element => {
                     {
                         order: buildSortParams(request),
                         ...buildFilterParams(request),
-                        "container.id": containerId,
                     },
                     (c) => {
                         cancelTokenSourcesRef.current.push(c);

@@ -11,6 +11,7 @@ export const appGridFrameworkComponents = {
         params: AppCellActionWithRenderParams
     ): ReactElement => {
         const { data, onPressDelete } = params;
+
         const { id } = data as UserField;
 
         const props: AppGridActionProps = {

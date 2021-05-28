@@ -20,6 +20,9 @@ yarn-error.log*
 
 .eslintcache
 
+/src/translation/**
+!/src/translation/.gitkeep
+
 # IDE
 .idea
 .run
@@ -28,5 +31,5 @@ yarn-error.log*
 **/scss/**/*.{css,css.map}
 
 # Translations
-./src/translations/*
+./src/translations
 !./src/translations/.gitkeep

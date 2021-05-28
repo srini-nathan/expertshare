@@ -28,7 +28,7 @@ const options = [
     { id: "3", value: "vanilla", label: "Vanilla" },
     { id: "4", value: "apple", label: "Apple" },
     { id: "5", value: "orange", label: "Orange" },
-    { id: "7", value: "pinapple", label: "Pineapple" },
+    { id: "7", value: "pineapple", label: "Pineapple" },
     { id: "8", value: "banana", label: "Banana" },
     { id: "9", value: "lemon", label: "Lemon" },
 ];

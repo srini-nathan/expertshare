@@ -1,3 +1,6 @@
 #!/bin/bash
-bash "${PWD}"/bin/dev-prepare.sh
+git pull
+yarn install
+bash ./bin/generate-jsons.sh
+bash ./bin/generate-translations.sh
 yarn build
