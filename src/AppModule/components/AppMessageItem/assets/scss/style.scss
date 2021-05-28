@@ -92,6 +92,11 @@
             padding-top: 12px;
         }
     }
+    .green-btn {
+        i {
+            color: var(--primary);
+        }
+    }
 }
 
 .list-group-item.active {

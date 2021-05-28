@@ -52,18 +52,35 @@
                     padding-bottom: 7px;
                 }
             }
-            .group-users {
-                margin-top: 0.5em;
-                font-size: 12px;
-                display: flex;
-                justify-content: space-between;
+            .group {
                 height: 200px;
-                span {
-                    font-weight: 700;
+                .group-users {
+                    margin-top: 0.5em;
+                    font-size: 12px;
+                    display: flex;
+                    jusstify-content: space-between;
+                    span {
+                        font-weight: 700;
+                    }
+                    .count {
+                        font-weight: 500;
+                        color: #7ebde9;
+                    }
                 }
-                .count {
-                    font-weight: 500;
-                    color: #7ebde9;
+            }
+            .badge-green {
+                background: var(--primary-20);
+                border-radius: 10px;
+                margin-right: 5px;
+                padding: 0.5em;
+                padding-top: 0.1em;
+                margin-bottom: 0.5em;
+                &--close {
+                    border: none;
+                    font-size: 18px;
+                    background: none;
+                    position: relative;
+                    top: 2px;
                 }
             }
         }

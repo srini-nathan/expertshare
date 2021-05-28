@@ -16,11 +16,13 @@ export interface AppMessageBoxProps {
     userChatID: (m: string) => void;
     initialMessagesWrapper?: boolean;
     initialMessagesBlock?: boolean;
+    initialPTOPWrapper?: boolean;
 }
 
 export const AppMessageBox: FC<AppMessageBoxProps> = ({
     initialMessagesWrapper = true,
     initialMessagesBlock = true,
+    initialPTOPWrapper = false,
 }) => {
     const messagesMockData = getMessagesArrayMock();
     const [showMessagesWrapper, setShowMessagesWrapper] = useState(
@@ -31,11 +33,15 @@ export const AppMessageBox: FC<AppMessageBoxProps> = ({
         initialMessagesBlock
     );
 
-    // eslint-disable-next-line no-console
-    console.log(showMessagesBlock);
+    const [showPTOPWrapper, setShowPTOPWrapper] = useState(initialPTOPWrapper);
 
     const [, setSearch] = useState<string>("");
     const [showCreateGroup, setShowGreateGroup] = useState(false);
+
+    const [newGroup, setNewGroup] = useState<[]>([]);
+
+    // eslint-disable-next-line no-console
+    console.log(newGroup);
 
     const handleQuickSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(event.currentTarget.value);
@@ -55,7 +61,14 @@ export const AppMessageBox: FC<AppMessageBoxProps> = ({
         <React.Fragment>
             <div className="message-box">
                 <div className="message-box--container">
-                    <div className="message-box--single">
+                    <div
+                        className="message-box--single"
+                        style={
+                            showPTOPWrapper
+                                ? { display: "block" }
+                                : { display: "none" }
+                        }
+                    >
                         <div className="tabs m-0 pt-1 pb-2">
                             <AppDetailsAction
                                 newMessagesCount={messagesMockData.mewMessages}
@@ -75,6 +88,7 @@ export const AppMessageBox: FC<AppMessageBoxProps> = ({
                     <AppGroupWindow
                         data={messagesMockData}
                         show={showCreateGroup}
+                        handleNewGroup={(group: any) => setNewGroup(group)}
                         handleCloseGroupWindow={() => {
                             setShowGreateGroup(false);
                         }}
@@ -122,6 +136,11 @@ export const AppMessageBox: FC<AppMessageBoxProps> = ({
                                     handleGroupClicked={() =>
                                         setShowGreateGroup(true)
                                     }
+                                    openWithUserChat={(id) => {
+                                        setShowPTOPWrapper(true);
+                                        // eslint-disable-next-line no-console
+                                        console.log(id);
+                                    }}
                                 />
                             </Row>
                         </div>

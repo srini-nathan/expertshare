@@ -8,17 +8,20 @@ export interface MessagestProps {
     activeTab: string;
     data: any;
     handleGroupClicked: () => void;
+    openWithUserChat: (id: string) => void;
 }
 
 export interface AppMessageProps {
     message: any;
     group?: boolean;
+    handlePTOPID: (id: string) => void;
 }
 
 export const Messages: FC<MessagestProps> = ({
     activeTab,
     data,
     handleGroupClicked,
+    openWithUserChat,
 }): JSX.Element => {
     const [activeTabMessage, setActiveTabMessage] = React.useState<string>(
         activeTab
@@ -32,8 +35,11 @@ export const Messages: FC<MessagestProps> = ({
         }
     };
 
-    const AppMessageItems: FC<AppMessageProps> = ({ message, group }: any) => {
-        // eslint-disable-next-line no-console
+    const AppMessageItems: FC<AppMessageProps> = ({
+        message,
+        group,
+        handlePTOPID,
+    }: any) => {
         return (
             <AppMessageItem
                 id={message.id}
@@ -43,7 +49,9 @@ export const Messages: FC<MessagestProps> = ({
                 message={message.lastMessage.message}
                 lastMessageTime={message.lastMessage.time}
                 online={message.lastMessage.online}
-                messageIdHandler={() => {}}
+                messageIdHandler={(id) => {
+                    handlePTOPID(id);
+                }}
                 group={group}
             />
         );
@@ -58,7 +66,10 @@ export const Messages: FC<MessagestProps> = ({
                 <div className="message mt-2">
                     <ListGroup>
                         {data.messages.map((message: any) => (
-                            <AppMessageItems message={message} />
+                            <AppMessageItems
+                                message={message}
+                                handlePTOPID={openWithUserChat}
+                            />
                         ))}
                     </ListGroup>
                 </div>
@@ -67,7 +78,10 @@ export const Messages: FC<MessagestProps> = ({
                 <div className="message mt-2">
                     <Row className="m-0 p-0">
                         {data.messages.map((message: any) => (
-                            <AppMessageItems message={message} />
+                            <AppMessageItems
+                                message={message}
+                                handlePTOPID={openWithUserChat}
+                            />
                         ))}
                     </Row>
                 </div>

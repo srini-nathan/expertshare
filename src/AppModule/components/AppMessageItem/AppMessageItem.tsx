@@ -33,7 +33,10 @@ export const AppMessageItem: FunctionComponent<MessageItemProps> = ({
     const groupOrButtonRender = (g: boolean) => {
         if (g) {
             return (
-                <AppButton className="more" variant="light">
+                <AppButton
+                    className={`more ${active && "green-btn"}`}
+                    variant="light"
+                >
                     <i className="fal fa-plus-circle btn-icon"></i>
                 </AppButton>
             );
