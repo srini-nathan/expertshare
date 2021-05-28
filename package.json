@@ -162,5 +162,8 @@
         "src/**/*.{css,scss}": [
             "stylelint --fix"
         ]
+    },
+    "peerDependencies": {
+        "froala-editor": "^3.2.7"
     }
 }
