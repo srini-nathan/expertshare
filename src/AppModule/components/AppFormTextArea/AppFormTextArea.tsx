@@ -7,6 +7,8 @@ import {
     AppReactHookFormProps,
 } from "../../models";
 
+import { AppButton } from "../AppButton";
+
 import "./assets/scss/style.scss";
 import { useInputPlaceholder } from "../../hooks";
 import { AppFormLabel } from "../AppFormLabel";
@@ -16,6 +18,7 @@ export interface AppFormTextAreaProps
         AppFormLayoutProps,
         AppReactHookFormProps {
     maxCount?: number;
+    isSend?: boolean;
     rows?: number;
     onChange?: ChangeEventHandler<
         HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -37,6 +40,7 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
     control,
     rows = 5,
     onChange,
+    isSend,
     ...props
 }): JSX.Element => {
     const [data, setData] = useState<string>(defaultValue);
@@ -55,7 +59,7 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
 
     return (
         <Form.Group {...groupProps}>
-            <AppFormLabel counter={data?.length} {...labelProps} />
+            {!isSend && <AppFormLabel counter={data?.length} {...labelProps} />}
             <Controller
                 {...controllerProps}
                 render={({ field }) => (
@@ -73,9 +77,22 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
                     />
                 )}
             />
-            <Form.Control.Feedback type="invalid">
-                {errorMessage}
-            </Form.Control.Feedback>
+
+            {isSend && (
+                <div className="is-send-wrapper">
+                    <i className="far fa-smile smile-icon">|</i>
+
+                    <AppButton className="sent-btn" variant="light">
+                        Send
+                    </AppButton>
+                </div>
+            )}
+
+            {!isSend && (
+                <Form.Control.Feedback type="invalid">
+                    {errorMessage}
+                </Form.Control.Feedback>
+            )}
         </Form.Group>
     );
 };

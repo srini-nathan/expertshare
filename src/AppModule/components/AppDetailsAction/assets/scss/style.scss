@@ -100,9 +100,6 @@
                 color: var(--secondary);
                 border-radius: var(--border-radius);
                 box-shadow: 0 3px 9px var(--secondary-10);
-                &::before {
-                    content: "\e018";
-                }
             }
 
             .rotate {

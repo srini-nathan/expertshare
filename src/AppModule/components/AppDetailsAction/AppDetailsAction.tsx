@@ -87,7 +87,7 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                             }
                         >
                             <i
-                                className={`fak fa-chevron-down ${
+                                className={`fas fa-chevron-down ${
                                     rotateBtn ? "rotate" : ""
                                 }`}
                             ></i>
@@ -100,7 +100,7 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                             id="btn-close-index"
                         >
                             <Button variant="link" onClick={handleCloseWindow}>
-                                <i className="fak fa-times-light"></i>
+                                <i className="fas fa-times"></i>
                             </Button>
                         </Col>
                     )}

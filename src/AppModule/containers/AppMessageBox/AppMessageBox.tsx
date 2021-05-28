@@ -5,8 +5,8 @@ import {
     AppChatList,
     AppGroupWindow,
 } from "../../components";
+import { AppСhoseMethodMessage } from "../../components/AppСhoseMethodMessage";
 import { Messages } from "./messages";
-import { PTOPMessages } from "./ptopmessages";
 import "./assets/scss/style.scss";
 
 // export getMessagesArrayMock should be removed
@@ -65,7 +65,10 @@ export const AppMessageBox: FC<AppMessageBoxProps> = ({
                                 handleCloseMessages={() => {}}
                             />
                             {messageBoxSingle()}
-                            <PTOPMessages activeTab="Text"></PTOPMessages>
+                            <AppСhoseMethodMessage
+                                activeTab="Text"
+                                className="ptop-messages"
+                            />
                         </div>
                     </div>
 
@@ -108,7 +111,7 @@ export const AppMessageBox: FC<AppMessageBoxProps> = ({
                                             placeholder="Search ..."
                                             type={"search"}
                                         ></Form.Control>
-                                        <i className="fak fa-search-light"></i>
+                                        <i className="fas fa-search"></i>
                                     </div>
                                 </Col>
                             </Row>

@@ -77,7 +77,7 @@ export const AppGroupWindow: FC<AppGroupWindowProps> = ({
                                     placeholder="Search..."
                                     type={"search"}
                                 ></Form.Control>
-                                <i className="fak fa-search-light"></i>
+                                <i className="fas fa-search"></i>
                             </div>
                         </Col>
                     </Row>

@@ -12,7 +12,7 @@ export const AppTabs: FunctionComponent<AppTabsProps> = ({
     ...props
 }) => {
     return (
-        <Tabs onSelect={onSelect} activeKey={activeKey} displayName="df">
+        <Tabs onSelect={onSelect} activeKey={activeKey}>
             {props.children}
         </Tabs>
     );

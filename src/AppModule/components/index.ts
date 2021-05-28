@@ -36,3 +36,4 @@ export * from "./AppDetailsAction";
 export * from "./AppMessageItem";
 export * from "./AppChatList";
 export * from "./AppGroupWindow";
+export * from "./AppСhoseMethodMessage";
