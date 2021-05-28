@@ -1,5 +1,5 @@
 import { BaseEntity, JsonResponseData } from "../../../AppModule/models";
-import { EmailTemplateApi } from "../../apis";
+import { RoleApi } from "../../apis";
 
 export class Role extends BaseEntity {
     name: string;
@@ -19,7 +19,7 @@ export class Role extends BaseEntity {
     }
 
     toString(): string {
-        return EmailTemplateApi.toResourceUrl(this.id);
+        return RoleApi.toResourceUrl(this.id);
     }
 
     toJSON(addExtraData = false): JsonResponseData {

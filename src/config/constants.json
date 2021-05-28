@@ -1,4 +1,31 @@
 {
+    "AFramePanel": {
+        "REMOTE": {
+            "REMOTE_ANIMATION_GLOWING": "glowing",
+            "REMOTE_ANIMATION_SHAKING": "shaking",
+            "REMOTE_ANIMATION_BLINKING": "blinking"
+        },
+        "TARGET": {
+            "TARGET_TYPE_ROOM": "room",
+            "TARGET_TYPE_IFRAME": "iframe",
+            "TARGET_TYPE_BILLBOARD": "billboard",
+            "TARGET_TYPE_PROJECTOR": "projector",
+            "TARGET_ACTION_ENTER": "enter",
+            "TARGET_ACTION_EXIT": "exit",
+            "TARGET_ACTION_OPEN": "open",
+            "TARGET_ACTION_CLOSE": "close",
+            "TARGET_ACTION_ZOOM_IN": "zoom_in",
+            "TARGET_ACTION_ZOOM_OUT": "zoom_out",
+            "TARGET_ACTION_START": "start",
+            "TARGET_ACTION_STOP": "stop"
+        },
+        "TYPE": {
+            "TYPE_DOOR": "door",
+            "TYPE_SCREEN": "screen",
+            "TYPE_BILLBOARD": "billboard",
+            "TYPE_PROJECTOR": "projector"
+        }
+    },
     "Container": {
         "STORAGE": { "STORAGE_LOCAL": "Local", "STORAGE_S3": "S3" }
     },
