@@ -29,3 +29,7 @@ yarn-error.log*
 
 # SASS watcher - compiled css and maps
 **/scss/**/*.{css,css.map}
+
+# Translations
+./src/translations
+!./src/translations/.gitkeep
