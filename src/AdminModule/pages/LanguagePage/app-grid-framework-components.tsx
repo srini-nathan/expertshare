@@ -6,7 +6,7 @@ import {
     AppGridAction,
     AppGridActionProps,
 } from "../../../AppModule/components";
-import { Language, User } from "../../models";
+import { Language } from "../../models";
 import { LanguageApi } from "../../apis";
 import { errorToast, successToast } from "../../../AppModule/utils";
 import { AppCellActionWithRenderParams } from "../../../AppModule/models";
@@ -58,13 +58,15 @@ export const appGridFrameworkComponents = {
         params: AppCellActionWithRenderParams
     ): ReactElement => {
         const { data, onPressDelete } = params;
-        const { id } = data as User;
+        const { id, isDefault } = data as Language;
 
         const props: AppGridActionProps = {
             editAction: {
-                url: `/admin/users/${id}`,
+                disable: isDefault,
+                url: `/admin/languages/${id}`,
             },
             deleteAction: {
+                disable: isDefault,
                 confirmation: "Are you sure want to delete ?",
                 onClick: () => {
                     onPressDelete(id);
