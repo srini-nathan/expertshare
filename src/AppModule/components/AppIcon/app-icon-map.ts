@@ -24,6 +24,8 @@ import {
     faDownload,
     faFilter,
     faUpload,
+    faCloudDownload,
+    faCloudUpload,
 } from "@fortawesome/pro-regular-svg-icons";
 import { AppIconMap } from "../../models";
 
@@ -39,6 +41,8 @@ export const appIconMap: AppIconMap = {
     Settings: faCog,
     Users: faUserFriends,
     dashboard: faThLarge,
+    CloudDownload: faCloudDownload,
+    CloudUpload: faCloudUpload,
     delete: faTrash,
     edit: faPen,
     add: faPlus,

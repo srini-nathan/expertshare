@@ -12,13 +12,14 @@ import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { LanguageApi } from "../../apis";
 import { Language } from "../../models";
-import { AppPageHeader } from "../../../AppModule/components";
+import { AppPageHeader, AppLoader } from "../../../AppModule/components";
 import {
     AppGrid,
     buildFilterParams,
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
+import { useDownloadFile } from "../../../AppModule/hooks";
 import { errorToast, successToast } from "../../../AppModule/utils";
 import "./assets/scss/list.scss";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
@@ -26,10 +27,14 @@ import { AuthState } from "../../../SecurityModule/models/context/AuthState";
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
+    const [loading, isLoading] = useState<boolean>(false);
+    const [selectedLocale, setSelectedLocale] = useState<string>("");
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const { state } = React.useContext(AuthContext);
     const { containerId } = state as AuthState;
+    const [updateLink] = useDownloadFile();
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -83,6 +88,44 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
             }
         });
     }
+    async function handleExport(locale: string) {
+        LanguageApi.exportLanguage(containerId as number, `${locale}.csv`).then(
+            (reponse) => {
+                updateLink({
+                    name: `${locale}.csv`,
+                    type: "file/csv",
+                    file: reponse,
+                });
+            }
+        );
+    }
+    async function handleImport(locale: string) {
+        setSelectedLocale(`${locale}.csv`);
+        if (fileInputRef && fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    }
+    async function uploadFile(e: any) {
+        isLoading(true);
+        const formData = new FormData();
+        formData.append("file", e.target.files[0]);
+
+        LanguageApi.importLanguage(
+            containerId as number,
+            selectedLocale,
+            formData
+        ).then(({ error, response }) => {
+            isLoading(false);
+
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                }
+            } else if (response !== null) {
+                successToast("Imported!");
+            }
+        });
+    }
 
     async function handleFilter(search: string) {
         appGridApi.current?.setFilterModel({
@@ -94,6 +137,8 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <Fragment>
+            {loading && <AppLoader />}
+
             <AppPageHeader
                 title={"Languages"}
                 createLink={"/admin/languages/new"}
@@ -101,12 +146,23 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
                 cancelTokenSources={cancelTokenSourcesRef.current}
                 showToolbar
             />
+            <input
+                ref={fileInputRef}
+                onChange={uploadFile}
+                id="select-file"
+                type="file"
+                accept=".csv"
+                hidden={true}
+            />
+
             <Row>
                 <Col>
                     <AppGrid
                         frameworkComponents={appGridFrameworkComponents}
                         columnDef={appGridColDef({
                             onPressDelete: handleDelete,
+                            onPressExport: handleExport,
+                            onPressImport: handleImport,
                         })}
                         dataSource={getDataSource()}
                         totalItems={totalItems}

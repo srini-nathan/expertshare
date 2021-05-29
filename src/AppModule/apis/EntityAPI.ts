@@ -231,6 +231,16 @@ export abstract class EntityAPI extends API {
         return config;
     }
 
+    protected static getPostMultiPartRequestConfig(): AxiosRequestConfig {
+        const config: AxiosRequestConfig = {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        };
+
+        return config;
+    }
+
     public static toResourceUrl(id: number): string {
         return route(this.GET_ITEM, { id });
     }

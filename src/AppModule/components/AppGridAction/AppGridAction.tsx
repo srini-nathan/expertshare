@@ -134,6 +134,9 @@ export const AppGridAction: FC<AppGridActionProps> = ({
     viewAction,
     customClickActions = [],
 }): JSX.Element => {
+    /* eslint-disable no-console */
+    console.log(customClickActions);
+    /* eslint-enable no-console */
     return (
         <div className="actions">
             <LinkAction icon={"add"} {...addAction}></LinkAction>
