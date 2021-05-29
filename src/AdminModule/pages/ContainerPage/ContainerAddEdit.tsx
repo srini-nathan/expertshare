@@ -4,8 +4,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { Col, Form, Row } from "react-bootstrap";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { DevTool } from "@hookform/devtools";
 import { Canceler } from "axios";
 import { isString as _isString } from "lodash";
 import { Client, Container, Package, UserGroup } from "../../models";
@@ -228,7 +226,6 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
             />
             <Row>
                 <Col>
-                    <DevTool control={control} />
                     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                         <AppCard title="Details">
                             <Form.Row>
