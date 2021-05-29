@@ -4,18 +4,44 @@ import { Canceler } from "axios";
 import { GridApi } from "ag-grid-community";
 import { Row, Col } from "react-bootstrap";
 import { isString as _isString } from "lodash";
+import { useSetRecoilState } from "recoil";
 import { errorToast } from "../../../AppModule/utils";
 import { AppPageHeader } from "../../../AppModule/components";
 import { AppContainerOverview } from "../../components";
 import { ContainerApi } from "../../apis";
 import { useAuthState } from "../../../AppModule/hooks";
 import { PContainer } from "../../models";
+import {
+    appDashboardLayoutOptions,
+    AppDashboardLayoutOptions,
+} from "../../../AppModule/atoms";
 
 export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
     const { clientId } = useAuthState();
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const [overviews, setOverviews] = useState<PContainer[]>([]);
+    const setLayoutOptions = useSetRecoilState<AppDashboardLayoutOptions>(
+        appDashboardLayoutOptions
+    );
+
+    useEffect(() => {
+        setLayoutOptions((currVal) => {
+            return {
+                ...currVal,
+                hideNav: true,
+            };
+        });
+        return () => {
+            setLayoutOptions((currVal) => {
+                return {
+                    ...currVal,
+                    hideNav: false,
+                };
+            });
+        };
+    });
+
     async function handleFilter(search: string) {
         appGridApi.current?.setFilterModel({
             domain: {
