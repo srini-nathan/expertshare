@@ -41,6 +41,7 @@ export const AppConfiguration: FC = ({ children }) => {
     }, [containerId]);
 
     useEffect(() => {
+        // @TODO: Don't store in localstorage, store them in context and use them,and loads only when user is Super-Admin or Admin
         const roles = localStorage.getItem("roles");
         if (!roles) {
             RoleApi.find<Role>().then(
@@ -48,7 +49,7 @@ export const AppConfiguration: FC = ({ children }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);
                     } else if (isNotFound) {
-                        errorToast("Container not exist");
+                        errorToast("Roles not found");
                     } else if (response !== null) {
                         localStorage.setItem(
                             "roles",
