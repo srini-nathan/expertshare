@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { Container } from "react-bootstrap";
 import { appNavigations } from "../../bootstrap";
 import AppNavigation from "../../containers/AppNavigation/AppNavigation";
+import { AppMessageBox } from "../../containers/AppMessageBox/AppMessageBox";
 
 export const DashboardLayout: FC = ({ children }) => {
     return (
@@ -11,6 +12,7 @@ export const DashboardLayout: FC = ({ children }) => {
                 <div className="col-md-12 col-sm-12 col-xl-12 p-3 p-lg-4 mb-2">
                     {children}
                 </div>
+                <AppMessageBox userChatID={() => {}} />
             </div>
         </Container>
     );

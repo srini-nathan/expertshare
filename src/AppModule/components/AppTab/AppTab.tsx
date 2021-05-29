@@ -4,7 +4,7 @@ import "./assets/scss/style.scss";
 
 export interface AppTabProps {
     eventKey?: string;
-    title: string;
+    title: React.ReactNode;
 }
 export const AppTab: FunctionComponent<AppTabProps> = ({
     eventKey,
