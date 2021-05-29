@@ -36,7 +36,7 @@ export const AppMessageBox: FC<AppMessageBoxProps> = ({
     const [showPTOPWrapper, setShowPTOPWrapper] = useState(initialPTOPWrapper);
 
     const [, setSearch] = useState<string>("");
-    const [showCreateGroup, setShowGreateGroup] = useState(false);
+    const [showCreateGroup, setShowCreateGroup] = useState(false);
 
     const [newGroup, setNewGroup] = useState<[]>([]);
 
@@ -90,7 +90,7 @@ export const AppMessageBox: FC<AppMessageBoxProps> = ({
                         show={showCreateGroup}
                         handleNewGroup={(group: any) => setNewGroup(group)}
                         handleCloseGroupWindow={() => {
-                            setShowGreateGroup(false);
+                            setShowCreateGroup(false);
                         }}
                     />
 
@@ -134,7 +134,7 @@ export const AppMessageBox: FC<AppMessageBoxProps> = ({
                                     activeTab="Chat"
                                     data={messagesMockData}
                                     handleGroupClicked={() =>
-                                        setShowGreateGroup(true)
+                                        setShowCreateGroup(true)
                                     }
                                     openWithUserChat={(id) => {
                                         setShowPTOPWrapper(true);
