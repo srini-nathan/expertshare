@@ -46,9 +46,6 @@ const {
     STORAGE: { STORAGE_S3, STORAGE_LOCAL },
 } = ContainerConstant;
 type PartialContainer = Partial<Container>;
-//  /* eslint-disable no-console */
-//  console.log(e.target.value);
-//  /* eslint-enable no-console */
 
 export const ContainerAddEdit: FC<RouteComponentProps> = ({
     navigate,
