@@ -1,14 +1,54 @@
+.react-datepicker-wrapper {
+    width: 100%;
+
+    input {
+        width: 100%;
+        height: 36px;
+        padding: 0 10px;
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--input-fg-clr);
+        background-color: var(--input-bg-clr);
+        border: 1px solid var(--input-border-clr) !important;
+        border-radius: var(--border-radius);
+
+        &:focus,
+        &:active {
+            color: var(--input-fg-clr);
+            background-color: var(--input-bg-clr);
+            border-color: var(--input-border-clr) !important;
+            box-shadow: unset;
+            outline: unset;
+        }
+    }
+}
+
+.react-datepicker-container {
+    z-index: 6;
+
+}
+
 .custom-datepicker {
     padding: 10px;
     border-radius: var(--border-radius);
     box-shadow: 0 3px 9px var(--box-shadow-box-clr);
     border: unset;
-    background-color: var(--light-clr);
     font-family: var(--font-family-sans-serif);
-    background-color: var(--widget-bg-color);
+    background-color: var(--light-clr);
     border: unset;
     border-radius: var(--border-radius);
     box-shadow: 0 10px 20px var(--primary-20);
+
+
+    .react-datepicker__triangle {
+        border-top-color: var(--light-clr) !important;
+        border-bottom-color: var(--light-clr) !important;
+
+        &::before {
+            border-top-color: var(--light-clr) !important;
+            border-bottom-color: var(--light-clr) !important;
+        }
+    }
 
     .react-datepicker__navigation {
         top: 38px;
@@ -79,15 +119,18 @@
                     background: var(--primary-20);
                 }
 
+                &.react-datepicker__day--selected {
+                    font-weight: 700;
+                    color: var(--primary);
+                    background: var(--primary-40);
+
+                }
+
                 &.react-datepicker__day--today {
                     font-weight: 700;
-                    color: var(--btn-fg-clr);
-                    background: var(--btn-bg-clr);
+                    color: var(--primary);
+                    background: var(--primary-20);
 
-                    &:hover {
-                        color: var(--btn-hover-fg-clr);
-                        background: var(--btn-hover-bg-clr);
-                    }
                 }
             }
         }

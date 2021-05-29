@@ -1,7 +1,7 @@
 import React, { FC, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
-import { forEach as _forEach, isString as _isString } from "lodash";
+import { isString as _isString } from "lodash";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -11,29 +11,26 @@ import {
     AppButton,
     AppLoader,
     AppFormSelectCreatable,
+    AppFormFieldGenerator,
 } from "../../components";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models";
-import { validation, errorToast, successToast } from "../../utils";
-import { UserApi, UserTagApi } from "../../../AdminModule/apis";
-import { UserTag } from "../../../AdminModule/models";
+import {
+    validation,
+    errorToast,
+    successToast,
+    setViolations,
+} from "../../utils";
+import { UserApi, UserTagApi, UserFieldApi } from "../../../AdminModule/apis";
+import { UserTag, UserField } from "../../../AdminModule/models";
 import { UnprocessableEntityErrorResponse, SimpleObject } from "../../models";
-
-const validationSchema = Yup.object().shape({
-    firstName: Yup.string().required(),
-    lastName: Yup.string().required(),
-});
 
 type UpdateProfileReq = {
     [key: string]: any;
 };
 
-type UpdateProfileForm = {
-    firstName: string;
-    lastName: string;
-    company?: string;
-    jobTitle?: string;
-    userTags?: any;
+type UpdateProfileForm<T> = {
+    [key: string]: T;
 };
 
 export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
@@ -44,6 +41,21 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     const [selectedUserTags, setSelectedUserTag] = useState<
         SimpleObject<string>[]
     >([]);
+    const [userFields, setUserFields] = useState<UserField[]>([]);
+
+    const validationShape = {
+        firstName: Yup.string().min(2).required(),
+        lastName: Yup.string().min(2).required(),
+    };
+    // userFields.forEach((e) => {
+    //     if (e.isActive && e.isRequired)
+    //         validationShape = {
+    //             ...validationShape,
+    //             [UserFieldApi.toResourceUrl(e.id)]: Yup.string().required(),
+    //         };
+    // });
+    const validationSchema = Yup.object().shape(validationShape);
+
     const { control, handleSubmit, formState, setError } = useForm({
         resolver: yupResolver(validationSchema),
         mode: "all",
@@ -86,27 +98,93 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
             });
         setSelectedUserTag(selectedTags);
     }, []);
-    const onSubmit = async (formData: UpdateProfileForm) => {
+
+    const fetchUserFields = () => {
+        UserFieldApi.find<UserField>(1, { "client.id": clientId }).then(
+            ({ error, response }) => {
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    }
+                } else if (response !== null) {
+                    setUserFields(response.items);
+                }
+            }
+        );
+    };
+    useEffect(() => {
+        fetchUserFields();
+    }, [user]);
+
+    const renderUserFields = () => {
+        return userFields.map((e) => {
+            let defaultValue: any = null;
+
+            user?.userFieldValues?.forEach((item: any) => {
+                if (e.id === item.userField.id) defaultValue = item;
+            });
+            return (
+                <AppFormFieldGenerator
+                    defaultValue={defaultValue}
+                    properties={e}
+                    validation={{
+                        ...validation(
+                            UserFieldApi.toResourceUrl(e.id),
+                            formState,
+                            true
+                        ),
+                    }}
+                    control={control}
+                />
+            );
+        });
+    };
+    const getDynamicFileds = (userField: any[]) => {
+        const userFieldValues: any[] = [];
+        Object.keys(userField).forEach((key: any) => {
+            let value: any = userField[key];
+            if (value instanceof Date) value = value.toISOString().slice(0, 10);
+            else if (value instanceof Object)
+                value = JSON.stringify(
+                    Object.keys(value).filter((item) => value[item])
+                );
+            else if (value === undefined) value = "false";
+
+            if (user?.userFieldValues && user?.userFieldValues.length > 0) {
+                user?.userFieldValues?.forEach((e: any) => {
+                    if (e.userField["@id"] === key) {
+                        userFieldValues.push({
+                            value: `${value}`,
+                            userField: key,
+                        });
+                    }
+                });
+            } else
+                userFieldValues.push({
+                    value: `${value}`,
+                    userField: key,
+                });
+        });
+        return userFieldValues;
+    };
+    const onSubmit = async (formData: UpdateProfileForm<any>) => {
         isLoading(true);
         formData.userTags = selectedUserTags.map((e) => {
             if (!e.id) return { name: e.label };
             return UserTagApi.toResourceUrl(parseInt(e.id, 10));
         });
+
+        formData.userFieldValues = getDynamicFileds(formData.userField);
+        delete formData.userField;
         if (user && user.id)
-            UserApi.updateProfile<UpdateProfileReq, UpdateProfileForm>(
+            UserApi.updateProfile<UpdateProfileReq, UpdateProfileForm<any>>(
                 user.id,
                 formData
             ).then(({ error, response }) => {
                 isLoading(false);
                 if (error instanceof UnprocessableEntityErrorResponse) {
-                    const { violations } = error;
-                    _forEach(violations, (value: string, key: string) => {
-                        const propertyName = key as keyof UpdateProfileForm;
-                        setError(propertyName, {
-                            type: "backend",
-                            message: value,
-                        });
-                    });
+                    setViolations<UpdateProfileForm<any>>(error, setError);
+
                     errorToast(error.title);
                 } else if (response !== null) {
                     const isArr = response.userTags instanceof Array;
@@ -131,9 +209,9 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     };
     return (
         <>
-            <Row className="pt-3">
-                <Col md={12} sm={12}>
-                    <Form onSubmit={handleSubmit(onSubmit)}>
+            <Form onSubmit={handleSubmit(onSubmit)}>
+                <Row className="pt-3">
+                    <Col md={12} sm={12}>
                         <AppCard>
                             <Form.Row>
                                 <AppFormInput
@@ -202,6 +280,14 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                         />
                                     </Form.Row>
                                 </Col>
+                            </Form.Row>
+                        </AppCard>
+                    </Col>
+                    <Col md={12}>
+                        <AppCard>
+                            <Row>
+                                {renderUserFields()}
+
                                 <Col
                                     md={12}
                                     className="justify-content-end d-flex"
@@ -217,11 +303,11 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                         </AppButton>
                                     )}
                                 </Col>
-                            </Form.Row>
+                            </Row>
                         </AppCard>
-                    </Form>
-                </Col>
-            </Row>
+                    </Col>
+                </Row>
+            </Form>
         </>
     );
 };

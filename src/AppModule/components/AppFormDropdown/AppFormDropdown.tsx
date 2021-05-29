@@ -7,6 +7,7 @@ import "./assets/scss/style.scss";
 export interface AppFormDropdownProps {
     id: string;
     name?: string;
+    className?: string;
     defaultValue: any;
     placeholder?: string;
     onChange?: (
@@ -22,6 +23,7 @@ export const AppFormDropdown: FC<AppFormDropdownProps> = ({
     id,
     defaultValue,
     name = "",
+    className = "",
     placeholder = "",
     onChange = () => {},
     options,
@@ -37,7 +39,7 @@ export const AppFormDropdown: FC<AppFormDropdownProps> = ({
             menuColor="red"
             onChange={onChange}
             placeholder={placeholder}
-            className="custom-select-container"
+            className={`custom-select-container ${className}`}
             classNamePrefix="custom-select"
             menuPlacement={menuPlacement}
         />

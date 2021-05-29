@@ -27,7 +27,6 @@ export interface AppFormSwitchProps {
 export const AppFormSwitch: FC<AppFormSwitchProps> = ({
     id,
     name,
-    value,
     errorMessage,
     label = "",
     description,
@@ -72,10 +71,9 @@ export const AppFormSwitch: FC<AppFormSwitchProps> = ({
             <Controller
                 name={name}
                 control={control}
-                defaultValue={value}
+                defaultValue={defaultChecked}
                 render={({ field }) => (
                     <FormCheck
-                        defaultChecked={defaultChecked}
                         inline={true}
                         type="switch"
                         className={classes}

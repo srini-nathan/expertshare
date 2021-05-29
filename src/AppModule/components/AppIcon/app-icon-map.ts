@@ -20,6 +20,10 @@ import {
     faEyeSlash,
     faClone,
     faBox,
+    faEnvelope,
+    faDownload,
+    faFilter,
+    faUpload,
 } from "@fortawesome/pro-regular-svg-icons";
 import { AppIconMap } from "../../models";
 
@@ -48,4 +52,8 @@ export const appIconMap: AppIconMap = {
     SignOut: faSignOut,
     faClone,
     Clone: faClone,
+    Email: faEnvelope,
+    Download: faDownload,
+    Filter: faFilter,
+    Upload: faUpload,
 };
