@@ -1,6 +1,11 @@
 import React from "react";
 import { Router } from "@reach/router";
-import { KitchenSink, UserProfilePage, MyProfilePage } from "./pages";
+import {
+    KitchenSink,
+    UserProfilePage,
+    MyProfilePage,
+    ContainerOverview,
+} from "./pages";
 import { ModuleRouter } from "./models";
 
 export const routers: ModuleRouter[] = [
@@ -14,6 +19,7 @@ export const routers: ModuleRouter[] = [
                     <KitchenSink path={"kitchen-sink"} />
                     <MyProfilePage path={"my-profile"} />
                     <UserProfilePage path={"user-profile/:id"} />
+                    <ContainerOverview path={"containers/overview"} />
                 </Router>
             );
         },

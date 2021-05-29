@@ -5,16 +5,16 @@ import { GridApi } from "ag-grid-community";
 import { Row, Col } from "react-bootstrap";
 import { isString as _isString } from "lodash";
 import { useSetRecoilState } from "recoil";
-import { errorToast } from "../../../AppModule/utils";
-import { AppPageHeader } from "../../../AppModule/components";
-import { AppContainerOverview } from "../../components";
-import { ContainerApi } from "../../apis";
-import { useAuthState } from "../../../AppModule/hooks";
-import { PContainer } from "../../models";
+import { errorToast } from "../../utils";
+import { AppPageHeader, AppContainerOverviewCard } from "../../components";
+
+import { ContainerApi } from "../../../AdminModule/apis";
+import { useAuthState } from "../../hooks";
+import { PContainer } from "../../../AdminModule/models";
 import {
     appDashboardLayoutOptions,
     AppDashboardLayoutOptions,
-} from "../../../AppModule/atoms";
+} from "../../atoms";
 
 export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
     const { clientId } = useAuthState();
@@ -73,7 +73,7 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
             <Row>
                 {overviews.map((container: PContainer) => (
                     <Col xs={12} sm={4} md={3} key={container.id}>
-                        <AppContainerOverview container={container} />
+                        <AppContainerOverviewCard container={container} />
                     </Col>
                 ))}
             </Row>

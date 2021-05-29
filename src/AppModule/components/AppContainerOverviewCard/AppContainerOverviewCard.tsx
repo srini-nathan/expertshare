@@ -1,12 +1,12 @@
 import React, { FC } from "react";
-import { PContainer } from "../../models";
+import { PContainer } from "../../../AdminModule/models";
 import "./assets/scss/overview.scss";
 
-export interface AppContainerOverviewProps {
+export interface AppContainerOverviewCardProps {
     container: PContainer;
 }
 
-export const AppContainerOverview: FC<AppContainerOverviewProps> = ({
+export const AppContainerOverviewCard: FC<AppContainerOverviewCardProps> = ({
     container,
 }): JSX.Element => {
     return (

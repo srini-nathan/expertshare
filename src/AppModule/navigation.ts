@@ -10,7 +10,7 @@ export const navigation: AppNavigationItemProps[] = [
     },
     {
         label: "Container",
-        path: "/admin/containers/overview",
+        path: "/containers/overview",
         icon: {
             name: "container",
         },
