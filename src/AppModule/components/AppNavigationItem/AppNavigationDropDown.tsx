@@ -44,7 +44,7 @@ export const AppNavigationDropDown: FC<AppNavigationDropDownProps> = ({
                         subDropDownItems.map((e) => {
                             if (e.path)
                                 return (
-                                    <Match path={e.path}>
+                                    <Match path={e.path} key={e.path}>
                                         {(props) => {
                                             return (
                                                 <Link to={e.path as string}>

@@ -141,17 +141,18 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
 
             <Row>
                 <AppFormTextArea
-                    id="textarea"
+                    id="textarea2"
                     md="4"
                     sm="4"
                     lg="4"
                     xl="4"
-                    name="textarea"
+                    name="textarea2"
                     label="Text Area"
                     placeholder="Write your message..."
                     maxCount={150}
                     rows={1}
                     control={control}
+                    errorMessage="This field is required"
                     isSend
                     className="main-messages"
                 />
