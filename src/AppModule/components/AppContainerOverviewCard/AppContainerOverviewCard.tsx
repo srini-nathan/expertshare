@@ -12,16 +12,18 @@ const { path } = FILETYPEINFO_CONTAINER_POSTER;
 
 export interface AppContainerOverviewCardProps {
     container: PContainer;
+    onClick: () => void;
 }
 
 export const AppContainerOverviewCard: FC<AppContainerOverviewCardProps> = ({
     container,
+    onClick,
 }): JSX.Element => {
-    const imagePath = useBuildAssetPath(path, container.imageName || "");
-
+    const { name, description, imageName = "" } = container;
+    const imagePath = useBuildAssetPath(path, imageName);
     return (
         <div className="container-overview--container--item">
-            <div className="inner-container white-box">
+            <div className="inner-container white-box" onClick={onClick}>
                 <div
                     className="inner-container--banner"
                     style={{
@@ -40,11 +42,11 @@ export const AppContainerOverviewCard: FC<AppContainerOverviewCardProps> = ({
                 <div className="inner-container--det p-3 mx-2">
                     <div className="inner-container--det--title">
                         <a href="#">
-                            <h2>{container.name}</h2>
+                            <h2>{name}</h2>
                         </a>
                     </div>
                     <div className="inner-container--det--desc">
-                        <p className="mb-0">{container.description}</p>
+                        <p className="mb-0">{description}</p>
                     </div>
                 </div>
             </div>

@@ -7,6 +7,7 @@ import {
     ForgotPasswordConfirmationPage,
     ResetPasswordPage,
     ResetPasswordConfirmationPage,
+    AutoLogin,
 } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
 import { SocialLoginRedirectPage } from "./pages/SocialLoginRedirectPage/SocialLoginRedirectPage";
@@ -31,6 +32,7 @@ export const routers: ModuleRouter[] = [
                     <ResetPasswordConfirmationPage
                         path={"reset-password-confirmation"}
                     />
+                    <AutoLogin path={"auto-login/:token"} />
                 </Router>
             );
         },
