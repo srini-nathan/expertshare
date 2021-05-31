@@ -3,7 +3,7 @@ import { RouteComponentProps, useParams } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { Col, Form, Row } from "react-bootstrap";
+import { Col, Form, Row, Image } from "react-bootstrap";
 import { Canceler } from "axios";
 import { isString as _isString } from "lodash";
 import { Client, Container, Package, UserGroup } from "../../models";
@@ -19,10 +19,12 @@ import {
     AppPageHeader,
     AppFormRadioSwitch,
     AppTagSelect,
+    AppUploader,
 } from "../../../AppModule/components";
 import {
     SimpleObject,
     UnprocessableEntityErrorResponse,
+    Upload,
 } from "../../../AppModule/models";
 import { ContainerApi } from "../../apis/ContainerApi";
 import {
@@ -37,12 +39,20 @@ import {
     useAuthState,
     useNavigator,
     useParamId,
+    useBuildAssetPath,
 } from "../../../AppModule/hooks";
+import { UploadAPI } from "../../../AppModule/apis";
 
-const { Container: ContainerConstant } = CONSTANTS;
+const { Container: ContainerConstant, Upload: UPLOAD } = CONSTANTS;
 const {
     STORAGE: { STORAGE_S3, STORAGE_LOCAL },
 } = ContainerConstant;
+const {
+    FILETYPE: { FILETYPE_CONTAINER_POSTER },
+    FILETYPEINFO: { FILETYPEINFO_CONTAINER_POSTER },
+} = UPLOAD;
+const { path } = FILETYPEINFO_CONTAINER_POSTER;
+
 type PartialContainer = Partial<Container>;
 
 export const ContainerAddEdit: FC<RouteComponentProps> = ({
@@ -66,7 +76,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
     const [storageType, setStorageType] = useState<string>("Local");
     const [loadingClient, setLoadingClient] = useState<boolean>(true);
     const [loadingUserGroups, setLoadingUserGroups] = useState<boolean>(true);
+    const containerPosterPath = useBuildAssetPath(path);
     const cancelTokenSourceRef = useRef<Canceler>();
+    const [files, setFiles] = useState<File[]>([]);
 
     let schema = {
         domain: Yup.string().required("Domain is Required"),
@@ -75,10 +87,10 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         userGroups: Yup.array().optional(),
         description: Yup.string().optional().nullable(),
         storage: Yup.string().required(),
-        bucketKey: Yup.string(),
-        bucketSecret: Yup.string(),
-        bucketName: Yup.string(),
-        bucketRegion: Yup.string(),
+        bucketKey: Yup.string().nullable(),
+        bucketSecret: Yup.string().nullable(),
+        bucketName: Yup.string().nullable(),
+        bucketRegion: Yup.string().nullable(),
     };
 
     if (storageType === STORAGE_S3) {
@@ -102,6 +114,10 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         resolver: yupResolver(Yup.object().shape(schema)),
         mode: "all",
     });
+
+    const onFileSelect = (selectedFiles: File[]) => {
+        setFiles(selectedFiles);
+    };
 
     useEffect(() => {
         ClientApi.findById<Client>(clientId).then(
@@ -186,14 +202,14 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         };
     }, []);
 
-    const onSubmit = (formData: Container) => {
+    const submitForm = (formData: Container) => {
         const userGroupsSelectedItems = selectedUserGroups.map((e) => {
             return UserGroupApi.toResourceUrl(parseInt(e.id, 10));
         });
         formData.client = ClientApi.toResourceUrl(clientId);
         formData.userGroups = userGroupsSelectedItems;
         formData.storage = storageType;
-        ContainerApi.createOrUpdate<Container>(id, formData).then(
+        return ContainerApi.createOrUpdate<Container>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
                     setViolations<Partial<Container>>(error, setError);
@@ -210,6 +226,31 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                 }
             }
         );
+    };
+
+    const onSubmit = async (formData: Container) => {
+        if (files.length > 0) {
+            const fd = new FormData();
+            fd.set("file", files[0], files[0].name);
+            fd.set("fileType", FILETYPE_CONTAINER_POSTER);
+
+            return UploadAPI.createResource<Upload, FormData>(fd).then(
+                ({ errorMessage, response }) => {
+                    if (errorMessage) {
+                        errorToast(errorMessage);
+                        return submitForm(formData);
+                    }
+
+                    if (response && response.fileName) {
+                        formData.imageName = response.fileName;
+                    }
+
+                    successToast("Image uploaded");
+                    return submitForm(formData);
+                }
+            );
+        }
+        return submitForm(formData);
     };
 
     if (loading || loadingClient || loadingUserGroups) {
@@ -281,19 +322,8 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         defaultValue={data.containerGroup}
                                         control={control}
                                     />
-                                </Col>
-                                <Col md={6} sm={12}>
-                                    <AppFormCheckBox
-                                        className="container-checkbox"
-                                        name={"isActive"}
-                                        label={"Active"}
-                                        labelPosition={"top"}
-                                        value={1}
-                                        defaultChecked={true}
-                                        register={register}
-                                    />
                                     <AppFormTextArea
-                                        className="pr-0"
+                                        className="pl-0"
                                         md={12}
                                         lg={12}
                                         xl={12}
@@ -310,6 +340,36 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         }
                                         defaultValue={data.description}
                                         control={control}
+                                    />
+                                </Col>
+                                <Col md={6} sm={12}>
+                                    <Form.Group
+                                        as={Col}
+                                        sm={12}
+                                        md={12}
+                                        lg={12}
+                                        xl={12}
+                                    >
+                                        <Form.Label>Poster</Form.Label>
+                                        <AppUploader
+                                            accept="image/*"
+                                            onFileSelect={onFileSelect}
+                                        />
+                                        {data.imageName ? (
+                                            <Image
+                                                src={`${containerPosterPath}/${data.imageName}`}
+                                                thumbnail
+                                            />
+                                        ) : null}
+                                    </Form.Group>
+                                    <AppFormCheckBox
+                                        className="container-checkbox"
+                                        name={"isActive"}
+                                        label={"Active"}
+                                        labelPosition={"top"}
+                                        value={1}
+                                        defaultChecked={true}
+                                        register={register}
                                     />
                                 </Col>
                             </Form.Row>

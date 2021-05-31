@@ -1,6 +1,14 @@
 import React, { FC } from "react";
 import { PContainer } from "../../../AdminModule/models";
 import "./assets/scss/overview.scss";
+import { CONSTANTS } from "../../../config";
+import { useBuildAssetPath } from "../../hooks";
+
+const { Upload: UPLOAD } = CONSTANTS;
+const {
+    FILETYPEINFO: { FILETYPEINFO_CONTAINER_POSTER },
+} = UPLOAD;
+const { path } = FILETYPEINFO_CONTAINER_POSTER;
 
 export interface AppContainerOverviewCardProps {
     container: PContainer;
@@ -9,13 +17,15 @@ export interface AppContainerOverviewCardProps {
 export const AppContainerOverviewCard: FC<AppContainerOverviewCardProps> = ({
     container,
 }): JSX.Element => {
+    const imagePath = useBuildAssetPath(path, container.imageName || "");
+
     return (
         <div className="container-overview--container--item">
             <div className="inner-container white-box">
                 <div
                     className="inner-container--banner"
                     style={{
-                        backgroundImage: `url(${container.imageName})`,
+                        backgroundImage: `url(${imagePath})`,
                     }}
                 >
                     <div className="inner-container--banner--icons">
