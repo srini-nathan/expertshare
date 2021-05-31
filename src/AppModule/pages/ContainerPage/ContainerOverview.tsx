@@ -71,7 +71,8 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
 
     const checkForAccess = (container: PContainer) => {
         const { domain, id } = container;
-        const path = `http://${domain}/auth/auto-login/{token}`;
+        // @TODO: do something with hardcoded paths
+        const path = `${window.location.protocol}//${domain}/auth/auto-login/{token}`;
         if (id) {
             // @TODO: remove any type from here
             AuthApi.checkAndGetToken<GetToken | any>(id)
