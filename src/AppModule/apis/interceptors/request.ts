@@ -7,13 +7,13 @@ export const onRequestFulfilled = (
 ): AxiosRequestConfig | Promise<AxiosRequestConfig> => {
     // eslint-disable-next-line no-console,no-param-reassign
     config.headers["ES-KEY"] = generateKeyHeader();
+    config.headers["Content-Type"] = "application/ld+json";
 
     const token = localStorage.getItem(AUTH_TOKEN_KEY);
     if (token) {
         // eslint-disable-next-line no-param-reassign
         config.headers.Authorization = `Bearer ${token}`;
     }
-
     return config;
 };
 

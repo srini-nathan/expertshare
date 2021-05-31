@@ -2,12 +2,14 @@ import React, { ReactElement, FC } from "react";
 import { ICellRendererParams } from "ag-grid-community";
 import { RouteComponentProps } from "@reach/router";
 import {
+    AppSwitch,
     AppGridAction,
     AppGridActionProps,
 } from "../../../AppModule/components";
 import { User } from "../../models";
 import { useAuthState, useRoles } from "../../../AppModule/hooks";
 import { AppCellActionParamsUserList } from "./AppCellActionParamsUserList";
+import { UserApi } from "../../apis";
 
 export interface AppCellActionWithRenderParamsUserList
     extends AppCellActionParamsUserList,
@@ -52,6 +54,24 @@ export const appGridFrameworkComponents = {
                     <GetRoles />
                 </optgroup>
             </select>
+        );
+    },
+    appSwitch: (params: ICellRendererParams): ReactElement => {
+        const { data } = params;
+        const { id, isBlocked } = data as User;
+
+        return (
+            <AppSwitch
+                name={`isblocked-${id}`}
+                id={`isblocked-${id}`}
+                value={isBlocked}
+                size={"sm"}
+                onChange={(event) => {
+                    UserApi.update<User, Partial<User>>(id, {
+                        isBlocked: event.currentTarget.checked,
+                    }).then();
+                }}
+            />
         );
     },
     AppHeaderChekbox: (params: any): ReactElement => {
