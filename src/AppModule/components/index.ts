@@ -48,3 +48,6 @@ export * from "./AppChatList";
 export * from "./AppGroupWindow";
 export * from "./AppСhoseMethodMessage";
 export * from "./AppContainerOverviewCard";
+export * from "./AppConferenceCard";
+export * from "./AppSwitchView";
+export * from "./AppFormTranslatable";

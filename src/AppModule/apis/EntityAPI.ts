@@ -71,10 +71,11 @@ export abstract class EntityAPI extends API {
     }
 
     public static async findById<R>(
-        id: number
+        id: number,
+        extraParams = {}
     ): Promise<FinalResponse<R | null>> {
         const path = route(this.GET_ITEM, { id });
-        return this.makeGet<R>(path)
+        return this.makeGet<R>(path, { ...extraParams })
             .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
             .catch((error) => this.handleServerError(error))
             .catch((error) => {

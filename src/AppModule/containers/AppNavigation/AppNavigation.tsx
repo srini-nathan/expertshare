@@ -21,8 +21,18 @@ import {
     AuthContext,
     logoutAction,
 } from "../../../SecurityModule/contexts/AuthContext";
-import { useWindowSize, useWindowLocation } from "../../hooks";
+import {
+    useWindowSize,
+    useWindowLocation,
+    useBuildAssetPath,
+} from "../../hooks";
+import { CONSTANTS } from "../../../config";
 
+const { Upload: UPLOAD } = CONSTANTS;
+const {
+    FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
+} = UPLOAD;
+const { path: PATH } = FILETYPEINFO_USER_PROFILE;
 interface AppNavigationProps {
     items: AppNavigationItemProps[];
 }
@@ -33,6 +43,8 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const [overflowItems, setOverflowItems] = useState<
         AppNavigationItemProps[] | AppSubNavigationItemProps[]
     >([]);
+    const profilePicturePath = useBuildAssetPath(PATH);
+
     const [subMenuItems] = useState<AppSubNavigationItemProps[]>([
         {
             label: "Settings",
@@ -370,6 +382,10 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                     ? `${user.firstName} ${user.lastName}`
                                                     : "Acount"
                                             }
+                                            style={{
+                                                backgroundImage: `url(${profilePicturePath}/${user.imageName})`,
+                                                backgroundSize: "cover",
+                                            }}
                                             iconClassName="profile-picture"
                                             subDropDownItems={[
                                                 {

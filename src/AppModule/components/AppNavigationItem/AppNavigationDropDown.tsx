@@ -6,6 +6,7 @@ import { AppIcon } from "../AppIcon";
 interface AppNavigationDropDownProps {
     label: string;
     className?: string;
+    style?: any;
     iconClassName?: string;
     icon?: string;
     path?: string;
@@ -16,6 +17,7 @@ interface AppNavigationDropDownProps {
 export const AppNavigationDropDown: FC<AppNavigationDropDownProps> = ({
     label,
     className = "",
+    style = {},
     iconClassName,
     subDropDownItems,
     action = () => {},
@@ -33,7 +35,7 @@ export const AppNavigationDropDown: FC<AppNavigationDropDownProps> = ({
                 eventKey="0"
             >
                 <div className="nav-icon img-container">
-                    <i className={`${iconClassName}`}></i>
+                    <i style={style} className={`${iconClassName}`}></i>
                 </div>
                 <span>{label}</span>
                 <AppIcon name={!open ? "next" : "ChevronDown"} />
