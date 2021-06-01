@@ -19,6 +19,7 @@ import {
 import { ModuleRouter } from "../AppModule/models";
 import { ContainerAddEdit } from "./pages/ContainerPage/ContainerAddEdit";
 import { UserFieldAddEditPage, UserFieldListPage } from "./pages/UserFieldPage";
+import { AttendeeOverview } from "./pages/AttendeePage";
 
 export const routers: ModuleRouter[] = [
     {
@@ -57,6 +58,7 @@ export const routers: ModuleRouter[] = [
                     <ContainerOverview
                         path={"containers/overview"}
                     ></ContainerOverview>
+                    <AttendeeOverview path={"attendees"}></AttendeeOverview>
                 </Router>
             );
         },

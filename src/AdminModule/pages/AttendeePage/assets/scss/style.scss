@@ -1,0 +1,98 @@
+.ag-cell {
+    .email {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--primary);
+        text-decoration: none;
+    }
+    .ag-react-container {
+        display: flex;
+        align-items: center;
+        .tag-container {
+            &--item {
+                a {
+                    display: inline-grid;
+                    align-content: center;
+                    width: unset !important;
+                    height: 26px !important;
+                    padding: 0 15px;
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: var(--primary);
+                    background-color: var(--primary-10);
+                    border: 1px solid var(--primary);
+                    border-radius: var(--spc-btn-border-radius);
+                }
+                &.more {
+                    a {
+                        background-color: unset;
+                        border: none;
+                        border-radius: none;
+                    }
+                }
+            }
+        }
+        .actions {
+            display: flex;
+            a {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: unset !important;
+                i {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+        }
+        a {
+            display: flex;
+            align-items: center;
+        }
+        .info {
+            display: flex;
+            align-items: center;
+            &--profile-pic {
+                i {
+                    display: block;
+                    width: 36px;
+                    height: 36px;
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                    border-radius: var(--circle-border-radius);
+                    &::after {
+                        position: relative;
+                        top: -3px;
+                        left: 24px;
+                        display: block;
+                        width: 11px;
+                        height: 11px;
+                        content: "";
+                        background-color: var(--primary);
+                        border: 2px solid var(--border-border-radius-clr);
+                        border-radius: var(--circle-border-radius);
+                    }
+                }
+            }
+            &--det {
+                h3 {
+                    display: flex;
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: var(--secondary);
+                }
+                p {
+                    display: box;
+                    overflow: hidden;
+                    box-orient: vertical;
+                    -webkit-line-clamp: 2;
+                    font-size: 14px;
+                    font-weight: 500;
+                    line-height: initial;
+                    color: var(--secondary-70);
+                }
+            }
+        }
+    }
+}

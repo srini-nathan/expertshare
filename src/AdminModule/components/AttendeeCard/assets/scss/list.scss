@@ -1,0 +1,240 @@
+.row{
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+.attendees-grid {
+    &--container {
+        &--item {
+            .card {
+                margin-bottom: 30px;
+                &--icons {
+                    position: absolute;
+                    top: 8px;
+                    right: 8px;
+                    z-index: 1;
+                    &--favorite {
+                        margin-bottom: 8px;
+                        a {
+                            width: 36px;
+                            height: 36px;
+                            padding: 0 !important;
+                            i {
+                                font-size: 19px;
+                                font-weight: 500;
+                                margin: auto;
+                            }
+                        }
+                    }
+                    &--vcf {
+                        a {
+                            width: 36px;
+                            height: 36px;
+                            font-size: 12px;
+                            font-weight: 700;
+                            i {
+                                font-style: normal;
+                            }
+                        }
+                    }
+                }
+                &--avatar {
+                    min-height: 206px;
+                    .profile-avatar {
+                        i {
+                            position: relative;
+                            display: block;
+                            width: 185px;
+                            height: 185px;
+                            margin: auto;
+                            background-repeat: no-repeat;
+                            background-position: center;
+                            background-size: contain;
+                            border-radius: var(--circle-border-radius);
+                            
+                        }
+
+                        &.online {
+                            i {
+                                &::after {
+                                    position: absolute;
+                                    top: 10px;
+                                    right: 20px;
+                                    display: block;
+                                    width: 32px;
+                                    height: 32px;
+                                    content: "";
+                                    background-color: var(--primary);
+                                    border-radius: var(--circle-border-radius);
+                                }
+                            }
+                        }
+                    }
+                    .speaker-btn {
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 104px;
+                        height: 36px;
+                        margin: auto;
+                        margin-top: -30px;
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: var(--btn-fg-clr);
+                        background-color: var(--speaker-btn-bg-clr);
+                        border-radius: var(--border-radius);
+                        svg {
+                            margin-top:4px;
+                        }
+                    }
+                }
+                &--title {
+                    &--name {
+                        h2 {
+                            display: -webkit-box;
+                            overflow: hidden;
+                            font-size: 20px;
+                            font-weight: 700;
+                            color: var(--secondary);
+                            font-family: var(--font-family-sans-serif);
+                            -webkit-box-orient: vertical;
+                            -webkit-line-clamp: 1;
+                        }
+                    }
+                    &--bio {
+                        display: -webkit-box;
+                        height: 20px;
+                        overflow: hidden;
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: var(--secondary-70);
+                        -webkit-box-orient: vertical;
+                        -webkit-line-clamp: 1;
+                    }
+                    &--mail {
+                        display: -webkit-box;
+                        height: 20px;
+                        overflow: hidden;
+                        font-size: 14px;
+                        font-weight: 700;
+                        color: var(--primary);
+                        -webkit-box-orient: vertical;
+                        -webkit-line-clamp: 1;
+                    }
+                }
+                &--tags {
+                    min-height: 65px;
+                    .row {
+                        justify-content: center;
+                    }
+                    &--item {
+                        text-align: center;
+                        a {
+                            display: inline-grid;
+                            align-content: center;
+                            min-height: 26px;
+                            padding: 0 15px;
+                            margin: 0 3px;
+                            font-size: 12px;
+                            font-weight: 700;
+                            color: var(--primary);
+                            background-color: var(--primary-10);
+                            border: 1px solid var(--primary);
+                            border-radius: var(--spc-btn-border-radius);
+                        }
+                        &.show-more {
+                            a {
+                                background-color: var(--btn-secondary-bg-clr);
+                                border: none;
+                            }
+                        }
+                    }
+                }
+                &--buttons {
+                    &--book-session {
+                        display: flex;
+                        justify-content: center;
+                        button {
+                            width: 100%;
+                            height: max-content;
+                            min-height: 36px;
+                            padding: 0 5px !important;
+                            svg,i {
+                                padding-bottom: 0px;
+                                margin-right: 10px;
+                                font-size:18px;
+                                font-weight: 500;
+                                &::before {
+                                    content: "\e01a";
+                                }
+                            }
+                        }
+                    }
+                    &--get-in-contact {
+                        display: flex;
+                        justify-content: center;
+                        button {
+                            width: 100%;
+                            height: max-content;
+                            min-height: 36px;
+                            padding: 0 5px !important;
+                            i {
+                                margin-right: 10px;
+                                font-size:18px;
+                                font-weight: 500;
+                            }
+                            .popup {
+                                position: absolute;
+                                top: 35px;
+                                right: 10px;
+                                z-index: 4;
+                                display: none;
+                                width: 169px;
+                                padding: 10px;
+                                background-color: var(--widget-bg-clr);
+                                border-radius: var(--border-radius);
+                                box-shadow: 0 12px 38px var(--secondary-20);
+                                &--inner {
+                                    &--item {
+                                        padding: 2px 5px;
+                                        text-align: left;
+                                        a {
+                                            display: flex;
+                                            align-items: center;
+                                            font-size: 12px;
+                                            font-weight: 700;
+                                            line-height: 30px;
+                                            color: var(--secondary);
+                                            i {
+                                                font-size: 15px;
+                                            }
+                                        }
+                                        &.video-chat {
+                                            a {
+                                                i {
+                                                    &::before {
+                                                        content: "\e007";
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            &:hover {
+                                & > .popup {
+                                    display: block;
+                                }
+                            }
+                        }
+                    }
+                    .btn-secondary {
+                        font-size: 12px !important;
+                        box-shadow: 0 3px 7px var(--secondary-20);
+                    }
+                }
+            }
+        }
+    }
+}
