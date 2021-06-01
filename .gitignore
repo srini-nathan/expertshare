@@ -31,6 +31,11 @@ yarn-error.log*
 **/scss/**/*.{css,css.map}
 
 # Translations
-./src/translations
-!./src/translations/.gitkeep
+/src/translations
+!/src/translations/.gitkeep
+
+# Dynamic Configuration
+/src/config/routes.json
+/src/config/constants.json
+
 /TIMELINE.md
