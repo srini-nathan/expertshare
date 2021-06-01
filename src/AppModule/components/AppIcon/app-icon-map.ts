@@ -20,6 +20,7 @@ import {
     faEyeSlash,
     faClone,
     faBox,
+    faMicrophone,
 } from "@fortawesome/pro-regular-svg-icons";
 import { AppIconMap } from "../../models";
 
@@ -48,4 +49,5 @@ export const appIconMap: AppIconMap = {
     SignOut: faSignOut,
     faClone,
     Clone: faClone,
+    Microphone: faMicrophone,
 };

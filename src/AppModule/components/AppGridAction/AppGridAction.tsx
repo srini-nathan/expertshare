@@ -1,6 +1,5 @@
 import React, { FC, useState } from "react";
 import { Link } from "@reach/router";
-
 import { AppIcon } from "../AppIcon";
 import { AppModal } from "../AppModal";
 
@@ -9,6 +8,7 @@ export interface AppGridActionProps {
     editAction?: AppGridLinkAction;
     treeAction?: AppGridLinkAction;
     deleteAction?: AppGridClickAction;
+    buttonAction?: AppCustomButtonAction[];
     customClickActions?: AppGridCustomClickAction[];
 }
 
@@ -29,6 +29,10 @@ interface AppGridCustomClickAction {
     disable?: boolean;
     icon: string;
 }
+interface AppCustomButtonAction {
+    onClick?: () => void;
+    text?: string;
+}
 
 interface ActionProps {
     disable?: boolean;
@@ -37,6 +41,10 @@ interface ActionProps {
 
 interface LinkActionProps extends ActionProps {
     url?: string;
+}
+interface ButtonActionProps {
+    onClick?: () => void;
+    text?: string;
 }
 
 const LinkAction: FC<LinkActionProps> = ({
@@ -67,6 +75,30 @@ const LinkAction: FC<LinkActionProps> = ({
         <Link className={"mr-3"} to={url}>
             <AppIcon name={icon} />
         </Link>
+    );
+};
+const ButtonAction: FC<ButtonActionProps> = ({
+    text,
+    onClick,
+}): JSX.Element => {
+    if (!text || !onClick) {
+        return <></>;
+    }
+
+    return (
+        <div className="action-btn">
+            <a
+                href="#"
+                className="btn btn-secondary mr-2"
+                onClick={(event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    onClick();
+                }}
+            >
+                {text}
+            </a>
+        </div>
     );
 };
 
@@ -130,6 +162,7 @@ export const AppGridAction: FC<AppGridActionProps> = ({
     editAction,
     treeAction,
     deleteAction,
+    buttonAction = [],
     customClickActions = [],
 }): JSX.Element => {
     return (
@@ -141,6 +174,9 @@ export const AppGridAction: FC<AppGridActionProps> = ({
                 <ClickAction icon={icon} {...rest}></ClickAction>
             ))}
             <ClickAction icon={"delete"} {...deleteAction}></ClickAction>
+            {buttonAction.map(({ text, ...rest }) => (
+                <ButtonAction text={text} {...rest}></ButtonAction>
+            ))}
         </div>
     );
 };

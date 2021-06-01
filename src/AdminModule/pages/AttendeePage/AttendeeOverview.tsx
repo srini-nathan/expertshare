@@ -75,7 +75,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}
                 showToolbar
-                showTypeSwitch={true}
+                showViewLayoutButtons={true}
             />
             {location.pathname === "/admin/attendees" && (
                 <AttendeeCard attendees={initialValues} />
