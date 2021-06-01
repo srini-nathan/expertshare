@@ -1,0 +1,14 @@
+@import "../../../../assets/scss/variables";
+
+.questions-and-answers-wrapper {
+    &--column {
+        background: white;
+        padding-right: 30px;
+        padding-left: 30px;
+        border-radius: 10px;
+    }
+
+    &--title {
+        margin-top: 1em;
+    }
+}

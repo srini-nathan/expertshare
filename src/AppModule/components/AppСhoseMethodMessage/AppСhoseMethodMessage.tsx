@@ -1,22 +1,23 @@
 import React, { FC } from "react";
-import { useForm } from "react-hook-form";
 import { AppTab } from "../AppTab";
 import { AppTabs } from "../AppTabs";
-import { AppFormTextArea } from "../AppFormTextArea";
+import { AppMessageCompose } from "../AppMessageCompose";
 
 import "./assests/scss/style.scss";
 
 export interface AppСhoseMethodMessageProps {
     activeTab: string;
     className?: string;
+    rows: number;
+    enterToPost?: boolean;
 }
 
 export const AppСhoseMethodMessage: FC<AppСhoseMethodMessageProps> = ({
     activeTab,
+    rows,
+    enterToPost,
     ...props
 }): JSX.Element => {
-    const { control } = useForm();
-
     const [activeTabMessage, setActiveTabMessage] = React.useState<string>(
         activeTab
     );
@@ -35,19 +36,13 @@ export const AppСhoseMethodMessage: FC<AppСhoseMethodMessageProps> = ({
                         </span>
                     }
                 >
-                    <AppFormTextArea
+                    <AppMessageCompose
                         id="textarea"
-                        md="12"
-                        sm="12"
-                        lg="12"
-                        xl="12"
-                        name="textarea"
                         label="Text Area"
                         placeholder="Write your message..."
-                        maxCount={150}
-                        rows={1}
-                        control={control}
+                        rows={rows}
                         isSend
+                        enterToPost={enterToPost}
                         className="main-messages"
                     />
                 </AppTab>

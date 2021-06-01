@@ -69,7 +69,7 @@ export const AppMessageBox: FC<AppMessageBoxProps> = ({
                                 : { display: "none" }
                         }
                     >
-                        <div className="tabs m-0 pt-1 pb-2">
+                        <div className="tabs-messages m-0 pt-1 pb-2">
                             <AppDetailsAction
                                 newMessagesCount={messagesMockData.mewMessages}
                                 avatarImg={messagesMockData.avatarUrl}
@@ -81,6 +81,7 @@ export const AppMessageBox: FC<AppMessageBoxProps> = ({
                             <AppСhoseMethodMessage
                                 activeTab="Text"
                                 className="ptop-messages"
+                                rows={1}
                             />
                         </div>
                     </div>

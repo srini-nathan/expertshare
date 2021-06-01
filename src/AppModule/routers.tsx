@@ -5,6 +5,7 @@ import {
     UserProfilePage,
     MyProfilePage,
     ContainerOverview,
+    SessionDetailsPage,
 } from "./pages";
 import { ModuleRouter } from "./models";
 
@@ -19,6 +20,9 @@ export const routers: ModuleRouter[] = [
                     <KitchenSink path={"kitchen-sink"} />
                     <MyProfilePage path={"my-profile"} />
                     <UserProfilePage path={"user-profile/:id"} />
+                    <SessionDetailsPage
+                        path={"conference/:id/session/:number"}
+                    />
                     <ContainerOverview path={"containers/overview"} />
                 </Router>
             );

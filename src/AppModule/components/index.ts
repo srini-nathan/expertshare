@@ -48,3 +48,5 @@ export * from "./AppChatList";
 export * from "./AppGroupWindow";
 export * from "./AppСhoseMethodMessage";
 export * from "./AppContainerOverviewCard";
+export * from "./AppMessageCompose";
+export * from "./AppQuestionsAndAnswers";
