@@ -1,7 +1,8 @@
 import React, { FC, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
-import { isString as _isString } from "lodash";
+import { find as _find, isString as _isString } from "lodash";
+
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -11,6 +12,7 @@ import {
     AppButton,
     AppLoader,
     AppFormSelectCreatable,
+    AppFormSelect,
     AppFormFieldGenerator,
 } from "../../components";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
@@ -21,9 +23,26 @@ import {
     successToast,
     setViolations,
 } from "../../utils";
+import { useAuthState } from "../../hooks";
 import { UserApi, UserTagApi, UserFieldApi } from "../../../AdminModule/apis";
-import { UserTag, UserField } from "../../../AdminModule/models";
-import { UnprocessableEntityErrorResponse, SimpleObject } from "../../models";
+import {
+    UserTag,
+    UserField,
+    User as UserModel,
+} from "../../../AdminModule/models";
+import {
+    UnprocessableEntityErrorResponse,
+    PrimitiveObject,
+    SimpleObject,
+} from "../../models";
+import { CONSTANTS } from "../../../config";
+
+const { TIMEZONE } = CONSTANTS.User;
+
+const options = TIMEZONE.map((value: string) => ({
+    value,
+    label: value,
+}));
 
 type UpdateProfileReq = {
     [key: string]: any;
@@ -35,12 +54,17 @@ type UpdateProfileForm<T> = {
 
 export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     const { state, dispatch } = React.useContext(AuthContext);
-    const { user, clientId } = state as AuthState;
+    const { clientId, user } = state as AuthState;
     const [loading, isLoading] = React.useState<boolean>(false);
+    const [dataLoading, isDataLoading] = React.useState<boolean>(true);
     const [userTags, setUserTags] = useState<SimpleObject<string>[]>([]);
     const [selectedUserTags, setSelectedUserTag] = useState<
         SimpleObject<string>[]
     >([]);
+    const { containerResourceId } = useAuthState();
+    const [data, setData] = useState<UserModel>(
+        new UserModel(containerResourceId)
+    );
     const [userFields, setUserFields] = useState<UserField[]>([]);
 
     const validationShape = {
@@ -56,7 +80,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     // });
     const validationSchema = Yup.object().shape(validationShape);
 
-    const { control, handleSubmit, formState, setError } = useForm({
+    const { control, handleSubmit, formState, setError, setValue } = useForm({
         resolver: yupResolver(validationSchema),
         mode: "all",
     });
@@ -65,7 +89,6 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     const fetchUserTags = () => {
         UserTagApi.find<UserTag>(1, { "client.id": clientId }).then(
             ({ error, response }) => {
-                isLoading(false);
                 if (error !== null) {
                     if (_isString(error)) {
                         errorToast(error);
@@ -89,7 +112,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
         fetchUserTags();
         const selectedTags: SimpleObject<string>[] = [];
         if (user && userTags)
-            user?.userTags?.forEach((e) => {
+            user?.userTags?.forEach((e: any) => {
                 selectedTags.push({
                     id: `${e.id}`,
                     value: `${e.name}`,
@@ -98,7 +121,30 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
             });
         setSelectedUserTag(selectedTags);
     }, []);
-
+    useEffect(() => {
+        isDataLoading(true);
+        UserApi.findById<UserModel>(user?.id as number).then(
+            ({ response, isNotFound, errorMessage }) => {
+                isDataLoading(false);
+                if (errorMessage) {
+                    errorToast(errorMessage);
+                } else if (isNotFound) {
+                    errorToast("Language not exist");
+                } else if (response !== null) {
+                    setData(response);
+                    const selectedTags: SimpleObject<string>[] = [];
+                    response?.userTags?.forEach((e: any) => {
+                        selectedTags.push({
+                            id: `${e.id}`,
+                            value: `${e.name}`,
+                            label: `${e.name}`,
+                        });
+                    });
+                    setSelectedUserTag(selectedTags);
+                }
+            }
+        );
+    }, []);
     const fetchUserFields = () => {
         UserFieldApi.find<UserField>(1, { "client.id": clientId }).then(
             ({ error, response }) => {
@@ -114,19 +160,21 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     };
     useEffect(() => {
         fetchUserFields();
-    }, [user]);
+    }, []);
 
     const renderUserFields = () => {
+        if (dataLoading) return <></>;
         return userFields.map((e) => {
             let defaultValue: any = null;
 
-            user?.userFieldValues?.forEach((item: any) => {
+            data?.userFieldValues?.forEach((item: any) => {
                 if (e.id === item.userField.id) defaultValue = item;
             });
             return (
                 <AppFormFieldGenerator
                     defaultValue={defaultValue}
                     properties={e}
+                    setValue={setValue}
                     validation={{
                         ...validation(
                             UserFieldApi.toResourceUrl(e.id),
@@ -141,8 +189,10 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     };
     const getDynamicFileds = (userField: any[]) => {
         const userFieldValues: any[] = [];
+
         Object.keys(userField).forEach((key: any) => {
             let value: any = userField[key];
+
             if (value instanceof Date) value = value.toISOString().slice(0, 10);
             else if (value instanceof Object)
                 value = JSON.stringify(
@@ -150,15 +200,24 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                 );
             else if (value === undefined) value = "false";
 
-            if (user?.userFieldValues && user?.userFieldValues.length > 0) {
-                user?.userFieldValues?.forEach((e: any) => {
+            if (data.userFieldValues && data.userFieldValues?.length > 0) {
+                let found = false;
+                data.userFieldValues?.forEach((e: any) => {
                     if (e.userField["@id"] === key) {
                         userFieldValues.push({
+                            "@id": `/api/user_field_values/${e.id}`,
                             value: `${value}`,
-                            userField: key,
                         });
+                        found = true;
                     }
                 });
+
+                if (!found) {
+                    userFieldValues.push({
+                        value: `${value}`,
+                        userField: key,
+                    });
+                }
             } else
                 userFieldValues.push({
                     value: `${value}`,
@@ -207,6 +266,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                 }
             });
     };
+
     return (
         <>
             <Form onSubmit={handleSubmit(onSubmit)}>
@@ -280,6 +340,37 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                         />
                                     </Form.Row>
                                 </Col>
+                                <AppFormSelect
+                                    id={"timezone"}
+                                    name={"timezone"}
+                                    label={"Select Timezone"}
+                                    md={12}
+                                    lg={12}
+                                    xl={12}
+                                    required={true}
+                                    {...validation("timezone", formState, true)}
+                                    defaultValue={{
+                                        value: user?.timezone
+                                            ? user?.timezone
+                                            : "",
+                                        label: user?.timezone
+                                            ? user?.timezone
+                                            : "",
+                                    }}
+                                    placeholder={"Timezone"}
+                                    errorMessage={errors.timezone?.message}
+                                    options={options}
+                                    control={control}
+                                    transform={{
+                                        output: (template: PrimitiveObject) =>
+                                            template?.value,
+                                        input: (value: string) => {
+                                            return _find([], {
+                                                value,
+                                            });
+                                        },
+                                    }}
+                                />
                             </Form.Row>
                         </AppCard>
                     </Col>

@@ -26,6 +26,8 @@ const schema = (isEditMode: boolean) => {
         jobTitle: yup.string().min(validations.jobTitle.min).required(),
         email: yup.string().email().required(),
         locale: yup.string().required(),
+        timezone: yup.string().required(),
+        isBlocked: yup.boolean(),
     };
     const authValidationShape = {
         plainPassword: yup.string().required(),

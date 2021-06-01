@@ -6,45 +6,48 @@ import { Form } from "react-bootstrap";
 import "./assets/scss/style.scss";
 
 export interface AppFormRadioGroupProps {
-    id: string;
     name: string;
-    value?: string;
-    defaultChecked?: boolean;
-    label?: string;
+    defaultValue?: any;
+    options?: any[];
     onChange?: ChangeEventHandler<HTMLInputElement>;
     register?<TFieldElement extends FieldElement<TFieldElement>>(
         ref?: (TFieldElement & Ref) | null,
         rules?: RegisterOptions
     ): void;
     control: Control<any>;
+    setValue: any;
 }
 
 export const AppFormRadioGroup: FC<AppFormRadioGroupProps> = ({
-    id,
-    value,
     name,
-    defaultChecked = false,
-    label = "",
     control,
+    options,
+    defaultValue,
+    setValue,
 }): JSX.Element => {
-    let props: any = {
-        id,
-        label,
-        value,
-    };
-    if (defaultChecked)
-        props = {
-            ...props,
-            defaultChecked,
-        };
     return (
-        <Controller
-            name={name}
-            defaultValue={value}
-            control={control}
-            render={({ field }) => (
-                <Form.Check {...field} type="radio" {...props} />
-            )}
-        />
+        <>
+            <Controller
+                name={name}
+                control={control}
+                defaultValue={defaultValue ? defaultValue.value : ""}
+                render={() => <input type="hidden" name={name} />}
+            />
+            {options?.map((e) => {
+                return (
+                    <Form.Check
+                        id={`radio_${e.value}`}
+                        name={`radio_${e.name}`}
+                        onChange={(element) => {
+                            setValue(name, element.target.value, {});
+                        }}
+                        type={"radio"}
+                        defaultValue={e.value}
+                        label={e.label}
+                        defaultChecked={e.defaultCheck}
+                    />
+                );
+            })}
+        </>
     );
 };

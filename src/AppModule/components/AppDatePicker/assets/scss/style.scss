@@ -40,6 +40,19 @@
     box-shadow: 0 10px 20px var(--primary-20);
 
 
+    select {
+        background-color: var(--input-bg-clr);
+        color: var(--input-fg-clr);
+        border: 1px solid var(--input-border-clr);
+        border-radius: var(--border-radius);
+        padding: 5px;
+        margin: 10px 5px;
+
+        &:focus {
+            outline: unset;
+        }
+    }
+
     .react-datepicker__triangle {
         border-top-color: var(--light-clr) !important;
         border-bottom-color: var(--light-clr) !important;
