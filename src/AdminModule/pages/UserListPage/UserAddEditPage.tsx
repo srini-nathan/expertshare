@@ -181,7 +181,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                         errorToast(errorMessage);
                     } else {
                         navigator("..").then(() => {
-                            successToast("Language updated");
+                            successToast("User updated");
                         });
                     }
                 }
@@ -195,7 +195,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                         errorToast(errorMessage);
                     } else {
                         navigator("..").then(() => {
-                            successToast("Language created");
+                            successToast("User created");
                         });
                     }
                 }
@@ -273,7 +273,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                     if (errorMessage) {
                         errorToast(errorMessage);
                     } else if (isNotFound) {
-                        errorToast("Language not exist");
+                        errorToast("User not exist");
                     } else if (response !== null) {
                         setData(response);
                         const selectedTags: SimpleObject<string>[] = [];
