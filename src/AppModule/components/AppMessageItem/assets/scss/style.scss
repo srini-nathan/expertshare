@@ -1,0 +1,110 @@
+@import "../../../../assets/scss/variables";
+
+.message-group-container {
+    border: none !important;
+    border-bottom: 1px solid var(--secondary-20) !important;
+
+    .content {
+        display: flex;
+        align-items: center;
+        .avatar {
+            i {
+                display: block;
+                width: 36px;
+                height: 36px;
+                background-repeat: no-repeat;
+                background-size: cover;
+                border-radius: 20px;
+                &::after {
+                    position: relative;
+                    top: -3px;
+                    left: 24px;
+                    display: block;
+                    width: 11px;
+                    height: 11px;
+                    content: "";
+                    background-color: var(--primary);
+                    border: 2px solid white;
+                    border-radius: 20px;
+                }
+            }
+        }
+        .details {
+            &--sender {
+                h3 {
+                    margin-bottom: 0;
+                    font-size: 16px;
+                    font-weight: 500;
+                    color: var(--secondary);
+                    .time {
+                        font-size: 12px;
+                        font-weight: 400;
+                        color: var(--secondary-70);
+                    }
+                }
+            }
+            &--comment {
+                p {
+                    margin-bottom: 0;
+                    font-size: 12px;
+                    font-weight: 500;
+                    color: var(--secondary);
+                }
+                span {
+                    font-size: 12px;
+                    font-weight: 400;
+                    color: var(--secondary-70);
+                }
+            }
+        }
+    }
+    .count {
+        position: absolute;
+        right: 15px;
+        bottom: 15px;
+        span {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 17px;
+            height: 17px;
+            padding-top: 1px;
+            font-size: 12px;
+            font-weight: 500;
+            color: white;
+            background-color: red;
+            border-radius: 20px;
+        }
+    }
+    .more {
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        background: white;
+        width: 45px;
+        -webkit-box-shadow: 3px 3px 8px 0px rgba(155, 167, 186, 0.2);
+        -moz-box-shadow: 3px 3px 8px 0px rgba(155, 167, 186, 0.2);
+        box-shadow: 3px 3px 8px 0px rgba(155, 167, 186, 0.2);
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        .btn-icon {
+            font-size: 19px;
+            padding-top: 12px;
+        }
+    }
+    .green-btn {
+        i {
+            color: var(--primary);
+        }
+    }
+}
+
+.list-group-item.active {
+    background-color: transparent !important;
+    border: none;
+}
+
+.list-group-item.disabled,
+.list-group-item:disabled {
+    background-color: var(--primary-20) !important;
+}

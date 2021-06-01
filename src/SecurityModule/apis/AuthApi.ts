@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import { API } from "../../AppModule/apis/API";
-import { ROUTES } from "../../config";
+import { ROUTES, route } from "../../config";
 import { checkAndParseResponse } from "../../AppModule/utils/api";
 import {
     UnprocessableEntityErrorResponse,
@@ -12,6 +12,7 @@ const {
     api_users_me_collection: API_ME,
     api_reset_password_request_collection: API_RESET_PASSWORD_REQUEST,
     api_reset_password_collection: API_RESET_PASSWORD,
+    api_security_get_token: API_SECURITY_GET_TOKEN,
 } = ROUTES;
 
 // @TODO: Missing URL from routes.json
@@ -85,5 +86,22 @@ export class AuthApi extends API {
     public static async me(): Promise<User> {
         const res: AxiosResponse<User> = await this.makeGet<User>(API_ME);
         return res.data;
+    }
+
+    // @TODO: move it to another API class, that is more related to it
+    static async checkAndGetToken<R>(
+        containerId: number
+    ): Promise<R | ErrorResponse> {
+        return this.makeGet<R>(
+            route(API_SECURITY_GET_TOKEN, {
+                containerId,
+            })
+        )
+            .then((res) => {
+                return res.data;
+            })
+            .catch(({ response }) => {
+                return this.handleError<R>(response.data);
+            });
     }
 }

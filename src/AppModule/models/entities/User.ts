@@ -8,8 +8,13 @@ export interface User extends BaseEntity {
     locale: string;
     jobTitle: string;
     company: string;
+    isAllowCommunication: boolean;
+    isDisplayAsGuest: boolean;
+    isExposeEmail: boolean;
     client: string;
     roles: string[];
+    timezone: string;
     status: string;
     userTags?: SimpleObject<string | number>[];
+    userFieldValues?: SimpleObject<string | number>[];
 }

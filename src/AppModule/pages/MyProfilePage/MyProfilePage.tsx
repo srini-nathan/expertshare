@@ -12,6 +12,7 @@ import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models";
 import { ChangePassword } from "./ChangePassword";
 import { UpdateProfile } from "./UpdateProfile";
+import { UpdatePrivacy } from "./UpdatePrivacy";
 
 export const MyProfilePage: FC<RouteComponentProps> = (): JSX.Element => {
     const { state } = React.useContext(AuthContext);
@@ -42,7 +43,7 @@ export const MyProfilePage: FC<RouteComponentProps> = (): JSX.Element => {
                         <AppTab eventKey="Setings" title="Setings">
                             <Row className="m-0 pt-3">
                                 <AppCard title="Privacy & Communication">
-                                    <span>Settings</span>
+                                    <UpdatePrivacy />
                                 </AppCard>
                             </Row>
                         </AppTab>

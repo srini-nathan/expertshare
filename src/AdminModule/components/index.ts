@@ -1,3 +1,3 @@
 export * from "./AppPackageSwitches";
-export * from "./AppContainerOverview";
+export * from "../../AppModule/components/AppContainerOverviewCard";
 export * from "./AppFieldTypeElements";

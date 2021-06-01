@@ -2,8 +2,8 @@ import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
 import { forEach as _forEach, find as _find } from "lodash";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { CONSTANTS } from "../../../config";
 import {
     AppPageHeader,
@@ -11,7 +11,7 @@ import {
     AppLoader,
     AppFormActions,
     AppCard,
-    AppFormCheckBox,
+    AppFormSwitch,
 } from "../../../AppModule/components";
 import { UserFieldEntity } from "../../models";
 import { UserFieldApi } from "../../apis";
@@ -44,10 +44,9 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
 
     const [data, setData] = useState<UserFieldEntity>(new UserFieldEntity());
     const [loading, setLoading] = useState<boolean>(isEditMode);
-    const [selected, setSelected] = useState<any>();
+    const [selected, setSelected] = useState<string>(FIELDTYPE.FIELDTYPE_TEXT);
 
     const {
-        register,
         control,
         handleSubmit,
         formState,
@@ -88,13 +87,12 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
         );
     };
 
-    const renderOptions = (type: any) => {
+    const renderOptions = (type: string) => {
         if (
-            type ===
-            (FIELDTYPE.FIELDTYPE_SELECT ||
-                FIELDTYPE.FIELDTYPE_MULTI_SELECT ||
-                FIELDTYPE.FIELDTYPE_CHECKBOX_GROUP ||
-                FIELDTYPE.FIELDTYPE_RADIO_GROUP)
+            type === FIELDTYPE.FIELDTYPE_SELECT ||
+            type === FIELDTYPE.FIELDTYPE_MULTI_SELECT ||
+            type === FIELDTYPE.FIELDTYPE_CHECKBOX_GROUP ||
+            type === FIELDTYPE.FIELDTYPE_RADIO_GROUP
         ) {
             return true;
         }
@@ -204,7 +202,9 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                                         output: (
                                             fieldType: PrimitiveObject
                                         ) => {
-                                            setSelected(fieldType.value);
+                                            setSelected(
+                                                fieldType.value as string
+                                            );
                                             return fieldType?.value;
                                         },
                                         input: (value: string) => {
@@ -215,19 +215,25 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                                     }}
                                 />
                             </Row>
-                            {selected && (
-                                <AppFieldTypeElement
-                                    name={"attr"}
-                                    header={"Attributes"}
-                                    isEditMode={isEditMode}
-                                    control={control}
-                                    defaultValue={data.attr}
-                                    setValue={setValue}
-                                    required={false}
-                                    errors={errors}
-                                />
+                            {selected ? (
+                                <Row>
+                                    <Col xs={12}>
+                                        <AppFieldTypeElement
+                                            name={"attr"}
+                                            header={"Attributes"}
+                                            isEditMode={isEditMode}
+                                            control={control}
+                                            defaultValue={data.attr}
+                                            setValue={setValue}
+                                            required={false}
+                                            errors={errors}
+                                        />
+                                    </Col>
+                                </Row>
+                            ) : (
+                                <></>
                             )}
-                            {renderOptions(selected) && (
+                            {renderOptions(selected) ? (
                                 <AppFieldTypeElement
                                     name={"options"}
                                     header={"Options"}
@@ -238,73 +244,88 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                                     required={true}
                                     errors={errors}
                                 />
+                            ) : (
+                                <> </>
                             )}
                         </AppCard>
 
                         <AppCard>
                             <Row>
-                                <Col md={4} sm={6}>
-                                    <AppFormCheckBox
-                                        className="container-checkbox"
-                                        name={"isActive"}
-                                        label={"Active"}
-                                        labelPosition={"top"}
-                                        value={data.isActive === false ? 0 : 1}
-                                        defaultChecked={data.isActive}
-                                        register={register}
-                                    />
-                                </Col>
-                                <Col md={4} sm={6}>
-                                    <AppFormCheckBox
-                                        className="container-checkbox"
-                                        name={"isExport"}
-                                        label={"Export"}
-                                        labelPosition={"top"}
-                                        value={data.isExport === false ? 0 : 1}
-                                        defaultChecked={data.isExport}
-                                        register={register}
-                                    />
-                                </Col>
-                                <Col md={4} sm={6}>
-                                    <AppFormCheckBox
-                                        className="container-checkbox"
-                                        name={"isImport"}
-                                        label={"Import"}
-                                        labelPosition={"top"}
-                                        value={data.isImport === false ? 0 : 1}
-                                        defaultChecked={data.isImport}
-                                        register={register}
-                                    />
-                                </Col>
-                                <Col md={4} sm={6}>
-                                    <AppFormCheckBox
-                                        className="container-checkbox"
-                                        name={"isVcf"}
-                                        label={"Vcf"}
-                                        labelPosition={"top"}
-                                        value={data.isVcf === false ? 0 : 1}
-                                        defaultChecked={data.isVcf}
-                                        register={register}
-                                    />
-                                </Col>
-                                <Col md={4} sm={6}>
-                                    <AppFormCheckBox
-                                        className="container-checkbox"
-                                        name={"isRequired"}
-                                        label={"Required"}
-                                        labelPosition={"top"}
-                                        value={
-                                            data.isRequired === false ? 0 : 1
-                                        }
-                                        defaultChecked={data.isRequired}
-                                        register={register}
-                                    />
-                                </Col>
-                                <AppFormActions
-                                    isEditMode={isEditMode}
-                                    navigation={navigator}
+                                <AppFormSwitch
+                                    md={4}
+                                    sm={6}
+                                    name={"isActive"}
+                                    required={false}
+                                    label={"Is Active ?"}
+                                    {...validation(
+                                        "isActive",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    defaultChecked={data.isActive}
+                                    control={control}
+                                />
+                                <AppFormSwitch
+                                    md={4}
+                                    sm={6}
+                                    name={"isExport"}
+                                    required={false}
+                                    label={"Is Exportable ?"}
+                                    {...validation(
+                                        "isExport",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    defaultChecked={data.isExport}
+                                    control={control}
+                                />
+                                <AppFormSwitch
+                                    md={4}
+                                    sm={6}
+                                    name={"isImport"}
+                                    required={false}
+                                    label={"Is Importable ?"}
+                                    {...validation(
+                                        "isImport",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    defaultChecked={data.isImport}
+                                    control={control}
+                                />
+                                <AppFormSwitch
+                                    md={4}
+                                    sm={6}
+                                    name={"isVcf"}
+                                    required={false}
+                                    label={"Is VCF ?"}
+                                    {...validation(
+                                        "isVcf",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    defaultChecked={data.isVcf}
+                                    control={control}
+                                />
+                                <AppFormSwitch
+                                    md={4}
+                                    sm={6}
+                                    name={"isRequired"}
+                                    required={false}
+                                    label={"Is Required ?"}
+                                    {...validation(
+                                        "isRequired",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    defaultChecked={data.isRequired}
+                                    control={control}
                                 />
                             </Row>
+                            <AppFormActions
+                                isEditMode={isEditMode}
+                                navigation={navigator}
+                            />
                         </AppCard>
                     </Form>
                 </Col>

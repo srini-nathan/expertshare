@@ -1,7 +1,6 @@
 @import "../../../../assets/scss/screens-sizes";
 @import "../../../../assets/scss/variables";
 
-
 textarea.form-control {
     min-height: 111px;
     font-size: 14px;
@@ -17,6 +16,54 @@ textarea.form-control {
         background-color: var(--input-bg-clr);
         border-color: var(--input-border-clr) !important;
         box-shadow: unset;
+    }
+}
+
+.main-messages {
+    position: relative;
+    margin-top: 1em;
+    textarea.form-control {
+        min-height: 36px;
+        resize: none;
+    }
+    .is-send-wrapper {
+        position: absolute;
+        top: 0;
+        right: 16px;
+        .smile-icon {
+            right: 0;
+            color: var(--input-border-clr);
+        }
+    }
+
+    .sent-btn {
+        background: transparent;
+        border: none;
+        color: var(--primary);
+        font-weight: 700;
+        &:hover {
+            color: var(--primary-90);
+            background: transparent;
+            border: none;
+        }
+        &:focus {
+            border: none;
+            box-shadow: none !important;
+            background: none !important;
+            border: none !important;
+        }
+        &:active {
+            border: none;
+            background: none !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+    }
+    .smile-icon {
+        &::before {
+            position: relative;
+            right: 18px;
+        }
     }
 }
 
@@ -41,7 +88,7 @@ textarea.form-control {
     font-size: 14px;
     font-weight: 700;
     line-height: 14px;
-    color: #C31F27;
+    color: #c31f27;
 }
 
 .counter {
@@ -54,7 +101,7 @@ textarea.form-control {
         position: relative;
         cursor: pointer;
 
-        &:hover>&-content {
+        &:hover > &-content {
             display: block;
         }
 
@@ -62,8 +109,8 @@ textarea.form-control {
             padding: 0 5px;
             margin-left: 2px;
             font-size: 10px;
-            color: #FFF;
-            background-color: #CAD0DC;
+            color: #fff;
+            background-color: #cad0dc;
             border: unset;
             border-radius: 50%;
         }
@@ -76,8 +123,8 @@ textarea.form-control {
             display: none;
             min-width: 200px;
             max-width: 276px;
-            padding: .5rem .75rem;
-            font-size: .875rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
             font-weight: 400;
             line-height: 1.5;
             color: var(--secondary-90);

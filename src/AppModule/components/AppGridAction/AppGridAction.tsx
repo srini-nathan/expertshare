@@ -6,6 +6,7 @@ import { AppModal } from "../AppModal";
 export interface AppGridActionProps {
     addAction?: AppGridLinkAction;
     editAction?: AppGridLinkAction;
+    viewAction?: AppGridLinkAction;
     treeAction?: AppGridLinkAction;
     deleteAction?: AppGridClickAction;
     buttonAction?: AppCustomButtonAction[];
@@ -163,6 +164,7 @@ export const AppGridAction: FC<AppGridActionProps> = ({
     treeAction,
     deleteAction,
     buttonAction = [],
+    viewAction,
     customClickActions = [],
 }): JSX.Element => {
     return (
@@ -177,6 +179,7 @@ export const AppGridAction: FC<AppGridActionProps> = ({
             {buttonAction.map(({ text, ...rest }) => (
                 <ButtonAction text={text} {...rest}></ButtonAction>
             ))}
+            <LinkAction icon={"Eye"} {...viewAction}></LinkAction>
         </div>
     );
 };

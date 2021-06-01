@@ -90,6 +90,13 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 name: "",
             },
         },
+        {
+            label: "Users",
+            path: "/admin/users",
+            icon: {
+                name: "",
+            },
+        },
     ]);
     const [showSubMenuItems, isSubMenuItems] = useState<boolean>(false);
 

@@ -14,7 +14,8 @@ import {
     AdministrationDesign,
     EmailTemplateListPage,
     EmailTemplateAddEditPage,
-    ContainerOverview,
+    UserListPage,
+    UserAddEditPage,
 } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
 import { ContainerAddEdit } from "./pages/ContainerPage/ContainerAddEdit";
@@ -55,10 +56,10 @@ export const routers: ModuleRouter[] = [
                     <UserFieldListPage path={"user-fields"} />
                     <UserFieldAddEditPage path={"user-fields/new"} />
                     <UserFieldAddEditPage path={"user-fields/:id"} />
-                    <ContainerOverview
-                        path={"containers/overview"}
-                    ></ContainerOverview>
                     <AttendeeOverview path={"attendees"}></AttendeeOverview>
+                    <UserListPage path={"users"} />
+                    <UserAddEditPage path={"users/new"} />
+                    <UserAddEditPage path={"users/:id"} />
                 </Router>
             );
         },

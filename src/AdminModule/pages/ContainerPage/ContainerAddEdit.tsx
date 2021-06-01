@@ -3,9 +3,7 @@ import { RouteComponentProps, useParams } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { Col, Form, Row } from "react-bootstrap";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { DevTool } from "@hookform/devtools";
+import { Col, Form, Row, Image } from "react-bootstrap";
 import { Canceler } from "axios";
 import { isString as _isString } from "lodash";
 import { Client, Container, Package, UserGroup } from "../../models";
@@ -21,10 +19,12 @@ import {
     AppPageHeader,
     AppFormRadioSwitch,
     AppTagSelect,
+    AppUploader,
 } from "../../../AppModule/components";
 import {
     SimpleObject,
     UnprocessableEntityErrorResponse,
+    Upload,
 } from "../../../AppModule/models";
 import { ContainerApi } from "../../apis/ContainerApi";
 import {
@@ -39,38 +39,21 @@ import {
     useAuthState,
     useNavigator,
     useParamId,
+    useBuildAssetPath,
 } from "../../../AppModule/hooks";
+import { UploadAPI } from "../../../AppModule/apis";
 
-const { Container: ContainerConstant } = CONSTANTS;
+const { Container: ContainerConstant, Upload: UPLOAD } = CONSTANTS;
 const {
     STORAGE: { STORAGE_S3, STORAGE_LOCAL },
 } = ContainerConstant;
-type PartialContainer = Partial<Container>;
+const {
+    FILETYPE: { FILETYPE_CONTAINER_POSTER },
+    FILETYPEINFO: { FILETYPEINFO_CONTAINER_POSTER },
+} = UPLOAD;
+const { path } = FILETYPEINFO_CONTAINER_POSTER;
 
-const schema = Yup.object().shape({
-    domain: Yup.string().required("Domain is Required"),
-    name: Yup.string().required("Name is Required"),
-    containerGroup: Yup.string().optional().nullable(),
-    userGroups: Yup.array().optional(),
-    description: Yup.string().optional().nullable(),
-    storage: Yup.string().required(),
-    bucketKey: Yup.string().when("storage", {
-        is: STORAGE_S3,
-        then: Yup.string().required("Bucket Key is Required").nullable(),
-    }),
-    bucketSecret: Yup.string().when("storage", {
-        is: STORAGE_S3,
-        then: Yup.string().required("Bucket Secret is Required").nullable(),
-    }),
-    bucketName: Yup.string().when("storage", {
-        is: STORAGE_S3,
-        then: Yup.string().required("Bucket Name is Required").nullable(),
-    }),
-    bucketRegion: Yup.string().when("storage", {
-        is: STORAGE_S3,
-        then: Yup.string().required("Bucket Region is Required").nullable(),
-    }),
-});
+type PartialContainer = Partial<Container>;
 
 export const ContainerAddEdit: FC<RouteComponentProps> = ({
     navigate,
@@ -90,10 +73,35 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         SimpleObject<string>[]
     >([]);
     const [loading, setLoading] = useState<boolean>(isEditMode);
+    const [storageType, setStorageType] = useState<string>("Local");
     const [loadingClient, setLoadingClient] = useState<boolean>(true);
     const [loadingUserGroups, setLoadingUserGroups] = useState<boolean>(true);
+    const containerPosterPath = useBuildAssetPath(path);
     const cancelTokenSourceRef = useRef<Canceler>();
+    const [files, setFiles] = useState<File[]>([]);
 
+    let schema = {
+        domain: Yup.string().required("Domain is Required"),
+        name: Yup.string().required("Name is Required"),
+        containerGroup: Yup.string().optional().nullable(),
+        userGroups: Yup.array().optional(),
+        description: Yup.string().optional().nullable(),
+        storage: Yup.string().required(),
+        bucketKey: Yup.string().nullable(),
+        bucketSecret: Yup.string().nullable(),
+        bucketName: Yup.string().nullable(),
+        bucketRegion: Yup.string().nullable(),
+    };
+
+    if (storageType === STORAGE_S3) {
+        schema = {
+            ...schema,
+            bucketKey: Yup.string().required("Bucket Key is Required"),
+            bucketSecret: Yup.string().required("Bucket Secret is Required"),
+            bucketName: Yup.string().required("Bucket Name is Required"),
+            bucketRegion: Yup.string().required("Bucket Region is Required"),
+        };
+    }
     const {
         register,
         control,
@@ -101,12 +109,15 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         formState,
         setError,
         trigger,
-        getValues,
         reset,
     } = useForm({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(Yup.object().shape(schema)),
         mode: "all",
     });
+
+    const onFileSelect = (selectedFiles: File[]) => {
+        setFiles(selectedFiles);
+    };
 
     useEffect(() => {
         ClientApi.findById<Client>(clientId).then(
@@ -151,6 +162,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                             }),
                         };
                         setSelectedUserGroups(selected);
+                        setStorageType(response.storage);
                         setData(payload);
                         reset(payload);
                     }
@@ -190,13 +202,14 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         };
     }, []);
 
-    const onSubmit = (formData: Container) => {
+    const submitForm = (formData: Container) => {
         const userGroupsSelectedItems = selectedUserGroups.map((e) => {
             return UserGroupApi.toResourceUrl(parseInt(e.id, 10));
         });
         formData.client = ClientApi.toResourceUrl(clientId);
         formData.userGroups = userGroupsSelectedItems;
-        ContainerApi.createOrUpdate<Container>(id, formData).then(
+        formData.storage = storageType;
+        return ContainerApi.createOrUpdate<Container>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
                     setViolations<Partial<Container>>(error, setError);
@@ -215,13 +228,36 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         );
     };
 
+    const onSubmit = async (formData: Container) => {
+        if (files.length > 0) {
+            const fd = new FormData();
+            fd.set("file", files[0], files[0].name);
+            fd.set("fileType", FILETYPE_CONTAINER_POSTER);
+
+            return UploadAPI.createResource<Upload, FormData>(fd).then(
+                ({ errorMessage, response }) => {
+                    if (errorMessage) {
+                        errorToast(errorMessage);
+                        return submitForm(formData);
+                    }
+
+                    if (response && response.fileName) {
+                        formData.imageName = response.fileName;
+                    }
+
+                    successToast("Image uploaded");
+                    return submitForm(formData);
+                }
+            );
+        }
+        return submitForm(formData);
+    };
+
     if (loading || loadingClient || loadingUserGroups) {
         return <AppLoader />;
     }
 
     const { errors } = formState;
-
-    const isS3 = STORAGE_S3 === getValues("storage");
 
     return (
         <Fragment>
@@ -231,7 +267,6 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
             />
             <Row>
                 <Col>
-                    <DevTool control={control} />
                     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                         <AppCard title="Details">
                             <Form.Row>
@@ -273,6 +308,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         md={12}
                                         lg={12}
                                         xl={12}
+                                        required={false}
                                         name={"containerGroup"}
                                         label={"Container Group"}
                                         {...validation(
@@ -286,19 +322,8 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         defaultValue={data.containerGroup}
                                         control={control}
                                     />
-                                </Col>
-                                <Col md={6} sm={12}>
-                                    <AppFormCheckBox
-                                        className="container-checkbox"
-                                        name={"isActive"}
-                                        label={"Active"}
-                                        labelPosition={"top"}
-                                        value={1}
-                                        defaultChecked={true}
-                                        register={register}
-                                    />
                                     <AppFormTextArea
-                                        className="pr-0"
+                                        className="pl-0"
                                         md={12}
                                         lg={12}
                                         xl={12}
@@ -317,6 +342,36 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         control={control}
                                     />
                                 </Col>
+                                <Col md={6} sm={12}>
+                                    <Form.Group
+                                        as={Col}
+                                        sm={12}
+                                        md={12}
+                                        lg={12}
+                                        xl={12}
+                                    >
+                                        <Form.Label>Poster</Form.Label>
+                                        <AppUploader
+                                            accept="image/*"
+                                            onFileSelect={onFileSelect}
+                                        />
+                                        {data.imageName ? (
+                                            <Image
+                                                src={`${containerPosterPath}/${data.imageName}`}
+                                                thumbnail
+                                            />
+                                        ) : null}
+                                    </Form.Group>
+                                    <AppFormCheckBox
+                                        className="container-checkbox"
+                                        name={"isActive"}
+                                        label={"Active"}
+                                        labelPosition={"top"}
+                                        value={1}
+                                        defaultChecked={true}
+                                        register={register}
+                                    />
+                                </Col>
                             </Form.Row>
                         </AppCard>
                         <AppCard title="Storage">
@@ -326,6 +381,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     defaultValue={data.storage}
                                     label={"storage"}
                                     control={control}
+                                    onChange={setStorageType}
                                     required={true}
                                     options={[
                                         {
@@ -345,7 +401,13 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     errorMessage={errors.storage?.message}
                                 />
                             </Row>
-                            <Row className={isS3 ? "mt-2" : "d-none"}>
+                            <Row
+                                className={
+                                    storageType === STORAGE_S3
+                                        ? "mt-2"
+                                        : "d-none"
+                                }
+                            >
                                 <AppFormInput
                                     md={"6"}
                                     lg={"6"}

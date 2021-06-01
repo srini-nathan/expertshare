@@ -6,6 +6,7 @@ import {
     AppButton,
     AppFormInput,
     AppFormTextArea,
+    AppModal,
 } from "../../components";
 import "./assets/scss/style.scss";
 import {
@@ -56,6 +57,10 @@ export const AppTranslation: FC<AppTranslationProps> = ({
     >(translationGroup);
     const { state } = React.useContext(AuthContext);
     const { containerId } = state as AuthState;
+    const [show, isShow] = useState<boolean>(false);
+    const [indexItem, setIndex] = useState<number>(0);
+    const [showItem, isShowItem] = useState<boolean>(false);
+    const [storing, isStoring] = useState<boolean>(false);
 
     const addNewItem = () => {
         if (translation)
@@ -87,13 +92,13 @@ export const AppTranslation: FC<AppTranslationProps> = ({
             ]);
     };
 
-    const removeTranslation = (index: number) => {
-        const id = translation && translation[index].id;
-
+    const removeTranslation = () => {
+        const id = translation && translation[indexItem].id;
+        isShowItem(false);
         if (id === null && translation) {
             setTransalations([
-                ...translation.splice(0, index),
-                ...translation.splice(index + 1),
+                ...translation.splice(0, indexItem),
+                ...translation.splice(indexItem + 1),
             ]);
         } else
             TranslationApi.deleteById(id as number).then(({ error }) => {
@@ -112,6 +117,8 @@ export const AppTranslation: FC<AppTranslationProps> = ({
     };
 
     const removeTranslationGroup = () => {
+        isShow(false);
+
         if (translationGroupName === undefined) {
             setTranslationGroup(null);
             successToast("Successfully deleted");
@@ -159,6 +166,7 @@ export const AppTranslation: FC<AppTranslationProps> = ({
         index: number,
         name: "tKey" | "defaultValue"
     ) => {
+        isStoring(true);
         if (translationGroupName) {
             let id = translation && translation[index].id;
             if (id === undefined) id = null;
@@ -181,6 +189,8 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                 id,
                 data as Translation
             ).then(({ error, errorMessage, response }) => {
+                isStoring(false);
+
                 if (error !== null) {
                     if (_isString(error)) {
                         errorToast(error);
@@ -189,13 +199,17 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                     }
                 } else if (response !== null) {
                     const translationItems = translation;
+
                     if (translationItems)
-                        translationItems[index] = {
-                            ...translationItems[index],
-                            id: response.id,
-                            tKey: response.tKey,
-                        };
-                    setTransalations(translationItems);
+                        setTransalations([
+                            ...translationItems.splice(0, indexItem),
+                            {
+                                ...translationItems[index],
+                                id: response.id,
+                                tKey: response.tKey,
+                            },
+                            ...translationItems.splice(indexItem + 1),
+                        ]);
                 }
             });
         }
@@ -208,7 +222,7 @@ export const AppTranslation: FC<AppTranslationProps> = ({
         id: number | null
     ) => {
         let valueId = id;
-
+        isStoring(true);
         if (!valueId) {
             if (translation && translation[index].items) {
                 const item = translation[index].items.filter(
@@ -236,6 +250,8 @@ export const AppTranslation: FC<AppTranslationProps> = ({
             valueId,
             data
         ).then(({ error, errorMessage, response }) => {
+            isStoring(false);
+
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
@@ -350,7 +366,10 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                     >
                         <div className="content--item--delete">
                             <AppButton
-                                onClick={() => removeTranslation(i)}
+                                onClick={() => {
+                                    isShowItem(true);
+                                    setIndex(i);
+                                }}
                                 variant="secondary"
                             >
                                 <AppIcon name="delete" />
@@ -410,11 +429,27 @@ export const AppTranslation: FC<AppTranslationProps> = ({
             })
         );
     };
+    const handleHideModal = () => {
+        isShow(false);
+        isShowItem(false);
+    };
 
     if (translationGroupName === null) return <></>;
 
     return (
         <React.Fragment>
+            <AppModal
+                show={show}
+                handleClose={handleHideModal}
+                handleDelete={removeTranslationGroup}
+                bodyContent="Are you sure you want to delete this item?"
+            />
+            <AppModal
+                show={showItem}
+                handleClose={handleHideModal}
+                handleDelete={removeTranslation}
+                bodyContent="Are you sure you want to delete this item?"
+            />
             <div className="translation-super-admin--container col-12 mt-4 px-0">
                 <div className="translation-super-admin--container--inner">
                     <div className="row p-0 m-0">
@@ -437,7 +472,9 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                     <div className="header d-flex">
                                         <div className="header--delete pl-0 pr-1">
                                             <AppButton
-                                                onClick={removeTranslationGroup}
+                                                onClick={() => {
+                                                    isShow(true);
+                                                }}
                                                 variant="secondary"
                                             >
                                                 <AppIcon name="delete" />
@@ -447,7 +484,10 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                             <AppButton
                                                 onClick={addNewItem}
                                                 variant="secondary"
-                                                disabled={!translationGroupName}
+                                                disabled={
+                                                    !translationGroupName ||
+                                                    storing
+                                                }
                                             >
                                                 <AppIcon name="add" />
                                             </AppButton>

@@ -1,26 +1,38 @@
 import React, { FC } from "react";
 import ReactDatePicker from "react-datepicker";
+import { Control, Controller } from "react-hook-form";
 import "react-datepicker/dist/react-datepicker.css";
 import "./assets/scss/style.scss";
 
 export interface AppDatePickerProps {
-    value: Date;
-    onChange: (
-        date: Date | [Date, Date] | /* for selectsRange */ null,
-        event: React.SyntheticEvent<any> | undefined
-    ) => void;
+    defaultValue?: Date;
+    name?: string;
+    control?: Control<any>;
 }
 
 export const AppDatePicker: FC<AppDatePickerProps> = ({
-    value,
-    onChange = () => {},
+    defaultValue,
+    name = "",
+    control,
 }): JSX.Element => {
+    const dateValue = defaultValue || new Date();
+
     return (
-        <ReactDatePicker
-            selected={value}
-            inline
-            onChange={onChange}
-            calendarClassName="custom-datepicker"
+        <Controller
+            control={control}
+            name={name}
+            defaultValue={dateValue}
+            render={({ field }) => (
+                <ReactDatePicker
+                    selected={field.value}
+                    onChange={field.onChange}
+                    calendarClassName="custom-datepicker"
+                    dateFormat="yyyy-M-d"
+                    showMonthDropdown
+                    showYearDropdown
+                    dropdownMode="select"
+                />
+            )}
         />
     );
 };

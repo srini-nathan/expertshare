@@ -28,3 +28,22 @@ export const errorToast = (text: string, config?: SweetAlertOptions): void => {
         ...config,
     }).then();
 };
+
+export const showLoader = (text: string, config?: SweetAlertOptions) => {
+    Swal.fire({
+        text,
+        didOpen: () => {
+            Swal.showLoading();
+        },
+        ...defaultConfig,
+        ...config,
+        toast: false,
+        backdrop: true,
+        position: "center",
+        showConfirmButton: false,
+    }).then();
+};
+
+export const hideLoader = () => {
+    Swal.close();
+};

@@ -3,8 +3,8 @@ import { useDropzone } from "react-dropzone";
 import { AppCropper } from "../AppCropper";
 import { AppButton } from "../AppButton";
 import { bytesToSize } from "./bytes-to-size";
-import { errorToast, successToast } from "../../utils";
-import { UploadAPI } from "../../apis/uploadAPI";
+import { Upload } from "../../models";
+
 import "./assets/scss/style.scss";
 
 export interface AppFile {
@@ -17,6 +17,9 @@ export interface AppUploaderProps {
     maxFiles?: number;
     accept?: string;
     withCropper?: boolean;
+    onReady?: (startFnc: () => void) => void;
+    onFileSelect: (files: File[]) => void;
+    onFinish?: (error: null | string, upload?: Upload) => void;
 }
 
 export const AppUploader: FC<AppUploaderProps> = ({
@@ -25,9 +28,10 @@ export const AppUploader: FC<AppUploaderProps> = ({
     maxSize = Infinity,
     minSize = 0,
     withCropper,
+    onFileSelect,
 }): JSX.Element => {
     const [files, setFiles] = useState<AppFile[]>([]);
-    const [croperFile, setCropperFile] = useState<any>(undefined);
+    const [cropperFile, setCropperFile] = useState<any>(undefined);
 
     const [showCropModal, setShowCropModal] = useState<boolean>(false);
     const [cropUrl, setCropUrl] = useState<string>("");
@@ -50,35 +54,21 @@ export const AppUploader: FC<AppUploaderProps> = ({
                     })
                 )
             );
+            onFileSelect(accepted);
         },
     });
-
-    const uploadHandler = () => {
-        const fd = new FormData();
-        fd.set("file", croperFile || files[0], files[0].name);
-        fd.set("fileType", "CONTAINER_POSTER");
-
-        UploadAPI.createResource(fd).then(({ error, errorMessage }) => {
-            // eslint-disable-next-line no-console
-            console.error(error);
-            if (errorMessage) {
-                errorToast(errorMessage);
-            } else {
-                successToast("Image updated");
-            }
-        });
-    };
 
     const acceptedFileItems = acceptedFiles.map((file) => (
         <li key={file.name}>
             File Name: {file.name} <br /> Size:{" "}
-            {bytesToSize(croperFile ? croperFile.size : file.size)}
+            {bytesToSize(cropperFile ? cropperFile.size : file.size)}
         </li>
     ));
 
     const fileRejectionItems = fileRejections.map(({ file, errors }) => (
         <li>
-            {file.name} - {file.size} bytes
+            {file.name} -
+            {bytesToSize(cropperFile ? cropperFile.size : file.size)}
             <ul className="erorrs-list">
                 {errors.map((e) => (
                     <li key={e.code} className="error-name">
@@ -124,42 +114,35 @@ export const AppUploader: FC<AppUploaderProps> = ({
                 </div>
                 <ul>{fileRejectionItems}</ul>
             </div>
-            {acceptedFiles.length > 0 && withCropper && (
+            {acceptedFiles.length > 0 && (
                 <div className="d-flex w-100 justify-content-start">
-                    <AppButton
-                        handleClick={() => {
-                            setShowCropModal(true);
-                        }}
-                        variant="secondary"
-                    >
-                        Edit image
-                    </AppButton>
-                    <AppButton
-                        variant="primary"
-                        className="ml-3"
-                        handleClick={() => {
-                            uploadHandler();
-                        }}
-                    >
-                        Save
-                    </AppButton>
-
-                    <AppCropper
-                        show={showCropModal}
-                        image={files}
-                        initialAspectRatio={16 / 9}
-                        handleClose={() => {
-                            setShowCropModal(false);
-                            setCropUrl(files[0].preview);
-                        }}
-                        handleSave={(url) => {
-                            setShowCropModal(false);
-                            setCropUrl(url);
-                        }}
-                        handleBlob={(blob) => {
-                            setCropperFile(blob);
-                        }}
-                    />
+                    {withCropper && (
+                        <AppButton
+                            handleClick={() => {
+                                setShowCropModal(true);
+                            }}
+                            variant="secondary"
+                        >
+                            Edit
+                            <AppCropper
+                                show={showCropModal}
+                                image={files}
+                                initialAspectRatio={16 / 9}
+                                handleClose={() => {
+                                    setShowCropModal(false);
+                                    setCropUrl(files[0].preview);
+                                }}
+                                handleSave={(url) => {
+                                    setShowCropModal(false);
+                                    setCropUrl(url);
+                                }}
+                                handleBlob={(blob) => {
+                                    setCropperFile(blob);
+                                    onFileSelect(blob);
+                                }}
+                            />
+                        </AppButton>
+                    )}
                 </div>
             )}
         </section>

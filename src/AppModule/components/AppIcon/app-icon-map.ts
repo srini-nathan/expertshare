@@ -21,6 +21,12 @@ import {
     faClone,
     faBox,
     faMicrophone,
+    faEnvelope,
+    faDownload,
+    faFilter,
+    faUpload,
+    faCloudDownload,
+    faCloudUpload,
 } from "@fortawesome/pro-regular-svg-icons";
 import { AppIconMap } from "../../models";
 
@@ -36,6 +42,8 @@ export const appIconMap: AppIconMap = {
     Settings: faCog,
     Users: faUserFriends,
     dashboard: faThLarge,
+    CloudDownload: faCloudDownload,
+    CloudUpload: faCloudUpload,
     delete: faTrash,
     edit: faPen,
     add: faPlus,
@@ -50,4 +58,8 @@ export const appIconMap: AppIconMap = {
     faClone,
     Clone: faClone,
     Microphone: faMicrophone,
+    Email: faEnvelope,
+    Download: faDownload,
+    Filter: faFilter,
+    Upload: faUpload,
 };

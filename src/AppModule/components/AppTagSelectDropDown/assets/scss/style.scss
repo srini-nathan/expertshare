@@ -11,6 +11,13 @@
         border: 1px solid var(--input-border-clr);
         border-radius: var(--border-radius);
 
+        span {
+            width: 94%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
         svg {
             position: absolute;
             top: 10px;
