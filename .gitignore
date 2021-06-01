@@ -33,3 +33,4 @@ yarn-error.log*
 # Translations
 ./src/translations
 !./src/translations/.gitkeep
+/TIMELINE.md
