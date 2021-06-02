@@ -5,6 +5,8 @@ import {
     UserProfilePage,
     MyProfilePage,
     ContainerOverview,
+    ConferenceGrid,
+    ConferenceAddEdit,
 } from "./pages";
 import { ModuleRouter } from "./models";
 
@@ -20,6 +22,10 @@ export const routers: ModuleRouter[] = [
                     <MyProfilePage path={"my-profile"} />
                     <UserProfilePage path={"user-profile/:id"} />
                     <ContainerOverview path={"containers/overview"} />
+                    <ConferenceGrid path={"conferences"} />
+                    <ConferenceGrid path={"conferences/:view"} />
+                    <ConferenceAddEdit path={"conference/new"} />
+                    <ConferenceAddEdit path={"conference/:id"} />
                 </Router>
             );
         },

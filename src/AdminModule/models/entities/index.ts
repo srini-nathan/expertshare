@@ -12,3 +12,5 @@ export * from "./UserField";
 export * from "./UserTag";
 export * from "./User";
 export * from "./Role";
+export * from "./Conference";
+export * from "./ConferenceTag";

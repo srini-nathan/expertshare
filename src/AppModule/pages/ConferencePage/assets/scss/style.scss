@@ -1,0 +1,17 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+
+.conference-tags {
+    display: inline-grid;
+    align-content: center;
+    height: 26px;
+    padding: 0 15px;
+    margin: auto 3px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--primary);
+    background-color: var(--primary-10);
+    border: 1px solid var(--primary);
+    border-radius: 25px;
+}

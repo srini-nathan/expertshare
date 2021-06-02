@@ -5,10 +5,12 @@ import "./assets/scss/style.scss";
 
 interface AppFormActionsProps {
     isEditMode: boolean;
+    backLink?: string;
     navigation: NavigateFn;
 }
 export const AppFormActions: FC<AppFormActionsProps> = ({
     isEditMode,
+    backLink,
     navigation,
 }): JSX.Element => {
     return (
@@ -17,7 +19,11 @@ export const AppFormActions: FC<AppFormActionsProps> = ({
                 type="button"
                 variant={"secondary"}
                 className="mr-4"
-                onClick={() => navigation("..").then()}
+                onClick={() =>
+                    backLink
+                        ? navigation(backLink).then()
+                        : navigation("..").then()
+                }
             >
                 Cancel
             </AppButton>

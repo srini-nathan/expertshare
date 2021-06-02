@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
-import { Row, Col, Form } from "react-bootstrap";
+import { Row, Col, Form, Image } from "react-bootstrap";
 import { find as _find, isString as _isString } from "lodash";
 
 import { useForm } from "react-hook-form";
@@ -14,6 +14,7 @@ import {
     AppFormSelectCreatable,
     AppFormSelect,
     AppFormFieldGenerator,
+    AppUploader,
 } from "../../components";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models";
@@ -23,7 +24,7 @@ import {
     successToast,
     setViolations,
 } from "../../utils";
-import { useAuthState } from "../../hooks";
+import { useAuthState, useBuildAssetPath } from "../../hooks";
 import { UserApi, UserTagApi, UserFieldApi } from "../../../AdminModule/apis";
 import {
     UserTag,
@@ -34,10 +35,18 @@ import {
     UnprocessableEntityErrorResponse,
     PrimitiveObject,
     SimpleObject,
+    Upload,
 } from "../../models";
+import { UploadAPI } from "../../apis";
 import { CONSTANTS } from "../../../config";
 
-const { TIMEZONE } = CONSTANTS.User;
+const { Upload: UPLOAD, User: USER } = CONSTANTS;
+const {
+    FILETYPE: { FILETYPE_USER_PROFILE },
+    FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
+} = UPLOAD;
+const { path } = FILETYPEINFO_USER_PROFILE;
+const { TIMEZONE } = USER;
 
 const options = TIMEZONE.map((value: string) => ({
     value,
@@ -66,6 +75,8 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
         new UserModel(containerResourceId)
     );
     const [userFields, setUserFields] = useState<UserField[]>([]);
+    const [files, setFiles] = useState<File[]>([]);
+    const profilePicturePath = useBuildAssetPath(path);
 
     const validationShape = {
         firstName: Yup.string().min(2).required(),
@@ -85,6 +96,10 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
         mode: "all",
     });
     const { errors } = formState;
+
+    const onFileSelect = (selectedFiles: File[]) => {
+        setFiles(selectedFiles);
+    };
 
     const fetchUserTags = () => {
         UserTagApi.find<UserTag>(1, { "client.id": clientId }).then(
@@ -226,7 +241,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
         });
         return userFieldValues;
     };
-    const onSubmit = async (formData: UpdateProfileForm<any>) => {
+    const submitForm = async (formData: UpdateProfileForm<any>) => {
         isLoading(true);
         formData.userTags = selectedUserTags.map((e) => {
             if (!e.id) return { name: e.label };
@@ -266,7 +281,30 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                 }
             });
     };
+    const onSubmit = async (formData: UserModel) => {
+        if (files.length > 0) {
+            const fd = new FormData();
+            fd.set("file", files[0], files[0].name);
+            fd.set("fileType", FILETYPE_USER_PROFILE);
 
+            return UploadAPI.createResource<Upload, FormData>(fd).then(
+                ({ errorMessage, response }) => {
+                    if (errorMessage) {
+                        errorToast(errorMessage);
+                        return submitForm(formData);
+                    }
+
+                    if (response && response.fileName) {
+                        formData.imageName = response.fileName;
+                    }
+
+                    successToast("Image uploaded");
+                    return submitForm(formData);
+                }
+            );
+        }
+        return submitForm(formData);
+    };
     return (
         <>
             <Form onSubmit={handleSubmit(onSubmit)}>
@@ -274,6 +312,25 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                     <Col md={12} sm={12}>
                         <AppCard>
                             <Form.Row>
+                                <Form.Group
+                                    as={Col}
+                                    sm={12}
+                                    md={12}
+                                    lg={12}
+                                    xl={12}
+                                >
+                                    <Form.Label>Profile Picture</Form.Label>
+                                    <AppUploader
+                                        accept="image/*"
+                                        onFileSelect={onFileSelect}
+                                    />
+                                    {data.imageName ? (
+                                        <Image
+                                            src={`${profilePicturePath}/${data.imageName}`}
+                                            thumbnail
+                                        />
+                                    ) : null}
+                                </Form.Group>
                                 <AppFormInput
                                     lg={6}
                                     xl={6}
