@@ -18,7 +18,7 @@
                         a {
                             width: 36px;
                             height: 36px;
-                            padding: 0 !important;
+                            padding: 8px !important;
                             i {
                                 font-size: 19px;
                                 font-weight: 500;
@@ -179,7 +179,8 @@
                             height: max-content;
                             min-height: 36px;
                             padding: 0 5px !important;
-                            i {
+                            svg,i {
+                                padding-bottom: 0px;
                                 margin-right: 10px;
                                 font-size:18px;
                                 font-weight: 500;
@@ -208,6 +209,11 @@
                                             color: var(--secondary);
                                             i {
                                                 font-size: 15px;
+                                            }
+                                            svg {
+                                                margin-right:5px;
+                                                width:1.2em;
+                                                text-align: left;
                                             }
                                         }
                                         &.video-chat {
