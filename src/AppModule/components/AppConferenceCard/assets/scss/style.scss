@@ -5,6 +5,16 @@
     &--item {
         margin-bottom: 30px;
 
+        .description {
+            height: 70px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+
+        }
+
         .conference-tags-container {
             height: 35px;
             overflow: hidden;

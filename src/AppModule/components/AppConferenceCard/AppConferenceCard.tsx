@@ -5,24 +5,38 @@ import { PConference } from "../../../AdminModule/models";
 import "./assets/scss/style.scss";
 import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath } from "../../hooks";
+import { getDate, getTime } from "../../utils";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
     FILETYPEINFO: { FILETYPEINFO_CONFERENCE_POSTER },
 } = UPLOAD;
+
 const { path } = FILETYPEINFO_CONFERENCE_POSTER;
 
 export interface AppConferenceCardProps {
     conference: PConference;
+    isGrantedControl?: boolean;
     handleDelete: (id: number) => void;
+    handleClone: (id: number) => void;
 }
 
 export const AppConferenceCard: FC<AppConferenceCardProps> = ({
     conference,
+    handleClone,
     handleDelete,
+    isGrantedControl,
 }): JSX.Element => {
-    const { id, title, imageName = "", conferenceTags = [] } = conference;
+    const {
+        id,
+        title,
+        startedAt,
+        imageName = "",
+        conferenceTags = [],
+        description,
+    } = conference;
     const imagePath = useBuildAssetPath(path, imageName);
+
     return (
         <Col md={12} lg={4} xl={4} className="events-grid--container--item">
             <div className="inner-container  ">
@@ -39,12 +53,21 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                         </a>
                     </div> */}
                     <div className="inner-container--banner--icons">
-                        <span onClick={() => handleDelete(id as number)}>
-                            <i className="fak fa-trash-light"></i>
-                        </span>
-                        <Link to={`/conference/${id}`}>
-                            <i className="fak fa-pen-regular"></i>
-                        </Link>
+                        {isGrantedControl && (
+                            <>
+                                <span onClick={() => handleClone(id as number)}>
+                                    <i className="far fa-clone"></i>
+                                </span>
+                                <span
+                                    onClick={() => handleDelete(id as number)}
+                                >
+                                    <i className="fak fa-trash-light"></i>
+                                </span>
+                                <Link to={`/conference/${id}`}>
+                                    <i className="fak fa-pen-regular"></i>
+                                </Link>
+                            </>
+                        )}
                     </div>
                 </div>
                 <div className="inner-container--det p-3 mx-2">
@@ -53,9 +76,10 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                             <h2>{title}</h2>
                         </a>
                     </div>
+                    <div className="description">{description}</div>
                     <div
                         className={
-                            "row m-0 p-0 justify-content-center conference-tags-container"
+                            "row m-0 mt-3 p-0 justify-content-center conference-tags-container"
                         }
                     >
                         {conferenceTags.map((e) => {
@@ -68,15 +92,21 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                     </div>
                     <div className="inner-container--det--time my-3">
                         <div className="inner-container--det--time--icon mr-2">
-                            <i className="fak fa-right"></i>
+                            {startedAt && <i className="fak fa-right"></i>}
                         </div>
                         <div className="inner-container--det--time--spec">
-                            <div className="inner-container--det--time--spec--date">
-                                <h3 className="mb-0">Monday, September 22</h3>
-                            </div>
-                            <div className="inner-container--det--time--spec--period">
-                                <span>09:00 AM - 12:00 PM</span>
-                            </div>
+                            {startedAt && (
+                                <>
+                                    <div className="inner-container--det--time--spec--date">
+                                        <h3 className="mb-0">
+                                            {getDate(startedAt).toString()}
+                                        </h3>
+                                    </div>
+                                    <div className="inner-container--det--time--spec--period">
+                                        <span>{getTime(startedAt)}</span>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </div>
                     {/* <div className="inner-container--det--participants">

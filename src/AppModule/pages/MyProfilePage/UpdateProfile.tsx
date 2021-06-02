@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
-import { Row, Col, Form, Image } from "react-bootstrap";
+import { Row, Col, Form } from "react-bootstrap";
 import { find as _find, isString as _isString } from "lodash";
 
 import { useForm } from "react-hook-form";
@@ -321,15 +321,15 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                 >
                                     <Form.Label>Profile Picture</Form.Label>
                                     <AppUploader
+                                        withCropper={true}
                                         accept="image/*"
+                                        imagePath={
+                                            data.imageName
+                                                ? `${profilePicturePath}/${data.imageName}`
+                                                : ""
+                                        }
                                         onFileSelect={onFileSelect}
                                     />
-                                    {data.imageName ? (
-                                        <Image
-                                            src={`${profilePicturePath}/${data.imageName}`}
-                                            thumbnail
-                                        />
-                                    ) : null}
                                 </Form.Group>
                                 <AppFormInput
                                     lg={6}

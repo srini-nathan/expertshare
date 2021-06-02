@@ -13,6 +13,9 @@ const {
     api_users_get_attendee_view_item: API_GET_ATTENDEE_COLLECTION,
     api_users_change_password_item: API_CHANGE_PASSWORD_COLLECTION,
     api_users_change_profile_item: API_UPDATE_PROFILE_COLLECTION,
+    api_users_import_collection: API_IMPORT,
+    api_users_invite_collection: API_INVITE,
+    api_users_export_collection: API_EXPORT,
 } = ROUTES;
 
 export abstract class UserApi extends EntityAPI {
@@ -68,5 +71,40 @@ export abstract class UserApi extends EntityAPI {
             .catch((error: AxiosError | ServerError) =>
                 this.handleErrorDuringCreatingOrUpdating(error)
             );
+    }
+
+    public static async exportUsers(): Promise<any> {
+        return this.makeGet<any>(API_EXPORT)
+            .then(({ data }) => {
+                return data;
+            })
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
+    }
+
+    public static async inviteUsers(entity: any): Promise<any> {
+        return this.makePost<any, any>(API_INVITE, entity)
+            .then(({ data }) => {
+                return Promise.resolve(new FinalResponse(data, null));
+            })
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
+    }
+
+    public static async importUsers(entity: any): Promise<any> {
+        const config: AxiosRequestConfig = this.getPostMultiPartRequestConfig();
+
+        return this.makePost<any, any>(API_IMPORT, entity, {}, config)
+            .then(({ data }) => {
+                return Promise.resolve(new FinalResponse(data, null));
+            })
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
     }
 }
