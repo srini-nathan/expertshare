@@ -6,13 +6,20 @@ import {
     IServerSideGetRowsParams,
 } from "ag-grid-community";
 import { Canceler } from "axios";
-import { Container, Row, Col } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { appGridColDef } from "./app-grid-col-def";
-import { AppPageHeader } from "../../../AppModule/components";
+import {
+    AppPageHeader,
+    // AppConferenceCard,
+    // AppLoader,
+    AppSwitchView,
+    AppListPageToolbar,
+} from "../../../AppModule/components";
 import "./assets/scss/style.scss";
 import { AttendeeCard } from "../../components/AttendeeCard";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { AppGrid } from "../../../AppModule/containers/AppGrid";
+import { appGridConfig } from "../../../AppModule/config";
 
 export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
     const appGridApi = useRef<GridApi>();
@@ -21,6 +28,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
     const [total, setTotal] = useState<number>(0);
     const initialValues = [
         {
+            id: 1,
             name: "Morris Warren",
             category: "Speaker",
             description:
@@ -32,7 +40,9 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 "http://html.srmedia.ch//v2/assets/images/profiles_pic_attendees/user-1.png",
         },
         {
+            id: 2,
             name: "Cameron Williamson",
+            category: "Speaker",
             description:
                 "Junior Security Officer and Design Consultant at Nevis",
             email: "cameron@expershare.me",
@@ -42,6 +52,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 "http://html.srmedia.ch//v2/assets/images/profiles_pic_attendees/user-2.png",
         },
         {
+            id: 3,
             name: "Jenny Wilson",
             category: "Speaker",
             description:
@@ -53,7 +64,9 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 "http://html.srmedia.ch//v2/assets/images/profiles_pic_attendees/user-3.png",
         },
         {
+            id: 4,
             name: "Brooklyn Simmons",
+            category: "Speaker",
             description:
                 "Junior Security Officer and Design Consultant at Nevis",
             email: "brook@expershare.me",
@@ -73,7 +86,11 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
     function getDataSource(): IServerSideDatasource {
         return {
             getRows(params: IServerSideGetRowsParams) {
-                const { api } = params;
+                const { request, api } = params;
+                const { endRow } = request;
+                const pageNo = endRow / appGridConfig.pageSize;
+                // eslint-disable-next-line no-console
+                console.log("pageNo", pageNo);
                 api?.hideOverlay();
                 setTotal(initialValues.length);
                 params.successCallback(initialValues, initialValues.length);
@@ -81,29 +98,26 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
         };
     }
     async function handleBookSessionClick() {
-        alert(1);
+        alert("You clicked book session button");
     }
     async function handleGetInContactClick() {
-        alert(1);
+        alert("You clicked get in contract button");
+    }
+    async function handleAddNewUser() {
+        alert("You clicked new user icon");
     }
 
-    return (
-        <Fragment>
-            <AppPageHeader
-                title={"Attendee"}
-                onQuickFilterChange={handleFilter}
-                cancelTokenSources={cancelTokenSourcesRef.current}
-                showToolbar
-                showViewLayoutButtons={true}
-            />
-            {location.pathname === "/admin/attendees/list" && (
-                <Row>
-                    <Col>
+    const renderView = () => {
+        switch (location.pathname) {
+            case "/admin/attendees/list":
+                return (
+                    <Col className="p-0">
                         <AppGrid
                             frameworkComponents={appGridFrameworkComponents}
                             columnDef={appGridColDef({
                                 onPressBookSession: handleBookSessionClick,
                                 onPressGetInContact: handleGetInContactClick,
+                                onPressAddNewUser: handleAddNewUser,
                             })}
                             totalItems={total}
                             dataSource={getDataSource()}
@@ -112,12 +126,12 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                             }}
                         />
                     </Col>
-                </Row>
-            )}
-            <Container fluid>
-                <Row>
-                    {location.pathname === "/admin/attendees" &&
-                        initialValues.map((item, index) => (
+                );
+            case "/admin/attendees/grid":
+            default:
+                return (
+                    <Row>
+                        {initialValues.map((item, index) => (
                             <Col
                                 xs={12}
                                 md={6}
@@ -128,8 +142,30 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                                 <AttendeeCard attendee={item} key={index} />
                             </Col>
                         ))}
-                </Row>
-            </Container>
+                    </Row>
+                );
+        }
+    };
+
+    return (
+        <Fragment>
+            <AppPageHeader title={"Attendees"} customToolbar>
+                <div className="d-flex pt-2 mb-5">
+                    <AppListPageToolbar
+                        onQuickFilterChange={handleFilter}
+                        cancelTokenSources={cancelTokenSourcesRef.current}
+                    />
+                    <AppSwitchView
+                        link={"/admin/attendees"}
+                        activeLink={
+                            location.pathname === "/admin/attendees/list"
+                                ? "list"
+                                : "grid"
+                        }
+                    />
+                </div>
+            </AppPageHeader>
+            {renderView()}
         </Fragment>
     );
 };

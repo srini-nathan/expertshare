@@ -3,6 +3,7 @@ import React, { ReactElement } from "react";
 import {
     AppGridAction,
     AppGridActionProps,
+    AppIcon,
 } from "../../../AppModule/components";
 import { AppCellActionWithRenderWithCustom } from "./app-actions";
 
@@ -14,12 +15,14 @@ export const appGridFrameworkComponents = {
                 <a href="#">
                     <div className="info--profile-pic mr-2">
                         <i
-                            style={{ backgroundImage: `url(${data.imageUrl})` }}
+                            style={{
+                                backgroundImage: `url(${data.avatarUrl})`,
+                            }}
                         ></i>
                     </div>
                     <div className="info--det">
                         <h3 className="mb-1">{data.name}</h3>
-                        <p className="mb-0">{data.designation}</p>
+                        <p className="mb-0">{data.description}</p>
                     </div>
                 </a>
             </div>
@@ -41,14 +44,32 @@ export const appGridFrameworkComponents = {
             </div>
         );
     },
+    appCategoryTemplateRenderer: (
+        params: ICellRendererParams
+    ): ReactElement => {
+        const { data } = params;
+        return (
+            <div className="category-container d-flex">
+                <a href="#" className="speaker-btn">
+                    <AppIcon name={"Microphone"} />
+                    &nbsp;
+                    {data.category}
+                </a>
+            </div>
+        );
+    },
     appEmailRenderer: (params: ICellRendererParams): ReactElement => {
         const { data } = params;
-        return <div className="email">{data.emailId}</div>;
+        return <div className="email">{data.email}</div>;
     },
     appGridActionRenderer: (
         params: AppCellActionWithRenderWithCustom
     ): ReactElement => {
-        const { onPressBookSession, onPressGetInContact } = params;
+        const {
+            onPressBookSession,
+            onPressGetInContact,
+            onPressAddNewUser,
+        } = params;
         const props: AppGridActionProps = {
             buttonAction: [
                 {
@@ -61,6 +82,14 @@ export const appGridFrameworkComponents = {
                     text: "Get In Contact",
                     onClick: () => {
                         onPressGetInContact();
+                    },
+                },
+            ],
+            customClickActions: [
+                {
+                    icon: "AddUserPlus",
+                    onClick: () => {
+                        onPressAddNewUser();
                     },
                 },
             ],

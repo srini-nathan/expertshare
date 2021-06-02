@@ -7,8 +7,8 @@ export const appGridColDef = ({
 }: AppCellActionWithCustom): ColDef[] => [
     {
         headerName: "Name",
-        field: "data",
-        filter: "text",
+        field: "name",
+        filter: "name",
         cellRenderer: "appNameTemplateRenderer",
         minWidth: 40,
         flex: 0.65,
@@ -16,7 +16,7 @@ export const appGridColDef = ({
     {
         headerName: "Email",
         cellRenderer: "appEmailRenderer",
-        field: "emailId",
+        field: "email",
         minWidth: 40,
         flex: 0.33,
     },
@@ -30,6 +30,7 @@ export const appGridColDef = ({
     {
         headerName: "Category",
         field: "category",
+        cellRenderer: "appCategoryTemplateRenderer",
         minWidth: 30,
         flex: 0.3,
     },

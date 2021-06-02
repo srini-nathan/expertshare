@@ -57,6 +57,12 @@ export const routers: ModuleRouter[] = [
                     <UserFieldAddEditPage path={"user-fields/new"} />
                     <UserFieldAddEditPage path={"user-fields/:id"} />
                     <AttendeeOverview path={"attendees"}></AttendeeOverview>
+                    <AttendeeOverview
+                        path={"attendees/list"}
+                    ></AttendeeOverview>
+                    <AttendeeOverview
+                        path={"attendees/grid"}
+                    ></AttendeeOverview>
                     <UserListPage path={"users"} />
                     <UserAddEditPage path={"users/new"} />
                     <UserAddEditPage path={"users/:id"} />
