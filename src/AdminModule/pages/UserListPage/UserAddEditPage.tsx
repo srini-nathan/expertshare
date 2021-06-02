@@ -156,7 +156,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         });
         return userFieldValues;
     };
-    const onSubmit = (formData: UpdateProfileForm<any>) => {
+    const onSubmit = async (formData: UpdateProfileForm<any>) => {
         const userGroupsSelectedItems = selectedUserGroups.map((e) => {
             return UserGroupApi.toResourceUrl(parseInt(e.id, 10));
         });
@@ -173,36 +173,36 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         delete formData.userField;
 
         if (isEditMode)
-            UserApi.replace<User, UpdateProfileForm<any>>(id, formData).then(
-                ({ error, errorMessage }) => {
-                    if (error instanceof UnprocessableEntityErrorResponse) {
-                        setViolations<User>(error, setError);
-                    } else if (errorMessage) {
-                        errorToast(errorMessage);
-                    } else {
-                        navigator("..").then(() => {
-                            successToast("User updated");
-                        });
-                    }
+            return UserApi.replace<User, UpdateProfileForm<any>>(
+                id,
+                formData
+            ).then(({ error, errorMessage }) => {
+                if (error instanceof UnprocessableEntityErrorResponse) {
+                    setViolations<User>(error, setError);
+                } else if (errorMessage) {
+                    errorToast(errorMessage);
+                } else {
+                    navigator("..").then(() => {
+                        successToast("User updated");
+                    });
                 }
-            );
-        else
-            UserApi.create<User, UpdateProfileForm<any>>(formData).then(
-                ({ error, errorMessage }) => {
-                    if (error instanceof UnprocessableEntityErrorResponse) {
-                        setViolations<User>(error, setError);
-                    } else if (errorMessage) {
-                        errorToast(errorMessage);
-                    } else {
-                        navigator("..").then(() => {
-                            successToast("User created");
-                        });
-                    }
+            });
+        return UserApi.create<User, UpdateProfileForm<any>>(formData).then(
+            ({ error, errorMessage }) => {
+                if (error instanceof UnprocessableEntityErrorResponse) {
+                    setViolations<User>(error, setError);
+                } else if (errorMessage) {
+                    errorToast(errorMessage);
+                } else {
+                    navigator("..").then(() => {
+                        successToast("User created");
+                    });
                 }
-            );
+            }
+        );
     };
-    const fetchUserTags = () => {
-        UserTagApi.find<UserTag>(1, { "client.id": clientId }).then(
+    const fetchUserTags = async () => {
+        return UserTagApi.find<UserTag>(1, { "client.id": clientId }).then(
             ({ error, response }) => {
                 if (error !== null) {
                     if (_isString(error)) {
@@ -222,8 +222,8 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
             }
         );
     };
-    const fetchUserFields = () => {
-        UserFieldApi.find<UserField>(1, { "client.id": clientId }).then(
+    const fetchUserFields = async () => {
+        return UserFieldApi.find<UserField>(1, { "client.id": clientId }).then(
             ({ error, response }) => {
                 if (error !== null) {
                     if (_isString(error)) {
@@ -629,10 +629,6 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     </Col>
                                 )}
                             </Form.Row>
-                            <AppFormActions
-                                isEditMode={isEditMode}
-                                navigation={navigator}
-                            />
                         </AppCard>
                     </Col>
                     {userFields.length > 0 && (
@@ -705,6 +701,11 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                         </AppCard>
                     </Col>
                 </Row>
+                <AppFormActions
+                    isEditMode={isEditMode}
+                    navigation={navigator}
+                    isLoading={formState.isSubmitting}
+                />
             </Form>
         </Fragment>
     );
