@@ -3,13 +3,21 @@ import { Col, Row } from "react-bootstrap";
 import { Link } from "@reach/router";
 import { AppCard } from "../AppCard";
 import { AppButton } from "../AppButton";
-
+import { CONSTANTS } from "../../../config";
 import "./assets/scss/style.scss";
+import { useBuildAssetPath } from "../../hooks";
+
+const { Upload: UPLOAD } = CONSTANTS;
+const {
+    FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
+} = UPLOAD;
+const { path } = FILETYPEINFO_USER_PROFILE;
 
 export interface AppProfileHeaderProps {
     firstName?: string;
     lastName?: string;
     jobTitle?: string;
+    imageName?: string;
     email?: string;
     userTags?: any[];
 }
@@ -18,9 +26,12 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
     firstName,
     lastName,
     jobTitle,
+    imageName,
     email,
     userTags,
 }): JSX.Element => {
+    const profilePicturePath = useBuildAssetPath(path);
+
     return (
         <AppCard className="user-profile--det--container mb-3 pt-4 px-0">
             <Col className="inner-container p-0">
@@ -29,7 +40,13 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                         md="auto"
                         className="inner-container--profile-pic pl-4 mt-5 mt-md-0"
                     >
-                        <Col className="inner-container--profile-pic--content online">
+                        <Col
+                            className="inner-container--profile-pic--content online"
+                            style={{
+                                backgroundImage: `url(${profilePicturePath}/${imageName})`,
+                                backgroundSize: "cover",
+                            }}
+                        >
                             <span className="speaker-btn">
                                 <i
                                     className="fak fa-speakers"

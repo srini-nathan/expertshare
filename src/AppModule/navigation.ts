@@ -9,6 +9,14 @@ export const navigation: AppNavigationItemProps[] = [
         },
     },
     {
+        label: "Event",
+        path: "/conferences/grid",
+        icon: {
+            name: "container",
+        },
+    },
+
+    {
         label: "Container",
         path: "/containers/overview",
         icon: {

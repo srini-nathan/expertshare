@@ -16,6 +16,8 @@ export class User extends BaseEntity {
 
     locale: string;
 
+    imageName: string;
+
     jobTitle: string;
 
     company: string;
@@ -60,6 +62,7 @@ export class User extends BaseEntity {
         email = "",
         plainPassword = "",
         confirmPassword = "",
+        imageName = "",
         firstName = "",
         lastName = "",
         source = "",
@@ -94,6 +97,7 @@ export class User extends BaseEntity {
         this.userField = userField;
         this.isBlocked = isBlocked;
         this.onboardedAt = onboardedAt;
+        this.imageName = imageName;
         this.lastLoginAt = lastLoginAt;
         this.isOnboarded = isOnboarded;
         this.isAllowCommunication = isAllowCommunication;

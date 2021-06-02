@@ -52,8 +52,8 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
         mode: "all",
     });
 
-    const onSubmit = (formData: Language) => {
-        LanguageApi.createOrUpdate<Language>(id, formData).then(
+    const onSubmit = async (formData: Language) => {
+        return LanguageApi.createOrUpdate<Language>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
                     setViolations<Language>(error, setError);
@@ -147,6 +147,7 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
                             <AppFormActions
                                 isEditMode={isEditMode}
                                 navigation={navigator}
+                                isLoading={formState.isSubmitting}
                             />
                         </Form>
                     </AppCard>

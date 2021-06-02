@@ -530,6 +530,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                         <AppFormActions
                             isEditMode={isEditMode}
                             navigation={navigator}
+                            isLoading={formState.isSubmitting}
                         />
                     </Form>
                 </Col>

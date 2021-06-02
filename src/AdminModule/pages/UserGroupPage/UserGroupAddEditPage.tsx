@@ -51,8 +51,8 @@ export const UserGroupAddEditPage: FC<RouteComponentProps> = ({
         mode: "all",
     });
 
-    const onSubmit = (formData: UserGroup) => {
-        UserGroupApi.createOrUpdate<UserGroup>(id, formData).then(
+    const onSubmit = async (formData: UserGroup) => {
+        return UserGroupApi.createOrUpdate<UserGroup>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
                     setViolations<UserGroup>(error, setError);
@@ -124,6 +124,7 @@ export const UserGroupAddEditPage: FC<RouteComponentProps> = ({
                         <AppFormActions
                             isEditMode={isEditMode}
                             navigation={navigator}
+                            isLoading={formState.isSubmitting}
                         />
                     </Form>
                 </Col>

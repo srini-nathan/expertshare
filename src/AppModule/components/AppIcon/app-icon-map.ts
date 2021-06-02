@@ -55,6 +55,8 @@ export const appIconMap: AppIconMap = {
     X: faTimes,
     Search: faSearch,
     Menu: faBars,
+    List: faBars,
+    Grid: faThLarge,
     User: faUser,
     Eye: faEye,
     EyeOff: faEyeSlash,

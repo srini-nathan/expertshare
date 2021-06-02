@@ -60,7 +60,6 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
         isInvalid,
         rows,
     };
-
     return (
         <Form.Group {...groupProps} className={`mb-0 ${className}`}>
             {!isSend && <AppFormLabel counter={data?.length} {...labelProps} />}

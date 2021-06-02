@@ -58,8 +58,8 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
         mode: "all",
     });
 
-    const onSubmit = (formData: UserFieldEntity) => {
-        UserFieldApi.createOrUpdate<UserFieldEntity>(id, formData).then(
+    const onSubmit = async (formData: UserFieldEntity) => {
+        return UserFieldApi.createOrUpdate<UserFieldEntity>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
                     // @TODO: need to replace this block with setViolations,
@@ -325,6 +325,7 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                             <AppFormActions
                                 isEditMode={isEditMode}
                                 navigation={navigator}
+                                isLoading={formState.isSubmitting}
                             />
                         </AppCard>
                     </Form>
