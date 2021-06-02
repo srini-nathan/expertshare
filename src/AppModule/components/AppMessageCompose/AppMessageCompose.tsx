@@ -18,6 +18,7 @@ export interface AppMessageComposeProps extends AppFormElementProps {
     isSend?: boolean;
     rows?: number;
     enterToPost?: boolean;
+    handleDataSend: (message: any) => void;
     onChange?: ChangeEventHandler<
         HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >;
@@ -29,6 +30,7 @@ export const AppMessageCompose: FC<AppMessageComposeProps> = ({
     description,
     rows = 5,
     onChange,
+    handleDataSend,
     isSend,
     enterToPost,
     ...props
@@ -63,72 +65,84 @@ export const AppMessageCompose: FC<AppMessageComposeProps> = ({
         setShowEmogiModal(false);
     };
 
+    const sendData = () => {
+        handleDataSend(data);
+        setData("");
+    };
+
     return (
-        <Form.Group {...groupProps}>
-            <div className={`${enterToPost && "qa-area"}`}>
-                <Form.Control
-                    as="textarea"
-                    rows={rows}
-                    value={data}
-                    className={`${
-                        enterToPost && "form-control-without-border"
-                    }`}
-                    onChange={(e) => {
-                        if (onChange) {
-                            onChange(e);
-                        }
-                        setData(e.target.value);
-                    }}
-                />
-            </div>
-
-            <div
-                className={`is-send-wrapper ${
-                    enterToPost && "wrapper-space-beetween"
-                }`}
-                ref={wrapperRef}
-            >
-                <div className="picker-wrapper">
-                    <AppButton
-                        className="sent-btn sent-btn--emoji"
-                        variant="light"
-                        onClick={() => setShowEmogiModal(true)}
-                    >
-                        <i className="far fa-smile smile-icon"></i>
-                    </AppButton>
-
-                    <Picker
-                        onSelect={addEmoji}
-                        style={
-                            !showEmogiModal
-                                ? { display: "none" }
-                                : {
-                                      display: "block",
-                                      position: "absolute",
-                                      top: 40,
-                                      zIndex: 1,
-                                  }
-                        }
+        <div className={`${enterToPost && "message-compose-wrapper"}`}>
+            <Form.Group {...groupProps}>
+                <div className={`${enterToPost && "qa-area"}`}>
+                    <Form.Control
+                        as="textarea"
+                        rows={rows}
+                        value={data}
+                        className={`${
+                            enterToPost && "form-control-without-border"
+                        }`}
+                        onChange={(e) => {
+                            if (onChange) {
+                                onChange(e);
+                            }
+                            setData(e.target.value);
+                        }}
                     />
-                </div>
 
-                <div className="post-comment">
-                    {enterToPost && (
-                        <div className="comment">
-                            <Form.Check
-                                type="checkbox"
-                                id="default-checkbox"
-                                label="Enter to post comment"
-                                className="checkbox"
+                    <div
+                        className={`is-send-wrapper ${
+                            enterToPost && "wrapper-space-beetween"
+                        }`}
+                        ref={wrapperRef}
+                    >
+                        <div className="picker-wrapper">
+                            <AppButton
+                                className="sent-btn sent-btn--emoji"
+                                variant="light"
+                                onClick={() => setShowEmogiModal(true)}
+                            >
+                                <i className="far fa-smile smile-icon"></i>
+                            </AppButton>
+
+                            <Picker
+                                onSelect={addEmoji}
+                                style={
+                                    !showEmogiModal
+                                        ? { display: "none" }
+                                        : {
+                                              display: "block",
+                                              position: "absolute",
+                                              top: 40,
+                                              zIndex: 1,
+                                          }
+                                }
                             />
                         </div>
-                    )}
-                    <span className="btn-separator">|</span>
-                    <AppButton className="sent-btn" variant="light">
-                        Send
-                    </AppButton>
+
+                        <div className="post-comment">
+                            {enterToPost && (
+                                <div className="comment">
+                                    <Form.Check
+                                        type="checkbox"
+                                        id={`${Math.random()}`}
+                                        label="Enter to post comment"
+                                        className="checkbox"
+                                    />
+                                </div>
+                            )}
+                            <span className="btn-separator">|</span>
+                            <AppButton
+                                className="sent-btn"
+                                variant="light"
+                                onClick={sendData}
+                                disabled={data.length === 0}
+                            >
+                                Send
+                            </AppButton>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </Form.Group>
+            </Form.Group>
+        </div>
     );
 };

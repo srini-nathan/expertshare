@@ -38,10 +38,7 @@ export const AppMessageBox: FC<AppMessageBoxProps> = ({
     const [, setSearch] = useState<string>("");
     const [showCreateGroup, setShowCreateGroup] = useState(false);
 
-    const [newGroup, setNewGroup] = useState<[]>([]);
-
-    // eslint-disable-next-line no-console
-    console.log(newGroup);
+    const [, setNewGroup] = useState<[]>([]);
 
     const handleQuickSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSearch(event.currentTarget.value);

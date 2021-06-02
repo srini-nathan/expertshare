@@ -10,12 +10,14 @@ export interface AppСhoseMethodMessageProps {
     className?: string;
     rows: number;
     enterToPost?: boolean;
+    handleMessageSend?: (message: string) => void;
 }
 
 export const AppСhoseMethodMessage: FC<AppСhoseMethodMessageProps> = ({
     activeTab,
     rows,
     enterToPost,
+    handleMessageSend,
     ...props
 }): JSX.Element => {
     const [activeTabMessage, setActiveTabMessage] = React.useState<string>(
@@ -44,6 +46,11 @@ export const AppСhoseMethodMessage: FC<AppСhoseMethodMessageProps> = ({
                         isSend
                         enterToPost={enterToPost}
                         className="main-messages"
+                        handleDataSend={(data) => {
+                            if (handleMessageSend) {
+                                handleMessageSend(data);
+                            }
+                        }}
                     />
                 </AppTab>
                 <AppTab

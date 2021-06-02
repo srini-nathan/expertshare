@@ -50,3 +50,4 @@ export * from "./AppСhoseMethodMessage";
 export * from "./AppContainerOverviewCard";
 export * from "./AppMessageCompose";
 export * from "./AppQuestionsAndAnswers";
+export * from "./AppQAThread";

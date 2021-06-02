@@ -18,6 +18,16 @@ textarea.form-control {
     }
 }
 
+.message-compose-wrapper {
+    .main-messages {
+        padding: 5px !important;
+    }
+
+    .sent-btn {
+        padding-right: 0 !important;
+    }
+}
+
 .main-messages {
     .btn-separator {
         color: var(--secondary-70);
@@ -28,9 +38,8 @@ textarea.form-control {
         border: none !important;
     }
     .qa-area {
-        height: 6em;
+        border: 1px solid #ccc;
         background: var(--input-bg-clr);
-        border: 1px solid var(--input-border-clr);
         border-radius: var(--border-radius);
     }
     position: relative;
@@ -42,13 +51,13 @@ textarea.form-control {
     }
 
     .wrapper-space-beetween {
+        position: relative !important;
         width: 100%;
         right: 0 !important;
         justify-content: space-between;
         padding-left: 15px;
         padding-right: 15px;
         .sent-btn--emoji {
-            margin-left: 15px;
         }
     }
 
