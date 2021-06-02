@@ -58,9 +58,9 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                             "row m-0 p-0 justify-content-center conference-tags-container"
                         }
                     >
-                        {conferenceTags.map((e, i) => {
+                        {conferenceTags.map((e) => {
                             return (
-                                <div className={"conference-tags"} key={i}>
+                                <div className={"conference-tags"} key={e.id}>
                                     {e.name}
                                 </div>
                             );
