@@ -103,8 +103,8 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
         }
     }, [id, isEditMode, trigger]);
 
-    const onSubmit = (formData: Client) => {
-        ClientApi.createOrUpdate<Client>(id, formData).then(
+    const onSubmit = async (formData: Client) => {
+        return ClientApi.createOrUpdate<Client>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
                     setViolations<PartialClient>(error, setError);
@@ -184,6 +184,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
                         <AppFormActions
                             isEditMode={isEditMode}
                             navigation={navigator}
+                            isLoading={formState.isSubmitting}
                         />
                     </Form>
                 </Col>
