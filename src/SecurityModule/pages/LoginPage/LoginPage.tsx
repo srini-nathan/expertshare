@@ -96,7 +96,13 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                     </Link>
                                 </Form.Group>
 
-                                <AppButton block={true} type={"submit"}>
+                                <AppButton
+                                    block={true}
+                                    type={"submit"}
+                                    loadingTxt={"Login In..."}
+                                    disabled={formState.isSubmitting}
+                                    isLoading={formState.isSubmitting}
+                                >
                                     Login
                                 </AppButton>
                                 <Row className={"mt-3"}>
