@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { useForm } from "react-hook-form";
-import { forEach as _forEach } from "lodash";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -10,7 +9,11 @@ import { AppAuthHeader, AppAuthFooter } from "../../components";
 import "./assets/scss/styles.scss";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { AuthApi } from "../../apis";
-import { validation, errorToast } from "../../../AppModule/utils";
+import {
+    validation,
+    errorToast,
+    setViolations,
+} from "../../../AppModule/utils";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
 
 type ForgotPassword = {
@@ -37,25 +40,15 @@ export const ForgotPasswordPage: FC<RouteComponentProps> = ({
         resolver: yupResolver(schema),
         mode: "all",
     });
-    const [loading, isLoading] = React.useState<boolean>(false);
     const [errorMessage, setErrorMessage] = React.useState<string>("");
-    const { errors } = formState;
+    const { errors, isSubmitting } = formState;
 
     const onSubmit = async (dataForm: ForgotPasswordForm) => {
-        isLoading(true);
-        AuthApi.resetPasswordRequest<ForgotPasswordForm, ForgotPassword>(
+        return AuthApi.resetPasswordRequest<ForgotPasswordForm, ForgotPassword>(
             dataForm
         ).then((error) => {
-            isLoading(false);
             if (error instanceof UnprocessableEntityErrorResponse) {
-                const { violations } = error;
-                _forEach(violations, (value: string, key: string) => {
-                    const propertyName = key as keyof ForgotPasswordForm;
-                    setError(propertyName, {
-                        type: "backend",
-                        message: value,
-                    });
-                });
+                setViolations<ForgotPasswordForm>(error, setError);
                 errorToast(error.title);
                 setErrorMessage(error.description);
             } else if (navigate) {
@@ -97,15 +90,14 @@ export const ForgotPasswordPage: FC<RouteComponentProps> = ({
                                         />
                                     </Form.Row>
                                 </Form.Group>
-
                                 <AppButton
-                                    disabled={loading}
+                                    disabled={isSubmitting}
+                                    isLoading={isSubmitting}
+                                    loadingTxt={"Please wait..."}
                                     block={true}
                                     type={"submit"}
                                 >
-                                    {loading
-                                        ? "Please wait..."
-                                        : "Resset Password"}
+                                    Reset Password
                                 </AppButton>
                             </Form>
                         </Col>
