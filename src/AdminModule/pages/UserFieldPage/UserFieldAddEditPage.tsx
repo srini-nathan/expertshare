@@ -88,15 +88,12 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
     };
 
     const renderOptions = (type: string) => {
-        if (
+        return (
             type === FIELDTYPE.FIELDTYPE_SELECT ||
             type === FIELDTYPE.FIELDTYPE_MULTI_SELECT ||
             type === FIELDTYPE.FIELDTYPE_CHECKBOX_GROUP ||
             type === FIELDTYPE.FIELDTYPE_RADIO_GROUP
-        ) {
-            return true;
-        }
-        return false;
+        );
     };
 
     useEffect(() => {
