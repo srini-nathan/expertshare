@@ -1,3 +1,5 @@
+import { Role } from "../../AdminModule/models";
+
 function getRoles() {
     const roles = localStorage.getItem("roles");
 
@@ -12,16 +14,17 @@ function getRoles() {
 export function filterRoles(role: string) {
     const roles = getRoles();
 
-    let FilterRoute = roles;
+    let FilterRoute: Role[];
 
-    if (role === "ROLE_SUPER_ADMIN")
+    if (role === "ROLE_SUPER_ADMIN") {
         FilterRoute = roles.filter((e: any) => {
             return e.role === "ROLE_ADMIN" || e.role === "ROLE_SUPER_ADMIN";
         });
-    else
+    } else {
         FilterRoute = roles.filter((e: any) => {
             return e.role !== "ROLE_SUPER_ADMIN" || e.role === "ROLE_ADMIN";
         });
+    }
 
     return FilterRoute;
 }
