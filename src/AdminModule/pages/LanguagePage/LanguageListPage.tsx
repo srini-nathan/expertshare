@@ -19,11 +19,9 @@ import {
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
-import { useDownloadFile } from "../../../AppModule/hooks";
+import { useAuthState, useDownloadFile } from "../../../AppModule/hooks";
 import { errorToast, successToast } from "../../../AppModule/utils";
 import "./assets/scss/list.scss";
-import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
-import { AuthState } from "../../../SecurityModule/models/context/AuthState";
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
@@ -31,8 +29,7 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [selectedLocale, setSelectedLocale] = useState<string>("");
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
-    const { state } = React.useContext(AuthContext);
-    const { containerId } = state as AuthState;
+    const { containerId } = useAuthState();
     const [updateLink] = useDownloadFile();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
