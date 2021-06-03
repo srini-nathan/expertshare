@@ -4,6 +4,7 @@ import { AppCellActionWithCustom } from "./app-actions";
 export const appGridColDef = ({
     onPressBookSession,
     onPressGetInContact,
+    onPressAddNewUser,
 }: AppCellActionWithCustom): ColDef[] => [
     {
         headerName: "Name",
@@ -45,6 +46,7 @@ export const appGridColDef = ({
         cellRendererParams: {
             onPressBookSession,
             onPressGetInContact,
+            onPressAddNewUser,
         },
     },
 ];

@@ -1,10 +1,6 @@
 import { ICellRendererParams } from "ag-grid-community";
 import React, { ReactElement } from "react";
-import {
-    AppGridAction,
-    AppGridActionProps,
-    AppIcon,
-} from "../../../AppModule/components";
+import { AppGridAction, AppGridActionProps, AppIcon } from "../../components";
 import { AppCellActionWithRenderWithCustom } from "./app-actions";
 
 export const appGridFrameworkComponents = {

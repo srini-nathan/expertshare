@@ -20,7 +20,6 @@ import {
 import { ModuleRouter } from "../AppModule/models";
 import { ContainerAddEdit } from "./pages/ContainerPage/ContainerAddEdit";
 import { UserFieldAddEditPage, UserFieldListPage } from "./pages/UserFieldPage";
-import { AttendeeOverview } from "./pages/AttendeePage";
 
 export const routers: ModuleRouter[] = [
     {
@@ -56,13 +55,6 @@ export const routers: ModuleRouter[] = [
                     <UserFieldListPage path={"user-fields"} />
                     <UserFieldAddEditPage path={"user-fields/new"} />
                     <UserFieldAddEditPage path={"user-fields/:id"} />
-                    <AttendeeOverview path={"attendees"}></AttendeeOverview>
-                    <AttendeeOverview
-                        path={"attendees/list"}
-                    ></AttendeeOverview>
-                    <AttendeeOverview
-                        path={"attendees/grid"}
-                    ></AttendeeOverview>
                     <UserListPage path={"users"} />
                     <UserAddEditPage path={"users/new"} />
                     <UserAddEditPage path={"users/:id"} />

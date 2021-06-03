@@ -7,6 +7,7 @@ import {
     ContainerOverview,
     ConferenceGrid,
     ConferenceAddEdit,
+    AttendeeOverview,
 } from "./pages";
 import { ModuleRouter } from "./models";
 
@@ -26,6 +27,13 @@ export const routers: ModuleRouter[] = [
                     <ConferenceGrid path={"conferences/:view"} />
                     <ConferenceAddEdit path={"conference/new"} />
                     <ConferenceAddEdit path={"conference/:id"} />
+                    <AttendeeOverview path={"attendees"}></AttendeeOverview>
+                    <AttendeeOverview
+                        path={"attendees/list"}
+                    ></AttendeeOverview>
+                    <AttendeeOverview
+                        path={"attendees/grid"}
+                    ></AttendeeOverview>
                 </Router>
             );
         },

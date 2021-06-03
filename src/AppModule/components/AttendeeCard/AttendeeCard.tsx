@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 // import { Col } from "react-bootstrap";
-import { AppIcon } from "../../../AppModule/components";
+import { AppIcon } from "../AppIcon";
 import "./assets/scss/list.scss";
 
 export interface AttendeeCardProps {

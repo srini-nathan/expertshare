@@ -14,12 +14,12 @@ import {
     // AppLoader,
     AppSwitchView,
     AppListPageToolbar,
-} from "../../../AppModule/components";
+} from "../../components";
 import "./assets/scss/style.scss";
 import { AttendeeCard } from "../../components/AttendeeCard";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
-import { AppGrid } from "../../../AppModule/containers/AppGrid";
-import { appGridConfig } from "../../../AppModule/config";
+import { AppGrid } from "../../containers/AppGrid";
+import { appGridConfig } from "../../config";
 
 export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
     const appGridApi = useRef<GridApi>();
@@ -109,7 +109,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
 
     const renderView = () => {
         switch (location.pathname) {
-            case "/admin/attendees/list":
+            case "/attendees/list":
                 return (
                     <Col className="p-0">
                         <AppGrid
@@ -127,7 +127,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                         />
                     </Col>
                 );
-            case "/admin/attendees/grid":
+            case "/attendees/grid":
             default:
                 return (
                     <Row>
@@ -156,9 +156,9 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                         cancelTokenSources={cancelTokenSourcesRef.current}
                     />
                     <AppSwitchView
-                        link={"/admin/attendees"}
+                        link={"/attendees"}
                         activeLink={
-                            location.pathname === "/admin/attendees/list"
+                            location.pathname === "/attendees/list"
                                 ? "list"
                                 : "grid"
                         }
