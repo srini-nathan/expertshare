@@ -1,11 +1,14 @@
 import React, { FC, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { Cropper } from "react-cropper";
 import { AppCropper } from "../AppCropper";
 import { bytesToSize } from "./bytes-to-size";
 import { Upload } from "../../models";
 import imageTemp from "./assets/images/imgthumb.svg";
 
 import "./assets/scss/style.scss";
+
+type Options = Cropper.Options;
 
 export interface AppFile {
     preview: string;
@@ -21,6 +24,7 @@ export interface AppUploaderProps {
     onReady?: (startFnc: () => void) => void;
     onFileSelect: (files: File[]) => void;
     onFinish?: (error: null | string, upload?: Upload) => void;
+    cropperOptions?: Options;
 }
 
 export const AppUploader: FC<AppUploaderProps> = ({
@@ -31,6 +35,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
     withCropper,
     imagePath,
     onFileSelect,
+    cropperOptions,
 }): JSX.Element => {
     const [files, setFiles] = useState<AppFile[]>([]);
     const [cropperFile, setCropperFile] = useState<any>(undefined);
@@ -167,6 +172,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
                                 setCropperFile(blob);
                                 onFileSelect([blob]);
                             }}
+                            cropperOptions={cropperOptions}
                         />
                     )}
                 </div>

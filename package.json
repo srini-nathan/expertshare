@@ -165,6 +165,7 @@
         ]
     },
     "peerDependencies": {
+        "cropperjs": "^1.5.11",
         "froala-editor": "^3.2.7"
     }
 }

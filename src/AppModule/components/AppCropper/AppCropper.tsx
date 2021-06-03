@@ -5,9 +5,10 @@ import InputRange from "react-input-range";
 import { AppButton } from "../AppButton";
 
 import "./assets/scss/style.scss";
-// eslint-disable-next-line import/no-extraneous-dependencies
 import "cropperjs/dist/cropper.css";
 import "react-input-range/lib/css/index.css";
+
+type Options = Cropper.Options;
 
 interface AppCropperProps {
     show: boolean;
@@ -18,6 +19,7 @@ interface AppCropperProps {
     image?: any;
     initialAspectRatio: number;
     maxZoomLevel?: number;
+    cropperOptions?: Options;
 }
 
 export const AppCropper: FC<AppCropperProps> = ({
@@ -29,6 +31,7 @@ export const AppCropper: FC<AppCropperProps> = ({
     title = "Crop Image",
     initialAspectRatio,
     maxZoomLevel = 5,
+    cropperOptions,
 }): JSX.Element => {
     const [cropper, setCropper] = useState<Cropper>();
     const [zoomValue, setZoomValue] = useState<number>(0);
@@ -62,13 +65,13 @@ export const AppCropper: FC<AppCropperProps> = ({
                     <Cropper
                         src={image[0].preview}
                         style={{ height: 400, width: "100%" }}
-                        // Cropper.js options
                         initialAspectRatio={initialAspectRatio}
                         viewMode={2}
                         guides={false}
                         onInitialized={(instance) => {
                             setCropper(instance);
                         }}
+                        {...cropperOptions}
                     />
                 )}
             </Modal.Body>
@@ -128,6 +131,7 @@ export const AppCropper: FC<AppCropperProps> = ({
                         );
                     }}
                 >
+                    {/* @TODO: Ask Yauheni to use AppIcon everywhere, where we're using icons */}
                     <i className="fas fa-plus"></i>
                 </AppButton>
                 <AppButton
