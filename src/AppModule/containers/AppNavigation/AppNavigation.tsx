@@ -380,7 +380,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                             label={
                                                 user.firstName && user.lastName
                                                     ? `${user.firstName} ${user.lastName}`
-                                                    : "Acount"
+                                                    : "Account"
                                             }
                                             style={{
                                                 backgroundImage: `url(${profilePicturePath}/${user.imageName})`,
