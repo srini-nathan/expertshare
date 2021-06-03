@@ -28,15 +28,24 @@ export const appGridFrameworkComponents = {
         const { data } = params;
         return (
             <div className="tag-container d-flex">
-                <div className="tag-container--item pr-2">
-                    <a href="#">{data.tags[0]}</a>
-                </div>
-                <div className="tag-container--item pr-2">
-                    <a href="#">{data.tags[1]}</a>
-                </div>
-                <div className="tag-container--item more pr-2">
-                    <a href="#">+ Show More</a>
-                </div>
+                {data.tags.map((tag: string, index: any) => {
+                    if (index < 2) {
+                        return (
+                            <div
+                                className="tag-container--item pr-2"
+                                key={index}
+                            >
+                                <a href="#">{tag}</a>
+                            </div>
+                        );
+                    }
+                    return <></>;
+                })}
+                {data.tags.length > 2 && (
+                    <div className="tag-container--item more pr-2">
+                        <a href="#">+ Show More</a>
+                    </div>
+                )}
             </div>
         );
     },
@@ -67,7 +76,7 @@ export const appGridFrameworkComponents = {
             onPressAddNewUser,
         } = params;
         const props: AppGridActionProps = {
-            buttonAction: [
+            customClickActions: [
                 {
                     text: "Book Session",
                     onClick: () => {
@@ -80,10 +89,9 @@ export const appGridFrameworkComponents = {
                         onPressGetInContact();
                     },
                 },
-            ],
-            customClickActions: [
                 {
                     icon: "AddUserPlus",
+                    text: "",
                     onClick: () => {
                         onPressAddNewUser();
                     },

@@ -55,18 +55,21 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
             </div>
             <div className="card--tags">
                 <div className="row m-0 p-0">
-                    <div className="card--tags--item col-auto px-0 mb-2">
-                        <a href="#">All Users</a>
-                    </div>
-                    <div className="card--tags--item col-auto px-0 mb-2">
-                        <a href="#">Special Invites</a>
-                    </div>
-                    <div className="card--tags--item col-auto px-0 mb-2">
-                        <a href="#">Another Tag Here</a>
-                    </div>
-                    <div className="card--tags--item show-more col-auto px-0 mb-2">
-                        <a href="#">+ Show More</a>
-                    </div>
+                    {attendee.tags.map((tag: string, index: any) => {
+                        if (index < 3) {
+                            return (
+                                <div className="card--tags--item col-auto px-0 mb-2">
+                                    <a href="#">{tag}</a>
+                                </div>
+                            );
+                        }
+                        return <></>;
+                    })}
+                    {attendee.tags.length > 2 && (
+                        <div className="card--tags--item show-more col-auto px-0 mb-2">
+                            <a href="#">+ Show More</a>
+                        </div>
+                    )}
                 </div>
             </div>
             <div className="card--buttons mt-3 mb-2">

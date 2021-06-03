@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useRef, useState } from "react";
-import { RouteComponentProps, useLocation } from "@reach/router";
+import { RouteComponentProps, useParams } from "@reach/router";
 import {
     GridApi,
     IServerSideDatasource,
@@ -23,7 +23,7 @@ import { appGridConfig } from "../../config";
 
 export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
     const appGridApi = useRef<GridApi>();
-    const location = useLocation();
+    const { view } = useParams();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const [total, setTotal] = useState<number>(0);
     const initialValues = [
@@ -108,8 +108,8 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
     }
 
     const renderView = () => {
-        switch (location.pathname) {
-            case "/attendees/list":
+        switch (view) {
+            case "list":
                 return (
                     <Col className="p-0">
                         <AppGrid
@@ -127,7 +127,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                         />
                     </Col>
                 );
-            case "/attendees/grid":
+            case "grid":
             default:
                 return (
                     <Row>
@@ -138,6 +138,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                                 lg={4}
                                 xl={3}
                                 className="attendees-grid--container--item"
+                                key={index}
                             >
                                 <AttendeeCard attendee={item} key={index} />
                             </Col>
@@ -157,11 +158,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                     />
                     <AppSwitchView
                         link={"/attendees"}
-                        activeLink={
-                            location.pathname === "/attendees/list"
-                                ? "list"
-                                : "grid"
-                        }
+                        activeLink={view || "grid"}
                     />
                 </div>
             </AppPageHeader>

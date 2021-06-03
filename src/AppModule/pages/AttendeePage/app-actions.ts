@@ -1,4 +1,4 @@
-import { AppCellActionWithRenderParams } from "../../../AppModule/models";
+import { AppCellActionWithRenderParams } from "../../models";
 
 export interface AppCellActionWithRenderWithCustom
     extends AppCellActionWithRenderParams {

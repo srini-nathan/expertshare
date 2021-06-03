@@ -9,7 +9,6 @@ export interface AppGridActionProps {
     viewAction?: AppGridLinkAction;
     treeAction?: AppGridLinkAction;
     deleteAction?: AppGridClickAction;
-    buttonAction?: AppCustomButtonAction[];
     customClickActions?: AppGridCustomClickAction[];
 }
 
@@ -28,24 +27,16 @@ interface AppGridCustomClickAction {
     confirmation?: string;
     onClick?: () => void;
     disable?: boolean;
-    icon: string;
-}
-interface AppCustomButtonAction {
-    onClick?: () => void;
+    icon?: string;
     text?: string;
 }
-
 interface ActionProps {
     disable?: boolean;
-    icon: string;
+    icon?: string;
 }
 
 interface LinkActionProps extends ActionProps {
     url?: string;
-}
-interface ButtonActionProps {
-    onClick?: () => void;
-    text?: string;
 }
 
 const LinkAction: FC<LinkActionProps> = ({
@@ -78,34 +69,10 @@ const LinkAction: FC<LinkActionProps> = ({
         </Link>
     );
 };
-const ButtonAction: FC<ButtonActionProps> = ({
-    text,
-    onClick,
-}): JSX.Element => {
-    if (!text || !onClick) {
-        return <></>;
-    }
-
-    return (
-        <div className="action-btn">
-            <a
-                href="#"
-                className="btn btn-secondary mr-2"
-                onClick={(event) => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    onClick();
-                }}
-            >
-                {text}
-            </a>
-        </div>
-    );
-};
-
 interface ClickActionProps extends ActionProps {
     onClick?: () => void;
     confirmation?: string;
+    text?: string;
 }
 
 const ClickAction: FC<ClickActionProps> = ({
@@ -113,6 +80,7 @@ const ClickAction: FC<ClickActionProps> = ({
     disable = false,
     onClick,
     confirmation,
+    text,
 }): JSX.Element => {
     const [show, setShow] = useState(false);
     if (!onClick) {
@@ -152,7 +120,8 @@ const ClickAction: FC<ClickActionProps> = ({
                     }
                 }}
             >
-                <AppIcon name={icon} />
+                {icon && <AppIcon name={icon} />}
+                {text}
             </a>
         </>
     );
@@ -163,7 +132,6 @@ export const AppGridAction: FC<AppGridActionProps> = ({
     editAction,
     treeAction,
     deleteAction,
-    buttonAction = [],
     viewAction,
     customClickActions = [],
 }): JSX.Element => {
@@ -172,11 +140,8 @@ export const AppGridAction: FC<AppGridActionProps> = ({
             <LinkAction icon={"add"} {...addAction}></LinkAction>
             <LinkAction icon={"edit"} {...editAction}></LinkAction>
             <LinkAction icon={"ListTree"} {...treeAction}></LinkAction>
-            {buttonAction.map(({ text, ...rest }) => (
-                <ButtonAction text={text} {...rest}></ButtonAction>
-            ))}
-            {customClickActions.map(({ icon, ...rest }) => (
-                <ClickAction icon={icon} {...rest}></ClickAction>
+            {customClickActions.map(({ icon, text, ...rest }) => (
+                <ClickAction icon={icon} text={text} {...rest}></ClickAction>
             ))}
             <ClickAction icon={"delete"} {...deleteAction}></ClickAction>
             <LinkAction icon={"Eye"} {...viewAction}></LinkAction>
