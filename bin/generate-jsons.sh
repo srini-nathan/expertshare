@@ -6,8 +6,6 @@ GENERATE_ROUTES="${ES_API_HOST}/generate/routes"
 GENERATE_CONSTANTS="${ES_API_HOST}/generate/constants"
 CONFIG_DUMP_PATH="./src/config"
 
-echo $ES_API_HOST;
-
 wget "$GENERATE_ROUTES" -O "${CONFIG_DUMP_PATH}/routes.json"
 wget "$GENERATE_CONSTANTS" -O "${CONFIG_DUMP_PATH}/constants.json"
 

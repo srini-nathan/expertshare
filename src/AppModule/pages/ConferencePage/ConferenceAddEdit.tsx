@@ -1,6 +1,6 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
-import { Row, Col, Form, Image } from "react-bootstrap";
+import { Row, Col, Form } from "react-bootstrap";
 import { isString as _isString } from "lodash";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,7 +13,8 @@ import {
     AppFormTranslatable,
     TranslationsType,
     AppUploader,
-    AppTagSelect,
+    AppFormSelectCreatable,
+    AppFormSwitch,
 } from "../../components";
 import {
     Upload,
@@ -22,7 +23,6 @@ import {
 } from "../../models";
 import {
     Conference,
-    PConferenceTag,
     ConferenceTag,
     Language,
 } from "../../../AdminModule/models";
@@ -32,7 +32,12 @@ import {
     ContainerApi,
     ConferenceTagApi,
 } from "../../../AdminModule/apis";
-import { errorToast, setViolations, successToast } from "../../utils";
+import {
+    errorToast,
+    setViolations,
+    successToast,
+    validation,
+} from "../../utils";
 import {
     useParamId,
     useNavigator,
@@ -72,7 +77,13 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
     const [files, setFiles] = useState<File[]>([]);
     const conferencePosterPath = useBuildAssetPath(path);
 
-    const { handleSubmit, setError, trigger } = useForm<Conference>({
+    const {
+        handleSubmit,
+        setError,
+        trigger,
+        formState,
+        control,
+    } = useForm<Conference>({
         resolver: yupResolver(schema),
         mode: "all",
     });
@@ -111,18 +122,16 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
 
     const submitForm = (formData: Conference) => {
         if (checkTranslation()) {
-            const tagsSelectedItems: PConferenceTag[] = selectedConferenceTags.map(
-                (e) => {
-                    return {
-                        name: e.value,
-                        container: ContainerApi.toResourceUrl(containerId),
-                    };
-                }
-            );
-            formData.conferenceTags = tagsSelectedItems;
             formData.translations = getTranslation();
             formData.container = ContainerApi.toResourceUrl(containerId);
-            formData.isVisible = true;
+            formData.conferenceTags = selectedConferenceTags.map((e) => {
+                if (e.id)
+                    return ConferenceTagApi.toResourceUrl(parseInt(e.id, 10));
+                return {
+                    name: e.value,
+                    container: ContainerApi.toResourceUrl(containerId),
+                };
+            });
 
             ConferenceApi.createOrUpdate<Conference>(id, formData).then(
                 ({ error, errorMessage }) => {
@@ -261,6 +270,9 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
             }
         });
     }, [data]);
+
+    const { errors } = formState;
+
     if (loading) {
         return <AppLoader />;
     }
@@ -278,7 +290,23 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                                 defaultLanguage={defaultLanguage}
                                 translations={translations}
                                 onChange={setTranslations}
-                            />{" "}
+                            />
+                            <AppFormSwitch
+                                sm={12}
+                                md={12}
+                                lg={12}
+                                xl={12}
+                                name={"isVisible"}
+                                label={"Is Visible ?"}
+                                {...validation(
+                                    "isVisible",
+                                    formState,
+                                    isEditMode
+                                )}
+                                errorMessage={errors.isVisible?.message}
+                                defaultChecked={data.isVisible}
+                                control={control}
+                            />
                             <Form.Row>
                                 <Form.Group
                                     as={Col}
@@ -290,56 +318,27 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                                     <Form.Label>Poster</Form.Label>
                                     <AppUploader
                                         accept="image/*"
+                                        imagePath={
+                                            data.imageName
+                                                ? `${conferencePosterPath}/${data.imageName}`
+                                                : ""
+                                        }
                                         onFileSelect={onFileSelect}
                                     />
-                                    {data.imageName ? (
-                                        <Image
-                                            src={`${conferencePosterPath}/${data.imageName}`}
-                                            thumbnail
-                                        />
-                                    ) : null}
                                 </Form.Group>
-
-                                <Form.Group
-                                    as={Col}
-                                    sm={12}
+                                <AppFormSelectCreatable
+                                    name="userTags"
+                                    label="Conference Tags"
                                     md={12}
-                                    lg={6}
-                                    xl={6}
-                                >
-                                    <AppTagSelect
-                                        options={conferenceTags}
-                                        selectedItems={selectedConferenceTags}
-                                        label="Conference Tags"
-                                        onChange={(item) => {
-                                            let index = -1;
-                                            selectedConferenceTags.filter(
-                                                (e, i) => {
-                                                    if (e.id === item.id) {
-                                                        index = i;
-                                                    }
-                                                    return e;
-                                                }
-                                            );
-                                            if (index !== -1) {
-                                                setSelectedConferenceTags([
-                                                    ...selectedConferenceTags.slice(
-                                                        0,
-                                                        index
-                                                    ),
-                                                    ...selectedConferenceTags.slice(
-                                                        index + 1
-                                                    ),
-                                                ]);
-                                            } else {
-                                                setSelectedConferenceTags([
-                                                    ...selectedConferenceTags,
-                                                    item,
-                                                ]);
-                                            }
-                                        }}
-                                    ></AppTagSelect>
-                                </Form.Group>
+                                    sm={12}
+                                    lg={12}
+                                    xl={12}
+                                    id="where-filter"
+                                    onChangeHandler={setSelectedConferenceTags}
+                                    value={selectedConferenceTags}
+                                    options={conferenceTags}
+                                    control={control}
+                                />
                             </Form.Row>
                             <AppFormActions
                                 isEditMode={isEditMode}

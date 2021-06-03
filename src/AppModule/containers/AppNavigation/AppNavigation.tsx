@@ -151,9 +151,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     };
     const updateScreenSize = () => {
         if (width > 767) {
-            let numberOfMenusToShow = 0;
-
-            numberOfMenusToShow = Math.floor(getMenuItemsHeight() / 66);
+            const numberOfMenusToShow = Math.floor(getMenuItemsHeight() / 66);
             const oItems = [];
             for (let i = numberOfMenusToShow; i < items.length; i += 1) {
                 oItems.push(items[i]);
@@ -380,7 +378,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                             label={
                                                 user.firstName && user.lastName
                                                     ? `${user.firstName} ${user.lastName}`
-                                                    : "Acount"
+                                                    : "Account"
                                             }
                                             style={{
                                                 backgroundImage: `url(${profilePicturePath}/${user.imageName})`,

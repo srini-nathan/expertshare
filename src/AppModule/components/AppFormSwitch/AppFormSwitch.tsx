@@ -54,6 +54,7 @@ export const AppFormSwitch: FC<AppFormSwitchProps> = ({
             sm={sm}
             lg={lg}
             xl={xl}
+            className="p-0"
             controlId={controlId}
         >
             <Form.Label>

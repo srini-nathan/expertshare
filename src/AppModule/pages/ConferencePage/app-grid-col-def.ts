@@ -3,39 +3,76 @@ import { AppCellActionParams } from "../../models";
 
 export const appGridColDef = ({
     onPressDelete,
-}: AppCellActionParams): ColDef[] => [
-    {
-        headerName: "Name",
-        field: "title",
-        filter: "translations.title",
-        sortable: true,
-        minWidth: 80,
-    },
+    onPressClone,
+    isGrantedControl,
+}: AppCellActionParams): ColDef[] => {
+    if (isGrantedControl)
+        return [
+            {
+                headerName: "Name",
+                field: "title",
+                filter: "translations.title",
+                sortable: true,
+                minWidth: 80,
+            },
 
-    {
-        headerName: "Description",
-        field: "description",
-        sortable: true,
-        minWidth: 40,
-    },
+            {
+                headerName: "Tags",
+                cellRenderer: "tags",
+                sortable: true,
+                minWidth: 40,
+            },
+            {
+                headerName: "Is Visible",
+                cellRenderer: "appSwitch",
+                sortable: true,
+                minWidth: 40,
+            },
 
-    {
-        headerName: "Tags",
-        cellRenderer: "tags",
-        sortable: true,
-        minWidth: 40,
-    },
+            {
+                headerName: "Actions",
+                field: "id",
+                sortable: false,
+                maxWidth: 165,
+                cellClass: "text-right",
+                headerClass: "action-header",
+                cellRenderer: "appGridActionRenderer",
+                cellRendererParams: {
+                    onPressDelete,
+                    isGrantedControl,
+                    onPressClone,
+                },
+            },
+        ];
 
-    {
-        headerName: "Actions",
-        field: "id",
-        sortable: false,
-        maxWidth: 125,
-        cellClass: "text-right",
-        headerClass: "action-header",
-        cellRenderer: "appGridActionRenderer",
-        cellRendererParams: {
-            onPressDelete,
+    return [
+        {
+            headerName: "Name",
+            field: "title",
+            filter: "translations.title",
+            sortable: true,
+            minWidth: 80,
         },
-    },
-];
+
+        {
+            headerName: "Tags",
+            cellRenderer: "tags",
+            sortable: true,
+            minWidth: 40,
+        },
+
+        {
+            headerName: "Actions",
+            field: "id",
+            sortable: false,
+            maxWidth: 125,
+            cellClass: "text-right",
+            headerClass: "action-header",
+            cellRenderer: "appGridActionRenderer",
+            cellRendererParams: {
+                onPressDelete,
+                isGrantedControl,
+            },
+        },
+    ];
+};

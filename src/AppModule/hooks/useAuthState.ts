@@ -9,8 +9,8 @@ export function useAuthState() {
     const { clientId, containerId, roles, token } = state as AuthState;
 
     if (clientId === null || containerId === null) {
-        throw new Error("ClientId or ContainerId is null.");
         errorToast("ClientId or ContainerId is null.");
+        throw new Error("ClientId or ContainerId is null.");
     }
     const role = roles[0] ? roles[0] : "";
 

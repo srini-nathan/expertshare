@@ -10,6 +10,7 @@ export interface AppGridActionProps {
     treeAction?: AppGridLinkAction;
     deleteAction?: AppGridClickAction;
     customClickActions?: AppGridCustomClickAction[];
+    isGrantedControl?: boolean;
 }
 
 interface AppGridLinkAction {
@@ -25,6 +26,7 @@ interface AppGridClickAction {
 
 interface AppGridCustomClickAction {
     confirmation?: string;
+    confirmationTitle?: string;
     onClick?: () => void;
     disable?: boolean;
     icon?: string;
@@ -73,12 +75,14 @@ interface ClickActionProps extends ActionProps {
     onClick?: () => void;
     confirmation?: string;
     text?: string;
+    confirmationTitle?: string;
 }
 
 const ClickAction: FC<ClickActionProps> = ({
     icon,
     disable = false,
     onClick,
+    confirmationTitle = "Delete Action",
     confirmation,
     text,
 }): JSX.Element => {
@@ -100,6 +104,7 @@ const ClickAction: FC<ClickActionProps> = ({
             {confirmation ? (
                 <AppModal
                     show={show}
+                    title={confirmationTitle}
                     handleClose={handleNegative}
                     handleDelete={handlePositive}
                     bodyContent={confirmation}
@@ -133,17 +138,28 @@ export const AppGridAction: FC<AppGridActionProps> = ({
     treeAction,
     deleteAction,
     viewAction,
+    isGrantedControl,
     customClickActions = [],
 }): JSX.Element => {
+    const showItem = () => {
+        if (isGrantedControl !== undefined) return isGrantedControl;
+        return true;
+    };
+
     return (
         <div className="actions">
             <LinkAction icon={"add"} {...addAction}></LinkAction>
-            <LinkAction icon={"edit"} {...editAction}></LinkAction>
+            {showItem() && (
+                <LinkAction icon={"edit"} {...editAction}></LinkAction>
+            )}
+
             <LinkAction icon={"ListTree"} {...treeAction}></LinkAction>
             {customClickActions.map(({ icon, text, ...rest }) => (
                 <ClickAction icon={icon} text={text} {...rest}></ClickAction>
             ))}
-            <ClickAction icon={"delete"} {...deleteAction}></ClickAction>
+            {showItem() && (
+                <ClickAction icon={"delete"} {...deleteAction}></ClickAction>
+            )}
             <LinkAction icon={"Eye"} {...viewAction}></LinkAction>
         </div>
     );

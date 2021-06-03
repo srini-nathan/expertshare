@@ -1,6 +1,5 @@
 import React, { ReactElement, FC } from "react";
 import { ICellRendererParams } from "ag-grid-community";
-import { RouteComponentProps } from "@reach/router";
 import {
     AppSwitch,
     AppGridAction,
@@ -15,16 +14,24 @@ export interface AppCellActionWithRenderParamsUserList
     extends AppCellActionParamsUserList,
         ICellRendererParams {}
 
-export const GetRoles: FC<RouteComponentProps> = (): JSX.Element => {
-    const { role } = useAuthState();
+interface UserRoles {
+    role: string;
+}
+
+export const GetRoles: FC<UserRoles> = ({ role }): JSX.Element => {
+    const { role: ROLE } = useAuthState();
     const { filterRoles } = useRoles();
-    const FilterRoute = filterRoles(role);
+    const FilterRoute = filterRoles(ROLE);
 
     return (
         <>
             {FilterRoute.map((e: any, key: number) => {
                 return (
-                    <option key={key} value={e["@id"]}>
+                    <option
+                        selected={role === e.role}
+                        key={key}
+                        value={e["@id"]}
+                    >
                         {e.name}
                     </option>
                 );
@@ -48,10 +55,9 @@ export const appGridFrameworkComponents = {
                 }}
                 name={"role"}
                 className="list-deopdown"
-                defaultValue={roles[0]}
             >
                 <optgroup>
-                    <GetRoles />
+                    <GetRoles role={roles[0]} />
                 </optgroup>
             </select>
         );

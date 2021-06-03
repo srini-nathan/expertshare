@@ -17,7 +17,7 @@ import {
     AppListPageToolbar,
 } from "../../components";
 import { ConferenceApi } from "../../../AdminModule/apis";
-import { useAuthState } from "../../hooks";
+import { useAuthState, useIsGranted } from "../../hooks";
 import { PConference } from "../../../AdminModule/models";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models";
@@ -29,8 +29,14 @@ import {
 import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { appGridConfig } from "../../config";
+import { CONSTANTS } from "../../../config";
 import "./assets/scss/style.scss";
 
+const { Role: ROLE } = CONSTANTS;
+
+const {
+    ROLE: { ROLE_OPERATOR },
+} = ROLE;
 export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
     const { containerId } = useAuthState();
     const { state } = React.useContext(AuthContext);
@@ -41,6 +47,7 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
     const [loading, isLoading] = useState<boolean>(true);
     const { view } = useParams();
     const appGridApi = useRef<GridApi>();
+    const isGrantedControl = useIsGranted(ROLE_OPERATOR);
 
     const fetchData = (params = {}) => {
         ConferenceApi.find<PConference>(
@@ -78,6 +85,27 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
     useEffect(() => {
         fetchData();
     }, []);
+    async function handleClone(id: number) {
+        ConferenceApi.clone<
+            PConference,
+            {
+                cloneId: number;
+            }
+        >(id).then(({ error }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                }
+            } else {
+                successToast("Successfully cloned");
+                fetchData();
+                appGridApi.current?.refreshServerSideStore({
+                    purge: false,
+                    route: [],
+                });
+            }
+        });
+    }
     async function handleDelete(id: number) {
         ConferenceApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
@@ -86,10 +114,12 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                 }
             } else {
                 successToast("Successfully deleted");
-                appGridApi.current?.refreshServerSideStore({
-                    purge: false,
-                    route: [],
-                });
+                if (view === "grid") fetchData();
+                else
+                    appGridApi.current?.refreshServerSideStore({
+                        purge: false,
+                        route: [],
+                    });
             }
         });
     }
@@ -141,6 +171,8 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                             frameworkComponents={appGridFrameworkComponents}
                             columnDef={appGridColDef({
                                 onPressDelete: handleDelete,
+                                onPressClone: handleClone,
+                                isGrantedControl,
                             })}
                             dataSource={getDataSource()}
                             totalItems={totalItems}
@@ -156,8 +188,12 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                     <Row className="events-grid--container mt-4 mx-0">
                         {conferences.map((conference: PConference) => (
                             <AppConferenceCard
+                                isGrantedControl={isGrantedControl}
                                 handleDelete={(id: number) => {
                                     handleDelete(id);
+                                }}
+                                handleClone={(id: number) => {
+                                    handleClone(id);
                                 }}
                                 conference={conference}
                             />
