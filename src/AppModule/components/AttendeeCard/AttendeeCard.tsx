@@ -58,7 +58,10 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                     {attendee.tags.map((tag: string, index: any) => {
                         if (index < 3) {
                             return (
-                                <div className="card--tags--item col-auto px-0 mb-2">
+                                <div
+                                    className="card--tags--item col-auto px-0 mb-2"
+                                    key={index}
+                                >
                                     <a href="#">{tag}</a>
                                 </div>
                             );

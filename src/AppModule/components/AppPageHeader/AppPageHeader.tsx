@@ -3,14 +3,12 @@ import { Col, Row } from "react-bootstrap";
 import { Canceler } from "axios";
 import "./assets/scss/style.scss";
 import { AppListPageToolbar } from "../AppListPageToolbar";
-import { AppHeaderTypeSwitch } from "../AppHeaderTypeSwitch";
 
 export interface AppPageHeaderProps {
     title: string;
     createLink?: string;
     showToolbar?: boolean;
     customToolbar?: boolean;
-    showViewLayoutButtons?: boolean;
     createLabel?: string;
     onQuickFilterChange?: (s: string) => void;
     cancelTokenSources?: Canceler[];
@@ -22,7 +20,6 @@ export const AppPageHeader: FC<AppPageHeaderProps> = ({
     createLabel = "Create",
     showToolbar = false,
     customToolbar = false,
-    showViewLayoutButtons = false,
     onQuickFilterChange,
     cancelTokenSources,
     children,
@@ -42,11 +39,6 @@ export const AppPageHeader: FC<AppPageHeaderProps> = ({
                     />
                 </Col>
             )}
-            <Col md={1}>
-                {showViewLayoutButtons && (
-                    <AppHeaderTypeSwitch></AppHeaderTypeSwitch>
-                )}
-            </Col>
             {customToolbar && (
                 <Col className="d-flex  justify-content-end" md={8}>
                     {children}
