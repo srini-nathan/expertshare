@@ -34,10 +34,7 @@ export const AppFieldTypeElement: FC<AppFieldTypeElementProps> = ({
         name,
     });
     const isValidCheck = (value: any) => {
-        if (value) {
-            return true;
-        }
-        return false;
+        return !!value;
     };
     useEffect(() => {
         if (isEditMode) {
