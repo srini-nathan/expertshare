@@ -165,7 +165,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
                             }}
                             handleBlob={(blob) => {
                                 setCropperFile(blob);
-                                onFileSelect(blob);
+                                onFileSelect([blob]);
                             }}
                         />
                     )}
