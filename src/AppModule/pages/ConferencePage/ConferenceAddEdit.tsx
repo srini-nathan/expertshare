@@ -120,20 +120,22 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
         setFiles(selectedFiles);
     };
 
-    const submitForm = (formData: Conference) => {
+    const submitForm = async (formData: Conference) => {
         if (checkTranslation()) {
             formData.translations = getTranslation();
             formData.container = ContainerApi.toResourceUrl(containerId);
             formData.conferenceTags = selectedConferenceTags.map((e) => {
-                if (e.id)
+                if (e.id) {
                     return ConferenceTagApi.toResourceUrl(parseInt(e.id, 10));
+                }
+
                 return {
                     name: e.value,
                     container: ContainerApi.toResourceUrl(containerId),
                 };
             });
 
-            ConferenceApi.createOrUpdate<Conference>(id, formData).then(
+            return ConferenceApi.createOrUpdate<Conference>(id, formData).then(
                 ({ error, errorMessage }) => {
                     if (error instanceof UnprocessableEntityErrorResponse) {
                         setViolations<Conference>(error, setError);
@@ -149,6 +151,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                 }
             );
         }
+        return Promise.reject();
     };
     const onSubmit = async (formData: Conference) => {
         if (files.length > 0) {
@@ -317,6 +320,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                                 >
                                     <Form.Label>Poster</Form.Label>
                                     <AppUploader
+                                        withCropper
                                         accept="image/*"
                                         imagePath={
                                             data.imageName
@@ -344,6 +348,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                                 isEditMode={isEditMode}
                                 navigation={navigator}
                                 backLink={"/conferences"}
+                                isLoading={formState.isSubmitting}
                             />
                         </Form>
                     </AppCard>
