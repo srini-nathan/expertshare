@@ -2,6 +2,8 @@
 
 .questions-and-answers-wrapper {
     &--column {
+        height: 90vh;
+        overflow: hidden;
         background: white;
         padding-right: 30px;
         padding-left: 30px;
@@ -14,5 +16,7 @@
     }
 
     &--thread {
+        overflow: scroll;
+        height: 100%;
     }
 }

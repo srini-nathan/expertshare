@@ -37,8 +37,14 @@ export abstract class SessionCommentsAPI extends EntityAPI {
             );
     }
 
-    public static async getMessages(): Promise<any> {
-        return this.makeGet<any>(API_GET_SESSIONS_COMMENTS)
+    public static async getMessages(
+        session: number,
+        container: number
+    ): Promise<any> {
+        return this.makeGet<any>(API_GET_SESSIONS_COMMENTS, {
+            "session.id": session,
+            "container.id": container,
+        })
             .then(({ data }) => {
                 return data;
             })

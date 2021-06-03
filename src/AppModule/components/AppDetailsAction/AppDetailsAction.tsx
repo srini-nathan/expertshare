@@ -60,8 +60,6 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
     };
 
     const answerMessage = (message: string) => {
-        // eslint-disable-next-line no-console
-        console.log(qId);
         if (handleAnswerMessage && qId) {
             handleAnswerMessage(message, qId);
         }
@@ -97,7 +95,7 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                         ) : (
                             <div className="name pl-2">
                                 <div className="name--sender">
-                                    <h3>Jane Cooper</h3>
+                                    <h3>Yauheni Maretski</h3>
                                 </div>
                                 <div className="name--comment">
                                     <span>Product Development @Snapchat</span>

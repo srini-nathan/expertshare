@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useEffect } from "react";
+import React, { useState, FunctionComponent, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 import { AppСhoseMethodMessage } from "../AppСhoseMethodMessage";
 import { AppQAThread } from "../AppQAThread";
@@ -18,6 +18,19 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
     container,
     session,
 }) => {
+    const [data, setData] = useState<[]>([]);
+
+    // eslint-disable-next-line no-console
+    console.log(data);
+
+    const getCurrentQestionsAndAnswersThread = () => {
+        SessionCommentsAPI.getMessages(session, container).then((response) => {
+            if (response["hydra:member"].length > 0) {
+                setData(response["hydra:member"].reverse());
+            }
+        });
+    };
+
     const newMessageSend = (message: string) => {
         const meesageObj = {
             message: `${message}`,
@@ -35,98 +48,15 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                     errorToast(errorMessage);
                 }
                 if (response) {
-                    // eslint-disable-next-line no-console
-                    console.log(response);
+                    getCurrentQestionsAndAnswersThread();
                 }
             }
         );
     };
 
     useEffect(() => {
-        SessionCommentsAPI.getMessages().then((response) => {
-            // eslint-disable-next-line no-console
-            console.log(response);
-        });
+        getCurrentQestionsAndAnswersThread();
     }, []);
-
-    const mockDataMessages = [
-        {
-            "@id": "/api/session_comments/1",
-            "@type": "SessionComment",
-            id: 1,
-            message: "Your message here...",
-            status: "NEW",
-            isReplyed: false,
-            user: {
-                "@id": "/api/users/4",
-                "@type": "User",
-                id: 4,
-                firstName: null,
-                lastName: null,
-                imageName: null,
-            },
-            children: [],
-            container: "/api/containers/3",
-            session: "/api/sessions/1",
-        },
-        {
-            "@id": "/api/session_comments/2",
-            "@type": "SessionComment",
-            id: 2,
-            message: "hello world",
-            status: "NEW",
-            isReplyed: false,
-            user: {
-                "@id": "/api/users/4",
-                "@type": "User",
-                id: 4,
-                firstName: null,
-                lastName: null,
-                imageName: null,
-            },
-            children: [],
-            container: "/api/containers/3",
-            session: "/api/sessions/1",
-        },
-        {
-            "@id": "/api/session_comments/3",
-            "@type": "SessionComment",
-            id: 3,
-            message: "asfsfasf👍",
-            status: "NEW",
-            isReplyed: false,
-            user: {
-                "@id": "/api/users/1",
-                "@type": "User",
-                id: 1,
-                firstName: null,
-                lastName: null,
-                imageName: null,
-            },
-            children: [],
-            container: "/api/containers/3",
-            session: "/api/sessions/1",
-        },
-        {
-            "@id": "/api/session_comments/4",
-            "@type": "SessionComment",
-            id: 4,
-            message: "afafsf",
-            status: "NEW",
-            isReplyed: false,
-            user: {
-                "@id": "/api/users/1",
-                "@type": "User",
-                id: 1,
-                firstName: null,
-                lastName: null,
-                imageName: null,
-            },
-            children: [],
-            container: "/api/containers/3",
-            session: "/api/sessions/1",
-        },
-    ];
 
     return (
         <Row className="questions-and-answers-wrapper">
@@ -153,7 +83,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                     />
                 </div>
                 <div className="questions-and-answers-wrapper--thread">
-                    <AppQAThread data={mockDataMessages} />
+                    <AppQAThread data={data} />
                 </div>
             </Col>
         </Row>

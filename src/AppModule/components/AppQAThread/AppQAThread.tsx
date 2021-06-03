@@ -10,9 +10,6 @@ export interface QAThreadProps {
 }
 
 export const AppQAThread: FC<QAThreadProps> = ({ data }): JSX.Element => {
-    // eslint-disable-next-line no-console
-    console.log(data);
-
     return (
         <Row className="m-0">
             <Col className="p-0">
@@ -23,9 +20,9 @@ export const AppQAThread: FC<QAThreadProps> = ({ data }): JSX.Element => {
                                 <AppDetailsAction
                                     questionId={item.id}
                                     handleCloseMessages={() => {}}
-                                    handleAnswerMessage={(message, qid) => {
+                                    handleAnswerMessage={() => {
                                         // eslint-disable-next-line no-console
-                                        console.log(message, qid);
+                                        // console.log(message, qid);
                                     }}
                                     isPTOP
                                     addComment
