@@ -38,11 +38,8 @@ export const ROLES: { [key: string]: string[] } = {
 };
 
 export const isGranted = (userRole: string, role: string): boolean => {
-    if (
-        ROLES[userRole] &&
-        (userRole === role || ROLES[userRole].indexOf(role) > -1)
-    ) {
-        return true;
-    }
-    return false;
+    return (
+        userRole === role ||
+        (ROLES[userRole] && ROLES[userRole].indexOf(role) > -1)
+    );
 };
