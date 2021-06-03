@@ -3,7 +3,7 @@ import { RouteComponentProps, useParams } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { Col, Form, Row, Image } from "react-bootstrap";
+import { Col, Form, Row } from "react-bootstrap";
 import { Canceler } from "axios";
 import { isString as _isString } from "lodash";
 import { Client, Container, Package, UserGroup } from "../../models";
@@ -352,15 +352,15 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     >
                                         <Form.Label>Poster</Form.Label>
                                         <AppUploader
+                                            withCropper
+                                            imagePath={
+                                                data.imageName
+                                                    ? `${containerPosterPath}/${data.imageName}`
+                                                    : ""
+                                            }
                                             accept="image/*"
                                             onFileSelect={onFileSelect}
                                         />
-                                        {data.imageName ? (
-                                            <Image
-                                                src={`${containerPosterPath}/${data.imageName}`}
-                                                thumbnail
-                                            />
-                                        ) : null}
                                     </Form.Group>
                                     <AppFormCheckBox
                                         className="container-checkbox"
@@ -530,6 +530,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                         <AppFormActions
                             isEditMode={isEditMode}
                             navigation={navigator}
+                            isLoading={formState.isSubmitting}
                         />
                     </Form>
                 </Col>

@@ -1,7 +1,8 @@
 import React, { FC, Fragment, useState, useRef } from "react";
 import { RouteComponentProps } from "@reach/router";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row, Modal } from "react-bootstrap";
 import { isString as _isString } from "lodash";
+import { useForm } from "react-hook-form";
 import {
     GridApi,
     IServerSideDatasource,
@@ -17,6 +18,7 @@ import {
     AppListPageToolbar,
     AppButton,
     AppIcon,
+    AppFormTextArea,
 } from "../../../AppModule/components";
 import {
     AppGrid,
@@ -29,7 +31,11 @@ import "./assets/scss/list.scss";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models/context/AuthState";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
-import { useAuthState, useRoles } from "../../../AppModule/hooks";
+import {
+    useAuthState,
+    useRoles,
+    useDownloadFile,
+} from "../../../AppModule/hooks";
 
 type UpdateRoleForm = {
     role: string;
@@ -75,6 +81,9 @@ function createCore() {
 const core = createCore();
 export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
+    const [show, isShow] = useState<boolean>(false);
+    const [inviteList, setInviteList] = useState<string>("");
+    const [userInviteErrorMessage, setErrorMessage] = useState<string>("");
     const [selectedUsers, setSelectedUsers] = useState<number[]>(
         core.getState()
     );
@@ -85,7 +94,10 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { role } = useAuthState();
     const { filterRoles } = useRoles();
     const FilterRoute = filterRoles(role);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [updateLink] = useDownloadFile();
 
+    const { control, setValue } = useForm<{ [key: string]: string }>();
     function getDataSource(): IServerSideDatasource {
         return {
             getRows(params: IServerSideGetRowsParams) {
@@ -123,7 +135,55 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
             },
         };
     }
+    async function handleExport() {
+        UserApi.exportUsers().then((reponse) => {
+            updateLink({
+                name: `users.csv`,
+                type: "file/csv",
+                file: reponse,
+            });
+        });
+    }
+    async function handleInvite() {
+        if (inviteList.length > 0) {
+            const formData = new FormData();
+            formData.append("users", inviteList);
+            UserApi.inviteUsers(formData).then(({ error, response }) => {
+                isShow(false);
+                setInviteList("");
+                setValue("userlist", "");
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    }
+                } else if (response !== null) {
+                    successToast("Invited!");
+                }
+            });
+        } else {
+            setErrorMessage("This field should not be empty!");
+        }
+    }
+    async function handleImport() {
+        if (fileInputRef && fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    }
 
+    async function uploadFile(e: any) {
+        const formData = new FormData();
+        formData.append("file", e.target.files[0]);
+
+        UserApi.importUsers(formData).then(({ error, response }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                }
+            } else if (response !== null) {
+                successToast("Imported!");
+            }
+        });
+    }
     async function handleDelete(id: number) {
         UserApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
@@ -186,8 +246,60 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
         });
     }
 
+    const renderModal = () => {
+        return (
+            <Modal show={show} backdrop="static" keyboard={false}>
+                <Modal.Header
+                    onHide={() => {
+                        isShow(false);
+                    }}
+                    closeButton
+                >
+                    <Modal.Title>Invite Users</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="text-left px-2">
+                        <h5>Add user emails and seperate with coma</h5>
+                        <span>
+                            example: user1@example.com,user2@example.com
+                        </span>
+                        <AppFormTextArea
+                            md={12}
+                            className="p-0 mt-2"
+                            lg={12}
+                            xl={12}
+                            onChange={(e: any) => {
+                                setInviteList(e.target.value);
+                                setErrorMessage("");
+                            }}
+                            name={"userlist"}
+                            placeholder=""
+                            required={false}
+                            errorMessage={userInviteErrorMessage}
+                            control={control}
+                        />
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <AppButton
+                        variant="secondary"
+                        onClick={() => {
+                            isShow(false);
+                            setInviteList("");
+                        }}
+                    >
+                        Cancel
+                    </AppButton>
+                    <AppButton variant="primary" onClick={handleInvite}>
+                        Invite
+                    </AppButton>
+                </Modal.Footer>
+            </Modal>
+        );
+    };
     return (
         <Fragment>
+            {renderModal()}
             <AppPageHeader title={"Users"} customToolbar>
                 <div className="d-flex pt-2 mb-5">
                     <AppButton className="mr-2 p-3" variant="secondary">
@@ -200,24 +312,47 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
                         onQuickFilterChange={handleFilter}
                         cancelTokenSources={cancelTokenSourcesRef.current}
                     />
-                    <AppButton className="mx-2 p-3" variant="secondary">
+                    <AppButton
+                        onClick={() => {
+                            isShow(true);
+                        }}
+                        className="mx-2 p-3"
+                        variant="secondary"
+                    >
                         <AppIcon className="mr-2" name="Email" />
                         Invite
                     </AppButton>
-                    <AppButton className="mr-2 p-3" variant="secondary">
+                    <AppButton
+                        onClick={() => {
+                            handleExport();
+                        }}
+                        className="mr-2 p-3"
+                        variant="secondary"
+                    >
                         <AppIcon className="mr-2" name="Upload" />
                         Export
                     </AppButton>
-                    <AppButton className="mr-2 p-3" variant="secondary">
+                    <AppButton
+                        onClick={() => {
+                            handleImport();
+                        }}
+                        className="p-3"
+                        variant="secondary"
+                    >
                         <AppIcon className="mr-2" name="Download" />
                         Batch Import
                     </AppButton>
-                    <AppButton className="mr-2 p-3" variant="secondary">
-                        <AppIcon className="mr-2" name="Settings" />
-                        Columns
-                    </AppButton>
                 </div>
             </AppPageHeader>
+
+            <input
+                ref={fileInputRef}
+                onChange={uploadFile}
+                id="select-file"
+                type="file"
+                accept=".csv"
+                hidden={true}
+            />
             <Row>
                 <Col>
                     <AppGrid

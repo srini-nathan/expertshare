@@ -5,7 +5,7 @@ import { GridApi } from "ag-grid-community";
 import { Row, Col } from "react-bootstrap";
 import { isString as _isString } from "lodash";
 import { useSetRecoilState } from "recoil";
-import { errorToast } from "../../utils";
+import { errorToast, hideLoader, showLoader } from "../../utils";
 import { AppPageHeader, AppContainerOverviewCard } from "../../components";
 
 import { ContainerApi } from "../../../AdminModule/apis";
@@ -70,6 +70,7 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
     }, []);
 
     const checkForAccess = (container: PContainer) => {
+        showLoader("Redirecting...");
         const { domain, id } = container;
         // @TODO: do something with hardcoded paths
         const path = `${window.location.protocol}//${domain}/auth/auto-login/{token}`;
@@ -77,6 +78,7 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
             // @TODO: remove any type from here
             AuthApi.checkAndGetToken<GetToken | any>(id)
                 .then(({ token }) => {
+                    hideLoader();
                     if (token) {
                         if (token === false) {
                             errorToast(
@@ -88,6 +90,7 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
                     }
                 })
                 .catch((error) => {
+                    hideLoader();
                     errorToast(error.message);
                 });
         }

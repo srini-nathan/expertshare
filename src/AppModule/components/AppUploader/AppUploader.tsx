@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { AppCropper } from "../AppCropper";
-import { AppButton } from "../AppButton";
 import { bytesToSize } from "./bytes-to-size";
 import { Upload } from "../../models";
+import imageTemp from "./assets/images/imgthumb.svg";
 
 import "./assets/scss/style.scss";
 
@@ -16,6 +16,7 @@ export interface AppUploaderProps {
     minSize?: number;
     maxFiles?: number;
     accept?: string;
+    imagePath?: string;
     withCropper?: boolean;
     onReady?: (startFnc: () => void) => void;
     onFileSelect: (files: File[]) => void;
@@ -28,12 +29,13 @@ export const AppUploader: FC<AppUploaderProps> = ({
     maxSize = Infinity,
     minSize = 0,
     withCropper,
+    imagePath,
     onFileSelect,
 }): JSX.Element => {
     const [files, setFiles] = useState<AppFile[]>([]);
     const [cropperFile, setCropperFile] = useState<any>(undefined);
 
-    const [showCropModal, setShowCropModal] = useState<boolean>(false);
+    const [showCropModal, setShowCropModal] = useState<boolean>(true);
     const [cropUrl, setCropUrl] = useState<string>("");
 
     const {
@@ -47,6 +49,8 @@ export const AppUploader: FC<AppUploaderProps> = ({
         minSize,
         maxSize,
         onDrop: (accepted) => {
+            if (withCropper) setShowCropModal(true);
+
             setFiles(
                 accepted.map((file) =>
                     Object.assign(file, {
@@ -58,12 +62,12 @@ export const AppUploader: FC<AppUploaderProps> = ({
         },
     });
 
-    const acceptedFileItems = acceptedFiles.map((file) => (
-        <li key={file.name}>
-            File Name: {file.name} <br /> Size:{" "}
-            {bytesToSize(cropperFile ? cropperFile.size : file.size)}
-        </li>
-    ));
+    // const acceptedFileItems = acceptedFiles.map((file) => (
+    //     <li key={file.name}>
+    //         File Name: {file.name} <br /> Size:{" "}
+    //         {bytesToSize(cropperFile ? cropperFile.size : file.size)}
+    //     </li>
+    // ));
 
     const fileRejectionItems = fileRejections.map(({ file, errors }) => (
         <li>
@@ -87,6 +91,28 @@ export const AppUploader: FC<AppUploaderProps> = ({
         </div>
     ));
 
+    const thumb = files.map((f: any) => {
+        return cropUrl || f.preview;
+    });
+
+    const getBackgroundStyles = () => {
+        if (thumb.length > 0)
+            return {
+                backgroundImage: `url(${thumb[0]})`,
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
+            };
+        if (imagePath && imagePath !== "")
+            return {
+                backgroundImage: `url(${imagePath})`,
+                backgroundSize: "contain",
+                backgroundRepeat: "no-repeat",
+            };
+        return {
+            backgroundImage: `url(${imageTemp}`,
+            backgroundRepeat: "no-repeat",
+        };
+    };
     useEffect(
         () => () => {
             // Make sure to revoke the data uris to avoid memory leaks
@@ -101,47 +127,47 @@ export const AppUploader: FC<AppUploaderProps> = ({
         <section className="app-uploader">
             <div {...getRootProps({ className: "dropzone" })}>
                 <input {...getInputProps()} />
-                <p className="drag-text">
-                    Drag 'n' drop some files here, or click to select files
-                </p>
+                <div
+                    className="image-container"
+                    style={getBackgroundStyles()}
+                ></div>
             </div>
-            <aside className="dropzone-thumbs-container">{thumbs}</aside>
-            <div className="accepted-rejected">
-                <div>{acceptedFiles.length > 0 && "Accepted:"}</div>
-                <ul>{acceptedFileItems}</ul>
-                <div className="rejected">
-                    {fileRejectionItems.length > 0 && "Rejected:"}
-                </div>
-                <ul>{fileRejectionItems}</ul>
-            </div>
+
+            {thumbs.length > 1 && (
+                <>
+                    <aside className="dropzone-thumbs-container">
+                        {thumbs}
+                    </aside>
+                    <div className="accepted-rejected">
+                        {/* <div>{acceptedFiles.length > 0 && "Accepted:"}</div> */}
+                        {/* <ul>{acceptedFileItems}</ul> */}
+                        <div className="rejected">
+                            {fileRejectionItems.length > 0 && "Rejected:"}
+                        </div>
+                        <ul>{fileRejectionItems}</ul>
+                    </div>
+                </>
+            )}
             {acceptedFiles.length > 0 && (
                 <div className="d-flex w-100 justify-content-start">
                     {withCropper && (
-                        <AppButton
-                            handleClick={() => {
-                                setShowCropModal(true);
+                        <AppCropper
+                            show={showCropModal}
+                            image={files}
+                            initialAspectRatio={16 / 9}
+                            handleClose={() => {
+                                setShowCropModal(false);
+                                setCropUrl(files[0].preview);
                             }}
-                            variant="secondary"
-                        >
-                            Edit
-                            <AppCropper
-                                show={showCropModal}
-                                image={files}
-                                initialAspectRatio={16 / 9}
-                                handleClose={() => {
-                                    setShowCropModal(false);
-                                    setCropUrl(files[0].preview);
-                                }}
-                                handleSave={(url) => {
-                                    setShowCropModal(false);
-                                    setCropUrl(url);
-                                }}
-                                handleBlob={(blob) => {
-                                    setCropperFile(blob);
-                                    onFileSelect(blob);
-                                }}
-                            />
-                        </AppButton>
+                            handleSave={(url) => {
+                                setShowCropModal(false);
+                                setCropUrl(url);
+                            }}
+                            handleBlob={(blob) => {
+                                setCropperFile(blob);
+                                onFileSelect([blob]);
+                            }}
+                        />
                     )}
                 </div>
             )}

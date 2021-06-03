@@ -5,8 +5,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { find as _find } from "lodash";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { DevTool } from "@hookform/devtools";
 import {
     AppPageHeader,
     AppBreadcrumb,
@@ -81,24 +79,25 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
         mode: "all",
     });
 
-    const onSubmit = (formData: EmailTemplate) => {
-        EmailTemplateApi.createOrUpdate<EmailTemplate>(id, formData).then(
-            ({ error, errorMessage }) => {
-                if (error instanceof UnprocessableEntityErrorResponse) {
-                    setViolations<EmailTemplate>(error, setError);
-                } else if (errorMessage) {
-                    errorToast(errorMessage);
-                } else {
-                    navigator("..").then(() => {
-                        successToast(
-                            isEditMode
-                                ? "Email template updated"
-                                : "Email template created"
-                        );
-                    });
-                }
+    const onSubmit = async (formData: EmailTemplate) => {
+        return EmailTemplateApi.createOrUpdate<EmailTemplate>(
+            id,
+            formData
+        ).then(({ error, errorMessage }) => {
+            if (error instanceof UnprocessableEntityErrorResponse) {
+                setViolations<EmailTemplate>(error, setError);
+            } else if (errorMessage) {
+                errorToast(errorMessage);
+            } else {
+                navigator("..").then(() => {
+                    successToast(
+                        isEditMode
+                            ? "Email template updated"
+                            : "Email template created"
+                    );
+                });
             }
-        );
+        });
     };
 
     useEffect(() => {
@@ -122,7 +121,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
         return <AppLoader />;
     }
 
-    const { errors } = formState;
+    const { errors, isSubmitting } = formState;
 
     return (
         <Fragment>
@@ -135,12 +134,11 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
             <Row>
                 <Col md="12">
                     <AppCard>
-                        <DevTool control={control} />
                         <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                             <Form.Row>
                                 <AppFormInput
                                     name={"name"}
-                                    label={"Email template name"}
+                                    label={"Name"}
                                     md={12}
                                     lg={12}
                                     sm={12}
@@ -187,7 +185,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                             <Form.Row>
                                 <AppFormInput
                                     name={"subject"}
-                                    label={"Email template Subject"}
+                                    label={"Subject"}
                                     md={12}
                                     lg={12}
                                     xl={12}
@@ -222,6 +220,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                             <AppFormActions
                                 isEditMode={isEditMode}
                                 navigation={navigator}
+                                isLoading={isSubmitting}
                             />
                         </Form>
                     </AppCard>

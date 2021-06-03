@@ -19,12 +19,14 @@ export interface AppFormFieldGeneratorProps {
     errorMessage?: any;
     control: Control<any>;
     validation: any;
+    setValue: any;
 }
 export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps> = ({
     properties,
     defaultValue,
     control,
     validation,
+    setValue,
     errorMessage,
 }) => {
     const { items } = properties;
@@ -124,21 +126,15 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                     required={properties.isRequired}
                 />
                 <Row className="m-0">
-                    {options.map((e: any) => {
-                        return (
-                            <AppFormRadioGroup
-                                key={e.value}
-                                id={e.value}
-                                name={e.name}
-                                value={e.value}
-                                {...validation}
-                                label={e.label}
-                                {...properties.attr}
-                                defaultChecked={e.defaultCheck}
-                                control={control}
-                            />
-                        );
-                    })}
+                    <AppFormRadioGroup
+                        setValue={setValue}
+                        defaultValue={defaultValue}
+                        name={`userField./api/user_fields/${properties.id}`}
+                        options={options}
+                        {...validation}
+                        {...properties.attr}
+                        control={control}
+                    />
                 </Row>
             </Col>
         );
@@ -211,10 +207,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                 name: `userField./api/user_fields/${properties.id}`,
                 value: key,
             });
-            if (
-                defaultValue &&
-                defaultValue.value.toUpperCase() === key.toUpperCase()
-            )
+            if (defaultValue && key && defaultValue.value === key)
                 dropDownDefaultValue = {
                     label: properties.options.choice[key],
                     name: `userField./api/user_fields/${properties.id}`,

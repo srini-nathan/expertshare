@@ -16,6 +16,8 @@ import {
     AppFormSelect,
     AppFormSelectCreatable,
     AppTagSelect,
+    AppFormSwitch,
+    AppFormLabel,
     AppFormFieldGenerator,
 } from "../../../AppModule/components";
 import { User, UserGroup, UserTag, UserField } from "../../models";
@@ -38,6 +40,14 @@ import {
     useRoles,
 } from "../../../AppModule/hooks";
 import { schema } from "./schema";
+import { CONSTANTS } from "../../../config";
+
+const { TIMEZONE } = CONSTANTS.User;
+
+const options = TIMEZONE.map((value: string) => ({
+    value,
+    label: value,
+}));
 
 type UpdateProfileForm<T> = {
     [key: string]: T;
@@ -73,6 +83,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         formState,
         setError,
         trigger,
+        setValue,
     } = useForm<User>({
         resolver: yupResolver(schema(isEditMode)),
         mode: "all",
@@ -115,17 +126,28 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                 );
             else if (value === undefined) value = "false";
 
-            if (isEditMode) {
+            if (
+                isEditMode &&
+                data.userFieldValues &&
+                data.userFieldValues?.length > 0
+            ) {
+                let found = false;
                 data.userFieldValues?.forEach((e: any) => {
                     if (e.userField["@id"] === key) {
                         userFieldValues.push({
+                            "@id": `/api/user_field_values/${e.id}`,
                             value: `${value}`,
-                            userField: key,
-                            id: e.id,
-                            user_id: data.id,
                         });
+                        found = true;
                     }
                 });
+
+                if (!found) {
+                    userFieldValues.push({
+                        value: `${value}`,
+                        userField: key,
+                    });
+                }
             } else
                 userFieldValues.push({
                     value: `${value}`,
@@ -134,7 +156,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         });
         return userFieldValues;
     };
-    const onSubmit = (formData: UpdateProfileForm<any>) => {
+    const onSubmit = async (formData: UpdateProfileForm<any>) => {
         const userGroupsSelectedItems = selectedUserGroups.map((e) => {
             return UserGroupApi.toResourceUrl(parseInt(e.id, 10));
         });
@@ -144,11 +166,28 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         });
         formData.userGroups = userGroupsSelectedItems;
         formData.image_name = "";
+        formData.source = "SOURCE_CREATE";
         formData.status = "active";
 
         formData.userFieldValues = getDynamicFileds(formData.userField);
         delete formData.userField;
-        UserApi.createOrUpdate<UpdateProfileForm<any>>(id, formData).then(
+
+        if (isEditMode)
+            return UserApi.replace<User, UpdateProfileForm<any>>(
+                id,
+                formData
+            ).then(({ error, errorMessage }) => {
+                if (error instanceof UnprocessableEntityErrorResponse) {
+                    setViolations<User>(error, setError);
+                } else if (errorMessage) {
+                    errorToast(errorMessage);
+                } else {
+                    navigator("..").then(() => {
+                        successToast("User updated");
+                    });
+                }
+            });
+        return UserApi.create<User, UpdateProfileForm<any>>(formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
                     setViolations<User>(error, setError);
@@ -156,16 +195,14 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                     errorToast(errorMessage);
                 } else {
                     navigator("..").then(() => {
-                        successToast(
-                            isEditMode ? "Language updated" : "Language created"
-                        );
+                        successToast("User created");
                     });
                 }
             }
         );
     };
-    const fetchUserTags = () => {
-        UserTagApi.find<UserTag>(1, { "client.id": clientId }).then(
+    const fetchUserTags = async () => {
+        return UserTagApi.find<UserTag>(1, { "client.id": clientId }).then(
             ({ error, response }) => {
                 if (error !== null) {
                     if (_isString(error)) {
@@ -185,8 +222,8 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
             }
         );
     };
-    const fetchUserFields = () => {
-        UserFieldApi.find<UserField>(1, { "client.id": clientId }).then(
+    const fetchUserFields = async () => {
+        return UserFieldApi.find<UserField>(1, { "client.id": clientId }).then(
             ({ error, response }) => {
                 if (error !== null) {
                     if (_isString(error)) {
@@ -236,7 +273,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                     if (errorMessage) {
                         errorToast(errorMessage);
                     } else if (isNotFound) {
-                        errorToast("Language not exist");
+                        errorToast("User not exist");
                     } else if (response !== null) {
                         setData(response);
                         const selectedTags: SimpleObject<string>[] = [];
@@ -282,6 +319,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                 <AppFormFieldGenerator
                     defaultValue={defaultValue}
                     properties={e}
+                    setValue={setValue}
                     control={control}
                     validation={{
                         ...validation(
@@ -474,7 +512,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     options={userTags}
                                     control={control}
                                 />
-                                <Col>
+                                <Col className="mb-4" md={12}>
                                     <AppTagSelect
                                         options={userGroups}
                                         selectedItems={selectedUserGroups}
@@ -508,19 +546,166 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                         }}
                                     ></AppTagSelect>
                                 </Col>
+                                <AppFormSelect
+                                    id={"timezone"}
+                                    name={"timezone"}
+                                    label={"Select Timezone"}
+                                    md={12}
+                                    lg={6}
+                                    xl={6}
+                                    required={true}
+                                    {...validation(
+                                        "timezone",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    defaultValue={{
+                                        value: data?.timezone,
+                                        label: data?.timezone,
+                                    }}
+                                    placeholder={"Timezone"}
+                                    errorMessage={errors.timezone?.message}
+                                    options={options}
+                                    control={control}
+                                    transform={{
+                                        output: (template: PrimitiveObject) =>
+                                            template?.value,
+                                        input: (value: string) => {
+                                            return _find([], {
+                                                value,
+                                            });
+                                        },
+                                    }}
+                                />
+                                <AppFormSwitch
+                                    id={"isBlocked"}
+                                    name={"isBlocked"}
+                                    label={"Is Blocked"}
+                                    md={12}
+                                    lg={6}
+                                    xl={6}
+                                    required={true}
+                                    {...validation(
+                                        "isBlocked",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    defaultChecked={data?.isBlocked}
+                                    errorMessage={errors.isBlocked?.message}
+                                    control={control}
+                                />
+                                <Col md={12}>
+                                    <hr />
+                                </Col>
+                                <Col md={12} lg={6} xl={6}>
+                                    <AppFormLabel
+                                        label={`Source: ${data?.source}`}
+                                        required={false}
+                                    />
+                                </Col>
+                                <Col md={12} lg={6} xl={6}>
+                                    <AppFormLabel
+                                        label={`Is Onboarded: ${
+                                            data?.isOnboarded ? "Yes" : "No"
+                                        }`}
+                                        required={false}
+                                    />
+                                </Col>
+
+                                {data?.lastLoginAt && (
+                                    <Col className="mt-3" md={12} lg={6} xl={6}>
+                                        <AppFormLabel
+                                            label={`Last Login: ${data?.lastLoginAt}`}
+                                            required={false}
+                                        />
+                                    </Col>
+                                )}
+                                {data?.isOnboarded && (
+                                    <Col className="mt-3" md={12} lg={6} xl={6}>
+                                        <AppFormLabel
+                                            label={`Onboarder at: ${data?.onboardedAt}`}
+                                            required={false}
+                                        />
+                                    </Col>
+                                )}
                             </Form.Row>
-                            <AppFormActions
-                                isEditMode={isEditMode}
-                                navigation={navigator}
-                            />
                         </AppCard>
                     </Col>
-                    <Col md={12}>
-                        <AppCard>
-                            <Row>{renderUserFields()}</Row>
+                    {userFields.length > 0 && (
+                        <Col md={12}>
+                            <AppCard>
+                                <Row>{renderUserFields()}</Row>
+                            </AppCard>
+                        </Col>
+                    )}
+
+                    <Col className={"mb-3"} md={12}>
+                        <AppCard title="Privacy & Communication">
+                            <Form.Row>
+                                <AppFormSwitch
+                                    id={"isDisplayAsGuest"}
+                                    name={"isDisplayAsGuest"}
+                                    label={"Is Display as Guest?"}
+                                    md={12}
+                                    lg={4}
+                                    xl={4}
+                                    required={true}
+                                    {...validation(
+                                        "isDisplayAsGuest",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    defaultChecked={data?.isDisplayAsGuest}
+                                    errorMessage={
+                                        errors.isDisplayAsGuest?.message
+                                    }
+                                    control={control}
+                                />
+                                <AppFormSwitch
+                                    id={"isExposeEmail"}
+                                    name={"isExposeEmail"}
+                                    label={"Is Expose Email?"}
+                                    md={12}
+                                    lg={4}
+                                    xl={4}
+                                    required={true}
+                                    {...validation(
+                                        "isExposeEmail",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    defaultChecked={data?.isExposeEmail}
+                                    errorMessage={errors.isExposeEmail?.message}
+                                    control={control}
+                                />
+                                <AppFormSwitch
+                                    id={"isAllowCommunication"}
+                                    name={"isAllowCommunication"}
+                                    label={"Is Allow Communication?"}
+                                    md={12}
+                                    lg={4}
+                                    xl={4}
+                                    required={true}
+                                    {...validation(
+                                        "isAllowCommunication",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    defaultChecked={data?.isAllowCommunication}
+                                    errorMessage={
+                                        errors.isAllowCommunication?.message
+                                    }
+                                    control={control}
+                                />
+                            </Form.Row>
                         </AppCard>
                     </Col>
                 </Row>
+                <AppFormActions
+                    isEditMode={isEditMode}
+                    navigation={navigator}
+                    isLoading={formState.isSubmitting}
+                />
             </Form>
         </Fragment>
     );

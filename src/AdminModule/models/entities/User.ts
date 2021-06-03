@@ -8,11 +8,15 @@ import { UserApi } from "../../apis";
 export class User extends BaseEntity {
     email: string;
 
+    source: string;
+
     firstName: string;
 
     lastName: string;
 
     locale: string;
+
+    imageName: string;
 
     jobTitle: string;
 
@@ -26,9 +30,25 @@ export class User extends BaseEntity {
 
     role: string;
 
+    isOnboarded: boolean;
+
+    isDisplayAsGuest: boolean;
+
+    isExposeEmail: boolean;
+
+    isAllowCommunication: boolean;
+
+    timezone: string;
+
     roles: string[];
 
     status: string;
+
+    onboardedAt?: string;
+
+    lastLoginAt?: string;
+
+    isBlocked: boolean;
 
     userTags?: SimpleObject<string | number>[] | string[];
 
@@ -42,8 +62,13 @@ export class User extends BaseEntity {
         email = "",
         plainPassword = "",
         confirmPassword = "",
+        imageName = "",
         firstName = "",
         lastName = "",
+        source = "",
+        lastLoginAt = "",
+        onboardedAt = "",
+        timezone = "",
         locale = "",
         company = "",
         jobTitle = "",
@@ -51,6 +76,11 @@ export class User extends BaseEntity {
         role = "",
         status = "",
         userTags = [],
+        isBlocked = false,
+        isOnboarded = false,
+        isDisplayAsGuest = false,
+        isExposeEmail = false,
+        isAllowCommunication = false,
         roles = [],
         userGroups = [],
         userFieldValues = [],
@@ -60,9 +90,19 @@ export class User extends BaseEntity {
         updatedAt,
     }: Partial<User> = {}) {
         super(id, createdAt, updatedAt);
+        this.source = source;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.timezone = timezone;
         this.userField = userField;
+        this.isBlocked = isBlocked;
+        this.onboardedAt = onboardedAt;
+        this.imageName = imageName;
+        this.lastLoginAt = lastLoginAt;
+        this.isOnboarded = isOnboarded;
+        this.isAllowCommunication = isAllowCommunication;
+        this.isExposeEmail = isExposeEmail;
+        this.isDisplayAsGuest = isDisplayAsGuest;
         this.locale = locale;
         this.jobTitle = jobTitle;
         this.client = client;

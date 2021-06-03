@@ -1,0 +1,130 @@
+import React, { FC } from "react";
+import { Row, Col, Form } from "react-bootstrap";
+import "./assets/scss/style.scss";
+import { Language } from "../../../AdminModule/models";
+import { AppButton } from "../AppButton";
+import { AppFormLabel } from "../AppFormLabel";
+
+export interface TranslationsType {
+    locale: string;
+    title: string;
+    description: string;
+}
+
+export interface AppFormTranslatableProps {
+    languages: Language[];
+    onChange: (value: TranslationsType[]) => void;
+    translations: TranslationsType[];
+    defaultLanguage: string;
+}
+
+export const AppFormTranslatable: FC<AppFormTranslatableProps> = ({
+    languages,
+    translations,
+    onChange,
+    defaultLanguage,
+}) => {
+    const [active, setActive] = React.useState<string>(defaultLanguage);
+
+    const handleValueChange = (value: string, name: string) => {
+        const newTranslatiosn = translations.map((e) => {
+            if (e.locale === active)
+                return {
+                    ...e,
+                    [name]: value,
+                };
+
+            return e;
+        });
+
+        onChange(newTranslatiosn);
+    };
+
+    const getValue = (name: string): string => {
+        const item = translations.filter((e) => e.locale === active);
+
+        if (item.length > 0)
+            if (name === "description") return item[0].description;
+            else return item[0].title;
+
+        return "";
+    };
+
+    const getTitleError = (): boolean => {
+        let noErrorTitle = false;
+        translations.forEach((e) => {
+            if (!noErrorTitle) noErrorTitle = e.title !== "";
+        });
+        return noErrorTitle;
+    };
+
+    const getDescriptionError = (): boolean => {
+        let noErrorTitle = false;
+        translations.forEach((e) => {
+            if (!noErrorTitle) noErrorTitle = e.description !== "";
+        });
+        return noErrorTitle;
+    };
+
+    return (
+        <Row className="translatable-container">
+            <Col md={12}>
+                <AppFormLabel label="Choose your language" required />
+            </Col>
+            <Col md={12} className="d-flex mb-4">
+                {languages
+                    .sort((a: Language, b: Language) =>
+                        b.isDefault > a.isDefault ? 1 : -1
+                    )
+                    .map((e: Language, i: number) => {
+                        return (
+                            <AppButton
+                                className={`mr-2 ${
+                                    active === e.locale ? "active" : ""
+                                } ${e.locale}`}
+                                onClick={() => {
+                                    setActive(e.locale);
+                                }}
+                                variant="secondary"
+                                key={i}
+                            >
+                                <i></i>
+                                {e.name}
+                            </AppButton>
+                        );
+                    })}
+            </Col>
+            <Form.Group as={Col} md={12}>
+                <AppFormLabel label={`Title (${active})`} required />
+
+                <Form.Control
+                    value={getValue("title")}
+                    name={`title_${active}`}
+                    onChange={(e: any) => {
+                        handleValueChange(e.target.value, "title");
+                    }}
+                />
+
+                <Form.Control.Feedback className={"d-block"} type="invalid">
+                    {!getTitleError() && "This feild is required"}
+                </Form.Control.Feedback>
+            </Form.Group>
+
+            <Form.Group as={Col} md={12}>
+                <AppFormLabel label={`Description (${active})`} required />
+
+                <Form.Control
+                    as={"textarea"}
+                    value={getValue("description")}
+                    name={`description_${active}`}
+                    onChange={(e: any) => {
+                        handleValueChange(e.target.value, "description");
+                    }}
+                />
+                <Form.Control.Feedback className={"d-block"} type="invalid">
+                    {!getDescriptionError() && "This feild is required"}
+                </Form.Control.Feedback>
+            </Form.Group>
+        </Row>
+    );
+};

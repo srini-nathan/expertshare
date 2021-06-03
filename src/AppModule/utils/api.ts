@@ -13,6 +13,10 @@ export const generateKeyHeader = (saltLen = 6): string => {
     return `${prefixSalt}${hostBase64}${suffixSalt}`;
 };
 
+export const getUserTimeZone = (): string => {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+};
+
 export const checkAndParseResponse = (
     data: string | SimpleObject<any>
 ): SimpleObject<any> => {

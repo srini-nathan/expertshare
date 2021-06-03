@@ -8,10 +8,14 @@ const {
     api_users_get_item: API_GET_ITEM,
     api_users_get_collection: API_GET_COLLECTION,
     api_users_patch_item: API_PATCH_ITEM,
+    api_users_put_item: API_PUT_ITEM,
     api_users_post_collection: API_POST_COLLECTION,
     api_users_get_attendee_view_item: API_GET_ATTENDEE_COLLECTION,
     api_users_change_password_item: API_CHANGE_PASSWORD_COLLECTION,
     api_users_change_profile_item: API_UPDATE_PROFILE_COLLECTION,
+    api_users_import_collection: API_IMPORT,
+    api_users_invite_collection: API_INVITE,
+    api_users_export_collection: API_EXPORT,
 } = ROUTES;
 
 export abstract class UserApi extends EntityAPI {
@@ -22,6 +26,8 @@ export abstract class UserApi extends EntityAPI {
     protected static GET_ITEM = API_GET_ITEM;
 
     protected static PATCH_ITEM = API_PATCH_ITEM;
+
+    protected static PUT_ITEM = API_PUT_ITEM;
 
     protected static DELETE_ITEM = API_DELETE_ITEM;
 
@@ -57,17 +63,48 @@ export abstract class UserApi extends EntityAPI {
         id: number,
         entity: P
     ): Promise<FinalResponse<R | null>> {
-        const config: AxiosRequestConfig = this.getPatchRequestConfig<P>();
-
-        return this.makePatch<R, P>(
+        return this.makePut<R, P>(
             route(API_UPDATE_PROFILE_COLLECTION, { id }),
-            JSON.stringify(entity),
-            {},
-            config
+            entity
         )
             .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
             .catch((error: AxiosError | ServerError) =>
                 this.handleErrorDuringCreatingOrUpdating(error)
             );
+    }
+
+    public static async exportUsers(): Promise<any> {
+        return this.makeGet<any>(API_EXPORT)
+            .then(({ data }) => {
+                return data;
+            })
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
+    }
+
+    public static async inviteUsers(entity: any): Promise<any> {
+        return this.makePost<any, any>(API_INVITE, entity)
+            .then(({ data }) => {
+                return Promise.resolve(new FinalResponse(data, null));
+            })
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
+    }
+
+    public static async importUsers(entity: any): Promise<any> {
+        const config: AxiosRequestConfig = this.getPostMultiPartRequestConfig();
+
+        return this.makePost<any, any>(API_IMPORT, entity, {}, config)
+            .then(({ data }) => {
+                return Promise.resolve(new FinalResponse(data, null));
+            })
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
     }
 }

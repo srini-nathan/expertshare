@@ -26,6 +26,18 @@
             "TYPE_PROJECTOR": "projector"
         }
     },
+    "ChatMessage": {
+        "STATUS": { "STATUS_NEW": "NEW", "STATUS_READ": "READ" },
+        "CONTENT": {
+            "CONTENT_TYPE_TEXT": "TEXT",
+            "CONTENT_TYPE_AUDIO": "AUDIO",
+            "CONTENT_TYPE_VIDEO": "VIDEO"
+        }
+    },
+    "ChatThread": {
+        "THREAD": { "THREAD_TYPE_O2O": "O2O", "THREAD_TYPE_GROUP": "GROUP" },
+        "STATUS": { "STATUS_NEW": "NEW", "STATUS_ARCHIVED": "ARCHIVED" }
+    },
     "Container": {
         "STORAGE": { "STORAGE_LOCAL": "Local", "STORAGE_S3": "S3" }
     },
@@ -68,7 +80,9 @@
             "FILETYPE_CONTAINER_POSTER": "CONTAINER_POSTER",
             "FILETYPE_CONFERENCE_POSTER": "CONFERENCE_POSTER",
             "FILETYPE_SESSION_POSTER": "SESSION_POSTER",
-            "FILETYPE_USER_PROFILE": "USER_PROFILE"
+            "FILETYPE_SESSION_DOC": "SESSION_DOC",
+            "FILETYPE_USER_PROFILE": "USER_PROFILE",
+            "FILETYPE_NEWSFEED_MEDIA": "NEWSFEED_MEDIA"
         },
         "FILETYPEINFO": {
             "FILETYPEINFO_CONTAINER_POSTER": {
@@ -91,23 +105,30 @@
                 "isSecure": false,
                 "path": "session"
             },
+            "FILETYPEINFO_SESSION_DOC": {
+                "key": "SESSION_DOC",
+                "isSecure": false,
+                "path": "session_doc"
+            },
             "FILETYPEINFO_USER_PROFILE": {
                 "key": "USER_PROFILE",
                 "isSecure": false,
                 "path": "user"
+            },
+            "FILETYPEINFO_NEWSFEED_MEDIA": {
+                "key": "NEWSFEED_MEDIA",
+                "isSecure": false,
+                "path": "newsfeed_media"
             }
         }
     },
     "User": {
-        "STATUS": {
-            "STATUS_ACTIVE": "STATUS_ACTIVE",
-            "STATUS_INACTIVE": "STATUS_INACTIVE"
-        },
+        "STATUS": { "STATUS_ACTIVE": "ACTIVE", "STATUS_INACTIVE": "INACTIVE" },
         "SOURCE": {
-            "SOURCE_CREATE": "SOURCE_CREATE",
-            "SOURCE_INVITE": "SOURCE_INVITE",
-            "SOURCE_IMPORT": "SOURCE_IMPORT",
-            "SOURCE_REGISTER": "SOURCE_REGISTER"
+            "SOURCE_CREATE": "CREATE",
+            "SOURCE_INVITE": "INVITE",
+            "SOURCE_IMPORT": "IMPORT",
+            "SOURCE_REGISTER": "REGISTER"
         },
         "TIMEZONE": [
             "Africa/Abidjan",
