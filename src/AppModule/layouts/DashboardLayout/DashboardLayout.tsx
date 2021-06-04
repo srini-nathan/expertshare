@@ -10,9 +10,10 @@ import {
 } from "../../atoms";
 
 export const DashboardLayout: FC = ({ children }) => {
-    const { hideNav } = useRecoilValue<AppDashboardLayoutOptions>(
-        appDashboardLayoutOptions
-    );
+    const {
+        hideNav,
+        hideMessenger,
+    } = useRecoilValue<AppDashboardLayoutOptions>(appDashboardLayoutOptions);
 
     return (
         <Container className={"p-0 unfixed"} fluid={true}>
@@ -25,7 +26,7 @@ export const DashboardLayout: FC = ({ children }) => {
                 <div className="col-md-12 col-sm-12 col-xl-12 p-3 p-lg-4 mb-2">
                     {children}
                 </div>
-                <AppMessageBox userChatID={() => {}} />
+                {hideMessenger ? null : <AppMessageBox userChatID={() => {}} />}
             </div>
         </Container>
     );

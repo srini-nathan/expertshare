@@ -14,6 +14,8 @@ import { PContainer } from "../../../AdminModule/models";
 import {
     appDashboardLayoutOptions,
     AppDashboardLayoutOptions,
+    overViewLayout,
+    normalLayout,
 } from "../../atoms";
 import { AuthApi } from "../../../SecurityModule/apis";
 import { route } from "../../../config";
@@ -35,14 +37,14 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
         setLayoutOptions((currVal) => {
             return {
                 ...currVal,
-                hideNav: true,
+                ...overViewLayout,
             };
         });
         return () => {
             setLayoutOptions((currVal) => {
                 return {
                     ...currVal,
-                    hideNav: false,
+                    ...normalLayout,
                 };
             });
         };
