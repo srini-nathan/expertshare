@@ -10,7 +10,9 @@ export interface AppСhoseMethodMessageProps {
     className?: string;
     rows: number;
     enterToPost?: boolean;
+    isEdit?: boolean;
     handleMessageSend?: (message: string) => void;
+    handleUpdateMessage?: (message: string) => void;
 }
 
 export const AppСhoseMethodMessage: FC<AppСhoseMethodMessageProps> = ({
@@ -18,6 +20,8 @@ export const AppСhoseMethodMessage: FC<AppСhoseMethodMessageProps> = ({
     rows,
     enterToPost,
     handleMessageSend,
+    handleUpdateMessage,
+    isEdit,
     ...props
 }): JSX.Element => {
     const [activeTabMessage, setActiveTabMessage] = React.useState<string>(
@@ -44,8 +48,14 @@ export const AppСhoseMethodMessage: FC<AppСhoseMethodMessageProps> = ({
                         placeholder="Write your message..."
                         rows={rows}
                         isSend
+                        isEdit={isEdit}
                         enterToPost={enterToPost}
                         className="main-messages"
+                        handleUpdateData={(message) => {
+                            if (handleUpdateMessage) {
+                                handleUpdateMessage(message);
+                            }
+                        }}
                         handleDataSend={(data) => {
                             if (handleMessageSend) {
                                 handleMessageSend(data);
@@ -53,7 +63,7 @@ export const AppСhoseMethodMessage: FC<AppСhoseMethodMessageProps> = ({
                         }}
                     />
                 </AppTab>
-                <AppTab
+                {/* <AppTab
                     eventKey="Audio"
                     title={
                         <span>
@@ -72,7 +82,7 @@ export const AppСhoseMethodMessage: FC<AppСhoseMethodMessageProps> = ({
                     }
                 >
                     Video
-                </AppTab>
+                </AppTab> */}
             </AppTabs>
         </div>
     );

@@ -18,7 +18,9 @@ export interface AppMessageComposeProps extends AppFormElementProps {
     isSend?: boolean;
     rows?: number;
     enterToPost?: boolean;
+    isEdit?: boolean;
     handleDataSend: (message: any) => void;
+    handleUpdateData?: (message: any) => void;
     onChange?: ChangeEventHandler<
         HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >;
@@ -31,8 +33,10 @@ export const AppMessageCompose: FC<AppMessageComposeProps> = ({
     rows = 5,
     onChange,
     handleDataSend,
+    handleUpdateData,
     isSend,
     enterToPost,
+    isEdit,
     ...props
 }): JSX.Element => {
     const [data, setData] = useState<string>("");
@@ -67,6 +71,13 @@ export const AppMessageCompose: FC<AppMessageComposeProps> = ({
 
     const sendData = () => {
         handleDataSend(data);
+        setData("");
+    };
+
+    const updateData = () => {
+        if (handleUpdateData) {
+            handleUpdateData(data);
+        }
         setData("");
     };
 
@@ -134,7 +145,7 @@ export const AppMessageCompose: FC<AppMessageComposeProps> = ({
                             <AppButton
                                 className="sent-btn"
                                 variant="light"
-                                onClick={sendData}
+                                onClick={isEdit ? updateData : sendData}
                                 disabled={data.length === 0}
                             >
                                 Send

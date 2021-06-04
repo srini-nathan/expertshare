@@ -25,7 +25,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
 
     const getCurrentQestionsAndAnswersThread = () => {
         SessionCommentsAPI.getMessages(session, container).then((response) => {
-            if (response["hydra:member"].length > 0) {
+            if (response) {
                 setData(response["hydra:member"].reverse());
             }
         });
@@ -35,7 +35,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
         const meesageObj = {
             message: `${message}`,
             status: "NEW",
-            isReplyed: false,
+            isReplyed: true,
             container: `api/containers/${container}`,
             session: `api/sessions/${session}`,
         };
@@ -52,6 +52,65 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                 }
             }
         );
+    };
+
+    const sendAnswerMessage = (message: string, aId: number) => {
+        const meesageObj = {
+            message: `${message}`,
+            status: "NEW",
+            parent: `/api/session_comments/${aId}`,
+            isReplyed: true,
+            container: `api/containers/${container}`,
+            session: `api/sessions/${session}`,
+        };
+
+        const messageToPost = JSON.stringify(meesageObj);
+
+        SessionCommentsAPI.postComment<any, any>(messageToPost).then(
+            ({ errorMessage, response }) => {
+                if (errorMessage) {
+                    errorToast(errorMessage);
+                }
+                if (response) {
+                    getCurrentQestionsAndAnswersThread();
+                }
+            }
+        );
+    };
+
+    const patchMessage = (message: string, id: number) => {
+        const meesageObj = {
+            message: `${message}`,
+            status: "NEW",
+            isReplyed: true,
+            container: `api/containers/${container}`,
+            session: `api/sessions/${session}`,
+        };
+
+        const messageToPost = JSON.stringify(meesageObj);
+
+        SessionCommentsAPI.update<any, any>(id, messageToPost).then(
+            ({ errorMessage, response }) => {
+                if (errorMessage) {
+                    errorToast(errorMessage);
+                }
+                if (response) {
+                    // eslint-disable-next-line no-console
+                    console.log(response);
+                    getCurrentQestionsAndAnswersThread();
+                }
+            }
+        );
+    };
+
+    const deleteQuestion = (qId: number) => {
+        SessionCommentsAPI.deleteById(qId).then(() => {
+            getCurrentQestionsAndAnswersThread();
+        });
+    };
+
+    const updateMessage = (message: string, qId: number) => {
+        patchMessage(message, qId);
     };
 
     useEffect(() => {
@@ -83,7 +142,16 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                     />
                 </div>
                 <div className="questions-and-answers-wrapper--thread">
-                    <AppQAThread data={data} />
+                    <AppQAThread
+                        data={data}
+                        deleteQuestion={(qId) => {
+                            deleteQuestion(qId);
+                        }}
+                        updateMessage={updateMessage}
+                        sendAnswer={(message, aId) => {
+                            sendAnswerMessage(message, aId);
+                        }}
+                    />
                 </div>
             </Col>
         </Row>

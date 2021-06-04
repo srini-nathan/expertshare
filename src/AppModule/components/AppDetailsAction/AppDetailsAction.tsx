@@ -16,6 +16,8 @@ export interface AppDetailsActionProps {
     handleCloseMessages: () => void;
     handleLike?: () => void;
     handleAnswerMessage?: (message: string, questionId: number) => void;
+    handleDeleteQuestion?: (questionId: number) => void;
+    updateMessage?: (message: string, questionId: number) => void;
     showShareBtn?: boolean;
     children?: JSX.Element[] | JSX.Element;
     questionId?: number;
@@ -29,14 +31,17 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
     handleCloseMessages,
     group,
     addComment = false,
-    handleLike,
+    // handleLike,
     handleAnswerMessage,
+    handleDeleteQuestion,
+    updateMessage,
     showShareBtn,
     children,
     questionId,
 }) => {
     const [rotateBtn, setRotateBtn] = useState(false);
     const [openMessageArea, setOpenMessageArea] = useState<boolean>(false);
+    const [openEditArea, setOpenEditArea] = useState(false);
 
     const qId = questionId;
 
@@ -60,10 +65,30 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
     };
 
     const answerMessage = (message: string) => {
+        // eslint-disable-next-line no-console
+        console.log(message);
         if (handleAnswerMessage && qId) {
             handleAnswerMessage(message, qId);
         }
         setOpenMessageArea(false);
+    };
+
+    const deleteQuestion = () => {
+        if (handleDeleteQuestion && qId) {
+            handleDeleteQuestion(qId);
+        }
+    };
+
+    const editQuestion = () => {
+        setOpenEditArea(!openEditArea);
+    };
+
+    const patchMessage = (message: string) => {
+        // eslint-disable-next-line no-console
+        if (updateMessage && qId) {
+            updateMessage(message, qId);
+        }
+        setOpenEditArea(false);
     };
 
     return (
@@ -145,15 +170,6 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
 
                     {addComment && (
                         <Row className="row m-0 p-0">
-                            <Col
-                                className="btn-collapse col-auto p-0"
-                                id="btn-collapse-index"
-                            >
-                                <Button variant="link" onClick={handleLike}>
-                                    <i className="far fa-heart"></i>
-                                </Button>
-                            </Col>
-
                             {showShareBtn && (
                                 <Col
                                     className="btn-close col-auto px-1 p-0 pl-2"
@@ -171,6 +187,24 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                                     </Button>
                                 </Col>
                             )}
+                            <Col
+                                className="btn-collapse col-auto p-0"
+                                id="btn-collapse-index"
+                            >
+                                <Button variant="link" onClick={deleteQuestion}>
+                                    <i className="far fa-trash-alt"></i>
+                                </Button>
+                                <Button variant="link" onClick={editQuestion}>
+                                    <i
+                                        className={`fas fa-edit ${
+                                            openEditArea && "active"
+                                        }`}
+                                    ></i>
+                                </Button>
+                                {/* <Button variant="link" onClick={handleLike}>
+                                    <i className="far fa-heart"></i>
+                                </Button> */}
+                            </Col>
                         </Row>
                     )}
                 </Col>
@@ -186,6 +220,18 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                                 rows={2}
                                 enterToPost
                                 handleMessageSend={answerMessage}
+                            />
+                        )}
+
+                        {openEditArea && (
+                            <AppСhoseMethodMessage
+                                activeTab="Text"
+                                className="ptop-messages"
+                                isEdit
+                                rows={2}
+                                enterToPost
+                                handleMessageSend={answerMessage}
+                                handleUpdateMessage={patchMessage}
                             />
                         )}
                     </div>
