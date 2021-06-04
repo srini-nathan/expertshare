@@ -7,25 +7,62 @@ import {
 } from "ag-grid-community";
 import { Canceler } from "axios";
 import { Row, Col } from "react-bootstrap";
+import { isString as _isString } from "lodash";
 import { appGridColDef } from "./app-grid-col-def";
 import {
     AppPageHeader,
-    // AppConferenceCard,
-    // AppLoader,
     AppSwitchView,
     AppListPageToolbar,
+    AppLoader,
 } from "../../components";
 import "./assets/scss/style.scss";
 import { AttendeeCard } from "../../components/AttendeeCard";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { AppGrid } from "../../containers/AppGrid";
 import { appGridConfig } from "../../config";
+import { UserApi } from "../../../AdminModule/apis";
+import { User } from "../../models/entities/User";
+import { SimpleObject } from "../../models";
+import { checkAndParseResponse, errorToast } from "../../utils";
 
 export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
     const appGridApi = useRef<GridApi>();
     const { view } = useParams();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const [total, setTotal] = useState<number>(0);
+    const [loading, isLoading] = useState<boolean>(true);
+    const [attendees, setAttendees] = useState<User[]>([]);
+    const fetchData = () => {
+        isLoading(true);
+        UserApi.getAttendeeList<User>().then(({ response, error }) => {
+            isLoading(false);
+
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                }
+            } else if (response !== null) {
+                const parsedData: SimpleObject<any> = checkAndParseResponse(
+                    response
+                );
+                // setAttendees(response.items);
+                // eslint-disable-next-line no-console
+                console.log(
+                    "response attendee list ",
+                    response,
+                    parsedData["hydra:member"]
+                );
+                setAttendees(parsedData["hydra:member"]);
+            }
+        });
+    };
+
+    React.useEffect(() => {
+        fetchData();
+    }, []);
+
+    if (loading) return <AppLoader />;
+
     const initialValues = [
         {
             id: 1,
@@ -90,10 +127,35 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 const { endRow } = request;
                 const pageNo = endRow / appGridConfig.pageSize;
                 // eslint-disable-next-line no-console
-                console.log("pageNo", pageNo);
+                console.log("pageNo", pageNo, initialValues);
                 api?.hideOverlay();
-                setTotal(initialValues.length);
-                params.successCallback(initialValues, initialValues.length);
+                UserApi.getAttendeeList<User>(pageNo, {}).then(
+                    ({ response, error }) => {
+                        isLoading(false);
+                        if (error !== null) {
+                            if (_isString(error)) {
+                                errorToast(error);
+                            }
+                        } else if (response !== null) {
+                            const parsedData: SimpleObject<any> = checkAndParseResponse(
+                                response
+                            );
+                            // setAttendees(response.items);
+                            // eslint-disable-next-line no-console
+                            console.log(
+                                "response attendee list ",
+                                response,
+                                parsedData["hydra:member"]
+                            );
+                            setAttendees(parsedData["hydra:member"]);
+                            setTotal(parsedData["hydra:member"].length);
+                            params.successCallback(
+                                parsedData["hydra:member"],
+                                parsedData["hydra:member"].length
+                            );
+                        }
+                    }
+                );
             },
         };
     }
@@ -131,7 +193,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
             default:
                 return (
                     <Row>
-                        {initialValues.map((item, index) => (
+                        {attendees.map((item, index) => (
                             <Col
                                 xs={12}
                                 md={6}

@@ -2,6 +2,7 @@ import React, { FC } from "react";
 // import { Col } from "react-bootstrap";
 import { AppIcon } from "../AppIcon";
 import "./assets/scss/list.scss";
+import UserAvatar from "./assets/images/user-avatar.png";
 
 export interface AttendeeCardProps {
     attendee: any;
@@ -30,7 +31,12 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                 >
                     <i
                         style={{
-                            backgroundImage: `url(${attendee.avatarUrl})`,
+                            backgroundImage: `url(${
+                                attendee.avatarUrl
+                                    ? attendee.avatarUrl
+                                    : UserAvatar
+                            })`,
+                            backgroundPosition: "center",
                         }}
                     ></i>
                 </a>
@@ -55,20 +61,21 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
             </div>
             <div className="card--tags">
                 <div className="row m-0 p-0">
-                    {attendee.tags.map((tag: string, index: any) => {
-                        if (index < 3) {
-                            return (
-                                <div
-                                    className="card--tags--item col-auto px-0 mb-2"
-                                    key={index}
-                                >
-                                    <a href="#">{tag}</a>
-                                </div>
-                            );
-                        }
-                        return <></>;
-                    })}
-                    {attendee.tags.length > 2 && (
+                    {attendee.tags &&
+                        attendee.tags.map((tag: string, index: any) => {
+                            if (index < 3) {
+                                return (
+                                    <div
+                                        className="card--tags--item col-auto px-0 mb-2"
+                                        key={index}
+                                    >
+                                        <a href="#">{tag}</a>
+                                    </div>
+                                );
+                            }
+                            return <></>;
+                        })}
+                    {attendee.tags && attendee.tags.length > 2 && (
                         <div className="card--tags--item show-more col-auto px-0 mb-2">
                             <a href="#">+ Show More</a>
                         </div>
