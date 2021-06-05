@@ -132,10 +132,12 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
         });
     }
 
+    if (loading) {
+        return <AppLoader />;
+    }
+
     return (
         <Fragment>
-            {loading && <AppLoader />}
-
             <AppPageHeader
                 title={"Languages"}
                 createLink={"/admin/languages/new"}
