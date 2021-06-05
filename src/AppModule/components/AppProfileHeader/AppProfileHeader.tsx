@@ -30,7 +30,13 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
     email,
     userTags,
 }): JSX.Element => {
-    const profilePicturePath = useBuildAssetPath(path);
+    const profilePicturePath = useBuildAssetPath(path, imageName);
+    const style = imageName
+        ? {
+              backgroundImage: `url(${profilePicturePath})`,
+              backgroundSize: "cover",
+          }
+        : {};
 
     return (
         <AppCard className="user-profile--det--container mb-3 pt-4 px-0">
@@ -41,11 +47,8 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                         className="inner-container--profile-pic pl-4 mt-5 mt-md-0"
                     >
                         <Col
+                            style={style}
                             className="inner-container--profile-pic--content online"
-                            style={{
-                                backgroundImage: `url(${profilePicturePath}/${imageName})`,
-                                backgroundSize: "cover",
-                            }}
                         >
                             <span className="speaker-btn">
                                 <i

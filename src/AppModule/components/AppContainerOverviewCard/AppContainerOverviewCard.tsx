@@ -21,8 +21,7 @@ export const AppContainerOverviewCard: FC<AppContainerOverviewCardProps> = ({
 }): JSX.Element => {
     const { name, description, imageName = null } = container;
     const imagePath = useBuildAssetPath(path, imageName);
-    const style =
-        imageName === null ? {} : { backgroundImage: `url(${imagePath})` };
+    const style = imageName ? { backgroundImage: `url(${imagePath})` } : {};
 
     return (
         <div className="container-overview--container--item">

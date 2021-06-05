@@ -36,16 +36,12 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
         description,
     } = conference;
     const imagePath = useBuildAssetPath(path, imageName);
+    const style = imageName ? { backgroundImage: `url(${imagePath})` } : {};
 
     return (
         <Col md={12} lg={4} xl={4} className="events-grid--container--item">
             <div className="inner-container  ">
-                <div
-                    className="inner-container--banner"
-                    style={{
-                        backgroundImage: `url(${imagePath})`,
-                    }}
-                >
+                <div className="inner-container--banner" style={style}>
                     {/* <div className="inner-container--banner--button">
                         <a href="#" className="live-now-btn mr-3">
                             <i className="fak fa-live"></i>
