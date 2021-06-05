@@ -50,6 +50,7 @@ export const AppMessageItem: FunctionComponent<MessageItemProps> = ({
 
     return (
         <ListGroup.Item
+            as={"div"}
             disabled={active && true}
             action
             className="message-group-container"
