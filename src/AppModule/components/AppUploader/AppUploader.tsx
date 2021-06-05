@@ -1,3 +1,4 @@
+// @TODO: move this to under containers, it has lots of logic
 import React, { FC, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Cropper } from "react-cropper";
@@ -7,6 +8,8 @@ import { Upload } from "../../models";
 import imageTemp from "./assets/images/imgthumb.svg";
 
 import "./assets/scss/style.scss";
+import { AppIcon } from "../AppIcon";
+import { AppButton } from "../AppButton";
 
 type Options = Cropper.Options;
 
@@ -25,6 +28,7 @@ export interface AppUploaderProps {
     onFileSelect: (files: File[]) => void;
     onFinish?: (error: null | string, upload?: Upload) => void;
     cropperOptions?: Options;
+    onDelete?: () => void;
 }
 
 export const AppUploader: FC<AppUploaderProps> = ({
@@ -36,6 +40,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
     imagePath,
     onFileSelect,
     cropperOptions,
+    onDelete,
 }): JSX.Element => {
     const [files, setFiles] = useState<AppFile[]>([]);
     const [cropperFile, setCropperFile] = useState<any>(undefined);
@@ -104,18 +109,14 @@ export const AppUploader: FC<AppUploaderProps> = ({
         if (thumb.length > 0)
             return {
                 backgroundImage: `url(${thumb[0]})`,
-                backgroundSize: "contain",
-                backgroundRepeat: "no-repeat",
             };
         if (imagePath && imagePath !== "")
             return {
                 backgroundImage: `url(${imagePath})`,
-                backgroundSize: "contain",
-                backgroundRepeat: "no-repeat",
             };
         return {
             backgroundImage: `url(${imageTemp}`,
-            backgroundRepeat: "no-repeat",
+            backgroundSize: "auto",
         };
     };
     useEffect(
@@ -128,14 +129,30 @@ export const AppUploader: FC<AppUploaderProps> = ({
         [files]
     );
 
+    const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation();
+        e.preventDefault();
+
+        if (onDelete) {
+            onDelete();
+        }
+
+        if (files.length > 0) {
+            setFiles([]);
+        }
+    };
+
     return (
         <section className="app-uploader">
             <div {...getRootProps({ className: "dropzone" })}>
                 <input {...getInputProps()} />
-                <div
-                    className="image-container"
-                    style={getBackgroundStyles()}
-                ></div>
+                <div className="image-container" style={getBackgroundStyles()}>
+                    {thumb.length > 0 || imagePath ? (
+                        <AppButton variant="danger" onClick={handleDelete}>
+                            <AppIcon name={"delete"} />
+                        </AppButton>
+                    ) : null}
+                </div>
             </div>
 
             {thumbs.length > 1 && (
