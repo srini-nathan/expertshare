@@ -30,6 +30,7 @@ import {
     UserTag,
     UserField,
     User as UserModel,
+    PUser,
 } from "../../../AdminModule/models";
 import {
     UnprocessableEntityErrorResponse,
@@ -45,8 +46,8 @@ const {
     FILETYPE: { FILETYPE_USER_PROFILE },
     FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
 } = UPLOAD;
-const { path } = FILETYPEINFO_USER_PROFILE;
 const { TIMEZONE } = USER;
+const { path } = FILETYPEINFO_USER_PROFILE;
 
 const options = TIMEZONE.map((value: string) => ({
     value,
@@ -71,9 +72,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
         SimpleObject<string>[]
     >([]);
     const { containerResourceId } = useAuthState();
-    const [data, setData] = useState<UserModel>(
-        new UserModel(containerResourceId)
-    );
+    const [data, setData] = useState<PUser>(new UserModel(containerResourceId));
     const [userFields, setUserFields] = useState<UserField[]>([]);
     const [files, setFiles] = useState<File[]>([]);
     const profilePicturePath = useBuildAssetPath(path);
@@ -330,6 +329,13 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                                 : ""
                                         }
                                         onFileSelect={onFileSelect}
+                                        onDelete={() => {
+                                            setValue("imageName", "");
+                                            setData({
+                                                ...data,
+                                                imageName: "",
+                                            });
+                                        }}
                                     />
                                 </Form.Group>
                                 <AppFormInput
