@@ -63,56 +63,6 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
 
     if (loading) return <AppLoader />;
 
-    const initialValues = [
-        {
-            id: 1,
-            name: "Morris Warren",
-            category: "Speaker",
-            description:
-                "Junior Security Officer and Design Consultant at Nevis",
-            email: "morris@expershare.me",
-            tags: ["All users", "Another Tag Here"],
-            online: true,
-            avatarUrl:
-                "http://html.srmedia.ch//v2/assets/images/profiles_pic_attendees/user-1.png",
-        },
-        {
-            id: 2,
-            name: "Cameron Williamson",
-            category: "Speaker",
-            description:
-                "Junior Security Officer and Design Consultant at Nevis",
-            email: "cameron@expershare.me",
-            tags: ["All users", "Another Tag Here"],
-            online: false,
-            avatarUrl:
-                "http://html.srmedia.ch//v2/assets/images/profiles_pic_attendees/user-2.png",
-        },
-        {
-            id: 3,
-            name: "Jenny Wilson",
-            category: "Speaker",
-            description:
-                "Junior Security Officer and Design Consultant at Nevis",
-            email: "cameron@expershare.me",
-            tags: ["All users", "Another Tag Here"],
-            online: true,
-            avatarUrl:
-                "http://html.srmedia.ch//v2/assets/images/profiles_pic_attendees/user-3.png",
-        },
-        {
-            id: 4,
-            name: "Brooklyn Simmons",
-            category: "Speaker",
-            description:
-                "Junior Security Officer and Design Consultant at Nevis",
-            email: "brook@expershare.me",
-            tags: ["All users", "Special Invites", "Another Tag Here"],
-            online: false,
-            avatarUrl:
-                "http://html.srmedia.ch//v2/assets/images/profiles_pic_attendees/user-4.png",
-        },
-    ];
     async function handleFilter(search: string) {
         appGridApi.current?.setFilterModel({
             name: {
@@ -126,8 +76,6 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 const { request, api } = params;
                 const { endRow } = request;
                 const pageNo = endRow / appGridConfig.pageSize;
-                // eslint-disable-next-line no-console
-                console.log("pageNo", pageNo, initialValues);
                 api?.hideOverlay();
                 UserApi.getAttendeeList<User>(pageNo, {}).then(
                     ({ response, error }) => {

@@ -53,9 +53,10 @@ export abstract class UserApi extends EntityAPI {
             })
         )
             .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
-            .catch((error: AxiosError | ServerError) =>
-                this.handleErrorDuringCreatingOrUpdating(error)
-            );
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
     }
 
     public static async changePassword<R, P>(
