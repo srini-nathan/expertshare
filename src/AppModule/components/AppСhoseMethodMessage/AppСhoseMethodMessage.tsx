@@ -11,6 +11,7 @@ export interface AppСhoseMethodMessageProps {
     rows: number;
     enterToPost?: boolean;
     isEdit?: boolean;
+    editMessage?: [];
     handleMessageSend?: (message: string) => void;
     handleUpdateMessage?: (message: string) => void;
 }
@@ -21,6 +22,7 @@ export const AppСhoseMethodMessage: FC<AppСhoseMethodMessageProps> = ({
     enterToPost,
     handleMessageSend,
     handleUpdateMessage,
+    editMessage,
     isEdit,
     ...props
 }): JSX.Element => {
@@ -48,6 +50,7 @@ export const AppСhoseMethodMessage: FC<AppСhoseMethodMessageProps> = ({
                         placeholder="Write your message..."
                         rows={rows}
                         isSend
+                        editMessage={editMessage}
                         isEdit={isEdit}
                         enterToPost={enterToPost}
                         className="main-messages"

@@ -19,6 +19,7 @@ export interface AppMessageComposeProps extends AppFormElementProps {
     rows?: number;
     enterToPost?: boolean;
     isEdit?: boolean;
+    editMessage?: any;
     handleDataSend: (message: any) => void;
     handleUpdateData?: (message: any) => void;
     onChange?: ChangeEventHandler<
@@ -35,6 +36,7 @@ export const AppMessageCompose: FC<AppMessageComposeProps> = ({
     handleDataSend,
     handleUpdateData,
     isSend,
+    editMessage,
     enterToPost,
     isEdit,
     ...props
@@ -45,6 +47,16 @@ export const AppMessageCompose: FC<AppMessageComposeProps> = ({
     const groupProps = { controlId, className, as: Col };
 
     const [showEmogiModal, setShowEmogiModal] = useState(false);
+
+    useEffect(() => {
+        if (isEdit) {
+            if (Array.isArray(editMessage)) {
+                setData(editMessage[0]);
+            } else {
+                setData(editMessage);
+            }
+        }
+    }, [editMessage]);
 
     function useOutsideEmoji(ref: any) {
         useEffect(() => {

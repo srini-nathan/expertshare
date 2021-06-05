@@ -20,9 +20,6 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
 }) => {
     const [data, setData] = useState<[]>([]);
 
-    // eslint-disable-next-line no-console
-    console.log(data);
-
     const getCurrentQestionsAndAnswersThread = () => {
         SessionCommentsAPI.getMessages(session, container).then((response) => {
             if (response) {
@@ -95,8 +92,6 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                     errorToast(errorMessage);
                 }
                 if (response) {
-                    // eslint-disable-next-line no-console
-                    console.log(response);
                     getCurrentQestionsAndAnswersThread();
                 }
             }

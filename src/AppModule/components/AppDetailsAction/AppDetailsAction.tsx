@@ -1,7 +1,9 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState, useEffect } from "react";
 import { Row, Col, Button } from "react-bootstrap";
+import { AuthState } from "../../../SecurityModule/models";
 import { AppСhoseMethodMessage } from "../AppСhoseMethodMessage";
 import DefaultAvatar from "./assets/images/default-avatar.png";
+import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import GreateGroup from "./assets/images/greate-group.svg";
 import "./assets/scss/style.scss";
 
@@ -21,6 +23,7 @@ export interface AppDetailsActionProps {
     showShareBtn?: boolean;
     children?: JSX.Element[] | JSX.Element;
     questionId?: number;
+    userObj?: any;
 }
 export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
     defaultAvatar = DefaultAvatar,
@@ -38,12 +41,18 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
     showShareBtn,
     children,
     questionId,
+    userObj,
 }) => {
+    const { state } = React.useContext(AuthContext);
+    const { user } = state as AuthState;
+
     const [rotateBtn, setRotateBtn] = useState(false);
     const [openMessageArea, setOpenMessageArea] = useState<boolean>(false);
     const [openEditArea, setOpenEditArea] = useState(false);
 
     const qId = questionId;
+    // eslint-disable-next-line no-console
+    console.log(userObj && userObj.firstName);
 
     const handleCloseWindow = () => {
         if (!isPTOP) {
@@ -65,8 +74,6 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
     };
 
     const answerMessage = (message: string) => {
-        // eslint-disable-next-line no-console
-        console.log(message);
         if (handleAnswerMessage && qId) {
             handleAnswerMessage(message, qId);
         }
@@ -84,12 +91,17 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
     };
 
     const patchMessage = (message: string) => {
-        // eslint-disable-next-line no-console
         if (updateMessage && qId) {
             updateMessage(message, qId);
         }
         setOpenEditArea(false);
     };
+
+    const [editMessage, setEditMessage] = useState<any>(children);
+
+    useEffect(() => {
+        setEditMessage(children);
+    }, [children]);
 
     return (
         <>
@@ -120,7 +132,10 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                         ) : (
                             <div className="name pl-2">
                                 <div className="name--sender">
-                                    <h3>Yauheni Maretski</h3>
+                                    <h3>
+                                        {userObj &&
+                                            `${userObj.firstName} ${userObj.lastName}`}
+                                    </h3>
                                 </div>
                                 <div className="name--comment">
                                     <span>Product Development @Snapchat</span>
@@ -187,24 +202,33 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                                     </Button>
                                 </Col>
                             )}
-                            <Col
-                                className="btn-collapse col-auto p-0"
-                                id="btn-collapse-index"
-                            >
-                                <Button variant="link" onClick={deleteQuestion}>
-                                    <i className="far fa-trash-alt"></i>
-                                </Button>
-                                <Button variant="link" onClick={editQuestion}>
-                                    <i
-                                        className={`fas fa-edit ${
-                                            openEditArea && "active"
-                                        }`}
-                                    ></i>
-                                </Button>
-                                {/* <Button variant="link" onClick={handleLike}>
-                                    <i className="far fa-heart"></i>
-                                </Button> */}
-                            </Col>
+
+                            {user && user.id === userObj.id && (
+                                <Col
+                                    className="btn-collapse col-auto p-0"
+                                    id="btn-collapse-index"
+                                >
+                                    <Button
+                                        variant="link"
+                                        onClick={deleteQuestion}
+                                    >
+                                        <i className="far fa-trash-alt"></i>
+                                    </Button>
+                                    <Button
+                                        variant="link"
+                                        onClick={editQuestion}
+                                    >
+                                        <i
+                                            className={`fas fa-edit ${
+                                                openEditArea && "active"
+                                            }`}
+                                        ></i>
+                                    </Button>
+                                    {/* <Button variant="link" onClick={handleLike}>
+                                        <i className="far fa-heart"></i>
+                                    </Button> */}
+                                </Col>
+                            )}
                         </Row>
                     )}
                 </Col>
@@ -219,6 +243,7 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                                 className="ptop-messages"
                                 rows={2}
                                 enterToPost
+                                editMessage={editMessage}
                                 handleMessageSend={answerMessage}
                             />
                         )}
@@ -228,6 +253,7 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                                 activeTab="Text"
                                 className="ptop-messages"
                                 isEdit
+                                editMessage={editMessage}
                                 rows={2}
                                 enterToPost
                                 handleMessageSend={answerMessage}
