@@ -24,6 +24,7 @@ import {
 import {
     Conference,
     ConferenceTag,
+    PConference,
     Language,
 } from "../../../AdminModule/models";
 import {
@@ -61,7 +62,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
     const { id, isEditMode } = useParamId();
     const navigator = useNavigator(navigate);
     const { containerResourceId, containerId } = useAuthState();
-    const [data, setData] = useState<Conference>(
+    const [data, setData] = useState<PConference>(
         new Conference(containerResourceId)
     );
     const [languages, setLanguages] = useState<Language[]>([]);
@@ -83,6 +84,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
         trigger,
         formState,
         control,
+        setValue,
     } = useForm<Conference>({
         resolver: yupResolver(schema),
         mode: "all",
@@ -328,6 +330,13 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                                                 : ""
                                         }
                                         onFileSelect={onFileSelect}
+                                        onDelete={() => {
+                                            setValue("imageName", "");
+                                            setData({
+                                                ...data,
+                                                imageName: "",
+                                            });
+                                        }}
                                     />
                                 </Form.Group>
                                 <AppFormSelectCreatable
