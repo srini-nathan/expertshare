@@ -65,8 +65,9 @@ export const Messages: FC<MessagestProps> = ({
             <AppTab eventKey="Chat" title="Chat">
                 <div className="message mt-2">
                     <ListGroup>
-                        {data.messages.map((message: any) => (
+                        {data.messages.map((message: string, i: number) => (
                             <AppMessageItems
+                                key={i}
                                 message={message}
                                 handlePTOPID={openWithUserChat}
                             />
@@ -77,8 +78,9 @@ export const Messages: FC<MessagestProps> = ({
             <AppTab eventKey="Online Now" title="Online Now">
                 <div className="message mt-2">
                     <Row className="m-0 p-0">
-                        {data.messages.map((message: any) => (
+                        {data.messages.map((message: any, i: number) => (
                             <AppMessageItems
+                                key={i}
                                 message={message}
                                 handlePTOPID={openWithUserChat}
                             />

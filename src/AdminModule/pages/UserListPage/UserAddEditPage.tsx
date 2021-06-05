@@ -317,6 +317,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
             });
             return (
                 <AppFormFieldGenerator
+                    key={e.id}
                     defaultValue={defaultValue}
                     properties={e}
                     setValue={setValue}

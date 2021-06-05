@@ -32,7 +32,7 @@ const { Upload: UPLOAD } = CONSTANTS;
 const {
     FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
 } = UPLOAD;
-const { path: PATH } = FILETYPEINFO_USER_PROFILE;
+
 interface AppNavigationProps {
     items: AppNavigationItemProps[];
 }
@@ -43,7 +43,16 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const [overflowItems, setOverflowItems] = useState<
         AppNavigationItemProps[] | AppSubNavigationItemProps[]
     >([]);
-    const profilePicturePath = useBuildAssetPath(PATH);
+    const profilePicturePath = useBuildAssetPath(
+        FILETYPEINFO_USER_PROFILE.path,
+        user.imageName
+    );
+    const style = user.imageName
+        ? {
+              backgroundImage: `url(${profilePicturePath})`,
+              backgroundSize: "cover",
+          }
+        : {};
 
     const [subMenuItems] = useState<AppSubNavigationItemProps[]>([
         {
@@ -380,10 +389,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                     ? `${user.firstName} ${user.lastName}`
                                                     : "Account"
                                             }
-                                            style={{
-                                                backgroundImage: `url(${profilePicturePath}/${user.imageName})`,
-                                                backgroundSize: "cover",
-                                            }}
+                                            style={style}
                                             iconClassName="profile-picture"
                                             subDropDownItems={[
                                                 {

@@ -142,9 +142,10 @@ export const AppGroupWindow: FC<AppGroupWindowProps> = ({
                     </Row>
                     <div className="message mt-2">
                         <ListGroup>
-                            {groupItems.map((message: any) => {
+                            {groupItems.map((message: any, i: number) => {
                                 return (
                                     <AppMessageItems
+                                        key={i}
                                         message={message}
                                         userIdHandler={(id) => {
                                             addActiveId(id);

@@ -36,6 +36,7 @@ export const AppFormRadioGroup: FC<AppFormRadioGroupProps> = ({
             {options?.map((e) => {
                 return (
                     <Form.Check
+                        key={e.value}
                         id={`radio_${e.value}`}
                         name={`radio_${e.name}`}
                         onChange={(element) => {

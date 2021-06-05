@@ -196,6 +196,7 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                                     handleClone(id);
                                 }}
                                 conference={conference}
+                                key={conference.id}
                             />
                         ))}
                     </Row>
@@ -203,7 +204,9 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
         }
     };
 
-    if (loading) return <AppLoader />;
+    if (loading) {
+        return <AppLoader />;
+    }
 
     return (
         <Fragment>

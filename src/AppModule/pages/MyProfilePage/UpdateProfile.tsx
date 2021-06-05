@@ -187,6 +187,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
             });
             return (
                 <AppFormFieldGenerator
+                    key={e.id}
                     defaultValue={defaultValue}
                     properties={e}
                     setValue={setValue}
