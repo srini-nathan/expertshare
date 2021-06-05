@@ -150,6 +150,9 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
                 type="file"
                 accept=".csv"
                 hidden={true}
+                onClick={(e) => {
+                    e.currentTarget.value = "";
+                }}
             />
 
             <Row>
