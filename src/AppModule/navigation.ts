@@ -8,6 +8,13 @@ export const navigation: AppNavigationItemProps[] = [
             name: "container",
         },
     },
+    {
+        label: "Attendees",
+        path: "/attendees",
+        icon: {
+            name: "AddUserPlus",
+        },
+    },
 ];
 
 export default navigation;
