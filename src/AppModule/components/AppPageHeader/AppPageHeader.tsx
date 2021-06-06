@@ -30,7 +30,7 @@ export const AppPageHeader: FC<AppPageHeaderProps> = ({
                 <h1>{title}</h1>
             </Col>
             {showToolbar && (
-                <Col md={6}>
+                <Col md={8}>
                     <AppListPageToolbar
                         createLabel={createLabel}
                         createLink={createLink}
