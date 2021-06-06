@@ -46,12 +46,6 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                     response
                 );
                 // setAttendees(response.items);
-                // eslint-disable-next-line no-console
-                console.log(
-                    "response attendee list ",
-                    response,
-                    parsedData["hydra:member"]
-                );
                 setAttendees(parsedData["hydra:member"]);
             }
         });
