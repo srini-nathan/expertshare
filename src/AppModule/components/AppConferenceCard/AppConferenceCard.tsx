@@ -54,14 +54,14 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                                 <span onClick={() => handleClone(id as number)}>
                                     <i className="far fa-clone"></i>
                                 </span>
+                                <Link to={`/conference/${id}`}>
+                                    <i className="fak fa-pen-regular"></i>
+                                </Link>
                                 <span
                                     onClick={() => handleDelete(id as number)}
                                 >
                                     <i className="fak fa-trash-light"></i>
                                 </span>
-                                <Link to={`/conference/${id}`}>
-                                    <i className="fak fa-pen-regular"></i>
-                                </Link>
                             </>
                         )}
                     </div>

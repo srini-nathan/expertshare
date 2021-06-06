@@ -28,10 +28,26 @@
             background-position: center;
             background-size: contain;
 
-            > button {
+            > span {
                 position: absolute;
                 right: 10px;
                 bottom: 10px;
+
+                i {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 36px;
+                    height: 36px;
+                    padding-bottom: 2px;
+                    font-size: 18px;
+                    font-weight: 500;
+                    color: var(--btn-secondary-fg-clr);
+                    background-color: var(--btn-secondary-bg-clr);
+                    border: 1px solid var(--btn-secondary-border-clr);
+                    border-radius: var(--border-radius);
+                    box-shadow: 0 3px 9px var(--secondary-10);
+                }
             }
         }
     }

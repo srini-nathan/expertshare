@@ -35,6 +35,7 @@ export const appGridFrameworkComponents = {
             customClickActions: [
                 {
                     icon: "Clone",
+                    confirmationTitle: "Clone Action",
                     confirmation: "Are you sure want to clone ?",
                     onClick: () => {
                         onPressClone(id);
