@@ -91,13 +91,6 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             },
         },
         {
-            label: "User Groups",
-            path: "/admin/user-groups",
-            icon: {
-                name: "",
-            },
-        },
-        {
             label: "Email Templates",
             path: "/admin/email-templates",
             icon: {
@@ -105,15 +98,22 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             },
         },
         {
-            label: "User Fields",
-            path: "/admin/user-fields",
+            label: "Users",
+            path: "/admin/users",
             icon: {
                 name: "",
             },
         },
         {
-            label: "Users",
-            path: "/admin/users",
+            label: "User Groups",
+            path: "/admin/user-groups",
+            icon: {
+                name: "",
+            },
+        },
+        {
+            label: "User Fields",
+            path: "/admin/user-fields",
             icon: {
                 name: "",
             },
