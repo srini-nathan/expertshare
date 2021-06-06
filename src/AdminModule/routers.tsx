@@ -16,6 +16,8 @@ import {
     EmailTemplateAddEditPage,
     UserListPage,
     UserAddEditPage,
+    SessionCategoryListPage,
+    SessionCategoryAddEditPage,
 } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
 import { ContainerAddEdit } from "./pages/ContainerPage/ContainerAddEdit";
@@ -58,6 +60,9 @@ export const routers: ModuleRouter[] = [
                     <UserListPage path={"users"} />
                     <UserAddEditPage path={"users/new"} />
                     <UserAddEditPage path={"users/:id"} />
+                    <SessionCategoryListPage path={"session-category"} />
+                    <SessionCategoryAddEditPage path={"session-category/new"} />
+                    <SessionCategoryAddEditPage path={"session-category/:id"} />
                 </Router>
             );
         },
