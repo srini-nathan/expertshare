@@ -108,7 +108,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
         switch (view) {
             case "list":
                 return (
-                    <Col className="p-0">
+                    <Col className="p-0 attendee-overview-page">
                         <AppGrid
                             frameworkComponents={appGridFrameworkComponents}
                             columnDef={appGridColDef({
