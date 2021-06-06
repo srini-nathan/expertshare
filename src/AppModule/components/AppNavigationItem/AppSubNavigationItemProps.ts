@@ -6,4 +6,5 @@ export interface AppSubNavigationItemProps {
     isActive?: boolean;
     className?: string;
     icon: AppIconProps;
+    roles?: string[];
 }

@@ -15,6 +15,7 @@ export const appGridFrameworkComponents = {
             onPressDelete,
             parentId: clientId,
             onPressClone,
+            hideParentFromUrl,
         } = params;
         const { id } = data as Container;
 
@@ -24,7 +25,9 @@ export const appGridFrameworkComponents = {
 
         const props: AppGridActionProps = {
             editAction: {
-                url: `/admin/clients/${clientId}/containers/${id}`,
+                url: hideParentFromUrl
+                    ? `/admin/containers/${id}`
+                    : `/admin/clients/${clientId}/containers/${id}`,
             },
             deleteAction: {
                 confirmation: "Are you sure want to delete ?",

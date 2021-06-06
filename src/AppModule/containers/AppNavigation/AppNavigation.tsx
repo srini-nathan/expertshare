@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useState, useRef } from "react";
 import {
     ListGroup,
-    Accordion,
     ListGroupItem,
+    Accordion,
     Nav,
     Navbar,
 } from "react-bootstrap";
@@ -25,14 +25,19 @@ import {
     useWindowSize,
     useWindowLocation,
     useBuildAssetPath,
+    useAuthState,
 } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
+import { isGranted } from "../../utils";
 
-const { Upload: UPLOAD } = CONSTANTS;
+const { Upload: UPLOAD, Role } = CONSTANTS;
 const {
     FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
 } = UPLOAD;
+const {
+    ROLE: { ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_OPERATOR },
+} = Role;
 
 interface AppNavigationProps {
     items: AppNavigationItemProps[];
@@ -40,6 +45,7 @@ interface AppNavigationProps {
 
 const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const { dispatch, state } = React.useContext(AuthContext);
+    const { role } = useAuthState();
     const { user } = state;
     const [overflowItems, setOverflowItems] = useState<
         AppNavigationItemProps[] | AppSubNavigationItemProps[]
@@ -67,6 +73,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
+            roles: [ROLE_OPERATOR],
         },
         {
             label: "Design",
@@ -74,6 +81,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
+            roles: [ROLE_OPERATOR],
         },
         {
             label: "Languages",
@@ -81,6 +89,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
+            roles: [ROLE_OPERATOR],
         },
         {
             label: "Translations",
@@ -88,6 +97,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
+            roles: [ROLE_OPERATOR],
         },
         {
             label: "Clients",
@@ -95,6 +105,15 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
+            roles: [ROLE_SUPER_ADMIN],
+        },
+        {
+            label: "Containers",
+            path: "/admin/containers",
+            icon: {
+                name: "",
+            },
+            roles: [ROLE_ADMIN],
         },
         {
             label: "Email Templates",
@@ -102,6 +121,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
+            roles: [ROLE_OPERATOR],
         },
         {
             label: "Users",
@@ -109,6 +129,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
+            roles: [ROLE_ADMIN],
         },
         {
             label: "User Groups",
@@ -116,6 +137,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
+            roles: [ROLE_ADMIN],
         },
         {
             label: "User Fields",
@@ -123,6 +145,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
+            roles: [ROLE_OPERATOR],
         },
     ]);
     const [showSubMenuItems, isSubMenuItems] = useState<boolean>(false);
@@ -184,7 +207,12 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         }
     }, []);
     useEffect(() => {
-        if (overflowItems.some((e) => e && e.path === location)) {
+        if (
+            overflowItems.some(
+                (e: AppNavigationItemProps | AppSubNavigationItemProps) =>
+                    e && e.path === location
+            )
+        ) {
             isShowMore(true);
         }
     }, [overflowItems]);
@@ -252,6 +280,12 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                         className="active main-menu "
                     />
                     {subMenuItems
+                        .filter(({ roles }) => {
+                            if (roles) {
+                                return isGranted(role, roles[0]);
+                            }
+                            return true;
+                        })
                         .filter((e) => !overflowItems.includes(e))
                         .map(({ label, path, icon }) => {
                             return (

@@ -35,12 +35,15 @@ export const routers: ModuleRouter[] = [
                     <ClientAddEdit path={"clients/new"} />
                     <ClientAddEdit path={"clients/:id"} />
                     <ContainerList path={"clients/:clientId/containers"} />
+                    <ContainerList path={"containers"} />
                     <ContainerAddEdit
                         path={"clients/:clientId/containers/new"}
                     />
+                    <ContainerAddEdit path={"containers/new"} />
                     <ContainerAddEdit
                         path={"clients/:clientId/containers/:id"}
                     />
+                    <ContainerAddEdit path={"containers/:id"} />
                     <LanguageListPage path={"languages"} />
                     <LanguageAddEditPage path={"languages/new"} />
                     <LanguageAddEditPage path={"languages/:id"} />

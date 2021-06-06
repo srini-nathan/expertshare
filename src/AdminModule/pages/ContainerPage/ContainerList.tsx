@@ -25,16 +25,19 @@ import { ContainerApi } from "../../apis/ContainerApi";
 import { Client, Container } from "../../models";
 import { ClientApi } from "../../apis";
 import { errorToast, successToast } from "../../../AppModule/utils";
+import { useAuthState } from "../../../AppModule/hooks";
 
 export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
+    const { clientId: loginUserClientId } = useAuthState();
     const { clientId } = useParams();
+    const cId = clientId || loginUserClientId;
     const [client, setClient] = useState<Client>();
 
     useEffect(() => {
-        ClientApi.findById<Client>(clientId).then(
+        ClientApi.findById<Client>(cId).then(
             ({ response, isNotFound, errorMessage }) => {
                 if (errorMessage) {
                     errorToast(errorMessage);
@@ -46,7 +49,7 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
             }
         );
         return () => {};
-    }, [clientId]);
+    }, [cId]);
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -60,7 +63,7 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
                     {
                         order: buildSortParams(request),
                         ...buildFilterParams(request),
-                        "client.id": clientId,
+                        "client.id": cId,
                     },
                     (c) => {
                         cancelTokenSourcesRef.current.push(c);
@@ -132,10 +135,16 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <Fragment>
-            <AppBreadcrumb linkText={"Client"} linkUrl={"../.."} />
+            {clientId ? (
+                <AppBreadcrumb linkText={"Client"} linkUrl={"../.."} />
+            ) : null}
             <AppPageHeader
                 title={"Container"}
-                createLink={`/admin/clients/${clientId}/containers/new`}
+                createLink={
+                    clientId
+                        ? `/admin/clients/${cId}/containers/new`
+                        : `/admin/containers/new`
+                }
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}
                 showToolbar
@@ -148,7 +157,8 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
                         columnDef={appGridColDef({
                             onPressDelete: handleDelete,
                             onPressClone: handleClone,
-                            parentId: clientId,
+                            parentId: cId,
+                            hideParentFromUrl: !clientId,
                         })}
                         dataSource={getDataSource()}
                         totalItems={totalItems}
