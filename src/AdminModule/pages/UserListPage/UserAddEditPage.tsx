@@ -171,8 +171,6 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
             formData.source = SOURCE.SOURCE_CREATE;
         }
 
-        formData.status = "active";
-
         formData.userFieldValues = getDynamicFileds(formData.userField);
         delete formData.userField;
 

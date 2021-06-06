@@ -4,8 +4,8 @@ import { useRecoilValue } from "recoil";
 import { appNavigations } from "../../bootstrap";
 import AppNavigation from "../../containers/AppNavigation/AppNavigation";
 import {
-    appDashboardLayoutOptions,
     AppDashboardLayoutOptions,
+    appDashboardLayoutOptions,
 } from "../../atoms";
 
 export const DashboardLayout: FC = ({ children }) => {
