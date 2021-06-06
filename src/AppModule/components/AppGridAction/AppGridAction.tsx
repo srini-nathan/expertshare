@@ -67,7 +67,7 @@ const LinkAction: FC<LinkActionProps> = ({
     }
 
     return (
-        <Link className={"mr-3"} to={url}>
+        <Link to={url}>
             <AppIcon name={icon} />
         </Link>
     );
