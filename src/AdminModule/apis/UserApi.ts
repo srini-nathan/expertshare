@@ -11,6 +11,7 @@ const {
     api_users_put_item: API_PUT_ITEM,
     api_users_post_collection: API_POST_COLLECTION,
     api_users_get_attendee_view_item: API_GET_ATTENDEE_COLLECTION,
+    api_users_get_attendee_list_collection: API_GET_ATTENDEE_LIST_COLLECTION,
     api_users_change_password_item: API_CHANGE_PASSWORD_COLLECTION,
     api_users_change_profile_item: API_UPDATE_PROFILE_COLLECTION,
     api_users_import_collection: API_IMPORT,
@@ -39,6 +40,23 @@ export abstract class UserApi extends EntityAPI {
             .catch((error: AxiosError | ServerError) =>
                 this.handleErrorDuringCreatingOrUpdating(error)
             );
+    }
+
+    public static async getAttendeeList<R>(
+        page = 1,
+        extraParams = {}
+    ): Promise<FinalResponse<R | null>> {
+        return this.makeGet<R>(
+            route(API_GET_ATTENDEE_LIST_COLLECTION, {
+                ...extraParams,
+                page,
+            })
+        )
+            .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
     }
 
     public static async changePassword<R, P>(
