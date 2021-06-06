@@ -1,5 +1,5 @@
 .react-datepicker-wrapper {
-    width: 100%;
+    width: 92%;
 
     input {
         width: 100%;
@@ -10,7 +10,8 @@
         color: var(--input-fg-clr);
         background-color: var(--input-bg-clr);
         border: 1px solid var(--input-border-clr) !important;
-        border-radius: var(--border-radius);
+        border-radius: var(--border-radius) 0 0 var(--border-radius);
+        border-right-color: transparent;
 
         &:focus,
         &:active {

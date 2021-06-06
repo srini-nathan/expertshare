@@ -26,6 +26,7 @@ import {
     faUpload,
     faCloudDownload,
     faCloudUpload,
+    faCalendar,
 } from "@fortawesome/pro-regular-svg-icons";
 import { AppIconMap } from "../../models";
 
@@ -62,4 +63,6 @@ export const appIconMap: AppIconMap = {
     Download: faDownload,
     Filter: faFilter,
     Upload: faUpload,
+    calendar: faCalendar,
+    faCalendar,
 };
