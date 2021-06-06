@@ -82,13 +82,6 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                             const parsedData: SimpleObject<any> = checkAndParseResponse(
                                 response
                             );
-                            // setAttendees(response.items);
-                            // eslint-disable-next-line no-console
-                            console.log(
-                                "response attendee list ",
-                                response,
-                                parsedData["hydra:member"]
-                            );
                             setAttendees(parsedData["hydra:member"]);
                             setTotal(parsedData["hydra:member"].length);
                             params.successCallback(
@@ -140,7 +133,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                                 xs={12}
                                 md={6}
                                 lg={4}
-                                xl={3}
+                                xl={4}
                                 className="attendees-grid--container--item"
                                 key={index}
                             >
