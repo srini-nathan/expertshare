@@ -27,7 +27,7 @@ import {
     useBuildAssetPath,
 } from "../../hooks";
 import { CONSTANTS } from "../../../config";
-import placeholder from "../../assets/images/profile.jpg";
+import placeholder from "../../assets/images/user-avatar.png";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -54,7 +54,9 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
               backgroundSize: "cover",
           }
         : {
-              backgroundSize: "cover",
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
               backgroundImage: `url(${placeholder})`,
           };
 

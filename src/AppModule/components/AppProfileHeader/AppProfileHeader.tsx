@@ -6,7 +6,7 @@ import { AppButton } from "../AppButton";
 import { CONSTANTS } from "../../../config";
 import "./assets/scss/style.scss";
 import { useBuildAssetPath } from "../../hooks";
-import placeholder from "../../assets/images/profile.jpg";
+import placeholder from "../../assets/images/user-avatar.png";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -39,7 +39,9 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
           }
         : {
               backgroundImage: `url(${placeholder})`,
-              backgroundSize: "cover",
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
           };
 
     return (
