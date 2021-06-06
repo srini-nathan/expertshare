@@ -2,10 +2,11 @@ import React, { FC } from "react";
 import { Link } from "@reach/router";
 import { Col } from "react-bootstrap";
 import { PConference } from "../../../AdminModule/models";
-import "./assets/scss/style.scss";
 import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath } from "../../hooks";
 import { getDate, getTime } from "../../utils";
+import "./assets/scss/style.scss";
+import placeholder from "./assets/images/imgthumb.svg";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -36,7 +37,15 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
         description,
     } = conference;
     const imagePath = useBuildAssetPath(path, imageName);
-    const style = imageName ? { backgroundImage: `url(${imagePath})` } : {};
+    const style = imageName
+        ? {
+              backgroundImage: `url(${imagePath})`,
+          }
+        : {
+              backgroundImage: `url(${placeholder})`,
+              backgroundSize: "inherit",
+              backgroundPosition: "center",
+          };
 
     return (
         <Col md={12} lg={4} xl={4} className="events-grid--container--item">

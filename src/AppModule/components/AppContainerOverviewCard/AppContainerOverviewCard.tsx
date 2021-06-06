@@ -3,6 +3,7 @@ import { PContainer } from "../../../AdminModule/models";
 import "./assets/scss/overview.scss";
 import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath } from "../../hooks";
+import placeholder from "./assets/images/imgthumb.svg";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -21,7 +22,15 @@ export const AppContainerOverviewCard: FC<AppContainerOverviewCardProps> = ({
 }): JSX.Element => {
     const { name, description, imageName = null } = container;
     const imagePath = useBuildAssetPath(path, imageName);
-    const style = imageName ? { backgroundImage: `url(${imagePath})` } : {};
+    const style = imageName
+        ? {
+              backgroundImage: `url(${imagePath})`,
+          }
+        : {
+              backgroundImage: `url(${placeholder})`,
+              backgroundSize: "inherit",
+              backgroundPosition: "center",
+          };
 
     return (
         <div className="container-overview--container--item">
