@@ -27,6 +27,7 @@ import {
     useBuildAssetPath,
 } from "../../hooks";
 import { CONSTANTS } from "../../../config";
+import placeholder from "../../assets/images/profile.jpg";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -52,7 +53,10 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
               backgroundImage: `url(${profilePicturePath})`,
               backgroundSize: "cover",
           }
-        : {};
+        : {
+              backgroundSize: "cover",
+              backgroundImage: `url(${placeholder})`,
+          };
 
     const [subMenuItems] = useState<AppSubNavigationItemProps[]>([
         {
