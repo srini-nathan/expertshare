@@ -209,6 +209,7 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                                 setDeleteShow(0);
                             }}
                             handleDelete={() => {
+                                setDeleteShow(0);
                                 handleDelete(showDelete).then();
                             }}
                             bodyContent={"Are you sure want to delete ?"}
@@ -220,6 +221,7 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                                 setCloneShow(0);
                             }}
                             handleDelete={() => {
+                                setCloneShow(0);
                                 handleClone(showClone).then();
                             }}
                             bodyContent={"Are you sure want to clone ?"}
