@@ -51,7 +51,7 @@
             height: 100%;
 
             .accordion {
-                .collapse:not(.collapse.show)~.nav-item {
+                .collapse:not(.collapse.show) ~ .nav-item {
                     &::after {
                         position: absolute;
                         top: 20px;
@@ -62,7 +62,7 @@
                     }
                 }
 
-                .collapse~.nav-item {
+                .collapse ~ .nav-item {
                     &::after {
                         position: absolute;
                         top: 20px;
@@ -86,7 +86,7 @@
             }
         }
 
-        &:hover>.more-menu {
+        &:hover > .more-menu {
             display: block;
         }
 
@@ -194,7 +194,7 @@
                 .nav-link {
 
                     @include media("md2") {
-                        padding: 0.75rem 1.25rem;
+                        padding: .75rem 1.25rem;
                         padding-left: 1.25rem !important;
                     }
 
@@ -222,9 +222,9 @@
                     }
 
                     .list-group-item {
-                        padding-left: 25px !important;
                         display: flex;
                         height: 50px;
+                        padding-left: 25px !important;
 
                         &.active,
                         &:hover {
@@ -247,6 +247,7 @@
 
                         span {
                             margin: auto 9px 0;
+                            font-size: 12px;
                         }
                     }
 
@@ -381,8 +382,8 @@
                 }
 
                 &.sub-menu {
-                    min-height: 50px !important;
                     height: 50px;
+                    min-height: 50px !important;
 
                     .nav-link {
                         font-weight: 400;
@@ -419,13 +420,13 @@
                     }
 
                     span {
-                        margin: 2px 0 auto 10px;
+                        max-width: 70%;
                         max-height: 40px;
-                        max-lines: 1;
+                        margin: 2px 0 auto 10px;
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;
-                        max-width: 70%;
+                        max-lines: 1;
 
                         @include media("xl") {
                             margin: auto 0 auto 15px;
