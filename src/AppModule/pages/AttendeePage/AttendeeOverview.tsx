@@ -133,7 +133,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                                 xs={12}
                                 md={6}
                                 lg={4}
-                                xl={4}
+                                xl={3}
                                 className="attendees-grid--container--item"
                                 key={index}
                             >
