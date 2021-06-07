@@ -7,7 +7,7 @@ export class SessionCategory extends BaseEntity {
 
     color: string;
 
-    isDefault: boolean;
+    translations?: any;
 
     container: string | Container;
 
@@ -16,7 +16,7 @@ export class SessionCategory extends BaseEntity {
         {
             name = "",
             color = "#000",
-            isDefault = false,
+            translations,
             id,
             createdAt,
             updatedAt,
@@ -26,7 +26,7 @@ export class SessionCategory extends BaseEntity {
         this.container = container;
         this.name = name;
         this.color = color;
-        this.isDefault = isDefault;
+        this.translations = translations;
     }
 
     toString(): string {
@@ -38,7 +38,7 @@ export class SessionCategory extends BaseEntity {
             ...super.toJSON(addExtraData),
             name: this.name,
             color: this.color,
-            isDefault: this.isDefault,
+            translations: this.translations,
             container: this.container.toString(),
         };
     }

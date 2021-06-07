@@ -23,15 +23,13 @@ export const appGridFrameworkComponents = {
         params: AppCellActionWithRenderParams
     ): ReactElement => {
         const { data, onPressDelete } = params;
-        const { id, isDefault } = data as SessionCategory;
+        const { id } = data as SessionCategory;
 
         const props: AppGridActionProps = {
             editAction: {
-                disable: isDefault,
                 url: `/admin/session-categories/${id}`,
             },
             deleteAction: {
-                disable: isDefault,
                 confirmation: "Are you sure want to delete ?",
                 onClick: () => {
                     onPressDelete(id);

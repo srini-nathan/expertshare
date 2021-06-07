@@ -18,8 +18,10 @@ import {
     buildFilterParams,
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
+import "./assets/scss/list.scss";
 import { appGridConfig } from "../../../AppModule/config";
 import { errorToast, successToast } from "../../../AppModule/utils";
+import { useAuthState } from "../../../AppModule/hooks";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models/context/AuthState";
 
@@ -27,8 +29,9 @@ export const SessionCategoryListPage: FC<RouteComponentProps> = () => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const [loading, setLoading] = useState<boolean>(false);
     const appGridApi = useRef<GridApi>();
+    const { containerId } = useAuthState();
     const { state } = React.useContext(AuthContext);
-    const { containerId } = state as AuthState;
+    const { user } = state as AuthState;
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
 
     function getDataSource(): IServerSideDatasource {
@@ -43,6 +46,7 @@ export const SessionCategoryListPage: FC<RouteComponentProps> = () => {
                     pageNo,
                     {
                         order: buildSortParams(request),
+                        locale: user?.locale || "en",
                         ...buildFilterParams(request),
                         "container.id": containerId,
                     },
