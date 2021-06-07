@@ -60,9 +60,13 @@ export const routers: ModuleRouter[] = [
                     <UserListPage path={"users"} />
                     <UserAddEditPage path={"users/new"} />
                     <UserAddEditPage path={"users/:id"} />
-                    <SessionCategoryListPage path={"session-category"} />
-                    <SessionCategoryAddEditPage path={"session-category/new"} />
-                    <SessionCategoryAddEditPage path={"session-category/:id"} />
+                    <SessionCategoryListPage path={"session-categories"} />
+                    <SessionCategoryAddEditPage
+                        path={"session-categories/:id"}
+                    />
+                    <SessionCategoryAddEditPage
+                        path={"session-categories/new"}
+                    />
                 </Router>
             );
         },

@@ -28,7 +28,7 @@ export const appGridFrameworkComponents = {
         const props: AppGridActionProps = {
             editAction: {
                 disable: isDefault,
-                url: `/admin/session-category/${id}`,
+                url: `/admin/session-categories/${id}`,
             },
             deleteAction: {
                 disable: isDefault,

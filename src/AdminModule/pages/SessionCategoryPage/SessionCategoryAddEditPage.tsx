@@ -7,9 +7,9 @@ import {
     AppPageHeader,
     AppBreadcrumb,
     AppLoader,
-    // AppFormSwitch,
     AppFormActions,
     AppCard,
+    AppFormInputColorPicker,
     AppFormInput,
 } from "../../../AppModule/components";
 import { SessionCategory } from "../../models";
@@ -47,9 +47,10 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
         formState,
         setError,
         trigger,
+        setValue,
     } = useForm<SessionCategory>({
         resolver: yupResolver(schema),
-        // mode: "all",
+        mode: "all",
     });
 
     const onSubmit = async (formData: SessionCategory) => {
@@ -65,8 +66,8 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
                 navigator("..").then(() => {
                     successToast(
                         isEditMode
-                            ? "SessionCategory updated"
-                            : "SessionCategory created"
+                            ? "Session category updated"
+                            : "Session category created"
                     );
                 });
             }
@@ -80,7 +81,7 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
                     if (errorMessage) {
                         errorToast(errorMessage);
                     } else if (isNotFound) {
-                        errorToast("SessionCategory not exist");
+                        errorToast("Session category not exist");
                     } else if (response !== null) {
                         setData(response);
                         trigger();
@@ -125,7 +126,7 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
                                     defaultValue={data.name}
                                     control={control}
                                 />
-                                <AppFormInput
+                                <AppFormInputColorPicker
                                     name={"color"}
                                     label={"Color"}
                                     {...validation(
@@ -136,6 +137,7 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
                                     errorMessage={errors.color?.message}
                                     defaultValue={data.color}
                                     control={control}
+                                    setValue={setValue}
                                 />
                             </Form.Row>
                             <AppFormActions

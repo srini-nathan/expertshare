@@ -20,7 +20,6 @@ import {
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
 import { errorToast, successToast } from "../../../AppModule/utils";
-import "./assets/scss/list.scss";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models/context/AuthState";
 
@@ -100,7 +99,7 @@ export const SessionCategoryListPage: FC<RouteComponentProps> = () => {
 
             <AppPageHeader
                 title={"Session Category"}
-                createLink={"/admin/session-category/new"}
+                createLink={"/admin/session-categories/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}
                 showToolbar
