@@ -36,6 +36,7 @@ export * from "./AppCropper";
 export * from "./AppFormLabel";
 export * from "./AppFormRichTextArea";
 export * from "./AppModal";
+export * from "./AppWelcomeModal";
 export * from "./AppFormSelect";
 export * from "./AppTabWithIcon";
 export * from "./AppFormSelectCreatable";

@@ -7,7 +7,7 @@ import { AuthLayout } from "./layouts/AuthLayout";
 import { ModuleRouter } from "./models";
 import AppProvider from "./contexts/AppContext";
 import { AuthContext } from "../SecurityModule/contexts/AuthContext";
-import { AppLoader } from "./components";
+import { AppLoader, AppWelcomeModal } from "./components";
 
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
@@ -48,6 +48,7 @@ const Home: FC<RouteComponentProps> = (): JSX.Element => {
 
 const App = (): JSX.Element => {
     const { state } = React.useContext(AuthContext);
+    const [showWelcomeModal, setShowWelcomeModal] = React.useState(true);
     const dashboardRoutes: ModuleRouter[] = appRouters.filter(
         ({ layout }) => layout === "dashboard"
     );
@@ -63,28 +64,56 @@ const App = (): JSX.Element => {
         );
     }
 
+    const showedWelcomeModal = localStorage.getItem("showed-welcome-modal");
+    // if (!showedWelcomeModal) {
+    //     // eslint-disable-next-line no-console
+    //     console.log("localstorage value:::", showedWelcomeModal);
+    //     setShowWelcomeModal(true);
+    //     localStorage.setItem("showed-welcome-modal", "true");
+    // }
+
+    // eslint-disable-next-line no-console
+    // console.log("handle close clicked:::", showedWelcomeModal);
+    // localStorage.setItem("showed-welcome-modal", "");
     if (state.isAuthenticated) {
         return (
-            <AppProvider>
-                <AppConfiguration>
-                    <DashboardLayout>
-                        <Router primary={false}>
-                            <Redirect from="/" to="/conferences/grid" noThrow />
-                            <Home path="home" />
-                            {dashboardRoutes.map(
-                                ({ RouterPlug, key, path }) => {
-                                    return <RouterPlug key={key} path={path} />;
-                                }
-                            )}
-                        </Router>
-                        <OnRouteChange
-                            action={() => {
-                                window.scrollTo(0, 0);
-                            }}
-                        />
-                    </DashboardLayout>
-                </AppConfiguration>
-            </AppProvider>
+            <>
+                <AppProvider>
+                    <AppConfiguration>
+                        <DashboardLayout>
+                            <Router primary={false}>
+                                <Redirect
+                                    from="/"
+                                    to="/conferences/grid"
+                                    noThrow
+                                />
+                                <Home path="home" />
+                                {dashboardRoutes.map(
+                                    ({ RouterPlug, key, path }) => {
+                                        return (
+                                            <RouterPlug key={key} path={path} />
+                                        );
+                                    }
+                                )}
+                            </Router>
+                            <OnRouteChange
+                                action={() => {
+                                    window.scrollTo(0, 0);
+                                }}
+                            />
+                        </DashboardLayout>
+                    </AppConfiguration>
+                </AppProvider>
+                <AppWelcomeModal
+                    show={(!showedWelcomeModal && showWelcomeModal) || true}
+                    handleClose={() => {
+                        // eslint-disable-next-line no-console
+                        console.log("handle close clicked");
+                        setShowWelcomeModal(false);
+                        localStorage.setItem("showed-welcome-modal", "true");
+                    }}
+                />
+            </>
         );
     }
 
