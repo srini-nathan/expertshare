@@ -65,16 +65,7 @@ const App = (): JSX.Element => {
     }
 
     const showedWelcomeModal = localStorage.getItem("showed-welcome-modal");
-    // if (!showedWelcomeModal) {
-    //     // eslint-disable-next-line no-console
-    //     console.log("localstorage value:::", showedWelcomeModal);
-    //     setShowWelcomeModal(true);
-    //     localStorage.setItem("showed-welcome-modal", "true");
-    // }
 
-    // eslint-disable-next-line no-console
-    // console.log("handle close clicked:::", showedWelcomeModal);
-    // localStorage.setItem("showed-welcome-modal", "");
     if (state.isAuthenticated) {
         return (
             <>
@@ -105,10 +96,8 @@ const App = (): JSX.Element => {
                     </AppConfiguration>
                 </AppProvider>
                 <AppWelcomeModal
-                    show={(!showedWelcomeModal && showWelcomeModal) || true}
+                    show={!showedWelcomeModal && showWelcomeModal}
                     handleClose={() => {
-                        // eslint-disable-next-line no-console
-                        console.log("handle close clicked");
                         setShowWelcomeModal(false);
                         localStorage.setItem("showed-welcome-modal", "true");
                     }}
