@@ -51,8 +51,6 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
     const [openEditArea, setOpenEditArea] = useState(false);
 
     const qId = questionId;
-    // eslint-disable-next-line no-console
-    console.log(userObj && userObj.firstName);
 
     const handleCloseWindow = () => {
         if (!isPTOP) {
