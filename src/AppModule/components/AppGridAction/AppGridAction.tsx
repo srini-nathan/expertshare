@@ -1,6 +1,5 @@
 import React, { FC, useState } from "react";
 import { Link } from "@reach/router";
-
 import { AppIcon } from "../AppIcon";
 import { AppModal } from "../AppModal";
 
@@ -30,12 +29,12 @@ interface AppGridCustomClickAction {
     confirmationTitle?: string;
     onClick?: () => void;
     disable?: boolean;
-    icon: string;
+    icon?: string;
+    text?: string;
 }
-
 interface ActionProps {
     disable?: boolean;
-    icon: string;
+    icon?: string;
 }
 
 interface LinkActionProps extends ActionProps {
@@ -67,15 +66,15 @@ const LinkAction: FC<LinkActionProps> = ({
     }
 
     return (
-        <Link className={"mr-3"} to={url}>
+        <Link to={url}>
             <AppIcon name={icon} />
         </Link>
     );
 };
-
 interface ClickActionProps extends ActionProps {
     onClick?: () => void;
     confirmation?: string;
+    text?: string;
     confirmationTitle?: string;
 }
 
@@ -85,6 +84,7 @@ const ClickAction: FC<ClickActionProps> = ({
     onClick,
     confirmationTitle = "Delete Action",
     confirmation,
+    text,
 }): JSX.Element => {
     const [show, setShow] = useState(false);
     if (!onClick) {
@@ -125,7 +125,8 @@ const ClickAction: FC<ClickActionProps> = ({
                     }
                 }}
             >
-                <AppIcon name={icon} />
+                {icon && <AppIcon name={icon} />}
+                {text}
             </a>
         </>
     );
@@ -148,18 +149,20 @@ export const AppGridAction: FC<AppGridActionProps> = ({
     return (
         <div className="actions">
             <LinkAction icon={"add"} {...addAction}></LinkAction>
-            {showItem() && (
-                <LinkAction icon={"edit"} {...editAction}></LinkAction>
-            )}
-
             <LinkAction icon={"ListTree"} {...treeAction}></LinkAction>
-            {customClickActions.map(({ icon, ...rest }, i) => (
-                <ClickAction icon={icon} {...rest} key={i}></ClickAction>
+            {customClickActions.map(({ icon, text, ...rest }) => (
+                <ClickAction icon={icon} text={text} {...rest}></ClickAction>
             ))}
-            {showItem() && (
-                <ClickAction icon={"delete"} {...deleteAction}></ClickAction>
-            )}
             <LinkAction icon={"Eye"} {...viewAction}></LinkAction>
+            {showItem() ? (
+                <>
+                    <LinkAction icon={"edit"} {...editAction}></LinkAction>
+                    <ClickAction
+                        icon={"delete"}
+                        {...deleteAction}
+                    ></ClickAction>
+                </>
+            ) : null}
         </div>
     );
 };

@@ -69,7 +69,7 @@ const App = (): JSX.Element => {
                 <AppConfiguration>
                     <DashboardLayout>
                         <Router primary={false}>
-                            <Redirect from="/" to="home" noThrow />
+                            <Redirect from="/" to="/conferences/grid" noThrow />
                             <Home path="home" />
                             {dashboardRoutes.map(
                                 ({ RouterPlug, key, path }) => {

@@ -6,6 +6,7 @@ import { AppButton } from "../AppButton";
 import { CONSTANTS } from "../../../config";
 import "./assets/scss/style.scss";
 import { useBuildAssetPath } from "../../hooks";
+import placeholder from "../../assets/images/user-avatar.png";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -36,7 +37,12 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
               backgroundImage: `url(${profilePicturePath})`,
               backgroundSize: "cover",
           }
-        : {};
+        : {
+              backgroundImage: `url(${placeholder})`,
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+          };
 
     return (
         <AppCard className="user-profile--det--container mb-3 pt-4 px-0">
@@ -114,7 +120,7 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                         md={12}
                         className="inner-container--portfolio  px-0 mt-4 portfolio-carousel"
                     >
-                        <Col className="inner-container--portfolio--content pt-4 px-0">
+                        <Col className="d-none inner-container--portfolio--content pt-4 px-0">
                             <Col className="inner-container--portfolio--content--item followers my-3 pl-3">
                                 <Link to="#">
                                     <i className="fak fa-users pr-2"></i>

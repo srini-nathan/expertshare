@@ -53,3 +53,4 @@ export * from "./AppConferenceCard";
 export * from "./AppSwitchView";
 export * from "./AppFormTranslatable";
 export * from "./AppSessionCategoryTranslations";
+export * from "./AttendeeCard";

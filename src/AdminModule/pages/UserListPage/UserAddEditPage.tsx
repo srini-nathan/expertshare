@@ -42,7 +42,7 @@ import {
 import { schema } from "./schema";
 import { CONSTANTS } from "../../../config";
 
-const { TIMEZONE } = CONSTANTS.User;
+const { TIMEZONE, SOURCE } = CONSTANTS.User;
 
 const options = TIMEZONE.map((value: string) => ({
     value,
@@ -166,8 +166,10 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         });
         formData.userGroups = userGroupsSelectedItems;
         formData.image_name = "";
-        formData.source = "SOURCE_CREATE";
-        formData.status = "active";
+
+        if (!isEditMode) {
+            formData.source = SOURCE.SOURCE_CREATE;
+        }
 
         formData.userFieldValues = getDynamicFileds(formData.userField);
         delete formData.userField;

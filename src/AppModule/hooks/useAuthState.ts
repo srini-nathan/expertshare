@@ -6,7 +6,7 @@ import { ClientApi, ContainerApi } from "../../AdminModule/apis";
 
 export function useAuthState() {
     const { state } = useContext(AuthContext);
-    const { clientId, containerId, roles, token } = state as AuthState;
+    const { clientId, containerId, roles, token, user } = state as AuthState;
 
     if (clientId === null || containerId === null) {
         errorToast("ClientId or ContainerId is null.");
@@ -21,5 +21,6 @@ export function useAuthState() {
         containerId,
         containerResourceId: ContainerApi.toResourceUrl(containerId),
         token,
+        user,
     };
 }

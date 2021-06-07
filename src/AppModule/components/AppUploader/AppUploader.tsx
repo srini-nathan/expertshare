@@ -8,8 +8,6 @@ import { Upload } from "../../models";
 import imageTemp from "./assets/images/imgthumb.svg";
 
 import "./assets/scss/style.scss";
-import { AppIcon } from "../AppIcon";
-import { AppButton } from "../AppButton";
 
 type Options = Cropper.Options;
 
@@ -148,9 +146,9 @@ export const AppUploader: FC<AppUploaderProps> = ({
                 <input {...getInputProps()} />
                 <div className="image-container" style={getBackgroundStyles()}>
                     {thumb.length > 0 || imagePath ? (
-                        <AppButton variant="danger" onClick={handleDelete}>
-                            <AppIcon name={"delete"} />
-                        </AppButton>
+                        <span onClick={handleDelete}>
+                            <i className="fak fa-trash-light"></i>
+                        </span>
                     ) : null}
                 </div>
             </div>

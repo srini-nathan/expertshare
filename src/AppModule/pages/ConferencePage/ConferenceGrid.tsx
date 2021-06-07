@@ -15,6 +15,7 @@ import {
     AppLoader,
     AppSwitchView,
     AppListPageToolbar,
+    AppModal,
 } from "../../components";
 import { ConferenceApi } from "../../../AdminModule/apis";
 import { useAuthState, useIsGranted } from "../../hooks";
@@ -48,6 +49,8 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
     const { view } = useParams();
     const appGridApi = useRef<GridApi>();
     const isGrantedControl = useIsGranted(ROLE_OPERATOR);
+    const [showDelete, setDeleteShow] = useState(0);
+    const [showClone, setCloneShow] = useState(0);
 
     const fetchData = (params = {}) => {
         ConferenceApi.find<PConference>(
@@ -190,15 +193,39 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                             <AppConferenceCard
                                 isGrantedControl={isGrantedControl}
                                 handleDelete={(id: number) => {
-                                    handleDelete(id);
+                                    setDeleteShow(id);
                                 }}
                                 handleClone={(id: number) => {
-                                    handleClone(id);
+                                    setCloneShow(id);
                                 }}
                                 conference={conference}
                                 key={conference.id}
                             />
                         ))}
+                        <AppModal
+                            show={showDelete > 0}
+                            title={"Delete Action"}
+                            handleClose={() => {
+                                setDeleteShow(0);
+                            }}
+                            handleDelete={() => {
+                                setDeleteShow(0);
+                                handleDelete(showDelete).then();
+                            }}
+                            bodyContent={"Are you sure want to delete ?"}
+                        />
+                        <AppModal
+                            show={showClone > 0}
+                            title={"Clone Action"}
+                            handleClose={() => {
+                                setCloneShow(0);
+                            }}
+                            handleDelete={() => {
+                                setCloneShow(0);
+                                handleClone(showClone).then();
+                            }}
+                            bodyContent={"Are you sure want to clone ?"}
+                        />
                     </Row>
                 );
         }

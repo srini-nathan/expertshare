@@ -24,7 +24,7 @@ import { useAuthState } from "../../../AppModule/hooks";
 
 export const UserFieldListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
-    const { containerId } = useAuthState();
+    const { clientId } = useAuthState();
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
 
@@ -40,7 +40,7 @@ export const UserFieldListPage: FC<RouteComponentProps> = (): JSX.Element => {
                     {
                         order: buildSortParams(request),
                         ...buildFilterParams(request),
-                        "container.id": containerId,
+                        "client.id": clientId,
                     },
                     (c) => {
                         cancelTokenSourcesRef.current.push(c);
