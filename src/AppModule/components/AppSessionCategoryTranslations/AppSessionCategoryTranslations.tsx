@@ -89,7 +89,7 @@ export const AppSessionCategoryTranslations: FC<AppSessionCategoryTranslationsPr
                 />
 
                 <Form.Control.Feedback className={"d-block"} type="invalid">
-                    {formState?.errors[`name_${active}`]?.message || ""}
+                    {formState?.errors[`name_${active}`]?.message}
                 </Form.Control.Feedback>
             </Form.Group>
         </Row>
