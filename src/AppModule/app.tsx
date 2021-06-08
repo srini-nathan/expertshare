@@ -64,8 +64,8 @@ const App = (): JSX.Element => {
         );
     }
 
-    const showedWelcomeModal = localStorage.getItem("showed-welcome-modal");
-
+    // eslint-disable-next-line no-console
+    console.log("showWelcomeModal:::, showedWelcomeModal:::", showWelcomeModal);
     if (state.isAuthenticated) {
         return (
             <>
@@ -93,15 +93,14 @@ const App = (): JSX.Element => {
                                 }}
                             />
                         </DashboardLayout>
+                        <AppWelcomeModal
+                            show={showWelcomeModal}
+                            handleClose={() => {
+                                setShowWelcomeModal(false);
+                            }}
+                        />
                     </AppConfiguration>
                 </AppProvider>
-                <AppWelcomeModal
-                    show={!showedWelcomeModal && showWelcomeModal}
-                    handleClose={() => {
-                        setShowWelcomeModal(false);
-                        localStorage.setItem("showed-welcome-modal", "true");
-                    }}
-                />
             </>
         );
     }

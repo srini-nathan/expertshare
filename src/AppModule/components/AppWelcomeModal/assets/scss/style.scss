@@ -6,59 +6,11 @@
     display: flex;
 }
 
-.modal {
-    overflow-y: hidden !important;
-    display: flex;
-    background-color: #7ebde990;
-    &-dialog {
+.app-welcome-model {
+    &.modal {
+        overflow-y: hidden !important;
         display: flex;
-        height: 100%;
-        margin: auto;
-        width: 1000px !important;
-        max-width: unset !important;
-        max-height: 95vh;
-    }
-
-    &-content {
-        margin: auto;
-        border: none !important;
-        overflow: hidden;
-        background-color: transparent !important;
-        border-radius: var(--border-radius) !important;
-    }
-
-    &-body {
-        padding: 0 !important;
-        font-size: 16px;
-        font-weight: 400;
-        color: var(--secondary);
-        text-align: left;
-        .base-container {
-            background-color: white;
-            min-height: 623px;
-            &--logo {
-                display: block;
-                width: auto;
-                height: 41px;
-                background-repeat: no-repeat;
-                background-size: contain;
-            }
-            &--title {
-                h1 {
-                    font-size: 42px;
-                    font-weight: 700;
-                    line-height: 50px;
-                }
-            }
-        }
-        .image-container i {
-            display: block;
-            width: auto;
-            height: 100%;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: cover;
-        }
+        background-color: #7ebde990;
     }
     .close-btn {
         position: fixed;
@@ -114,6 +66,61 @@
                 a i.fa-pause {
                     display: block;
                 }
+            }
+        }
+    }
+}
+
+.app-welcome-model {
+    .modal {
+        &-dialog {
+            display: flex;
+            height: 100%;
+            margin: auto;
+            width: 1000px !important;
+            max-width: unset !important;
+            max-height: 95vh;
+        }
+
+        &-content {
+            margin: auto;
+            border: none !important;
+            overflow: hidden;
+            background-color: transparent !important;
+            border-radius: var(--border-radius) !important;
+        }
+
+        &-body {
+            padding: 0 !important;
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--secondary);
+            text-align: left;
+            .base-container {
+                background-color: white;
+                min-height: 623px;
+                &--logo {
+                    display: block;
+                    width: auto;
+                    height: 41px;
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                }
+                &--title {
+                    h1 {
+                        font-size: 42px;
+                        font-weight: 700;
+                        line-height: 50px;
+                    }
+                }
+            }
+            .image-container i {
+                display: block;
+                width: auto;
+                height: 100%;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
             }
         }
     }

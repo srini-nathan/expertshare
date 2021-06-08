@@ -13,7 +13,7 @@ interface AppWelcomeModalProps {
 export const AppWelcomeModal: FC<AppWelcomeModalProps> = ({
     show,
     handleClose,
-    mode = "video",
+    mode = "text",
 }): JSX.Element => {
     const [isPlaying, setIsPlaying] = React.useState(false);
     const videoPlayerRef = useRef<HTMLVideoElement>();
@@ -29,8 +29,22 @@ export const AppWelcomeModal: FC<AppWelcomeModalProps> = ({
             setIsPlaying(false);
         }
     };
+    // eslint-disable-next-line no-console
+    console.log("app welcome modal:::", show, mode);
+    const showedWelcomeModal = localStorage.getItem("showed-welcome-modal");
+
+    const handleCloseModal = () => {
+        localStorage.setItem("showed-welcome-modal", "true");
+        handleClose();
+    };
+
     return (
-        <Modal show={show} onHide={handleClose} keyboard={false}>
+        <Modal
+            show={!showedWelcomeModal && show}
+            onHide={handleCloseModal}
+            keyboard={false}
+            className="app-welcome-model"
+        >
             <Modal.Body>
                 {mode === "text" && (
                     <div className="row m-0 p-0">
@@ -93,7 +107,7 @@ export const AppWelcomeModal: FC<AppWelcomeModalProps> = ({
                 )}
             </Modal.Body>
 
-            <a href="#" className="close-btn" onClick={handleClose}>
+            <a href="#" className="close-btn" onClick={handleCloseModal}>
                 <i className="fak fa-close-vlight"></i>
             </a>
         </Modal>
