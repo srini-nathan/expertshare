@@ -1,7 +1,5 @@
 import React, { FC, Fragment } from "react";
 import { RouteComponentProps } from "@reach/router";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { DevTool } from "@hookform/devtools";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, Row } from "react-bootstrap";
@@ -46,7 +44,6 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                         {...validation("colorPicker", formState, false)}
                         errorMessage={errors.colorPicker?.message}
                     />
-                    <DevTool control={control} />
                 </Row>
             </Form>
         </Fragment>
