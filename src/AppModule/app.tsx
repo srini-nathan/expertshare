@@ -10,8 +10,8 @@ import { AuthContext } from "../SecurityModule/contexts/AuthContext";
 import { useChosenContainer, useNavigator } from "./hooks";
 import { AppLoader } from "./components";
 import { LandingHelper } from "./pages";
-import "./assets/scss/main.scss";
 import "./assets/scss/bootstrap.scss";
+import "./assets/scss/main.scss";
 
 interface Props {
     location: {
