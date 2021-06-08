@@ -29,8 +29,7 @@ export const AppWelcomeModal: FC<AppWelcomeModalProps> = ({
             setIsPlaying(false);
         }
     };
-    // eslint-disable-next-line no-console
-    console.log("app welcome modal:::", show, mode);
+
     const showedWelcomeModal = localStorage.getItem("showed-welcome-modal");
 
     const handleCloseModal = () => {

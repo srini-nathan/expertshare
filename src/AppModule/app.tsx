@@ -64,8 +64,6 @@ const App = (): JSX.Element => {
         );
     }
 
-    // eslint-disable-next-line no-console
-    console.log("showWelcomeModal:::, showedWelcomeModal:::", showWelcomeModal);
     if (state.isAuthenticated) {
         return (
             <>
