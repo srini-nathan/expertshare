@@ -65,6 +65,7 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
                             message: "Only support valid HEX color code",
                         }
                     ),
+                name: yup.string().required(),
             })
         ),
         mode: "all",

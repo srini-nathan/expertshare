@@ -12,7 +12,7 @@ import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { SessionCategoryApi } from "../../apis";
 import { SessionCategory } from "../../models";
-import { AppPageHeader, AppLoader } from "../../../AppModule/components";
+import { AppPageHeader } from "../../../AppModule/components";
 import {
     AppGrid,
     buildFilterParams,
@@ -27,7 +27,7 @@ import { AuthState } from "../../../SecurityModule/models/context/AuthState";
 
 export const SessionCategoryListPage: FC<RouteComponentProps> = () => {
     const [totalItems, setTotalItems] = useState<number>(0);
-    const [loading, setLoading] = useState<boolean>(false);
+    // const [loading, setLoading] = useState<boolean>(false);
     const appGridApi = useRef<GridApi>();
     const { containerId } = useAuthState();
     const { state } = React.useContext(AuthContext);
@@ -37,7 +37,7 @@ export const SessionCategoryListPage: FC<RouteComponentProps> = () => {
     function getDataSource(): IServerSideDatasource {
         return {
             getRows(params: IServerSideGetRowsParams) {
-                setLoading(true);
+                // setLoading(true);
                 const { request, api } = params;
                 const { endRow } = request;
                 const pageNo = endRow / appGridConfig.pageSize;
@@ -54,7 +54,7 @@ export const SessionCategoryListPage: FC<RouteComponentProps> = () => {
                         cancelTokenSourcesRef.current.push(c);
                     }
                 ).then(({ error, response }) => {
-                    setLoading(false);
+                    // setLoading(false);
                     if (error !== null) {
                         if (_isString(error)) {
                             errorToast(error);
@@ -99,7 +99,7 @@ export const SessionCategoryListPage: FC<RouteComponentProps> = () => {
 
     return (
         <Fragment>
-            {loading && <AppLoader />}
+            {/* {loading && <AppLoader />} */}
 
             <AppPageHeader
                 title={"Session Category"}

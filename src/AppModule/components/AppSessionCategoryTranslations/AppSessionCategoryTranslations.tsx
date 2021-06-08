@@ -88,6 +88,7 @@ export const AppSessionCategoryTranslations: FC<AppSessionCategoryTranslationsPr
                 <Form.Control
                     value={getValue("name")}
                     name={`name_${active}`}
+                    required
                     onChange={(e: any) => {
                         handleValueChange(e.target.value, "name");
                     }}
