@@ -53,6 +53,7 @@
         "styled-components": "^4.4.1",
         "sweetalert2": "^10.16.0",
         "sweetalert2-react-content": "^3.3.1",
+        "swiper": "^6.7.0",
         "use-player": "^0.2.0",
         "yup": "^0.32.9"
     },

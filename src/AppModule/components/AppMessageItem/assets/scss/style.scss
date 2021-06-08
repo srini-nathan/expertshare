@@ -7,6 +7,7 @@
     .content {
         display: flex;
         align-items: center;
+
         .avatar {
             i {
                 display: block;
@@ -15,6 +16,7 @@
                 background-repeat: no-repeat;
                 background-size: cover;
                 border-radius: 20px;
+
                 &::after {
                     position: relative;
                     top: -3px;
@@ -29,6 +31,7 @@
                 }
             }
         }
+
         .details {
             &--sender {
                 h3 {
@@ -36,6 +39,7 @@
                     font-size: 16px;
                     font-weight: 500;
                     color: var(--secondary);
+
                     .time {
                         font-size: 12px;
                         font-weight: 400;
@@ -43,6 +47,7 @@
                     }
                 }
             }
+
             &--comment {
                 p {
                     margin-bottom: 0;
@@ -50,6 +55,7 @@
                     font-weight: 500;
                     color: var(--secondary);
                 }
+
                 span {
                     font-size: 12px;
                     font-weight: 400;
@@ -58,10 +64,12 @@
             }
         }
     }
+
     .count {
         position: absolute;
         right: 15px;
         bottom: 15px;
+
         span {
             display: inline-flex;
             align-items: center;
@@ -76,6 +84,7 @@
             border-radius: 20px;
         }
     }
+
     .more {
         position: absolute;
         right: 10px;
@@ -87,11 +96,13 @@
         box-shadow: 3px 3px 8px 0px rgba(155, 167, 186, 0.2);
         padding-left: 0 !important;
         padding-right: 0 !important;
+
         .btn-icon {
             font-size: 19px;
             padding-top: 12px;
         }
     }
+
     .green-btn {
         i {
             color: var(--primary);

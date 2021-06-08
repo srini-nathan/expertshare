@@ -72,9 +72,9 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                 </div>
                 <div className="inner-container--det p-3 mx-2">
                     <div className="inner-container--det--title">
-                        <a href="#">
+                        <Link to={`/conferences/${id}/agenda`}>
                             <h2>{title}</h2>
-                        </a>
+                        </Link>
                     </div>
                     <div className="description">{description}</div>
                     <div

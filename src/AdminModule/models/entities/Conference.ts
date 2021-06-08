@@ -17,10 +17,13 @@ export class Conference extends BaseEntity {
 
     container: string;
 
+    sessionDates: { [key: string]: string };
+
     conferenceTags: PConferenceTag[];
 
     constructor({
         title = "",
+        sessionDates = {},
         container = "",
         imageName = "",
         startedAt = "",
@@ -36,6 +39,7 @@ export class Conference extends BaseEntity {
         this.container = container;
         this.conferenceTags = conferenceTags;
         this.title = title;
+        this.sessionDates = sessionDates;
         this.startedAt = startedAt;
         this.translations = translations;
         this.imageName = imageName;

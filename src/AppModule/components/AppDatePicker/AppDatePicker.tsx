@@ -7,13 +7,19 @@ import "./assets/scss/style.scss";
 export interface AppDatePickerProps {
     defaultValue?: Date;
     name?: string;
+    dateFormat?: string;
+    showTimeSelect?: boolean;
+    showTimeInput?: boolean;
     control?: Control<any>;
 }
 
 export const AppDatePicker: FC<AppDatePickerProps> = ({
     defaultValue,
     name = "",
+    dateFormat = "yyyy-M-d",
     control,
+    showTimeSelect = false,
+    showTimeInput = false,
 }): JSX.Element => {
     const dateValue = defaultValue || new Date();
 
@@ -27,9 +33,11 @@ export const AppDatePicker: FC<AppDatePickerProps> = ({
                     selected={field.value}
                     onChange={field.onChange}
                     calendarClassName="custom-datepicker"
-                    dateFormat="yyyy-M-d"
+                    dateFormat={dateFormat}
                     showMonthDropdown
                     showYearDropdown
+                    showTimeSelect={showTimeSelect as boolean}
+                    showTimeInput={showTimeInput}
                     dropdownMode="select"
                 />
             )}

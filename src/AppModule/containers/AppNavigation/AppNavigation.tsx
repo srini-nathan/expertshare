@@ -25,6 +25,7 @@ import {
     useWindowSize,
     useWindowLocation,
     useBuildAssetPath,
+    useIsGranted,
 } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 
@@ -33,6 +34,13 @@ const {
     FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
 } = UPLOAD;
 const { path: PATH } = FILETYPEINFO_USER_PROFILE;
+
+const { Role: ROLE } = CONSTANTS;
+
+const {
+    ROLE: { ROLE_OPERATOR },
+} = ROLE;
+
 interface AppNavigationProps {
     items: AppNavigationItemProps[];
 }
@@ -44,6 +52,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         AppNavigationItemProps[] | AppSubNavigationItemProps[]
     >([]);
     const profilePicturePath = useBuildAssetPath(PATH);
+    const isGrantedControl = useIsGranted(ROLE_OPERATOR);
 
     const [subMenuItems] = useState<AppSubNavigationItemProps[]>([
         {
@@ -307,41 +316,46 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                     <ListGroupItem
                                         className={`seperator  p-0 mx-4`}
                                     ></ListGroupItem>
-                                    <ListGroupItem
-                                        className={`nav-item py-2 px-lg-4`}
-                                    >
-                                        <div
-                                            onClick={() => {
-                                                isSubMenuItems(
-                                                    !showSubMenuItems
-                                                );
-                                            }}
-                                            className="nav-link"
-                                        >
-                                            <div className="nav-icon">
-                                                <AppIcon
-                                                    name={
-                                                        showSubMenuItems
-                                                            ? "ChevronLeft"
-                                                            : "Settings"
-                                                    }
-                                                    className={
-                                                        showSubMenuItems
-                                                            ? "btn-secondary back-to-menu"
-                                                            : ""
-                                                    }
-                                                />
-                                            </div>
-                                            <span>
-                                                {showSubMenuItems
-                                                    ? "Back to App"
-                                                    : "Administration"}
-                                            </span>
-                                        </div>
-                                    </ListGroupItem>
-                                    <ListGroupItem
-                                        className={`seperator  p-0 mx-4`}
-                                    ></ListGroupItem>
+                                    {isGrantedControl && (
+                                        <>
+                                            <ListGroupItem
+                                                className={`nav-item py-2 px-lg-4`}
+                                            >
+                                                <div
+                                                    onClick={() => {
+                                                        isSubMenuItems(
+                                                            !showSubMenuItems
+                                                        );
+                                                    }}
+                                                    className="nav-link"
+                                                >
+                                                    <div className="nav-icon">
+                                                        <AppIcon
+                                                            name={
+                                                                showSubMenuItems
+                                                                    ? "ChevronLeft"
+                                                                    : "Settings"
+                                                            }
+                                                            className={
+                                                                showSubMenuItems
+                                                                    ? "btn-secondary back-to-menu"
+                                                                    : ""
+                                                            }
+                                                        />
+                                                    </div>
+                                                    <span>
+                                                        {showSubMenuItems
+                                                            ? "Back to App"
+                                                            : "Administration"}
+                                                    </span>
+                                                </div>
+                                            </ListGroupItem>
+                                            <ListGroupItem
+                                                className={`seperator  p-0 mx-4`}
+                                            ></ListGroupItem>
+                                        </>
+                                    )}
+
                                     <ListGroupItem
                                         className={`nav-item collapseable p-0`}
                                     >
