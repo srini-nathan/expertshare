@@ -1,8 +1,9 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
-import { useForm } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { isString as _isString } from "lodash";
+import mapValues from "lodash/mapValues";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {
@@ -21,7 +22,7 @@ import {
     errorToast,
     setViolations,
     successToast,
-    validation,
+    // validation,
 } from "../../../AppModule/utils";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
 import {
@@ -53,20 +54,36 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
         setError,
         trigger,
         setValue,
+        register,
+        ...rest
     } = useForm<SessionCategory>({
         resolver: yupResolver(
-            yup.object().shape({
-                color: yup
-                    .string()
-                    .required()
-                    .matches(
-                        /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8}|[A-Fa-f0-9]{3,4})$/,
-                        {
-                            message: "Only support valid HEX color code",
+            yup.lazy((obj) =>
+                yup.object(
+                    mapValues(obj, (_, key) => {
+                        if (key === "color") {
+                            return yup
+                                .string()
+                                .required()
+                                .matches(
+                                    /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8}|[A-Fa-f0-9]{3,4})$/,
+                                    {
+                                        message:
+                                            "Only support valid HEX color code",
+                                    }
+                                );
                         }
-                    ),
-                name: yup.string().required(),
-            })
+
+                        if (key.includes("name")) {
+                            return yup
+                                .string()
+                                .required("Name is a required field.");
+                        }
+
+                        return yup.string().notRequired();
+                    })
+                )
+            )
         ),
         mode: "all",
     });
@@ -217,36 +234,44 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
             <Row>
                 <Col>
                     <AppCard>
-                        <Form noValidate onSubmit={handleSubmit(onSubmit)}>
-                            <AppSessionCategoryTranslations
-                                languages={languages}
-                                defaultLanguage={defaultLanguage}
-                                translations={translations}
-                                onChange={setTranslations}
-                            />
-                            <Form.Row>
-                                <AppFormInputColorPicker
-                                    name={"color"}
-                                    label={"Color"}
-                                    {...validation(
-                                        "color",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    xl={12}
-                                    lg={12}
-                                    errorMessage={errors.color?.message}
-                                    defaultValue={data.color}
-                                    control={control}
-                                    setValue={setValue}
+                        <FormProvider
+                            {...{
+                                control,
+                                handleSubmit,
+                                formState,
+                                setError,
+                                trigger,
+                                setValue,
+                                register,
+                                ...rest,
+                            }}
+                        >
+                            <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+                                <AppSessionCategoryTranslations
+                                    languages={languages}
+                                    defaultLanguage={defaultLanguage}
+                                    translations={translations}
+                                    onChange={setTranslations}
                                 />
-                            </Form.Row>
-                            <AppFormActions
-                                isEditMode={isEditMode}
-                                navigation={navigator}
-                                isLoading={formState.isSubmitting}
-                            />
-                        </Form>
+                                <Form.Row>
+                                    <AppFormInputColorPicker
+                                        label={"Color"}
+                                        {...register("color")}
+                                        xl={12}
+                                        lg={12}
+                                        errorMessage={errors.color?.message}
+                                        defaultValue={data.color}
+                                        control={control}
+                                        setValue={setValue}
+                                    />
+                                </Form.Row>
+                                <AppFormActions
+                                    isEditMode={isEditMode}
+                                    navigation={navigator}
+                                    isLoading={formState.isSubmitting}
+                                />
+                            </Form>
+                        </FormProvider>
                     </AppCard>
                 </Col>
             </Row>

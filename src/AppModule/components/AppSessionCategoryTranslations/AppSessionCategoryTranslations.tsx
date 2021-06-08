@@ -1,9 +1,11 @@
 import React, { FC } from "react";
 import { Row, Col, Form } from "react-bootstrap";
 import "./assets/scss/style.scss";
+import { useFormContext } from "react-hook-form";
 import { Language } from "../../../AdminModule/models";
 import { AppButton } from "../AppButton";
 import { AppFormLabel } from "../AppFormLabel";
+// import { validation } from "../../utils";
 
 export interface SessionCategoryTranslationsType {
     locale: string;
@@ -23,8 +25,8 @@ export const AppSessionCategoryTranslations: FC<AppSessionCategoryTranslationsPr
     onChange,
     defaultLanguage,
 }) => {
+    const { formState, register } = useFormContext();
     const [active, setActive] = React.useState<string>(defaultLanguage);
-
     const handleValueChange = (value: string, name: string) => {
         const newTranslatiosn = translations.map((e) => {
             if (e.locale === active)
@@ -44,14 +46,6 @@ export const AppSessionCategoryTranslations: FC<AppSessionCategoryTranslationsPr
         if (item.length > 0) if (name === "name") return item[0].name;
 
         return "";
-    };
-
-    const getNameError = (): boolean => {
-        let noErrorName = false;
-        translations.forEach((e) => {
-            if (!noErrorName) noErrorName = e.name !== "";
-        });
-        return noErrorName;
     };
 
     return (
@@ -87,15 +81,15 @@ export const AppSessionCategoryTranslations: FC<AppSessionCategoryTranslationsPr
 
                 <Form.Control
                     value={getValue("name")}
-                    name={`name_${active}`}
-                    required
+                    {...register(`name_${active}`)}
+                    // required
                     onChange={(e: any) => {
                         handleValueChange(e.target.value, "name");
                     }}
                 />
 
                 <Form.Control.Feedback className={"d-block"} type="invalid">
-                    {!getNameError() && "This feild is required"}
+                    {formState?.errors[`name_${active}`]?.message || ""}
                 </Form.Control.Feedback>
             </Form.Group>
         </Row>
