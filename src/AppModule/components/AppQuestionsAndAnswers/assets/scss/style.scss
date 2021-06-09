@@ -1,0 +1,24 @@
+@import "../../../../assets/scss/variables";
+
+.questions-and-answers-wrapper {
+    &--column {
+        width: 100%;
+        height: 90vh;
+        overflow: hidden;
+        background: white;
+        padding-right: 30px;
+        padding-left: 30px;
+        border-radius: 10px;
+    }
+
+    &--title {
+        margin-top: 2em;
+        margin-bottom: 0;
+    }
+
+    &--thread {
+        height: 68vh;
+        overflow-y: scroll;
+        scrollbar-width: none;
+    }
+}
