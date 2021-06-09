@@ -18,4 +18,5 @@ export interface User extends BaseEntity {
     status: string;
     userTags?: SimpleObject<string | number>[];
     userFieldValues?: SimpleObject<string | number>[];
+    imageName?: string;
 }
