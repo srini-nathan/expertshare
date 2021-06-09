@@ -22,7 +22,6 @@ import {
     errorToast,
     setViolations,
     successToast,
-    // validation,
 } from "../../../AppModule/utils";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
 import {
@@ -155,8 +154,7 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
                     errorToast("Language not exist");
                 } else if (response !== null) {
                     setData(response);
-                    trigger();
-
+                    setValue("color", response.color);
                     const items: SessionCategoryTranslationsType[] = Object.keys(
                         response.translations
                     ).map((key) => {
@@ -169,7 +167,7 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
                 }
             });
         }
-    }, [id, isEditMode, trigger]);
+    }, [id, isEditMode]);
 
     useEffect(() => {
         languages.forEach((e) => {
