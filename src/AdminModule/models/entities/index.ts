@@ -14,3 +14,4 @@ export * from "./User";
 export * from "./Role";
 export * from "./Conference";
 export * from "./ConferenceTag";
+export * from "./SessionCategory";

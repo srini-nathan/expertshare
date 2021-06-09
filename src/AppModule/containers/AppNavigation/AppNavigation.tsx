@@ -147,6 +147,13 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             },
             roles: [ROLE_OPERATOR],
         },
+        {
+            label: "Session Category",
+            path: "/admin/session-categories",
+            icon: {
+                name: "",
+            },
+        },
     ]);
     const [showSubMenuItems, isSubMenuItems] = useState<boolean>(false);
 
