@@ -73,7 +73,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
-            roles: [ROLE_OPERATOR],
+            isVisible: isGranted(role, ROLE_OPERATOR),
         },
         {
             label: "Design",
@@ -81,47 +81,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
-            roles: [ROLE_OPERATOR],
-        },
-        {
-            label: "Languages",
-            path: "/admin/languages",
-            icon: {
-                name: "",
-            },
-            roles: [ROLE_OPERATOR],
-        },
-        {
-            label: "Translations",
-            path: "/admin/translations",
-            icon: {
-                name: "",
-            },
-            roles: [ROLE_OPERATOR],
-        },
-        {
-            label: "Clients",
-            path: "/admin/clients",
-            icon: {
-                name: "",
-            },
-            roles: [ROLE_SUPER_ADMIN],
-        },
-        {
-            label: "Containers",
-            path: "/admin/containers",
-            icon: {
-                name: "",
-            },
-            roles: [ROLE_ADMIN],
-        },
-        {
-            label: "Email Templates",
-            path: "/admin/email-templates",
-            icon: {
-                name: "",
-            },
-            roles: [ROLE_OPERATOR],
+            isVisible: isGranted(role, ROLE_OPERATOR),
         },
         {
             label: "Users",
@@ -129,7 +89,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
-            roles: [ROLE_ADMIN],
+            isVisible: isGranted(role, ROLE_ADMIN),
         },
         {
             label: "User Groups",
@@ -137,7 +97,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
-            roles: [ROLE_ADMIN],
+            isVisible: isGranted(role, ROLE_ADMIN),
         },
         {
             label: "User Fields",
@@ -145,7 +105,49 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
-            roles: [ROLE_OPERATOR],
+            isVisible: isGranted(role, ROLE_OPERATOR),
+        },
+        {
+            label: "Email Templates",
+            path: "/admin/email-templates",
+            icon: {
+                name: "",
+            },
+            isVisible: isGranted(role, ROLE_OPERATOR),
+        },
+        {
+            label: "Languages",
+            path: "/admin/languages",
+            icon: {
+                name: "",
+            },
+            isVisible: isGranted(role, ROLE_OPERATOR),
+        },
+        {
+            label: "Translations",
+            path: "/admin/translations",
+            icon: {
+                name: "",
+            },
+            isVisible: isGranted(role, ROLE_OPERATOR),
+        },
+        {
+            label: "Clients",
+            path: "/admin/clients",
+            icon: {
+                name: "",
+            },
+            isVisible: isGranted(role, ROLE_SUPER_ADMIN),
+        },
+        {
+            label: "Containers",
+            path: "/admin/containers",
+            icon: {
+                name: "",
+            },
+            isVisible:
+                !isGranted(role, ROLE_SUPER_ADMIN) &&
+                isGranted(role, ROLE_ADMIN),
         },
     ]);
     const [showSubMenuItems, isSubMenuItems] = useState<boolean>(false);
@@ -280,11 +282,8 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                         className="active main-menu "
                     />
                     {subMenuItems
-                        .filter(({ roles }) => {
-                            if (roles) {
-                                return isGranted(role, roles[0]);
-                            }
-                            return true;
+                        .filter(({ isVisible }) => {
+                            return isVisible;
                         })
                         .filter((e) => !overflowItems.includes(e))
                         .map(({ label, path, icon }) => {

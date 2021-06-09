@@ -96,6 +96,7 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
                             value: defaultValue,
                             charCounterCount: withCounter,
                             charCounterMax: maxCount,
+                            heightMin: 450,
                         }}
                     />
                 )}

@@ -51,7 +51,7 @@
             height: 100%;
 
             .accordion {
-                .collapse:not(.collapse.show) ~ .nav-item {
+                .collapse:not(.collapse.show)~.nav-item {
                     &::after {
                         position: absolute;
                         top: 20px;
@@ -62,7 +62,7 @@
                     }
                 }
 
-                .collapse ~ .nav-item {
+                .collapse~.nav-item {
                     &::after {
                         position: absolute;
                         top: 20px;
@@ -86,7 +86,7 @@
             }
         }
 
-        &:hover > .more-menu {
+        &:hover>.more-menu {
             display: block;
         }
 
@@ -247,7 +247,6 @@
 
                         span {
                             margin: auto 9px 0;
-                            font-size: 12px;
                         }
                     }
 
