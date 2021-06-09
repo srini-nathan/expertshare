@@ -40,7 +40,7 @@ export const AppPageHeader: FC<AppPageHeaderProps> = ({
                 </Col>
             )}
             {customToolbar && (
-                <Col className="d-flex justify-content-end" md={8}>
+                <Col className="d-flex justify-content-end" md={7}>
                     {children}
                 </Col>
             )}
