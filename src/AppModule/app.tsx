@@ -8,7 +8,7 @@ import { ModuleRouter } from "./models";
 import AppProvider from "./contexts/AppContext";
 import { AuthContext } from "../SecurityModule/contexts/AuthContext";
 import { useChosenContainer, useNavigator } from "./hooks";
-import { AppLoader } from "./components";
+import { AppLoader, AppPictureInPicture } from "./components";
 import { LandingHelper } from "./pages";
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
@@ -92,6 +92,13 @@ const App = (): JSX.Element => {
                             }}
                         />
                     </DashboardLayout>
+                    <AppPictureInPicture show={true}>
+                        <div>
+                            <div>Drag me! Please!</div>
+                            <div>Drag me! Please!</div>
+                            <div>Drag me! Please!</div>
+                        </div>
+                    </AppPictureInPicture>
                 </AppConfiguration>
             </AppProvider>
         );
