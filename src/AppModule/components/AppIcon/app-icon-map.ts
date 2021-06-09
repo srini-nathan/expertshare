@@ -32,6 +32,8 @@ import {
     faUserPlus,
     faCommentAltLines,
     faCalendarPlus,
+    faCommentAlt,
+    faShare,
 } from "@fortawesome/pro-regular-svg-icons";
 import { AppIconMap } from "../../models";
 
@@ -40,12 +42,14 @@ export const appIconMap: AppIconMap = {
     container: faBox,
     ChevronDown: faChevronDown,
     ChevronUp: faChevronUp,
+    CommentAlt: faCommentAlt,
     ArrowLeft: faArrowLeft,
     back: faChevronLeft,
     next: faChevronRight,
     administrator: faCog,
     Settings: faCog,
     Users: faUserFriends,
+    FaShare: faShare,
     dashboard: faThLarge,
     CloudDownload: faCloudDownload,
     CloudUpload: faCloudUpload,

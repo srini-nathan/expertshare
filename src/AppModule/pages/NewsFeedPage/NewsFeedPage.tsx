@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Row, Col } from "react-bootstrap";
 
@@ -22,6 +22,10 @@ export const NewsFeedPage: FC<RouteComponentProps> = (): JSX.Element => {
         });
     };
 
+    useEffect(() => {
+        updateFeed();
+    }, []);
+
     return (
         <>
             <Row className="justify-content-md-center">
@@ -36,7 +40,12 @@ export const NewsFeedPage: FC<RouteComponentProps> = (): JSX.Element => {
                 </Col>
 
                 <Col md={11}>
-                    <AppFeedShower />
+                    {newsFeedData.length > 0 &&
+                        newsFeedData.map((item: any) => (
+                            <AppFeedShower item={item}>
+                                comments block
+                            </AppFeedShower>
+                        ))}
                 </Col>
             </Row>
         </>

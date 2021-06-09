@@ -60,9 +60,6 @@ export const AppFeedAdder: FC<AppFeedAdderProps> = ({
         mode: "all",
     });
 
-    // eslint-disable-next-line no-console
-    console.log(control);
-
     function useOutsideEmoji(ref: any) {
         useEffect(() => {
             function handleClickOutside(event: any) {
@@ -144,7 +141,7 @@ export const AppFeedAdder: FC<AppFeedAdderProps> = ({
                     <div className="picker-wrapper">
                         <AppButton
                             className="sent-btn sent-btn--emoji"
-                            variant="light"
+                            variant="secondary"
                             onClick={() => setShowEmogiModal(true)}
                         >
                             <i className="far fa-smile smile-icon"></i>
