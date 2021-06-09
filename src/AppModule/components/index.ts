@@ -54,3 +54,4 @@ export * from "./AppSwitchView";
 export * from "./AppFormTranslatable";
 export * from "./AttendeeCard";
 export * from "./AppFeedAdder";
+export * from "./AppFeedShower";

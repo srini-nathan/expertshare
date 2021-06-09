@@ -1,8 +1,13 @@
 @import "../../../../assets/scss/screens-sizes";
 @import "../../../../assets/scss/variables";
 
+.app-feed-adder-wrapper {
+    background: white;
+    padding: 2em;
+}
+
 .app-feed-adder {
-    background-color: var(--input-bg-clr);
+    background-color: white;
     padding: 0 !important;
     border: 1px solid var(--input-border-clr);
     border-radius: var(--border-radius);

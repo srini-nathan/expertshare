@@ -18,13 +18,17 @@ import { AppFormSwitch } from "../AppFormSwitch";
 import { AppDatePicker } from "../AppDatePicker";
 import { AppButton } from "../AppButton";
 
+import { NewsfeedApi } from "../../apis";
+import { errorToast } from "../../utils";
+
 import "emoji-mart/css/emoji-mart.css";
 import "./assets/scss/style.scss";
 
 export interface AppFeedAdderProps extends AppFormElementProps {
     isSend?: boolean;
     rows?: number;
-    handleDataSend: (message: any) => void;
+    container: number;
+    handleUpdateFeed: () => void;
     handleUpdateData?: (message: any) => void;
     onChange?: ChangeEventHandler<
         HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -34,13 +38,14 @@ export interface AppFeedAdderProps extends AppFormElementProps {
 export const AppFeedAdder: FC<AppFeedAdderProps> = ({
     rows = 5,
     onChange,
-    handleDataSend,
+    handleUpdateFeed,
     handleUpdateData,
     isSend,
     ...props
 }): JSX.Element => {
     const [data, setData] = useState<string>("");
-    const { className = "" } = props;
+
+    const { className = "", container } = props;
     const groupProps = { className, as: Col };
 
     const [showEmogiModal, setShowEmogiModal] = useState(false);
@@ -54,6 +59,9 @@ export const AppFeedAdder: FC<AppFeedAdderProps> = ({
         resolver: yupResolver(validationSchema),
         mode: "all",
     });
+
+    // eslint-disable-next-line no-console
+    console.log(control);
 
     function useOutsideEmoji(ref: any) {
         useEffect(() => {
@@ -78,15 +86,42 @@ export const AppFeedAdder: FC<AppFeedAdderProps> = ({
         setShowEmogiModal(false);
     };
 
+    const newNewsFeedSend = (message: string) => {
+        const meesageObj = {
+            postText: `${message}`,
+            status: "NEW",
+            // To Do - Add Published, AlwaysTop and Shedule values to this keyss
+            isPublished: true,
+            isAlwaysTop: true,
+            scheduleStartAt: "2021-06-09T08:38:58.127Z",
+            scheduleEndAt: "2021-06-09T08:38:58.127Z",
+            container: `api/containers/${container}`,
+            mediaFileNames: [],
+        };
+
+        const messageToPost = JSON.stringify(meesageObj);
+
+        NewsfeedApi.postNewsfeed<any, any>(messageToPost).then(
+            ({ response, errorMessage }) => {
+                if (response) {
+                    handleUpdateFeed();
+                }
+                if (errorMessage) {
+                    errorToast(errorMessage);
+                }
+            }
+        );
+    };
+
     const sendData = () => {
-        handleDataSend(data);
+        newNewsFeedSend(data);
         setData("");
         settOpenImage(false);
         setOpenVideo(false);
     };
 
     return (
-        <>
+        <div className="app-feed-adder-wrapper">
             <Form.Group {...groupProps}>
                 <Form.Control
                     as="textarea"
@@ -259,6 +294,6 @@ export const AppFeedAdder: FC<AppFeedAdderProps> = ({
                     </Row>
                 )}
             </div>
-        </>
+        </div>
     );
 };
