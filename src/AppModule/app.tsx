@@ -8,8 +8,14 @@ import { ModuleRouter } from "./models";
 import AppProvider from "./contexts/AppContext";
 import { AuthContext } from "../SecurityModule/contexts/AuthContext";
 import { useChosenContainer, useNavigator } from "./hooks";
-import { AppLoader, AppPictureInPicture, AppYoutubeFrame } from "./components";
+import {
+    AppLoader,
+    AppPictureInPicture,
+    AppYoutubeFrame,
+    AppWelcomeModal,
+} from "./components";
 import { LandingHelper } from "./pages";
+
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
 
@@ -54,6 +60,8 @@ const App = (): JSX.Element => {
     const { state } = React.useContext(AuthContext);
     const navigator = useNavigator();
     const { isChosen } = useChosenContainer();
+    const [showWelcomeModal, setShowWelcomeModal] = React.useState(true);
+
     const dashboardRoutes: ModuleRouter[] = appRouters.filter(
         ({ layout }) => layout === "dashboard"
     );
@@ -92,6 +100,12 @@ const App = (): JSX.Element => {
                             }}
                         />
                     </DashboardLayout>
+                    <AppWelcomeModal
+                        show={showWelcomeModal}
+                        handleClose={() => {
+                            setShowWelcomeModal(false);
+                        }}
+                    />
                     <AppPictureInPicture show={true}>
                         <AppYoutubeFrame
                             url={
