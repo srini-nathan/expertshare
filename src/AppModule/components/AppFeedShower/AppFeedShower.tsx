@@ -152,7 +152,7 @@ export const AppFeedShower: FC<AppFeedShowerProps> = ({
                                 >
                                     <AppIcon
                                         className={`mr-2 ml-2 ${
-                                            showCommentTextarea && "green"
+                                            showEditTextarea && "green"
                                         }`}
                                         name="edit"
                                     />
@@ -205,6 +205,17 @@ export const AppFeedShower: FC<AppFeedShowerProps> = ({
 
             <div className="app-feed-shower-wrapper--type-your-comment text pl-2 pr-2 pb-4">
                 {showCommentTextarea && (
+                    <AppСhoseMethodMessage
+                        activeTab="Text"
+                        className="ptop-messages"
+                        rows={2}
+                        enterToPost
+                        handleMessageSend={(message) => {
+                            newMessageSend(message);
+                        }}
+                    />
+                )}
+                {showEditTextarea && (
                     <AppСhoseMethodMessage
                         activeTab="Text"
                         className="ptop-messages"
