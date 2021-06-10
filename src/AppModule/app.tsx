@@ -1,5 +1,5 @@
-import React, { FC } from "react";
-import { Redirect, RouteComponentProps, Router, Location } from "@reach/router";
+import React from "react";
+import { Redirect, Router, Location, useMatch } from "@reach/router";
 import { appRouters } from "./bootstrap";
 import { DashboardLayout } from "./layouts/DashboardLayout";
 import { AppConfiguration } from "./layouts/AppConfiguration";
@@ -7,8 +7,9 @@ import { AuthLayout } from "./layouts/AuthLayout";
 import { ModuleRouter } from "./models";
 import AppProvider from "./contexts/AppContext";
 import { AuthContext } from "../SecurityModule/contexts/AuthContext";
+import { useChosenContainer, useNavigator } from "./hooks";
 import { AppLoader } from "./components";
-
+import { LandingHelper } from "./pages";
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
 
@@ -42,35 +43,43 @@ const OnRouteChange = ({ action }: Props2) => (
     </Location>
 );
 
-const Home: FC<RouteComponentProps> = (): JSX.Element => {
-    return <h2>Hi</h2>;
+const AppFullScreenLoader = (): JSX.Element => {
+    return (
+        <div className={"vh-100 vw-100"}>
+            <AppLoader />
+        </div>
+    );
 };
-
 const App = (): JSX.Element => {
     const { state } = React.useContext(AuthContext);
+    const navigator = useNavigator();
+    const { isChosen } = useChosenContainer();
     const dashboardRoutes: ModuleRouter[] = appRouters.filter(
         ({ layout }) => layout === "dashboard"
     );
     const authRoutes: ModuleRouter[] = appRouters.filter(
         ({ layout }) => layout === "auth"
     );
+    const overViewPage = useMatch("/containers/overview");
+    const autoLoginPage = useMatch("/auth/auto-login/:token");
+    const isOverViewPage = overViewPage !== null;
+    const isAutoLoginPage = autoLoginPage !== null;
 
     if (state.isAuthenticated === null) {
-        return (
-            <div className={"vh-100 vw-100"}>
-                <AppLoader />
-            </div>
-        );
+        return <AppFullScreenLoader />;
     }
 
-    if (state.isAuthenticated) {
+    if (!isAutoLoginPage && state.isAuthenticated) {
+        if (!isChosen() && !isOverViewPage) {
+            navigator("/containers/overview").then();
+            return <AppFullScreenLoader />;
+        }
         return (
             <AppProvider>
                 <AppConfiguration>
                     <DashboardLayout>
                         <Router primary={false}>
-                            <Redirect from="/" to="/conferences/grid" noThrow />
-                            <Home path="home" />
+                            <LandingHelper path="/" />
                             {dashboardRoutes.map(
                                 ({ RouterPlug, key, path }) => {
                                     return <RouterPlug key={key} path={path} />;

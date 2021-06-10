@@ -1,17 +1,103 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC, useState, useEffect } from "react";
+import ReactPlayer from "react-player";
+import { AppСhoseMethodMessage } from "../AppСhoseMethodMessage";
 import { AppButton } from "../AppButton";
 import { AppIcon } from "../AppIcon";
+import { NewsfeedCommentApi } from "../../apis";
+import { AppQAThread } from "../AppQAThread";
+import { errorToast } from "../../utils";
+
 import "./assets/scss/style.scss";
 
 export interface AppFeedShowerProps {
     item?: any;
-    children?: ReactNode;
+    container: number;
+    user?: any;
+    handleNewsFeedId: (id: number) => void;
 }
 
 export const AppFeedShower: FC<AppFeedShowerProps> = ({
     item,
-    children,
+    container,
+    handleNewsFeedId,
 }): JSX.Element => {
+    const [data, setData] = useState<[]>([]);
+
+    const [showCommentTextarea, setShowCommentTextarea] = useState<boolean>(
+        false
+    );
+
+    const [showEditTextarea, setShowEditTextarea] = useState<boolean>(false);
+
+    const newsfeedId = item.id;
+    const [showThread, setShowThread] = useState<boolean>(true);
+
+    const getCurrentThread = () => {
+        NewsfeedCommentApi.getNewsfeedComments(newsfeedId).then((response) => {
+            if (response) {
+                setData(response["hydra:member"].reverse());
+            }
+        });
+    };
+
+    const newMessageSend = (message: string) => {
+        const meesageObj = {
+            message: `${message}`,
+            status: "NEW",
+            isReplyed: true,
+            container: `api/containers/${container}`,
+            newsfeed: `api/newsfeeds/${newsfeedId}`,
+        };
+
+        const messageToPost = JSON.stringify(meesageObj);
+
+        NewsfeedCommentApi.postNewsfeedComments<any, any>(messageToPost).then(
+            ({ response, errorMessage }) => {
+                if (response) {
+                    getCurrentThread();
+                }
+                if (errorMessage) {
+                    errorToast(errorMessage);
+                }
+            }
+        );
+
+        setShowCommentTextarea(false);
+    };
+
+    const sendAnswerMessage = (message: string, aId: number) => {
+        const meesageObj = {
+            message: `${message}`,
+            status: "NEW",
+            parent: `api/newsfeed_comments/${aId}`,
+            isReplyed: true,
+            container: `api/containers/${container}`,
+            newsfeed: `api/newsfeeds/${newsfeedId}`,
+        };
+
+        const messageToPost = JSON.stringify(meesageObj);
+
+        NewsfeedCommentApi.postNewsfeedComments<any, any>(messageToPost).then(
+            ({ response, errorMessage }) => {
+                if (response) {
+                    getCurrentThread();
+                }
+                if (errorMessage) {
+                    errorToast(errorMessage);
+                }
+            }
+        );
+    };
+
+    const showAllThread = () => {
+        setShowThread(!showThread);
+        getCurrentThread();
+    };
+
+    useEffect(() => {
+        getCurrentThread();
+    }, []);
+
     return (
         <div className="app-feed-shower-wrapper">
             <div className="row m-0 px-3 pt-3 pb-3">
@@ -36,24 +122,115 @@ export const AppFeedShower: FC<AppFeedShowerProps> = ({
                             className="btn-collapse col-auto p-0"
                             id="btn-collapse-single"
                         >
-                            <AppButton variant="secondary">
-                                <AppIcon className="mr-2 ml-2" name="FaShare" />
-                            </AppButton>
+                            <div className="btns-flex">
+                                <AppButton
+                                    variant="secondary"
+                                    onClick={() =>
+                                        setShowCommentTextarea(
+                                            !showCommentTextarea
+                                        )
+                                    }
+                                    className={`${
+                                        showCommentTextarea && "green-bg"
+                                    }`}
+                                >
+                                    <AppIcon
+                                        className={`mr-2 ml-2 ${
+                                            showCommentTextarea && "green"
+                                        }`}
+                                        name="FaShare"
+                                    />
+                                </AppButton>
+                                <AppButton
+                                    variant="secondary"
+                                    onClick={() => {
+                                        setShowEditTextarea(!showEditTextarea);
+                                    }}
+                                    className={`${
+                                        showEditTextarea && "green-bg"
+                                    }`}
+                                >
+                                    <AppIcon
+                                        className={`mr-2 ml-2 ${
+                                            showCommentTextarea && "green"
+                                        }`}
+                                        name="edit"
+                                    />
+                                </AppButton>
+                                <AppButton
+                                    variant="secondary"
+                                    onClick={() => handleNewsFeedId(newsfeedId)}
+                                >
+                                    <AppIcon
+                                        className="mr-2 ml-2"
+                                        name="delete"
+                                    />
+                                </AppButton>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="row app-feed-shower-wrapper--posted-text text pt-2 pb-3">
-                {item.postText}
+            <div className="row app-feed-shower-wrapper--posted-text text pr-5 pt-2 pb-3">
+                <div className="text">{item.postText}</div>
+                {item.mediaFileNames[0] && (
+                    <img
+                        className=" app-feed-shower-wrapper--posted-text--image"
+                        src={`https://esrapidev1.expertshare.me/uploads/${container}/newsfeed_media/${item.mediaFileNames[0]}`}
+                    />
+                )}
+
+                {item.mediaFileNames[1] && (
+                    <ReactPlayer
+                        className={"video-player"}
+                        url={`https://esrapidev1.expertshare.me/uploads/${container}/newsfeed_media/${item.mediaFileNames[1]}`}
+                    />
+                )}
             </div>
 
             <div className="row app-feed-shower-wrapper--button-comments text pt-2 pb-3">
-                <AppButton variant="secondary">
-                    <span className="mr-2">1.5K</span>
-                    <AppIcon name="CommentAlt" />
-                </AppButton>
+                {data.length > 0 && (
+                    <AppButton
+                        variant="secondary"
+                        className={`${showThread && "green"}`}
+                        onClick={() => {
+                            showAllThread();
+                        }}
+                    >
+                        {/* <span className="mr-2">1.5K</span> */}
+                        <AppIcon name="CommentAlt" />
+                    </AppButton>
+                )}
             </div>
-            {children}
+
+            <div className="app-feed-shower-wrapper--type-your-comment text pl-2 pr-2 pb-4">
+                {showCommentTextarea && (
+                    <AppСhoseMethodMessage
+                        activeTab="Text"
+                        className="ptop-messages"
+                        rows={2}
+                        enterToPost
+                        handleMessageSend={(message) => {
+                            newMessageSend(message);
+                        }}
+                    />
+                )}
+            </div>
+            {showThread && (
+                <div className="">
+                    <AppQAThread
+                        data={data}
+                        deleteQuestion={(qId) => {
+                            // eslint-disable-next-line no-console
+                            console.log(qId);
+                        }}
+                        updateMessage={() => {}}
+                        sendAnswer={(message, aId) => {
+                            sendAnswerMessage(message, aId);
+                        }}
+                    />
+                </div>
+            )}
         </div>
     );
 };

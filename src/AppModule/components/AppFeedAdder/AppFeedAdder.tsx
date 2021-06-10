@@ -12,14 +12,14 @@ import * as Yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { AppFormElementProps } from "../../models";
+import { AppFormElementProps, Upload } from "../../models";
 import { AppUploader } from "../AppUploader";
+import { UploadAPI, NewsfeedApi } from "../../apis";
 import { AppFormSwitch } from "../AppFormSwitch";
 import { AppDatePicker } from "../AppDatePicker";
 import { AppButton } from "../AppButton";
 
-import { NewsfeedApi } from "../../apis";
-import { errorToast } from "../../utils";
+import { errorToast, successToast } from "../../utils";
 
 import "emoji-mart/css/emoji-mart.css";
 import "./assets/scss/style.scss";
@@ -53,6 +53,20 @@ export const AppFeedAdder: FC<AppFeedAdderProps> = ({
     const [openImage, settOpenImage] = useState<boolean>(false);
     const [openVideo, setOpenVideo] = useState<boolean>(false);
 
+    const [videoFile, setVideoFile] = useState<File[]>([]);
+    const [videoFileName, setVideoFileName] = useState<any>("");
+
+    const [imageFileName, setImageFileName] = useState<any>("");
+    const [imageBlob, setImageBlob] = useState<Blob[]>([]);
+
+    const setImageData = (image: any) => {
+        if (image[0].name) {
+            setImageFileName(image[0].name);
+        } else {
+            setImageBlob(image);
+        }
+    };
+
     const validationSchema = Yup.object().shape({});
 
     const { control } = useForm({
@@ -67,7 +81,6 @@ export const AppFeedAdder: FC<AppFeedAdderProps> = ({
                     setShowEmogiModal(false);
                 }
             }
-
             document.addEventListener("mousedown", handleClickOutside);
             return () => {
                 document.removeEventListener("mousedown", handleClickOutside);
@@ -93,7 +106,7 @@ export const AppFeedAdder: FC<AppFeedAdderProps> = ({
             scheduleStartAt: "2021-06-09T08:38:58.127Z",
             scheduleEndAt: "2021-06-09T08:38:58.127Z",
             container: `api/containers/${container}`,
-            mediaFileNames: [],
+            mediaFileNames: [imageFileName, videoFileName.fileName],
         };
 
         const messageToPost = JSON.stringify(meesageObj);
@@ -101,6 +114,10 @@ export const AppFeedAdder: FC<AppFeedAdderProps> = ({
         NewsfeedApi.postNewsfeed<any, any>(messageToPost).then(
             ({ response, errorMessage }) => {
                 if (response) {
+                    setImageFileName("");
+                    setImageBlob([]);
+                    setVideoFileName("");
+                    setVideoFile([]);
                     handleUpdateFeed();
                 }
                 if (errorMessage) {
@@ -113,8 +130,47 @@ export const AppFeedAdder: FC<AppFeedAdderProps> = ({
     const sendData = () => {
         newNewsFeedSend(data);
         setData("");
-        settOpenImage(false);
         setOpenVideo(false);
+    };
+
+    const uploadImage = async () => {
+        const fd = new FormData();
+        fd.set("file", imageBlob[0], imageFileName);
+        fd.set("fileType", "NEWSFEED_MEDIA");
+        fd.set("container", `${container}`);
+
+        return UploadAPI.createResource<Upload, FormData>(fd).then(
+            ({ errorMessage, response }) => {
+                if (errorMessage) {
+                    errorToast(errorMessage);
+                }
+                if (response) {
+                    setImageFileName(response.fileName);
+                }
+                successToast("Image uploaded");
+                settOpenImage(false);
+            }
+        );
+    };
+
+    const uploadVideo = async () => {
+        const fd = new FormData();
+        fd.set("file", videoFile[0], videoFile[0].name);
+        fd.set("fileType", "NEWSFEED_MEDIA");
+        fd.set("container", `${container}`);
+
+        return UploadAPI.createResource<Upload, FormData>(fd).then(
+            ({ errorMessage, response }) => {
+                if (errorMessage) {
+                    errorToast(errorMessage);
+                }
+                if (response) {
+                    setVideoFileName(response);
+                }
+                successToast("Video uploaded");
+                setOpenVideo(false);
+            }
+        );
     };
 
     return (
@@ -194,6 +250,8 @@ export const AppFeedAdder: FC<AppFeedAdderProps> = ({
                     </div>
                 </div>
             </Form.Group>
+            <p>{imageFileName && `Image: ${imageFileName}`}</p>
+            <p>{videoFileName && `Video: ${videoFileName.fileName}`}</p>
             <div className="app-feed-settings">
                 <span className="app-feed-settings--info">
                     <i className="fa fa-info-circle" aria-hidden="true"></i>
@@ -202,25 +260,45 @@ export const AppFeedAdder: FC<AppFeedAdderProps> = ({
                 </span>
                 <div className="app-feed-settings--images">
                     {openImage && (
-                        <AppUploader
-                            withCropper
-                            accept="image/*"
-                            onFileSelect={(files) => {
-                                // eslint-disable-next-line no-console
-                                console.log(files);
-                            }}
-                        />
+                        <>
+                            <Row className="d-flex justify-content-end mr-1">
+                                <AppButton
+                                    onClick={uploadImage}
+                                    disabled={imageFileName === "" && true}
+                                    className="mt-3 mb-3 d-flex justify-content-end"
+                                >
+                                    Upload Image
+                                </AppButton>
+                            </Row>
+                            <AppUploader
+                                withCropper
+                                accept="image/*"
+                                onFileSelect={(files) => {
+                                    setImageData(files);
+                                }}
+                            />
+                        </>
                     )}
                 </div>
                 <div className="app-feed-settings--videos">
                     {openVideo && (
-                        <AppUploader
-                            accept="video/*"
-                            onFileSelect={(files) => {
-                                // eslint-disable-next-line no-console
-                                console.log(files);
-                            }}
-                        />
+                        <>
+                            <Row className="d-flex justify-content-end mr-1">
+                                <AppButton
+                                    onClick={uploadVideo}
+                                    disabled={videoFile.length === 0 && true}
+                                    className="mt-3 mb-3 d-flex justify-content-end"
+                                >
+                                    Upload Video
+                                </AppButton>
+                            </Row>
+                            <AppUploader
+                                accept="video/*"
+                                onFileSelect={(video) => {
+                                    setVideoFile(video);
+                                }}
+                            />
+                        </>
                     )}
                 </div>
 
@@ -279,7 +357,7 @@ export const AppFeedAdder: FC<AppFeedAdderProps> = ({
                                 control={control}
                             />
                         </Col>
-                        <Col lg={5}>
+                        <Col lg={6}>
                             <span className="app-feed-settings--schedule">
                                 Schedule post
                             </span>

@@ -1,8 +1,15 @@
-import React, { FC } from "react";
-// import { Col } from "react-bootstrap";
+import React, { FC, useState } from "react";
 import { AppIcon } from "../AppIcon";
 import "./assets/scss/list.scss";
-import UserAvatar from "./assets/images/user-avatar.png";
+import { useBuildAssetPath } from "../../hooks";
+import { CONSTANTS } from "../../../config";
+import { User } from "../../models";
+import placeholder from "../../assets/images/user-avatar.png";
+
+const { Upload: UPLOAD } = CONSTANTS;
+const {
+    FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
+} = UPLOAD;
 
 export interface AttendeeCardProps {
     attendee: any;
@@ -11,6 +18,32 @@ export interface AttendeeCardProps {
 export const AttendeeCard: FC<AttendeeCardProps> = ({
     attendee,
 }): JSX.Element => {
+    const [online] = useState(false);
+    const {
+        imageName,
+        firstName,
+        lastName,
+        jobTitle,
+        company,
+        email,
+        userTags,
+    } = attendee as User;
+    const profilePicturePath = useBuildAssetPath(
+        FILETYPEINFO_USER_PROFILE.path,
+        imageName
+    );
+    const style = imageName
+        ? {
+              backgroundImage: `url(${profilePicturePath})`,
+              backgroundSize: "cover",
+          }
+        : {
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              backgroundImage: `url(${placeholder})`,
+          };
+
     return (
         <div className="card p-3">
             <div className="card--icons">
@@ -24,21 +57,10 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                 <a
                     href="#"
                     className={
-                        attendee.online
-                            ? "profile-avatar online"
-                            : "profile-avatar"
+                        online ? "profile-avatar online" : "profile-avatar"
                     }
                 >
-                    <i
-                        style={{
-                            backgroundImage: `url(${
-                                attendee.avatarUrl
-                                    ? attendee.avatarUrl
-                                    : UserAvatar
-                            })`,
-                            backgroundPosition: "center",
-                        }}
-                    ></i>
+                    <i style={style}></i>
                 </a>
                 {attendee.category && (
                     <a href="#" className="speaker-btn">
@@ -50,38 +72,42 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
             </div>
             <div className="card--title text-center mt-3">
                 <a href="#" className="card--title--name">
-                    <h2>{attendee.name}</h2>
+                    <h2>
+                        {firstName} {lastName}
+                    </h2>
                 </a>
                 <p className="card--title--bio mb-1 mx-2">
-                    {attendee.description}
+                    {jobTitle} at {company}
                 </p>
                 <a href="#" className="card--title--mail mb-3 d-block">
-                    {attendee.email}
+                    {email}
                 </a>
             </div>
-            <div className="card--tags">
-                <div className="row m-0 p-0">
-                    {attendee.tags &&
-                        attendee.tags.map((tag: string, index: any) => {
+            {userTags && (
+                <div className="card--tags">
+                    <div className="row m-0 p-0">
+                        {userTags.map((tag, index: any) => {
                             if (index < 3) {
                                 return (
                                     <div
                                         className="card--tags--item col-auto px-0 mb-2"
                                         key={index}
                                     >
-                                        <a href="#">{tag}</a>
+                                        <a href="#">{tag.name}</a>
                                     </div>
                                 );
                             }
+
                             return <></>;
                         })}
-                    {attendee.tags && attendee.tags.length > 2 && (
-                        <div className="card--tags--item show-more col-auto px-0 mb-2">
-                            <a href="#">+ Show More</a>
-                        </div>
-                    )}
+                        {userTags.length > 2 && (
+                            <div className="card--tags--item show-more col-auto px-0 mb-2">
+                                <a href="#">+ Show More</a>
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
             <div className="card--buttons mt-3 mb-2">
                 <div className="row m-0 p-0">
                     <div className="card--buttons--book-session col-6 px-2">

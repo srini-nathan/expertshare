@@ -13,3 +13,4 @@ export * from "./UserTagApi";
 export * from "./RoleApi";
 export * from "./ConferenceApi";
 export * from "./ConferenceTagApi";
+export * from "./SessionCategoryApi";

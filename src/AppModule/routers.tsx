@@ -5,6 +5,7 @@ import {
     UserProfilePage,
     MyProfilePage,
     ContainerOverview,
+    SessionDetailsPage,
     ConferenceGrid,
     ConferenceAddEdit,
     AttendeeOverview,
@@ -23,6 +24,9 @@ export const routers: ModuleRouter[] = [
                     <KitchenSink path={"kitchen-sink"} />
                     <MyProfilePage path={"my-profile"} />
                     <UserProfilePage path={"user-profile/:id"} />
+                    <SessionDetailsPage
+                        path={"conference/:id/session/:number"}
+                    />
                     <ContainerOverview path={"containers/overview"} />
                     <ConferenceGrid path={"conferences"} />
                     <ConferenceGrid path={"conferences/:view"} />
