@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { Row, Col, Form } from "react-bootstrap";
 import "./assets/scss/style.scss";
 import { Language } from "../../../AdminModule/models";
@@ -9,11 +9,13 @@ export interface TranslationsType {
     locale: string;
     title: string;
     description: string;
+    streamUrl?: string;
 }
 
 export interface AppFormTranslatableProps {
     languages: Language[];
     onChange: (value: TranslationsType[]) => void;
+    setActiveLanguage?: (value: string) => void;
     translations: TranslationsType[];
     defaultLanguage: string;
 }
@@ -22,6 +24,7 @@ export const AppFormTranslatable: FC<AppFormTranslatableProps> = ({
     languages,
     translations,
     onChange,
+    setActiveLanguage,
     defaultLanguage,
 }) => {
     const [active, setActive] = React.useState<string>(defaultLanguage);
@@ -65,6 +68,10 @@ export const AppFormTranslatable: FC<AppFormTranslatableProps> = ({
         });
         return noErrorTitle;
     };
+
+    useEffect(() => {
+        if (setActiveLanguage) setActiveLanguage(active);
+    }, [active]);
 
     return (
         <Row className="translatable-container">

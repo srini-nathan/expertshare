@@ -1,0 +1,56 @@
+@import "../../../../assets/scss/variables";
+
+.streams-container {
+    .tab-pane {
+        display: none;
+        min-height: 205px;
+
+        &.show {
+            display: block;
+        }
+    }
+
+    .stream-items {
+        display: block;
+        width: 64px;
+        height: 32px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+
+        &.youtube {
+            background-image: url(../images/youtube.png);
+
+        }
+
+        &.knovio {
+            background-image: url(../images/knovio.png);
+
+        }
+
+        &.vimeo {
+            background-image: url(../images/vimeo.png);
+
+        }
+
+        &.zoom {
+            background-image: url(../images/zoom.png);
+
+        }
+
+        &.webex {
+            background-image: url(../images/webex.png);
+
+        }
+
+        &.swisscom {
+            background-image: url(../images/swisscom.png);
+
+        }
+
+        &.dacast {
+            background-image: url(../images/dacast.png);
+
+        }
+    }
+}

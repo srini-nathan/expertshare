@@ -1,0 +1,338 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.event-detail-admin--workshop {
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
+    &--container {
+        min-width: 1500px;
+        background-color: var(--light-clr);
+        border-radius: var(--border-radius);
+
+        &--header {
+            &--left {
+                &--content {
+                    .arrow-left-btn {
+                        width: 36px;
+
+                        i {
+                            font-size: 17px;
+                            font-weight: 500;
+                            color: var(--secondary);
+
+                            &::before {
+                                content: "\e017";
+                            }
+                        }
+                    }
+                }
+            }
+
+            &--right {
+                display: flex;
+                align-items: center;
+
+                .size-dropdown {
+                    display: flex;
+                    align-items: center;
+                    width: 125px;
+                    height: 36px;
+                    background-color: var(--btn-secondary-bg-clr);
+                    border-radius: var(--border-radius);
+                    box-shadow: 0 6px 30px var(--secondary-20);
+
+                    .cardsize-dropdown {
+                        width: 100%;
+                        font-size: 14px;
+                        font-weight: 500;
+                        color: var(--secondary);
+
+                    }
+                }
+
+                .btn-arrow {
+                    width: 36px;
+
+                    i {
+                        font-size: 17px;
+                        font-weight: 500;
+
+                        &::before {
+                            content: "\e016";
+                        }
+                    }
+                }
+            }
+        }
+
+        &--content {
+            &--item {
+                .inner-container {
+                    overflow: hidden;
+
+                    &--header {
+                        &--time {
+                            display: flex;
+
+                            i {
+                                font-size: 17px;
+                                font-weight: 500;
+                                color: var(--header-desc-fg-clr);
+                            }
+
+                            &--content {
+                                display: grid;
+
+                                h2 {
+                                    font-size: 16px;
+                                    font-weight: 700;
+                                    color: var(--header-desc-fg-clr);
+
+                                    span {
+                                        font-size: 16px;
+                                        font-weight: 700;
+                                        color: var(--header-sub-desc-fg-clr);
+                                    }
+                                }
+
+                                span {
+                                    font-size: 12px;
+                                    font-weight: 500;
+                                    color: var(--header-sub-desc-fg-clr);
+                                }
+                            }
+                        }
+
+                        &--seats {
+                            display: flex;
+
+                            i {
+                                font-size: 20px;
+                                font-weight: 500;
+                                color: var(--header-desc-fg-clr);
+                            }
+
+                            &--content {
+                                display: grid;
+
+                                h2 {
+                                    font-size: 16px;
+                                    font-weight: 700;
+                                    color: var(--header-desc-fg-clr);
+
+                                    span {
+                                        font-size: 16px;
+                                        font-weight: 700;
+                                        color: var(--header-sub-desc-fg-clr);
+                                    }
+                                }
+
+                                span {
+                                    font-size: 12px;
+                                    font-weight: 500;
+                                    color: var(--header-sub-desc-fg-clr);
+                                }
+                            }
+                        }
+                    }
+
+                    &--banner {
+                        &--content {
+                            position: relative;
+                            width: auto;
+                            height: 133px;
+                            cursor: pointer;
+                            background-repeat: no-repeat;
+                            background-size: cover;
+
+                            &--button {
+                                position: absolute;
+                                top: 10px;
+                                left: 10px;
+                            }
+                        }
+                    }
+
+                    &--det {
+                        &--title {
+                            a {
+                                h2 {
+                                    display: -webkit-box;
+                                    height: 60px;
+                                    -webkit-box-orient: vertical;
+                                    -webkit-line-clamp: 2;
+                                    overflow: hidden;
+                                    font-size: 20px;
+                                    font-weight: 700;
+                                    line-height: 28px;
+                                    color: var(--secondary);
+                                }
+                            }
+                        }
+
+                        &--content {
+                            &--title {
+                                display: flex;
+                                align-items: center;
+
+                                i {
+                                    font-size: 23px;
+
+                                    &::before {
+                                        content: "\e000";
+                                    }
+                                }
+
+                                h3 {
+                                    font-size: 16px;
+                                    font-weight: 700;
+                                    color: var(--secondary);
+                                }
+                            }
+
+                            &--speakers {
+                                height: 135px;
+
+                                &--item {
+                                    a {
+                                        display: flex;
+                                        align-items: center;
+                                    }
+
+                                    &--profile {
+                                        i {
+                                            display: block;
+                                            width: 36px;
+                                            height: 36px;
+                                            margin-bottom: 5px;
+                                            background-repeat: no-repeat;
+                                            background-size: cover;
+                                            border-radius: 50%;
+
+                                            &::after {
+                                                position: relative;
+                                                top: 0;
+                                                left: 24px;
+                                                display: block;
+                                                width: 10px;
+                                                height: 10px;
+                                                content: "";
+                                                background-color: var(--primary);
+                                                border: 1px solid var(--border-border-radius-clr);
+                                                border-radius: 50%;
+                                            }
+                                        }
+                                    }
+
+                                    &--det {
+                                        display: grid;
+
+                                        h4 {
+                                            display: -webkit-box;
+                                            -webkit-box-orient: vertical;
+                                            -webkit-line-clamp: 1;
+                                            overflow: hidden;
+                                            font-size: 16px;
+                                            font-weight: 500;
+                                            color: var(--secondary);
+                                        }
+
+                                        span {
+                                            display: -webkit-box;
+                                            -webkit-box-orient: vertical;
+                                            -webkit-line-clamp: 1;
+                                            overflow: hidden;
+                                            font-size: 12px;
+                                            font-weight: 500;
+                                            color: var(--secondary-70);
+                                        }
+                                    }
+
+                                    &.user-1 {
+                                        i {
+                                            // background-image: url(/v2/assets/images/profiles_pic_speakers/user-9.png);
+                                        }
+                                    }
+
+                                    &.user-2 {
+                                        i {
+                                            // background-image: url(/v2/assets/images/profiles_pic_speakers/user-2.png);
+                                        }
+                                    }
+
+                                    &.user-3 {
+                                        i {
+                                            // background-image: url(/v2/assets/images/profiles_pic_speakers/user-7.png);
+                                        }
+                                    }
+                                }
+                            }
+
+                            &--more {
+                                padding-left: 43px;
+
+                                a {
+                                    font-size: 14px;
+                                    font-weight: 500;
+                                    color: var(--primary);
+                                }
+                            }
+                        }
+
+                        &--action {
+                            &--join {
+                                a {
+                                    position: relative;
+
+                                    i {
+                                        position: absolute;
+                                        left: 10px;
+                                        font-size: 17px;
+                                        font-weight: 500;
+                                    }
+                                }
+                            }
+
+                            &--other {
+                                &--item {
+                                    a {
+                                        i {
+                                            font-size: 17px;
+                                            font-weight: 500;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                &.event-1 {
+                    .inner-container {
+                        &--banner {
+                            &--content {
+                                // background-image: url(/v2/assets/images/events_banner/events-banner-1.png);
+                            }
+                        }
+                    }
+                }
+
+                &.event-2 {
+                    .inner-container {
+                        &--banner {
+                            &--content {
+                                // background-image: url(/v2/assets/images/events_banner/events-banner-2.png);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+}

@@ -178,7 +178,7 @@
                                             height: 36px;
                                             background-repeat: no-repeat;
                                             background-size: cover;
-                                            border-radius: var(--circle-border-radius);
+                                            border-radius: 50%;
 
                                             &::after {
                                                 position: relative;
@@ -190,7 +190,7 @@
                                                 content: "";
                                                 background-color: var(--primary);
                                                 border: 1px solid var(--border-border-radius-clr);
-                                                border-radius: var(--circle-border-radius);
+                                                border-radius: 50%;
 
                                             }
                                         }
@@ -259,7 +259,7 @@
                         flex: 0 0 auto;
                         width: 137px;
                         height: 80px;
-                        background-color: var(--light-bg-clr);
+                        background-color: var(--light-clr);
                         border-radius: var(--border-radius);
 
                         &--logo {

@@ -3,6 +3,8 @@ import { Control } from "react-hook-form";
 import { Col, Form } from "react-bootstrap";
 import { AppFormInput } from "../AppFormInput";
 import { AppFormSwitch } from "../AppFormSwitch";
+import { AppFormTextArea } from "../AppFormTextArea";
+import { AppFormRichTextArea } from "../AppFormRichTextArea";
 import { AppFormDropdown } from "../AppFormDropdown";
 import { PrimitiveObject } from "../../models";
 import "./assets/scss/style.scss";
@@ -106,7 +108,42 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             </Form.Group>
         );
     };
-
+    const renderTextarea = () => {
+        const prps = {
+            type: items.attr,
+            label: items.label ? items.label : "",
+        };
+        return (
+            <AppFormTextArea
+                md={"6"}
+                sm={"12"}
+                lg={"4"}
+                xl={"4"}
+                name={properties.title}
+                defaultValue={defaultValue}
+                {...prps}
+                control={control}
+            />
+        );
+    };
+    const renderRichTextarea = () => {
+        const prps = {
+            type: items.attr,
+            label: items.label ? items.label : "",
+        };
+        return (
+            <AppFormRichTextArea
+                md={"6"}
+                sm={"12"}
+                lg={"4"}
+                xl={"4"}
+                name={properties.title}
+                defaultValue={defaultValue}
+                {...prps}
+                control={control}
+            />
+        );
+    };
     const renderForm = () => {
         switch (properties.items.type) {
             case "TEXT":
@@ -121,6 +158,10 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                 return renderSeperator();
             case "BLANK":
                 return renderBlank();
+            case "TEXTAREA":
+                return renderTextarea();
+            case "RICH_TEXTAREA":
+                return renderRichTextarea();
             default:
                 return <></>;
         }

@@ -13,3 +13,7 @@ export * from "./UserTagApi";
 export * from "./RoleApi";
 export * from "./ConferenceApi";
 export * from "./ConferenceTagApi";
+export * from "./SessionApi";
+export * from "./SessionTagApi";
+export * from "./SessionCategoryApi";
+export * from "./SessionDocumentApi";

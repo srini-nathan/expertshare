@@ -1,0 +1,14 @@
+@import "../../../../assets/scss/variables";
+
+.app-video-stream {
+
+    position: relative;
+    padding-bottom: 56.6%;
+
+    iframe {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+    }
+
+}
