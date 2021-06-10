@@ -57,3 +57,4 @@ export * from "./AppSwitchView";
 export * from "./AppFormTranslatable";
 export * from "./AppSessionCategoryTranslations";
 export * from "./AttendeeCard";
+export * from "./AppPictureInPicture";

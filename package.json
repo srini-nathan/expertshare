@@ -42,6 +42,7 @@
         "react-cropper": "^2.1.7",
         "react-datepicker": "^3.7.0",
         "react-dom": "16",
+        "react-draggable": "^4.4.3",
         "react-dropzone": "^11.3.2",
         "react-froala-wysiwyg": "^3.2.6-1",
         "react-helmet": "^6.1.0",
