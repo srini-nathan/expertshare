@@ -31,14 +31,14 @@
 
     .select-box--content {
         margin: 10px 0;
-        max-height: 250px;
+        height: 150px;
         overflow: auto;
-
 
         .badge-green {
             display: flex;
             align-items: center;
             padding: 4px 7px;
+            margin: 5px;
             background-color: var(--primary-10);
 
             border-radius: 25px;
@@ -112,9 +112,11 @@
         }
 
         .content {
+
+            height: 250px;
+            overflow: auto;
+
             &--inner {
-                height: 250px;
-                overflow: auto;
                 scrollbar-color: var(--secondary) var(--secondary-10);
                 scrollbar-width: thin;
 

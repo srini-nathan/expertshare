@@ -147,6 +147,9 @@
                     }
 
                     &--header {
+                        border-top-left-radius: var(--border-radius);
+                        border-top-right-radius: var(--border-radius);
+
                         &--time {
                             display: flex;
 
@@ -265,7 +268,26 @@
                             }
 
                             &--speakers {
-                                height: 135px;
+                                height: 150px;
+                                scrollbar-color: var(--secondary) var(--secondary-10);
+                                scrollbar-width: thin;
+
+                                &::-webkit-scrollbar {
+                                    width: 3px;
+                                    height: 4px;
+                                }
+
+                                &::-webkit-scrollbar-track {
+                                    background: var(--secondary-10);
+                                }
+
+                                &::-webkit-scrollbar-thumb {
+                                    background: var(--secondary);
+                                }
+
+                                &::-webkit-scrollbar-thumb:hover {
+                                    opacity: 50%;
+                                }
 
                                 &--item {
                                     a {
@@ -345,10 +367,11 @@
                             &--more {
                                 padding-left: 43px;
 
-                                a {
+                                span {
                                     font-size: 14px;
                                     font-weight: 500;
                                     color: var(--primary);
+                                    cursor: pointer;
                                 }
                             }
                         }

@@ -124,7 +124,7 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                             </Col>
                         </Col>
                         <Col className="inner-container--det--desc p-0 mt-3">
-                            <i className="fak fa-description"></i>
+                            <i className="fak fa-tags"></i>
                             <Col className="p-0 inner-container--det--desc--content">
                                 <h2 className="">Tags</h2>
                                 <Row

@@ -166,8 +166,8 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         });
         formData.userGroups = userGroupsSelectedItems;
         formData.image_name = "";
-        formData.source = "SOURCE_CREATE";
-        formData.status = "active";
+        formData.source = "CREATE";
+        formData.status = "ACTIVE";
 
         formData.userFieldValues = getDynamicFileds(formData.userField);
         delete formData.userField;

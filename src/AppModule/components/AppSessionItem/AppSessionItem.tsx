@@ -1,4 +1,5 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
+import { Row, Col } from "react-bootstrap";
 import { Link } from "@reach/router";
 import { Session, SessionCategory } from "../../../AdminModule/models";
 import "./assets/scss/style.scss";
@@ -6,6 +7,7 @@ import { getTime } from "../../utils";
 import { useBuildAssetPath } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 import { AppButton } from "../AppButton";
+import { AppCard } from "../AppCard";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -29,6 +31,8 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
 }): JSX.Element => {
     const conferencePosterPath = useBuildAssetPath(path);
     const userProfilePath = useBuildAssetPath(USERPATH);
+
+    const [showMore, isShowMore] = useState<boolean>(false);
 
     const getSize = (): string[] => {
         switch (session.cardSize) {
@@ -71,23 +75,28 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
     };
 
     return (
-        <div className={`p-0 ${getSize()[0]}`}>
-            <div
-                className={`event-detail-admin--workshop--container--content--item py-2 col-12`}
+        <Col className={`p-0 ${getSize()[0]}`}>
+            <Col
+                sm={12}
+                className={`event-detail-admin--workshop--container--content--item py-2`}
             >
-                <div className={`inner-container card pb-1  ${getSize()[1]}`}>
-                    <div className="row m-0 p-0">
-                        <div
-                            className="inner-container--header col-12 pt-3 pb-2 px-3 px-2"
+                <AppCard className={`inner-container p-0  ${getSize()[1]}`}>
+                    <Row className="m-0 p-0">
+                        <Col
+                            sm={12}
+                            className="inner-container--header pt-3 pb-2 px-3 px-2"
                             style={{
                                 backgroundColor: getCategory().color,
                                 color: getCategory().textColor,
                             }}
                         >
-                            <div className="row m-0 p-0">
-                                <div className="inner-container--header--time col-6 px-0">
+                            <Row className="m-0 p-0">
+                                <Col
+                                    sm={6}
+                                    className="inner-container--header--time px-0"
+                                >
                                     <i className="fak fa-clock-light"></i>
-                                    <div className="inner-container--header--time--content pl-3">
+                                    <Col className="inner-container--header--time--content pl-3">
                                         <h2 className="mb-0">
                                             {getTime(session.start)}
                                             <span className="value">
@@ -97,17 +106,20 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                         <span className="desc">
                                             {getCategory().name}
                                         </span>
-                                    </div>
-                                </div>
-                                <div className="inner-container--header--seats col-6 px-0">
+                                    </Col>
+                                </Col>
+                                <Col
+                                    sm={6}
+                                    className="inner-container--header--seats col-6 px-0"
+                                >
                                     <i className="fak fa-seat"></i>
                                     <div className="inner-container--header--seats--content pl-3">
                                         <h2 className="mb-0">1150</h2>
                                         <span>Seats</span>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
+                                </Col>
+                            </Row>
+                        </Col>
                         <div
                             className={`inner-container--banner ${
                                 getSize()[2]
@@ -136,7 +148,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                             } p-3 mx-2`}
                         >
                             <div className="inner-container--det--title">
-                                <Link to="#">
+                                <Link to={`/sessions/${session.id}`}>
                                     <h2 className="mb-0">{session.title}</h2>
                                 </Link>
                             </div>
@@ -147,8 +159,37 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                         Speakers & Moderators
                                     </h3>
                                 </div>
-                                <div className="inner-container--det--content--speakers mt-3">
+                                <div
+                                    style={{
+                                        overflow: showMore ? "auto" : "hidden",
+                                    }}
+                                    className="inner-container--det--content--speakers mt-3"
+                                >
                                     {session.speakers.map((e: any) => {
+                                        return (
+                                            <div className="inner-container--det--content--speakers--item user-1 mt-2">
+                                                <a href="#">
+                                                    <div className="inner-container--det--content--speakers--item--profile pr-2">
+                                                        <i
+                                                            style={{
+                                                                backgroundImage: `url(${userProfilePath}/${e.imageName})`,
+                                                            }}
+                                                        ></i>
+                                                    </div>
+                                                    <div className="inner-container--det--content--speakers--item--det">
+                                                        <h4 className="name mb-0">
+                                                            {e.firstName}{" "}
+                                                            {e.lastName}
+                                                        </h4>
+                                                        <span className="major">
+                                                            {e.jobTitle}
+                                                        </span>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        );
+                                    })}
+                                    {session.moderators.map((e: any) => {
                                         return (
                                             <div className="inner-container--det--content--speakers--item user-1 mt-2">
                                                 <a href="#">
@@ -174,7 +215,13 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                     })}
                                 </div>
                                 <div className="inner-container--det--content--more">
-                                    <a href="#">+ Show More</a>
+                                    <span
+                                        onClick={() => {
+                                            isShowMore(!showMore);
+                                        }}
+                                    >
+                                        {showMore ? " Show Less" : " Show More"}
+                                    </span>
                                 </div>
                             </div>
                             <div className="inner-container--det--action col-12 mt-3 px-0">
@@ -244,9 +291,9 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                    </Row>
+                </AppCard>
+            </Col>
+        </Col>
     );
 };

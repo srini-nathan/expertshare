@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Link } from "@reach/router";
-import { Col } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { PConference } from "../../../AdminModule/models";
 import "./assets/scss/style.scss";
 import { CONSTANTS } from "../../../config";
@@ -39,9 +39,9 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
 
     return (
         <Col md={12} lg={4} xl={4} className="events-grid--container--item">
-            <div className="inner-container  ">
-                <div
-                    className="inner-container--banner"
+            <Col className="inner-container p-0">
+                <Col
+                    className="inner-container--banner p-0"
                     style={{
                         backgroundImage: `url(${imagePath})`,
                     }}
@@ -52,7 +52,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                             Live Now
                         </a>
                     </div> */}
-                    <div className="inner-container--banner--icons">
+                    <div className="inner-container--banner--icons ">
                         {isGrantedControl && (
                             <>
                                 <span onClick={() => handleClone(id as number)}>
@@ -69,17 +69,18 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                             </>
                         )}
                     </div>
-                </div>
-                <div className="inner-container--det p-3 mx-2">
-                    <div className="inner-container--det--title">
+                </Col>
+
+                <Col className="inner-container--det p-3 mx-2">
+                    <Col className="inner-container--det--title p-0">
                         <Link to={`/conferences/${id}/agenda`}>
                             <h2>{title}</h2>
                         </Link>
-                    </div>
-                    <div className="description">{description}</div>
-                    <div
+                    </Col>
+                    <Col className="description p-0">{description}</Col>
+                    <Row
                         className={
-                            "row m-0 mt-3 p-0 justify-content-center conference-tags-container"
+                            "m-0 mt-3 p-0 justify-content-center conference-tags-container"
                         }
                     >
                         {conferenceTags.map((e) => {
@@ -89,8 +90,8 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                                 </div>
                             );
                         })}
-                    </div>
-                    <div className="inner-container--det--time my-3">
+                    </Row>
+                    <Col className="inner-container--det--time p-0 my-3">
                         <div className="inner-container--det--time--icon mr-2">
                             {startedAt && <i className="fak fa-right"></i>}
                         </div>
@@ -108,7 +109,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                                 </>
                             )}
                         </div>
-                    </div>
+                    </Col>
                     {/* <div className="inner-container--det--participants">
                         <div className="inner-container--det--participants--icon mr-2">
                             <i className="fak fa-speakers"></i>
@@ -174,7 +175,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                         </div>
                     </div>
                 */}
-                </div>
+                </Col>
                 {/* <div className="inner-container--sponsors px-3 pt-3 pb-3">
                     <h3 className="mb-0 pl-2 pt-1">
                         <i className="fak fa-handshake-alt-light mr-2"></i>
@@ -228,7 +229,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                     </div>
                 </div>
            */}
-            </div>
+            </Col>
         </Col>
     );
 };

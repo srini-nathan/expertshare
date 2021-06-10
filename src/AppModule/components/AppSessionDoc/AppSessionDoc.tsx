@@ -2,29 +2,39 @@ import React, { FC, useRef } from "react";
 import { SimpleObject } from "../../models";
 import { AppButton } from "../AppButton";
 import { bytesToSize } from "../AppUploader/bytes-to-size";
-
 import "./assets/scss/style.scss";
+import { CONSTANTS } from "../../../config";
+import { useBuildAssetPath } from "../../hooks";
+
+const { Upload: UPLOAD } = CONSTANTS;
+const {
+    FILETYPEINFO: { FILETYPEINFO_SESSION_DOC },
+} = UPLOAD;
+const { path } = FILETYPEINFO_SESSION_DOC;
 
 export interface AppSessionDocProps {
-    name?: string;
-    onFileSelect: (files: File[]) => void;
-    onRemoveDoc: (index: number) => void;
+    onFileSelect?: (files: File[]) => void;
+    onRemoveDoc?: (index: number) => void;
     files: SimpleObject<string>[];
+    showAddDelete?: boolean;
 }
 
 export const AppSessionDoc: FC<AppSessionDocProps> = ({
     onFileSelect,
     onRemoveDoc,
     files,
+    showAddDelete = false,
 }): JSX.Element => {
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const sessionDocPath = useBuildAssetPath(path);
+
     async function handleFileSelection() {
         if (fileInputRef && fileInputRef.current) {
             fileInputRef.current.click();
         }
     }
     async function uploadFile(e: any) {
-        onFileSelect(e.target.files);
+        if (onFileSelect) onFileSelect(e.target.files);
     }
     const getType = (name: string): string => {
         return name.substr(name.lastIndexOf(".") + 1);
@@ -60,13 +70,26 @@ export const AppSessionDoc: FC<AppSessionDocProps> = ({
                                 </div>
                             </div>
                         </a>
-                        <AppButton
-                            onClick={() => onRemoveDoc(i)}
-                            variant="secondary"
-                            className="btn-delete "
+                        <a
+                            target="_blank"
+                            href={`${sessionDocPath}/${
+                                files[parseInt(e, 10)].fileName
+                            }`}
+                            className="btn-delete btn-secondary btn "
                         >
-                            <i className="fak fa-trash-light"></i>
-                        </AppButton>
+                            <i className="fa fa-arrow-down"></i>
+                        </a>
+                        {showAddDelete && (
+                            <AppButton
+                                onClick={() => {
+                                    if (onRemoveDoc) onRemoveDoc(i);
+                                }}
+                                variant="secondary"
+                                className="btn-delete "
+                            >
+                                <i className="fak fa-trash-light"></i>
+                            </AppButton>
+                        )}
                     </div>
                 );
             })
@@ -92,16 +115,18 @@ export const AppSessionDoc: FC<AppSessionDocProps> = ({
                                 Documents
                             </h3>
                         </div>
-                        <div className="create-session--docs--header--button col-auto mr-0 ml-auto px-0">
-                            <AppButton
-                                onClick={handleFileSelection}
-                                variant="secondary"
-                                className=" add-btn"
-                            >
-                                <i className="fak fa-plus-light"></i>
-                                Add
-                            </AppButton>
-                        </div>
+                        {showAddDelete && (
+                            <div className="create-session--docs--header--button col-auto mr-0 ml-auto px-0">
+                                <AppButton
+                                    onClick={handleFileSelection}
+                                    variant="secondary"
+                                    className=" add-btn"
+                                >
+                                    <i className="fak fa-plus-light"></i>
+                                    Add
+                                </AppButton>
+                            </div>
+                        )}
                     </div>
                 </div>
 

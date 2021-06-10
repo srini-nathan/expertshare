@@ -22,6 +22,8 @@ export class Container extends BaseEntity {
 
     bucketRegion: string;
 
+    bucketEndpoint: string;
+
     isActive: boolean;
 
     description: string;
@@ -55,6 +57,7 @@ export class Container extends BaseEntity {
             bucketSecret = "",
             bucketName = "",
             bucketRegion = "",
+            bucketEndpoint = "",
             description = "",
             configuration = [],
             configurationTypes = [],
@@ -80,6 +83,7 @@ export class Container extends BaseEntity {
         this.bucketSecret = bucketSecret;
         this.bucketName = bucketName;
         this.bucketRegion = bucketRegion;
+        this.bucketEndpoint = bucketEndpoint;
         this.description = description;
         this.configuration = configuration;
         this.configurationTypes = configurationTypes;
@@ -109,6 +113,7 @@ export class Container extends BaseEntity {
             bucketSecret: this.bucketSecret,
             bucketName: this.bucketName,
             bucketRegion: this.bucketRegion,
+            bucketEndpoint: this.bucketEndpoint,
             description: this.description,
             configuration: this.configuration,
             configurationTypes: this.configurationTypes,

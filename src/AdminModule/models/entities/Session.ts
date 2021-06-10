@@ -75,7 +75,7 @@ export class Session extends BaseEntity {
 
     speakers: string[] | User[];
 
-    moderators: string[];
+    moderators: string[] | User[];
 
     constructor({
         title = "",

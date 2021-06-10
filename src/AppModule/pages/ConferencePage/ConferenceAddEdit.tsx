@@ -344,6 +344,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                                 isEditMode={isEditMode}
                                 navigation={navigator}
                                 backLink={"/conferences"}
+                                isLoading={formState.isSubmitting}
                             />
                         </Form>
                     </AppCard>

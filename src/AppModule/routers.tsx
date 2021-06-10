@@ -9,6 +9,7 @@ import {
     ConferenceAddEdit,
     SessionAddEdit,
     EventAgenda,
+    SessionDetailsPage,
 } from "./pages";
 import { ModuleRouter } from "./models";
 
@@ -31,6 +32,7 @@ export const routers: ModuleRouter[] = [
                     <SessionAddEdit path={"sessions/:conferenceId/new"} />
                     <SessionAddEdit path={"sessions/:conferenceId/:id"} />
                     <EventAgenda path={"conferences/:id/agenda"} />
+                    <SessionDetailsPage path={"sessions/:id"} />
                 </Router>
             );
         },

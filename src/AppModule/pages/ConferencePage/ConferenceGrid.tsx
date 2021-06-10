@@ -15,6 +15,8 @@ import {
     AppLoader,
     AppSwitchView,
     AppListPageToolbar,
+    AppGridPagination,
+    AppFormDropdown,
 } from "../../components";
 import { ConferenceApi } from "../../../AdminModule/apis";
 import { useAuthState, useIsGranted } from "../../hooks";
@@ -31,6 +33,10 @@ import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { appGridConfig } from "../../config";
 import { CONSTANTS } from "../../../config";
 import "./assets/scss/style.scss";
+import {
+    defaultPageSize,
+    pageSizeOptions,
+} from "../../containers/AppGrid/app-grid-helpers";
 
 const { Role: ROLE } = CONSTANTS;
 
@@ -48,10 +54,14 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
     const { view } = useParams();
     const appGridApi = useRef<GridApi>();
     const isGrantedControl = useIsGranted(ROLE_OPERATOR);
+    const [pageSize, setPageSize] = useState<number>(30);
+    const [active, setActive] = useState<number>(1);
 
     const fetchData = (params = {}) => {
+        isLoading(true);
+
         ConferenceApi.find<PConference>(
-            1,
+            active,
             {
                 "container.id": containerId,
                 locale: user?.locale || "en",
@@ -68,6 +78,7 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                 }
             } else if (response !== null) {
                 setConferences(response.items);
+                setTotalItems(response.totalItems);
             }
         });
     };
@@ -84,7 +95,7 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [active, pageSize]);
     async function handleClone(id: number) {
         ConferenceApi.clone<
             PConference,
@@ -222,6 +233,26 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                 </div>
             </AppPageHeader>
             {renderView()}
+            <div className="d-flex flex-row app-grid-action py-3">
+                <AppGridPagination
+                    className="mr-3"
+                    itemsPerPage={pageSize}
+                    totalItems={totalItems}
+                    active={active}
+                    onClick={setActive}
+                />
+                {totalItems > 0 ? (
+                    <div className="pagination-container">
+                        <AppFormDropdown
+                            id={"pageSize"}
+                            defaultValue={defaultPageSize()}
+                            options={pageSizeOptions()}
+                            onChange={(e: any) => setPageSize(e.value)}
+                            menuPlacement={"top"}
+                        />
+                    </div>
+                ) : null}
+            </div>
         </Fragment>
     );
 };

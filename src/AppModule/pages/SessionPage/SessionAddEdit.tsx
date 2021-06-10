@@ -7,7 +7,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import {
     AppPageHeader,
     AppBreadcrumb,
-    AppButton,
     AppLoader,
     AppFormActions,
     AppCard,
@@ -23,7 +22,7 @@ import {
     AppDatePicker,
     AppSelectStream,
     AppSessionDoc,
-    AppUserSelector,
+    AppSessionUsers,
 } from "../../components";
 import {
     Upload,
@@ -103,8 +102,6 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
     const [sessionTags, setSessionTags] = React.useState<
         SimpleObject<string>[]
     >([]);
-    const [showSpeakers, isShowSpeakers] = useState<boolean>(false);
-    const [showModerators, isShowModerators] = useState<boolean>(false);
 
     const [selectedSessionTags, setSelectedSessionTags] = React.useState<
         SimpleObject<string>[]
@@ -123,7 +120,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
     const [docsFile, setDocsFile] = useState<SimpleObject<string>[]>([]);
     const sessionPosterPath = useBuildAssetPath(path);
     const [userGroups, setUserGroups] = React.useState<SimpleObject<string>[]>(
-        []
+        data.sessionDocs
     );
 
     const [selectedUserGroups, setSelectedUserGroups] = React.useState<
@@ -215,6 +212,13 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
         /* eslint-enable no-console */
         if (checkTranslation()) {
             formData.translations = getTranslation();
+            formData.sessionDocs = docsFile.map((e) => {
+                return {
+                    fileName: e.fileName,
+                    name: e.name,
+                    container: e.container,
+                };
+            });
             formData.container = ContainerApi.toResourceUrl(containerId);
             formData.conference = ConferenceApi.toResourceUrl(conferenceId);
             formData.sessionTags = selectedSessionTags.map((e) => {
@@ -322,6 +326,22 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                         };
                     });
                     setTranslations(items);
+                    const sessionDocs: SimpleObject<string>[] = response.sessionDocs.map(
+                        (e) => {
+                            return {
+                                fileName: e.fileName,
+                                name: e.name,
+                                size: "",
+                                container: ContainerApi.toResourceUrl(
+                                    containerId
+                                ),
+                            };
+                        }
+                    );
+                    setDocsFile(sessionDocs);
+                    isExtraLink(response.isExternalLinkEnable);
+                    setSelectedModerators(response.moderators as User[]);
+                    setSelectedSpeakers(response.speakers as User[]);
                 }
             });
         }
@@ -788,171 +808,47 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                     <Col md={12}>
                         <AppCard>
                             <Row>
-                                <Col md={12} lg={6}>
-                                    <div className="create-session--speakers">
-                                        <Row className="  p-0 m-0">
-                                            <div className="create-session--speakers--header col-12 px-0">
-                                                <div className="row m-0 p-0">
-                                                    <div className="create-session--speakers--header--name col-auto px-0">
-                                                        <h3>
-                                                            <i className="fak fa-speakers"></i>
-                                                            Speakers
-                                                        </h3>
-                                                    </div>
-                                                    <div className="create-session--speakers--header--button col-auto mr-0 ml-auto px-0">
-                                                        <AppButton
-                                                            onClick={() => {
-                                                                isShowSpeakers(
-                                                                    true
-                                                                );
-                                                            }}
-                                                            variant={
-                                                                "secondary"
-                                                            }
-                                                            className=" add-btn"
-                                                        >
-                                                            <i className="fak fa-plus-light"></i>
-                                                            Add
-                                                        </AppButton>
-                                                    </div>
-                                                    <AppUserSelector
-                                                        users={users}
-                                                        role="ROLE_SPEAKER"
-                                                        show={showSpeakers}
-                                                        handleClose={
-                                                            isShowSpeakers
-                                                        }
-                                                        handleSelectedUsers={
-                                                            setSelectedSpeakers
-                                                        }
-                                                        selectedUsers={
-                                                            selectedSpeakers
-                                                        }
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="create-session--speakers--container">
-                                                <div className="row m-0 p-0">
-                                                    {selectedSpeakers.map(
-                                                        (item: User) => {
-                                                            return (
-                                                                <div className="create-session--moderators--container--item col-md-4 pl-0 mt-4">
-                                                                    <a href="#">
-                                                                        <div className="row m-0 p-0">
-                                                                            <i className="avatar col-md-auto col-lg-auto pl-0 col-auto col-xl-auto"></i>
-                                                                            <div className="name-details col-md-8 col-lg-8 pr-0 col-8 col-xl-8">
-                                                                                <h3>
-                                                                                    {
-                                                                                        item.firstName
-                                                                                    }{" "}
-                                                                                    {
-                                                                                        item.lastName
-                                                                                    }
-                                                                                </h3>
-                                                                                <p>
-                                                                                    {
-                                                                                        item.jobTitle
-                                                                                    }
-
-                                                                                    @
-                                                                                    {
-                                                                                        item.company
-                                                                                    }
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </a>
-                                                                </div>
-                                                            );
-                                                        }
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </Row>
-                                    </div>
+                                <Col
+                                    md={12}
+                                    lg={6}
+                                    className="create-session--speakers divider-right"
+                                >
+                                    <AppSessionUsers
+                                        xl={4}
+                                        lg={4}
+                                        md={12}
+                                        sm={12}
+                                        showAdd
+                                        handleSelectedUsers={
+                                            setSelectedSpeakers
+                                        }
+                                        selectedUsers={selectedSpeakers}
+                                        title="Speakers"
+                                        icon="speakers"
+                                        role="ROLE_SPEAKER"
+                                        users={users}
+                                    />
                                 </Col>
-                                <Col md={12} lg={6}>
-                                    <div className="create-session--speakers">
-                                        <Row className="  p-0 m-0">
-                                            <div className="create-session--speakers--header col-12 px-0">
-                                                <div className="row m-0 p-0">
-                                                    <div className="create-session--speakers--header--name col-auto px-0">
-                                                        <h3>
-                                                            <i className="fak fa-moderators"></i>
-                                                            Moderators
-                                                        </h3>
-                                                    </div>
-                                                    <div className="create-session--speakers--header--button col-auto mr-0 ml-auto px-0">
-                                                        <AppButton
-                                                            onClick={() => {
-                                                                isShowModerators(
-                                                                    true
-                                                                );
-                                                            }}
-                                                            variant={
-                                                                "secondary"
-                                                            }
-                                                            className=" add-btn"
-                                                        >
-                                                            <i className="fak fa-plus-light"></i>
-                                                            Add
-                                                        </AppButton>
-                                                    </div>
-                                                    <AppUserSelector
-                                                        users={users}
-                                                        role="ROLE_MODERATOR"
-                                                        show={showModerators}
-                                                        handleClose={
-                                                            isShowModerators
-                                                        }
-                                                        handleSelectedUsers={
-                                                            setSelectedModerators
-                                                        }
-                                                        selectedUsers={
-                                                            selectedModerators
-                                                        }
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="create-session--speakers--container">
-                                                <div className="row m-0 p-0">
-                                                    {selectedModerators.map(
-                                                        (item: User) => {
-                                                            return (
-                                                                <div className="create-session--moderators--container--item col-md-4 pl-0 mt-4">
-                                                                    <a href="#">
-                                                                        <div className="row m-0 p-0">
-                                                                            <i className="avatar col-md-auto col-lg-auto pl-0 col-auto col-xl-auto"></i>
-                                                                            <div className="name-details col-md-8 col-lg-8 pr-0 col-8 col-xl-8">
-                                                                                <h3>
-                                                                                    {
-                                                                                        item.firstName
-                                                                                    }{" "}
-                                                                                    {
-                                                                                        item.lastName
-                                                                                    }
-                                                                                </h3>
-                                                                                <p>
-                                                                                    {
-                                                                                        item.jobTitle
-                                                                                    }
-
-                                                                                    @
-                                                                                    {
-                                                                                        item.company
-                                                                                    }
-                                                                                </p>
-                                                                            </div>
-                                                                        </div>
-                                                                    </a>
-                                                                </div>
-                                                            );
-                                                        }
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </Row>
-                                    </div>
+                                <Col
+                                    md={12}
+                                    lg={6}
+                                    className="create-session--speakers"
+                                >
+                                    <AppSessionUsers
+                                        xl={4}
+                                        lg={4}
+                                        md={12}
+                                        sm={12}
+                                        showAdd
+                                        handleSelectedUsers={
+                                            setSelectedModerators
+                                        }
+                                        selectedUsers={selectedModerators}
+                                        title="Moderators"
+                                        icon="moderators"
+                                        role="ROLE_MODERATOR"
+                                        users={users}
+                                    />
                                 </Col>
                             </Row>
                         </AppCard>
@@ -961,6 +857,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                     <Col md={12} lg={6} xl={6}>
                         <AppCard>
                             <AppSessionDoc
+                                showAddDelete={true}
                                 onFileSelect={onDocsSelect}
                                 onRemoveDoc={onRemoveDoc}
                                 files={docsFile}

@@ -1,2 +1,2 @@
-// export * from "./ConferenceGrid";
 export * from "./SessionAddEdit";
+export * from "./SessionDetailsPage";

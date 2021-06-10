@@ -1,6 +1,11 @@
 @import "../../../../assets/scss/screens-sizes";
 @import "../../../../assets/scss/variables";
 
+.fa-tags {
+    &::before {
+        content: '\e014'
+    }
+}
 
 .event-detail-admin--det {
     &--container {

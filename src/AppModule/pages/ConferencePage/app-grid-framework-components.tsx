@@ -39,6 +39,9 @@ export const appGridFrameworkComponents = {
             editAction: {
                 url: `/conference/${id}`,
             },
+            viewAction: {
+                url: `/conferences/${id}/agenda`,
+            },
             deleteAction: {
                 confirmation: "Are you sure want to delete ?",
                 onClick: () => {
@@ -48,7 +51,7 @@ export const appGridFrameworkComponents = {
             customClickActions: [
                 {
                     icon: "Clone",
-                    confirmation: "Are you sure want to clone ?",
+                    confirmation: "Are you sure want to clone?",
                     confirmationTitle: "Clone Action",
                     onClick: () => {
                         if (onPressClone) onPressClone(id);
