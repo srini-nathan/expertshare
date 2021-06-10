@@ -1,19 +1,40 @@
-import { useAuthState } from "./useAuthState";
+import { useRecoilValue } from "recoil";
 import { API_HOST } from "../config/app-env";
+import { CONSTANTS } from "../../config";
+import { FileTypeInfo } from "../models";
+import { appContainer } from "../atoms/AppContainer";
 
-// @TODO: instead of passing folder, use constant fileInfo
+const {
+    Container: { STORAGE },
+} = CONSTANTS;
+
 export function useBuildAssetPath(
-    folder: string,
+    fileInfo: FileTypeInfo,
     fileName: string | null = null
 ) {
-    const { containerId } = useAuthState();
+    const container = useRecoilValue(appContainer);
 
-    // @TODO: Build AWS path based on container
-    // $css3_base_url: 'https://%env(CSS3_HOST)%/[BUCKET_NAME]/'
-    // $aws_uploader_bucket_base_url: 'https://[BUCKET_NAME].s3.%env(AWS_REGION)%.amazonaws.com/'
-    if (fileName) {
-        return `${API_HOST}/uploads/${containerId}/${folder}/${fileName}`;
+    if (!container) {
+        return "";
     }
 
-    return `${API_HOST}/uploads/${containerId}/${folder}`;
+    const { id, storage, bucketEndpoint, bucketName, bucketRegion } = container;
+    const { path } = fileInfo;
+    let basePath = "";
+
+    if (storage === STORAGE.STORAGE_S3) {
+        if (bucketEndpoint) {
+            basePath = `https://${bucketEndpoint}/${bucketName}`;
+        } else {
+            basePath = `https://${bucketName}.s3.${bucketRegion}.amazonaws.com`;
+        }
+    } else {
+        basePath = `${API_HOST}/uploads/${id}/${path}`;
+    }
+
+    if (fileName) {
+        return `${basePath}/${fileName}`;
+    }
+
+    return basePath;
 }

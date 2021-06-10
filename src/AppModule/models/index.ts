@@ -8,3 +8,4 @@ export * from "./SimpleObject";
 export * from "./AcceptableResponse";
 export * from "./Partial";
 export * from "./PrimitiveObject";
+export * from "./FileTypeInfo";

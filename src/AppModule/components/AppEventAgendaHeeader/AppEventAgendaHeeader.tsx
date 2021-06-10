@@ -7,12 +7,12 @@ import "./assets/scss/style.scss";
 import { useBuildAssetPath } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 import { AppButton } from "../AppButton";
+import { FileTypeInfo } from "../../models";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
     FILETYPEINFO: { FILETYPEINFO_CONFERENCE_POSTER },
 } = UPLOAD;
-const { path } = FILETYPEINFO_CONFERENCE_POSTER;
 
 export interface AppEventAgendaHeeaderProps {
     conference: Conference;
@@ -27,7 +27,9 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
     handleDelete,
     isGrantedControl,
 }): JSX.Element => {
-    const conferencePosterPath = useBuildAssetPath(path);
+    const conferencePosterPath = useBuildAssetPath(
+        FILETYPEINFO_CONFERENCE_POSTER as FileTypeInfo
+    );
 
     return (
         <Col className="event-detail-admin--det--container col-12 mb-3 px-0">

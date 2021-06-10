@@ -1,5 +1,5 @@
 import React, { FC, useRef } from "react";
-import { SimpleObject } from "../../models";
+import { FileTypeInfo, SimpleObject } from "../../models";
 import { AppButton } from "../AppButton";
 import { bytesToSize } from "../AppUploader/bytes-to-size";
 import "./assets/scss/style.scss";
@@ -10,7 +10,6 @@ const { Upload: UPLOAD } = CONSTANTS;
 const {
     FILETYPEINFO: { FILETYPEINFO_SESSION_DOC },
 } = UPLOAD;
-const { path } = FILETYPEINFO_SESSION_DOC;
 
 export interface AppSessionDocProps {
     onFileSelect?: (files: File[]) => void;
@@ -26,7 +25,9 @@ export const AppSessionDoc: FC<AppSessionDocProps> = ({
     showAddDelete = false,
 }): JSX.Element => {
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const sessionDocPath = useBuildAssetPath(path);
+    const sessionDocPath = useBuildAssetPath(
+        FILETYPEINFO_SESSION_DOC as FileTypeInfo
+    );
 
     async function handleFileSelection() {
         if (fileInputRef && fileInputRef.current) {

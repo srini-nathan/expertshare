@@ -7,13 +7,12 @@ import { useBuildAssetPath } from "../../hooks";
 import { getDate, getTime } from "../../utils";
 import "./assets/scss/style.scss";
 import placeholder from "./assets/images/imgthumb.svg";
+import { FileTypeInfo } from "../../models";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
     FILETYPEINFO: { FILETYPEINFO_CONFERENCE_POSTER },
 } = UPLOAD;
-
-const { path } = FILETYPEINFO_CONFERENCE_POSTER;
 
 export interface AppConferenceCardProps {
     conference: PConference;
@@ -36,7 +35,10 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
         conferenceTags = [],
         description,
     } = conference;
-    const imagePath = useBuildAssetPath(path, imageName);
+    const imagePath = useBuildAssetPath(
+        FILETYPEINFO_CONFERENCE_POSTER as FileTypeInfo,
+        imageName
+    );
     const style = imageName
         ? {
               backgroundImage: `url(${imagePath})`,

@@ -31,6 +31,7 @@ import {
 import { CONSTANTS } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
 import { isGranted } from "../../utils";
+import { FileTypeInfo } from "../../models";
 
 const { Upload: UPLOAD, Role } = CONSTANTS;
 const {
@@ -53,7 +54,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         AppNavigationItemProps[] | AppSubNavigationItemProps[]
     >([]);
     const profilePicturePath = useBuildAssetPath(
-        FILETYPEINFO_USER_PROFILE.path,
+        FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         user.imageName
     );
     const isGrantedControl = useIsGranted(ROLE_OPERATOR);
@@ -136,7 +137,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             roles: [ROLE_ADMIN],
         },
         {
-            label: "User Groups",
+            label: "User  Groups",
             path: "/admin/user-groups",
             icon: {
                 name: "",

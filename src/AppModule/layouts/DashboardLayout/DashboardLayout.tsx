@@ -1,8 +1,8 @@
 import React, { FC } from "react";
 import { Container } from "react-bootstrap";
 import { useRecoilValue } from "recoil";
-import { appNavigations } from "../../bootstrap";
 import AppNavigation from "../../containers/AppNavigation/AppNavigation";
+import { appNavigations } from "../../bootstrap";
 import {
     AppDashboardLayoutOptions,
     appDashboardLayoutOptions,

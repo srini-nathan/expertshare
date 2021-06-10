@@ -7,12 +7,12 @@ import { CONSTANTS } from "../../../config";
 import "./assets/scss/style.scss";
 import { useBuildAssetPath } from "../../hooks";
 import placeholder from "../../assets/images/user-avatar.png";
+import { FileTypeInfo } from "../../models";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
     FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
 } = UPLOAD;
-const { path } = FILETYPEINFO_USER_PROFILE;
 
 export interface AppProfileHeaderProps {
     firstName?: string;
@@ -31,7 +31,10 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
     email,
     userTags,
 }): JSX.Element => {
-    const profilePicturePath = useBuildAssetPath(path, imageName);
+    const profilePicturePath = useBuildAssetPath(
+        FILETYPEINFO_USER_PROFILE as FileTypeInfo,
+        imageName
+    );
     const style = imageName
         ? {
               backgroundImage: `url(${profilePicturePath})`,

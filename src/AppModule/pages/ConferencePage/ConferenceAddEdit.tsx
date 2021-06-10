@@ -20,6 +20,7 @@ import {
     Upload,
     UnprocessableEntityErrorResponse,
     SimpleObject,
+    FileTypeInfo,
 } from "../../models";
 import {
     Conference,
@@ -54,7 +55,6 @@ const {
     FILETYPE: { FILETYPE_CONFERENCE_POSTER },
     FILETYPEINFO: { FILETYPEINFO_CONFERENCE_POSTER },
 } = UPLOAD;
-const { path } = FILETYPEINFO_CONFERENCE_POSTER;
 
 export const ConferenceAddEdit: FC<RouteComponentProps> = ({
     navigate,
@@ -76,7 +76,9 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
     const [translations, setTranslations] = useState<TranslationsType[]>([]);
     const [defaultLanguage, setDefaultLanguage] = useState<string>("");
     const [files, setFiles] = useState<File[]>([]);
-    const conferencePosterPath = useBuildAssetPath(path);
+    const conferencePosterPath = useBuildAssetPath(
+        FILETYPEINFO_CONFERENCE_POSTER as FileTypeInfo
+    );
 
     const {
         handleSubmit,
