@@ -21,6 +21,7 @@ export interface AppFormSwitchProps {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     control?: Control<any>;
     defaultChecked?: boolean;
+    className?: string;
     onChange?: ChangeEventHandler<HTMLInputElement>;
 }
 
@@ -29,6 +30,7 @@ export const AppFormSwitch: FC<AppFormSwitchProps> = ({
     name,
     errorMessage,
     label = "",
+    className = "",
     description,
     sm = 12,
     md = 6,
@@ -54,7 +56,7 @@ export const AppFormSwitch: FC<AppFormSwitchProps> = ({
             sm={sm}
             lg={lg}
             xl={xl}
-            className="p-0"
+            className={className}
             controlId={controlId}
         >
             <Form.Label>

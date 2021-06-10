@@ -93,17 +93,19 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
     };
     const renderSwitch = () => {
         return (
-            <AppFormSwitch
-                md={"6"}
-                label={properties.labelKey}
-                sm={"12"}
-                lg={"6"}
-                xl={"6"}
-                {...properties.attr}
-                name={`userField./api/user_fields/${properties.id}`}
-                defaultChecked={defaultValue ? defaultValue.value : false}
-                control={control}
-            />
+            <Col md={"6"} sm={"12"} lg={"6"} xl={"6"}>
+                <AppFormSwitch
+                    md={"6"}
+                    label={properties.labelKey}
+                    sm={"12"}
+                    lg={"12"}
+                    xl={"12"}
+                    {...properties.attr}
+                    name={`userField./api/user_fields/${properties.id}`}
+                    defaultChecked={defaultValue ? defaultValue.value : false}
+                    control={control}
+                />
+            </Col>
         );
     };
 

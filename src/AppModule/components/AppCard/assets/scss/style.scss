@@ -7,6 +7,21 @@
     border-radius: var(--border-radius) !important;
     box-shadow: 0 3px 9px var(--box-shadow-box-clr);
 
+    &.card-height {
+        height: 95%;
+
+    }
+
+    &.card-height2 {
+        height: 93%;
+
+    }
+
+    &.card-height3 {
+        height: 90%;
+
+    }
+
     &-title {
         &.h5 {
             display: flex;

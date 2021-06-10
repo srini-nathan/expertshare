@@ -5,9 +5,12 @@ import {
     UserProfilePage,
     MyProfilePage,
     ContainerOverview,
-    SessionDetailsPage,
+    // SessionDetailsPage,
     ConferenceGrid,
     ConferenceAddEdit,
+    SessionAddEdit,
+    EventAgenda,
+    SessionDetailsPage,
     AttendeeOverview,
 } from "./pages";
 import { ModuleRouter } from "./models";
@@ -31,6 +34,10 @@ export const routers: ModuleRouter[] = [
                     <ConferenceGrid path={"conferences/:view"} />
                     <ConferenceAddEdit path={"conference/new"} />
                     <ConferenceAddEdit path={"conference/:id"} />
+                    <SessionAddEdit path={"sessions/:conferenceId/new"} />
+                    <SessionAddEdit path={"sessions/:conferenceId/:id"} />
+                    <EventAgenda path={"conferences/:id/agenda"} />
+                    <SessionDetailsPage path={"sessions/:id"} />
                     <AttendeeOverview path={"attendees"} />
                     <AttendeeOverview path={"attendees/:view"} />
                 </Router>

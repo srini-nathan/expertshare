@@ -1,9 +1,11 @@
 .container-overview--container {
     &--item {
         margin-bottom: 30px;
+
         .inner-container {
             background-color: var(--light-clr);
             box-shadow: 0 3px 9px var(--secondary-10);
+
             &--banner {
                 display: flex;
                 height: 270px;
@@ -11,17 +13,21 @@
                 background-repeat: no-repeat;
                 background-size: cover;
                 border-radius: var(--border-radius) var(--border-radius) 0 0;
+
                 &--button {
                     margin-top: 8px;
                     margin-right: auto;
                     margin-left: 8px;
                 }
+
                 &--icons {
                     margin-top: 8px;
                     margin-right: 8px;
                     margin-left: auto;
+
                     a {
                         margin-left: 6px;
+
                         i {
                             display: inline-flex;
                             align-items: center;
@@ -37,6 +43,7 @@
                             border-radius: var(--border-radius);
                             box-shadow: 0 3px 9px var(--secondary-10);
                         }
+
                         &.add-favorite {
                             &.active {
                                 i {
@@ -47,10 +54,12 @@
                     }
                 }
             }
+
             &--det {
                 margin-top: -40px;
-                background-color: var(--widget-bg-clr);
+                background-color: var(--light-clr);
                 border-radius: var(--border-radius) var(--border-radius) 0 0;
+
                 &--title {
                     h2 {
                         display: flex;
@@ -63,6 +72,7 @@
                         -webkit-line-clamp: 2;
                     }
                 }
+
                 &--desc {
                     p {
                         display: flex;

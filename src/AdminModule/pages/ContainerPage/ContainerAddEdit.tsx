@@ -91,6 +91,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         bucketSecret: Yup.string().nullable(),
         bucketName: Yup.string().nullable(),
         bucketRegion: Yup.string().nullable(),
+        bucketEndpoint: Yup.string().nullable(),
     };
 
     if (storageType === STORAGE_S3) {
@@ -100,6 +101,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
             bucketSecret: Yup.string().required("Bucket Secret is Required"),
             bucketName: Yup.string().required("Bucket Name is Required"),
             bucketRegion: Yup.string().required("Bucket Region is Required"),
+            bucketEndpoint: Yup.string().required(
+                "Bucket Endpoint is Required"
+            ),
         };
     }
     const {
@@ -481,6 +485,24 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     defaultValue={data.bucketRegion}
                                     control={control}
                                     key={"bucketRegion"}
+                                />
+                                <AppFormInput
+                                    md={"6"}
+                                    lg={"6"}
+                                    xl={"6"}
+                                    name={"bucketEndpoint"}
+                                    label={"AWS S3 Bucket Endpoint"}
+                                    {...validation(
+                                        "bucketEndpoint",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={
+                                        errors.bucketEndpoint?.message
+                                    }
+                                    defaultValue={data.bucketEndpoint}
+                                    control={control}
+                                    key={"bucketEndpoint"}
                                 />
                             </Row>
                         </AppCard>
