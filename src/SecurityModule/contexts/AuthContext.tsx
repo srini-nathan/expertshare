@@ -2,7 +2,11 @@ import React, { createContext, useEffect } from "react";
 import { navigate } from "@reach/router";
 import jwtDecode from "jwt-decode";
 import { AuthApi, LoginResponse } from "../apis/AuthApi";
-import { AUTH_TOKEN_KEY, AUTH_USER_KEY } from "../../AppModule/config/app-env";
+import {
+    AUTH_CHOSEN_CONTAINER,
+    AUTH_TOKEN_KEY,
+    AUTH_USER_KEY,
+} from "../../AppModule/config/app-env";
 import { AuthState } from "../models/context/AuthState";
 
 interface IAuthAction {
@@ -30,6 +34,12 @@ enum AuthActionTypes {
     LOGOUT,
 }
 export const AuthContext = createContext<AuthState | any>(initialState);
+
+const clearAuthStorage = async () => {
+    localStorage.removeItem(AUTH_TOKEN_KEY);
+    localStorage.removeItem(AUTH_USER_KEY);
+    localStorage.removeItem(AUTH_CHOSEN_CONTAINER);
+};
 
 function reducer(state: AuthState, action: IAuthAction): AuthState {
     switch (action.type) {
@@ -86,8 +96,7 @@ type Props = {
 export const logoutAction = async (
     dispatch: React.Dispatch<IAuthAction>
 ): Promise<void> => {
-    localStorage.removeItem(AUTH_TOKEN_KEY);
-    localStorage.removeItem(AUTH_USER_KEY);
+    await clearAuthStorage();
     dispatch({
         type: AuthActionTypes.LOGOUT,
         payload: {
@@ -139,11 +148,11 @@ export const socialLogin = async (
                     containerId: cntid,
                 },
             });
-            await navigate("/home");
+            await navigate("/conferences/grid");
         }
     } catch (err) {
         if (localStorage.getItem(AUTH_TOKEN_KEY)) {
-            await localStorage.removeItem(AUTH_TOKEN_KEY);
+            await clearAuthStorage();
             dispatch({
                 type: AuthActionTypes.LOGIN_ERROR,
                 payload: {
@@ -162,6 +171,15 @@ export const socialLogin = async (
             });
         }
     }
+};
+
+export const autoLogin = async (
+    token: string,
+    dispatch: React.Dispatch<IAuthAction>
+): Promise<void> => {
+    await clearAuthStorage();
+    localStorage.setItem(AUTH_CHOSEN_CONTAINER, "true");
+    return socialLogin(token, dispatch);
 };
 
 export const loginAction = async (
@@ -196,11 +214,11 @@ export const loginAction = async (
                     containerId: cntid,
                 },
             });
-            await navigate("/home");
+            await navigate("/conferences/grid");
         }
     } catch (err) {
         if (localStorage.getItem(AUTH_TOKEN_KEY)) {
-            await localStorage.removeItem(AUTH_TOKEN_KEY);
+            await clearAuthStorage();
             dispatch({
                 type: AuthActionTypes.LOGIN_ERROR,
                 payload: {

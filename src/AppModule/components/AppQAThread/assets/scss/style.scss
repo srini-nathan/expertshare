@@ -1,0 +1,15 @@
+.question-wrapper {
+    &--question {
+        margin-left: 2.2em;
+        padding-left: 2.2em;
+        margin-bottom: 1em;
+        border-left: 1px solid #ccc;
+        padding-right: 1em;
+    }
+    &--child {
+        .first-row {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+        }
+    }
+}

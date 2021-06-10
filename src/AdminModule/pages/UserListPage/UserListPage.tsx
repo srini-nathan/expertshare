@@ -340,7 +340,7 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
                         variant="secondary"
                     >
                         <AppIcon className="mr-2" name="Download" />
-                        Batch Import
+                        Import
                     </AppButton>
                 </div>
             </AppPageHeader>

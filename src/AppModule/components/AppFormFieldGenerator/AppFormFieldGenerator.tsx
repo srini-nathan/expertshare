@@ -165,6 +165,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                     {options.map((e: any) => {
                         return (
                             <AppFormCheckBoxGroup
+                                key={e.value}
                                 name={e.name}
                                 id={e.value}
                                 {...validation}

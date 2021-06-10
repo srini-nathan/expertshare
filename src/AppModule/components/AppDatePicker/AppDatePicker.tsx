@@ -1,8 +1,10 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import { Control, Controller } from "react-hook-form";
 import "react-datepicker/dist/react-datepicker.css";
 import "./assets/scss/style.scss";
+import { InputGroup } from "react-bootstrap";
+import { AppIcon } from "../AppIcon";
 
 export interface AppDatePickerProps {
     defaultValue?: Date;
@@ -22,6 +24,7 @@ export const AppDatePicker: FC<AppDatePickerProps> = ({
     showTimeInput = false,
 }): JSX.Element => {
     const dateValue = defaultValue || new Date();
+    const [open, setOpen] = useState(false);
 
     return (
         <Controller
@@ -29,17 +32,38 @@ export const AppDatePicker: FC<AppDatePickerProps> = ({
             name={name}
             defaultValue={dateValue}
             render={({ field }) => (
-                <ReactDatePicker
-                    selected={field.value}
-                    onChange={field.onChange}
-                    calendarClassName="custom-datepicker"
-                    dateFormat={dateFormat}
-                    showMonthDropdown
-                    showYearDropdown
-                    showTimeSelect={showTimeSelect as boolean}
-                    showTimeInput={showTimeInput}
-                    dropdownMode="select"
-                />
+                <InputGroup>
+                    <ReactDatePicker
+                        selected={field.value}
+                        onInputClick={() => {
+                            setOpen(true);
+                        }}
+                        onChange={(...e) => {
+                            setOpen(!open);
+                            field.onChange(...e);
+                        }}
+                        calendarClassName="custom-datepicker"
+                        dateFormat={dateFormat}
+                        showTimeSelect={showTimeSelect as boolean}
+                        showTimeInput={showTimeInput}
+                        showMonthDropdown
+                        showYearDropdown
+                        dropdownMode="select"
+                        open={open}
+                        onClickOutside={() => {
+                            setOpen(false);
+                        }}
+                    />
+                    <InputGroup.Append>
+                        <InputGroup.Text
+                            onClick={() => {
+                                setOpen(!open);
+                            }}
+                        >
+                            <AppIcon name="calendar" />
+                        </InputGroup.Text>
+                    </InputGroup.Append>
+                </InputGroup>
             )}
         />
     );

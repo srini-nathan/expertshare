@@ -28,7 +28,6 @@ export interface AppButtonProps extends ButtonProps {
     size?: "sm" | "lg";
     block?: boolean;
     disabled?: boolean;
-    handleClick?: () => void;
     isLoading?: boolean;
     loadingTxt?: string;
 }
@@ -36,7 +35,6 @@ export const AppButton: FunctionComponent<AppButtonProps> = ({
     submit = false,
     reset = false,
     type = "button",
-    handleClick,
     isLoading,
     loadingTxt = "Saving...",
     ...props
@@ -50,7 +48,7 @@ export const AppButton: FunctionComponent<AppButtonProps> = ({
     }
 
     return (
-        <Button type={btnType} onClick={handleClick} {...props}>
+        <Button type={btnType} {...props}>
             {isLoading ? loadingTxt : props.children}
         </Button>
     );

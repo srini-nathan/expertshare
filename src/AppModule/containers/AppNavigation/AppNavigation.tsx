@@ -1,8 +1,8 @@
 import React, { FC, useEffect, useState, useRef } from "react";
 import {
     ListGroup,
-    Accordion,
     ListGroupItem,
+    Accordion,
     Nav,
     Navbar,
 } from "react-bootstrap";
@@ -26,20 +26,20 @@ import {
     useWindowLocation,
     useBuildAssetPath,
     useIsGranted,
+    useAuthState,
 } from "../../hooks";
 import { CONSTANTS } from "../../../config";
+import placeholder from "../../assets/images/user-avatar.png";
+import { isGranted } from "../../utils";
 
-const { Upload: UPLOAD } = CONSTANTS;
+const { Upload: UPLOAD, Role } = CONSTANTS;
 const {
     FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
 } = UPLOAD;
-const { path: PATH } = FILETYPEINFO_USER_PROFILE;
-
-const { Role: ROLE } = CONSTANTS;
 
 const {
-    ROLE: { ROLE_OPERATOR },
-} = ROLE;
+    ROLE: { ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_OPERATOR },
+} = Role;
 
 interface AppNavigationProps {
     items: AppNavigationItemProps[];
@@ -47,12 +47,28 @@ interface AppNavigationProps {
 
 const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const { dispatch, state } = React.useContext(AuthContext);
+    const { role } = useAuthState();
     const { user } = state;
     const [overflowItems, setOverflowItems] = useState<
         AppNavigationItemProps[] | AppSubNavigationItemProps[]
     >([]);
-    const profilePicturePath = useBuildAssetPath(PATH);
+    const profilePicturePath = useBuildAssetPath(
+        FILETYPEINFO_USER_PROFILE.path,
+        user.imageName
+    );
     const isGrantedControl = useIsGranted(ROLE_OPERATOR);
+
+    const style = user.imageName
+        ? {
+              backgroundImage: `url(${profilePicturePath})`,
+              backgroundSize: "cover",
+          }
+        : {
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              backgroundImage: `url(${placeholder})`,
+          };
 
     const [subMenuItems] = useState<AppSubNavigationItemProps[]>([
         {
@@ -61,6 +77,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
+            roles: [ROLE_OPERATOR],
         },
         {
             label: "Design",
@@ -68,6 +85,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
+            roles: [ROLE_OPERATOR],
         },
         {
             label: "Languages",
@@ -75,6 +93,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
+            roles: [ROLE_OPERATOR],
         },
         {
             label: "Translations",
@@ -82,6 +101,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
+            roles: [ROLE_OPERATOR],
         },
         {
             label: "Clients",
@@ -89,13 +109,15 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
+            roles: [ROLE_SUPER_ADMIN],
         },
         {
-            label: "User Groups",
-            path: "/admin/user-groups",
+            label: "Containers",
+            path: "/admin/containers",
             icon: {
                 name: "",
             },
+            roles: [ROLE_ADMIN],
         },
         {
             label: "Email Templates",
@@ -103,6 +125,23 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
+            roles: [ROLE_OPERATOR],
+        },
+        {
+            label: "Users",
+            path: "/admin/users",
+            icon: {
+                name: "",
+            },
+            roles: [ROLE_ADMIN],
+        },
+        {
+            label: "User Groups",
+            path: "/admin/user-groups",
+            icon: {
+                name: "",
+            },
+            roles: [ROLE_ADMIN],
         },
         {
             label: "User Fields",
@@ -110,10 +149,11 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
+            roles: [ROLE_OPERATOR],
         },
         {
-            label: "Users",
-            path: "/admin/users",
+            label: "Session Category",
+            path: "/admin/session-categories",
             icon: {
                 name: "",
             },
@@ -178,7 +218,12 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         }
     }, []);
     useEffect(() => {
-        if (overflowItems.some((e) => e && e.path === location)) {
+        if (
+            overflowItems.some(
+                (e: AppNavigationItemProps | AppSubNavigationItemProps) =>
+                    e && e.path === location
+            )
+        ) {
             isShowMore(true);
         }
     }, [overflowItems]);
@@ -246,6 +291,12 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                         className="active main-menu "
                     />
                     {subMenuItems
+                        .filter(({ roles }) => {
+                            if (roles) {
+                                return isGranted(role, roles[0]);
+                            }
+                            return true;
+                        })
                         .filter((e) => !overflowItems.includes(e))
                         .map(({ label, path, icon }) => {
                             return (
@@ -394,10 +445,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                     ? `${user.firstName} ${user.lastName}`
                                                     : "Account"
                                             }
-                                            style={{
-                                                backgroundImage: `url(${profilePicturePath}/${user.imageName})`,
-                                                backgroundSize: "cover",
-                                            }}
+                                            style={style}
                                             iconClassName="profile-picture"
                                             subDropDownItems={[
                                                 {

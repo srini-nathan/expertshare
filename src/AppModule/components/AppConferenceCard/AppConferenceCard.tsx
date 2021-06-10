@@ -2,10 +2,11 @@ import React, { FC } from "react";
 import { Link } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { PConference } from "../../../AdminModule/models";
-import "./assets/scss/style.scss";
 import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath } from "../../hooks";
 import { getDate, getTime } from "../../utils";
+import "./assets/scss/style.scss";
+import placeholder from "./assets/images/imgthumb.svg";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -36,16 +37,20 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
         description,
     } = conference;
     const imagePath = useBuildAssetPath(path, imageName);
+    const style = imageName
+        ? {
+              backgroundImage: `url(${imagePath})`,
+          }
+        : {
+              backgroundImage: `url(${placeholder})`,
+              backgroundSize: "inherit",
+              backgroundPosition: "center",
+          };
 
     return (
         <Col md={12} lg={4} xl={4} className="events-grid--container--item">
             <Col className="inner-container p-0">
-                <Col
-                    className="inner-container--banner p-0"
-                    style={{
-                        backgroundImage: `url(${imagePath})`,
-                    }}
-                >
+                <Col className="inner-container--banner p-0" style={style}>
                     {/* <div className="inner-container--banner--button">
                         <a href="#" className="live-now-btn mr-3">
                             <i className="fak fa-live"></i>
@@ -58,14 +63,14 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                                 <span onClick={() => handleClone(id as number)}>
                                     <i className="far fa-clone"></i>
                                 </span>
+                                <Link to={`/conference/${id}`}>
+                                    <i className="fak fa-pen-regular"></i>
+                                </Link>
                                 <span
                                     onClick={() => handleDelete(id as number)}
                                 >
                                     <i className="fak fa-trash-light"></i>
                                 </span>
-                                <Link to={`/conference/${id}`}>
-                                    <i className="fak fa-pen-regular"></i>
-                                </Link>
                             </>
                         )}
                     </div>

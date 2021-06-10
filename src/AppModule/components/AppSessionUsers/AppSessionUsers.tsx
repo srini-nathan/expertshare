@@ -13,10 +13,10 @@ export interface AppSessionUsersProps {
     role: string;
     title: string;
     icon: string;
-    sm: string | number;
-    md: string | number;
-    lg: string | number;
-    xl: string | number;
+    sm: number;
+    md: number;
+    lg: number;
+    xl: number;
     showAdd?: boolean;
 }
 

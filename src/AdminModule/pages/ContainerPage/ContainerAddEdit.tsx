@@ -114,6 +114,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         setError,
         trigger,
         reset,
+        setValue,
     } = useForm({
         resolver: yupResolver(Yup.object().shape(schema)),
         mode: "all",
@@ -364,6 +365,13 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                             }
                                             accept="image/*"
                                             onFileSelect={onFileSelect}
+                                            onDelete={() => {
+                                                setValue("imageName", "");
+                                                setData({
+                                                    ...data,
+                                                    imageName: "",
+                                                });
+                                            }}
                                         />
                                     </Form.Group>
                                     <AppFormCheckBox

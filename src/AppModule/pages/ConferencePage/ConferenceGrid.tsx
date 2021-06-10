@@ -17,6 +17,7 @@ import {
     AppListPageToolbar,
     AppGridPagination,
     AppFormDropdown,
+    AppModal,
 } from "../../components";
 import { ConferenceApi } from "../../../AdminModule/apis";
 import { useAuthState, useIsGranted } from "../../hooks";
@@ -56,10 +57,11 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
     const isGrantedControl = useIsGranted(ROLE_OPERATOR);
     const [pageSize, setPageSize] = useState<number>(30);
     const [active, setActive] = useState<number>(1);
+    const [showDelete, setDeleteShow] = useState(0);
+    const [showClone, setCloneShow] = useState(0);
 
     const fetchData = (params = {}) => {
         isLoading(true);
-
         ConferenceApi.find<PConference>(
             active,
             {
@@ -195,34 +197,59 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                 );
             case "grid":
             default:
+                if (loading) {
+                    return <AppLoader />;
+                }
                 return (
                     <Row className="events-grid--container mt-4 mx-0">
                         {conferences.map((conference: PConference) => (
                             <AppConferenceCard
                                 isGrantedControl={isGrantedControl}
                                 handleDelete={(id: number) => {
-                                    handleDelete(id);
+                                    setDeleteShow(id);
                                 }}
                                 handleClone={(id: number) => {
-                                    handleClone(id);
+                                    setCloneShow(id);
                                 }}
                                 conference={conference}
+                                key={conference.id}
                             />
                         ))}
+                        <AppModal
+                            show={showDelete > 0}
+                            title={"Delete Action"}
+                            handleClose={() => {
+                                setDeleteShow(0);
+                            }}
+                            handleDelete={() => {
+                                setDeleteShow(0);
+                                handleDelete(showDelete).then();
+                            }}
+                            bodyContent={"Are you sure want to delete ?"}
+                        />
+                        <AppModal
+                            show={showClone > 0}
+                            title={"Clone Action"}
+                            handleClose={() => {
+                                setCloneShow(0);
+                            }}
+                            handleDelete={() => {
+                                setCloneShow(0);
+                                handleClone(showClone).then();
+                            }}
+                            bodyContent={"Are you sure want to clone ?"}
+                        />
                     </Row>
                 );
         }
     };
 
-    if (loading) return <AppLoader />;
-
     return (
         <Fragment>
-            <AppPageHeader title={"Envent"} customToolbar>
+            <AppPageHeader title={"Event"} customToolbar>
                 <div className="d-flex pt-2 mb-5">
                     <AppListPageToolbar
                         createLink={"/conference/new"}
-                        createLabel="Create New Event"
                         onQuickFilterChange={handleFilter}
                         cancelTokenSources={cancelTokenSourcesRef.current}
                     />
@@ -232,6 +259,7 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                     />
                 </div>
             </AppPageHeader>
+
             {renderView()}
             <div className="d-flex flex-row app-grid-action py-3">
                 <AppGridPagination

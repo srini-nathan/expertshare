@@ -1,29 +1,36 @@
 import { BaseEntity, JsonResponseData } from "../../../AppModule/models";
 import { SessionCategoryApi } from "../../apis";
+import { Container } from "./Container";
 
 export class SessionCategory extends BaseEntity {
     name: string;
-
-    container: string;
 
     color: string;
 
     textColor: string;
 
-    constructor({
-        name = "",
-        container = "",
-        color = "",
-        textColor = "",
-        id,
-        createdAt,
-        updatedAt,
-    }: Partial<SessionCategory> = {}) {
+    translations?: any;
+
+    container: string | Container;
+
+    constructor(
+        container: string,
+        {
+            name = "",
+            color = "#fff",
+            textColor = "#000",
+            translations,
+            id,
+            createdAt,
+            updatedAt,
+        }: Partial<SessionCategory> = {}
+    ) {
         super(id, createdAt, updatedAt);
         this.container = container;
+        this.name = name;
         this.color = color;
         this.textColor = textColor;
-        this.name = name;
+        this.translations = translations;
     }
 
     toString(): string {
@@ -34,8 +41,12 @@ export class SessionCategory extends BaseEntity {
         return {
             ...super.toJSON(addExtraData),
             name: this.name,
-            container: this.container,
+            color: this.color,
+            textColor: this.textColor,
+            translations: this.translations,
+            container: this.container.toString(),
         };
     }
 }
+
 export type PSessionCategory = Partial<SessionCategory>;

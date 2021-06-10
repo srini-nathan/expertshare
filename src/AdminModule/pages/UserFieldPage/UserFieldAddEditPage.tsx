@@ -31,10 +31,12 @@ const { UserField } = CONSTANTS;
 const { FIELDTYPE } = UserField;
 const { name, fieldKey, labelKey } = validations;
 
-const options = Object.entries(FIELDTYPE).map(([key, value]) => ({
-    value,
-    label: key,
-}));
+const options: PrimitiveObject[] = Object.entries(FIELDTYPE).map(
+    ([key, value]) => ({
+        value,
+        label: key,
+    })
+);
 
 export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
     navigate,

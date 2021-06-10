@@ -130,3 +130,5 @@ export class User extends BaseEntity {
         return data;
     }
 }
+
+export type PUser = Partial<User>;

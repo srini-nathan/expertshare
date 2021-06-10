@@ -1,6 +1,7 @@
 @import "../../../../assets/scss/variables";
 
 .message-group-container {
+    cursor: pointer;
     border: none !important;
     border-bottom: 1px solid var(--secondary-20) !important;
 
@@ -26,7 +27,7 @@
                     height: 11px;
                     content: "";
                     background-color: var(--primary);
-                    border: 2px solid white;
+                    border: 2px solid #FFF;
                     border-radius: 20px;
                 }
             }
@@ -79,27 +80,26 @@
             padding-top: 1px;
             font-size: 12px;
             font-weight: 500;
-            color: white;
-            background-color: red;
+            color: #FFF;
+            background-color: #F00;
             border-radius: 20px;
         }
     }
 
     .more {
         position: absolute;
-        right: 10px;
         top: 10px;
-        background: white;
+        right: 10px;
         width: 45px;
-        -webkit-box-shadow: 3px 3px 8px 0px rgba(155, 167, 186, 0.2);
-        -moz-box-shadow: 3px 3px 8px 0px rgba(155, 167, 186, 0.2);
-        box-shadow: 3px 3px 8px 0px rgba(155, 167, 186, 0.2);
-        padding-left: 0 !important;
         padding-right: 0 !important;
 
+        padding-left: 0 !important;
+        background: white;
+        box-shadow: 3px 3px 8px 0 rgba(155, 167, 186, .2);
+
         .btn-icon {
-            font-size: 19px;
             padding-top: 12px;
+            font-size: 19px;
         }
     }
 

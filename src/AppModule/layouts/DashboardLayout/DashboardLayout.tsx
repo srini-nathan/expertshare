@@ -3,10 +3,9 @@ import { Container } from "react-bootstrap";
 import { useRecoilValue } from "recoil";
 import { appNavigations } from "../../bootstrap";
 import AppNavigation from "../../containers/AppNavigation/AppNavigation";
-import { AppMessageBox } from "../../containers/AppMessageBox/AppMessageBox";
 import {
-    appDashboardLayoutOptions,
     AppDashboardLayoutOptions,
+    appDashboardLayoutOptions,
 } from "../../atoms";
 
 export const DashboardLayout: FC = ({ children }) => {
@@ -25,7 +24,7 @@ export const DashboardLayout: FC = ({ children }) => {
                 <div className="col-md-12 col-sm-12 col-xl-12 p-3 p-lg-4 mb-2">
                     {children}
                 </div>
-                <AppMessageBox userChatID={() => {}} />
+                {/* {hideMessenger ? null : <AppMessageBox userChatID={() => {}} />} */}
             </div>
         </Container>
     );

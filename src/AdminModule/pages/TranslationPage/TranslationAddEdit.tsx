@@ -148,7 +148,9 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         );
     };
 
-    if (loading) return <AppLoader />;
+    if (loading) {
+        return <AppLoader />;
+    }
 
     return (
         <>

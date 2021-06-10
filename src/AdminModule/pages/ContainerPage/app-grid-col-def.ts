@@ -5,6 +5,7 @@ export const appGridColDef = ({
     onPressDelete,
     onPressClone,
     parentId,
+    hideParentFromUrl,
 }: AppCellActionWithCustom): ColDef[] => [
     {
         headerName: "Domain",
@@ -30,6 +31,7 @@ export const appGridColDef = ({
             onPressDelete,
             onPressClone,
             parentId,
+            hideParentFromUrl,
         },
     },
 ];

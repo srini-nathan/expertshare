@@ -17,7 +17,7 @@ export interface AppListPageToolbarProps {
 
 export const AppListPageToolbar: FC<AppListPageToolbarProps> = ({
     createLink,
-    createLabel = "Create New",
+    createLabel = "Create",
     onQuickFilterChange = () => {},
     cancelTokenSources = [],
 }): JSX.Element => {

@@ -1,22 +1,31 @@
 import React, { FC } from "react";
-import { useForm } from "react-hook-form";
 import { AppTab } from "../AppTab";
 import { AppTabs } from "../AppTabs";
-import { AppFormTextArea } from "../AppFormTextArea";
+import { AppMessageCompose } from "../AppMessageCompose";
 
 import "./assests/scss/style.scss";
 
 export interface AppСhoseMethodMessageProps {
     activeTab: string;
     className?: string;
+    rows: number;
+    enterToPost?: boolean;
+    isEdit?: boolean;
+    editMessage?: [];
+    handleMessageSend?: (message: string) => void;
+    handleUpdateMessage?: (message: string) => void;
 }
 
 export const AppСhoseMethodMessage: FC<AppСhoseMethodMessageProps> = ({
     activeTab,
+    rows,
+    enterToPost,
+    handleMessageSend,
+    handleUpdateMessage,
+    editMessage,
+    isEdit,
     ...props
 }): JSX.Element => {
-    const { control } = useForm();
-
     const [activeTabMessage, setActiveTabMessage] = React.useState<string>(
         activeTab
     );
@@ -35,23 +44,29 @@ export const AppСhoseMethodMessage: FC<AppСhoseMethodMessageProps> = ({
                         </span>
                     }
                 >
-                    <AppFormTextArea
+                    <AppMessageCompose
                         id="textarea"
-                        md="12"
-                        sm="12"
-                        lg="12"
-                        xl="12"
-                        name="textarea"
                         label="Text Area"
                         placeholder="Write your message..."
-                        maxCount={150}
-                        rows={1}
-                        control={control}
+                        rows={rows}
                         isSend
+                        editMessage={editMessage}
+                        isEdit={isEdit}
+                        enterToPost={enterToPost}
                         className="main-messages"
+                        handleUpdateData={(message) => {
+                            if (handleUpdateMessage) {
+                                handleUpdateMessage(message);
+                            }
+                        }}
+                        handleDataSend={(data) => {
+                            if (handleMessageSend) {
+                                handleMessageSend(data);
+                            }
+                        }}
                     />
                 </AppTab>
-                <AppTab
+                {/* <AppTab
                     eventKey="Audio"
                     title={
                         <span>
@@ -70,7 +85,7 @@ export const AppСhoseMethodMessage: FC<AppСhoseMethodMessageProps> = ({
                     }
                 >
                     Video
-                </AppTab>
+                </AppTab> */}
             </AppTabs>
         </div>
     );
