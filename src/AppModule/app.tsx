@@ -8,7 +8,7 @@ import { ModuleRouter } from "./models";
 import AppProvider from "./contexts/AppContext";
 import { AuthContext } from "../SecurityModule/contexts/AuthContext";
 import { useChosenContainer, useNavigator } from "./hooks";
-import { AppLoader, AppPictureInPicture } from "./components";
+import { AppLoader, AppPictureInPicture, AppYoutubeFrame } from "./components";
 import { LandingHelper } from "./pages";
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
@@ -93,11 +93,13 @@ const App = (): JSX.Element => {
                         />
                     </DashboardLayout>
                     <AppPictureInPicture show={true}>
-                        <div>
-                            <div>Drag me! Please!</div>
-                            <div>Drag me! Please!</div>
-                            <div>Drag me! Please!</div>
-                        </div>
+                        <AppYoutubeFrame
+                            url={
+                                "https://www.youtube.com/watch?v=aqz-KE-bpKQ&t=253s"
+                            }
+                            height={"200"}
+                            width={"100%"}
+                        />
                     </AppPictureInPicture>
                 </AppConfiguration>
             </AppProvider>
