@@ -29,6 +29,7 @@ import {
     UnprocessableEntityErrorResponse,
     SimpleObject,
     PrimitiveObject,
+    FileTypeInfo,
 } from "../../models";
 import {
     Session,
@@ -72,7 +73,6 @@ const {
     FILETYPE: { FILETYPE_SESSION_POSTER, FILETYPE_SESSION_DOC },
     FILETYPEINFO: { FILETYPEINFO_SESSION_POSTER },
 } = UPLOAD;
-const { path } = FILETYPEINFO_SESSION_POSTER;
 const { Session: SESSION } = CONSTANTS;
 const { CARDSIZE } = SESSION;
 const { CARDTYPE } = SESSION;
@@ -119,7 +119,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
     const [defaultLanguage, setDefaultLanguage] = useState<string>("");
     const [files, setFiles] = useState<File[]>([]);
     const [docsFile, setDocsFile] = useState<SimpleObject<string>[]>([]);
-    const sessionPosterPath = useBuildAssetPath(path);
+    const sessionPosterPath = useBuildAssetPath(
+        FILETYPEINFO_SESSION_POSTER as FileTypeInfo
+    );
     const [userGroups, setUserGroups] = React.useState<SimpleObject<string>[]>(
         data.sessionDocs
     );

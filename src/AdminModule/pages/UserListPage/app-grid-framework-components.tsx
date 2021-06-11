@@ -15,12 +15,12 @@ import { AppCellActionParamsUserList } from "./AppCellActionParamsUserList";
 import { UserApi } from "../../apis";
 import UserAvatar from "../../../AppModule/assets/images/user-avatar.png";
 import { CONSTANTS } from "../../../config";
+import { FileTypeInfo } from "../../../AppModule/models";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
     FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
 } = UPLOAD;
-const { path } = FILETYPEINFO_USER_PROFILE;
 
 export interface AppCellActionWithRenderParamsUserList
     extends AppCellActionParamsUserList,
@@ -56,7 +56,10 @@ export const GetRoles: FC<UserRoles> = ({ role }): JSX.Element => {
 };
 export const UserDetailsInfo: FC<UserInfo> = ({ data }): JSX.Element => {
     const { firstName, lastName, imageName } = data;
-    const imagePath = useBuildAssetPath(path, imageName);
+    const imagePath = useBuildAssetPath(
+        FILETYPEINFO_USER_PROFILE as FileTypeInfo,
+        imageName
+    );
 
     const style = imageName
         ? {

@@ -1,21 +1,25 @@
 import React from "react";
 import { ContainerTypes } from "./types";
+import { Container } from "../../AdminModule/models";
 
-export interface States {
-    [key: string]: any;
+export interface AppState {
+    isLoading: boolean;
+    container: Container | null;
 }
 
-const initialState: States = {
+const initialState: AppState = {
     isLoading: false,
-    ContainerState: null,
+    container: null,
 };
+
 interface Action {
     type: ContainerTypes;
-    payload: States;
+    payload: Container | null;
 }
-export const AppContext = React.createContext<States | any>(initialState);
 
-function reducer(state: States, action: Action): States {
+export const AppContext = React.createContext<AppState | any>(initialState);
+
+function reducer(state: AppState, action: Action): AppState {
     switch (action.type) {
         case ContainerTypes.LOADING:
             return {
@@ -25,14 +29,13 @@ function reducer(state: States, action: Action): States {
 
         case ContainerTypes.SUCCESS:
             return {
-                ...state,
                 isLoading: false,
-                ContainerState: action.payload,
+                container: action.payload,
             };
         case ContainerTypes.ERROR:
             return {
-                isLoading: false,
                 ...state,
+                isLoading: false,
             };
         default:
             return state;

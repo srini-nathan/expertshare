@@ -22,6 +22,7 @@ import {
     AppUploader,
 } from "../../../AppModule/components";
 import {
+    FileTypeInfo,
     SimpleObject,
     UnprocessableEntityErrorResponse,
     Upload,
@@ -48,10 +49,9 @@ const {
     STORAGE: { STORAGE_S3, STORAGE_LOCAL },
 } = ContainerConstant;
 const {
-    FILETYPE: { FILETYPE_CONTAINER_POSTER },
     FILETYPEINFO: { FILETYPEINFO_CONTAINER_POSTER },
+    FILETYPE: { FILETYPE_CONTAINER_POSTER },
 } = UPLOAD;
-const { path } = FILETYPEINFO_CONTAINER_POSTER;
 
 type PartialContainer = Partial<Container>;
 
@@ -76,7 +76,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
     const [storageType, setStorageType] = useState<string>("Local");
     const [loadingClient, setLoadingClient] = useState<boolean>(true);
     const [loadingUserGroups, setLoadingUserGroups] = useState<boolean>(true);
-    const containerPosterPath = useBuildAssetPath(path);
+    const containerPosterPath = useBuildAssetPath(
+        FILETYPEINFO_CONTAINER_POSTER as FileTypeInfo
+    );
     const cancelTokenSourceRef = useRef<Canceler>();
     const [files, setFiles] = useState<File[]>([]);
 

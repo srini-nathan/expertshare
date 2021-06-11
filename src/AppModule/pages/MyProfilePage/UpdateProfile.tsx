@@ -37,6 +37,7 @@ import {
     PrimitiveObject,
     SimpleObject,
     Upload,
+    FileTypeInfo,
 } from "../../models";
 import { UploadAPI } from "../../apis";
 import { CONSTANTS } from "../../../config";
@@ -47,7 +48,6 @@ const {
     FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
 } = UPLOAD;
 const { TIMEZONE } = USER;
-const { path } = FILETYPEINFO_USER_PROFILE;
 
 const options = TIMEZONE.map((value: string) => ({
     value,
@@ -75,7 +75,9 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     const [data, setData] = useState<PUser>(new UserModel(containerResourceId));
     const [userFields, setUserFields] = useState<UserField[]>([]);
     const [files, setFiles] = useState<File[]>([]);
-    const profilePicturePath = useBuildAssetPath(path);
+    const profilePicturePath = useBuildAssetPath(
+        FILETYPEINFO_USER_PROFILE as FileTypeInfo
+    );
 
     const validationShape = {
         firstName: Yup.string().min(2).required(),

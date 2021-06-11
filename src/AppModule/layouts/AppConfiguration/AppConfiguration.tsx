@@ -1,5 +1,6 @@
 import React, { FC, useEffect } from "react";
 import { Helmet } from "react-helmet";
+import { useSetRecoilState } from "recoil";
 import { Container, Role } from "../../../AdminModule/models";
 import { ContainerApi, RoleApi } from "../../../AdminModule/apis";
 import { errorToast } from "../../utils";
@@ -7,10 +8,12 @@ import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AppContext } from "../../contexts/AppContext";
 import { ContainerTypes } from "../../contexts/types";
 import { AuthState } from "../../../SecurityModule/models";
+import { appContainer } from "../../atoms/AppContainer";
 
 export const AppConfiguration: FC = ({ children }) => {
     const { dispatch } = React.useContext(AppContext);
     const { state } = React.useContext(AuthContext);
+    const setAppContainer = useSetRecoilState(appContainer);
     const { containerId } = state as AuthState;
     const [
         containerConfiguration,
@@ -29,6 +32,7 @@ export const AppConfiguration: FC = ({ children }) => {
                     } else if (isNotFound) {
                         errorToast("Container not exist");
                     } else if (response !== null) {
+                        setAppContainer(response);
                         setContainerConfiguration(response.configuration);
                         dispatch({
                             type: ContainerTypes.SUCCESS,
@@ -65,6 +69,11 @@ export const AppConfiguration: FC = ({ children }) => {
         return (
             <Helmet>
                 {containerConfiguration &&
+                    containerConfiguration.projectName &&
+                    containerConfiguration.projectName !== "" && (
+                        <title>{containerConfiguration.projectName}</title>
+                    )}
+                {containerConfiguration &&
                     containerConfiguration.googleAnalyticsCode &&
                     containerConfiguration.googleAnalyticsCode !== "" && (
                         <script
@@ -72,6 +81,7 @@ export const AppConfiguration: FC = ({ children }) => {
                             src={`https://www.googletagmanager.com/gtag/js?id=${containerConfiguration.googleAnalyticsCode}`}
                         ></script>
                     )}
+
                 {containerConfiguration &&
                     containerConfiguration.isHubspotEnable &&
                     containerConfiguration.hubspotId !== "" && (

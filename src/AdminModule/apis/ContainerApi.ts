@@ -20,6 +20,7 @@ const {
     api_containers_post_collection: API_POST_COLLECTION,
     api_containers_clone_collection: API_CLONE_COLLECTION,
     api_containers_get_overview_collection: API_GET_OVERVIEW_COLLECTION,
+    api_containers_my_container_collection: API_GET_MY_CONTAINER_COLLECTION,
 } = ROUTES;
 
 export abstract class ContainerApi extends EntityAPI {
@@ -76,6 +77,17 @@ export abstract class ContainerApi extends EntityAPI {
                 return Promise.resolve(
                     new FinalResponse<ListResponse<R>>(list)
                 );
+            })
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
+    }
+
+    public static async myContainer<R>(): Promise<FinalResponse<R | null>> {
+        return this.makeGet<R>(API_GET_MY_CONTAINER_COLLECTION)
+            .then(({ data }) => {
+                return Promise.resolve(new FinalResponse<R>(data));
             })
             .catch((error: AxiosError | ServerError) => {
                 const { message } = error;

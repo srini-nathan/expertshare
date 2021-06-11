@@ -6,12 +6,12 @@ import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath } from "../../hooks";
 import "./assets/scss/style.scss";
 import { AppIcon } from "../AppIcon";
+import { FileTypeInfo } from "../../models";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
     FILETYPEINFO: { FILETYPEINFO_CONFIGURATION },
 } = UPLOAD;
-const { path } = FILETYPEINFO_CONFIGURATION;
 
 export interface AppFormFileProps {
     id?: string;
@@ -51,7 +51,10 @@ export const AppFormFile: FC<AppFormFileProps> = ({
 }): JSX.Element => {
     const controlId = id || name;
     let placeholderText = "";
-    const settingFilePath = useBuildAssetPath(path, value);
+    const settingFilePath = useBuildAssetPath(
+        FILETYPEINFO_CONFIGURATION as FileTypeInfo,
+        value
+    );
 
     if (placeholder !== false) {
         placeholderText = _isString(placeholder)

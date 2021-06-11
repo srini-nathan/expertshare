@@ -47,6 +47,7 @@ import {
     PrimitiveObject,
     SimpleObject,
     Upload,
+    FileTypeInfo,
 } from "../../../AppModule/models";
 import { UploadAPI } from "../../../AppModule/apis";
 
@@ -66,7 +67,6 @@ const {
     FILETYPE: { FILETYPE_USER_PROFILE },
     FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
 } = UPLOAD;
-const { path } = FILETYPEINFO_USER_PROFILE;
 const options = TIMEZONE.map((value: string) => ({
     value,
     label: value,
@@ -103,7 +103,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         SimpleObject<string>[]
     >([]);
     const [languages, setLanguages] = useState<SimpleObject<string>[]>([]);
-    const profilePicturePath = useBuildAssetPath(path);
+    const profilePicturePath = useBuildAssetPath(
+        FILETYPEINFO_USER_PROFILE as FileTypeInfo
+    );
     const [files, setFiles] = useState<File[]>([]);
 
     const {

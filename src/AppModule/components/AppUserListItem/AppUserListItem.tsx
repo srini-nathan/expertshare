@@ -4,12 +4,12 @@ import "./assets/scss/style.scss";
 import { useBuildAssetPath } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 import UserAvatar from "../../assets/images/user-avatar.png";
+import { FileTypeInfo } from "../../models";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
     FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
 } = UPLOAD;
-const { path } = FILETYPEINFO_USER_PROFILE;
 
 export interface AppUserListItemProps {
     user: User;
@@ -18,7 +18,10 @@ export interface AppUserListItemProps {
 export const AppUserListItem: FC<AppUserListItemProps> = ({
     user,
 }): JSX.Element => {
-    const userProfilePath = useBuildAssetPath(path, user.imageName);
+    const userProfilePath = useBuildAssetPath(
+        FILETYPEINFO_USER_PROFILE as FileTypeInfo,
+        user.imageName
+    );
 
     const style = user.imageName
         ? {

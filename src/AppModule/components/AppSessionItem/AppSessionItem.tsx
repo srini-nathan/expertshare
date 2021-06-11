@@ -9,12 +9,12 @@ import { CONSTANTS } from "../../../config";
 import { AppButton } from "../AppButton";
 import { AppCard } from "../AppCard";
 import { AppUserListItem } from "../AppUserListItem";
+import { FileTypeInfo } from "../../models";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
     FILETYPEINFO: { FILETYPEINFO_SESSION_POSTER },
 } = UPLOAD;
-const { path } = FILETYPEINFO_SESSION_POSTER;
 
 export interface AppSessionItemProps {
     session: Session;
@@ -29,8 +29,9 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
     handleDelete,
     isGrantedControl,
 }): JSX.Element => {
-    const conferencePosterPath = useBuildAssetPath(path);
-
+    const conferencePosterPath = useBuildAssetPath(
+        FILETYPEINFO_SESSION_POSTER as FileTypeInfo
+    );
     const [showMore, isShowMore] = useState<boolean>(false);
 
     const getSize = (): string[] => {

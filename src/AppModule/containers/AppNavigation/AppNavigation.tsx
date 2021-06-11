@@ -34,6 +34,7 @@ import placeholder from "../../assets/images/user-avatar.png";
 import { errorToast, isGranted } from "../../utils";
 import { LanguageApi } from "../../../AdminModule/apis";
 import { Language } from "../../../AdminModule/models";
+import { FileTypeInfo } from "../../models";
 
 const { Upload: UPLOAD, Role } = CONSTANTS;
 const {
@@ -56,7 +57,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         AppNavigationItemProps[] | AppSubNavigationItemProps[]
     >([]);
     const profilePicturePath = useBuildAssetPath(
-        FILETYPEINFO_USER_PROFILE.path,
+        FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         user.imageName
     );
     const isGrantedControl = useIsGranted(ROLE_OPERATOR);

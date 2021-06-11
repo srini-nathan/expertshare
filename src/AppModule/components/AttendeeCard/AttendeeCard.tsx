@@ -4,7 +4,7 @@ import { AppIcon } from "../AppIcon";
 import "./assets/scss/list.scss";
 import { useBuildAssetPath } from "../../hooks";
 import { CONSTANTS } from "../../../config";
-import { User } from "../../models";
+import { FileTypeInfo, User } from "../../models";
 import placeholder from "../../assets/images/user-avatar.png";
 
 const { Upload: UPLOAD } = CONSTANTS;
@@ -30,7 +30,7 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
         userTags,
     } = attendee as User;
     const profilePicturePath = useBuildAssetPath(
-        FILETYPEINFO_USER_PROFILE.path,
+        FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         imageName
     );
     const style = imageName
