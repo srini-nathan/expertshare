@@ -3,14 +3,14 @@ import { AppNavigationItemProps } from "./components/AppNavigationItem";
 export const navigation: AppNavigationItemProps[] = [
     {
         label: "Event",
-        path: "/conferences/grid",
+        path: "/event",
         icon: {
             name: "container",
         },
     },
     {
         label: "Attendees",
-        path: "/attendees",
+        path: "/attendee",
         icon: {
             name: "AddUserPlus",
         },

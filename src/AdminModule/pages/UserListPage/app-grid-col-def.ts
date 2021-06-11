@@ -23,18 +23,13 @@ export const appGridColDef = ({
         maxWidth: 30,
         sortable: false,
     },
+
     {
-        headerName: "First Name",
+        headerName: "Name",
         field: "firstName",
-        filter: "text",
+        cellRenderer: "appNameTemplateRenderer",
+        maxWidth: 220,
         sortable: true,
-        minWidth: 80,
-    },
-    {
-        headerName: "Last Name",
-        field: "lastName",
-        sortable: true,
-        minWidth: 40,
     },
 
     {

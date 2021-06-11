@@ -35,6 +35,7 @@ export const AppСhoseMethodMessage: FC<AppСhoseMethodMessageProps> = ({
             <AppTabs
                 onSelect={setActiveTabMessage}
                 activeKey={activeTabMessage}
+                className="d-none"
             >
                 <AppTab
                     eventKey="Text"

@@ -16,8 +16,26 @@
         }
 
         .conference-tags-container {
-            height: 35px;
-            overflow: hidden;
+            height: 80px;
+
+            &--title {
+                i {
+                    font-size: 20px;
+                    color: var(--secondary);
+
+                }
+
+                span {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: var(--secondary);
+                }
+            }
+
+            &--tags {
+                height: 35px;
+                overflow: hidden;
+            }
         }
 
         .conference-tags {
@@ -36,7 +54,7 @@
 
         .inner-container {
             background-color: var(--light-clr);
-            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            border-radius: var(--border-radius);
             box-shadow: 0 3px 9px var(--box-shadow-box-clr);
 
             &--banner {
@@ -111,6 +129,7 @@
 
                 &--time {
                     display: flex;
+                    height: 45px;
 
                     &--icon {
                         i {

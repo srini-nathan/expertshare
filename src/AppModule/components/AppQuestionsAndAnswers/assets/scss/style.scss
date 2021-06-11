@@ -1,6 +1,10 @@
 @import "../../../../assets/scss/variables";
 
 .questions-and-answers-wrapper {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 0;
+
     &--column {
         width: 100%;
         height: 90vh;
@@ -17,8 +21,24 @@
     }
 
     &--thread {
-        height: 68vh;
-        overflow-y: scroll;
-        scrollbar-width: none;
+        height: 64vh;
+        overflow-y: auto;
+
+        &::-webkit-scrollbar {
+            width: 3px;
+            height: 4px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: var(--secondary-10);
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: var(--secondary);
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+            opacity: 50%;
+        }
     }
 }

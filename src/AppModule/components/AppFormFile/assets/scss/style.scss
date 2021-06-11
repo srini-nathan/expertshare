@@ -1,0 +1,66 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.form-control {
+    color: var(--input-fg-clr);
+    background-color: var(--input-bg-clr);
+    border: 1px solid var(--input-border-clr);
+    border-radius: var(--border-radius);
+
+    &:focus {
+        color: var(--input-fg-clr);
+        background-color: var(--input-bg-clr);
+        border-color: var(--input-border-clr);
+        box-shadow: unset;
+    }
+}
+
+.form-label {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    margin-bottom: 3px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--secondary);
+}
+
+.required {
+    margin: 0 5px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 14px;
+    color: #C31F27;
+}
+
+.counter {
+    position: absolute;
+    right: 0;
+}
+
+.custom-file {
+    width: calc(100% - 50px) !important;
+    margin-right: 7px;
+
+    &--container {
+        a {
+            width: 36px;
+        }
+    }
+
+    &-label {
+        color: var(--input-fg-clr);
+        background-color: var(--input-bg-clr);
+        border: 1px solid var(--input-border-clr);
+        border-radius: var(--border-radius);
+
+        &:focus {
+            color: var(--input-fg-clr);
+            background-color: var(--input-bg-clr);
+            border-color: var(--input-border-clr);
+            box-shadow: unset;
+            outline: unset;
+        }
+    }
+}

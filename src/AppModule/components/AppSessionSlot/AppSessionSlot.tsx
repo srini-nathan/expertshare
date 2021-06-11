@@ -65,7 +65,7 @@ export const AppSessionSlot: FC<AppSessionSlotProps> = ({
                                         />
                                     </div>
                                     <Link
-                                        to={`/sessions/${conferenceId}/new`}
+                                        to={`/event/${conferenceId}/session/create`}
                                         className="btn-session btn btn-secondary mr-3"
                                     >
                                         + Session

@@ -2,8 +2,9 @@
 
 .nav-tabs {
     // No need to show, because haven other tabs
-    display: none !important;
+    // display: none !important;
     border-bottom: unset !important;
+
     a {
         &.nav-item {
             border-radius: var(--border-radius);

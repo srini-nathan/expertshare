@@ -69,6 +69,11 @@ export const AppConfiguration: FC = ({ children }) => {
         return (
             <Helmet>
                 {containerConfiguration &&
+                    containerConfiguration.projectName &&
+                    containerConfiguration.projectName !== "" && (
+                        <title>{containerConfiguration.projectName}</title>
+                    )}
+                {containerConfiguration &&
                     containerConfiguration.googleAnalyticsCode &&
                     containerConfiguration.googleAnalyticsCode !== "" && (
                         <script
@@ -76,6 +81,7 @@ export const AppConfiguration: FC = ({ children }) => {
                             src={`https://www.googletagmanager.com/gtag/js?id=${containerConfiguration.googleAnalyticsCode}`}
                         ></script>
                     )}
+
                 {containerConfiguration &&
                     containerConfiguration.isHubspotEnable &&
                     containerConfiguration.hubspotId !== "" && (

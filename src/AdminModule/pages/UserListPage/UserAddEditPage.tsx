@@ -19,9 +19,23 @@ import {
     AppFormSwitch,
     AppFormLabel,
     AppFormFieldGenerator,
+    AppUploader,
 } from "../../../AppModule/components";
-import { User, UserGroup, UserTag, UserField } from "../../models";
-import { UserApi, UserTagApi, UserGroupApi, UserFieldApi } from "../../apis";
+import {
+    User,
+    PUser,
+    UserGroup,
+    UserTag,
+    UserField,
+    Language,
+} from "../../models";
+import {
+    UserApi,
+    UserTagApi,
+    UserGroupApi,
+    UserFieldApi,
+    LanguageApi,
+} from "../../apis";
 import {
     errorToast,
     setViolations,
@@ -32,18 +46,27 @@ import {
     UnprocessableEntityErrorResponse,
     PrimitiveObject,
     SimpleObject,
+    Upload,
+    FileTypeInfo,
 } from "../../../AppModule/models";
+import { UploadAPI } from "../../../AppModule/apis";
+
 import {
     useParamId,
     useNavigator,
     useAuthState,
     useRoles,
+    useBuildAssetPath,
 } from "../../../AppModule/hooks";
 import { schema } from "./schema";
 import { CONSTANTS } from "../../../config";
 
-const { TIMEZONE, SOURCE } = CONSTANTS.User;
-
+const { Upload: UPLOAD, User: USER } = CONSTANTS;
+const { TIMEZONE, SOURCE, STATUS } = USER;
+const {
+    FILETYPE: { FILETYPE_USER_PROFILE },
+    FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
+} = UPLOAD;
 const options = TIMEZONE.map((value: string) => ({
     value,
     label: value,
@@ -57,12 +80,12 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
     const { id, isEditMode } = useParamId();
-    const { clientId: storageClientId, role } = useAuthState();
+    const { clientId: storageClientId, role, containerId } = useAuthState();
     const { clientId = storageClientId } = useParams();
     const { filterRoles, getRoles } = useRoles();
     const navigator = useNavigator(navigate);
     const { containerResourceId } = useAuthState();
-    const [data, setData] = useState<User>(new User(containerResourceId));
+    const [data, setData] = useState<PUser>(new User(containerResourceId));
     const [loading, setLoading] = useState<boolean>(isEditMode);
     const cancelTokenSourceRef = useRef<Canceler>();
     const [userGroups, setUserGroups] = React.useState<SimpleObject<string>[]>(
@@ -76,6 +99,14 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
     >([]);
     const [userTags, setUserTags] = useState<SimpleObject<string>[]>([]);
     const [userFields, setUserFields] = useState<UserField[]>([]);
+    const [relationalManager, setRelationalManager] = useState<
+        SimpleObject<string>[]
+    >([]);
+    const [languages, setLanguages] = useState<SimpleObject<string>[]>([]);
+    const profilePicturePath = useBuildAssetPath(
+        FILETYPEINFO_USER_PROFILE as FileTypeInfo
+    );
+    const [files, setFiles] = useState<File[]>([]);
 
     const {
         control,
@@ -103,7 +134,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         if (isEditMode) {
             let userRole: any = {};
             getRoles().forEach((e: any) => {
-                if (e.role === data.roles[0])
+                if (data?.roles && e?.role && e?.role === data.roles[0])
                     userRole = {
                         value: e["@id"],
                         label: e.name,
@@ -156,7 +187,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         });
         return userFieldValues;
     };
-    const onSubmit = async (formData: UpdateProfileForm<any>) => {
+    const submitForm = async (formData: UpdateProfileForm<any>) => {
         const userGroupsSelectedItems = selectedUserGroups.map((e) => {
             return UserGroupApi.toResourceUrl(parseInt(e.id, 10));
         });
@@ -169,6 +200,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
 
         if (!isEditMode) {
             formData.source = SOURCE.SOURCE_CREATE;
+            formData.status = STATUS.STATUS_ACTIVE;
         }
 
         formData.userFieldValues = getDynamicFileds(formData.userField);
@@ -202,6 +234,33 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                 }
             }
         );
+    };
+    const onFileSelect = (selectedFiles: File[]) => {
+        setFiles(selectedFiles);
+    };
+    const onSubmit = async (formData: User) => {
+        if (files.length > 0) {
+            const fd = new FormData();
+            fd.set("file", files[0], files[0].name);
+            fd.set("fileType", FILETYPE_USER_PROFILE);
+
+            return UploadAPI.createResource<Upload, FormData>(fd).then(
+                ({ errorMessage, response }) => {
+                    if (errorMessage) {
+                        errorToast(errorMessage);
+                        return submitForm(formData);
+                    }
+
+                    if (response && response.fileName) {
+                        formData.imageName = response.fileName;
+                    }
+
+                    successToast("Image uploaded");
+                    return submitForm(formData);
+                }
+            );
+        }
+        return submitForm(formData);
     };
     const fetchUserTags = async () => {
         return UserTagApi.find<UserTag>(1, { "client.id": clientId }).then(
@@ -268,6 +327,68 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
             }
         };
     }, []);
+
+    useEffect(() => {
+        UserApi.getLimited<User>(1, {
+            "roles.role": "ROLE_RELATION_MANAGER",
+            "client.id": clientId,
+        }).then(({ error, response }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                }
+            } else if (response !== null) {
+                const rm: SimpleObject<string>[] = response.items.map((e) => {
+                    return {
+                        id: UserApi.toResourceUrl(e.id),
+                        value: UserApi.toResourceUrl(e.id),
+                        label: `${e.firstName} ${e.lastName}`,
+                    };
+                });
+                setRelationalManager(rm);
+            }
+        });
+    }, []);
+
+    useEffect(() => {
+        LanguageApi.find<Language>(1, { "container.id": containerId }).then(
+            ({ error, response }) => {
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    }
+                } else if (response !== null) {
+                    const langs: SimpleObject<string>[] = [];
+                    response.items.forEach((e) => {
+                        langs.push({
+                            id: `${e.id}`,
+                            value: e.locale,
+                            label: e.name,
+                        });
+                    });
+                    setLanguages(langs);
+                }
+            }
+        );
+    }, []);
+
+    const getRelationalManager = () => {
+        const item = relationalManager.find(
+            (e) => e.id === data.relationManager
+        );
+
+        if (item) return item;
+
+        return "";
+    };
+
+    const getLocale = () => {
+        const item = languages.find((e) => e.value === data.locale);
+
+        if (item) return item;
+
+        return "";
+    };
     useEffect(() => {
         if (isEditMode) {
             UserApi.findById<User>(id).then(
@@ -345,6 +466,32 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                     <Col md={12}>
                         <AppCard>
                             <Form.Row>
+                                <Form.Group
+                                    as={Col}
+                                    sm={12}
+                                    md={12}
+                                    lg={12}
+                                    xl={12}
+                                >
+                                    <Form.Label>Profile Picture</Form.Label>
+                                    <AppUploader
+                                        withCropper={true}
+                                        accept="image/*"
+                                        imagePath={
+                                            data.imageName
+                                                ? `${profilePicturePath}/${data.imageName}`
+                                                : ""
+                                        }
+                                        onFileSelect={onFileSelect}
+                                        onDelete={() => {
+                                            setValue("imageName", "");
+                                            setData({
+                                                ...data,
+                                                imageName: "",
+                                            });
+                                        }}
+                                    />
+                                </Form.Group>
                                 <AppFormInput
                                     lg={6}
                                     xl={6}
@@ -421,20 +568,34 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     errorMessage={errors.email?.message}
                                     control={control}
                                 />
-                                <AppFormInput
-                                    lg={6}
-                                    xl={6}
-                                    defaultValue={data.locale}
+                                <AppFormSelect
+                                    id={"locale"}
                                     name={"locale"}
                                     label={"Locale"}
+                                    md={12}
+                                    className="local-container"
+                                    lg={6}
+                                    xl={6}
                                     required={true}
                                     {...validation(
                                         "locale",
                                         formState,
                                         isEditMode
                                     )}
+                                    defaultValue={getLocale()}
+                                    placeholder={"Locale"}
                                     errorMessage={errors.locale?.message}
+                                    options={languages}
                                     control={control}
+                                    transform={{
+                                        output: (locale: PrimitiveObject) =>
+                                            locale?.value,
+                                        input: (value: string) => {
+                                            return _find([], {
+                                                value,
+                                            });
+                                        },
+                                    }}
                                 />
                                 {!isEditMode && [
                                     <AppFormInputPassword
@@ -477,10 +638,10 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     id={"role"}
                                     name={"role"}
                                     label={"Select Role"}
-                                    md={12}
                                     className="role-container"
-                                    lg={12}
-                                    xl={12}
+                                    md={12}
+                                    lg={6}
+                                    xl={6}
                                     required={true}
                                     {...validation(
                                         "role",
@@ -502,6 +663,39 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                         },
                                     }}
                                 />
+                                <AppFormSelect
+                                    id={"relationManager"}
+                                    name={"relationManager"}
+                                    label={"Relation Manager"}
+                                    md={12}
+                                    className="role-container"
+                                    lg={6}
+                                    xl={6}
+                                    required={true}
+                                    {...validation(
+                                        "relationManager",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    defaultValue={getRelationalManager()}
+                                    placeholder={"Relation Manager"}
+                                    errorMessage={
+                                        errors.relationManager?.message
+                                    }
+                                    options={relationalManager}
+                                    control={control}
+                                    transform={{
+                                        output: (
+                                            relationManager: PrimitiveObject
+                                        ) => relationManager?.value,
+                                        input: (value: string) => {
+                                            return _find([], {
+                                                value,
+                                            });
+                                        },
+                                    }}
+                                />
+
                                 <AppFormSelectCreatable
                                     name="userTags"
                                     label={"User Tags"}
@@ -562,10 +756,14 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                         formState,
                                         isEditMode
                                     )}
-                                    defaultValue={{
-                                        value: data?.timezone,
-                                        label: data?.timezone,
-                                    }}
+                                    defaultValue={
+                                        data.timezone
+                                            ? {
+                                                  value: data?.timezone,
+                                                  label: data?.timezone,
+                                              }
+                                            : ""
+                                    }
                                     placeholder={"Timezone"}
                                     errorMessage={errors.timezone?.message}
                                     options={options}

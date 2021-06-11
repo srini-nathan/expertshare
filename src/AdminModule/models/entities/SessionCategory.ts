@@ -17,8 +17,8 @@ export class SessionCategory extends BaseEntity {
         container: string,
         {
             name = "",
-            color = "#fff",
-            textColor = "#000",
+            color = "#30B7A7",
+            textColor = "#fff",
             translations,
             id,
             createdAt,

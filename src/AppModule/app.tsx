@@ -68,7 +68,7 @@ const App = (): JSX.Element => {
     const authRoutes: ModuleRouter[] = appRouters.filter(
         ({ layout }) => layout === "auth"
     );
-    const overViewPage = useMatch("/containers/overview");
+    const overViewPage = useMatch("/container");
     const autoLoginPage = useMatch("/auth/auto-login/:token");
     const isOverViewPage = overViewPage !== null;
     const isAutoLoginPage = autoLoginPage !== null;
@@ -79,7 +79,7 @@ const App = (): JSX.Element => {
 
     if (!isAutoLoginPage && state.isAuthenticated) {
         if (!isChosen() && !isOverViewPage) {
-            navigator("/containers/overview").then();
+            navigator("/container").then();
             return <AppFullScreenLoader />;
         }
         return (

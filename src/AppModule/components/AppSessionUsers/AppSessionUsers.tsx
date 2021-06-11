@@ -1,16 +1,15 @@
 import React, { FC, useState } from "react";
 import { Row, Col } from "react-bootstrap";
-import { Link } from "@reach/router";
 import { AppUserSelector } from "../AppUserSelector";
 import { AppButton } from "../AppButton";
 import "./assets/scss/style.scss";
 import { User } from "../../../AdminModule/models";
+import { AppUserListItem } from "../AppUserListItem";
 
 export interface AppSessionUsersProps {
     handleSelectedUsers?: (users: User[]) => void;
     users?: User[];
     selectedUsers: User[];
-    role: string;
     title: string;
     icon: string;
     sm: number;
@@ -23,7 +22,6 @@ export interface AppSessionUsersProps {
 export const AppSessionUsers: FC<AppSessionUsersProps> = ({
     users = [],
     title,
-    role,
     icon,
     sm,
     md,
@@ -67,7 +65,6 @@ export const AppSessionUsers: FC<AppSessionUsersProps> = ({
                             </Col>
                             <AppUserSelector
                                 users={users}
-                                role={role}
                                 show={show}
                                 handleClose={isShow}
                                 handleSelectedUsers={handleSelectedUsers}
@@ -88,24 +85,7 @@ export const AppSessionUsers: FC<AppSessionUsersProps> = ({
                                 xl={xl}
                                 className="create-session--moderators--container--item pl-0 mt-4"
                             >
-                                <Link to="#">
-                                    <Row className="m-0 p-0">
-                                        <i className="avatar col-md-auto col-lg-auto pl-0 col-auto col-xl-auto"></i>
-                                        <Col
-                                            lg={8}
-                                            md={8}
-                                            xl={8}
-                                            className="name-details pr-0"
-                                        >
-                                            <h3>
-                                                {item.firstName} {item.lastName}
-                                            </h3>
-                                            <p>
-                                                {item.jobTitle}@{item.company}
-                                            </p>
-                                        </Col>
-                                    </Row>
-                                </Link>
+                                <AppUserListItem user={item as User} />
                             </Col>
                         );
                     })}
