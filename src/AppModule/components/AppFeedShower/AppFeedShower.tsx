@@ -108,7 +108,9 @@ export const AppFeedShower: FC<AppFeedShowerProps> = ({
                         </div>
                         <div className="name pl-2">
                             <div className="name--sender">
-                                <h3>{item.user}</h3>
+                                <h3>
+                                    {item.user.firstName} {item.user.lastName}
+                                </h3>
                             </div>
                             <div className="name--comment">
                                 <span>{item.scheduleEndAt}</span>
@@ -220,9 +222,13 @@ export const AppFeedShower: FC<AppFeedShowerProps> = ({
                         activeTab="Text"
                         className="ptop-messages"
                         rows={2}
+                        isEdit
+                        editMessage={item.postText}
                         enterToPost
-                        handleMessageSend={(message) => {
-                            newMessageSend(message);
+                        handleUpdateMessage={(message) => {
+                            setShowEditTextarea(false);
+                            // eslint-disable-next-line no-console
+                            console.log(message);
                         }}
                     />
                 )}

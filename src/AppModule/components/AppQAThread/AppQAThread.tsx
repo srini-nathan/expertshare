@@ -18,6 +18,8 @@ export const AppQAThread: FC<QAThreadProps> = ({
     sendAnswer,
     updateMessage,
 }): JSX.Element => {
+    // eslint-disable-next-line no-console
+    console.log(data);
     return (
         <Row className="m-0">
             <Col className="p-0">
