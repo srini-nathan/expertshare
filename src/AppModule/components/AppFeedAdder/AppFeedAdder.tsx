@@ -28,7 +28,7 @@ export interface AppFeedAdderProps extends AppFormElementProps {
     isSend?: boolean;
     rows?: number;
     container: number;
-    handleUpdateFeed: () => void;
+    addNewsfeedObject: (message: any) => void;
     handleUpdateData?: (message: any) => void;
     onChange?: ChangeEventHandler<
         HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
@@ -38,8 +38,8 @@ export interface AppFeedAdderProps extends AppFormElementProps {
 export const AppFeedAdder: FC<AppFeedAdderProps> = ({
     rows = 5,
     onChange,
-    handleUpdateFeed,
     handleUpdateData,
+    addNewsfeedObject,
     isSend,
     ...props
 }): JSX.Element => {
@@ -114,11 +114,11 @@ export const AppFeedAdder: FC<AppFeedAdderProps> = ({
         NewsfeedApi.postNewsfeed<any, any>(messageToPost).then(
             ({ response, errorMessage }) => {
                 if (response) {
+                    addNewsfeedObject(response);
                     setImageFileName("");
                     setImageBlob([]);
                     setVideoFileName("");
                     setVideoFile([]);
-                    handleUpdateFeed();
                 }
                 if (errorMessage) {
                     errorToast(errorMessage);

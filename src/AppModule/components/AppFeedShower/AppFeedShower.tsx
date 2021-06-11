@@ -5,7 +5,7 @@ import { AppButton } from "../AppButton";
 import { AppIcon } from "../AppIcon";
 import { NewsfeedCommentApi } from "../../apis";
 import { AppQAThread } from "../AppQAThread";
-import { errorToast } from "../../utils";
+import { successToast, errorToast } from "../../utils";
 
 import "./assets/scss/style.scss";
 
@@ -14,12 +14,14 @@ export interface AppFeedShowerProps {
     container: number;
     user?: any;
     handleNewsFeedId: (id: number) => void;
+    handlePatchNewsfeedMessage: (id: number, message: string) => void;
 }
 
 export const AppFeedShower: FC<AppFeedShowerProps> = ({
     item,
     container,
     handleNewsFeedId,
+    handlePatchNewsfeedMessage,
 }): JSX.Element => {
     const [data, setData] = useState<[]>([]);
 
@@ -61,7 +63,6 @@ export const AppFeedShower: FC<AppFeedShowerProps> = ({
                 }
             }
         );
-
         setShowCommentTextarea(false);
     };
 
@@ -94,9 +95,22 @@ export const AppFeedShower: FC<AppFeedShowerProps> = ({
         getCurrentThread();
     };
 
+    const updateNewsfeeMessage = (message: string) => {
+        handlePatchNewsfeedMessage(newsfeedId, message);
+    };
+
+    const deleteNewsfeedCommentById = (id: number) => {
+        // eslint-disable-next-line no-console
+        NewsfeedCommentApi.deleteNewsfeedCommentById(id).then(() => {
+            getCurrentThread();
+            successToast("Successfully deleted");
+        });
+    };
+
     useEffect(() => {
+        setData([]);
         getCurrentThread();
-    }, []);
+    }, [item]);
 
     return (
         <div className="app-feed-shower-wrapper">
@@ -185,6 +199,9 @@ export const AppFeedShower: FC<AppFeedShowerProps> = ({
                 {item.mediaFileNames[1] && (
                     <ReactPlayer
                         className={"video-player"}
+                        controls={true}
+                        width="100%"
+                        height="100%"
                         url={`https://esrapidev1.expertshare.me/uploads/${container}/newsfeed_media/${item.mediaFileNames[1]}`}
                     />
                 )}
@@ -227,8 +244,7 @@ export const AppFeedShower: FC<AppFeedShowerProps> = ({
                         enterToPost
                         handleUpdateMessage={(message) => {
                             setShowEditTextarea(false);
-                            // eslint-disable-next-line no-console
-                            console.log(message);
+                            updateNewsfeeMessage(message);
                         }}
                     />
                 )}
@@ -238,10 +254,12 @@ export const AppFeedShower: FC<AppFeedShowerProps> = ({
                     <AppQAThread
                         data={data}
                         deleteQuestion={(qId) => {
-                            // eslint-disable-next-line no-console
-                            console.log(qId);
+                            deleteNewsfeedCommentById(qId);
                         }}
-                        updateMessage={() => {}}
+                        updateMessage={(id, message) => {
+                            // eslint-disable-next-line no-console
+                            console.log(id, message);
+                        }}
                         sendAnswer={(message, aId) => {
                             sendAnswerMessage(message, aId);
                         }}

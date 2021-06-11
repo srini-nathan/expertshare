@@ -1,4 +1,4 @@
-import { AxiosError } from "axios";
+import { AxiosError, AxiosRequestConfig } from "axios";
 
 import { FinalResponse, ServerError, SimpleObject } from "../models";
 
@@ -47,9 +47,14 @@ export abstract class NewsfeedApi extends EntityAPI {
             );
     }
 
-    public static async getNewsfeed(container: number): Promise<any> {
+    public static async getNewsfeed(
+        container: number,
+        page: number
+    ): Promise<any> {
         return this.makeGet<any>(API_NEWSFEED_GET_COLLECTION, {
             "container.id": container,
+            page,
+            itemsPerPage: 3,
         })
 
             .then(({ data }) => {
@@ -61,6 +66,24 @@ export abstract class NewsfeedApi extends EntityAPI {
 
                 return Promise.resolve(new FinalResponse(null, message));
             });
+    }
+
+    public static async patchNewsfeed<R, P>(
+        id: number,
+        entity: P
+    ): Promise<FinalResponse<R | null>> {
+        const config: AxiosRequestConfig = this.getPatchRequestConfig<P>();
+
+        return this.makePatch<R, P>(
+            route(API_NEWSFEED_PATCH_ITEM, { id }),
+            entity,
+            {},
+            config
+        )
+            .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
+            .catch((error: AxiosError | ServerError) =>
+                this.handleErrorDuringCreatingOrUpdating(error)
+            );
     }
 
     public static async deleteNewsfeedById(id: number): Promise<any> {

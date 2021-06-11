@@ -2,6 +2,8 @@ import React, { FunctionComponent, useState, useEffect } from "react";
 import { Row, Col, Button } from "react-bootstrap";
 import { AuthState } from "../../../SecurityModule/models";
 import { AppСhoseMethodMessage } from "../AppСhoseMethodMessage";
+import { AppButton } from "../AppButton";
+import { AppIcon } from "../AppIcon";
 import DefaultAvatar from "./assets/images/default-avatar.png";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import GreateGroup from "./assets/images/greate-group.svg";
@@ -206,22 +208,32 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                                     className="btn-collapse col-auto p-0"
                                     id="btn-collapse-index"
                                 >
-                                    <Button
-                                        variant="link"
-                                        onClick={deleteQuestion}
-                                    >
-                                        <i className="far fa-trash-alt"></i>
-                                    </Button>
-                                    <Button
-                                        variant="link"
-                                        onClick={editQuestion}
-                                    >
-                                        <i
-                                            className={`fas fa-edit ${
+                                    <div className="btns-flex-questions">
+                                        <AppButton
+                                            variant="secondary"
+                                            onClick={editQuestion}
+                                            className={`edit-btn ${
                                                 openEditArea && "active"
                                             }`}
-                                        ></i>
-                                    </Button>
+                                        >
+                                            <AppIcon
+                                                className={`fas fa-edit ${
+                                                    openEditArea && "active"
+                                                }`}
+                                                name="edit"
+                                            />
+                                        </AppButton>
+                                        <AppButton
+                                            variant="secondary"
+                                            className="btn-delete"
+                                            onClick={deleteQuestion}
+                                        >
+                                            <AppIcon
+                                                className="mr-2 ml-2"
+                                                name="delete"
+                                            />
+                                        </AppButton>
+                                    </div>
                                     {/* <Button variant="link" onClick={handleLike}>
                                         <i className="far fa-heart"></i>
                                     </Button> */}

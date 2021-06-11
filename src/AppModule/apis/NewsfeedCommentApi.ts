@@ -2,19 +2,22 @@ import { AxiosError } from "axios";
 
 import { FinalResponse, ServerError, SimpleObject } from "../models";
 
-import { ROUTES } from "../../config";
+import { ROUTES, route } from "../../config";
 
 import { EntityAPI } from "./EntityAPI";
 
 const {
     api_newsfeed_comments_get_collection: API_NEWSFEED_GET_COMMENTS,
     api_newsfeed_comments_post_collection: API_NEWSFEED_POST_COLLECTION,
+    api_newsfeed_comments_delete_item: API_NEWSFEED_COMMENTS_DELETE_ITEM,
 } = ROUTES;
 
 export abstract class NewsfeedCommentApi extends EntityAPI {
     protected static GET_NEWSFEED_COMMENTS = API_NEWSFEED_GET_COMMENTS;
 
     protected static POST_NEWSFEED_COMMENTS = API_NEWSFEED_POST_COLLECTION;
+
+    protected static DELETE_NEWSFEED_COMMENT = API_NEWSFEED_COMMENTS_DELETE_ITEM;
 
     public static async postNewsfeedComments<R, P>(
         resource: P
@@ -55,6 +58,17 @@ export abstract class NewsfeedCommentApi extends EntityAPI {
             .catch((error: AxiosError | ServerError) => {
                 const { message } = error;
 
+                return Promise.resolve(new FinalResponse(null, message));
+            });
+    }
+
+    public static async deleteNewsfeedCommentById(id: number): Promise<any> {
+        return this.makeDelete(route(API_NEWSFEED_COMMENTS_DELETE_ITEM, { id }))
+            .then(({ data }) => {
+                return data;
+            })
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
                 return Promise.resolve(new FinalResponse(null, message));
             });
     }

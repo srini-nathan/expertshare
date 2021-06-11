@@ -85,11 +85,12 @@
 .action {
     display: flex;
     align-items: center;
+
     .btn-collapse {
         button {
             cursor: pointer;
-            padding: 0 !important;
             text-decoration: none;
+            padding: 0 !important;
             i {
                 display: flex;
                 align-items: center;
@@ -104,6 +105,17 @@
 
             .rotate {
                 transform: rotate(180deg);
+            }
+        }
+        .btns-flex-questions {
+            display: flex;
+            justify-content: space-between;
+            width: 80px;
+            .btn-delete {
+                padding: 0 3px !important;
+            }
+            .edit-btn {
+                padding: 0 9px !important;
             }
         }
     }
