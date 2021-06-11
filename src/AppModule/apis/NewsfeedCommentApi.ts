@@ -22,8 +22,6 @@ export abstract class NewsfeedCommentApi extends EntityAPI {
     public static async postNewsfeedComments<R, P>(
         resource: P
     ): Promise<FinalResponse<R | null>> {
-        // eslint-disable-next-line no-console
-        console.log(resource);
         return this.makePost<R, P>(
             API_NEWSFEED_POST_COLLECTION,
             resource,
@@ -46,9 +44,14 @@ export abstract class NewsfeedCommentApi extends EntityAPI {
             );
     }
 
-    public static async getNewsfeedComments(newsfeedId: number): Promise<any> {
+    public static async getNewsfeedComments(
+        newsfeedId: number,
+        page: number
+    ): Promise<any> {
         return this.makeGet<any>(API_NEWSFEED_GET_COMMENTS, {
             "newsfeed.id": newsfeedId,
+            page,
+            "order[id]": "desc",
         })
 
             .then(({ data }) => {

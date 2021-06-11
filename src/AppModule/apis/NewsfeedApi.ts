@@ -53,8 +53,8 @@ export abstract class NewsfeedApi extends EntityAPI {
     ): Promise<any> {
         return this.makeGet<any>(API_NEWSFEED_GET_COLLECTION, {
             "container.id": container,
+            "order[id]": "desc",
             page,
-            itemsPerPage: 3,
         })
 
             .then(({ data }) => {

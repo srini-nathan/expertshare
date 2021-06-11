@@ -29,6 +29,16 @@ export const NewsFeedPage: FC<RouteComponentProps> = (): JSX.Element => {
         });
     };
 
+    const updateFeed = () => {
+        NewsfeedApi.getNewsfeed(containerId, currentPage).then((response) => {
+            if (response) {
+                setNewsfeedData([...newsFeedData, ...response["hydra:member"]]);
+                setCurrentPage(currentPage + 1);
+                setIsFetching(false);
+            }
+        });
+    };
+
     const deleteNewsFeedById = (id: number) => {
         NewsfeedApi.deleteNewsfeedById(id).then(() => {
             const newNewsfeed = newsFeedData.filter(
@@ -66,27 +76,18 @@ export const NewsFeedPage: FC<RouteComponentProps> = (): JSX.Element => {
         );
     };
 
-    // eslint-disable-next-line no-console
-    console.log(newsFeedData);
-
     const isScrolling = () => {
-        // eslint-disable-next-line no-console
-        // console.log(
-        //     window.innerHeight + document.documentElement.scrollTop,
-        //     document.documentElement.offsetHeight - 1
-        // );
         if (
             window.innerHeight + document.documentElement.scrollTop >
             document.documentElement.offsetHeight - 1
         ) {
             setIsFetching(true);
         }
-        // eslint-disable-next-line no-console
     };
 
     useEffect(() => {
         if (isFetching) {
-            getFeed();
+            updateFeed();
         }
     }, [isFetching]);
 

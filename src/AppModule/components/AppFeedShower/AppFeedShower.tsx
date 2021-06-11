@@ -23,8 +23,10 @@ export const AppFeedShower: FC<AppFeedShowerProps> = ({
     handleNewsFeedId,
     handlePatchNewsfeedMessage,
 }): JSX.Element => {
-    const [data, setData] = useState<[]>([]);
-
+    const [data, setData] = useState<any>([]);
+    const [messagesPerPage, setMessagePerPage] = useState<number>(30);
+    const [showMoreButton, setShowMoreButton] = useState(false);
+    const [currentPage, setCurrentPage] = useState<number>(1);
     const [showCommentTextarea, setShowCommentTextarea] = useState<boolean>(
         false
     );
@@ -35,9 +37,43 @@ export const AppFeedShower: FC<AppFeedShowerProps> = ({
     const [showThread, setShowThread] = useState<boolean>(true);
 
     const getCurrentThread = () => {
-        NewsfeedCommentApi.getNewsfeedComments(newsfeedId).then((response) => {
-            if (response) {
-                setData(response["hydra:member"].reverse());
+        NewsfeedCommentApi.getNewsfeedComments(newsfeedId, 1).then(
+            (response) => {
+                if (response) {
+                    setData(response["hydra:member"]);
+                }
+            }
+        );
+    };
+
+    // eslint-disable-next-line no-console
+    console.log(messagesPerPage, currentPage);
+
+    const checkCurrentThread = () => {
+        NewsfeedCommentApi.getNewsfeedComments(
+            newsfeedId,
+            currentPage + 1
+        ).then((response) => {
+            // eslint-disable-next-line no-console
+            console.log(response["hydra:totalItems"]);
+            if (response["hydra:totalItems"] > messagesPerPage) {
+                setShowMoreButton(true);
+            } else if (response["hydra:totalItems"] <= messagesPerPage) {
+                setShowMoreButton(false);
+            }
+        });
+    };
+
+    const updateCurrentThread = () => {
+        NewsfeedCommentApi.getNewsfeedComments(
+            newsfeedId,
+            currentPage + 1
+        ).then((response) => {
+            if (response["hydra:totalItems"] > messagesPerPage) {
+                setMessagePerPage(messagesPerPage + 30);
+                setCurrentPage(currentPage + 1);
+                setShowMoreButton(false);
+                setData([...data, ...response["hydra:member"]]);
             }
         });
     };
@@ -100,7 +136,6 @@ export const AppFeedShower: FC<AppFeedShowerProps> = ({
     };
 
     const deleteNewsfeedCommentById = (id: number) => {
-        // eslint-disable-next-line no-console
         NewsfeedCommentApi.deleteNewsfeedCommentById(id).then(() => {
             getCurrentThread();
             successToast("Successfully deleted");
@@ -111,6 +146,10 @@ export const AppFeedShower: FC<AppFeedShowerProps> = ({
         setData([]);
         getCurrentThread();
     }, [item]);
+
+    useEffect(() => {
+        checkCurrentThread();
+    }, [data]);
 
     return (
         <div className="app-feed-shower-wrapper">
@@ -250,7 +289,7 @@ export const AppFeedShower: FC<AppFeedShowerProps> = ({
                 )}
             </div>
             {showThread && (
-                <div className="">
+                <div className="app-thread-shower">
                     <AppQAThread
                         data={data}
                         deleteQuestion={(qId) => {
@@ -264,6 +303,17 @@ export const AppFeedShower: FC<AppFeedShowerProps> = ({
                             sendAnswerMessage(message, aId);
                         }}
                     />
+                    {showMoreButton && (
+                        <div className="d-flex justify-content-center">
+                            <AppButton
+                                variant="light"
+                                onClick={updateCurrentThread}
+                                className="show-more-btn mt-2 mb-4"
+                            >
+                                <span>+ Show More</span>
+                            </AppButton>
+                        </div>
+                    )}
                 </div>
             )}
         </div>
