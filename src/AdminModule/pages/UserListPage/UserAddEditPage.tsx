@@ -200,12 +200,15 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         formData.userGroups = userGroupsSelectedItems;
         formData.image_name = "";
 
+        if (formData.relationManager === "") delete formData.relationManager;
+
         if (!isEditMode) {
             formData.source = SOURCE.SOURCE_CREATE;
             formData.status = STATUS.STATUS_ACTIVE;
         }
 
-        formData.userFieldValues = getDynamicFileds(formData.userField);
+        if (formData.userField)
+            formData.userFieldValues = getDynamicFileds(formData.userField);
         delete formData.userField;
 
         if (isEditMode)
