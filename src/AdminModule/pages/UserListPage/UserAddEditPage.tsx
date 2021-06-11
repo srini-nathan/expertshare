@@ -147,44 +147,46 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
     const getDynamicFileds = (userField: any[]) => {
         const userFieldValues: any[] = [];
 
-        Object.keys(userField).forEach((key: any) => {
-            let value: any = userField[key];
+        if (userField)
+            Object.keys(userField).forEach((key: any) => {
+                let value: any = userField[key];
 
-            if (value instanceof Date) value = value.toISOString().slice(0, 10);
-            else if (value instanceof Object)
-                value = JSON.stringify(
-                    Object.keys(value).filter((item) => value[item])
-                );
-            else if (value === undefined) value = "false";
+                if (value instanceof Date)
+                    value = value.toISOString().slice(0, 10);
+                else if (value instanceof Object)
+                    value = JSON.stringify(
+                        Object.keys(value).filter((item) => value[item])
+                    );
+                else if (value === undefined) value = "false";
 
-            if (
-                isEditMode &&
-                data.userFieldValues &&
-                data.userFieldValues?.length > 0
-            ) {
-                let found = false;
-                data.userFieldValues?.forEach((e: any) => {
-                    if (e.userField["@id"] === key) {
+                if (
+                    isEditMode &&
+                    data.userFieldValues &&
+                    data.userFieldValues?.length > 0
+                ) {
+                    let found = false;
+                    data.userFieldValues?.forEach((e: any) => {
+                        if (e.userField["@id"] === key) {
+                            userFieldValues.push({
+                                "@id": `/api/user_field_values/${e.id}`,
+                                value: `${value}`,
+                            });
+                            found = true;
+                        }
+                    });
+
+                    if (!found) {
                         userFieldValues.push({
-                            "@id": `/api/user_field_values/${e.id}`,
                             value: `${value}`,
+                            userField: key,
                         });
-                        found = true;
                     }
-                });
-
-                if (!found) {
+                } else
                     userFieldValues.push({
                         value: `${value}`,
                         userField: key,
                     });
-                }
-            } else
-                userFieldValues.push({
-                    value: `${value}`,
-                    userField: key,
-                });
-        });
+            });
         return userFieldValues;
     };
     const submitForm = async (formData: UpdateProfileForm<any>) => {
