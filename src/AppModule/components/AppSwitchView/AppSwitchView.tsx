@@ -16,8 +16,8 @@ export const AppSwitchView: FC<AppSwitchViewProps> = ({
     return (
         <Col className={"switch-view p-0 mx-2"}>
             <Link
-                className={activeLink === "grid" ? `active-view` : ""}
-                to={`${link}/grid`}
+                className={activeLink === "" ? `active-view` : ""}
+                to={`${link}`}
             >
                 <AppIcon name="Grid" />
             </Link>

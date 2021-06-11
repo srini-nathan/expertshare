@@ -38,9 +38,9 @@ export const LandingHelper: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (!isChosen()) {
-            nav("/containers/overview").then();
+            nav("/container").then();
         } else {
-            nav("/conferences/grid").then();
+            nav("/event").then();
         }
     });
     return <AppLoader />;

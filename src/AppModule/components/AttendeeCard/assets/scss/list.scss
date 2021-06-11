@@ -240,7 +240,7 @@
                                 display: none;
                                 width: 169px;
                                 padding: 10px;
-                                background-color: var(--widget-bg-clr);
+                                background-color: var(--light-clr);
                                 border-radius: var(--border-radius);
                                 box-shadow: 0 12px 38px var(--secondary-20);
 
@@ -282,7 +282,7 @@
                             }
 
                             &:hover {
-                                & > .popup {
+                                &>.popup {
                                     display: block;
                                 }
                             }

@@ -153,10 +153,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                         onQuickFilterChange={handleFilter}
                         cancelTokenSources={cancelTokenSourcesRef.current}
                     />
-                    <AppSwitchView
-                        link={"/attendees"}
-                        activeLink={view || "grid"}
-                    />
+                    <AppSwitchView link={"/attendee"} activeLink={view || ""} />
                 </div>
             </AppPageHeader>
             {renderView()}

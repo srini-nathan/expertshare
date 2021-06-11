@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
-import { RouteComponentProps } from "@reach/router";
+import { RouteComponentProps, useParams } from "@reach/router";
 import { Row, Col } from "react-bootstrap";
 import {
     AppLoader,
@@ -8,17 +8,18 @@ import {
     AppSessionDetails,
     AppSessionDescription,
     AppSessionUsers,
+    AppQuestionsAndAnswers,
 } from "../../components";
 import { Session, User } from "../../../AdminModule/models";
 import { SessionApi } from "../../../AdminModule/apis";
 import { errorToast } from "../../utils";
-import { useParamId, useAuthState } from "../../hooks";
+import { useAuthState } from "../../hooks";
 import "./assets/scss/style.scss";
 
 export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
-    const { id } = useParamId();
+    const { id, confereneceId } = useParams();
     const [loading, isLoading] = useState<boolean>(true);
-    const { containerResourceId } = useAuthState();
+    const { containerResourceId, containerId } = useAuthState();
     const [data, setData] = useState<Session>(new Session(containerResourceId));
     /* eslint-disable no-console */
     console.log(data.streamUrl);
@@ -44,47 +45,55 @@ export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <Fragment>
-            <Col md={12}>
-                <AppCard className="p-0 mt-2">
-                    <AppSessionHeader session={data} />
-                    <Row className="my-5 mx-0 px-4">
-                        <Col
-                            md={12}
-                            lg={8}
-                            className="create-session--speakers divider-right"
-                        >
-                            <AppSessionUsers
-                                xl={6}
-                                lg={6}
+            <Row className="m-0">
+                <Col className="pl-0" md={12} sm={12} lg={8}>
+                    <AppCard className="p-0">
+                        <AppSessionHeader session={data} />
+                        <Row className="my-5 mx-0 px-4">
+                            <Col
                                 md={12}
-                                sm={12}
-                                selectedUsers={data.speakers as User[]}
-                                title="Speakers"
-                                icon="speakers"
-                                role="ROLE_SPEAKER"
-                            />
-                        </Col>
-                        <Col
-                            md={12}
-                            lg={4}
-                            className="create-session--speakers"
-                        >
-                            <AppSessionUsers
-                                xl={12}
-                                lg={12}
+                                lg={8}
+                                className="create-session--speakers divider-right"
+                            >
+                                <AppSessionUsers
+                                    xl={6}
+                                    lg={6}
+                                    md={12}
+                                    sm={12}
+                                    selectedUsers={data.speakers as User[]}
+                                    title="Speakers"
+                                    icon="speakers"
+                                />
+                            </Col>
+                            <Col
                                 md={12}
-                                sm={12}
-                                selectedUsers={data.moderators as User[]}
-                                title="Moderators"
-                                icon="moderators"
-                                role="ROLE_MODERATOR"
-                            />
-                        </Col>
-                    </Row>
-                </AppCard>
-                <AppSessionDetails session={data} />
-                <AppSessionDescription session={data} />
-            </Col>
+                                lg={4}
+                                className="create-session--speakers"
+                            >
+                                <AppSessionUsers
+                                    xl={12}
+                                    lg={12}
+                                    md={12}
+                                    sm={12}
+                                    selectedUsers={data.moderators as User[]}
+                                    title="Moderators"
+                                    icon="moderators"
+                                />
+                            </Col>
+                        </Row>
+                    </AppCard>
+                    <AppSessionDetails session={data} />
+                    <AppSessionDescription session={data} />
+                </Col>
+                <Col md={12} sm={12} lg={4} className="pr-0">
+                    <AppQuestionsAndAnswers
+                        name="Questions & Answers"
+                        conferenceNumber={confereneceId}
+                        session={id}
+                        container={containerId}
+                    />
+                </Col>
+            </Row>
         </Fragment>
     );
 };

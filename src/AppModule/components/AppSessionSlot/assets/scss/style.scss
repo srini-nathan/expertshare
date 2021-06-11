@@ -203,54 +203,9 @@
                                         align-items: center;
                                     }
 
-                                    &--profile {
-                                        i {
-                                            display: block;
-                                            width: 36px;
-                                            height: 36px;
-                                            margin-bottom: 5px;
-                                            background-repeat: no-repeat;
-                                            background-size: cover;
-                                            border-radius: 50%;
+                                    &--profile {}
 
-                                            &::after {
-                                                position: relative;
-                                                top: 0;
-                                                left: 24px;
-                                                display: block;
-                                                width: 10px;
-                                                height: 10px;
-                                                content: "";
-                                                background-color: var(--primary);
-                                                border: 1px solid var(--border-border-radius-clr);
-                                                border-radius: 50%;
-                                            }
-                                        }
-                                    }
-
-                                    &--det {
-                                        display: grid;
-
-                                        h4 {
-                                            display: -webkit-box;
-                                            -webkit-box-orient: vertical;
-                                            -webkit-line-clamp: 1;
-                                            overflow: hidden;
-                                            font-size: 16px;
-                                            font-weight: 500;
-                                            color: var(--secondary);
-                                        }
-
-                                        span {
-                                            display: -webkit-box;
-                                            -webkit-box-orient: vertical;
-                                            -webkit-line-clamp: 1;
-                                            overflow: hidden;
-                                            font-size: 12px;
-                                            font-weight: 500;
-                                            color: var(--secondary-70);
-                                        }
-                                    }
+                                    &--det {}
 
                                     &.user-1 {
                                         i {

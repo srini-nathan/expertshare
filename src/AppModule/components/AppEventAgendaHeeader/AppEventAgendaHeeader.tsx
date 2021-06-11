@@ -57,7 +57,7 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                                         Manage Categories
                                     </Link>
                                     <Link
-                                        to={`/sessions/${conference.id}/new`}
+                                        to={`/event/${conference.id}/session/create`}
                                         className="manage-cat ml-2 btn btn-secondary"
                                     >
                                         + Create Session
@@ -74,7 +74,7 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                                         <i className="fak fa-clone-light"></i>
                                     </AppButton>
                                     <Link
-                                        to={`/conference/${conference.id}`}
+                                        to={`/event/${conference.id}/update`}
                                         className="mx-2"
                                     >
                                         <AppButton variant="secondary">

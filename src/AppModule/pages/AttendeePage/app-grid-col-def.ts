@@ -30,7 +30,7 @@ export const appGridColDef = ({
     },
     {
         headerName: "Category",
-        field: "category",
+        field: "role",
         cellRenderer: "appCategoryTemplateRenderer",
         minWidth: 30,
         flex: 0.3,

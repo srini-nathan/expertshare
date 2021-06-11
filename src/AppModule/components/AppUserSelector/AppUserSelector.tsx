@@ -3,6 +3,7 @@ import { Form, Row, Col } from "react-bootstrap";
 import { AppButton } from "../AppButton";
 import "./assets/scss/style.scss";
 import { User } from "../../../AdminModule/models";
+import { AppUserListItem } from "../AppUserListItem";
 
 export interface AppUserSelectorProps {
     show: boolean;
@@ -10,7 +11,6 @@ export interface AppUserSelectorProps {
     handleSelectedUsers: (users: User[]) => void;
     users: User[];
     selectedUsers: User[];
-    role: string;
 }
 
 interface UserBangeProps {
@@ -23,7 +23,6 @@ export const AppUserSelector: FC<AppUserSelectorProps> = ({
     show,
     handleClose,
     users,
-    role,
     handleSelectedUsers,
     selectedUsers = [],
 }): JSX.Element => {
@@ -31,17 +30,13 @@ export const AppUserSelector: FC<AppUserSelectorProps> = ({
 
     const addActiveId = (id: number) => {
         const item = users.find((user: User) => user.id === id);
-        /* eslint-disable no-console */
-        console.log(item, id);
-        /* eslint-enable no-console */
+
         handleSelectedUsers([...(selectedUsers as User[]), item as User]);
     };
 
     const getActive = (id: number): boolean => {
         const item = selectedUsers.find((user: User) => user.id === Number(id));
-        /* eslint-disable no-console */
-        console.log(item, id);
-        /* eslint-enable no-console */
+
         if (item) return true;
         return false;
     };
@@ -136,58 +131,37 @@ export const AppUserSelector: FC<AppUserSelectorProps> = ({
                                             e.lastName.includes(sreach)
                                     )
                                     .map((user: User) => {
-                                        if (user.roles[0] === role)
-                                            return (
-                                                <div className="content--inner--item">
-                                                    <Row className="m-0">
-                                                        <div className="detail  col-auto">
-                                                            <div className="detail--avatar ">
-                                                                <i
-                                                                    style={{
-                                                                        backgroundImage: `url(${user.imageName})`,
-                                                                    }}
-                                                                ></i>
-                                                            </div>
-                                                            <div className="detail--info pl-2">
-                                                                <h3>
-                                                                    {
-                                                                        user.firstName
-                                                                    }{" "}
-                                                                    {
-                                                                        user.lastName
-                                                                    }
-                                                                </h3>
-                                                                <span>
-                                                                    {
-                                                                        user.jobTitle
-                                                                    }
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="add col-auto mr-0 ml-auto">
-                                                            <AppButton
-                                                                disabled={getActive(
+                                        return (
+                                            <div className="content--inner--item">
+                                                <Row className="m-0">
+                                                    <div className="detail  col-auto">
+                                                        <AppUserListItem
+                                                            user={user}
+                                                        />
+                                                    </div>
+                                                    <div className="add col-auto mr-0 ml-auto">
+                                                        <AppButton
+                                                            disabled={getActive(
+                                                                user.id
+                                                            )}
+                                                            onClick={() =>
+                                                                addActiveId(
                                                                     user.id
-                                                                )}
-                                                                onClick={() =>
-                                                                    addActiveId(
-                                                                        user.id
-                                                                    )
-                                                                }
-                                                                className={`more ${
-                                                                    getActive(
-                                                                        user.id
-                                                                    ) &&
-                                                                    "green-btn"
-                                                                }`}
-                                                                variant="light"
-                                                            >
-                                                                <i className="fal fa-plus-circle btn-icon"></i>
-                                                            </AppButton>
-                                                        </div>
-                                                    </Row>
-                                                </div>
-                                            );
+                                                                )
+                                                            }
+                                                            className={`more ${
+                                                                getActive(
+                                                                    user.id
+                                                                ) && "green-btn"
+                                                            }`}
+                                                            variant="light"
+                                                        >
+                                                            <i className="fal fa-plus-circle btn-icon"></i>
+                                                        </AppButton>
+                                                    </div>
+                                                </Row>
+                                            </div>
+                                        );
                                         return <></>;
                                     })}
                             </Row>
@@ -197,7 +171,7 @@ export const AppUserSelector: FC<AppUserSelectorProps> = ({
                         <div className="select-box--header">
                             <div className="row m-0 p-0">
                                 <div className="title col-6">
-                                    <h4 className="mb-0">Attendees</h4>
+                                    <h4 className="mb-0">Users</h4>
                                 </div>
                                 {/* <span className="count">0/99</span> */}
                             </div>

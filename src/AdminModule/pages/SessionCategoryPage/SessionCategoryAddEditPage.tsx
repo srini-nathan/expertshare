@@ -73,6 +73,19 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
                                 );
                         }
 
+                        if (key === "textColor") {
+                            return yup
+                                .string()
+                                .required()
+                                .matches(
+                                    /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8}|[A-Fa-f0-9]{3,4})$/,
+                                    {
+                                        message:
+                                            "Only support valid HEX color code",
+                                    }
+                                );
+                        }
+
                         if (key.includes("name")) {
                             return yup
                                 .string()
@@ -259,6 +272,16 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
                                         lg={12}
                                         errorMessage={errors.color?.message}
                                         defaultValue={data.color}
+                                        control={control}
+                                        setValue={setValue}
+                                    />
+                                    <AppFormInputColorPicker
+                                        label={"Text Color"}
+                                        {...register("textColor")}
+                                        xl={12}
+                                        lg={12}
+                                        errorMessage={errors.textColor?.message}
+                                        defaultValue={data.textColor}
                                         control={control}
                                         setValue={setValue}
                                     />

@@ -4,7 +4,7 @@ import { Col, Row } from "react-bootstrap";
 import { PConference } from "../../../AdminModule/models";
 import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath } from "../../hooks";
-import { getDate, getTime } from "../../utils";
+import { getDateFormat, getTime } from "../../utils";
 import "./assets/scss/style.scss";
 import placeholder from "./assets/images/imgthumb.svg";
 
@@ -31,7 +31,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
     const {
         id,
         title,
-        startedAt,
+        startAt,
         imageName = "",
         conferenceTags = [],
         description,
@@ -50,7 +50,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
     return (
         <Col md={12} lg={4} xl={4} className="events-grid--container--item">
             <Col className="inner-container p-0">
-                <Col className="inner-container--banner p-0" style={style}>
+                <div className="inner-container--banner p-0" style={style}>
                     {/* <div className="inner-container--banner--button">
                         <a href="#" className="live-now-btn mr-3">
                             <i className="fak fa-live"></i>
@@ -63,7 +63,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                                 <span onClick={() => handleClone(id as number)}>
                                     <i className="far fa-clone"></i>
                                 </span>
-                                <Link to={`/conference/${id}`}>
+                                <Link to={`/event/${id}/update`}>
                                     <i className="fak fa-pen-regular"></i>
                                 </Link>
                                 <span
@@ -74,47 +74,61 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                             </>
                         )}
                     </div>
-                </Col>
+                </div>
 
-                <Col className="inner-container--det p-3 mx-2">
+                <div className="inner-container--det p-3 mx-2">
                     <Col className="inner-container--det--title p-0">
-                        <Link to={`/conferences/${id}/agenda`}>
+                        <Link to={`/event/${id}/agenda`}>
                             <h2>{title}</h2>
                         </Link>
                     </Col>
-                    <Col className="description p-0">{description}</Col>
-                    <Row
-                        className={
-                            "m-0 mt-3 p-0 justify-content-center conference-tags-container"
-                        }
-                    >
-                        {conferenceTags.map((e) => {
-                            return (
-                                <div className={"conference-tags"} key={e.id}>
-                                    {e.name}
-                                </div>
-                            );
-                        })}
-                    </Row>
                     <Col className="inner-container--det--time p-0 my-3">
                         <div className="inner-container--det--time--icon mr-2">
-                            {startedAt && <i className="fak fa-right"></i>}
+                            {startAt && <i className="fak fa-right"></i>}
                         </div>
                         <div className="inner-container--det--time--spec">
-                            {startedAt && (
+                            {startAt && (
                                 <>
                                     <div className="inner-container--det--time--spec--date">
                                         <h3 className="mb-0">
-                                            {getDate(startedAt).toString()}
+                                            {getDateFormat(startAt)}
                                         </h3>
                                     </div>
                                     <div className="inner-container--det--time--spec--period">
-                                        <span>{getTime(startedAt)}</span>
+                                        <span>{getTime(startAt)}</span>
                                     </div>
                                 </>
                             )}
                         </div>
                     </Col>
+                    <Col className="conference-tags-container p-0 my-3">
+                        <div className="conference-tags-container--title ">
+                            {conferenceTags.length > 0 && (
+                                <>
+                                    <i className="fak fa-tags mr-2"></i>
+                                    <span>Tags</span>
+                                </>
+                            )}
+                        </div>
+                        <Row
+                            className={
+                                "m-0 mt-3 p-0 conference-tags-container--tags"
+                            }
+                        >
+                            {conferenceTags.map((e) => {
+                                return (
+                                    <div
+                                        className={"conference-tags"}
+                                        key={e.id}
+                                    >
+                                        {e.name}
+                                    </div>
+                                );
+                            })}
+                        </Row>
+                    </Col>
+                    <Col className="description mb-2 p-0">{description}</Col>
+
                     {/* <div className="inner-container--det--participants">
                         <div className="inner-container--det--participants--icon mr-2">
                             <i className="fak fa-speakers"></i>
@@ -180,7 +194,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                         </div>
                     </div>
                 */}
-                </Col>
+                </div>
                 {/* <div className="inner-container--sponsors px-3 pt-3 pb-3">
                     <h3 className="mb-0 pl-2 pt-1">
                         <i className="fak fa-handshake-alt-light mr-2"></i>

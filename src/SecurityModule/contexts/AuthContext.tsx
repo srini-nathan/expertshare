@@ -148,7 +148,7 @@ export const socialLogin = async (
                     containerId: cntid,
                 },
             });
-            await navigate("/conferences/grid");
+            await navigate("/event");
         }
     } catch (err) {
         if (localStorage.getItem(AUTH_TOKEN_KEY)) {
@@ -214,7 +214,7 @@ export const loginAction = async (
                     containerId: cntid,
                 },
             });
-            await navigate("/conferences/grid");
+            await navigate("/event");
         }
     } catch (err) {
         if (localStorage.getItem(AUTH_TOKEN_KEY)) {

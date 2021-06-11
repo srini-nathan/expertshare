@@ -20,13 +20,27 @@ const validations = {
 
 const schema = (isEditMode: boolean) => {
     let validationShape = {
-        firstName: yup.string().min(validations.firstName.min).required(),
-        lastName: yup.string().min(validations.lastName.min).required(),
-        company: yup.string().min(validations.company.min).required(),
-        jobTitle: yup.string().min(validations.jobTitle.min).required(),
+        firstName: yup
+            .string()
+            .min(validations.firstName.min)
+            .required("First Name is Reqired"),
+        lastName: yup
+            .string()
+            .min(validations.lastName.min)
+            .required("Last Name is Reqired"),
+        company: yup
+            .string()
+            .min(validations.company.min)
+            .required("Company is Reqired"),
+        jobTitle: yup
+            .string()
+            .min(validations.jobTitle.min)
+            .required("Job Titile is Reqired"),
         email: yup.string().email().required(),
-        locale: yup.string().required(),
-        timezone: yup.string().required(),
+        locale: yup.string().required("Locale is Reqired"),
+        role: yup.string().required("Role is Reqired"),
+        relationManager: yup.string(),
+        timezone: yup.string().required("Timezone is Reqired"),
         isBlocked: yup.boolean(),
     };
     const authValidationShape = {

@@ -259,6 +259,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                     errorMessage={errors.content?.message}
                                     defaultValue={data.content}
                                     control={control}
+                                    minHeight={450}
                                 />
                             </Form.Row>
                             <AppFormActions

@@ -7,6 +7,7 @@ const schema = yup.object().shape({
     sessionCategory: yup.string().required(),
     cardSize: yup.string().required(),
     cardType: yup.string().required(),
+    ord: yup.number().nullable(),
     streamUrlYoutube: yup.string().when("streamType", {
         is: "YOUTUBE",
         then: yup.string().required(),

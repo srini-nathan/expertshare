@@ -1,20 +1,20 @@
 import React, { FC, useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import { Link } from "@reach/router";
-import { Session, SessionCategory } from "../../../AdminModule/models";
+import { Session, SessionCategory, User } from "../../../AdminModule/models";
 import "./assets/scss/style.scss";
 import { getTime } from "../../utils";
 import { useBuildAssetPath } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 import { AppButton } from "../AppButton";
 import { AppCard } from "../AppCard";
+import { AppUserListItem } from "../AppUserListItem";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
-    FILETYPEINFO: { FILETYPEINFO_SESSION_POSTER, FILETYPEINFO_USER_PROFILE },
+    FILETYPEINFO: { FILETYPEINFO_SESSION_POSTER },
 } = UPLOAD;
 const { path } = FILETYPEINFO_SESSION_POSTER;
-const { path: USERPATH } = FILETYPEINFO_USER_PROFILE;
 
 export interface AppSessionItemProps {
     session: Session;
@@ -30,7 +30,6 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
     isGrantedControl,
 }): JSX.Element => {
     const conferencePosterPath = useBuildAssetPath(path);
-    const userProfilePath = useBuildAssetPath(USERPATH);
 
     const [showMore, isShowMore] = useState<boolean>(false);
 
@@ -71,7 +70,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
 
         if (hours > 0)
             return ` ${hours}:${minutes} ${hours > 1 ? "hours" : "hour"}`;
-        return `${Math.floor(minutes)} mins`;
+        return ` ${Math.floor(minutes)} mins`;
     };
 
     return (
@@ -92,7 +91,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                         >
                             <Row className="m-0 p-0">
                                 <Col
-                                    sm={6}
+                                    sm={8}
                                     className="inner-container--header--time px-0"
                                 >
                                     <i className="fak fa-clock-light"></i>
@@ -109,13 +108,13 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                     </Col>
                                 </Col>
                                 <Col
-                                    sm={6}
+                                    sm={4}
                                     className="inner-container--header--seats col-6 px-0"
                                 >
-                                    <i className="fak fa-seat"></i>
+                                    {/* <i className="fak fa-seat"></i> */}
                                     <div className="inner-container--header--seats--content pl-3">
-                                        <h2 className="mb-0">1150</h2>
-                                        <span>Seats</span>
+                                        {/* <h2 className="mb-0">1150</h2> */}
+                                        {/* <span>Seats</span> */}
                                     </div>
                                 </Col>
                             </Row>
@@ -125,22 +124,26 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                 getSize()[2]
                             } px-0`}
                         >
-                            <div
-                                style={{
-                                    backgroundImage: `url(${conferencePosterPath}/${session.imageName})`,
-                                }}
-                                className="inner-container--banner--content"
+                            <Link
+                                to={`/event/${conference}/session/${session.id}`}
                             >
-                                <div className="inner-container--banner--content--button">
-                                    {/* <a href="#" className="live-now-btn mr-3">
+                                <div
+                                    style={{
+                                        backgroundImage: `url(${conferencePosterPath}/${session.imageName})`,
+                                    }}
+                                    className="inner-container--banner--content"
+                                >
+                                    <div className="inner-container--banner--content--button">
+                                        {/* <a href="#" className="live-now-btn mr-3">
                                     <i
                                         className="fak fa-live"
                                         aria-hidden="true"
                                     ></i>
                                     Live Now
                                 </a> */}
+                                    </div>
                                 </div>
-                            </div>
+                            </Link>
                         </div>
                         <div
                             className={`inner-container--det ${
@@ -148,81 +151,68 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                             } p-3 mx-2`}
                         >
                             <div className="inner-container--det--title">
-                                <Link to={`/sessions/${session.id}`}>
+                                <Link
+                                    to={`/event/${conference}/session/${session.id}`}
+                                >
                                     <h2 className="mb-0">{session.title}</h2>
                                 </Link>
                             </div>
                             <div className="inner-container--det--content mt-3">
-                                <div className="inner-container--det--content--title">
-                                    <i className="fak fa-speakers"></i>
-                                    <h3 className="mb-0 pl-2">
-                                        Speakers & Moderators
-                                    </h3>
-                                </div>
-                                <div
-                                    style={{
-                                        overflow: showMore ? "auto" : "hidden",
-                                    }}
-                                    className="inner-container--det--content--speakers mt-3"
-                                >
-                                    {session.speakers.map((e: any) => {
-                                        return (
-                                            <div className="inner-container--det--content--speakers--item user-1 mt-2">
-                                                <a href="#">
-                                                    <div className="inner-container--det--content--speakers--item--profile pr-2">
-                                                        <i
-                                                            style={{
-                                                                backgroundImage: `url(${userProfilePath}/${e.imageName})`,
-                                                            }}
-                                                        ></i>
-                                                    </div>
-                                                    <div className="inner-container--det--content--speakers--item--det">
-                                                        <h4 className="name mb-0">
-                                                            {e.firstName}{" "}
-                                                            {e.lastName}
-                                                        </h4>
-                                                        <span className="major">
-                                                            {e.jobTitle}
-                                                        </span>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        );
-                                    })}
-                                    {session.moderators.map((e: any) => {
-                                        return (
-                                            <div className="inner-container--det--content--speakers--item user-1 mt-2">
-                                                <a href="#">
-                                                    <div className="inner-container--det--content--speakers--item--profile pr-2">
-                                                        <i
-                                                            style={{
-                                                                backgroundImage: `url(${userProfilePath}/${e.imageName})`,
-                                                            }}
-                                                        ></i>
-                                                    </div>
-                                                    <div className="inner-container--det--content--speakers--item--det">
-                                                        <h4 className="name mb-0">
-                                                            {e.firstName}{" "}
-                                                            {e.lastName}
-                                                        </h4>
-                                                        <span className="major">
-                                                            {e.jobTitle}
-                                                        </span>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                                <div className="inner-container--det--content--more">
-                                    <span
-                                        onClick={() => {
-                                            isShowMore(!showMore);
-                                        }}
-                                    >
-                                        {showMore ? " Show Less" : " Show More"}
-                                    </span>
-                                </div>
+                                {(session.moderators.length > 0 ||
+                                    session.speakers.length > 0) && (
+                                    <>
+                                        <div className="inner-container--det--content--title">
+                                            <i className="fak fa-speakers"></i>
+                                            <h3 className="mb-0 pl-2">
+                                                Speakers & Moderators
+                                            </h3>
+                                        </div>
+                                        <div
+                                            style={{
+                                                overflow: showMore
+                                                    ? "auto"
+                                                    : "hidden",
+                                            }}
+                                            className="inner-container--det--content--speakers mt-3"
+                                        >
+                                            {session.speakers.map(
+                                                (e: any, i: number) => {
+                                                    return (
+                                                        <AppUserListItem
+                                                            key={i}
+                                                            user={e as User}
+                                                        />
+                                                    );
+                                                }
+                                            )}
+                                            {session.moderators.map(
+                                                (e: any, i: number) => {
+                                                    return (
+                                                        <AppUserListItem
+                                                            key={i}
+                                                            user={e as User}
+                                                        />
+                                                    );
+                                                }
+                                            )}
+                                        </div>
+                                        <div className="inner-container--det--content--more">
+                                            {session.moderators.length +
+                                                session.speakers.length >
+                                                3 && (
+                                                <span
+                                                    onClick={() => {
+                                                        isShowMore(!showMore);
+                                                    }}
+                                                >
+                                                    {showMore
+                                                        ? "- Show Less"
+                                                        : "+ Show More"}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </>
+                                )}
                             </div>
                             <div className="inner-container--det--action col-12 mt-3 px-0">
                                 <div className="row">
@@ -241,7 +231,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                         <div className={`${getSize()[3]}`}>
                                             <div className="inner-container--det--action--other">
                                                 <div className="row">
-                                                    <div className="inner-container--det--action--other--item col-3">
+                                                    {/* <div className="inner-container--det--action--other--item col-3">
                                                         <AppButton
                                                             variant={
                                                                 "secondary"
@@ -250,8 +240,8 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                                         >
                                                             <i className="fak fa-arrows-light"></i>
                                                         </AppButton>
-                                                    </div>
-                                                    <div className="inner-container--det--action--other--item col-3">
+                                                    </div> */}
+                                                    <div className="inner-container--det--action--other--item col-6">
                                                         <AppButton
                                                             onClick={() =>
                                                                 handleDelete(
@@ -266,15 +256,15 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                                             <i className="fak fa-trash-light"></i>
                                                         </AppButton>
                                                     </div>
-                                                    <div className="inner-container--det--action--other--item col-3">
+                                                    <div className="inner-container--det--action--other--item col-6">
                                                         <Link
-                                                            to={`/sessions/${conference}/${session.id}`}
+                                                            to={`/event/${conference}/session/${session.id}/update`}
                                                             className="btn-edit btn btn-secondary mr-0 ml-auto"
                                                         >
                                                             <i className="fak fa-pen-regular"></i>
                                                         </Link>
                                                     </div>
-                                                    <div className="inner-container--det--action--other--item col-3">
+                                                    {/* <div className="inner-container--det--action--other--item col-3">
                                                         <AppButton
                                                             variant={
                                                                 "secondary"
@@ -283,7 +273,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                                         >
                                                             <i className="fak fa-clone-light"></i>
                                                         </AppButton>
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                             </div>
                                         </div>

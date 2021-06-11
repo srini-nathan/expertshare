@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState, useRef } from "react";
+import { isString as _isString } from "lodash";
 import {
     ListGroup,
     ListGroupItem,
@@ -30,7 +31,9 @@ import {
 } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
-import { isGranted } from "../../utils";
+import { errorToast, isGranted } from "../../utils";
+import { LanguageApi } from "../../../AdminModule/apis";
+import { Language } from "../../../AdminModule/models";
 
 const { Upload: UPLOAD, Role } = CONSTANTS;
 const {
@@ -47,7 +50,7 @@ interface AppNavigationProps {
 
 const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const { dispatch, state } = React.useContext(AuthContext);
-    const { role } = useAuthState();
+    const { role, containerId } = useAuthState();
     const { user } = state;
     const [overflowItems, setOverflowItems] = useState<
         AppNavigationItemProps[] | AppSubNavigationItemProps[]
@@ -159,9 +162,12 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
+            isVisible: isGranted(role, ROLE_OPERATOR),
         },
     ]);
     const [showSubMenuItems, isSubMenuItems] = useState<boolean>(false);
+    const [languages, setLanguages] = useState<Language[]>([]);
+    const [userLocale, setUserLocale] = useState<Language>();
 
     const [showMore, isShowMore] = useState<boolean>(false);
     const { width, height } = useWindowSize();
@@ -229,7 +235,23 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             isShowMore(true);
         }
     }, [overflowItems]);
-
+    useEffect(() => {
+        LanguageApi.find<Language>(1, { "container.id": containerId }).then(
+            ({ error, response }) => {
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    }
+                } else if (response !== null) {
+                    setLanguages(response.items);
+                    const ul = response.items.find(
+                        (e) => e.locale === user.locale
+                    );
+                    setUserLocale(ul);
+                }
+            }
+        );
+    }, []);
     const renderMoreMenu = () => {
         return (
             overflowItems.length > 0 && (
@@ -416,15 +438,21 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                 }, 300);
                                             }}
                                             className="language"
-                                            label="English"
-                                            iconClassName="languages en"
-                                            subDropDownItems={[
-                                                {
-                                                    label: "German",
-                                                    iconClassName:
-                                                        "languages de",
-                                                },
-                                            ]}
+                                            label={
+                                                userLocale
+                                                    ? userLocale?.name
+                                                    : ""
+                                            }
+                                            iconClassName={`languages ${userLocale?.locale}`}
+                                            subDropDownItems={languages
+                                                .filter((e) => e.isActive)
+                                                .filter((e) => e !== userLocale)
+                                                .map((e) => {
+                                                    return {
+                                                        label: e.name,
+                                                        iconClassName: `languages ${e.locale}`,
+                                                    };
+                                                })}
                                         />
                                     </ListGroupItem>
                                     <ListGroupItem
@@ -440,8 +468,9 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                 }, 300);
                                             }}
                                             label={
-                                                user.firstName && user.lastName
-                                                    ? `${user.firstName} ${user.lastName}`
+                                                user?.firstName &&
+                                                user?.lastName
+                                                    ? `${user?.firstName} ${user?.lastName}`
                                                     : "Account"
                                             }
                                             style={style}

@@ -25,21 +25,24 @@ export const routers: ModuleRouter[] = [
                 <Router>
                     <KitchenSink path={"kitchen-sink"} />
                     <MyProfilePage path={"my-profile"} />
-                    <UserProfilePage path={"user-profile/:id"} />
-                    <SessionDetailsPage
-                        path={"conference/:id/session/:number"}
+                    <ContainerOverview path={"container"} />
+                    <ConferenceGrid path={"event"} />
+                    <ConferenceGrid path={"event/:view"} />
+                    <ConferenceAddEdit path={"event/create"} />
+                    <ConferenceAddEdit path={"event/:id/update"} />
+                    <SessionAddEdit
+                        path={"event/:conferenceId/session/create"}
                     />
-                    <ContainerOverview path={"containers/overview"} />
-                    <ConferenceGrid path={"conferences"} />
-                    <ConferenceGrid path={"conferences/:view"} />
-                    <ConferenceAddEdit path={"conference/new"} />
-                    <ConferenceAddEdit path={"conference/:id"} />
-                    <SessionAddEdit path={"sessions/:conferenceId/new"} />
-                    <SessionAddEdit path={"sessions/:conferenceId/:id"} />
-                    <EventAgenda path={"conferences/:id/agenda"} />
-                    <SessionDetailsPage path={"sessions/:id"} />
-                    <AttendeeOverview path={"attendees"} />
-                    <AttendeeOverview path={"attendees/:view"} />
+                    <SessionAddEdit
+                        path={"event/:conferenceId/session/:id/update"}
+                    />
+                    <EventAgenda path={"event/:id/agenda"} />
+                    <SessionDetailsPage
+                        path={"event/:conferenceId/session/:id"}
+                    />
+                    <AttendeeOverview path={"attendee"} />
+                    <AttendeeOverview path={"attendee/:view"} />
+                    <UserProfilePage path={"attendee/:id/show"} />
                 </Router>
             );
         },

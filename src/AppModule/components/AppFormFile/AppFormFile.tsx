@@ -1,16 +1,19 @@
-import React, { FC, useState } from "react";
-import { Form, Col } from "react-bootstrap";
+import React, { FC } from "react";
+import { Form, Col, Row } from "react-bootstrap";
 import { Control, Controller } from "react-hook-form";
 import { isString as _isString, startCase as _startCase } from "lodash";
-import FroalaEditorComponent from "react-froala-wysiwyg";
-
-import "froala-editor/css/froala_style.min.css";
-import "froala-editor/css/froala_editor.pkgd.min.css";
-import "froala-editor/js/plugins.pkgd.min";
-
+import { CONSTANTS } from "../../../config";
+import { useBuildAssetPath } from "../../hooks";
 import "./assets/scss/style.scss";
+import { AppIcon } from "../AppIcon";
 
-export interface AppFormRichTextAreaProps {
+const { Upload: UPLOAD } = CONSTANTS;
+const {
+    FILETYPEINFO: { FILETYPEINFO_CONFIGURATION },
+} = UPLOAD;
+const { path } = FILETYPEINFO_CONFIGURATION;
+
+export interface AppFormFileProps {
     id?: string;
     name: string;
     sm?: string | number;
@@ -18,24 +21,21 @@ export interface AppFormRichTextAreaProps {
     lg?: string | number;
     xl?: string | number;
     defaultValue?: string;
-    value?: string;
     placeholder?: string | boolean;
     required?: boolean;
-    onChange?: (value: string) => void;
     label?: string;
     description?: string;
     errorMessage?: string;
+    value?: string;
     withCounter?: boolean;
     maxCount?: number;
-    minHeight?: number;
+    onFileSelect?: (files: File[]) => void;
     control?: Control<any>;
 }
 
-export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
+export const AppFormFile: FC<AppFormFileProps> = ({
     id,
     name,
-    defaultValue = "",
-    minHeight = 250,
     value = "",
     placeholder,
     errorMessage,
@@ -46,17 +46,12 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
     lg = 4,
     xl = 4,
     required = false,
-    withCounter = false,
-    maxCount = 25,
     control,
-    onChange,
+    onFileSelect = () => {},
 }): JSX.Element => {
-    let val = defaultValue;
-    if (value) val = value;
-    const [model, setModel] = useState<string>(val);
-
     const controlId = id || name;
     let placeholderText = "";
+    const settingFilePath = useBuildAssetPath(path, value);
 
     if (placeholder !== false) {
         placeholderText = _isString(placeholder)
@@ -87,35 +82,41 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
                     )}
                 </Form.Label>
             ) : null}
-            <Controller
-                name={name}
-                defaultValue={val}
-                control={control}
-                render={({ field }) => (
-                    <FroalaEditorComponent
-                        model={value && onChange ? value : model}
-                        onModelChange={(e: string) => {
-                            if (onChange) {
-                                onChange(e);
-                            } else {
-                                field.onChange(e);
-                                setModel(e);
-                            }
-                        }}
-                        tag="textarea"
-                        config={{
-                            placeholderText,
-                            value: val,
-                            charCounterCount: withCounter,
-                            charCounterMax: maxCount,
-                            heightMin: minHeight,
-                        }}
-                    />
-                )}
-            />
+            <Row className="m-0 w-100 custom-file--container">
+                <Controller
+                    name={name}
+                    control={control}
+                    render={({ field }) => (
+                        <Form.File
+                            label={label}
+                            id={controlId}
+                            placeholder={placeholderText}
+                            {...field}
+                            custom
+                            onChange={(e: any) => {
+                                onFileSelect(e.target.files);
+                            }}
+                        />
+                    )}
+                />
+
+                <a
+                    target="_blank"
+                    href={settingFilePath}
+                    onClick={(e) => {
+                        if (!value) {
+                            e.preventDefault();
+                        }
+                    }}
+                    className={`btn btn-secondary ${!value && "disabled"}`}
+                >
+                    <AppIcon name="Download" />
+                </a>
+            </Row>
+
             <Form.Control.Feedback
                 type="invalid"
-                className={required && !model ? "d-inline" : ""}
+                className={required ? "d-block" : ""}
             >
                 {errorMessage}
             </Form.Control.Feedback>
