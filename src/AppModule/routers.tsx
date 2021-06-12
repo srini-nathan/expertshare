@@ -12,6 +12,8 @@ import {
     EventAgenda,
     SessionDetailsPage,
     AttendeeOverview,
+    AFrameRoomGrid,
+    AFrameRoomAddEdit,
 } from "./pages";
 import { ModuleRouter } from "./models";
 
@@ -40,6 +42,10 @@ export const routers: ModuleRouter[] = [
                     <SessionDetailsPage path={"sessions/:id"} />
                     <AttendeeOverview path={"attendees"} />
                     <AttendeeOverview path={"attendees/:view"} />
+                    <AFrameRoomGrid path={"aframerooms"} />
+                    <AFrameRoomGrid path={"aframerooms/:view"} />
+                    <AFrameRoomAddEdit path={"aframeroom/new"} />
+                    <AFrameRoomAddEdit path={"aframeroom/:id"} />
                 </Router>
             );
         },

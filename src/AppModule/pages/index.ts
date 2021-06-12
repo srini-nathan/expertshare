@@ -6,3 +6,4 @@ export * from "./ConferencePage";
 export * from "./SessionPage";
 export * from "./AttendeePage";
 export * from "./ExtraPage";
+export * from "./AFrameRoom";
