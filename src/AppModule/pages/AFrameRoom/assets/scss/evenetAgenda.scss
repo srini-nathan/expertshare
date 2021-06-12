@@ -1,0 +1,16 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.swiper-container {
+    width: 100%;
+    display: flex;
+}
+
+.category-btn {
+    padding: 0 !important;
+
+    span {
+        padding: 0 15px;
+        border-radius: var(--border-radius);
+    }
+}
