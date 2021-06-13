@@ -1,5 +1,6 @@
 import React, { FC, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
+import { useTranslation } from "react-i18next";
 import {
     GridApi,
     GridReadyEvent,
@@ -38,6 +39,7 @@ export const AppGrid: FC<AppGridProps> = ({
     frameworkComponents,
     onReady,
 }) => {
+    const { t } = useTranslation();
     const [gridApi, setGridApi] = useState<GridApi>();
     const [, setGridColumnApi] = useState<ColumnApi>();
     const [pageSize, setPageSize] = useState<number>(appGridConfig.pageSize);
@@ -56,6 +58,16 @@ export const AppGrid: FC<AppGridProps> = ({
         const { api } = event;
         setActive(api.paginationGetCurrentPage() + 1);
     };
+
+    const columns: ColDef[] = columnDef.map((column: ColDef) => {
+        if (column.headerName) {
+            return {
+                ...column,
+                headerName: t(column.headerName),
+            };
+        }
+        return column;
+    });
 
     return (
         <React.Fragment>
@@ -87,11 +99,11 @@ export const AppGrid: FC<AppGridProps> = ({
                         gridOptions={{
                             domLayout: "autoHeight",
                         }}
-                        columnDefs={columnDef}
+                        columnDefs={columns}
                         noRowsOverlayComponent={"customNoRowsOverlay"}
                         noRowsOverlayComponentParams={{
                             noRowsMessageFunc() {
-                                return `Sorry - no data!`;
+                                return t("common.list:message.nodata");
                             },
                         }}
                     />

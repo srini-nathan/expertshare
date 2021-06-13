@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-
+import { useTranslation } from "react-i18next";
 import { Button, Modal } from "react-bootstrap";
 import "./assets/scss/style.scss";
 
@@ -17,6 +17,8 @@ export const AppModal: FC<AppModalProps> = ({
     bodyContent,
     title = "Delete Action",
 }): JSX.Element => {
+    const { t } = useTranslation();
+
     return (
         <Modal
             show={show}
@@ -30,10 +32,10 @@ export const AppModal: FC<AppModalProps> = ({
             <Modal.Body>{bodyContent}</Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
-                    No
+                    {t("common.button:no")}
                 </Button>
                 <Button variant="primary" onClick={handleDelete}>
-                    Yes
+                    {t("common.button:yes")}
                 </Button>
             </Modal.Footer>
         </Modal>

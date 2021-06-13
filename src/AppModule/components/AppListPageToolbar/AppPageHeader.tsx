@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { Col, Form, Row, InputGroup } from "react-bootstrap";
 import { navigate } from "@reach/router";
 import { Subject } from "rxjs";
@@ -17,13 +18,13 @@ export interface AppListPageToolbarProps {
 
 export const AppListPageToolbar: FC<AppListPageToolbarProps> = ({
     createLink,
-    createLabel = "Create",
+    createLabel = "common.button:create",
     onQuickFilterChange = () => {},
     cancelTokenSources = [],
 }): JSX.Element => {
     const search$ = useRef(new Subject<string>());
     const destroy$ = new Subject<string>();
-
+    const { t } = useTranslation();
     useEffect(() => {
         search$.current
             .pipe(
@@ -59,7 +60,7 @@ export const AppListPageToolbar: FC<AppListPageToolbarProps> = ({
                             <InputGroup>
                                 <Form.Control
                                     onChange={handleQuickSearch}
-                                    placeholder="Search ..."
+                                    placeholder={t("common.button:search")}
                                     type={"search"}
                                 ></Form.Control>
                                 <InputGroup.Prepend>
@@ -69,15 +70,16 @@ export const AppListPageToolbar: FC<AppListPageToolbarProps> = ({
                                 </InputGroup.Prepend>
                             </InputGroup>
                         </Col>
-                        <Col md="auto" className=" my-2 my-md-0">
+                        <Col md="auto" className="my-2 my-md-0">
                             {createLink ? (
                                 <AppButton
+                                    className={"text-capitalize"}
                                     variant={"secondary"}
                                     onClick={() => {
                                         navigate(createLink);
                                     }}
                                 >
-                                    + {createLabel}
+                                    + {t(createLabel)}
                                 </AppButton>
                             ) : null}
                         </Col>

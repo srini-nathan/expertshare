@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Control } from "react-hook-form";
 import { Col, Form } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { AppFormInput } from "../AppFormInput";
 import { AppFormSwitch } from "../AppFormSwitch";
 import { AppFormTextArea } from "../AppFormTextArea";
@@ -25,6 +26,7 @@ export interface AppDataProps {
     label: string;
     value?: string;
     defaultValue: any;
+    placeholder: string;
     onChange?: any;
 }
 export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorProps> = ({
@@ -37,6 +39,9 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
     onFileSelect,
 }) => {
     const { items } = properties;
+    const { t } = useTranslation();
+
+    items.label = items.label ? t(items.label) : "";
 
     const getLayoutProms = () => {
         switch (items.column) {
@@ -93,6 +98,7 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             type: items.attr ? items.attr.type : "text",
             label: items.label ? items.label : "",
             defaultValue,
+            placeholder: "",
             name: properties.title,
         };
         if (items.translation && translations)
@@ -176,6 +182,7 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             type: items.attr ? items.attr.type : "text",
             label: items.label ? items.label : "",
             defaultValue,
+            placeholder: "",
             name: properties.title,
         };
         if (items.translation && translations) {
@@ -202,6 +209,7 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             type: items.attr ? items.attr.type : "text",
             label: items.label ? items.label : "",
             defaultValue,
+            placeholder: "",
             name: properties.title,
         };
         if (items.translation && translations) {
@@ -226,6 +234,7 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             type: items.attr ? items.attr.type : "text",
             label: items.label ? items.label : "",
             defaultValue,
+            placeholder: "",
             name: properties.title,
         };
         if (items.translation && translations)

@@ -29,7 +29,10 @@
         }
     },
     "ChatMessage": {
-        "STATUS": { "STATUS_NEW": "NEW", "STATUS_READ": "READ" },
+        "STATUS": {
+            "STATUS_NEW": "NEW",
+            "STATUS_READ": "READ"
+        },
         "CONTENT": {
             "CONTENT_TYPE_TEXT": "TEXT",
             "CONTENT_TYPE_AUDIO": "AUDIO",
@@ -37,11 +40,20 @@
         }
     },
     "ChatThread": {
-        "THREAD": { "THREAD_TYPE_O2O": "O2O", "THREAD_TYPE_GROUP": "GROUP" },
-        "STATUS": { "STATUS_NEW": "NEW", "STATUS_ARCHIVED": "ARCHIVED" }
+        "THREAD": {
+            "THREAD_TYPE_O2O": "O2O",
+            "THREAD_TYPE_GROUP": "GROUP"
+        },
+        "STATUS": {
+            "STATUS_NEW": "NEW",
+            "STATUS_ARCHIVED": "ARCHIVED"
+        }
     },
     "Container": {
-        "STORAGE": { "STORAGE_LOCAL": "Local", "STORAGE_S3": "S3" }
+        "STORAGE": {
+            "STORAGE_LOCAL": "Local",
+            "STORAGE_S3": "S3"
+        }
     },
     "EmailTemplate": {
         "ETKEY": {
@@ -162,7 +174,8 @@
             "FILETYPE_USER_PROFILE": "USER_PROFILE",
             "FILETYPE_NEWSFEED_MEDIA": "NEWSFEED_MEDIA",
             "FILETYPE_AFRAMEROOM_MEDIA": "AFRAMEROOM_MEDIA",
-            "FILETYPE_AFRAMEPANEL_MEDIA": "AFRAMEPANEL_MEDIA"
+            "FILETYPE_AFRAMEPANEL_MEDIA": "AFRAMEPANEL_MEDIA",
+            "FILETYPE_CONFIGURATION": "CONFIGURATION"
         },
         "FILETYPEINFO": {
             "FILETYPEINFO_CONTAINER_POSTER": {
@@ -244,11 +257,24 @@
                 "allowType": [],
                 "isSecure": false,
                 "path": "aframepanel_media"
+            },
+            "FILETYPEINFO_CONFIGURATION": {
+                "key": "CONFIGURATION",
+                "width": null,
+                "height": null,
+                "ratio": null,
+                "maxSize": 32,
+                "allowType": [],
+                "isSecure": false,
+                "path": "configuration"
             }
         }
     },
     "User": {
-        "STATUS": { "STATUS_ACTIVE": "ACTIVE", "STATUS_INACTIVE": "INACTIVE" },
+        "STATUS": {
+            "STATUS_ACTIVE": "ACTIVE",
+            "STATUS_INACTIVE": "INACTIVE"
+        },
         "SOURCE": {
             "SOURCE_CREATE": "CREATE",
             "SOURCE_INVITE": "INVITE",

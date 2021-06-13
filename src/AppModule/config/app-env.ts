@@ -7,3 +7,4 @@ export const AUTH_CHOSEN_CONTAINER = process.env.REACT_APP_AUTH_CHOSEN_CONTAINER
  * so based on that response transformers works
  */
 export const ACCEPTABLE_RESPONSE = process.env.REACT_APP_ACCEPTABLE_RESPONSE || "JSON";
+export const USER_LOCALE = process.env.REACT_APP_USER_LOCALE || "es_locale";

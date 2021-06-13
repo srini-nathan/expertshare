@@ -8,6 +8,7 @@ import {
     IServerSideGetRowsParams,
 } from "ag-grid-community";
 import { isString as _isString } from "lodash";
+import { useTranslation } from "react-i18next";
 import { errorToast, successToast } from "../../utils";
 import {
     AppPageHeader,
@@ -59,6 +60,7 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
     const [active, setActive] = useState<number>(1);
     const [showDelete, setDeleteShow] = useState(0);
     const [showClone, setCloneShow] = useState(0);
+    const { t } = useTranslation();
 
     const fetchData = (params = {}) => {
         isLoading(true);
@@ -110,7 +112,7 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                     errorToast(error);
                 }
             } else {
-                successToast("Successfully cloned");
+                successToast(t("event.list:clone.info.message"));
                 fetchData();
                 appGridApi.current?.refreshServerSideStore({
                     purge: false,
@@ -126,7 +128,7 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                     errorToast(error);
                 }
             } else {
-                successToast("Successfully deleted");
+                successToast(t("event.list:delete.info.message"));
                 if (view === "grid") fetchData();
                 else
                     appGridApi.current?.refreshServerSideStore({
@@ -217,7 +219,7 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                         ))}
                         <AppModal
                             show={showDelete > 0}
-                            title={"Delete Action"}
+                            title={t("event.list:delete.confirm.title")}
                             handleClose={() => {
                                 setDeleteShow(0);
                             }}
@@ -225,11 +227,11 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                                 setDeleteShow(0);
                                 handleDelete(showDelete).then();
                             }}
-                            bodyContent={"Are you sure want to delete ?"}
+                            bodyContent={t("event.list:delete.confirm.message")}
                         />
                         <AppModal
                             show={showClone > 0}
-                            title={"Clone Action"}
+                            title={t("event.list:clone.confirm.title")}
                             handleClose={() => {
                                 setCloneShow(0);
                             }}
@@ -237,7 +239,7 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                                 setCloneShow(0);
                                 handleClone(showClone).then();
                             }}
-                            bodyContent={"Are you sure want to clone ?"}
+                            bodyContent={t("event.list:clone.confirm.message")}
                         />
                     </Row>
                 );
@@ -246,7 +248,7 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <Fragment>
-            <AppPageHeader title={"Event"} customToolbar>
+            <AppPageHeader title={t("event.list:header.title")} customToolbar>
                 <div className="d-flex pt-2 mb-5">
                     <AppListPageToolbar
                         createLink={"/event/create"}
