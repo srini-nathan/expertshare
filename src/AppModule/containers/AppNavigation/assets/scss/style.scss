@@ -404,7 +404,7 @@
                     @include media("mobile") {
                         padding-left: 0 !important;
                     }
-
+                    /*
                     @include media("xl") {
                         font-size: 14px;
                     }
@@ -413,11 +413,11 @@
                     @include media("lg") {
                         font-size: 12px;
                     }
-
+                    
                     @include media("md") {
                         font-size: .8rem;
                     }
-
+                    */
                     span {
                         max-width: 70%;
                         max-height: 40px;
