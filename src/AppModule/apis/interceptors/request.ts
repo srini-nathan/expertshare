@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from "axios";
-import { AUTH_TOKEN_KEY } from "../../config/app-env";
+import { AUTH_TOKEN_KEY, USER_LOCALE } from "../../config/app-env";
 import { generateKeyHeader, getUserTimeZone } from "../../utils/api";
 
 export const onRequestFulfilled = (
@@ -16,6 +16,10 @@ export const onRequestFulfilled = (
         // eslint-disable-next-line no-param-reassign
         config.headers.Authorization = `Bearer ${token}`;
     }
+
+    const locale = localStorage.getItem(USER_LOCALE);
+    // eslint-disable-next-line @typescript-eslint/dot-notation, no-console,no-param-reassign
+    config.params["locale"] = locale;
     return config;
 };
 

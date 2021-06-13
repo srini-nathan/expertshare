@@ -3,6 +3,7 @@ import { ContainerApi } from "../../AdminModule/apis/ContainerApi";
 import { GenerateApi } from "../../AdminModule/apis/GenerateApi";
 import { I18nMap, MyContainer } from "../../AdminModule/models";
 import i18n from "../config/i18n";
+import { USER_LOCALE } from "../config/app-env";
 
 interface GlobalState {
     status: "LOADED" | "LOADING" | "ERROR";
@@ -49,7 +50,7 @@ export const GlobalProvider: React.FC = (props) => {
 
                             if (isDefault) {
                                 // @TODO: add hook or something, don't use direct localstorage here
-                                localStorage.setItem("es_local", locale);
+                                localStorage.setItem(USER_LOCALE, locale);
                                 i18n.changeLanguage(locale);
                             }
                         })
