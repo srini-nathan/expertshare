@@ -18,3 +18,4 @@ export * from "./SessionTag";
 export * from "./Session";
 export * from "./SessionCategory";
 export * from "./SessionDoc";
+export * from "./MyContainer";
