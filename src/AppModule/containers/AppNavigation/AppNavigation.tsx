@@ -28,6 +28,7 @@ import {
     useBuildAssetPath,
     useIsGranted,
     useAuthState,
+    useUserLocale,
 } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
@@ -53,6 +54,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const { dispatch, state } = React.useContext(AuthContext);
     const { role, containerId } = useAuthState();
     const { user } = state;
+    const { locale, setLocale } = useUserLocale();
     const [overflowItems, setOverflowItems] = useState<
         AppNavigationItemProps[] | AppSubNavigationItemProps[]
     >([]);
@@ -245,9 +247,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                     }
                 } else if (response !== null) {
                     setLanguages(response.items);
-                    const ul = response.items.find(
-                        (e) => e.locale === user.locale
-                    );
+                    const ul = response.items.find((e) => e.locale === locale);
                     setUserLocale(ul);
                 }
             }
@@ -452,6 +452,10 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                     return {
                                                         label: e.name,
                                                         iconClassName: `languages ${e.locale}`,
+                                                        action: () => {
+                                                            setUserLocale(e);
+                                                            setLocale(e.locale);
+                                                        },
                                                     };
                                                 })}
                                         />
