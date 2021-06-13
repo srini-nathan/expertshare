@@ -1,4 +1,4 @@
-import Swal, { SweetAlertOptions } from "sweetalert2";
+import Swal, { SweetAlertOptions, SweetAlertResult } from "sweetalert2";
 
 const defaultConfig: SweetAlertOptions = {
     toast: true,
@@ -29,8 +29,12 @@ export const errorToast = (text: string, config?: SweetAlertOptions): void => {
     }).then();
 };
 
-export const showLoader = (text: string, config?: SweetAlertOptions) => {
-    Swal.fire({
+export const showLoader = (
+    text: string,
+    config?: SweetAlertOptions
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<SweetAlertResult<any>> => {
+    return Swal.fire({
         text,
         didOpen: () => {
             Swal.showLoading();
@@ -44,6 +48,6 @@ export const showLoader = (text: string, config?: SweetAlertOptions) => {
     }).then();
 };
 
-export const hideLoader = () => {
+export const hideLoader = (): void => {
     Swal.close();
 };
