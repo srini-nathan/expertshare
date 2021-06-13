@@ -1,6 +1,7 @@
 import React, { FC, Fragment, useEffect, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { isString as _isString } from "lodash";
+import { useTranslation } from "react-i18next";
 import { Row } from "react-bootstrap";
 import SwiperCore, { Navigation } from "swiper/core";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -63,6 +64,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
     SwiperCore.use([Navigation]);
     const navigator = useNavigator(navigate);
     const isGrantedControl = useIsGranted(ROLE_OPERATOR);
+    const { t } = useTranslation();
 
     useEffect(() => {
         ConferenceApi.findById<Conference>(id).then(
@@ -141,7 +143,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                     errorToast(error);
                 }
             } else {
-                successToast("Successfully cloned");
+                successToast(t("event.agenda:clone.info.message"));
                 navigator("/event").then(() => {});
             }
         });
@@ -153,7 +155,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                     errorToast(error);
                 }
             } else {
-                successToast("Successfully deleted");
+                successToast(t("event.agenda:delete.info.message"));
                 navigator("/event").then(() => {});
             }
         });
@@ -166,7 +168,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                     errorToast(error);
                 }
             } else {
-                successToast("Successfully updated");
+                successToast(t("event.agenda:update.info.message"));
                 fetchSessions();
             }
         });
@@ -195,7 +197,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                     errorToast(error);
                 }
             } else {
-                successToast("Successfully deleted");
+                successToast(t("event.agenda:sizeChange.info.message"));
                 fetchSessions();
             }
         });
@@ -278,7 +280,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                     isGrantedControl={isGrantedControl}
                 />
             )}
-            <AppPageHeader title="Event Agenda" />
+            <AppPageHeader title={t("event.agenda:header.title")} />
             {data?.sessionDates && (
                 <AppSessionDates
                     activeDate={activeDate}
@@ -297,7 +299,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                     {categoryFilter.length === 0 && (
                         <i className="fak fa-check-regular-bold pr-2"></i>
                     )}
-                    All
+                    {t("event.agenda:label.all")}
                 </AppButton>
                 {SessionCategories.map((e) => {
                     return (

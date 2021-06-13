@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { Link } from "@reach/router";
 import "./assets/scss/style.scss";
+import { useTranslation } from "react-i18next";
 import { Session } from "../../../AdminModule/models";
 import { AppFormDropdown } from "../AppFormDropdown";
 import { CONSTANTS } from "../../../config";
@@ -28,6 +29,7 @@ export const AppSessionSlot: FC<AppSessionSlotProps> = ({
     handleChangeCard,
     buttonName,
 }): JSX.Element => {
+    const { t } = useTranslation();
     return (
         <div className="event-detail-admin--workshop larg-size larg-carousel col-12 my-4 px-0">
             <div className="event-detail-admin--workshop--container p-3">
@@ -59,7 +61,9 @@ export const AppSessionSlot: FC<AppSessionSlotProps> = ({
                                                 handleChangeCard(e.value, ids);
                                             }}
                                             defaultValue={""}
-                                            placeholder={"Card Size"}
+                                            placeholder={t(
+                                                "event.agenda:label.cardSize"
+                                            )}
                                             className="cardsize-dropdown"
                                             options={cardSizeOptions}
                                         />
@@ -68,7 +72,7 @@ export const AppSessionSlot: FC<AppSessionSlotProps> = ({
                                         to={`/event/${conferenceId}/session/create`}
                                         className="btn-session btn btn-secondary mr-3"
                                     >
-                                        + Session
+                                        {t("event.agenda:button.createSession")}
                                     </Link>
                                 </>
                             )}

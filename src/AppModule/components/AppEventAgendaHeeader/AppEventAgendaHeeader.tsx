@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { Link } from "@reach/router";
+import { useTranslation } from "react-i18next";
 import { Row, Col } from "react-bootstrap";
 import { Conference } from "../../../AdminModule/models";
 import "./assets/scss/style.scss";
@@ -30,6 +31,7 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
     const conferencePosterPath = useBuildAssetPath(
         FILETYPEINFO_CONFERENCE_POSTER as FileTypeInfo
     );
+    const { t } = useTranslation();
 
     return (
         <Col className="event-detail-admin--det--container col-12 mb-3 px-0">
@@ -56,13 +58,15 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                                         to="#"
                                         className="manage-cat btn btn-secondary"
                                     >
-                                        Manage Categories
+                                        {t(
+                                            "event.agenda:button.manageCategory"
+                                        )}
                                     </Link>
                                     <Link
                                         to={`/event/${conference.id}/session/create`}
                                         className="manage-cat ml-2 btn btn-secondary"
                                     >
-                                        + Create Session
+                                        {t("event.agenda:button.createSession")}
                                     </Link>
                                 </Col>
                                 <Col className="inner-container--action--exclusive p-0 mt-2 mt-sm-3">
@@ -119,7 +123,9 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                         <Col className="inner-container--det--desc p-0">
                             <i className="fak fa-description"></i>
                             <Col className="p-0 inner-container--det--desc--content">
-                                <h2 className="">Description</h2>
+                                <h2 className="">
+                                    {t("event.agenda:label.description")}
+                                </h2>
                                 <p className="mb-0">
                                     {conference?.description}
                                 </p>
@@ -128,7 +134,9 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                         <Col className="inner-container--det--desc p-0 mt-3">
                             <i className="fak fa-tags"></i>
                             <Col className="p-0 inner-container--det--desc--content">
-                                <h2 className="">Tags</h2>
+                                <h2 className="">
+                                    {t("event.agenda:label.tags")}
+                                </h2>
                                 <Row
                                     className={
                                         "m-0 mt-3 p-0 justify-content-left conference-tags-container"
