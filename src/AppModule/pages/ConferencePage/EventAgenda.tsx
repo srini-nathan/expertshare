@@ -142,7 +142,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                 }
             } else {
                 successToast("Successfully cloned");
-                navigator("/conferences").then(() => {});
+                navigator("/event").then(() => {});
             }
         });
     }
@@ -154,7 +154,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                 }
             } else {
                 successToast("Successfully deleted");
-                navigator("/conferences").then(() => {});
+                navigator("/event").then(() => {});
             }
         });
     }

@@ -18,6 +18,7 @@ import { LandingHelper } from "./pages";
 
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
+import { useGlobalData } from "./contexts";
 
 interface Props {
     location: {
@@ -57,6 +58,7 @@ const AppFullScreenLoader = (): JSX.Element => {
     );
 };
 const App = (): JSX.Element => {
+    const { status } = useGlobalData();
     const { state } = React.useContext(AuthContext);
     const navigator = useNavigator();
     const { isChosen } = useChosenContainer();
@@ -68,18 +70,18 @@ const App = (): JSX.Element => {
     const authRoutes: ModuleRouter[] = appRouters.filter(
         ({ layout }) => layout === "auth"
     );
-    const overViewPage = useMatch("/containers/overview");
+    const overViewPage = useMatch("/container");
     const autoLoginPage = useMatch("/auth/auto-login/:token");
     const isOverViewPage = overViewPage !== null;
     const isAutoLoginPage = autoLoginPage !== null;
 
-    if (state.isAuthenticated === null) {
+    if (status === "LOADING" || state.isAuthenticated === null) {
         return <AppFullScreenLoader />;
     }
 
     if (!isAutoLoginPage && state.isAuthenticated) {
         if (!isChosen() && !isOverViewPage) {
-            navigator("/containers/overview").then();
+            navigator("/container").then();
             return <AppFullScreenLoader />;
         }
         return (

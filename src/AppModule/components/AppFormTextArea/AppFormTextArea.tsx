@@ -25,6 +25,7 @@ export interface AppFormTextAreaProps
     >;
     disabled?: boolean;
     onBlurHandler?: (value: React.FocusEvent<HTMLTextAreaElement>) => void;
+    value?: string;
 }
 
 export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
@@ -45,6 +46,7 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
     onChange,
     onBlurHandler,
     isSend,
+    value,
     ...props
 }): JSX.Element => {
     const [data, setData] = useState<string>(defaultValue);
@@ -60,6 +62,11 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
         isInvalid,
         rows,
     };
+    let valueController = {};
+    if (value)
+        valueController = {
+            value,
+        };
     return (
         <Form.Group {...groupProps} className={`mb-0 ${className}`}>
             {!isSend && <AppFormLabel counter={data?.length} {...labelProps} />}
@@ -81,6 +88,7 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
                             if (onBlurHandler) onBlurHandler(e);
                         }}
                         {...controlProps}
+                        {...valueController}
                     />
                 )}
             />

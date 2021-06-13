@@ -19,6 +19,15 @@ export const appGridColDef = ({
         flex: 0.4,
         sortable: false,
     },
+
+    {
+        headerName: "Text Color",
+        field: "textColor",
+        cellRenderer: "AppColorPickerRender",
+        minWidth: 40,
+        flex: 0.4,
+        sortable: false,
+    },
     {
         headerName: "Actions",
         field: "id",

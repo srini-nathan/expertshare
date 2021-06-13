@@ -9,5 +9,6 @@ export class JsonResponseData {
         | null
         | null[]
         | JsonResponseData
-        | JsonResponseData[];
+        | JsonResponseData[]
+        | undefined;
 }

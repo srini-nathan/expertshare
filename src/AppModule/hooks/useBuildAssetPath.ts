@@ -1,8 +1,7 @@
-import { useRecoilValue } from "recoil";
+import { useGlobalData } from "../contexts/GlobalContext";
 import { API_HOST } from "../config/app-env";
 import { CONSTANTS } from "../../config";
 import { FileTypeInfo } from "../models";
-import { appContainer } from "../atoms/AppContainer";
 
 const {
     Container: { STORAGE },
@@ -11,8 +10,8 @@ const {
 export function useBuildAssetPath(
     fileInfo: FileTypeInfo,
     fileName: string | null = null
-) {
-    const container = useRecoilValue(appContainer);
+): string {
+    const { container } = useGlobalData();
 
     if (!container) {
         return "";

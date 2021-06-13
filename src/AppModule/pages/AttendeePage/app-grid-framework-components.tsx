@@ -3,7 +3,7 @@ import React, { ReactElement } from "react";
 import { AppGridAction, AppGridActionProps, AppIcon } from "../../components";
 import { AppCellActionWithRenderWithCustom } from "./app-actions";
 import { User } from "../../models";
-import UserAvatar from "./assets/images/user-avatar.png";
+import UserAvatar from "../../assets/images/user-avatar.png";
 
 export const appGridFrameworkComponents = {
     appNameTemplateRenderer: (params: ICellRendererParams): ReactElement => {
@@ -85,31 +85,31 @@ export const appGridFrameworkComponents = {
         params: AppCellActionWithRenderWithCustom
     ): ReactElement => {
         const {
-            onPressBookSession,
+            // onPressBookSession,
             onPressGetInContact,
-            onPressAddNewUser,
+            // onPressAddNewUser,
         } = params;
         const props: AppGridActionProps = {
             customClickActions: [
-                {
-                    text: "Book Session",
-                    onClick: () => {
-                        onPressBookSession();
-                    },
-                },
+                // {
+                //     text: "Book Session",
+                //     onClick: () => {
+                //         onPressBookSession();
+                //     },
+                // },
                 {
                     text: "Get In Contact",
                     onClick: () => {
                         onPressGetInContact();
                     },
                 },
-                {
-                    icon: "AddUserPlus",
-                    text: "",
-                    onClick: () => {
-                        onPressAddNewUser();
-                    },
-                },
+                // {
+                //     icon: "AddUserPlus",
+                //     text: "",
+                //     onClick: () => {
+                //         onPressAddNewUser();
+                //     },
+                // },
             ],
         };
         return <AppGridAction {...props} />;

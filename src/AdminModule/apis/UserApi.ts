@@ -1,6 +1,14 @@
 import { AxiosError, AxiosRequestConfig } from "axios";
+import {
+    onFindAllResponseHydra,
+    onFindAllResponseJson,
+} from "../../AppModule/apis";
 import { EntityAPI } from "../../AppModule/apis/EntityAPI";
-import { FinalResponse, ServerError } from "../../AppModule/models";
+import {
+    FinalResponse,
+    ListResponse,
+    ServerError,
+} from "../../AppModule/models";
 import { route, ROUTES } from "../../config";
 
 const {
@@ -17,6 +25,7 @@ const {
     api_users_import_collection: API_IMPORT,
     api_users_invite_collection: API_INVITE,
     api_users_export_collection: API_EXPORT,
+    api_users_get_limited_collection: GET_LIMITED_USERS,
 } = ROUTES;
 
 export abstract class UserApi extends EntityAPI {
@@ -53,6 +62,28 @@ export abstract class UserApi extends EntityAPI {
             })
         )
             .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
+    }
+
+    public static async getLimited<R>(
+        page = 1,
+        extraParams = {}
+    ): Promise<FinalResponse<ListResponse<R> | null>> {
+        return this.makeGet<R>(GET_LIMITED_USERS, {
+            ...extraParams,
+            page,
+        })
+            .then(({ data }) => {
+                const list = this.acceptHydra
+                    ? onFindAllResponseHydra<R>(data)
+                    : onFindAllResponseJson<R>(data);
+                return Promise.resolve(
+                    new FinalResponse<ListResponse<R>>(list)
+                );
+            })
             .catch((error: AxiosError | ServerError) => {
                 const { message } = error;
                 return Promise.resolve(new FinalResponse(null, message));

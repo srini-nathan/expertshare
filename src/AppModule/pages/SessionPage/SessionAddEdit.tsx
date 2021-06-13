@@ -96,7 +96,8 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
     const { containerResourceId, containerId, clientId } = useAuthState();
     const [data, setData] = useState<Session>(new Session(containerResourceId));
     const [languages, setLanguages] = useState<Language[]>([]);
-    const [users, setUsers] = useState<User[]>([]);
+    const [moderatores, setModeratores] = useState<User[]>([]);
+    const [speakers, setSpeakers] = useState<User[]>([]);
     const [selectedModerators, setSelectedModerators] = useState<User[]>([]);
     const [selectedSpeakers, setSelectedSpeakers] = useState<User[]>([]);
     const [sessionTags, setSessionTags] = React.useState<
@@ -253,15 +254,11 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                     } else if (errorMessage) {
                         errorToast(errorMessage);
                     } else {
-                        navigator(`/conferences/${conferenceId}/agenda`).then(
-                            () => {
-                                successToast(
-                                    isEditMode
-                                        ? "Event updated"
-                                        : "Event created"
-                                );
-                            }
-                        );
+                        navigator(`/event/${conferenceId}/agenda`).then(() => {
+                            successToast(
+                                isEditMode ? "Event updated" : "Event created"
+                            );
+                        });
                     }
                 }
             );
@@ -269,9 +266,6 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
     };
 
     const onSubmit = async (formData: Session) => {
-        /* eslint-disable no-console */
-        console.log(formData.end);
-        /* eslint-enable no-console */
         if (files.length > 0) {
             const fd = new FormData();
             fd.set("file", files[0], files[0].name);
@@ -398,8 +392,8 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                 }
             }
         );
-        UserApi.find<User>(1, {
-            "roles.role": ["ROLE_SPEAKER", "ROLE_MODERATOR"],
+        UserApi.getLimited<User>(1, {
+            "roles.role": "ROLE_MODERATOR",
             "client.id": clientId,
         }).then(({ error, response }) => {
             if (error !== null) {
@@ -407,7 +401,19 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                     errorToast(error);
                 }
             } else if (response !== null) {
-                setUsers(response.items);
+                setModeratores(response.items);
+            }
+        });
+        UserApi.getLimited<User>(1, {
+            "roles.role": "ROLE_SPEAKER",
+            "client.id": clientId,
+        }).then(({ error, response }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                }
+            } else if (response !== null) {
+                setSpeakers(response.items);
             }
         });
         LanguageApi.find<Language>(1, { "container.id": containerId }).then(
@@ -478,7 +484,10 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
 
     return (
         <Fragment>
-            <AppBreadcrumb linkText={"Events"} linkUrl={"/conferences"} />
+            <AppBreadcrumb
+                linkText={"Events"}
+                linkUrl={`/event/${conferenceId}/agenda`}
+            />
             <AppPageHeader
                 title={isEditMode ? "Edit Session" : "Add Session"}
             />
@@ -827,8 +836,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                         selectedUsers={selectedSpeakers}
                                         title="Speakers"
                                         icon="speakers"
-                                        role="ROLE_SPEAKER"
-                                        users={users}
+                                        users={speakers}
                                     />
                                 </Col>
                                 <Col
@@ -848,8 +856,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                         selectedUsers={selectedModerators}
                                         title="Moderators"
                                         icon="moderators"
-                                        role="ROLE_MODERATOR"
-                                        users={users}
+                                        users={moderatores}
                                     />
                                 </Col>
                             </Row>
@@ -1027,13 +1034,27 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     },
                                 }}
                             />
+                            <AppFormInput
+                                className="pl-0"
+                                name={"ord"}
+                                type={"number"}
+                                md={12}
+                                lg={12}
+                                xl={12}
+                                required={false}
+                                label="Order"
+                                {...validation("ord", formState, isEditMode)}
+                                errorMessage={errors.ord?.message}
+                                defaultValue={`${data?.ord}`}
+                                control={control}
+                            />
                         </AppCard>
                     </Col>
 
                     <AppFormActions
                         isEditMode={isEditMode}
                         navigation={navigator}
-                        backLink={"/conferences"}
+                        backLink={`/event/${conferenceId}/agenda`}
                         isLoading={formState.isSubmitting}
                     />
                 </Row>

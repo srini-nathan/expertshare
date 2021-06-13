@@ -6,48 +6,114 @@ import { AppFormSwitch } from "../AppFormSwitch";
 import { AppFormTextArea } from "../AppFormTextArea";
 import { AppFormRichTextArea } from "../AppFormRichTextArea";
 import { AppFormDropdown } from "../AppFormDropdown";
+import { AppFormFile } from "../AppFormFile";
 import { PrimitiveObject } from "../../models";
 import "./assets/scss/style.scss";
 
 export interface AppFormElementGeneratorProps {
     properties: any;
+    activeLanguage?: string;
     defaultValue: any;
+    translations?: any[];
+    onChange?: (value: any[]) => void;
+    onFileSelect?: (files: File[], title: string, translation: boolean) => void;
     control: Control<any>;
+}
+export interface AppDataProps {
+    type: string;
+    name: string;
+    label: string;
+    value?: string;
+    defaultValue: any;
+    onChange?: any;
 }
 export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorProps> = ({
     properties,
     defaultValue,
     control,
+    onChange,
+    translations,
+    activeLanguage = "",
+    onFileSelect,
 }) => {
     const { items } = properties;
+
+    const getLayoutProms = () => {
+        switch (items.column) {
+            case 3:
+                return {
+                    xl: 12,
+                    lg: 12,
+                    md: 12,
+                    sm: 12,
+                };
+            case 2:
+                return {
+                    xl: 6,
+                    lg: 6,
+                    md: 6,
+                    sm: 12,
+                };
+            case 1:
+            default:
+                return {
+                    xl: 4,
+                    lg: 4,
+                    md: 6,
+                    sm: 12,
+                };
+        }
+    };
+
+    const getTranslationValue = (name: string) => {
+        if (translations) {
+            const item = translations.find((e) => e.locale === activeLanguage);
+
+            if (item) return item[name];
+        }
+        return "";
+    };
+    const handleTranslationValue = (value: string) => {
+        if (translations) {
+            const newTranslatiosn = translations.map((e) => {
+                if ((e.locale as string) === activeLanguage)
+                    return {
+                        ...e,
+                        [properties.title]: value,
+                    };
+                return e;
+            });
+
+            if (onChange) onChange(newTranslatiosn);
+        }
+    };
+
     const renderText = () => {
-        const prps = {
+        let prps: AppDataProps = {
             type: items.attr ? items.attr.type : "text",
             label: items.label ? items.label : "",
+            defaultValue,
+            name: properties.title,
         };
+        if (items.translation && translations)
+            prps = {
+                ...prps,
+                label: items.label ? `${items.label} (${activeLanguage})` : "",
+                value: getTranslationValue(properties.title),
+                onChange: handleTranslationValue,
+            };
         return (
-            <AppFormInput
-                md={"6"}
-                sm={"12"}
-                lg={"4"}
-                xl={"4"}
-                name={properties.title}
-                defaultValue={defaultValue}
-                {...prps}
-                control={control}
-            />
+            <AppFormInput {...getLayoutProms()} {...prps} control={control} />
         );
     };
+
     const renderSwitch = () => {
         const prps = {
             label: items.label ? items.label : "",
         };
         return (
             <AppFormSwitch
-                md={"6"}
-                sm={"12"}
-                lg={"4"}
-                xl={"4"}
+                {...getLayoutProms()}
                 name={properties.title}
                 {...prps}
                 defaultChecked={defaultValue}
@@ -97,10 +163,7 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
         return (
             <Form.Group
                 as={Col}
-                md={"6"}
-                sm={"12"}
-                lg={"4"}
-                xl={"4"}
+                {...getLayoutProms()}
                 controlId={properties.title}
             >
                 <Form.Label>{items.label}</Form.Label>
@@ -109,36 +172,80 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
         );
     };
     const renderTextarea = () => {
-        const prps = {
-            type: items.attr,
+        let prps: AppDataProps = {
+            type: items.attr ? items.attr.type : "text",
             label: items.label ? items.label : "",
+            defaultValue,
+            name: properties.title,
         };
+        if (items.translation && translations) {
+            delete prps.defaultValue;
+            prps = {
+                ...prps,
+                label: items.label ? `${items.label} (${activeLanguage})` : "",
+                value: getTranslationValue(properties.title),
+                onChange: (e: any) => {
+                    handleTranslationValue(e.target.value);
+                },
+            };
+        }
         return (
             <AppFormTextArea
-                md={"6"}
-                sm={"12"}
-                lg={"4"}
-                xl={"4"}
-                name={properties.title}
-                defaultValue={defaultValue}
+                {...getLayoutProms()}
                 {...prps}
                 control={control}
             />
         );
     };
     const renderRichTextarea = () => {
-        const prps = {
-            type: items.attr,
+        let prps: AppDataProps = {
+            type: items.attr ? items.attr.type : "text",
             label: items.label ? items.label : "",
+            defaultValue,
+            name: properties.title,
         };
+        if (items.translation && translations) {
+            delete prps.defaultValue;
+            prps = {
+                ...prps,
+                label: items.label ? `${items.label} (${activeLanguage})` : "",
+                value: getTranslationValue(properties.title),
+                onChange: handleTranslationValue,
+            };
+        }
         return (
             <AppFormRichTextArea
-                md={"6"}
-                sm={"12"}
-                lg={"4"}
-                xl={"4"}
-                name={properties.title}
-                defaultValue={defaultValue}
+                {...getLayoutProms()}
+                {...prps}
+                control={control}
+            />
+        );
+    };
+    const renderFile = () => {
+        let prps: AppDataProps = {
+            type: items.attr ? items.attr.type : "text",
+            label: items.label ? items.label : "",
+            defaultValue,
+            name: properties.title,
+        };
+        if (items.translation && translations)
+            prps = {
+                ...prps,
+                label: items.label ? `${items.label} (${activeLanguage})` : "",
+                value: getTranslationValue(properties.title),
+                onChange: handleTranslationValue,
+            };
+        return (
+            <AppFormFile
+                {...getLayoutProms()}
+                onFileSelect={(files: File[]) => {
+                    if (onFileSelect)
+                        onFileSelect(
+                            files,
+                            properties.title,
+                            items.translation
+                        );
+                }}
                 {...prps}
                 control={control}
             />
@@ -162,6 +269,8 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                 return renderTextarea();
             case "RICH_TEXTAREA":
                 return renderRichTextarea();
+            case "FILE":
+                return renderFile();
             default:
                 return <></>;
         }

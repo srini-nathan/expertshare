@@ -71,6 +71,8 @@ export class Session extends BaseEntity {
 
     container: string;
 
+    ord?: number;
+
     sessionTags: PSessionTag[];
 
     speakers: string[] | User[];
@@ -83,6 +85,7 @@ export class Session extends BaseEntity {
         cardSize = "MEDIUM",
         cardType = "COMPACT",
         imageName = "",
+        ord = 1,
         webexMeetingPassword = "",
         webexUrl = "",
         zoomMeetingPassword = "",
@@ -117,6 +120,7 @@ export class Session extends BaseEntity {
         updatedAt,
     }: Partial<Session> = {}) {
         super(id, createdAt, updatedAt);
+        this.ord = ord;
         this.container = container;
         this.webexMeetingPassword = webexMeetingPassword;
         this.speakers = speakers;

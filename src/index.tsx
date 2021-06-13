@@ -5,14 +5,17 @@ import { LocationProvider } from "@reach/router";
 import App from "./AppModule/app";
 import AuthProvider from "./SecurityModule/contexts/AuthContext";
 import "./AppModule/config/app-env";
+import { GlobalProvider } from "./AppModule/contexts";
 
 ReactDOM.render(
     <React.StrictMode>
         <LocationProvider>
             <RecoilRoot>
-                <AuthProvider>
-                    <App />
-                </AuthProvider>
+                <GlobalProvider>
+                    <AuthProvider>
+                        <App />
+                    </AuthProvider>
+                </GlobalProvider>
             </RecoilRoot>
         </LocationProvider>
     </React.StrictMode>,

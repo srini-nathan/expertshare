@@ -113,11 +113,8 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
     }, []);
 
     return (
-        <Row className="questions-and-answers-wrapper">
-            <Col
-                md={{ offset: 8 }}
-                className="questions-and-answers-wrapper--column"
-            >
+        <Col className="questions-and-answers-wrapper p-0">
+            <Col className="questions-and-answers-wrapper--column">
                 <Row>
                     <Col className="questions-and-answers-wrapper--title">
                         <h4>
@@ -149,6 +146,6 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                     />
                 </div>
             </Col>
-        </Row>
+        </Col>
     );
 };

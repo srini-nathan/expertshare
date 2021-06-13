@@ -10,6 +10,50 @@
     z-index: 5;
 }
 
+.local-container {
+    z-index: 6;
+
+}
+
+.info {
+    display: flex;
+
+    &--profile-pic {
+        display: flex;
+
+        i {
+            display: block;
+            width: 36px;
+            height: 36px;
+            margin: auto;
+            background-repeat: no-repeat;
+            background-size: 36px;
+            border-radius: var(--circle-border-radius);
+
+            &::after {
+                position: relative;
+                top: -3px;
+                left: 24px;
+                display: block;
+                width: 11px;
+                height: 11px;
+                content: "";
+                background-color: var(--primary);
+                border: 2px solid var(--border-border-radius-clr);
+                border-radius: var(--circle-border-radius);
+            }
+        }
+    }
+
+    &--det {
+        h3 {
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 60px;
+        }
+    }
+}
+
 .list-deopdown {
     min-width: 130px;
     height: 36px;

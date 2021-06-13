@@ -146,7 +146,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                     } else if (errorMessage) {
                         errorToast(errorMessage);
                     } else {
-                        navigator("/conferences").then(() => {
+                        navigator("/event").then(() => {
                             successToast(
                                 isEditMode ? "Event updated" : "Event created"
                             );
@@ -286,7 +286,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
 
     return (
         <Fragment>
-            <AppBreadcrumb linkText={"Events"} linkUrl={"/conferences"} />
+            <AppBreadcrumb linkText={"Events"} linkUrl={"/event"} />
             <AppPageHeader title={isEditMode ? "Edit Event" : "Add Event"} />
             <Row>
                 <Col>
@@ -358,7 +358,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                             <AppFormActions
                                 isEditMode={isEditMode}
                                 navigation={navigator}
-                                backLink={"/conferences"}
+                                backLink={"/event"}
                                 isLoading={formState.isSubmitting}
                             />
                         </Form>

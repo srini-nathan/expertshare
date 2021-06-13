@@ -87,7 +87,11 @@ export abstract class ContainerApi extends EntityAPI {
     public static async myContainer<R>(): Promise<FinalResponse<R | null>> {
         return this.makeGet<R>(API_GET_MY_CONTAINER_COLLECTION)
             .then(({ data }) => {
-                return Promise.resolve(new FinalResponse<R>(data));
+                const list = this.acceptHydra
+                    ? onFindAllResponseHydra<R>(data)
+                    : onFindAllResponseJson<R>(data);
+                const single = list.items[0];
+                return Promise.resolve(new FinalResponse<R>(single));
             })
             .catch((error: AxiosError | ServerError) => {
                 const { message } = error;

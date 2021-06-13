@@ -18,13 +18,16 @@ export interface AppFormRichTextAreaProps {
     lg?: string | number;
     xl?: string | number;
     defaultValue?: string;
+    value?: string;
     placeholder?: string | boolean;
     required?: boolean;
+    onChange?: (value: string) => void;
     label?: string;
     description?: string;
     errorMessage?: string;
     withCounter?: boolean;
     maxCount?: number;
+    minHeight?: number;
     control?: Control<any>;
 }
 
@@ -32,6 +35,8 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
     id,
     name,
     defaultValue = "",
+    minHeight = 250,
+    value = "",
     placeholder,
     errorMessage,
     label = "",
@@ -44,8 +49,11 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
     withCounter = false,
     maxCount = 25,
     control,
+    onChange,
 }): JSX.Element => {
-    const [model, setModel] = useState<string>(defaultValue);
+    let val = defaultValue;
+    if (value) val = value;
+    const [model, setModel] = useState<string>(val);
 
     const controlId = id || name;
     let placeholderText = "";
@@ -81,21 +89,26 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
             ) : null}
             <Controller
                 name={name}
-                defaultValue={defaultValue}
+                defaultValue={val}
                 control={control}
                 render={({ field }) => (
                     <FroalaEditorComponent
-                        model={model}
+                        model={value && onChange ? value : model}
                         onModelChange={(e: string) => {
-                            field.onChange(e);
-                            setModel(e);
+                            if (onChange) {
+                                onChange(e);
+                            } else {
+                                field.onChange(e);
+                                setModel(e);
+                            }
                         }}
                         tag="textarea"
                         config={{
                             placeholderText,
-                            value: defaultValue,
+                            value: val,
                             charCounterCount: withCounter,
                             charCounterMax: maxCount,
+                            heightMin: minHeight,
                         }}
                     />
                 )}

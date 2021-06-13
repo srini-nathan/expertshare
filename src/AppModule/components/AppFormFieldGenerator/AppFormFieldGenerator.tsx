@@ -93,7 +93,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
     };
     const renderSwitch = () => {
         return (
-            <Col md={"6"} sm={"12"} lg={"6"} xl={"6"}>
+            <Col className="p-0" md={"6"} sm={"12"} lg={"6"} xl={"6"}>
                 <AppFormSwitch
                     md={"6"}
                     label={properties.labelKey}

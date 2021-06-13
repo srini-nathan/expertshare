@@ -37,10 +37,10 @@ export const appGridFrameworkComponents = {
         const props: AppGridActionProps = {
             isGrantedControl,
             editAction: {
-                url: `/conference/${id}`,
+                url: `/event/${id}/update`,
             },
             viewAction: {
-                url: `/conferences/${id}/agenda`,
+                url: `/event/${id}/agenda`,
             },
             deleteAction: {
                 confirmation: "Are you sure want to delete ?",

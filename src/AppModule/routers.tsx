@@ -27,9 +27,20 @@ export const routers: ModuleRouter[] = [
                 <Router>
                     <KitchenSink path={"kitchen-sink"} />
                     <MyProfilePage path={"my-profile"} />
-                    <UserProfilePage path={"user-profile/:id"} />
+                    <ContainerOverview path={"container"} />
+                    <ConferenceGrid path={"event"} />
+                    <ConferenceGrid path={"event/:view"} />
+                    <ConferenceAddEdit path={"event/create"} />
+                    <ConferenceAddEdit path={"event/:id/update"} />
+                    <SessionAddEdit
+                        path={"event/:conferenceId/session/create"}
+                    />
+                    <SessionAddEdit
+                        path={"event/:conferenceId/session/:id/update"}
+                    />
+                    <EventAgenda path={"event/:id/agenda"} />
                     <SessionDetailsPage
-                        path={"conference/:id/session/:number"}
+                        path={"event/:conferenceId/session/:id"}
                     />
                     <ContainerOverview path={"containers/overview"} />
                     <ConferenceGrid path={"conferences"} />
@@ -46,6 +57,9 @@ export const routers: ModuleRouter[] = [
                     <AFrameRoomGrid path={"aframerooms/:view"} />
                     <AFrameRoomAddEdit path={"aframeroom/new"} />
                     <AFrameRoomAddEdit path={"aframeroom/:id"} />
+                    <AttendeeOverview path={"attendee"} />
+                    <AttendeeOverview path={"attendee/:view"} />
+                    <UserProfilePage path={"attendee/:id/show"} />
                 </Router>
             );
         },
