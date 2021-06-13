@@ -78,7 +78,7 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                     </h2>
                 </a>
                 <p className="card--title--bio mb-1 mx-2">
-                    {jobTitle} at {company}
+                    {jobTitle}, {company}
                 </p>
                 <a href="#" className="card--title--mail mb-3 d-block">
                     {email}

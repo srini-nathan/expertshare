@@ -87,13 +87,13 @@ export const appGridFrameworkComponents = {
             },
             customClickActions: [
                 {
-                    icon: "CloudDownload",
+                    icon: "CloudUpload",
                     onClick: () => {
                         onPressExport(locale);
                     },
                 },
                 {
-                    icon: "CloudUpload",
+                    icon: "CloudDownload",
                     onClick: () => {
                         onPressImport(locale);
                     },

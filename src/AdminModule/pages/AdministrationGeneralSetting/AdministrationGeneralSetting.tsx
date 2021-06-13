@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { isString as _isString } from "lodash";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import { useTranslation } from "react-i18next";
 import {
     AppPageHeader,
     AppCard,
@@ -77,6 +78,7 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
     const [files, setFiles] = React.useState<ContainerFormType>(
         {} as ContainerFormType
     );
+    const { t } = useTranslation();
 
     const hookNav = useNavigate();
     const nav = navigate ?? hookNav;
@@ -251,7 +253,7 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
             configuration &&
             configuration.map((e: any) => {
                 return (
-                    <AppTab eventKey={`${e.title}_key`} title={e.title}>
+                    <AppTab eventKey={`${e.title}_key`} title={t(e.title)}>
                         <Col md={12} className="p-0 mt-4">
                             <AppCard>
                                 <Row>

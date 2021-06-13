@@ -4,6 +4,7 @@ import { Canceler } from "axios";
 import { Row, Col } from "react-bootstrap";
 import { isString as _isString } from "lodash";
 import { useSetRecoilState } from "recoil";
+import { useTranslation } from "react-i18next";
 import { errorToast, hideLoader, showLoader } from "../../utils";
 import {
     AppPageHeader,
@@ -39,6 +40,7 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
     const setLayoutOptions = useSetRecoilState<AppDashboardLayoutOptions>(
         appDashboardLayoutOptions
     );
+    const { t } = useTranslation();
 
     const handleLogoutEvent = async (): Promise<void> => {
         await logoutAction(dispatch);
@@ -104,13 +106,14 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <Fragment>
-            <AppPageHeader title={"Containers"} customToolbar>
+            <AppPageHeader title={t("container:header.title")} customToolbar>
                 <AppButton
                     variant="primary"
                     className="p-2"
                     onClick={handleLogoutEvent}
                 >
-                    <i className="fas fa-sign-out p-1"></i> Logout
+                    <i className="fas fa-sign-out p-1"></i>
+                    {t("container:button.logout")}
                 </AppButton>
             </AppPageHeader>
             <Row>
