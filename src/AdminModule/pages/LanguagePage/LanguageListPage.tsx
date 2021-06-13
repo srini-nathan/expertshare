@@ -1,6 +1,7 @@
 import React, { FC, Fragment, useState, useRef } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { isString as _isString } from "lodash";
 import {
     GridApi,
@@ -12,7 +13,7 @@ import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { LanguageApi } from "../../apis";
 import { Language } from "../../models";
-import { AppPageHeader, AppLoader } from "../../../AppModule/components";
+import { AppPageHeader } from "../../../AppModule/components";
 import {
     AppGrid,
     buildFilterParams,
@@ -20,18 +21,23 @@ import {
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
 import { useAuthState, useDownloadFile } from "../../../AppModule/hooks";
-import { errorToast, successToast } from "../../../AppModule/utils";
+import {
+    errorToast,
+    successToast,
+    showLoader,
+    hideLoader,
+} from "../../../AppModule/utils";
 import "./assets/scss/list.scss";
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
-    const [loading, isLoading] = useState<boolean>(false);
     const [selectedLocale, setSelectedLocale] = useState<string>("");
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const { containerId } = useAuthState();
     const [updateLink] = useDownloadFile();
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const { t } = useTranslation();
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -74,10 +80,10 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
         LanguageApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
                 if (_isString(error)) {
-                    errorToast(error);
+                    errorToast(t(error));
                 }
             } else {
-                successToast("Successfully deleted");
+                successToast(t("admin.language.list:delete.toast.success"));
                 appGridApi.current?.refreshServerSideStore({
                     purge: false,
                     route: [],
@@ -86,7 +92,7 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
         });
     }
     async function handleExport(locale: string) {
-        LanguageApi.exportLanguage(containerId as number, `${locale}.csv`).then(
+        LanguageApi.exportLanguage(containerId, `${locale}.csv`).then(
             (reponse) => {
                 updateLink({
                     name: `${locale}.csv`,
@@ -103,25 +109,24 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
         }
     }
     async function uploadFile(e: any) {
-        isLoading(true);
+        showLoader(t("admin.language.list:translation.importing"));
         const formData = new FormData();
         formData.append("file", e.target.files[0]);
 
-        LanguageApi.importLanguage(
-            containerId as number,
-            selectedLocale,
-            formData
-        ).then(({ error, response }) => {
-            isLoading(false);
-
-            if (error !== null) {
-                if (_isString(error)) {
-                    errorToast(error);
+        LanguageApi.importLanguage(containerId, selectedLocale, formData).then(
+            ({ error, response }) => {
+                hideLoader();
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(t(error));
+                    }
+                } else if (response !== null) {
+                    successToast(
+                        t("admin.language.list:translation.toast.success")
+                    );
                 }
-            } else if (response !== null) {
-                successToast("Imported!");
             }
-        });
+        );
     }
 
     async function handleFilter(search: string) {
@@ -132,14 +137,10 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
         });
     }
 
-    if (loading) {
-        return <AppLoader />;
-    }
-
     return (
         <Fragment>
             <AppPageHeader
-                title={"Languages"}
+                title={t("admin.language.list:header.title")}
                 createLink={"/admin/languages/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}

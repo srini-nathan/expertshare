@@ -1,6 +1,7 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -40,6 +41,7 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
         new Language(containerResourceId)
     );
     const [loading, setLoading] = useState<boolean>(isEditMode);
+    const { t } = useTranslation();
 
     const {
         control,
@@ -58,11 +60,13 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
                 if (error instanceof UnprocessableEntityErrorResponse) {
                     setViolations<Language>(error, setError);
                 } else if (errorMessage) {
-                    errorToast(errorMessage);
+                    errorToast(t(errorMessage));
                 } else {
                     navigator("..").then(() => {
                         successToast(
-                            isEditMode ? "Language updated" : "Language created"
+                            isEditMode
+                                ? t("admin.language.form:toast.success.edit")
+                                : t("admin.language.form:toast.success.add")
                         );
                     });
                 }
@@ -77,7 +81,9 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
                     if (errorMessage) {
                         errorToast(errorMessage);
                     } else if (isNotFound) {
-                        errorToast("Language not exist");
+                        errorToast(
+                            t("admin.language.form:toast.error.notfound")
+                        );
                     } else if (response !== null) {
                         setData(response);
                         trigger();
@@ -96,9 +102,16 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
 
     return (
         <Fragment>
-            <AppBreadcrumb linkText={"Language"} linkUrl={".."} />
+            <AppBreadcrumb
+                linkText={t("admin.language.list:header.title")}
+                linkUrl={".."}
+            />
             <AppPageHeader
-                title={isEditMode ? "Edit Language" : "Add Language"}
+                title={
+                    isEditMode
+                        ? t("admin.language.form:header.title")
+                        : t("admin.language.form:header.edittitle")
+                }
             />
             <Row>
                 <Col>
@@ -107,7 +120,7 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
                             <Form.Row>
                                 <AppFormInput
                                     name={"name"}
-                                    label={"Name"}
+                                    label={t("admin.language.form:label.name")}
                                     maxCount={name.max}
                                     {...validation(
                                         "name",
@@ -120,7 +133,9 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
                                 />
                                 <AppFormInput
                                     name={"locale"}
-                                    label={"Locale"}
+                                    label={t(
+                                        "admin.language.form:label.locale"
+                                    )}
                                     maxCount={locale.max}
                                     {...validation(
                                         "locale",
@@ -133,7 +148,9 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
                                 />
                                 <AppFormSwitch
                                     name={"isActive"}
-                                    label={"Is Active ?"}
+                                    label={t(
+                                        "admin.language.form:label.isActive"
+                                    )}
                                     {...validation(
                                         "locale",
                                         formState,

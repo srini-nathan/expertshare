@@ -20,6 +20,7 @@ interface AppGridLinkAction {
 
 interface AppGridClickAction {
     confirmation?: string;
+    confirmationTitle?: string;
     onClick?: () => void;
     disable?: boolean;
 }

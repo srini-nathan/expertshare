@@ -1,5 +1,6 @@
 import React, { ReactElement } from "react";
 import { ICellRendererParams } from "ag-grid-community";
+import { useTranslation } from "react-i18next";
 import {
     AppRadio,
     AppSwitch,
@@ -12,7 +13,7 @@ import { errorToast, successToast } from "../../../AppModule/utils";
 import { AppCellActionWithRenderWithCustom } from "./app-actions";
 
 export const appGridFrameworkComponents = {
-    appSwitch: (params: ICellRendererParams): ReactElement => {
+    AppSwitch: (params: ICellRendererParams): ReactElement => {
         const { data } = params;
         const { id, name, isActive, isDefault } = data as Language;
 
@@ -31,9 +32,11 @@ export const appGridFrameworkComponents = {
             />
         );
     },
-    appFormRadio: (params: ICellRendererParams): ReactElement => {
+    AppFormRadio: (params: ICellRendererParams): ReactElement => {
         const { data, api } = params;
         const { id, name, isDefault } = data as Language;
+        const { t } = useTranslation();
+
         return (
             <AppRadio
                 name={"isDefault"}
@@ -46,7 +49,11 @@ export const appGridFrameworkComponents = {
                                 errorToast(errorMessage);
                             } else {
                                 api.refreshServerSideStore({ purge: true });
-                                successToast("Default language changed.");
+                                successToast(
+                                    t(
+                                        "admin.language.list:defaultlanguage.toast.success"
+                                    )
+                                );
                             }
                         }
                     );
@@ -54,11 +61,12 @@ export const appGridFrameworkComponents = {
             ></AppRadio>
         );
     },
-    appGridActionRenderer: (
+    AppGridActionRenderer: (
         params: AppCellActionWithRenderWithCustom
     ): ReactElement => {
         const { data, onPressDelete, onPressExport, onPressImport } = params;
         const { id, isDefault, locale } = data as Language;
+        const { t } = useTranslation();
 
         const props: AppGridActionProps = {
             editAction: {
@@ -67,7 +75,12 @@ export const appGridFrameworkComponents = {
             },
             deleteAction: {
                 disable: isDefault,
-                confirmation: "Are you sure want to delete ?",
+                confirmation: t(
+                    "admin.language.form:delete.confirmation.message"
+                ),
+                confirmationTitle: t(
+                    "admin.language.form:delete.confirmation.title"
+                ),
                 onClick: () => {
                     onPressDelete(id);
                 },
