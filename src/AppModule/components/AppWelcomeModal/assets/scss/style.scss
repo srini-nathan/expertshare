@@ -1,10 +1,6 @@
 @import "../../../../assets/scss/screens-sizes";
 @import "../../../../assets/scss/variables";
 
-.modal-backdrop.show {
-    opacity: 0 !important;
-    display: flex;
-}
 
 .app-welcome-model {
     &.modal {
