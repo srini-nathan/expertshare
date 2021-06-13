@@ -5,7 +5,9 @@ export const init = (resources: Resource) => {
     i18n.use(initReactI18next).init({
         lng: "en",
         fallbackLng: "en",
-        debug: false,
+        keySeparator: false,
+        nsSeparator: "::",
+        debug: true,
         interpolation: {
             escapeValue: false,
         },
