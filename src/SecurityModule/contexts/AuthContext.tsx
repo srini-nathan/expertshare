@@ -6,7 +6,6 @@ import {
     AUTH_CHOSEN_CONTAINER,
     AUTH_TOKEN_KEY,
     AUTH_USER_KEY,
-    USER_LOCALE,
 } from "../../AppModule/config/app-env";
 import { AuthState } from "../models/context/AuthState";
 
@@ -133,9 +132,6 @@ export const socialLogin = async (
             await localStorage.setItem(AUTH_TOKEN_KEY, token);
             const user = await AuthApi.me();
             await localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
-            if (user.locale) {
-                localStorage.setItem(USER_LOCALE, user.locale);
-            }
             dispatch({
                 type: AuthActionTypes.LOGIN_SUCCESS,
                 payload: {
@@ -201,9 +197,6 @@ export const loginAction = async (
             const { ip, roles, cid, cntid }: JWT = await jwtDecode(token);
             await localStorage.setItem(AUTH_TOKEN_KEY, token);
             const user = await AuthApi.me();
-            if (user.locale) {
-                localStorage.setItem(USER_LOCALE, user.locale);
-            }
             await localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
             dispatch({
                 type: AuthActionTypes.LOGIN_SUCCESS,
@@ -254,9 +247,6 @@ export default function AuthProvider({ children }: Props): JSX.Element {
             if (token) {
                 try {
                     const user = await AuthApi.me();
-                    if (user.locale) {
-                        localStorage.setItem(USER_LOCALE, user.locale);
-                    }
                     const { ip, roles, cid, cntid }: JWT = jwtDecode(token);
                     dispatch({
                         type: AuthActionTypes.LOGIN_SUCCESS,

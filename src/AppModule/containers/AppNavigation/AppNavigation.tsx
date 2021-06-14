@@ -54,7 +54,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const { dispatch, state } = React.useContext(AuthContext);
     const { role, containerId } = useAuthState();
     const { user } = state;
-    const { locale, setLocale } = useUserLocale();
+    const { locale, setLocale, containerLocale } = useUserLocale();
     const [overflowItems, setOverflowItems] = useState<
         AppNavigationItemProps[] | AppSubNavigationItemProps[]
     >([]);
@@ -177,6 +177,16 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const { location } = useWindowLocation();
     const logoHolder = useRef<HTMLDivElement>(null);
     const bottomMenu = useRef<HTMLAnchorElement>(null);
+
+    useEffect(() => {
+        if (locale === "") {
+            if (user.locale) {
+                setLocale(user.locale);
+            } else {
+                setLocale(containerLocale);
+            }
+        }
+    });
 
     const handleLogoutEvent = async (): Promise<void> => {
         await logoutAction(dispatch);
