@@ -194,9 +194,6 @@ export const AppUploader: FC<AppUploaderProps> = ({
                                 setCropUrl(url);
                             }}
                             handleBlob={(blob) => {
-                                /* eslint-disable no-console */
-                                console.log(blob);
-                                /* eslint-enable no-console */
                                 setCropperFile(blob);
                                 onFileSelect([blob]);
                             }}

@@ -12,7 +12,7 @@ import * as Yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-import { AppFormElementProps, Upload } from "../../models";
+import { AppFormElementProps, FileTypeInfo, Upload } from "../../models";
 import { AppUploader } from "../AppUploader";
 import { UploadAPI, NewsfeedApi } from "../../apis";
 import { AppFormSwitch } from "../AppFormSwitch";
@@ -24,6 +24,12 @@ import { errorToast, successToast } from "../../utils";
 import "emoji-mart/css/emoji-mart.css";
 import "./assets/scss/style.scss";
 
+import { CONSTANTS } from "../../../config";
+
+const { Upload: UPLOAD } = CONSTANTS;
+const {
+    FILETYPEINFO: { FILETYPEINFO_NEWSFEED_MEDIA },
+} = UPLOAD;
 export interface AppFeedAdderProps extends AppFormElementProps {
     isSend?: boolean;
     rows?: number;
@@ -276,6 +282,9 @@ export const AppFeedAdder: FC<AppFeedAdderProps> = ({
                                 onFileSelect={(files) => {
                                     setImageData(files);
                                 }}
+                                fileInfo={
+                                    FILETYPEINFO_NEWSFEED_MEDIA as FileTypeInfo
+                                }
                             />
                         </>
                     )}
@@ -297,6 +306,9 @@ export const AppFeedAdder: FC<AppFeedAdderProps> = ({
                                 onFileSelect={(video) => {
                                     setVideoFile(video);
                                 }}
+                                fileInfo={
+                                    FILETYPEINFO_NEWSFEED_MEDIA as FileTypeInfo
+                                }
                             />
                         </>
                     )}
