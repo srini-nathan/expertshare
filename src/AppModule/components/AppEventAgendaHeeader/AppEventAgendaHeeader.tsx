@@ -55,7 +55,7 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                             <>
                                 <Col className="inner-container--action--base p-0">
                                     <Link
-                                        to="#"
+                                        to="/admin/session-categories"
                                         className="manage-cat btn btn-secondary"
                                     >
                                         {t(

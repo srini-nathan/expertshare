@@ -27,6 +27,8 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
         jobTitle,
         company,
         email,
+        isExposeEmail,
+        isAllowCommunication,
         userTags,
     } = attendee as User;
     const profilePicturePath = useBuildAssetPath(
@@ -81,7 +83,7 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                     {jobTitle}, {company}
                 </p>
                 <a href="#" className="card--title--mail mb-3 d-block">
-                    {email}
+                    {isExposeEmail && email}
                 </a>
             </div>
             {userTags && (
@@ -129,12 +131,14 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                                             Start Video Chat
                                         </a>
                                     </div> */}
-                                    <div className="popup--inner--item conversation">
-                                        <a href="#">
-                                            <AppIcon name="Conversation" />
-                                            Start Conversation
-                                        </a>
-                                    </div>
+                                    {isAllowCommunication && (
+                                        <div className="popup--inner--item conversation">
+                                            <a href="#">
+                                                <AppIcon name="Conversation" />
+                                                Start Conversation
+                                            </a>
+                                        </div>
+                                    )}
                                     <div className="popup--inner--item view-profile">
                                         <Link
                                             to={`/attendee/${attendee.id}/show`}

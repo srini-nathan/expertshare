@@ -6,6 +6,7 @@ import {
     AUTH_CHOSEN_CONTAINER,
     AUTH_TOKEN_KEY,
     AUTH_USER_KEY,
+    AUTH_SKIP_ONBOARDING,
 } from "../../AppModule/config/app-env";
 import { AuthState } from "../models/context/AuthState";
 
@@ -39,6 +40,7 @@ const clearAuthStorage = async () => {
     localStorage.removeItem(AUTH_TOKEN_KEY);
     localStorage.removeItem(AUTH_USER_KEY);
     localStorage.removeItem(AUTH_CHOSEN_CONTAINER);
+    localStorage.removeItem(AUTH_SKIP_ONBOARDING);
 };
 
 function reducer(state: AuthState, action: IAuthAction): AuthState {
@@ -179,6 +181,7 @@ export const autoLogin = async (
 ): Promise<void> => {
     await clearAuthStorage();
     localStorage.setItem(AUTH_CHOSEN_CONTAINER, "true");
+    localStorage.setItem(AUTH_SKIP_ONBOARDING, "true");
     return socialLogin(token, dispatch);
 };
 

@@ -8,6 +8,7 @@ import "./assets/scss/style.scss";
 import { useBuildAssetPath } from "../../hooks";
 import placeholder from "../../assets/images/user-avatar.png";
 import { FileTypeInfo } from "../../models";
+import { AppIcon } from "../AppIcon";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -19,6 +20,9 @@ export interface AppProfileHeaderProps {
     lastName?: string;
     jobTitle?: string;
     imageName?: string;
+    isAllowCommunication?: boolean;
+    isExposeEmail?: boolean;
+    isProfilePage?: boolean;
     email?: string;
     userTags?: any[];
 }
@@ -28,6 +32,9 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
     lastName,
     jobTitle,
     imageName,
+    isAllowCommunication = true,
+    isExposeEmail = true,
+    isProfilePage = true,
     email,
     userTags,
 }): JSX.Element => {
@@ -83,7 +90,7 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                             <p>{jobTitle && jobTitle}</p>
                         </Col>
                         <Col className="inner-container--main-det--mail p-0">
-                            <span>{email}</span>
+                            <span>{isExposeEmail && email}</span>
                         </Col>
                         <Col className="inner-container--main-det--tags mt-4 p-0">
                             <Col className="row m-0 p-0">
@@ -101,24 +108,32 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                             </Col>
                         </Col>
                     </Col>
-                    <Col className="inner-container--right-btn col-auto mr-0 ml-auto pr-4 p-0">
-                        <Col className="inner-container--right-btn--content p-0">
-                            <AppButton
-                                variant="secondary"
-                                className="get-contact-btn"
-                            >
-                                <i className="fak fa-start-conversation pr-2"></i>
-                                Get In Contact
-                            </AppButton>
-                            {/* <AppButton
+                    {!isProfilePage && (
+                        <Col className="inner-container--right-btn col-auto mr-0 ml-auto pr-4 p-0">
+                            <Col className="inner-container--right-btn--content p-0">
+                                {isAllowCommunication && (
+                                    <AppButton
+                                        variant="secondary"
+                                        className="get-contact-btn"
+                                    >
+                                        <AppIcon
+                                            name="Conversation"
+                                            className="mr-2"
+                                        />
+                                        Start Conversation
+                                    </AppButton>
+                                )}
+
+                                {/* <AppButton
                                 variant="secondary"
                                 className="add-user-btn px-3 mr-2"
                             >
                                 <i className="fak fa-user-plus-regular pr-2"></i>
                                 Follow
                             </AppButton> */}
+                            </Col>
                         </Col>
-                    </Col>
+                    )}
                     <Col
                         md={12}
                         className="inner-container--portfolio  px-0 mt-4 portfolio-carousel"

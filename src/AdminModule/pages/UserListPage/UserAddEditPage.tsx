@@ -198,7 +198,6 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
             return UserTagApi.toResourceUrl(parseInt(e.id, 10));
         });
         formData.userGroups = userGroupsSelectedItems;
-        formData.image_name = "";
 
         if (formData.relationManager === "") delete formData.relationManager;
 
@@ -439,10 +438,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
 
     const renderUserFields = () => {
         return userFields.map((e) => {
-            let defaultValue: any = null;
-            data.userFieldValues?.forEach((item: any) => {
-                if (e.id === item.userField.id) defaultValue = item;
-            });
+            const defaultValue: any = (data?.userFieldValues as any[]).find(
+                (item: any) => e.id === item.userField.id
+            );
             return (
                 <AppFormFieldGenerator
                     key={e.id}
@@ -503,7 +501,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     name={"firstName"}
                                     label={"First Name"}
                                     defaultValue={data.firstName}
-                                    required={true}
+                                    required={false}
                                     {...validation(
                                         "firstName",
                                         formState,
@@ -518,7 +516,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     name={"lastName"}
                                     defaultValue={data.lastName}
                                     label={"Last Name"}
-                                    required={true}
+                                    required={false}
                                     {...validation(
                                         "lastName",
                                         formState,
@@ -534,7 +532,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     name={"company"}
                                     defaultValue={data.company}
                                     label={"Company"}
-                                    required={true}
+                                    required={false}
                                     {...validation(
                                         "company",
                                         formState,
@@ -549,7 +547,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     defaultValue={data.jobTitle}
                                     name={"jobTitle"}
                                     label={"Job Title"}
-                                    required={true}
+                                    required={false}
                                     {...validation(
                                         "jobTitle",
                                         formState,
@@ -581,7 +579,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     className="local-container"
                                     lg={6}
                                     xl={6}
-                                    required={true}
+                                    required={false}
                                     {...validation(
                                         "locale",
                                         formState,
@@ -676,7 +674,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     className="role-container"
                                     lg={6}
                                     xl={6}
-                                    required={true}
+                                    required={false}
                                     {...validation(
                                         "relationManager",
                                         formState,
@@ -755,7 +753,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     md={12}
                                     lg={6}
                                     xl={6}
-                                    required={true}
+                                    required={false}
                                     {...validation(
                                         "timezone",
                                         formState,
@@ -787,10 +785,10 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     id={"isBlocked"}
                                     name={"isBlocked"}
                                     label={"Is Blocked"}
+                                    required={false}
                                     md={12}
                                     lg={6}
                                     xl={6}
-                                    required={true}
                                     {...validation(
                                         "isBlocked",
                                         formState,
@@ -855,7 +853,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     md={12}
                                     lg={4}
                                     xl={4}
-                                    required={true}
+                                    required={false}
                                     {...validation(
                                         "isDisplayAsGuest",
                                         formState,
@@ -874,7 +872,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     md={12}
                                     lg={4}
                                     xl={4}
-                                    required={true}
+                                    required={false}
                                     {...validation(
                                         "isExposeEmail",
                                         formState,
@@ -891,7 +889,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     md={12}
                                     lg={4}
                                     xl={4}
-                                    required={true}
+                                    required={false}
                                     {...validation(
                                         "isAllowCommunication",
                                         formState,

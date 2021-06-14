@@ -103,9 +103,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
             bucketSecret: Yup.string().required("Bucket Secret is Required"),
             bucketName: Yup.string().required("Bucket Name is Required"),
             bucketRegion: Yup.string().required("Bucket Region is Required"),
-            bucketEndpoint: Yup.string().required(
-                "Bucket Endpoint is Required"
-            ),
+            bucketEndpoint: Yup.string().nullable(),
         };
     }
     const {
@@ -493,6 +491,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     lg={"6"}
                                     xl={"6"}
                                     name={"bucketEndpoint"}
+                                    required={false}
                                     label={"AWS S3 Bucket Endpoint"}
                                     {...validation(
                                         "bucketEndpoint",

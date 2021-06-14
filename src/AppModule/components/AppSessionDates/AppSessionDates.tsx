@@ -1,7 +1,9 @@
 import React, { FC } from "react";
 import { Col } from "react-bootstrap";
+import { format } from "date-fns";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "./assets/scss/style.scss";
+import { useGlobalData } from "../../contexts";
 
 export interface AppSessionDatesProps {
     sessionDates: { [key: string]: string };
@@ -14,31 +16,7 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
     activeDate,
     setActiveDate,
 }): JSX.Element => {
-    const getDay = (date: string) => {
-        const newDate = new Date(date);
-        const options = {
-            day: "2-digit",
-        } as const;
-        return newDate.toLocaleDateString("en-US", options);
-    };
-
-    const getDate2 = (date: string) => {
-        const newDate = new Date(date);
-        const options = {
-            year: "numeric",
-            month: "long",
-            day: "2-digit",
-        } as const;
-        return newDate.toLocaleDateString("en-US", options);
-    };
-    const getDayName = (date: string) => {
-        const newDate = new Date(date);
-
-        const options = {
-            weekday: "long",
-        } as const;
-        return newDate.toLocaleDateString("en-US", options);
-    };
+    const { container } = useGlobalData();
 
     return (
         <Col
@@ -66,15 +44,30 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
                                     >
                                         <div className="num-day">
                                             <span>
-                                                {getDay(sessionDates[key])}
+                                                {format(
+                                                    new Date(sessionDates[key]),
+                                                    "dd"
+                                                )}
                                             </span>
                                         </div>
                                         <div className="date-day">
                                             <span className="date-day--dofw">
-                                                {getDayName(sessionDates[key])}
+                                                {format(
+                                                    new Date(sessionDates[key]),
+                                                    "EEEE"
+                                                )}
                                             </span>
                                             <span className="date-day--dofy">
-                                                {getDate2(sessionDates[key])}
+                                                {format(
+                                                    new Date(sessionDates[key]),
+                                                    container &&
+                                                        container.configuration &&
+                                                        (container.configuration as any)
+                                                            .longDate
+                                                        ? (container.configuration as any)
+                                                              .longDate
+                                                        : "MMMM dd, yyyy"
+                                                )}
                                             </span>
                                         </div>
                                     </a>

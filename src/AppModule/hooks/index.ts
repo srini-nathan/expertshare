@@ -10,3 +10,4 @@ export * from "./useBuildAssetPath";
 export * from "./useIsGranted";
 export * from "./useChosenContainer";
 export * from "./useUserLocale";
+export * from "./useSkipOnboarding";

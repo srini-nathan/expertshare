@@ -26,6 +26,7 @@ const {
     api_users_invite_collection: API_INVITE,
     api_users_export_collection: API_EXPORT,
     api_users_get_limited_collection: GET_LIMITED_USERS,
+    api_users_email_exist_collection: EMAIL_EXIST,
 } = ROUTES;
 
 export abstract class UserApi extends EntityAPI {
@@ -106,6 +107,17 @@ export abstract class UserApi extends EntityAPI {
             .catch((error: AxiosError | ServerError) =>
                 this.handleErrorDuringCreatingOrUpdating(error)
             );
+    }
+
+    public static async emailExist(entity: any): Promise<any> {
+        return this.makePost<any, any>(EMAIL_EXIST, entity)
+            .then(({ data }) => {
+                return Promise.resolve(new FinalResponse(data, null));
+            })
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
     }
 
     public static async updateProfile<R, P>(

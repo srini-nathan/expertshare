@@ -21,9 +21,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [loading, isLoading] = useState<boolean>(true);
     const { containerResourceId, containerId } = useAuthState();
     const [data, setData] = useState<Session>(new Session(containerResourceId));
-    /* eslint-disable no-console */
-    console.log(data.streamUrl);
-    /* eslint-enable no-console */
+
     useEffect(() => {
         SessionApi.findById<Session>(id).then(
             ({ response, isNotFound, errorMessage }) => {
