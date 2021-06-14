@@ -12,6 +12,7 @@ import {
     EventAgenda,
     SessionDetailsPage,
     AttendeeOverview,
+    NewsFeedPage,
     OnBoardingPage,
 } from "./pages";
 import { ModuleRouter } from "./models";
@@ -41,6 +42,14 @@ export const routers: ModuleRouter[] = [
                     <SessionDetailsPage
                         path={"event/:conferenceId/session/:id"}
                     />
+                    <ContainerOverview path={"containers/overview"} />
+                    <ConferenceGrid path={"conferences"} />
+                    <ConferenceGrid path={"conferences/:view"} />
+                    <ConferenceAddEdit path={"conference/new"} />
+                    <ConferenceAddEdit path={"conference/:id"} />
+                    <AttendeeOverview path={"attendees"} />
+                    <AttendeeOverview path={"attendees/:view"} />
+                    <NewsFeedPage path={"newsfeed"} />
                     <AttendeeOverview path={"attendee"} />
                     <AttendeeOverview path={"attendee/:view"} />
                     <UserProfilePage path={"attendee/:id/show"} />

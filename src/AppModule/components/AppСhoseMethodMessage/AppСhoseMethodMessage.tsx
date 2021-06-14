@@ -11,7 +11,7 @@ export interface AppСhoseMethodMessageProps {
     rows: number;
     enterToPost?: boolean;
     isEdit?: boolean;
-    editMessage?: [];
+    editMessage?: any;
     handleMessageSend?: (message: string) => void;
     handleUpdateMessage?: (message: string) => void;
 }

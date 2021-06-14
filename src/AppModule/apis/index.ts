@@ -5,3 +5,5 @@ export * from "./EntityAPI";
 export * from "./UploadAPI";
 export * from "./SessionAPI";
 export * from "./SessionCommentsAPI";
+export * from "./NewsfeedApi";
+export * from "./NewsfeedCommentApi";

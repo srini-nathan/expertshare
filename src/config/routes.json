@@ -1,5 +1,5 @@
 {
-    "_preview_error": "/_error/{code}",
+    "_preview_error": "/_error/{code}.{_format}",
     "_wdt": "/_wdt/{token}",
     "api_aframe_a3d": "/api/aframe/a3d",
     "api_conferences_clone_collection": "/api/conferences/clone",

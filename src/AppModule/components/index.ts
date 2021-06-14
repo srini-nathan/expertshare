@@ -72,6 +72,8 @@ export * from "./AppSessionDescription";
 export * from "./AppSessionTags";
 export * from "./AppSessionCategoryTranslations";
 export * from "./AttendeeCard";
+export * from "./AppFeedAdder";
+export * from "./AppFeedShower";
 export * from "./AppPictureInPicture";
 export * from "./AppUserListItem";
 export * from "./AppFormFile";

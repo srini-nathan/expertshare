@@ -4,12 +4,12 @@ import { ROUTES } from "../../config";
 import { EntityAPI } from "./EntityAPI";
 
 const {
-    api_sessions_get_agenda_collection: API_GET_SESSIONS_RESOURCES,
+    // api_sessions_get_agenda_collection: API_GET_SESSIONS_RESOURCES,
     api_sessions_post_collection: API_POST_SESSION,
 } = ROUTES;
 
 export abstract class SessionAPI extends EntityAPI {
-    protected static GET_SESSIONS = API_GET_SESSIONS_RESOURCES;
+    // protected static GET_SESSIONS = API_GET_SESSIONS_RESOURCES;
 
     protected static POST_SESSION = API_POST_SESSION;
 

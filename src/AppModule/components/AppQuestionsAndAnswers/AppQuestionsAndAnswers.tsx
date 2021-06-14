@@ -108,6 +108,12 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
         patchMessage(message, qId);
     };
 
+    const handleScroll = () => {
+        const { scrollY } = window;
+        /* eslint-disable no-console */
+        console.log(scrollY);
+    };
+
     useEffect(() => {
         getCurrentQestionsAndAnswersThread();
     }, []);
@@ -133,7 +139,10 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                         }}
                     />
                 </div>
-                <div className="questions-and-answers-wrapper--thread">
+                <div
+                    className="questions-and-answers-wrapper--thread"
+                    onScroll={handleScroll}
+                >
                     <AppQAThread
                         data={data}
                         deleteQuestion={(qId) => {

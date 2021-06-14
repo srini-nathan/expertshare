@@ -23,9 +23,10 @@ export const AppQAThread: FC<QAThreadProps> = ({
             <Col className="p-0">
                 <div className="question-wrapper">
                     {data.length > 0 &&
-                        data.map((item: any) => (
+                        data.map((item: any, index: number) => (
                             <>
                                 <AppDetailsAction
+                                    key={index}
                                     questionId={item.id}
                                     userObj={item.user}
                                     handleCloseMessages={() => {}}
@@ -44,34 +45,37 @@ export const AppQAThread: FC<QAThreadProps> = ({
                                 >
                                     {item.message}
                                     {item.children.length > 0 &&
-                                        item.children.map((answer: any) => (
-                                            <div className="question-wrapper--child">
-                                                {/* List of aswers */}
-                                                <AppDetailsAction
-                                                    questionId={answer.id}
-                                                    userObj={item.user}
-                                                    handleCloseMessages={() => {}}
-                                                    isPTOP
-                                                    handleDeleteQuestion={(
-                                                        qId
-                                                    ) => {
-                                                        deleteQuestion(qId);
-                                                    }}
-                                                    updateMessage={(
-                                                        message,
-                                                        iId
-                                                    ) => {
-                                                        updateMessage(
+                                        item.children.map(
+                                            (answer: any, i: number) => (
+                                                <div className="question-wrapper--child">
+                                                    {/* List of aswers */}
+                                                    <AppDetailsAction
+                                                        key={i}
+                                                        questionId={answer.id}
+                                                        userObj={item.user}
+                                                        handleCloseMessages={() => {}}
+                                                        isPTOP
+                                                        handleDeleteQuestion={(
+                                                            qId
+                                                        ) => {
+                                                            deleteQuestion(qId);
+                                                        }}
+                                                        updateMessage={(
                                                             message,
                                                             iId
-                                                        );
-                                                    }}
-                                                    addComment
-                                                >
-                                                    {answer.message}
-                                                </AppDetailsAction>
-                                            </div>
-                                        ))}
+                                                        ) => {
+                                                            updateMessage(
+                                                                message,
+                                                                iId
+                                                            );
+                                                        }}
+                                                        addComment
+                                                    >
+                                                        {answer.message}
+                                                    </AppDetailsAction>
+                                                </div>
+                                            )
+                                        )}
                                 </AppDetailsAction>
                             </>
                         ))}
