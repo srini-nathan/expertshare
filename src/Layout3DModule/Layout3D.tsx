@@ -13,6 +13,7 @@ import { useBuildAssetPath } from "../AppModule/hooks";
 import { CONSTANTS } from "../config";
 import { mainMessageTabs } from "../AppModule/containers/AppMessageBox/tabs-configurator";
 import { PanelInterfaceProps } from "./components/Types/Interfaces";
+import { FileTypeInfo } from "../AppModule/models";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -40,8 +41,12 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
     const pathRoom = FILETYPEINFO_AFRAMEROOM_MEDIA.path;
     const pathPanel = FILETYPEINFO_AFRAMEPANEL_MEDIA.path;
 
-    const imgPath = useBuildAssetPath(pathRoom);
-    const panelPath = useBuildAssetPath(pathPanel);
+    const imgPath = useBuildAssetPath(
+        FILETYPEINFO_AFRAMEROOM_MEDIA as FileTypeInfo
+    );
+    const panelPath = useBuildAssetPath(
+        FILETYPEINFO_AFRAMEPANEL_MEDIA as FileTypeInfo
+    );
 
     const [ROOM_ASSETS_PATH] = useState<string>(imgPath);
     const [PANEL_ASSETS_PATH] = useState<string>(panelPath);

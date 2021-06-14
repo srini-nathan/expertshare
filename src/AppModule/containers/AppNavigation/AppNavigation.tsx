@@ -156,7 +156,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
-            roles: [ROLE_ADMIN],
+            isVisible: isGranted(role, ROLE_ADMIN),
         },
         {
             label: "Containers",
