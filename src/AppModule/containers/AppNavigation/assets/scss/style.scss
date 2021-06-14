@@ -331,7 +331,7 @@
                 color: var(--sidebar-icon-clr);
                 border-radius: var(--border-radius);
 
-                svg {
+                svg, i {
                     width: 20px;
                     height: 20px;
                     margin: auto;
@@ -413,7 +413,7 @@
                     @include media("lg") {
                         font-size: 12px;
                     }
-                    
+
                     @include media("md") {
                         font-size: .8rem;
                     }
