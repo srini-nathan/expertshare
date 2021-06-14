@@ -12,7 +12,7 @@ export interface AppCellActionWithRenderParams
 export const appGridFrameworkComponents = {
     appSwitch: (params: ICellRendererParams): ReactElement => {
         const { data } = params;
-        const { id, isEntryRoom } = data as AFrameRoom;
+        const { id, isEntryRoom = false } = data as AFrameRoom;
 
         return (
             <AppSwitch
@@ -37,10 +37,10 @@ export const appGridFrameworkComponents = {
         const props: AppGridActionProps = {
             isGrantedControl,
             editAction: {
-                url: `/aframeroom/${id}`,
+                url: `/admin/room/${id}`,
             },
             viewAction: {
-                url: `/aframeroom/${id}`,
+                url: `/admin/room/${id}`,
             },
             deleteAction: {
                 confirmation: "Are you sure want to delete?",

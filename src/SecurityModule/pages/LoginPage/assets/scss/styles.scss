@@ -55,6 +55,57 @@
     }
 }
 
+.tabs-translation-auth {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+
+    .active {
+        color: var(--primary) !important;
+        background-color: var(--primary-20) !important;
+        border-color: transparent !important;
+    }
+
+    .btn {
+        text-transform: capitalize;
+
+        i {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
+    }
+
+    .en {
+        i {
+            background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/en_flag.png);
+            background-size: 20px;
+        }
+    }
+
+    .it {
+        i {
+            background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/it_flag.jpg);
+            background-size: 20px;
+        }
+    }
+
+    .fr {
+        i {
+            background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/fr_flag.png);
+            background-size: 20px;
+        }
+    }
+
+    .de {
+        i {
+            background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/de_flag.png);
+            background-size: 20px;
+        }
+    }
+}
+
 .active-account-box {
     width: 100%;
 
@@ -94,7 +145,6 @@
 
             .forgot-password {
                 display: flex;
-                margin-top: -10px;
                 font-size: 14px;
                 font-weight: 700;
                 color: var(--primary);
@@ -128,12 +178,12 @@
                         opacity: 50%;
                     }
 
-                    p {
-                        font-size: 14px;
-                        font-weight: 400;
-                        color: var(--secondary);
-                        text-align: left;
-                    }
+                    // p {
+                    //     font-size: 14px;
+                    //     font-weight: 400;
+                    //     color: var(--secondary);
+                    //     text-align: left;
+                    // }
                 }
             }
 

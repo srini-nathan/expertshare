@@ -199,17 +199,15 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                     }
                 } else if (response !== null) {
                     const translationItems = translation;
+                    if (translationItems) {
+                        translationItems[index] = {
+                            ...translationItems[index],
+                            id: response.id,
+                            tKey: response.tKey,
+                        };
+                    }
 
-                    if (translationItems)
-                        setTransalations([
-                            ...translationItems.splice(0, indexItem),
-                            {
-                                ...translationItems[index],
-                                id: response.id,
-                                tKey: response.tKey,
-                            },
-                            ...translationItems.splice(indexItem + 1),
-                        ]);
+                    setTransalations(translationItems);
                 }
             });
         }

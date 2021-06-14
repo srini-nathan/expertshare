@@ -2,7 +2,7 @@ import * as yup from "yup";
 
 const schema = yup.object().shape({
     isVisible: yup.boolean(),
-    streamType: yup.string().default("YOUTUBE"),
+    streamType: yup.string().nullable(),
     isExternalLinkEnable: yup.boolean(),
     sessionCategory: yup.string().required(),
     cardSize: yup.string().required(),

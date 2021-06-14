@@ -81,11 +81,9 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
                 } else if (errorMessage) {
                     errorToast(errorMessage);
                 } else {
-                    navigator("/aframerooms").then(() => {
+                    navigator("/admin/rooms").then(() => {
                         successToast(
-                            isEditMode
-                                ? "AFrameRoom updated"
-                                : "AFrameRoom created"
+                            isEditMode ? "Rooms updated" : "Rooms created"
                         );
                     });
                 }
@@ -139,10 +137,8 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
 
     return (
         <Fragment>
-            <AppBreadcrumb linkText={"AFrameRooms"} linkUrl={"/aframerooms"} />
-            <AppPageHeader
-                title={isEditMode ? "Edit AFrameRooms" : "Add AFrameRooms"}
-            />
+            <AppBreadcrumb linkText={"Rooms"} linkUrl={"/admin/rooms"} />
+            <AppPageHeader title={isEditMode ? "Edit Rooms" : "Add Rooms"} />
             <Row>
                 <Col>
                     <AppCard>
@@ -171,22 +167,25 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
                                     </Form.Control.Feedback>
                                 </Form.Group>
                             </Form.Row>
-                            <AppFormSwitch
-                                sm={12}
-                                md={12}
-                                lg={12}
-                                xl={12}
-                                name={"isEntryRoom"}
-                                label={"Is EntryRoom?"}
-                                {...validation(
-                                    "isEntryRoom",
-                                    formState,
-                                    isEditMode
-                                )}
-                                errorMessage={errors.isEntryRoom?.message}
-                                defaultChecked={data.isEntryRoom}
-                                control={control}
-                            />
+                            {data.isEntryRoom !== undefined && (
+                                <AppFormSwitch
+                                    sm={12}
+                                    md={12}
+                                    lg={12}
+                                    xl={12}
+                                    name={"isEntryRoom"}
+                                    label={"Is EntryRoom?"}
+                                    {...validation(
+                                        "isEntryRoom",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    value={data.isEntryRoom}
+                                    errorMessage={errors.isEntryRoom?.message}
+                                    defaultChecked={data.isEntryRoom}
+                                    control={control}
+                                />
+                            )}
                             <Form.Row>
                                 <Form.Group
                                     as={Col}
@@ -378,7 +377,7 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
                             <AppFormActions
                                 isEditMode={isEditMode}
                                 navigation={navigator}
-                                backLink={"/aframerooms"}
+                                backLink={"/admin/rooms"}
                                 isLoading={formState.isSubmitting}
                             />
                         </Form>

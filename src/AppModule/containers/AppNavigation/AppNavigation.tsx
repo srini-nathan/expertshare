@@ -28,6 +28,7 @@ import {
     useBuildAssetPath,
     useIsGranted,
     useAuthState,
+    useUserLocale,
 } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
@@ -53,6 +54,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const { dispatch, state } = React.useContext(AuthContext);
     const { role, containerId } = useAuthState();
     const { user } = state;
+    const { locale, setLocale, containerLocale } = useUserLocale();
     const [overflowItems, setOverflowItems] = useState<
         AppNavigationItemProps[] | AppSubNavigationItemProps[]
     >([]);
@@ -165,6 +167,14 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             },
             isVisible: isGranted(role, ROLE_OPERATOR),
         },
+        {
+            label: "Rooms",
+            path: "/admin/rooms",
+            icon: {
+                name: "",
+            },
+            isVisible: isGranted(role, ROLE_OPERATOR),
+        },
     ]);
     const [showSubMenuItems, isSubMenuItems] = useState<boolean>(false);
     const [languages, setLanguages] = useState<Language[]>([]);
@@ -175,6 +185,16 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const { location } = useWindowLocation();
     const logoHolder = useRef<HTMLDivElement>(null);
     const bottomMenu = useRef<HTMLAnchorElement>(null);
+
+    useEffect(() => {
+        if (locale === "") {
+            if (user.locale) {
+                setLocale(user.locale);
+            } else {
+                setLocale(containerLocale);
+            }
+        }
+    });
 
     const handleLogoutEvent = async (): Promise<void> => {
         await logoutAction(dispatch);
@@ -245,9 +265,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                     }
                 } else if (response !== null) {
                     setLanguages(response.items);
-                    const ul = response.items.find(
-                        (e) => e.locale === user.locale
-                    );
+                    const ul = response.items.find((e) => e.locale === locale);
                     setUserLocale(ul);
                 }
             }
@@ -452,6 +470,10 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                     return {
                                                         label: e.name,
                                                         iconClassName: `languages ${e.locale}`,
+                                                        action: () => {
+                                                            setUserLocale(e);
+                                                            setLocale(e.locale);
+                                                        },
                                                     };
                                                 })}
                                         />

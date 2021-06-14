@@ -64,6 +64,8 @@ export const UserDetailsInfo: FC<UserInfo> = ({ data }): JSX.Element => {
     const style = imageName
         ? {
               backgroundImage: `url(${imagePath})`,
+              backgroundSize: "contain",
+              backgroundPosition: "center",
           }
         : {
               backgroundImage: `url(${UserAvatar})`,

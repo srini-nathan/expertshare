@@ -1,15 +1,16 @@
 import React, { FC, useState } from "react";
 import { Row, Col } from "react-bootstrap";
+import { format } from "date-fns";
 import { Link } from "@reach/router";
 import { Session, SessionCategory, User } from "../../../AdminModule/models";
 import "./assets/scss/style.scss";
-import { getTime } from "../../utils";
 import { useBuildAssetPath } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 import { AppButton } from "../AppButton";
 import { AppCard } from "../AppCard";
 import { AppUserListItem } from "../AppUserListItem";
 import { FileTypeInfo } from "../../models";
+import { useGlobalData } from "../../contexts";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -30,9 +31,11 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
     isGrantedControl,
 }): JSX.Element => {
     const conferencePosterPath = useBuildAssetPath(
-        FILETYPEINFO_SESSION_POSTER as FileTypeInfo
+        FILETYPEINFO_SESSION_POSTER as FileTypeInfo,
+        session.imageName
     );
     const [showMore, isShowMore] = useState<boolean>(false);
+    const { container } = useGlobalData();
 
     const getSize = (): string[] => {
         switch (session.cardSize) {
@@ -98,7 +101,16 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                     <i className="fak fa-clock-light"></i>
                                     <Col className="inner-container--header--time--content pl-3">
                                         <h2 className="mb-0">
-                                            {getTime(session.start)}
+                                            {format(
+                                                new Date(session.start),
+                                                container &&
+                                                    container.configuration &&
+                                                    (container.configuration as any)
+                                                        .shortTime
+                                                    ? (container.configuration as any)
+                                                          .shortTime
+                                                    : "hh:mm a"
+                                            )}
                                             <span className="value">
                                                 {getDiffTime()}
                                             </span>
@@ -130,7 +142,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                             >
                                 <div
                                     style={{
-                                        backgroundImage: `url(${conferencePosterPath}/${session.imageName})`,
+                                        backgroundImage: `url(${conferencePosterPath})`,
                                     }}
                                     className="inner-container--banner--content"
                                 >

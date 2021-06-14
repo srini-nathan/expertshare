@@ -18,7 +18,7 @@ export class AFrameRoom extends BaseEntity {
 
     camRotZ: string;
 
-    isEntryRoom: boolean;
+    isEntryRoom?: boolean;
 
     container: string;
 
@@ -31,7 +31,7 @@ export class AFrameRoom extends BaseEntity {
         camRotX = "",
         camRotY = "",
         camRotZ = "",
-        isEntryRoom = true,
+        isEntryRoom,
         container = "",
         id,
         createdAt,

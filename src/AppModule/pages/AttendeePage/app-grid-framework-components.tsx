@@ -1,38 +1,57 @@
 import { ICellRendererParams } from "ag-grid-community";
-import React, { ReactElement } from "react";
+import React, { FC, ReactElement } from "react";
 import { AppGridAction, AppGridActionProps, AppIcon } from "../../components";
 import { AppCellActionWithRenderWithCustom } from "./app-actions";
-import { User } from "../../models";
+import { FileTypeInfo, User } from "../../models";
 import UserAvatar from "../../assets/images/user-avatar.png";
+import { CONSTANTS } from "../../../config";
+import { useBuildAssetPath } from "../../hooks";
 
+const { Upload: UPLOAD } = CONSTANTS;
+const {
+    FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
+} = UPLOAD;
+
+interface UserInfo {
+    data: User;
+}
+export const UserDetailsInfo: FC<UserInfo> = ({ data }): JSX.Element => {
+    const { firstName, lastName, imageName } = data;
+    const imagePath = useBuildAssetPath(
+        FILETYPEINFO_USER_PROFILE as FileTypeInfo,
+        imageName
+    );
+
+    const style = imageName
+        ? {
+              backgroundImage: `url(${imagePath})`,
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+          }
+        : {
+              backgroundImage: `url(${UserAvatar})`,
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+          };
+
+    return (
+        <div className="info">
+            <div className="info--profile-pic mr-2">
+                <i style={style}></i>
+            </div>
+            <div className="info--det">
+                <h3 className="mb-1">
+                    {firstName} {lastName}
+                </h3>
+            </div>
+        </div>
+    );
+};
 export const appGridFrameworkComponents = {
     appNameTemplateRenderer: (params: ICellRendererParams): ReactElement => {
         const { data } = params;
-        const { firstName, lastName, jobTitle, company } = data as User;
-        return (
-            <div className="info">
-                <a href="#">
-                    <div className="info--profile-pic mr-2">
-                        <i
-                            style={{
-                                backgroundImage: `url(${
-                                    data.avatarUrl ? data.avatarUrl : UserAvatar
-                                })`,
-                                backgroundPosition: "center",
-                            }}
-                        ></i>
-                    </div>
-                    <div className="info--det">
-                        <h3 className="mb-1">
-                            {firstName} {lastName}
-                        </h3>
-                        <p className="mb-0">
-                            {jobTitle} at {company}
-                        </p>
-                    </div>
-                </a>
-            </div>
-        );
+
+        return <UserDetailsInfo data={data as User} />;
     },
     appTagTemplateRenderer: (params: ICellRendererParams): ReactElement => {
         const { data } = params;
@@ -79,7 +98,7 @@ export const appGridFrameworkComponents = {
     },
     appEmailRenderer: (params: ICellRendererParams): ReactElement => {
         const { data } = params;
-        return <div className="email">{data.email}</div>;
+        return <div className="email">{data.isExposeEmail && data.email} </div>;
     },
     appGridActionRenderer: (
         params: AppCellActionWithRenderWithCustom

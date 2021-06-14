@@ -61,6 +61,23 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
     });
 
     const onSubmit = async (formData: UserFieldEntity) => {
+        if (formData.options) {
+            const choice = (formData.options as any).map((e: any) => {
+                return {
+                    [e.key]: e.value,
+                };
+            });
+            formData.options = {
+                choice,
+            };
+        }
+        if (formData.attr)
+            formData.attr = (formData.attr as any).map((e: any) => {
+                return {
+                    [e.key]: e.value,
+                };
+            });
+
         return UserFieldApi.createOrUpdate<UserFieldEntity>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {

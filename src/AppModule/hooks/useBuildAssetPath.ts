@@ -28,7 +28,11 @@ export function useBuildAssetPath(
             basePath = `https://${bucketName}.s3.${bucketRegion}.amazonaws.com`;
         }
     } else {
-        basePath = `${API_HOST}/uploads/${id}/${path}`;
+        basePath = `${API_HOST}/uploads/${id}`;
+    }
+
+    if (path) {
+        basePath = `${basePath}/${path}`;
     }
 
     if (fileName) {

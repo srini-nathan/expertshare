@@ -57,7 +57,7 @@ export const AppAFrameRoomCard: FC<AppAFrameRoomCardProps> = ({
                     <div className="inner-container--banner--icons ">
                         {isGrantedControl && (
                             <>
-                                <Link to={`/aframeroom/${id}`}>
+                                <Link to={`/admin/room/${id}`}>
                                     <i className="fak fa-pen-regular"></i>
                                 </Link>
                                 <span
@@ -72,7 +72,7 @@ export const AppAFrameRoomCard: FC<AppAFrameRoomCardProps> = ({
 
                 <Col className="inner-container--det p-3 mx-2">
                     <Col className="inner-container--det--name p-0">
-                        <Link to={`/aframeroom/${id}`}>
+                        <Link to={`/admin/room/${id}`}>
                             <h2>{`Name: ${name}`}</h2>
                         </Link>
                     </Col>
