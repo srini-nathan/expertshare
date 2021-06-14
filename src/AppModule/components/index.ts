@@ -75,3 +75,4 @@ export * from "./AttendeeCard";
 export * from "./AppPictureInPicture";
 export * from "./AppUserListItem";
 export * from "./AppFormFile";
+export * from "./AppSwisscomFrame";
