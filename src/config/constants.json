@@ -29,10 +29,7 @@
         }
     },
     "ChatMessage": {
-        "STATUS": {
-            "STATUS_NEW": "NEW",
-            "STATUS_READ": "READ"
-        },
+        "STATUS": { "STATUS_NEW": "NEW", "STATUS_READ": "READ" },
         "CONTENT": {
             "CONTENT_TYPE_TEXT": "TEXT",
             "CONTENT_TYPE_AUDIO": "AUDIO",
@@ -40,75 +37,11 @@
         }
     },
     "ChatThread": {
-        "THREAD": {
-            "THREAD_TYPE_O2O": "O2O",
-            "THREAD_TYPE_GROUP": "GROUP"
-        },
-        "STATUS": {
-            "STATUS_NEW": "NEW",
-            "STATUS_ARCHIVED": "ARCHIVED"
-        }
+        "THREAD": { "THREAD_TYPE_O2O": "O2O", "THREAD_TYPE_GROUP": "GROUP" },
+        "STATUS": { "STATUS_NEW": "NEW", "STATUS_ARCHIVED": "ARCHIVED" }
     },
     "Container": {
-        "STORAGE": {
-            "STORAGE_LOCAL": "Local",
-            "STORAGE_S3": "S3"
-        }
-    },
-    "EmailTemplate": {
-        "ETKEY": {
-            "ETKEY_USER_ACTIVATION": "USER_ACTIVATION",
-            "ETKEY_FORGOT_PASSWORD": "FORGOT_PASSWORD",
-            "ETKEY_CREATE_PROFILE_ACTIVATION": "CREATE_PROFILE_ACTIVATION",
-            "ETKEY_USER_INVITATION": "USER_INVITATION"
-        },
-        "ETKEYINFO": {
-            "ETKEYINFO_USER_ACTIVATION": {
-                "DOMAIN_NAME": "##DOMAIN_NAME##",
-                "PROJECT_NAME": "##PROJECT_NAME##",
-                "SOCIAL_BLOCK": "##SOCIAL_BLOCK##",
-                "USER_FIRSTNAME": "##USER_FIRSTNAME##",
-                "USER_LASTNAME": "##USER_LASTNAME##",
-                "ONETIME_LOGIN_URL": "##ONETIME_LOGIN_URL##",
-                "PROFILE_VIEW_URL": "##PROFILE_VIEW_URL##"
-            },
-            "ETKEYINFO_FORGOT_PASSWORD": {
-                "DOMAIN_NAME": "##DOMAIN_NAME##",
-                "PROJECT_NAME": "##PROJECT_NAME##",
-                "SOCIAL_BLOCK": "##SOCIAL_BLOCK##",
-                "USER_FIRSTNAME": "##USER_FIRSTNAME##",
-                "USER_LASTNAME": "##USER_LASTNAME##",
-                "RESET_PASSWORD_URL": "##RESET_PASSWORD_URL##",
-                "TOKEN_LIFE_TIME": "##TOKEN_LIFE_TIME##"
-            },
-            "ETKEYINFO_CREATE_PROFILE_ACTIVATION": {
-                "DOMAIN_NAME": "##DOMAIN_NAME##",
-                "PROJECT_NAME": "##PROJECT_NAME##",
-                "SOCIAL_BLOCK": "##SOCIAL_BLOCK##",
-                "USER_FIRSTNAME": "##USER_FIRSTNAME##",
-                "USER_LASTNAME": "##USER_LASTNAME##",
-                "ONETIME_LOGIN_URL": "##ONETIME_LOGIN_URL##"
-            },
-            "ETKEYINFO_USER_INVITATION": {
-                "DOMAIN_NAME": "##DOMAIN_NAME##",
-                "PROJECT_NAME": "##PROJECT_NAME##",
-                "SOCIAL_BLOCK": "##SOCIAL_BLOCK##",
-                "USER_FIRSTNAME": "##USER_FIRSTNAME##",
-                "USER_LASTNAME": "##USER_LASTNAME##",
-                "ONETIME_LOGIN_URL": "##ONETIME_LOGIN_URL##"
-            }
-        }
-    },
-    "JobQueue": {
-        "STATUS": {
-            "STATUS_CREATED": "CREATED",
-            "STATUS_EXECUTED": "EXECUTED"
-        },
-        "PRIORITY": {
-            "PRIORITY_HIGH": 1,
-            "PRIORITY_MEDIUM": 101,
-            "PRIORITY_LOW": 201
-        }
+        "STORAGE": { "STORAGE_LOCAL": "Local", "STORAGE_S3": "S3" }
     },
     "EmailTemplate": {
         "ETKEY": {
@@ -337,10 +270,7 @@
         }
     },
     "User": {
-        "STATUS": {
-            "STATUS_ACTIVE": "ACTIVE",
-            "STATUS_INACTIVE": "INACTIVE"
-        },
+        "STATUS": { "STATUS_ACTIVE": "ACTIVE", "STATUS_INACTIVE": "INACTIVE" },
         "SOURCE": {
             "SOURCE_CREATE": "CREATE",
             "SOURCE_INVITE": "INVITE",
