@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { NavigateFn } from "@reach/router";
+import { useTranslation } from "react-i18next";
 import { AppButton } from "../AppButton";
 import "./assets/scss/style.scss";
 
@@ -15,6 +16,7 @@ export const AppFormActions: FC<AppFormActionsProps> = ({
     navigation,
     isLoading,
 }): JSX.Element => {
+    const { t } = useTranslation();
     return (
         <div className="d-flex justify-content-end footer-action w-100 p-4">
             <AppButton
@@ -34,9 +36,15 @@ export const AppFormActions: FC<AppFormActionsProps> = ({
                 type="submit"
                 isLoading={isLoading}
                 disabled={isLoading}
-                loadingTxt={isEditMode ? "Updating..." : "Saving..."}
+                loadingTxt={
+                    isEditMode
+                        ? t("common.button:updating")
+                        : t("common.button:saving")
+                }
             >
-                {isEditMode ? "Update" : "Save"}
+                {isEditMode
+                    ? t("common.button:update")
+                    : t("common.button:save")}
             </AppButton>
         </div>
     );

@@ -46,16 +46,11 @@ export const AppFeedShower: FC<AppFeedShowerProps> = ({
         );
     };
 
-    // eslint-disable-next-line no-console
-    console.log(messagesPerPage, currentPage);
-
     const checkCurrentThread = () => {
         NewsfeedCommentApi.getNewsfeedComments(
             newsfeedId,
             currentPage + 1
         ).then((response) => {
-            // eslint-disable-next-line no-console
-            console.log(response["hydra:totalItems"]);
             if (response["hydra:totalItems"] > messagesPerPage) {
                 setShowMoreButton(true);
             } else if (response["hydra:totalItems"] <= messagesPerPage) {

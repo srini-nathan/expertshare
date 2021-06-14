@@ -1,5 +1,8 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useRef } from "react";
 import { Row, Col, Form, InputGroup } from "react-bootstrap";
+import { ActionMeta, ValueType } from "react-select";
+import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
+import { Subject } from "rxjs";
 import {
     AppFormDropdown,
     AppButton,
@@ -7,7 +10,7 @@ import {
     AppTagSelectDropDown,
 } from "../../../AppModule/components";
 import { Language } from "../../models";
-import { SimpleObject } from "../../../AppModule/models";
+import { PrimitiveObject, SimpleObject } from "../../../AppModule/models";
 
 import "./assets/scss/style.scss";
 
@@ -18,6 +21,11 @@ export interface AppTranslationToolbarProps {
     options: Language[];
     selectedItems: Language[];
     onChangeSelect: (item: SimpleObject<string>) => void;
+    onChangeSelectFilter: (
+        value: ValueType<PrimitiveObject, boolean>,
+        actionMeta: ActionMeta<PrimitiveObject>
+    ) => void;
+    onQuickFilterChange?: (s: string) => void;
 }
 
 export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
@@ -26,6 +34,8 @@ export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
     label,
     selectedItems,
     onChangeSelect,
+    onChangeSelectFilter,
+    onQuickFilterChange = () => {},
 }): JSX.Element => {
     const values: SimpleObject<string>[] = options.map((e) => {
         return {
@@ -41,6 +51,28 @@ export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
             label: e.name,
         };
     });
+    const search$ = useRef(new Subject<string>());
+    const destroy$ = new Subject<string>();
+
+    useEffect(() => {
+        search$.current
+            .pipe(
+                debounceTime(300),
+                distinctUntilChanged(),
+                takeUntil(destroy$)
+            )
+            .subscribe((search: string) => {
+                onQuickFilterChange(search);
+            });
+        return () => {
+            destroy$.next();
+            destroy$.complete();
+        };
+    });
+
+    function handleQuickSearch(event: React.ChangeEvent<HTMLInputElement>) {
+        search$.current.next(event.currentTarget.value);
+    }
 
     return (
         <Row className={"translation-page d-flex justify-content-end mt-2"}>
@@ -57,20 +89,21 @@ export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
                     id="where-filter"
                     defaultValue={{
                         label: "Translation Key",
-                        value: "2",
+                        value: "tKey",
                     }}
+                    onChange={onChangeSelectFilter}
                     options={[
                         {
                             label: "Translation Group",
-                            value: "2",
+                            value: "translationGroup.tgKey",
                         },
                         {
                             label: "Translation Key",
-                            value: "3",
+                            value: "tKey",
                         },
                         {
                             label: "Translation Value",
-                            value: "4",
+                            value: "translationValues.val",
                         },
                     ]}
                 />
@@ -83,6 +116,7 @@ export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
                         </InputGroup.Text>
                     </InputGroup.Prepend>
                     <Form.Control
+                        onChange={handleQuickSearch}
                         placeholder="Search ..."
                         type={"search"}
                     ></Form.Control>

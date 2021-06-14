@@ -2,6 +2,7 @@ import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
 import { isString as _isString } from "lodash";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -20,6 +21,7 @@ import {
     Upload,
     UnprocessableEntityErrorResponse,
     SimpleObject,
+    FileTypeInfo,
 } from "../../models";
 import {
     Conference,
@@ -54,7 +56,6 @@ const {
     FILETYPE: { FILETYPE_CONFERENCE_POSTER },
     FILETYPEINFO: { FILETYPEINFO_CONFERENCE_POSTER },
 } = UPLOAD;
-const { path } = FILETYPEINFO_CONFERENCE_POSTER;
 
 export const ConferenceAddEdit: FC<RouteComponentProps> = ({
     navigate,
@@ -76,7 +77,10 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
     const [translations, setTranslations] = useState<TranslationsType[]>([]);
     const [defaultLanguage, setDefaultLanguage] = useState<string>("");
     const [files, setFiles] = useState<File[]>([]);
-    const conferencePosterPath = useBuildAssetPath(path);
+    const conferencePosterPath = useBuildAssetPath(
+        FILETYPEINFO_CONFERENCE_POSTER as FileTypeInfo
+    );
+    const { t } = useTranslation();
 
     const {
         handleSubmit,
@@ -144,9 +148,11 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                     } else if (errorMessage) {
                         errorToast(errorMessage);
                     } else {
-                        navigator("/conferences").then(() => {
+                        navigator("/event").then(() => {
                             successToast(
-                                isEditMode ? "Event updated" : "Event created"
+                                isEditMode
+                                    ? t("event.form:updated.info.message")
+                                    : t("event.form:created.info.message")
                             );
                         });
                     }
@@ -172,7 +178,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                         formData.imageName = response.fileName;
                     }
 
-                    successToast("Image uploaded");
+                    successToast(t("event.form:uploaded.info.message"));
                     return submitForm(formData);
                 }
             );
@@ -284,8 +290,17 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
 
     return (
         <Fragment>
-            <AppBreadcrumb linkText={"Events"} linkUrl={"/conferences"} />
-            <AppPageHeader title={isEditMode ? "Edit Event" : "Add Event"} />
+            <AppBreadcrumb
+                linkText={t("common.breadcrumb:event")}
+                linkUrl={"/event"}
+            />
+            <AppPageHeader
+                title={
+                    isEditMode
+                        ? t("event.form:header.title.edit")
+                        : t("event.form:header.title.add")
+                }
+            />
             <Row>
                 <Col>
                     <AppCard>
@@ -302,7 +317,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                                 lg={12}
                                 xl={12}
                                 name={"isVisible"}
-                                label={"Is Visible ?"}
+                                label={t("event.form:label.isVisible")}
                                 {...validation(
                                     "isVisible",
                                     formState,
@@ -320,7 +335,9 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                                     lg={6}
                                     xl={6}
                                 >
-                                    <Form.Label>Poster</Form.Label>
+                                    <Form.Label>
+                                        {t("event.form:label.posterImage")}
+                                    </Form.Label>
                                     <AppUploader
                                         withCropper
                                         accept="image/*"
@@ -341,7 +358,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                                 </Form.Group>
                                 <AppFormSelectCreatable
                                     name="userTags"
-                                    label="Conference Tags"
+                                    label={t("event.form:label.tags")}
                                     md={12}
                                     sm={12}
                                     lg={12}
@@ -356,7 +373,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                             <AppFormActions
                                 isEditMode={isEditMode}
                                 navigation={navigator}
-                                backLink={"/conferences"}
+                                backLink={"/event"}
                                 isLoading={formState.isSubmitting}
                             />
                         </Form>

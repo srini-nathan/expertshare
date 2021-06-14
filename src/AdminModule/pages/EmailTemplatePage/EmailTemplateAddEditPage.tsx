@@ -1,6 +1,6 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
-import { Row, Col, Form } from "react-bootstrap";
+import { Row, Col, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -32,6 +32,8 @@ import {
     useNavigator,
     useParamId,
 } from "../../../AppModule/hooks";
+import { CONSTANTS } from "../../../config";
+import "./assets/scss/style.scss";
 
 const schema = yup.object().shape({
     name: yup.string().min(2).required(),
@@ -40,23 +42,19 @@ const schema = yup.object().shape({
     content: yup.string().required(),
 });
 
-const defaultThemeList: PrimitiveObject[] = [
-    {
-        id: "1",
-        value: "forgot_password_email",
-        label: "forgot_password_email",
-    },
-    {
-        id: "2",
-        value: "user_create_profile_activation_email",
-        label: "user_create_profile_activation_email",
-    },
-    {
-        id: "3",
-        value: "reset_password_email",
-        label: "reset_password_email",
-    },
-];
+const { EmailTemplate: EMAIL_TEMPLATE } = CONSTANTS;
+const { ETKEY, ETKEYINFO } = EMAIL_TEMPLATE;
+const {
+    ETKEYINFO_USER_ACTIVATION,
+    ETKEYINFO_FORGOT_PASSWORD,
+    ETKEYINFO_CREATE_PROFILE_ACTIVATION,
+    ETKEYINFO_USER_INVITATION,
+} = ETKEYINFO;
+
+const options: PrimitiveObject[] = Object.entries(ETKEY).map(([, value]) => ({
+    value,
+    label: value,
+}));
 
 export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
     navigate,
@@ -68,6 +66,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
         new EmailTemplate(containerResourceId)
     );
     const [loading, setLoading] = useState<boolean>(isEditMode);
+    const [selectedTemplate, setSelectedTemplate] = useState<string>("");
 
     const {
         control,
@@ -78,6 +77,46 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
         resolver: yupResolver(schema),
         mode: "all",
     });
+
+    const copyToClipboard = (text: string) => {
+        const el = document.createElement("textarea");
+        el.value = text;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand("copy");
+        document.body.removeChild(el);
+    };
+
+    const getPlaceholders = (): string[] => {
+        switch (selectedTemplate) {
+            case "USER_ACTIVATION":
+                return Object.entries(ETKEYINFO_USER_ACTIVATION).map(
+                    ([, value]) => {
+                        return value;
+                    }
+                );
+            case "FORGOT_PASSWORD":
+                return Object.entries(ETKEYINFO_FORGOT_PASSWORD).map(
+                    ([, value]) => {
+                        return value;
+                    }
+                );
+            case "CREATE_PROFILE_ACTIVATION":
+                return Object.entries(ETKEYINFO_CREATE_PROFILE_ACTIVATION).map(
+                    ([, value]) => {
+                        return value;
+                    }
+                );
+            case "USER_INVITATION":
+                return Object.entries(ETKEYINFO_USER_INVITATION).map(
+                    ([, value]) => {
+                        return value;
+                    }
+                );
+            default:
+                return [];
+        }
+    };
 
     const onSubmit = async (formData: EmailTemplate) => {
         return EmailTemplateApi.createOrUpdate<EmailTemplate>(
@@ -136,6 +175,39 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                     <AppCard>
                         <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                             <Form.Row>
+                                <AppFormSelect
+                                    id={"etKey"}
+                                    name={"etKey"}
+                                    label={"Select template"}
+                                    md={12}
+                                    lg={12}
+                                    xl={12}
+                                    {...validation(
+                                        "etKey",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.etKey?.message}
+                                    defaultValue={data.etKey}
+                                    placeholder={"Email Template"}
+                                    options={options}
+                                    control={control}
+                                    transform={{
+                                        output: (template: PrimitiveObject) => {
+                                            setSelectedTemplate(
+                                                template?.value as string
+                                            );
+                                            return template?.value;
+                                        },
+                                        input: (value: string) => {
+                                            return _find(options, {
+                                                value,
+                                            });
+                                        },
+                                    }}
+                                />
+                            </Form.Row>
+                            <Form.Row>
                                 <AppFormInput
                                     name={"name"}
                                     label={"Name"}
@@ -153,35 +225,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                     control={control}
                                 />
                             </Form.Row>
-                            <Form.Row>
-                                <AppFormSelect
-                                    id={"ddTheme"}
-                                    name={"etKey"}
-                                    label={"Select template"}
-                                    md={12}
-                                    lg={12}
-                                    xl={12}
-                                    {...validation(
-                                        "etKey",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    errorMessage={errors.etKey?.message}
-                                    defaultValue={data.etKey}
-                                    placeholder={"Theme"}
-                                    options={defaultThemeList}
-                                    control={control}
-                                    transform={{
-                                        output: (template: PrimitiveObject) =>
-                                            template?.value,
-                                        input: (value: string) => {
-                                            return _find(defaultThemeList, {
-                                                value,
-                                            });
-                                        },
-                                    }}
-                                />
-                            </Form.Row>
+
                             <Form.Row>
                                 <AppFormInput
                                     name={"subject"}
@@ -215,6 +259,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                     errorMessage={errors.content?.message}
                                     defaultValue={data.content}
                                     control={control}
+                                    minHeight={450}
                                 />
                             </Form.Row>
                             <AppFormActions
@@ -223,6 +268,42 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                 isLoading={isSubmitting}
                             />
                         </Form>
+                    </AppCard>
+
+                    <AppCard title="Placeholders">
+                        <div className="email-template-container">
+                            {getPlaceholders().map((e, i) => {
+                                let show = false;
+                                return (
+                                    <OverlayTrigger
+                                        placement="right"
+                                        delay={{ show: 250, hide: 400 }}
+                                        overlay={(props) => {
+                                            return (
+                                                <Tooltip id={e} {...props}>
+                                                    {show
+                                                        ? "Copied!"
+                                                        : "Click to Copy"}
+                                                </Tooltip>
+                                            );
+                                        }}
+                                    >
+                                        <span
+                                            className="emailTemplateKey"
+                                            onClick={() => {
+                                                copyToClipboard(e);
+                                                show = true;
+                                            }}
+                                            key={i}
+                                        >
+                                            <i className="far fa-clone"></i>
+
+                                            {e}
+                                        </span>
+                                    </OverlayTrigger>
+                                );
+                            })}
+                        </div>
                     </AppCard>
                 </Col>
             </Row>

@@ -22,6 +22,7 @@ import {
     AppUploader,
 } from "../../../AppModule/components";
 import {
+    FileTypeInfo,
     SimpleObject,
     UnprocessableEntityErrorResponse,
     Upload,
@@ -48,10 +49,9 @@ const {
     STORAGE: { STORAGE_S3, STORAGE_LOCAL },
 } = ContainerConstant;
 const {
-    FILETYPE: { FILETYPE_CONTAINER_POSTER },
     FILETYPEINFO: { FILETYPEINFO_CONTAINER_POSTER },
+    FILETYPE: { FILETYPE_CONTAINER_POSTER },
 } = UPLOAD;
-const { path } = FILETYPEINFO_CONTAINER_POSTER;
 
 type PartialContainer = Partial<Container>;
 
@@ -76,7 +76,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
     const [storageType, setStorageType] = useState<string>("Local");
     const [loadingClient, setLoadingClient] = useState<boolean>(true);
     const [loadingUserGroups, setLoadingUserGroups] = useState<boolean>(true);
-    const containerPosterPath = useBuildAssetPath(path);
+    const containerPosterPath = useBuildAssetPath(
+        FILETYPEINFO_CONTAINER_POSTER as FileTypeInfo
+    );
     const cancelTokenSourceRef = useRef<Canceler>();
     const [files, setFiles] = useState<File[]>([]);
 
@@ -91,6 +93,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
         bucketSecret: Yup.string().nullable(),
         bucketName: Yup.string().nullable(),
         bucketRegion: Yup.string().nullable(),
+        bucketEndpoint: Yup.string().nullable(),
     };
 
     if (storageType === STORAGE_S3) {
@@ -100,6 +103,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
             bucketSecret: Yup.string().required("Bucket Secret is Required"),
             bucketName: Yup.string().required("Bucket Name is Required"),
             bucketRegion: Yup.string().required("Bucket Region is Required"),
+            bucketEndpoint: Yup.string().nullable(),
         };
     }
     const {
@@ -481,6 +485,25 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     defaultValue={data.bucketRegion}
                                     control={control}
                                     key={"bucketRegion"}
+                                />
+                                <AppFormInput
+                                    md={"6"}
+                                    lg={"6"}
+                                    xl={"6"}
+                                    name={"bucketEndpoint"}
+                                    required={false}
+                                    label={"AWS S3 Bucket Endpoint"}
+                                    {...validation(
+                                        "bucketEndpoint",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={
+                                        errors.bucketEndpoint?.message
+                                    }
+                                    defaultValue={data.bucketEndpoint}
+                                    control={control}
+                                    key={"bucketEndpoint"}
                                 />
                             </Row>
                         </AppCard>

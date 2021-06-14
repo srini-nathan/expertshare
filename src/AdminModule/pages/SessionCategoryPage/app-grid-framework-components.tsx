@@ -10,12 +10,12 @@ export const appGridFrameworkComponents = {
     AppColorPickerRender: (
         params: AppCellActionWithRenderParams
     ): ReactElement => {
-        const { data } = params;
-        const { color } = data as SessionCategory;
+        const { value } = params;
+
         return (
             <div
                 className="cell-color"
-                style={{ backgroundColor: color }}
+                style={{ backgroundColor: value }}
             ></div>
         );
     },

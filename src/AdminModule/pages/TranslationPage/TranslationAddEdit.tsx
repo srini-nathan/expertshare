@@ -31,6 +31,7 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const [pageSize, setPageSize] = useState<number>(30);
     const [active, setActive] = useState<number>(1);
+    const [activeFilter, setActiveFilter] = useState<string>("tKey");
 
     const [translataionCombines, setTranslationCombines] = useState<
         TranslationCombineList[]
@@ -62,54 +63,36 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         isLoading(false);
     }, [translataionCombines]);
 
-    const fetchData = () => {
+    const fetchData = (search = "") => {
         isLoading(true);
-        TranslationApi.find<TranslationCombine>(active).then(
-            ({ error, response }) => {
-                isLoading(false);
-                if (error !== null) {
-                    if (_isString(error)) {
-                        errorToast(error);
-                    }
-                } else if (response !== null) {
-                    let groups: TranslationCombineList[] = [];
+        TranslationApi.find<TranslationCombine>(active, {
+            [activeFilter]: search,
+        }).then(({ error, response }) => {
+            isLoading(false);
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                }
+            } else if (response !== null) {
+                let groups: TranslationCombineList[] = [];
 
-                    response.items.forEach((e) => {
-                        const index = groups.findIndex(
-                            (item) =>
-                                item.translationGroup &&
-                                item.translationGroup.tgKey ===
-                                    e.translationGroup.tgKey
-                        );
+                response.items.forEach((e) => {
+                    const index = groups.findIndex(
+                        (item) =>
+                            item.translationGroup &&
+                            item.translationGroup.tgKey ===
+                                e.translationGroup.tgKey
+                    );
 
-                        if (index !== -1) {
-                            let items: any = [];
-                            if (groups[index]) items = groups[index].items;
-                            groups = [
-                                ...groups.slice(0, index),
-                                {
-                                    ...groups[index],
-                                    items: [
-                                        ...items,
-                                        {
-                                            itemKey: randomInteger(),
-                                            tKey: e.tKey,
-                                            defaultValue: e.defaultValue,
-                                            id: e.id,
-                                            translationGroup:
-                                                e.translationGroup,
-                                            translationValues:
-                                                e.translationValues,
-                                        },
-                                    ],
-                                },
-                                ...groups.slice(index + 1),
-                            ];
-                        } else {
-                            groups.push({
-                                translationGroup: e.translationGroup,
-                                itemKey: randomInteger(),
+                    if (index !== -1) {
+                        let items: any = [];
+                        if (groups[index]) items = groups[index].items;
+                        groups = [
+                            ...groups.slice(0, index),
+                            {
+                                ...groups[index],
                                 items: [
+                                    ...items,
                                     {
                                         itemKey: randomInteger(),
                                         tKey: e.tKey,
@@ -119,20 +102,39 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         translationValues: e.translationValues,
                                     },
                                 ],
-                            });
-                        }
-                    });
-                    setTranslationCombines(groups);
-                    setTotalItems(response.totalItems);
-                }
+                            },
+                            ...groups.slice(index + 1),
+                        ];
+                    } else {
+                        groups.push({
+                            translationGroup: e.translationGroup,
+                            itemKey: randomInteger(),
+                            items: [
+                                {
+                                    itemKey: randomInteger(),
+                                    tKey: e.tKey,
+                                    defaultValue: e.defaultValue,
+                                    id: e.id,
+                                    translationGroup: e.translationGroup,
+                                    translationValues: e.translationValues,
+                                },
+                            ],
+                        });
+                    }
+                });
+                setTranslationCombines(groups);
+                setTotalItems(response.totalItems);
             }
-        );
+        });
     };
     useEffect(() => {
         fetchData();
     }, [languages, active, pageSize]);
 
     const renderTranslations = () => {
+        if (loading) {
+            return <AppLoader />;
+        }
         return (
             translataionCombines &&
             translataionCombines.map((e) => {
@@ -148,10 +150,6 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         );
     };
 
-    if (loading) {
-        return <AppLoader />;
-    }
-
     return (
         <>
             <AppPageHeader customToolbar title={"Administration"}>
@@ -159,6 +157,12 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                     options={languages}
                     selectedItems={selectedLanguages}
                     label={`Included Languages (${selectedLanguages.length})`}
+                    onChangeSelectFilter={(e: any) => {
+                        setActiveFilter(e.value);
+                    }}
+                    onQuickFilterChange={(e: string) => {
+                        fetchData(e);
+                    }}
                     onChangeSelect={(item: any) => {
                         let index = -1;
                         selectedLanguages.filter((e, i) => {

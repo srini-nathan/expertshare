@@ -4,12 +4,12 @@ import "./assets/scss/overview.scss";
 import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath } from "../../hooks";
 import placeholder from "./assets/images/imgthumb.svg";
+import { FileTypeInfo } from "../../models";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
     FILETYPEINFO: { FILETYPEINFO_CONTAINER_POSTER },
 } = UPLOAD;
-const { path } = FILETYPEINFO_CONTAINER_POSTER;
 
 export interface AppContainerOverviewCardProps {
     container: PContainer;
@@ -21,7 +21,10 @@ export const AppContainerOverviewCard: FC<AppContainerOverviewCardProps> = ({
     onClick,
 }): JSX.Element => {
     const { name, description, imageName = null } = container;
-    const imagePath = useBuildAssetPath(path, imageName);
+    const imagePath = useBuildAssetPath(
+        FILETYPEINFO_CONTAINER_POSTER as FileTypeInfo,
+        imageName
+    );
     const style = imageName
         ? {
               backgroundImage: `url(${imagePath})`,

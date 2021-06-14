@@ -13,17 +13,20 @@ export class Conference extends BaseEntity {
 
     isVisible: boolean;
 
-    startedAt?: string;
+    startAt?: string;
 
     container: string;
+
+    sessionDates: { [key: string]: string };
 
     conferenceTags: PConferenceTag[];
 
     constructor({
         title = "",
+        sessionDates = {},
         container = "",
         imageName = "",
-        startedAt = "",
+        startAt = "",
         conferenceTags = [],
         translations,
         isVisible = true,
@@ -36,7 +39,8 @@ export class Conference extends BaseEntity {
         this.container = container;
         this.conferenceTags = conferenceTags;
         this.title = title;
-        this.startedAt = startedAt;
+        this.sessionDates = sessionDates;
+        this.startAt = startAt;
         this.translations = translations;
         this.imageName = imageName;
         this.isVisible = isVisible;

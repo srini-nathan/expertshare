@@ -1,0 +1,46 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.session-details-tags {
+    h2 {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--secondary);
+
+        i {
+            padding-right: 10px;
+            padding-bottom: 4px;
+            font-size: 22px;
+            font-weight: 500;
+
+            &::before {
+                content: "\e014";
+            }
+        }
+    }
+
+    &--container {
+        &--item {
+            a {
+                display: flex;
+                height: 28px;
+                padding: 5px 10px 0;
+                font-size: 12px;
+                font-weight: 700;
+                color: var(--primary);
+                background-color: var(--primary-10);
+                border: 1px solid var(--primary);
+                border-radius: 25px;
+
+                &:hover {
+                    color: var(--primary);
+                    background-color: var(--primary-10);
+                    border: 1px solid var(--primary);
+                }
+            }
+        }
+    }
+}

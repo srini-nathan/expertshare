@@ -37,7 +37,10 @@ export const appGridFrameworkComponents = {
         const props: AppGridActionProps = {
             isGrantedControl,
             editAction: {
-                url: `/conference/${id}`,
+                url: `/event/${id}/update`,
+            },
+            viewAction: {
+                url: `/event/${id}/agenda`,
             },
             deleteAction: {
                 confirmation: "Are you sure want to delete ?",
@@ -48,7 +51,7 @@ export const appGridFrameworkComponents = {
             customClickActions: [
                 {
                     icon: "Clone",
-                    confirmation: "Are you sure want to clone ?",
+                    confirmation: "Are you sure want to clone?",
                     confirmationTitle: "Clone Action",
                     onClick: () => {
                         if (onPressClone) onPressClone(id);

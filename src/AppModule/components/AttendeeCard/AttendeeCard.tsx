@@ -1,9 +1,10 @@
 import React, { FC, useState } from "react";
+import { Link } from "@reach/router";
 import { AppIcon } from "../AppIcon";
 import "./assets/scss/list.scss";
 import { useBuildAssetPath } from "../../hooks";
 import { CONSTANTS } from "../../../config";
-import { User } from "../../models";
+import { FileTypeInfo, User } from "../../models";
 import placeholder from "../../assets/images/user-avatar.png";
 
 const { Upload: UPLOAD } = CONSTANTS;
@@ -26,10 +27,12 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
         jobTitle,
         company,
         email,
+        isExposeEmail,
+        isAllowCommunication,
         userTags,
     } = attendee as User;
     const profilePicturePath = useBuildAssetPath(
-        FILETYPEINFO_USER_PROFILE.path,
+        FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         imageName
     );
     const style = imageName
@@ -48,20 +51,20 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
         <div className="card p-3">
             <div className="card--icons">
                 <div className="card--icons--favorite">
-                    <a href="#" className="btn btn-secondary">
+                    {/* <a href="#" className="btn btn-secondary">
                         <AppIcon name="AddUserPlus" />
-                    </a>
+                    </a> */}
                 </div>
             </div>
             <div className="card--avatar mt-3">
-                <a
-                    href="#"
+                <Link
+                    to={`/attendee/${attendee.id}/show`}
                     className={
                         online ? "profile-avatar online" : "profile-avatar"
                     }
                 >
                     <i style={style}></i>
-                </a>
+                </Link>
                 {attendee.category && (
                     <a href="#" className="speaker-btn">
                         <AppIcon name={"Microphone"} />
@@ -77,10 +80,10 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                     </h2>
                 </a>
                 <p className="card--title--bio mb-1 mx-2">
-                    {jobTitle} at {company}
+                    {jobTitle}, {company}
                 </p>
                 <a href="#" className="card--title--mail mb-3 d-block">
-                    {email}
+                    {isExposeEmail && email}
                 </a>
             </div>
             {userTags && (
@@ -110,42 +113,51 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
             )}
             <div className="card--buttons mt-3 mb-2">
                 <div className="row m-0 p-0">
-                    <div className="card--buttons--book-session col-6 px-2">
+                    {/* <div className="card--buttons--book-session col-6 px-2">
                         <button className="btn btn-secondary">
                             <AppIcon name="CalendarPlus" />
                             Book Session
                         </button>
-                    </div>
-                    <div className="card--buttons--get-in-contact col-6 px-2">
+                    </div> */}
+                    <div className="card--buttons--get-in-contact col-12 px-2">
                         <button className="btn btn-secondary">
                             <AppIcon name="Conversation" />
                             Get In Contact
                             <div className="popup">
                                 <div className="popup--inner">
-                                    <div className="popup--inner--item video-chat">
+                                    {/* <div className="popup--inner--item video-chat">
                                         <a href="#">
                                             <AppIcon name={"Video"} />
                                             Start Video Chat
                                         </a>
-                                    </div>
-                                    <div className="popup--inner--item conversation">
-                                        <a href="#">
-                                            <AppIcon name="Conversation" />
-                                            Start Conversation
-                                        </a>
-                                    </div>
+                                    </div> */}
+                                    {isAllowCommunication && (
+                                        <div className="popup--inner--item conversation">
+                                            <a href="#">
+                                                <AppIcon name="Conversation" />
+                                                Start Conversation
+                                            </a>
+                                        </div>
+                                    )}
                                     <div className="popup--inner--item view-profile">
-                                        <a href="#">
+                                        <Link
+                                            to={`/attendee/${attendee.id}/show`}
+                                            className={
+                                                online
+                                                    ? "profile-avatar online"
+                                                    : "profile-avatar"
+                                            }
+                                        >
                                             <AppIcon name="AddUserPlus" />
                                             View Profile
-                                        </a>
+                                        </Link>
                                     </div>
-                                    <div className="popup--inner--item view-profile">
+                                    {/* <div className="popup--inner--item view-profile">
                                         <a href="#">
                                             <AppIcon name="Download" />
                                             Download VCF
                                         </a>
-                                    </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </button>

@@ -7,6 +7,8 @@ export class SessionCategory extends BaseEntity {
 
     color: string;
 
+    textColor: string;
+
     translations?: any;
 
     container: string | Container;
@@ -15,7 +17,8 @@ export class SessionCategory extends BaseEntity {
         container: string,
         {
             name = "",
-            color = "#000",
+            color = "#30B7A7",
+            textColor = "#fff",
             translations,
             id,
             createdAt,
@@ -26,6 +29,7 @@ export class SessionCategory extends BaseEntity {
         this.container = container;
         this.name = name;
         this.color = color;
+        this.textColor = textColor;
         this.translations = translations;
     }
 
@@ -38,8 +42,11 @@ export class SessionCategory extends BaseEntity {
             ...super.toJSON(addExtraData),
             name: this.name,
             color: this.color,
+            textColor: this.textColor,
             translations: this.translations,
             container: this.container.toString(),
         };
     }
 }
+
+export type PSessionCategory = Partial<SessionCategory>;

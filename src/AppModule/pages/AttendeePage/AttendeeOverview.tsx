@@ -8,6 +8,7 @@ import {
 import { Canceler } from "axios";
 import { Row, Col } from "react-bootstrap";
 import { isString as _isString } from "lodash";
+import { useTranslation } from "react-i18next";
 import { appGridColDef } from "./app-grid-col-def";
 import {
     AppPageHeader,
@@ -32,6 +33,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
     const [total, setTotal] = useState<number>(0);
     const [loading, isLoading] = useState<boolean>(true);
     const [attendees, setAttendees] = useState<User[]>([]);
+    const { t } = useTranslation();
     const fetchData = () => {
         isLoading(true);
         UserApi.getAttendeeList<User>().then(({ response, error }) => {
@@ -147,16 +149,16 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <Fragment>
-            <AppPageHeader title={"Attendees"} customToolbar>
+            <AppPageHeader
+                title={t("attendee.list:header.title")}
+                customToolbar
+            >
                 <div className="d-flex pt-2 mb-5">
                     <AppListPageToolbar
                         onQuickFilterChange={handleFilter}
                         cancelTokenSources={cancelTokenSourcesRef.current}
                     />
-                    <AppSwitchView
-                        link={"/attendees"}
-                        activeLink={view || "grid"}
-                    />
+                    <AppSwitchView link={"/attendee"} activeLink={view || ""} />
                 </div>
             </AppPageHeader>
             {renderView()}

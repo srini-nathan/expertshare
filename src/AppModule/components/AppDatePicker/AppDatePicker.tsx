@@ -9,13 +9,19 @@ import { AppIcon } from "../AppIcon";
 export interface AppDatePickerProps {
     defaultValue?: Date;
     name?: string;
+    dateFormat?: string;
+    showTimeSelect?: boolean;
+    showTimeInput?: boolean;
     control?: Control<any>;
 }
 
 export const AppDatePicker: FC<AppDatePickerProps> = ({
     defaultValue,
     name = "",
+    dateFormat = "yyyy-M-d",
     control,
+    showTimeSelect = false,
+    showTimeInput = false,
 }): JSX.Element => {
     const dateValue = defaultValue || new Date();
     const [open, setOpen] = useState(false);
@@ -37,7 +43,9 @@ export const AppDatePicker: FC<AppDatePickerProps> = ({
                             field.onChange(...e);
                         }}
                         calendarClassName="custom-datepicker"
-                        dateFormat="yyyy-MM-dd"
+                        dateFormat={dateFormat}
+                        showTimeSelect={showTimeSelect as boolean}
+                        showTimeInput={showTimeInput}
                         showMonthDropdown
                         showYearDropdown
                         dropdownMode="select"

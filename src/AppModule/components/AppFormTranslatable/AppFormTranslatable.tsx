@@ -1,6 +1,7 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { Row, Col, Form } from "react-bootstrap";
 import "./assets/scss/style.scss";
+import { useTranslation } from "react-i18next";
 import { Language } from "../../../AdminModule/models";
 import { AppButton } from "../AppButton";
 import { AppFormLabel } from "../AppFormLabel";
@@ -9,11 +10,13 @@ export interface TranslationsType {
     locale: string;
     title: string;
     description: string;
+    streamUrl?: string;
 }
 
 export interface AppFormTranslatableProps {
     languages: Language[];
     onChange: (value: TranslationsType[]) => void;
+    setActiveLanguage?: (value: string) => void;
     translations: TranslationsType[];
     defaultLanguage: string;
 }
@@ -22,9 +25,11 @@ export const AppFormTranslatable: FC<AppFormTranslatableProps> = ({
     languages,
     translations,
     onChange,
+    setActiveLanguage,
     defaultLanguage,
 }) => {
     const [active, setActive] = React.useState<string>(defaultLanguage);
+    const { t } = useTranslation();
 
     const handleValueChange = (value: string, name: string) => {
         const newTranslatiosn = translations.map((e) => {
@@ -66,10 +71,17 @@ export const AppFormTranslatable: FC<AppFormTranslatableProps> = ({
         return noErrorTitle;
     };
 
+    useEffect(() => {
+        if (setActiveLanguage) setActiveLanguage(active);
+    }, [active]);
+
     return (
         <Row className="translatable-container">
             <Col md={12}>
-                <AppFormLabel label="Choose your language" required />
+                <AppFormLabel
+                    label={t("common.label:chooseLanguage")}
+                    required
+                />
             </Col>
             <Col md={12} className="d-flex mb-4">
                 {languages
@@ -95,7 +107,10 @@ export const AppFormTranslatable: FC<AppFormTranslatableProps> = ({
                     })}
             </Col>
             <Form.Group as={Col} md={12}>
-                <AppFormLabel label={`Title (${active})`} required />
+                <AppFormLabel
+                    label={`${t("event.form:label.title")} (${active})`}
+                    required
+                />
 
                 <Form.Control
                     value={getValue("title")}
@@ -111,7 +126,10 @@ export const AppFormTranslatable: FC<AppFormTranslatableProps> = ({
             </Form.Group>
 
             <Form.Group as={Col} md={12}>
-                <AppFormLabel label={`Description (${active})`} required />
+                <AppFormLabel
+                    label={`${t("event.form:label.description")} (${active})`}
+                    required
+                />
 
                 <Form.Control
                     as={"textarea"}

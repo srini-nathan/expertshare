@@ -1,11 +1,11 @@
-import { User } from "../../../AppModule/models";
+import { PUser } from "../../../AdminModule/models";
 
 export interface AuthState {
     isAuthenticated: boolean | null;
     loginSuccess: boolean;
     showLogin: boolean;
     token: string | null;
-    user: User | null;
+    user: PUser | null;
     loginError: string | null;
     sessionFetched: boolean;
     ip: string | null;

@@ -7,11 +7,18 @@ import { AuthLayout } from "./layouts/AuthLayout";
 import { ModuleRouter } from "./models";
 import AppProvider from "./contexts/AppContext";
 import { AuthContext } from "../SecurityModule/contexts/AuthContext";
-import { useChosenContainer, useNavigator } from "./hooks";
-import { AppLoader } from "./components";
+import { useChosenContainer, useNavigator, useSkipOnboarding } from "./hooks";
+import {
+    AppLoader,
+    // AppPictureInPicture,
+    // AppYoutubeFrame,
+    AppWelcomeModal,
+} from "./components";
 import { LandingHelper } from "./pages";
+
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
+import { useGlobalData } from "./contexts";
 
 interface Props {
     location: {
@@ -51,27 +58,35 @@ const AppFullScreenLoader = (): JSX.Element => {
     );
 };
 const App = (): JSX.Element => {
+    const { status } = useGlobalData();
     const { state } = React.useContext(AuthContext);
+    const { user } = state;
     const navigator = useNavigator();
     const { isChosen } = useChosenContainer();
+    const { isSkipOnboarding } = useSkipOnboarding();
+    const [showWelcomeModal, setShowWelcomeModal] = React.useState(true);
+
     const dashboardRoutes: ModuleRouter[] = appRouters.filter(
         ({ layout }) => layout === "dashboard"
     );
     const authRoutes: ModuleRouter[] = appRouters.filter(
         ({ layout }) => layout === "auth"
     );
-    const overViewPage = useMatch("/containers/overview");
+    const overViewPage = useMatch("/container");
+    const onBoardingPage = useMatch("/onboarding");
     const autoLoginPage = useMatch("/auth/auto-login/:token");
     const isOverViewPage = overViewPage !== null;
     const isAutoLoginPage = autoLoginPage !== null;
 
-    if (state.isAuthenticated === null) {
+    if (status === "LOADING" || state.isAuthenticated === null) {
         return <AppFullScreenLoader />;
     }
 
     if (!isAutoLoginPage && state.isAuthenticated) {
-        if (!isChosen() && !isOverViewPage) {
-            navigator("/containers/overview").then();
+        if (!user.isOnboarded && !isSkipOnboarding() && !onBoardingPage) {
+            navigator("/onboarding").then();
+        } else if (!isChosen() && !isOverViewPage && !onBoardingPage) {
+            navigator("/container").then();
             return <AppFullScreenLoader />;
         }
         return (
@@ -92,6 +107,21 @@ const App = (): JSX.Element => {
                             }}
                         />
                     </DashboardLayout>
+                    <AppWelcomeModal
+                        show={showWelcomeModal}
+                        handleClose={() => {
+                            setShowWelcomeModal(false);
+                        }}
+                    />
+                    {/* <AppPictureInPicture show={true}>
+                        <AppYoutubeFrame
+                            url={
+                                "https://www.youtube.com/watch?v=aqz-KE-bpKQ&t=253s"
+                            }
+                            height={"200"}
+                            width={"100%"}
+                        />
+                    </AppPictureInPicture> */}
                 </AppConfiguration>
             </AppProvider>
         );

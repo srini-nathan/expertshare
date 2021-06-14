@@ -1,0 +1,263 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.session-details-share {
+    border-left: 1px solid var(--secondary-20);
+
+    h2 {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--secondary);
+
+        i {
+            padding-right: 10px;
+            padding-bottom: 4px;
+            font-size: 22px;
+            font-weight: 500;
+        }
+    }
+
+    &--container {
+        &--item {
+            button {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 36px;
+                padding: 2px 7px;
+                font-size: 14px;
+                font-weight: 500;
+                color: var(--btn-secondary-fg-clr);
+                background-color: var(--btn-secondary-bg-clr);
+                border: var(--btn-secondary-border-clr);
+                border-radius: var(--border-radius);
+                box-shadow: 0 3px 9px var(--secondary-10);
+
+                span {
+                    padding-right: 2px;
+                }
+
+                i {
+                    padding-right: 7px;
+                    padding-bottom: 3px;
+                    font-size: 20px;
+                }
+            }
+
+            &.share {
+                button {
+                    i {
+                        &::before {
+                            content: "\e01b";
+                        }
+                    }
+
+                    .share--popup {
+                        position: absolute;
+                        top: 37px;
+                        left: -20px;
+                        z-index: 1000;
+                        display: none;
+                        align-items: center;
+                        width: 433px;
+                        height: 60px;
+                        background-color: var(--light-clr);
+                        border-radius: var(--border-radius);
+                        box-shadow: 0 12px 38px var(--secondary-30);
+
+                        @include media("csc-4") {
+                            right: 0;
+                            left: auto;
+                        }
+
+                        @include media("csc-5") {
+                            left: auto;
+                            width: max-content;
+                            height: auto;
+                            padding: 9px;
+                        }
+
+                        &--container {
+                            &--socials {
+                                padding-left: 10px;
+
+                                @include media("csc-5") {
+                                    padding-left: 0;
+                                    margin-bottom: 8px;
+                                }
+
+                                &--item {
+                                    a {
+                                        display: flex;
+                                        align-items: center;
+                                        justify-content: center;
+                                        width: 36px;
+                                        height: 36px;
+                                        border-radius: var(--border-radius);
+                                        box-shadow: 0 3px 9px var(--secondary-10);
+
+                                        i {
+                                            display: block;
+                                            width: 20px;
+                                            height: 20px;
+                                            background-repeat: no-repeat;
+                                            background-size: contain;
+
+                                            &::before {
+                                                content: unset;
+                                            }
+                                        }
+                                    }
+
+                                    &.linkedin {
+                                        a {
+                                            i {
+                                                background-image: url(../images/linkedin-icon.svg);
+                                            }
+                                        }
+                                    }
+
+                                    &.facebook {
+                                        a {
+                                            i {
+                                                background-image: url(../images/facebook-icon.svg);
+                                            }
+                                        }
+                                    }
+
+                                    &.twitter {
+                                        a {
+                                            i {
+                                                margin-top: 4px;
+                                                background-image: url(../images/twiter-icon.svg);
+                                            }
+                                        }
+                                    }
+
+                                    &.instagram {
+                                        a {
+                                            i {
+                                                background-image: url(../images/Instagram-icon.svg);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            &--link {
+                                position: inherit;
+                                padding-right: 10px;
+
+                                @include media("csc-5") {
+                                    padding-right: 0;
+                                }
+
+                                &--inner-box {
+                                    display: flex;
+                                    align-items: center;
+                                    height: 38px;
+                                    border: 1px solid var(--secondary-70);
+                                    border-radius: var(--border-radius);
+
+                                    form {
+                                        display: flex;
+                                        align-items: center;
+
+                                        input {
+                                            padding-left: 9px;
+                                            font-size: 14px;
+                                            font-weight: 400;
+                                            line-height: 21px;
+                                            background-color: unset;
+                                            border: none;
+
+                                            &:disabled {
+                                                color: var(--input-placeholder-fg-clr);
+                                            }
+                                        }
+
+                                        i {
+                                            position: absolute;
+                                            right: 18px;
+                                            padding-right: 3px;
+                                            padding-bottom: 0;
+                                            padding-left: 15px;
+                                            font-size: 18px;
+                                            font-weight: 500;
+                                            color: var(--secondary);
+                                            border-left: 1px solid var(--secondary-20);
+
+                                            &:before {
+                                                content: "\e01f";
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    &:hover {
+                        color: var(--primary);
+                    }
+
+                    &:hover>.share--popup {
+                        display: flex;
+                    }
+                }
+            }
+
+            &.calendar {
+                button {
+                    i {
+                        &::before {
+                            font-size: 18px;
+                            content: "\e01a";
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.session-details-info {
+    h2 {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--secondary);
+
+        i {
+            padding-right: 10px;
+            padding-bottom: 4px;
+            font-size: 22px;
+            font-weight: 500;
+        }
+    }
+
+    &--container {
+        &--item {
+            span {
+                display: flex;
+                align-items: center;
+                font-size: 12px;
+                font-weight: 700;
+                color: var(--secondary);
+
+                i {
+                    padding-right: 10px;
+                    padding-bottom: 5px;
+                    font-size: 20px;
+                    font-weight: 300;
+                    color: var(--secondary-70);
+                }
+            }
+        }
+    }
+}

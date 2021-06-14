@@ -1,12 +1,16 @@
 import React, { FC, Fragment, useEffect, useRef, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Canceler } from "axios";
-import { GridApi } from "ag-grid-community";
 import { Row, Col } from "react-bootstrap";
 import { isString as _isString } from "lodash";
 import { useSetRecoilState } from "recoil";
+import { useTranslation } from "react-i18next";
 import { errorToast, hideLoader, showLoader } from "../../utils";
-import { AppPageHeader, AppContainerOverviewCard } from "../../components";
+import {
+    AppPageHeader,
+    AppContainerOverviewCard,
+    AppButton,
+} from "../../components";
 
 import { ContainerApi } from "../../../AdminModule/apis";
 import { useAuthState } from "../../hooks";
@@ -19,19 +23,28 @@ import {
 } from "../../atoms";
 import { AuthApi } from "../../../SecurityModule/apis";
 import { route } from "../../../config";
+import {
+    AuthContext,
+    logoutAction,
+} from "../../../SecurityModule/contexts/AuthContext";
 
 type GetToken = {
     token: boolean | string;
 };
 
 export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
+    const { dispatch } = React.useContext(AuthContext);
     const { clientId } = useAuthState();
-    const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const [overviews, setOverviews] = useState<PContainer[]>([]);
     const setLayoutOptions = useSetRecoilState<AppDashboardLayoutOptions>(
         appDashboardLayoutOptions
     );
+    const { t } = useTranslation();
+
+    const handleLogoutEvent = async (): Promise<void> => {
+        await logoutAction(dispatch);
+    };
 
     useEffect(() => {
         setLayoutOptions((currVal) => {
@@ -50,13 +63,6 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
         };
     });
 
-    async function handleFilter(search: string) {
-        appGridApi.current?.setFilterModel({
-            domain: {
-                filter: search,
-            },
-        });
-    }
     useEffect(() => {
         ContainerApi.overview<PContainer>(1, { "client.id": clientId }, (c) => {
             cancelTokenSourcesRef.current.push(c);
@@ -100,12 +106,16 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <Fragment>
-            <AppPageHeader
-                title={"Containers"}
-                onQuickFilterChange={handleFilter}
-                cancelTokenSources={cancelTokenSourcesRef.current}
-                showToolbar
-            />
+            <AppPageHeader title={t("container:header.title")} customToolbar>
+                <AppButton
+                    variant="primary"
+                    className="p-2"
+                    onClick={handleLogoutEvent}
+                >
+                    <i className="fas fa-sign-out p-1"></i>
+                    {t("container:button.logout")}
+                </AppButton>
+            </AppPageHeader>
             <Row>
                 {overviews.map((container: PContainer) => (
                     <Col xs={12} sm={6} md={4} lg={3} xl={3} key={container.id}>

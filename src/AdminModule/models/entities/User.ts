@@ -40,6 +40,8 @@ export class User extends BaseEntity {
 
     timezone: string;
 
+    relationManager: string;
+
     roles: string[];
 
     status: string;
@@ -63,6 +65,7 @@ export class User extends BaseEntity {
         plainPassword = "",
         confirmPassword = "",
         imageName = "",
+        relationManager = "",
         firstName = "",
         lastName = "",
         source = "",
@@ -91,6 +94,7 @@ export class User extends BaseEntity {
     }: Partial<User> = {}) {
         super(id, createdAt, updatedAt);
         this.source = source;
+        this.relationManager = relationManager;
         this.firstName = firstName;
         this.lastName = lastName;
         this.timezone = timezone;
@@ -125,6 +129,33 @@ export class User extends BaseEntity {
     toJSON(addExtraData = false): JsonResponseData {
         const data: JsonResponseData = {
             ...super.toJSON(addExtraData),
+            email: this.email,
+            plainPassword: this.plainPassword,
+            confirmPassword: this.confirmPassword,
+            imageName: this.imageName,
+            relationManager: this.relationManager,
+            firstName: this.firstName,
+            lastName: this.lastName,
+            source: this.source,
+            lastLoginAt: this.lastLoginAt,
+            onboardedAt: this.onboardedAt,
+            timezone: this.timezone,
+            locale: this.locale,
+            company: this.company,
+            jobTitle: this.jobTitle,
+            client: this.client,
+            role: this.role,
+            status: this.status,
+            userTags: this.userTags,
+            isBlocked: this.isBlocked,
+            isOnboarded: this.isOnboarded,
+            isDisplayAsGuest: this.isDisplayAsGuest,
+            isExposeEmail: this.isExposeEmail,
+            isAllowCommunication: this.isAllowCommunication,
+            roles: this.roles,
+            userGroups: this.userGroups,
+            userFieldValues: this.userFieldValues,
+            userField: this.userField,
         };
 
         return data;

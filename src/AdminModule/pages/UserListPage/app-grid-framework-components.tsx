@@ -6,9 +6,21 @@ import {
     AppGridActionProps,
 } from "../../../AppModule/components";
 import { User } from "../../models";
-import { useAuthState, useRoles } from "../../../AppModule/hooks";
+import {
+    useAuthState,
+    useBuildAssetPath,
+    useRoles,
+} from "../../../AppModule/hooks";
 import { AppCellActionParamsUserList } from "./AppCellActionParamsUserList";
 import { UserApi } from "../../apis";
+import UserAvatar from "../../../AppModule/assets/images/user-avatar.png";
+import { CONSTANTS } from "../../../config";
+import { FileTypeInfo } from "../../../AppModule/models";
+
+const { Upload: UPLOAD } = CONSTANTS;
+const {
+    FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
+} = UPLOAD;
 
 export interface AppCellActionWithRenderParamsUserList
     extends AppCellActionParamsUserList,
@@ -16,6 +28,9 @@ export interface AppCellActionWithRenderParamsUserList
 
 interface UserRoles {
     role: string;
+}
+interface UserInfo {
+    data: User;
 }
 
 export const GetRoles: FC<UserRoles> = ({ role }): JSX.Element => {
@@ -39,8 +54,45 @@ export const GetRoles: FC<UserRoles> = ({ role }): JSX.Element => {
         </>
     );
 };
+export const UserDetailsInfo: FC<UserInfo> = ({ data }): JSX.Element => {
+    const { firstName, lastName, imageName } = data;
+    const imagePath = useBuildAssetPath(
+        FILETYPEINFO_USER_PROFILE as FileTypeInfo,
+        imageName
+    );
+
+    const style = imageName
+        ? {
+              backgroundImage: `url(${imagePath})`,
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+          }
+        : {
+              backgroundImage: `url(${UserAvatar})`,
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+          };
+
+    return (
+        <div className="info">
+            <div className="info--profile-pic mr-2">
+                <i style={style}></i>
+            </div>
+            <div className="info--det">
+                <h3 className="mb-1">
+                    {firstName} {lastName}
+                </h3>
+            </div>
+        </div>
+    );
+};
 
 export const appGridFrameworkComponents = {
+    appNameTemplateRenderer: (params: ICellRendererParams): ReactElement => {
+        const { data } = params;
+
+        return <UserDetailsInfo data={data as User} />;
+    },
     appSelect: (
         params: AppCellActionWithRenderParamsUserList
     ): ReactElement => {

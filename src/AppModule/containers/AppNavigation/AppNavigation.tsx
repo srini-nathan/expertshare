@@ -1,4 +1,5 @@
 import React, { FC, useEffect, useState, useRef } from "react";
+import { isString as _isString } from "lodash";
 import {
     ListGroup,
     ListGroupItem,
@@ -25,16 +26,22 @@ import {
     useWindowSize,
     useWindowLocation,
     useBuildAssetPath,
+    useIsGranted,
     useAuthState,
+    useUserLocale,
 } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
-import { isGranted } from "../../utils";
+import { errorToast, isGranted } from "../../utils";
+import { LanguageApi } from "../../../AdminModule/apis";
+import { Language } from "../../../AdminModule/models";
+import { FileTypeInfo } from "../../models";
 
 const { Upload: UPLOAD, Role } = CONSTANTS;
 const {
     FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
 } = UPLOAD;
+
 const {
     ROLE: { ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_OPERATOR },
 } = Role;
@@ -45,15 +52,18 @@ interface AppNavigationProps {
 
 const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const { dispatch, state } = React.useContext(AuthContext);
-    const { role } = useAuthState();
+    const { role, containerId } = useAuthState();
     const { user } = state;
+    const { locale, setLocale, containerLocale } = useUserLocale();
     const [overflowItems, setOverflowItems] = useState<
         AppNavigationItemProps[] | AppSubNavigationItemProps[]
     >([]);
     const profilePicturePath = useBuildAssetPath(
-        FILETYPEINFO_USER_PROFILE.path,
+        FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         user.imageName
     );
+    const isGrantedControl = useIsGranted(ROLE_OPERATOR);
+
     const style = user.imageName
         ? {
               backgroundImage: `url(${profilePicturePath})`,
@@ -73,7 +83,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
-            roles: [ROLE_OPERATOR],
+            isVisible: isGranted(role, ROLE_OPERATOR),
         },
         {
             label: "Design",
@@ -81,47 +91,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
-            roles: [ROLE_OPERATOR],
-        },
-        {
-            label: "Languages",
-            path: "/admin/languages",
-            icon: {
-                name: "",
-            },
-            roles: [ROLE_OPERATOR],
-        },
-        {
-            label: "Translations",
-            path: "/admin/translations",
-            icon: {
-                name: "",
-            },
-            roles: [ROLE_OPERATOR],
-        },
-        {
-            label: "Clients",
-            path: "/admin/clients",
-            icon: {
-                name: "",
-            },
-            roles: [ROLE_SUPER_ADMIN],
-        },
-        {
-            label: "Containers",
-            path: "/admin/containers",
-            icon: {
-                name: "",
-            },
-            roles: [ROLE_ADMIN],
-        },
-        {
-            label: "Email Templates",
-            path: "/admin/email-templates",
-            icon: {
-                name: "",
-            },
-            roles: [ROLE_OPERATOR],
+            isVisible: isGranted(role, ROLE_OPERATOR),
         },
         {
             label: "Users",
@@ -129,7 +99,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
-            roles: [ROLE_ADMIN],
+            isVisible: isGranted(role, ROLE_ADMIN),
         },
         {
             label: "User Groups",
@@ -137,7 +107,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
-            roles: [ROLE_ADMIN],
+            isVisible: isGranted(role, ROLE_ADMIN),
         },
         {
             label: "User Fields",
@@ -145,7 +115,49 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
-            roles: [ROLE_OPERATOR],
+            isVisible: isGranted(role, ROLE_OPERATOR),
+        },
+        {
+            label: "Email Templates",
+            path: "/admin/email-templates",
+            icon: {
+                name: "",
+            },
+            isVisible: isGranted(role, ROLE_OPERATOR),
+        },
+        {
+            label: "Languages",
+            path: "/admin/languages",
+            icon: {
+                name: "",
+            },
+            isVisible: isGranted(role, ROLE_OPERATOR),
+        },
+        {
+            label: "Translations",
+            path: "/admin/translations",
+            icon: {
+                name: "",
+            },
+            isVisible: isGranted(role, ROLE_OPERATOR),
+        },
+        {
+            label: "Clients",
+            path: "/admin/clients",
+            icon: {
+                name: "",
+            },
+            isVisible: isGranted(role, ROLE_SUPER_ADMIN),
+        },
+        {
+            label: "Containers",
+            path: "/admin/containers",
+            icon: {
+                name: "",
+            },
+            isVisible:
+                !isGranted(role, ROLE_SUPER_ADMIN) &&
+                isGranted(role, ROLE_ADMIN),
         },
         {
             label: "Session Category",
@@ -153,15 +165,28 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
+            isVisible: isGranted(role, ROLE_OPERATOR),
         },
     ]);
     const [showSubMenuItems, isSubMenuItems] = useState<boolean>(false);
+    const [languages, setLanguages] = useState<Language[]>([]);
+    const [userLocale, setUserLocale] = useState<Language>();
 
     const [showMore, isShowMore] = useState<boolean>(false);
     const { width, height } = useWindowSize();
     const { location } = useWindowLocation();
     const logoHolder = useRef<HTMLDivElement>(null);
     const bottomMenu = useRef<HTMLAnchorElement>(null);
+
+    useEffect(() => {
+        if (locale === "") {
+            if (user.locale) {
+                setLocale(user.locale);
+            } else {
+                setLocale(containerLocale);
+            }
+        }
+    });
 
     const handleLogoutEvent = async (): Promise<void> => {
         await logoutAction(dispatch);
@@ -223,7 +248,21 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             isShowMore(true);
         }
     }, [overflowItems]);
-
+    useEffect(() => {
+        LanguageApi.find<Language>(1, { "container.id": containerId }).then(
+            ({ error, response }) => {
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    }
+                } else if (response !== null) {
+                    setLanguages(response.items);
+                    const ul = response.items.find((e) => e.locale === locale);
+                    setUserLocale(ul);
+                }
+            }
+        );
+    }, []);
     const renderMoreMenu = () => {
         return (
             overflowItems.length > 0 && (
@@ -287,11 +326,8 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                         className="active main-menu "
                     />
                     {subMenuItems
-                        .filter(({ roles }) => {
-                            if (roles) {
-                                return isGranted(role, roles[0]);
-                            }
-                            return true;
+                        .filter(({ isVisible }) => {
+                            return isVisible;
                         })
                         .filter((e) => !overflowItems.includes(e))
                         .map(({ label, path, icon }) => {
@@ -363,41 +399,46 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                     <ListGroupItem
                                         className={`seperator  p-0 mx-4`}
                                     ></ListGroupItem>
-                                    <ListGroupItem
-                                        className={`nav-item py-2 px-lg-4`}
-                                    >
-                                        <div
-                                            onClick={() => {
-                                                isSubMenuItems(
-                                                    !showSubMenuItems
-                                                );
-                                            }}
-                                            className="nav-link"
-                                        >
-                                            <div className="nav-icon">
-                                                <AppIcon
-                                                    name={
-                                                        showSubMenuItems
-                                                            ? "ChevronLeft"
-                                                            : "Settings"
-                                                    }
-                                                    className={
-                                                        showSubMenuItems
-                                                            ? "btn-secondary back-to-menu"
-                                                            : ""
-                                                    }
-                                                />
-                                            </div>
-                                            <span>
-                                                {showSubMenuItems
-                                                    ? "Back to App"
-                                                    : "Administration"}
-                                            </span>
-                                        </div>
-                                    </ListGroupItem>
-                                    <ListGroupItem
-                                        className={`seperator  p-0 mx-4`}
-                                    ></ListGroupItem>
+                                    {isGrantedControl && (
+                                        <>
+                                            <ListGroupItem
+                                                className={`nav-item py-2 px-lg-4`}
+                                            >
+                                                <div
+                                                    onClick={() => {
+                                                        isSubMenuItems(
+                                                            !showSubMenuItems
+                                                        );
+                                                    }}
+                                                    className="nav-link"
+                                                >
+                                                    <div className="nav-icon">
+                                                        <AppIcon
+                                                            name={
+                                                                showSubMenuItems
+                                                                    ? "ChevronLeft"
+                                                                    : "Settings"
+                                                            }
+                                                            className={
+                                                                showSubMenuItems
+                                                                    ? "btn-secondary back-to-menu"
+                                                                    : ""
+                                                            }
+                                                        />
+                                                    </div>
+                                                    <span>
+                                                        {showSubMenuItems
+                                                            ? "Back to App"
+                                                            : "Administration"}
+                                                    </span>
+                                                </div>
+                                            </ListGroupItem>
+                                            <ListGroupItem
+                                                className={`seperator  p-0 mx-4`}
+                                            ></ListGroupItem>
+                                        </>
+                                    )}
+
                                     <ListGroupItem
                                         className={`nav-item collapseable p-0`}
                                     >
@@ -408,15 +449,25 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                 }, 300);
                                             }}
                                             className="language"
-                                            label="English"
-                                            iconClassName="languages en"
-                                            subDropDownItems={[
-                                                {
-                                                    label: "German",
-                                                    iconClassName:
-                                                        "languages de",
-                                                },
-                                            ]}
+                                            label={
+                                                userLocale
+                                                    ? userLocale?.name
+                                                    : ""
+                                            }
+                                            iconClassName={`languages ${userLocale?.locale}`}
+                                            subDropDownItems={languages
+                                                .filter((e) => e.isActive)
+                                                .filter((e) => e !== userLocale)
+                                                .map((e) => {
+                                                    return {
+                                                        label: e.name,
+                                                        iconClassName: `languages ${e.locale}`,
+                                                        action: () => {
+                                                            setUserLocale(e);
+                                                            setLocale(e.locale);
+                                                        },
+                                                    };
+                                                })}
                                         />
                                     </ListGroupItem>
                                     <ListGroupItem
@@ -432,8 +483,9 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                 }, 300);
                                             }}
                                             label={
-                                                user.firstName && user.lastName
-                                                    ? `${user.firstName} ${user.lastName}`
+                                                user?.firstName &&
+                                                user?.lastName
+                                                    ? `${user?.firstName} ${user?.lastName}`
                                                     : "Account"
                                             }
                                             style={style}

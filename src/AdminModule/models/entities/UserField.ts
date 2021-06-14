@@ -15,12 +15,13 @@ export interface UserField extends BaseEntity {
 }
 
 export interface FieldsAttr {
-    key: string;
-    value: string;
+    [key: string]: string;
 }
 export interface FieldOptions {
-    key: string;
-    value: string;
+    choice: ChoiceOptions;
+}
+export interface ChoiceOptions {
+    [key: string]: string;
 }
 export class UserFieldEntity {
     name: string;
@@ -43,7 +44,7 @@ export class UserFieldEntity {
 
     attr?: FieldsAttr[];
 
-    options?: FieldOptions[];
+    options?: FieldOptions;
 
     constructor() {
         this.name = "";
@@ -56,6 +57,6 @@ export class UserFieldEntity {
         this.isVcf = false;
         this.isRequired = false;
         this.attr = [];
-        this.options = [];
+        this.options = { choice: { "": "" } };
     }
 }

@@ -6,9 +6,11 @@
             color: var(--primary);
             text-decoration: none;
         }
+
         .ag-react-container {
             display: flex;
             align-items: center;
+
             .tag-container {
                 &--item {
                     a {
@@ -24,6 +26,7 @@
                         border: 1px solid var(--primary);
                         border-radius: var(--spc-btn-border-radius);
                     }
+
                     &.more {
                         a {
                             background-color: unset;
@@ -33,6 +36,7 @@
                     }
                 }
             }
+
             .category-container {
                 a {
                     display: flex;
@@ -48,13 +52,16 @@
                     background-color: var(--speaker-btn-bg-clr);
                     border: 1px solid var(--primary);
                     border-radius: var(--border-radius);
+
                     svg {
                         margin-top: 4px;
                     }
                 }
             }
+
             .actions {
                 display: flex;
+
                 a {
                     display: flex;
                     align-items: center;
@@ -67,15 +74,18 @@
                     padding: 0 5px;
                     font-size: 14px;
                     font-weight: 500;
+
                     i {
                         display: flex;
                         align-items: center;
                         justify-content: center;
                     }
                 }
+
                 .action-btn {
                     display: flex;
                     align-items: center;
+
                     a {
                         font-size: 14px;
                         font-weight: 500;
@@ -86,13 +96,16 @@
                     }
                 }
             }
+
             a {
                 display: flex;
                 align-items: center;
             }
+
             .info {
                 display: flex;
                 align-items: center;
+
                 &--profile-pic {
                     i {
                         display: block;
@@ -101,6 +114,7 @@
                         background-repeat: no-repeat;
                         background-size: contain;
                         border-radius: var(--circle-border-radius);
+
                         &::after {
                             position: relative;
                             top: -3px;
@@ -115,13 +129,16 @@
                         }
                     }
                 }
+
                 &--det {
                     h3 {
                         display: flex;
                         font-size: 14px;
                         font-weight: 500;
                         color: var(--secondary);
+                        line-height: 20px;
                     }
+
                     p {
                         display: box;
                         overflow: hidden;

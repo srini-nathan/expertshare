@@ -20,6 +20,7 @@ interface AppGridLinkAction {
 
 interface AppGridClickAction {
     confirmation?: string;
+    confirmationTitle?: string;
     onClick?: () => void;
     disable?: boolean;
 }
@@ -148,12 +149,12 @@ export const AppGridAction: FC<AppGridActionProps> = ({
 
     return (
         <div className="actions">
+            <LinkAction icon={"Eye"} {...viewAction}></LinkAction>
             <LinkAction icon={"add"} {...addAction}></LinkAction>
             <LinkAction icon={"ListTree"} {...treeAction}></LinkAction>
             {customClickActions.map(({ icon, text, ...rest }) => (
                 <ClickAction icon={icon} text={text} {...rest}></ClickAction>
             ))}
-            <LinkAction icon={"Eye"} {...viewAction}></LinkAction>
             {showItem() ? (
                 <>
                     <LinkAction icon={"edit"} {...editAction}></LinkAction>

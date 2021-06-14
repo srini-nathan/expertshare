@@ -1,0 +1,14 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.streaming-tab {
+    .nav-link {
+        height: 52px;
+        padding: 10px;
+
+        &.active {
+            border: 1px solid var(--primary) !important;
+            background-color: var(--light-clr) !important;
+        }
+    }
+}

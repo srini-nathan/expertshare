@@ -15,16 +15,19 @@ export const AppYoutubeFrame: FC<AppYoutube> = ({
     configuration,
 }): JSX.Element => {
     let videoID = url.split("v=")[1];
-    const ampersandPosition = videoID.indexOf("&");
+    if (videoID) {
+        const ampersandPosition = videoID.indexOf("&");
 
-    if (ampersandPosition !== -1) {
-        videoID = videoID.substring(0, ampersandPosition);
+        if (ampersandPosition !== -1) {
+            videoID = videoID.substring(0, ampersandPosition);
+        }
+        const opts: Options = {
+            height,
+            width,
+            playerVars: configuration,
+        };
+
+        return <YouTube videoId={videoID} opts={opts} />;
     }
-    const opts: Options = {
-        height,
-        width,
-        playerVars: configuration,
-    };
-
-    return <YouTube videoId={videoID} opts={opts} />;
+    return <></>;
 };

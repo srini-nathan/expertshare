@@ -20,6 +20,10 @@ export interface AppFormFieldGeneratorProps {
     control: Control<any>;
     validation: any;
     setValue: any;
+    md?: number;
+    sm?: number;
+    lg?: number;
+    xl?: number;
 }
 export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps> = ({
     properties,
@@ -28,15 +32,19 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
     validation,
     setValue,
     errorMessage,
+    md = 6,
+    sm = 12,
+    lg = 6,
+    xl = 6,
 }) => {
     const { items } = properties;
     const renderText = (type: string) => {
         return (
             <AppFormInput
-                md={"6"}
-                sm={"12"}
-                lg={"6"}
-                xl={"6"}
+                md={md}
+                sm={sm}
+                lg={lg}
+                xl={xl}
                 label={properties.labelKey}
                 type={type}
                 required={properties.isRequired}
@@ -52,11 +60,11 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
     const renderTextArea = () => {
         return (
             <AppFormTextArea
-                md={"6"}
+                md={md}
+                sm={sm}
+                lg={lg}
+                xl={xl}
                 {...validation}
-                sm={"12"}
-                lg={"6"}
-                xl={"6"}
                 label={properties.labelKey}
                 required={properties.isRequired}
                 name={`userField./api/user_fields/${properties.id}`}
@@ -74,11 +82,11 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                     required={properties.isRequired}
                 />
                 <AppDatePicker
-                    md={"6"}
-                    sm={"12"}
-                    lg={"6"}
+                    md={md}
+                    sm={sm}
+                    lg={lg}
+                    xl={xl}
                     {...validation}
-                    xl={"6"}
                     label={properties.labelKey}
                     required={properties.isRequired}
                     name={`userField./api/user_fields/${properties.id}`}
@@ -93,17 +101,19 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
     };
     const renderSwitch = () => {
         return (
-            <AppFormSwitch
-                md={"6"}
-                label={properties.labelKey}
-                sm={"12"}
-                lg={"6"}
-                xl={"6"}
-                {...properties.attr}
-                name={`userField./api/user_fields/${properties.id}`}
-                defaultChecked={defaultValue ? defaultValue.value : false}
-                control={control}
-            />
+            <Col className="p-0" md={"6"} sm={"12"} lg={"6"} xl={"6"}>
+                <AppFormSwitch
+                    label={properties.labelKey}
+                    md={md}
+                    sm={sm}
+                    lg={lg}
+                    xl={xl}
+                    {...properties.attr}
+                    name={`userField./api/user_fields/${properties.id}`}
+                    defaultChecked={defaultValue ? defaultValue.value : false}
+                    control={control}
+                />
+            </Col>
         );
     };
 
@@ -221,10 +231,10 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
         };
         return (
             <AppFormSelect
-                md={"6"}
-                sm={"12"}
-                lg={"6"}
-                xl={"6"}
+                md={md}
+                sm={sm}
+                lg={lg}
+                xl={xl}
                 label={properties.labelKey}
                 required={properties.isRequired}
                 name={`userField./api/user_fields/${properties.id}`}

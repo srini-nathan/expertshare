@@ -9,7 +9,7 @@ export const appGridColDef = ({
     if (isGrantedControl)
         return [
             {
-                headerName: "Name",
+                headerName: "event.list:column.title",
                 field: "title",
                 filter: "translations.title",
                 sortable: true,
@@ -17,23 +17,23 @@ export const appGridColDef = ({
             },
 
             {
-                headerName: "Tags",
+                headerName: "event.list:column.tags",
                 cellRenderer: "tags",
                 sortable: true,
                 minWidth: 40,
             },
             {
-                headerName: "Is Visible",
+                headerName: "event.list:column.isVisible",
                 cellRenderer: "appSwitch",
                 sortable: true,
                 minWidth: 40,
             },
 
             {
-                headerName: "Actions",
+                headerName: "event.list:column.actions",
                 field: "id",
                 sortable: false,
-                maxWidth: 165,
+                maxWidth: 220,
                 cellClass: "text-right",
                 headerClass: "action-header",
                 cellRenderer: "appGridActionRenderer",
@@ -47,7 +47,7 @@ export const appGridColDef = ({
 
     return [
         {
-            headerName: "Name",
+            headerName: "event.list:column.title",
             field: "title",
             filter: "translations.title",
             sortable: true,
@@ -55,17 +55,17 @@ export const appGridColDef = ({
         },
 
         {
-            headerName: "Tags",
+            headerName: "event.list:column.tags",
             cellRenderer: "tags",
             sortable: true,
             minWidth: 40,
         },
 
         {
-            headerName: "Actions",
+            headerName: "event.list:column.actions",
             field: "id",
             sortable: false,
-            maxWidth: 125,
+            maxWidth: 160,
             cellClass: "text-right",
             headerClass: "action-header",
             cellRenderer: "appGridActionRenderer",
