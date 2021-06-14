@@ -126,9 +126,6 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
                 }
             );
         }
-        /* eslint-disable no-console */
-        console.log(files);
-        /* eslint-enable no-console */
     };
 
     const onSubmit = async (formData: ContainerFormType) => {
@@ -162,11 +159,7 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
             }
         });
     };
-    useEffect(() => {
-        /* eslint-disable no-console */
-        console.log(translations);
-        /* eslint-enable no-console */
-    }, [translations]);
+
     useEffect(() => {
         LanguageApi.find<Language>(1, { "container.id": containerId }).then(
             ({ error, response }) => {
@@ -221,14 +214,6 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
             });
 
         if (languages.length !== translations.length) {
-            /* eslint-disable no-console */
-            console.log(
-                languages.length,
-                translations.length,
-                languages,
-                translations
-            );
-            /* eslint-enable no-console */
             const items: any[] = languages.map((e) => {
                 let item = {
                     locale: e.locale,
@@ -265,16 +250,16 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
                                             className="d-flex mb-4 tabs-translation"
                                         >
                                             {languages
-                                                .sort(
-                                                    (
-                                                        a: Language,
-                                                        b: Language
-                                                    ) =>
-                                                        b.isDefault >
-                                                        a.isDefault
-                                                            ? 1
-                                                            : -1
-                                                )
+                                                // .sort(
+                                                //     (
+                                                //         a: Language,
+                                                //         b: Language
+                                                //     ) =>
+                                                //         b.isDefault >
+                                                //         a.isDefault
+                                                //             ? 1
+                                                //             : -1
+                                                // )
                                                 .map(
                                                     (
                                                         lang: Language,

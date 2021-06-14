@@ -375,6 +375,9 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                     <Form.Label>Profile Picture</Form.Label>
                                     <AppUploader
                                         withCropper={true}
+                                        fileInfo={
+                                            FILETYPEINFO_USER_PROFILE as FileTypeInfo
+                                        }
                                         accept="image/*"
                                         imagePath={
                                             data.imageName

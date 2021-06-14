@@ -1,3 +1,133 @@
+// // Variables
+// //
+// // Variables should follow the `$component-state-property-size` formula for
+// // consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
+
+// // Use abbreviations as follow
+// //  background => bg
+// //  foreground => fg
+// //  button => btn
+// //  color => clr
+
+// //custom colors
+
+
+// :root {
+//     //font
+//     --font-family-sans-serif: "grotesque";
+//     --divider-clr: #E6E8E8;
+
+//     //main colors
+//     --body-bg-clr: #F3F9FD;
+//     --light-clr: #FFF;
+//     //Grid Colors
+//     --row-odd-bg-clr: #7EBDE910;
+//     --box-shadow-box-clr: rgba(155, 167, 186, .25);
+
+//     //primary color range
+//     --primary: #30B7A7;
+//     --primary-10: #30B7A710;
+//     --primary-15: #30B7A715;
+//     --primary-20: #30B7A720;
+//     --primary-30: #30B7A730;
+//     --primary-40: #30B7A740;
+//     --primary-50: #30B7A750;
+//     --primary-60: #30B7A760;
+//     --primary-70: #30B7A770;
+//     --primary-80: #30B7A780;
+//     --primary-90: #30B7A790;
+//     //secondary color range
+//     --secondary: #444;
+//     --secondary-10: #44444410;
+//     --secondary-15: #44444415;
+//     --secondary-20: #44444420;
+//     --secondary-30: #44444430;
+//     --secondary-40: #44444440;
+//     --secondary-50: #44444450;
+//     --secondary-60: #44444460;
+//     --secondary-70: #44444470;
+//     --secondary-80: #44444480;
+//     --secondary-90: #44444490;
+//     //input colors
+//     --input-bg-clr: #FCFCFC;
+//     --input-fg-clr: #051515;
+//     --input-border-clr: #A7A7A7;
+//     --border-radius: 5px;
+
+
+//     //widget colors
+//     --widget-bg-color: #36999C15;
+//     --widget-bg-clr: #A0B2C020;
+//     --widget-border-clr: #36999C;
+
+//     //button colors
+//     --btn-bg-clr: #30B7A7;
+//     --btn-border-clr: #30B7A7;
+//     --btn-bg-clr-20: #30B7A720;
+//     --btn-hover-bg-clr: #29A092;
+//     --btn-hover-fg-clr: #FFF;
+//     --btn-hover-border-clr: #30B7A7;
+//     --btn-fg-clr: #FFF;
+//     --btn-fg-clr-60: #FFFFFF60;
+//     --btn-hover-border-clr: transparent;
+//     --btn-secondary-fg-clr: #444;
+//     --btn-secondary-bg-clr: #FFF;
+//     --btn-secondary-border-clr: #FFF;
+//     --btn-hover-secondary-fg-clr: #444;
+//     --btn-hover-secondary-bg-clr: #FFF;
+//     --btn-hover-secondary-border-clr: #FFF;
+//     --speaker-btn-bg-clr: #7EBDE9;
+
+//     //check box color
+//     --checkbox-checked-bg: #36989C;
+//     --checkbox-not-checked-bg: #D7EAEB;
+//     --checkbox-toggler-not-checked-clr: #98CBCC;
+//     --checkbox-toggler-checked-clr: #FCFCFC;
+//     --checkbox-block-bg-clr: #F7FBFB;
+//     --checkbox-block-border-radius: var(--border-radius);
+
+
+//     // sidebar colors
+//     --sidebar-bg-clr: #FFF;
+//     --sidebar-item-hover-bg-clr: #30B7A710;
+//     --sidebar-hover-bg-clr: #30B7A710;
+//     --sidebar-fg-clr: #444;
+//     --sidebar-hover-fg-clr: #30B7A7;
+//     --sidebar-icon-clr: #444;
+//     --sidebar-hover-icon-clr: #30B7A7;
+//     --sidebar-menu-extra-bg-clr: #D4EBEA;
+//     --sidebar-sub-menu-bg-clr: #D4E7E8;
+
+
+//     //Login Page
+//     --agree-bg-clr: #A0B2C033;
+//     --agree-scrollbar-track-bg-clr: #A0B2C0;
+//     --body-bg-clr: #F3F9FD;
+//     --body-bg-clr: #F3F9FD;
+//     --placeholder-fg-clr: #939AA7;
+//     --placeholder-auth-fg-clr: #A0B2C0;
+//     --border-text-box: #A0B2C0;
+//     --border-inner-box: #A0B2C030;
+//     --border-separate-box: #A0B2C050;
+//     --checkbox-border-radius: 1px;
+//     --checkbox-label-fg-clr: #939AA7;
+//     --checkbox-not-checked-bg: #EAF8F6;
+//     --container-box-bg-clr: #FFF;
+//     --sub-text-fg-clr: #A0B2C0;
+//     --p-sub-fg-clr: #5B6275;
+//     --i-fg-clr: #FFF;
+//     --i-bg-clr: #FFF;
+//     --docx-i-bg-clr: #3B6CC7;
+//     --pdf-i-bg-clr: #C72424;
+//     --pptx-i-bg-clr: #F88703;
+//     --xls-i-bg-clr: #11824C;
+//     --file-icon-bg-clr: #FFF;
+//     --live-btn-bg-clr: #EB5353;
+//     --spc-btn-border-radius: 17px;
+//     --circle-border-radius: 50%;
+// }
+
+
 // Variables
 //
 // Variables should follow the `$component-state-property-size` formula for
@@ -25,17 +155,17 @@
     --box-shadow-box-clr: rgba(155, 167, 186, .25);
 
     //primary color range
-    --primary: #30B7A7;
-    --primary-10: #30B7A710;
-    --primary-15: #30B7A715;
-    --primary-20: #30B7A720;
-    --primary-30: #30B7A730;
-    --primary-40: #30B7A740;
-    --primary-50: #30B7A750;
-    --primary-60: #30B7A760;
-    --primary-70: #30B7A770;
-    --primary-80: #30B7A780;
-    --primary-90: #30B7A790;
+    --primary: #000;
+    --primary-10: #00000010;
+    --primary-15: #00000015;
+    --primary-20: #00000020;
+    --primary-30: #00000030;
+    --primary-40: #00000040;
+    --primary-50: #00000050;
+    --primary-60: #00000060;
+    --primary-70: #00000070;
+    --primary-80: #00000080;
+    --primary-90: #00000090;
     //secondary color range
     --secondary: #444;
     --secondary-10: #44444410;
@@ -58,15 +188,15 @@
     //widget colors
     --widget-bg-color: #36999C15;
     --widget-bg-clr: #A0B2C020;
-    --widget-border-clr: #36999C;
+    --widget-border-clr: #000000;
 
     //button colors
-    --btn-bg-clr: #30B7A7;
-    --btn-border-clr: #30B7A7;
-    --btn-bg-clr-20: #30B7A720;
-    --btn-hover-bg-clr: #29A092;
+    --btn-bg-clr: #000000;
+    --btn-border-clr: #000000;
+    --btn-bg-clr-20: #00000020;
+    --btn-hover-bg-clr: #000000;
     --btn-hover-fg-clr: #FFF;
-    --btn-hover-border-clr: #30B7A7;
+    --btn-hover-border-clr: #000000;
     --btn-fg-clr: #FFF;
     --btn-fg-clr-60: #FFFFFF60;
     --btn-hover-border-clr: transparent;
@@ -79,7 +209,7 @@
     --speaker-btn-bg-clr: #7EBDE9;
 
     //check box color
-    --checkbox-checked-bg: #36989C;
+    --checkbox-checked-bg: #000000;
     --checkbox-not-checked-bg: #D7EAEB;
     --checkbox-toggler-not-checked-clr: #98CBCC;
     --checkbox-toggler-checked-clr: #FCFCFC;
@@ -89,12 +219,12 @@
 
     // sidebar colors
     --sidebar-bg-clr: #FFF;
-    --sidebar-item-hover-bg-clr: #30B7A710;
-    --sidebar-hover-bg-clr: #30B7A710;
+    --sidebar-item-hover-bg-clr: #00000010;
+    --sidebar-hover-bg-clr: #00000010;
     --sidebar-fg-clr: #444;
-    --sidebar-hover-fg-clr: #30B7A7;
+    --sidebar-hover-fg-clr: #000000;
     --sidebar-icon-clr: #444;
-    --sidebar-hover-icon-clr: #30B7A7;
+    --sidebar-hover-icon-clr: #000000;
     --sidebar-menu-extra-bg-clr: #D4EBEA;
     --sidebar-sub-menu-bg-clr: #D4E7E8;
 

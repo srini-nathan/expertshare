@@ -341,6 +341,9 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                                     <AppUploader
                                         withCropper
                                         accept="image/*"
+                                        fileInfo={
+                                            FILETYPEINFO_CONFERENCE_POSTER as FileTypeInfo
+                                        }
                                         imagePath={
                                             data.imageName
                                                 ? `${conferencePosterPath}/${data.imageName}`

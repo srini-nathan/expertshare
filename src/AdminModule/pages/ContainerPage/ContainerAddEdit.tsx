@@ -358,6 +358,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         <Form.Label>Poster</Form.Label>
                                         <AppUploader
                                             withCropper
+                                            fileInfo={
+                                                FILETYPEINFO_CONTAINER_POSTER as FileTypeInfo
+                                            }
                                             imagePath={
                                                 data.imageName
                                                     ? `${containerPosterPath}/${data.imageName}`

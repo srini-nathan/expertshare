@@ -186,9 +186,6 @@ export const EventAgenda: FC<RouteComponentProps> = ({
         }
     }
     async function handleChangeSize(cardSize: string, ids: number[]) {
-        /* eslint-disable no-console */
-        console.log(cardSize, ids);
-        /* eslint-enable no-console */
         SessionApi.changeCardSize<Session, { cardSize: string; ids: number[] }>(
             { cardSize, ids }
         ).then(({ error }) => {
