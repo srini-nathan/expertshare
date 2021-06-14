@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useRef } from "react";
 import { Link, RouteComponentProps } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { Container, Row, Col, Form } from "react-bootstrap";
@@ -34,12 +34,15 @@ const schema = yup.object().shape({
 
 export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [emailStatus, setEmailStatus] = useState<string>("");
+    const [agree, isAgree] = useState<boolean>(false);
+    const [readed, isReaded] = useState<boolean>(false);
     const [activeLanguage, setActiveLanguage] = useState<string>("");
     const [userEmail, setUserEmail] = useState<string>("");
     const { control, handleSubmit, formState, setError } = useForm<LoginForm>({
         resolver: yupResolver(schema),
         mode: "all",
     });
+    const desclaimer = useRef<HTMLDivElement>(null);
     const { container } = useGlobalData();
     const { errors } = formState;
 
@@ -97,9 +100,8 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                 return (
                     <>
                         <AppAuthHeader
-                            title="Log In"
-                            description="Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
-        velit mollit. Exercitation veniam consequat sunt nostrud amet."
+                            title="Login"
+                            description="Login description"
                         />
                         <div className="active-account-box">
                             <Col
@@ -171,7 +173,32 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                                 .isDisclaimerEnable && (
                                                 <Form.Group>
                                                     <div className="agreement-box mt-2 p-2">
-                                                        <div className="agreement-box--inner">
+                                                        <div
+                                                            ref={desclaimer}
+                                                            onScroll={() => {
+                                                                if (
+                                                                    desclaimer &&
+                                                                    desclaimer.current
+                                                                ) {
+                                                                    if (
+                                                                        desclaimer
+                                                                            .current
+                                                                            .scrollTop ===
+                                                                        desclaimer
+                                                                            .current
+                                                                            ?.scrollHeight -
+                                                                            desclaimer
+                                                                                .current
+                                                                                ?.offsetHeight
+                                                                    ) {
+                                                                        isReaded(
+                                                                            true
+                                                                        );
+                                                                    }
+                                                                }
+                                                            }}
+                                                            className="agreement-box--inner"
+                                                        >
                                                             <div
                                                                 dangerouslySetInnerHTML={{
                                                                     __html: getValue(
@@ -185,6 +212,16 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                                             />
                                                         </div>
                                                     </div>
+                                                    <Form.Check
+                                                        onChange={() => {
+                                                            isAgree(!agree);
+                                                        }}
+                                                        disabled={!readed}
+                                                        className="mt-2"
+                                                        type="checkbox"
+                                                        label="I agree with those Terms"
+                                                        id="checkbox-des"
+                                                    />
                                                 </Form.Group>
                                             )}
                                     </Form.Group>
@@ -192,7 +229,14 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                         block={true}
                                         type={"submit"}
                                         loadingTxt={"Login In..."}
-                                        disabled={formState.isSubmitting}
+                                        disabled={
+                                            formState.isSubmitting ||
+                                            (container &&
+                                                container.configuration &&
+                                                (container.configuration as any)
+                                                    .isDisclaimerEnable &&
+                                                !agree)
+                                        }
                                         isLoading={formState.isSubmitting}
                                     >
                                         Login
@@ -289,7 +333,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
         <Container fluid className="active-account auth-container">
             <div className="auth-container--box">
                 <Row className="p-0 m-auto">
-                    <div className="tabs-translation-auth">
+                    <div className="tabs-translation-auth mb-3">
                         {container &&
                             container.languages &&
                             container.languages.map((e, i) => {
@@ -299,7 +343,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                         className={`${e.locale} ${
                                             activeLanguage === e.locale &&
                                             "active"
-                                        }`}
+                                        } mx-1`}
                                         onClick={() => {
                                             setActiveLanguage(e.locale);
                                         }}

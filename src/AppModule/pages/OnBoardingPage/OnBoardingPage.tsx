@@ -36,8 +36,14 @@ import {
 } from "../../atoms";
 import { LanguageApi, UserApi, UserFieldApi } from "../../../AdminModule/apis";
 import { Language, User, PUser, UserField } from "../../../AdminModule/models";
-import { useAuthState, useNavigator, useSkipOnboarding } from "../../hooks";
 import {
+    useAuthState,
+    useBuildAssetPath,
+    useNavigator,
+    useSkipOnboarding,
+} from "../../hooks";
+import {
+    FileTypeInfo,
     PrimitiveObject,
     SimpleObject,
     UnprocessableEntityErrorResponse,
@@ -52,6 +58,7 @@ type UpdateProfileForm<T> = {
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
+    FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
     FILETYPE: { FILETYPE_USER_PROFILE },
 } = UPLOAD;
 const schema = yup.object().shape({
@@ -78,7 +85,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
     const [dataLoading, isDataLoading] = React.useState<boolean>(true);
     const { clientId, containerId, user, containerResourceId } = useAuthState();
     const [data, setData] = useState<PUser>(new User(containerResourceId));
-
+    const profilePicturePath = useBuildAssetPath(
+        FILETYPEINFO_USER_PROFILE as FileTypeInfo
+    );
     const {
         control,
         handleSubmit,
@@ -301,8 +310,23 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                     >
                                         <AppUploader
                                             withCropper={true}
+                                            fileInfo={
+                                                FILETYPEINFO_USER_PROFILE as FileTypeInfo
+                                            }
                                             accept="image/*"
+                                            imagePath={
+                                                user && user.imageName
+                                                    ? `${profilePicturePath}/${user.imageName}`
+                                                    : ""
+                                            }
                                             onFileSelect={onFileSelect}
+                                            onDelete={() => {
+                                                setValue("imageName", "");
+                                                setData({
+                                                    ...user,
+                                                    imageName: "",
+                                                });
+                                            }}
                                         />
                                     </Form.Group>
                                     {userFields && getUserField("salutation") && (

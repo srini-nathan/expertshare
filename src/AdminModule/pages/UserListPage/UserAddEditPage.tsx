@@ -480,6 +480,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     <AppUploader
                                         withCropper={true}
                                         accept="image/*"
+                                        fileInfo={
+                                            FILETYPEINFO_USER_PROFILE as FileTypeInfo
+                                        }
                                         imagePath={
                                             data.imageName
                                                 ? `${profilePicturePath}/${data.imageName}`

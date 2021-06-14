@@ -4,7 +4,7 @@ import { useDropzone } from "react-dropzone";
 import { Cropper } from "react-cropper";
 import { AppCropper } from "../AppCropper";
 import { bytesToSize } from "./bytes-to-size";
-import { Upload } from "../../models";
+import { FileTypeInfo, Upload } from "../../models";
 import imageTemp from "./assets/images/imgthumb.svg";
 
 import "./assets/scss/style.scss";
@@ -19,6 +19,9 @@ export interface AppUploaderProps {
     maxSize?: number;
     minSize?: number;
     maxFiles?: number;
+    ratio?: string;
+    width?: string;
+    height?: string;
     accept?: string;
     imagePath?: string;
     withCropper?: boolean;
@@ -27,6 +30,7 @@ export interface AppUploaderProps {
     onFinish?: (error: null | string, upload?: Upload) => void;
     cropperOptions?: Options;
     onDelete?: () => void;
+    fileInfo: FileTypeInfo;
 }
 
 export const AppUploader: FC<AppUploaderProps> = ({
@@ -39,6 +43,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
     onFileSelect,
     cropperOptions,
     onDelete,
+    fileInfo,
 }): JSX.Element => {
     const [files, setFiles] = useState<AppFile[]>([]);
     const [cropperFile, setCropperFile] = useState<any>(undefined);
@@ -66,6 +71,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
                     })
                 )
             );
+
             onFileSelect(accepted);
         },
     });
@@ -90,7 +96,9 @@ export const AppUploader: FC<AppUploaderProps> = ({
             </ul>
         </li>
     ));
-
+    /* eslint-disable no-console */
+    console.log(files);
+    /* eslint-enable no-console */
     const thumbs = files.map((f: any) => (
         <div className="thumb-container">
             <div className="thumb-inner">
@@ -100,7 +108,8 @@ export const AppUploader: FC<AppUploaderProps> = ({
     ));
 
     const thumb = files.map((f: any) => {
-        return cropUrl || f.preview;
+        if (withCropper) return cropUrl;
+        return f.preview;
     });
 
     const getBackgroundStyles = () => {
@@ -174,16 +183,20 @@ export const AppUploader: FC<AppUploaderProps> = ({
                         <AppCropper
                             show={showCropModal}
                             image={files}
-                            initialAspectRatio={16 / 9}
+                            fileInfo={fileInfo}
                             handleClose={() => {
                                 setShowCropModal(false);
-                                setCropUrl(files[0].preview);
+                                setCropUrl("");
+                                setFiles([]);
                             }}
                             handleSave={(url) => {
                                 setShowCropModal(false);
                                 setCropUrl(url);
                             }}
                             handleBlob={(blob) => {
+                                /* eslint-disable no-console */
+                                console.log(blob);
+                                /* eslint-enable no-console */
                                 setCropperFile(blob);
                                 onFileSelect([blob]);
                             }}

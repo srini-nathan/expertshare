@@ -208,9 +208,6 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
     };
 
     const submitForm = async (formData: Session) => {
-        /* eslint-disable no-console */
-        console.log(formData.end);
-        /* eslint-enable no-console */
         formData.translations = getTranslation();
         formData.sessionDocs = docsFile.map((e) => {
             return {
@@ -238,9 +235,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
             formData.start
         )}`;
         formData.end = `${getDate(formData.end)} ${getTime24(formData.end)}`;
-        /* eslint-disable no-console */
-        console.log(formData.end);
-        /* eslint-enable no-console */
+
         return SessionApi.createOrUpdate<Session>(id, formData).then(
             ({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
@@ -508,6 +503,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     data.imageName
                                         ? `${sessionPosterPath}/${data.imageName}`
                                         : ""
+                                }
+                                fileInfo={
+                                    FILETYPEINFO_SESSION_POSTER as FileTypeInfo
                                 }
                                 onFileSelect={onFileSelect}
                             />

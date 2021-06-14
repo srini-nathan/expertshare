@@ -7,6 +7,7 @@ import { AppButton } from "../AppButton";
 import "./assets/scss/style.scss";
 import "cropperjs/dist/cropper.css";
 import "react-input-range/lib/css/index.css";
+import { FileTypeInfo } from "../../models";
 
 type Options = Cropper.Options;
 
@@ -17,9 +18,9 @@ interface AppCropperProps {
     handleBlob: (blog: any) => void;
     title?: string;
     image?: any;
-    initialAspectRatio: number;
     maxZoomLevel?: number;
     cropperOptions?: Options;
+    fileInfo: FileTypeInfo;
 }
 
 export const AppCropper: FC<AppCropperProps> = ({
@@ -29,24 +30,32 @@ export const AppCropper: FC<AppCropperProps> = ({
     handleSave,
     handleBlob,
     title = "Crop Image",
-    initialAspectRatio,
     maxZoomLevel = 5,
     cropperOptions,
+    fileInfo,
 }): JSX.Element => {
     const [cropper, setCropper] = useState<Cropper>();
     const [zoomValue, setZoomValue] = useState<number>(0);
 
-    const onCrop = () => {
+    const { ratio, width, height } = fileInfo;
+
+    const onCrop = (type = "image/jpeg") => {
         if (typeof cropper !== "undefined") {
             cropper.getCroppedCanvas().toBlob(
                 (blob: any) => {
                     handleBlob(blob);
                     handleSave(URL.createObjectURL(blob));
                 },
-                "image/jpeg",
+                type,
                 0.75
             );
         }
+    };
+    const getRatio = (): number => {
+        const ratios = ratio?.split("/");
+        if (ratios && ratios.length > 0)
+            return parseInt(ratios[0], 10) / parseInt(ratios[1], 10);
+        return 16 / 9;
     };
 
     return (
@@ -65,7 +74,12 @@ export const AppCropper: FC<AppCropperProps> = ({
                     <Cropper
                         src={image[0].preview}
                         style={{ height: 400, width: "100%" }}
-                        initialAspectRatio={initialAspectRatio}
+                        aspectRatio={getRatio()}
+                        cropBoxResizable={false}
+                        autoCropArea={1}
+                        width={parseInt(width as string, 10)}
+                        height={parseInt(height as string, 10)}
+                        dragMode="move"
                         viewMode={2}
                         guides={false}
                         onInitialized={(instance) => {
@@ -148,7 +162,12 @@ export const AppCropper: FC<AppCropperProps> = ({
                     <i className="fas fa-times"></i>
                     <span className="text-cancel">Cancel</span>
                 </AppButton>
-                <AppButton variant="primary" onClick={onCrop}>
+                <AppButton
+                    variant="primary"
+                    onClick={() => {
+                        if (image.length > 0) onCrop(image[0]);
+                    }}
+                >
                     <i className="fas fa-check white"></i>
                     <span className="text-cancel">Done</span>
                 </AppButton>

@@ -132,10 +132,13 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                             </Col>
                         </Col>
                         <Col className="inner-container--det--desc p-0 mt-3">
-                            <i className="fak fa-tags"></i>
+                            {conference?.conferenceTags.length > 0 && (
+                                <i className="fak fa-tags"></i>
+                            )}
                             <Col className="p-0 inner-container--det--desc--content">
                                 <h2 className="">
-                                    {t("event.agenda:label.tags")}
+                                    {conference?.conferenceTags.length > 0 &&
+                                        t("event.agenda:label.tags")}
                                 </h2>
                                 <Row
                                     className={
