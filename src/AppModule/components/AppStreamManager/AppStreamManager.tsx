@@ -4,6 +4,7 @@ import { AppVimeoFrame } from "../AppVimeoFrame";
 import { AppYoutubeFrame } from "../AppYoutubeFrame";
 import { AppDacastFrame } from "../AppDacastFrame";
 import { AppKnovioPlayer } from "../AppKnovioPlayer";
+import { AppSwisscomFrame } from "../AppSwisscomFrame";
 import "./assets/scss/style.scss";
 import { Session } from "../../../AdminModule/models";
 import { useBuildAssetPath } from "../../hooks";
@@ -114,6 +115,15 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
                         width={1522}
                         height={910}
                         linkUrl={session.streamUrl}
+                    />
+                );
+
+            case "SWISSCOM":
+                return (
+                    <AppSwisscomFrame
+                        url={session.streamUrl}
+                        width={1522}
+                        height={910}
                     />
                 );
 

@@ -5,19 +5,21 @@
             "REMOTE_ANIMATION_SHAKING": "shaking",
             "REMOTE_ANIMATION_BLINKING": "blinking"
         },
-        "TARGET": {
-            "TARGET_TYPE_ROOM": "room",
-            "TARGET_TYPE_IFRAME": "iframe",
-            "TARGET_TYPE_BILLBOARD": "billboard",
-            "TARGET_TYPE_PROJECTOR": "projector",
-            "TARGET_ACTION_ENTER": "enter",
-            "TARGET_ACTION_EXIT": "exit",
-            "TARGET_ACTION_OPEN": "open",
-            "TARGET_ACTION_CLOSE": "close",
-            "TARGET_ACTION_ZOOM_IN": "zoom_in",
-            "TARGET_ACTION_ZOOM_OUT": "zoom_out",
-            "TARGET_ACTION_START": "start",
-            "TARGET_ACTION_STOP": "stop"
+        "TARGETTYPE": {
+            "TARGETTYPE_ROOM": "room",
+            "TARGETTYPE_IFRAME": "iframe",
+            "TARGETTYPE_BILLBOARD": "billboard",
+            "TARGETTYPE_PROJECTOR": "projector"
+        },
+        "TARGETACTION": {
+            "TARGETACTION_ENTER": "enter",
+            "TARGETACTION_EXIT": "exit",
+            "TARGETACTION_OPEN": "open",
+            "TARGETACTION_CLOSE": "close",
+            "TARGETACTION_ZOOM_IN": "zoom_in",
+            "TARGETACTION_ZOOM_OUT": "zoom_out",
+            "TARGETACTION_START": "start",
+            "TARGETACTION_STOP": "stop"
         },
         "TYPE": {
             "TYPE_DOOR": "door",
@@ -40,6 +42,61 @@
     },
     "Container": {
         "STORAGE": { "STORAGE_LOCAL": "Local", "STORAGE_S3": "S3" }
+    },
+    "EmailTemplate": {
+        "ETKEY": {
+            "ETKEY_USER_ACTIVATION": "USER_ACTIVATION",
+            "ETKEY_FORGOT_PASSWORD": "FORGOT_PASSWORD",
+            "ETKEY_CREATE_PROFILE_ACTIVATION": "CREATE_PROFILE_ACTIVATION",
+            "ETKEY_USER_INVITATION": "USER_INVITATION"
+        },
+        "ETKEYINFO": {
+            "ETKEYINFO_USER_ACTIVATION": {
+                "DOMAIN_NAME": "##DOMAIN_NAME##",
+                "PROJECT_NAME": "##PROJECT_NAME##",
+                "SOCIAL_BLOCK": "##SOCIAL_BLOCK##",
+                "USER_FIRSTNAME": "##USER_FIRSTNAME##",
+                "USER_LASTNAME": "##USER_LASTNAME##",
+                "ONETIME_LOGIN_URL": "##ONETIME_LOGIN_URL##",
+                "PROFILE_VIEW_URL": "##PROFILE_VIEW_URL##"
+            },
+            "ETKEYINFO_FORGOT_PASSWORD": {
+                "DOMAIN_NAME": "##DOMAIN_NAME##",
+                "PROJECT_NAME": "##PROJECT_NAME##",
+                "SOCIAL_BLOCK": "##SOCIAL_BLOCK##",
+                "USER_FIRSTNAME": "##USER_FIRSTNAME##",
+                "USER_LASTNAME": "##USER_LASTNAME##",
+                "RESET_PASSWORD_URL": "##RESET_PASSWORD_URL##",
+                "TOKEN_LIFE_TIME": "##TOKEN_LIFE_TIME##"
+            },
+            "ETKEYINFO_CREATE_PROFILE_ACTIVATION": {
+                "DOMAIN_NAME": "##DOMAIN_NAME##",
+                "PROJECT_NAME": "##PROJECT_NAME##",
+                "SOCIAL_BLOCK": "##SOCIAL_BLOCK##",
+                "USER_FIRSTNAME": "##USER_FIRSTNAME##",
+                "USER_LASTNAME": "##USER_LASTNAME##",
+                "ONETIME_LOGIN_URL": "##ONETIME_LOGIN_URL##"
+            },
+            "ETKEYINFO_USER_INVITATION": {
+                "DOMAIN_NAME": "##DOMAIN_NAME##",
+                "PROJECT_NAME": "##PROJECT_NAME##",
+                "SOCIAL_BLOCK": "##SOCIAL_BLOCK##",
+                "USER_FIRSTNAME": "##USER_FIRSTNAME##",
+                "USER_LASTNAME": "##USER_LASTNAME##",
+                "ONETIME_LOGIN_URL": "##ONETIME_LOGIN_URL##"
+            }
+        }
+    },
+    "JobQueue": {
+        "STATUS": {
+            "STATUS_CREATED": "CREATED",
+            "STATUS_EXECUTED": "EXECUTED"
+        },
+        "PRIORITY": {
+            "PRIORITY_HIGH": 1,
+            "PRIORITY_MEDIUM": 101,
+            "PRIORITY_LOW": 201
+        }
     },
     "NewsfeedComment": {
         "STATUS": {
@@ -68,6 +125,27 @@
             "ROLE_SUPER_ADMIN": "ROLE_SUPER_ADMIN"
         }
     },
+    "Session": {
+        "STREAMTYPE": {
+            "STREAMTYPE_YOUTUBE": "YOUTUBE",
+            "STREAMTYPE_VIMEO": "VIMEO",
+            "STREAMTYPE_SWISSCOM": "SWISSCOM",
+            "STREAMTYPE_DACAST": "DACAST",
+            "STREAMTYPE_KNOVIO": "KNOVIO",
+            "STREAMTYPE_ZOOM": "ZOOM",
+            "STREAMTYPE_WEBEX": "WEBEX"
+        },
+        "CARDSIZE": {
+            "CARDSIZE_SMALL": "SMALL",
+            "CARDSIZE_MEDIUM": "MEDIUM",
+            "CARDSIZE_LARGE": "LARGE",
+            "CARDSIZE_XLARGE": "XLARGE"
+        },
+        "CARDTYPE": {
+            "CARDTYPE_COMPACT": "COMPACT",
+            "CARDTYPE_DETAIL": "DETAIL"
+        }
+    },
     "SessionComment": {
         "STATUS": {
             "STATUS_NEW": "NEW",
@@ -82,43 +160,112 @@
             "FILETYPE_SESSION_POSTER": "SESSION_POSTER",
             "FILETYPE_SESSION_DOC": "SESSION_DOC",
             "FILETYPE_USER_PROFILE": "USER_PROFILE",
-            "FILETYPE_NEWSFEED_MEDIA": "NEWSFEED_MEDIA"
+            "FILETYPE_NEWSFEED_MEDIA": "NEWSFEED_MEDIA",
+            "FILETYPE_AFRAMEROOM_MEDIA": "AFRAMEROOM_MEDIA",
+            "FILETYPE_AFRAMEPANEL_MEDIA": "AFRAMEPANEL_MEDIA",
+            "FILETYPE_CONFIGURATION": "CONFIGURATION",
+            "FILETYPE_DESIGN_CONFIGURATION": "DESIGN_CONFIGURATION"
         },
         "FILETYPEINFO": {
             "FILETYPEINFO_CONTAINER_POSTER": {
                 "key": "CONTAINER_POSTER",
-                "width": "",
-                "height": "",
-                "ratio": "",
-                "maxSize": "",
+                "width": "337",
+                "height": "190",
+                "ratio": "16:9",
+                "maxSize": 1,
                 "allowType": [],
                 "isSecure": false,
                 "path": "container"
             },
             "FILETYPEINFO_CONFERENCE_POSTER": {
                 "key": "CONFERENCE_POSTER",
+                "width": "467",
+                "height": "262",
+                "ratio": "16:9",
+                "maxSize": 1,
+                "allowType": [],
                 "isSecure": false,
                 "path": "conference"
             },
             "FILETYPEINFO_SESSION_POSTER": {
                 "key": "SESSION_POSTER",
+                "width": "1018",
+                "height": "573",
+                "ratio": "16:9",
+                "maxSize": 1,
+                "allowType": [],
                 "isSecure": false,
                 "path": "session"
             },
             "FILETYPEINFO_SESSION_DOC": {
                 "key": "SESSION_DOC",
+                "width": null,
+                "height": null,
+                "ratio": null,
+                "maxSize": 5,
+                "allowType": [],
                 "isSecure": false,
                 "path": "session_doc"
             },
             "FILETYPEINFO_USER_PROFILE": {
                 "key": "USER_PROFILE",
+                "width": "200",
+                "height": "200",
+                "ratio": "1:1",
+                "maxSize": 0.5,
+                "allowType": [],
                 "isSecure": false,
                 "path": "user"
             },
             "FILETYPEINFO_NEWSFEED_MEDIA": {
                 "key": "NEWSFEED_MEDIA",
+                "width": "1018",
+                "height": "573",
+                "ratio": "16:9",
+                "maxSize": 5,
+                "allowType": [],
                 "isSecure": false,
                 "path": "newsfeed_media"
+            },
+            "FILETYPEINFO_AFRAMEROOM_MEDIA": {
+                "key": "AFRAMEROOM_MEDIA",
+                "width": null,
+                "height": null,
+                "ratio": null,
+                "maxSize": 32,
+                "allowType": [],
+                "isSecure": false,
+                "path": "aframeroom_media"
+            },
+            "FILETYPEINFO_AFRAMEPANEL_MEDIA": {
+                "key": "AFRAMEPANEL_MEDIA",
+                "width": null,
+                "height": null,
+                "ratio": null,
+                "maxSize": 32,
+                "allowType": [],
+                "isSecure": false,
+                "path": "aframepanel_media"
+            },
+            "FILETYPEINFO_CONFIGURATION": {
+                "key": "CONFIGURATION",
+                "width": null,
+                "height": null,
+                "ratio": null,
+                "maxSize": 32,
+                "allowType": [],
+                "isSecure": false,
+                "path": "configuration"
+            },
+            "FILETYPEINFO_DESIGN_CONFIGURATION": {
+                "key": "DESIGN_CONFIGURATION",
+                "width": null,
+                "height": null,
+                "ratio": null,
+                "maxSize": 32,
+                "allowType": [],
+                "isSecure": false,
+                "path": "design_configuration"
             }
         }
     },

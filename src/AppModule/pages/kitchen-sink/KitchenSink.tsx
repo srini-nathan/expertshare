@@ -4,7 +4,11 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Form, Row } from "react-bootstrap";
 import * as yup from "yup";
-import { AppPageHeader, AppFormInputColorPicker } from "../../components";
+import {
+    AppPageHeader,
+    AppFormInputColorPicker,
+    AppSwisscomFrame,
+} from "../../components";
 import { validation } from "../../utils";
 
 export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
@@ -43,6 +47,13 @@ export const KitchenSink: FC<RouteComponentProps> = (): JSX.Element => {
                         required={true}
                         {...validation("colorPicker", formState, false)}
                         errorMessage={errors.colorPicker?.message}
+                    />
+                </Row>
+                <Row>
+                    <AppSwisscomFrame
+                        url="https://e.video-cdn.net/video?video-id=A5VqB9g7N21Av3gFTYHPQt&player-id=DTZ5GxPMeR22Q3EHhvNBQA&channel-id=95279"
+                        width={1522}
+                        height={910}
                     />
                 </Row>
             </Form>
