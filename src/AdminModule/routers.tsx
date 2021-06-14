@@ -19,6 +19,7 @@ import {
     SessionCategoryListPage,
     SessionCategoryAddEditPage,
 } from "./pages";
+import { Layout3D } from "../Layout3DModule";
 import { ModuleRouter } from "../AppModule/models";
 import { ContainerAddEdit } from "./pages/ContainerPage/ContainerAddEdit";
 import { UserFieldAddEditPage, UserFieldListPage } from "./pages/UserFieldPage";
@@ -47,6 +48,7 @@ export const routers: ModuleRouter[] = [
                     />
                     <ContainerAddEdit path={"containers/:id"} />
                     <LanguageListPage path={"languages"} />
+                    <Layout3D path={"layout3d"} />
                     <LanguageAddEditPage path={"languages/new"} />
                     <LanguageAddEditPage path={"languages/:id"} />
                     <UserGroupListPage path={"user-groups"} />

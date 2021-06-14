@@ -6,7 +6,7 @@ import { ContainerApi, RoleApi } from "../../../AdminModule/apis";
 import { errorToast } from "../../utils";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AppContext } from "../../contexts/AppContext";
-import { ContainerTypes } from "../../contexts/types";
+import { ContainerTypes } from "../../contexts/types/container-types";
 import { AuthState } from "../../../SecurityModule/models";
 import { appContainer } from "../../atoms/AppContainer";
 

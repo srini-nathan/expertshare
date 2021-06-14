@@ -328,6 +328,8 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                                 control={control}
                             />
                             <Form.Row>
+                                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                                {/* @ts-ignore */}
                                 <Form.Group
                                     as={Col}
                                     sm={12}

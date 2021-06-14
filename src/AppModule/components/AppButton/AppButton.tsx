@@ -48,6 +48,8 @@ export const AppButton: FunctionComponent<AppButtonProps> = ({
     }
 
     return (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         <Button type={btnType} {...props}>
             {isLoading ? loadingTxt : props.children}
         </Button>

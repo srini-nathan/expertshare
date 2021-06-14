@@ -16,7 +16,7 @@ import { ContainerApi } from "../../apis";
 import { successToast, errorToast } from "../../../AppModule/utils";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models";
-import { ContainerTypes } from "../../../AppModule/contexts";
+import { ContainerTypes } from "../../../AppModule/contexts/types/container-types";
 import { Container } from "../../models";
 
 const parseData = (data: any) => {

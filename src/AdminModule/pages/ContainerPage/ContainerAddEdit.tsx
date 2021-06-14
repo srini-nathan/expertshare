@@ -348,6 +348,8 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     />
                                 </Col>
                                 <Col md={6} sm={12}>
+                                    {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
+                                    {/* @ts-ignore */}
                                     <Form.Group
                                         as={Col}
                                         sm={12}
