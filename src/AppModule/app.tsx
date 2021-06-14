@@ -7,11 +7,11 @@ import { AuthLayout } from "./layouts/AuthLayout";
 import { ModuleRouter } from "./models";
 import AppProvider from "./contexts/AppContext";
 import { AuthContext } from "../SecurityModule/contexts/AuthContext";
-import { useChosenContainer, useNavigator } from "./hooks";
+import { useChosenContainer, useNavigator, useSkipOnboarding } from "./hooks";
 import {
     AppLoader,
-    AppPictureInPicture,
-    AppYoutubeFrame,
+    // AppPictureInPicture,
+    // AppYoutubeFrame,
     AppWelcomeModal,
 } from "./components";
 import { LandingHelper } from "./pages";
@@ -60,8 +60,10 @@ const AppFullScreenLoader = (): JSX.Element => {
 const App = (): JSX.Element => {
     const { status } = useGlobalData();
     const { state } = React.useContext(AuthContext);
+    const { user } = state;
     const navigator = useNavigator();
     const { isChosen } = useChosenContainer();
+    const { isSkipOnboarding } = useSkipOnboarding();
     const [showWelcomeModal, setShowWelcomeModal] = React.useState(true);
 
     const dashboardRoutes: ModuleRouter[] = appRouters.filter(
@@ -71,6 +73,7 @@ const App = (): JSX.Element => {
         ({ layout }) => layout === "auth"
     );
     const overViewPage = useMatch("/container");
+    const onBoardingPage = useMatch("/onboarding");
     const autoLoginPage = useMatch("/auth/auto-login/:token");
     const isOverViewPage = overViewPage !== null;
     const isAutoLoginPage = autoLoginPage !== null;
@@ -80,7 +83,9 @@ const App = (): JSX.Element => {
     }
 
     if (!isAutoLoginPage && state.isAuthenticated) {
-        if (!isChosen() && !isOverViewPage) {
+        if (!user.isOnboarded && !isSkipOnboarding() && !onBoardingPage) {
+            navigator("/onboarding").then();
+        } else if (!isChosen() && !isOverViewPage && !onBoardingPage) {
             navigator("/container").then();
             return <AppFullScreenLoader />;
         }
@@ -108,7 +113,7 @@ const App = (): JSX.Element => {
                             setShowWelcomeModal(false);
                         }}
                     />
-                    <AppPictureInPicture show={true}>
+                    {/* <AppPictureInPicture show={true}>
                         <AppYoutubeFrame
                             url={
                                 "https://www.youtube.com/watch?v=aqz-KE-bpKQ&t=253s"
@@ -116,7 +121,7 @@ const App = (): JSX.Element => {
                             height={"200"}
                             width={"100%"}
                         />
-                    </AppPictureInPicture>
+                    </AppPictureInPicture> */}
                 </AppConfiguration>
             </AppProvider>
         );

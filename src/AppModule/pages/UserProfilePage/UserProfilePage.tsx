@@ -30,7 +30,7 @@ export const UserProfilePage: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <>
-            <AppProfileHeader {...user} />
+            <AppProfileHeader isProfilePage={false} {...user} />
             <Tab.Container defaultActiveKey="Feeds">
                 <AppTabWithIcon
                     eventKey="Feeds"

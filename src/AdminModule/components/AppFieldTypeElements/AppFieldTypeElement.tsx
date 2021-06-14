@@ -23,7 +23,6 @@ export const AppFieldTypeElement: FC<AppFieldTypeElementProps> = ({
     name,
     control,
     header,
-    setValue,
     defaultValue,
     isEditMode,
     errors,
@@ -38,7 +37,19 @@ export const AppFieldTypeElement: FC<AppFieldTypeElementProps> = ({
     };
     useEffect(() => {
         if (isEditMode) {
-            setValue(name, defaultValue);
+            if (name === "attr") {
+                defaultValue.forEach((e: any) => {
+                    Object.keys(e).forEach((b) => {
+                        append({ key: b, value: e[b] });
+                    });
+                });
+            } else if (defaultValue.choice) {
+                defaultValue.choice.forEach((e: any) => {
+                    Object.keys(e).forEach((b) => {
+                        append({ key: b, value: e[b] });
+                    });
+                });
+            }
         } else {
             append({ key: "", value: "" });
         }

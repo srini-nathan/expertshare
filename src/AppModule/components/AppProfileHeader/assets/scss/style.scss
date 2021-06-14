@@ -136,6 +136,64 @@
                     display: flex;
                     align-items: center;
 
+                    button {
+
+                        .popup {
+                            position: absolute;
+                            top: 35px;
+                            right: 10px;
+                            z-index: 4;
+                            display: none;
+                            width: 169px;
+                            padding: 10px;
+                            background-color: var(--light-clr);
+                            border-radius: var(--border-radius);
+                            box-shadow: 0 12px 38px var(--secondary-20);
+
+                            &--inner {
+                                &--item {
+                                    padding: 2px 5px;
+                                    text-align: left;
+
+                                    a {
+                                        display: flex;
+                                        align-items: center;
+                                        font-size: 12px;
+                                        font-weight: 700;
+                                        line-height: 30px;
+                                        color: var(--secondary);
+
+                                        i {
+                                            font-size: 15px;
+                                        }
+
+                                        svg {
+                                            width: 1.2em;
+                                            margin-right: 5px;
+                                            text-align: left;
+                                        }
+                                    }
+
+                                    &.video-chat {
+                                        a {
+                                            i {
+                                                &::before {
+                                                    content: "\e007";
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        &:hover {
+                            &>.popup {
+                                display: block;
+                            }
+                        }
+                    }
+
                     a {
                         text-decoration: none;
 

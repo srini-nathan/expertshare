@@ -72,10 +72,14 @@ export const AppSelectStream: FC<AppSelectStreamProps> = ({
             <Col md={12} className="d-flex mb-4">
                 <Tab.Container
                     onSelect={(e: string | null) => {
-                        if (e === activeKey) setActiveKey("");
-                        else setActiveKey(e as string);
-                        if (changeValue) {
-                            changeValue("streamType", e as string);
+                        if (e === activeKey) {
+                            setActiveKey("");
+                            if (changeValue) changeValue("streamType", "");
+                        } else {
+                            setActiveKey(e as string);
+                            if (changeValue) {
+                                changeValue("streamType", e as string);
+                            }
                         }
                     }}
                     activeKey={activeKey}

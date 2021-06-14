@@ -25,12 +25,18 @@ import {
     setViolations,
 } from "../../utils";
 import { useAuthState, useBuildAssetPath } from "../../hooks";
-import { UserApi, UserTagApi, UserFieldApi } from "../../../AdminModule/apis";
+import {
+    UserApi,
+    UserTagApi,
+    UserFieldApi,
+    LanguageApi,
+} from "../../../AdminModule/apis";
 import {
     UserTag,
     UserField,
     User as UserModel,
     PUser,
+    Language,
 } from "../../../AdminModule/models";
 import {
     UnprocessableEntityErrorResponse,
@@ -41,6 +47,8 @@ import {
 } from "../../models";
 import { UploadAPI } from "../../apis";
 import { CONSTANTS } from "../../../config";
+import { useGlobalData } from "../../contexts";
+import "./assets/scss/style.scss";
 
 const { Upload: UPLOAD, User: USER } = CONSTANTS;
 const {
@@ -66,22 +74,29 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     const { state, dispatch } = React.useContext(AuthContext);
     const { clientId, user } = state as AuthState;
     const [loading, isLoading] = React.useState<boolean>(false);
-    const [dataLoading, isDataLoading] = React.useState<boolean>(true);
+    const [, isDataLoading] = React.useState<boolean>(true);
+    const [, isFieldLoading] = React.useState<boolean>(true);
     const [userTags, setUserTags] = useState<SimpleObject<string>[]>([]);
     const [selectedUserTags, setSelectedUserTag] = useState<
         SimpleObject<string>[]
     >([]);
-    const { containerResourceId } = useAuthState();
+    const { containerResourceId, containerId } = useAuthState();
+    const [languages, setLanguages] = useState<SimpleObject<string>[]>([]);
     const [data, setData] = useState<PUser>(new UserModel(containerResourceId));
     const [userFields, setUserFields] = useState<UserField[]>([]);
     const [files, setFiles] = useState<File[]>([]);
     const profilePicturePath = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo
     );
+    const { container } = useGlobalData();
 
     const validationShape = {
         firstName: Yup.string().min(2).required(),
         lastName: Yup.string().min(2).required(),
+        company: Yup.string().min(2).required(),
+        jobTitle: Yup.string().min(2).required(),
+        timezone: Yup.string().min(2).required(),
+        locale: Yup.string().min(2).required(),
     };
     // userFields.forEach((e) => {
     //     if (e.isActive && e.isRequired)
@@ -97,7 +112,6 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
         mode: "all",
     });
     const { errors } = formState;
-
     const onFileSelect = (selectedFiles: File[]) => {
         setFiles(selectedFiles);
     };
@@ -162,8 +176,11 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
         );
     }, []);
     const fetchUserFields = () => {
+        isFieldLoading(true);
         UserFieldApi.find<UserField>(1, { "client.id": clientId }).then(
             ({ error, response }) => {
+                isFieldLoading(false);
+
                 if (error !== null) {
                     if (_isString(error)) {
                         errorToast(error);
@@ -176,16 +193,24 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     };
     useEffect(() => {
         fetchUserFields();
-    }, []);
-
-    const renderUserFields = () => {
-        if (dataLoading) return <></>;
-        return userFields.map((e) => {
-            let defaultValue: any = null;
-
-            data?.userFieldValues?.forEach((item: any) => {
-                if (e.id === item.userField.id) defaultValue = item;
+    }, [data]);
+    const getValue = (name: string) => {
+        let val = "";
+        if (
+            container &&
+            container.configuration &&
+            (container?.configuration as any).translations
+        )
+            (container?.configuration as any).translations.forEach((e: any) => {
+                if (e.locale === user?.locale) val = e[name];
             });
+        return val;
+    };
+    const renderUserFields = () => {
+        return userFields.map((e) => {
+            const defaultValue: any = (data?.userFieldValues as any[]).find(
+                (item: any) => e.id === item.userField.id
+            );
             return (
                 <AppFormFieldGenerator
                     key={e.id}
@@ -285,6 +310,30 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                 }
             });
     };
+    useEffect(() => {
+        LanguageApi.find<Language>(1, { "container.id": containerId }).then(
+            ({ error, response }) => {
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    }
+                } else if (response !== null) {
+                    const langs: SimpleObject<string>[] = [];
+                    response.items.forEach((e) => {
+                        langs.push({
+                            id: `${e.id}`,
+                            value: e.locale,
+                            label: e.name,
+                        });
+                    });
+                    setLanguages(langs);
+                }
+            }
+        );
+    }, []);
+    const getLocale = () => {
+        return languages.find((e) => e.value === user?.locale) || "";
+    };
     const onSubmit = async (formData: UserModel) => {
         if (files.length > 0) {
             const fd = new FormData();
@@ -375,7 +424,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                     name={"company"}
                                     defaultValue={user?.company}
                                     label={"Company"}
-                                    required={false}
+                                    required={true}
                                     {...validation("company", formState, true)}
                                     errorMessage={errors.Company?.message}
                                     control={control}
@@ -386,7 +435,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                     defaultValue={user?.jobTitle}
                                     name={"jobTitle"}
                                     label={"Job Title"}
-                                    required={false}
+                                    required={true}
                                     {...validation("jobTitle", formState, true)}
                                     errorMessage={errors.jobTitle?.message}
                                     control={control}
@@ -413,8 +462,8 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                     name={"timezone"}
                                     label={"Select Timezone"}
                                     md={12}
-                                    lg={12}
-                                    xl={12}
+                                    lg={6}
+                                    xl={6}
                                     required={true}
                                     {...validation("timezone", formState, true)}
                                     defaultValue={{
@@ -439,6 +488,31 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                         },
                                     }}
                                 />
+                                <AppFormSelect
+                                    id={"locale"}
+                                    name={"locale"}
+                                    label={"Locale"}
+                                    md={12}
+                                    className="local-container"
+                                    lg={6}
+                                    xl={6}
+                                    required={true}
+                                    {...validation("locale", formState, true)}
+                                    defaultValue={getLocale()}
+                                    placeholder={"Locale"}
+                                    errorMessage={errors.locale?.message}
+                                    options={languages}
+                                    control={control}
+                                    transform={{
+                                        output: (locale: PrimitiveObject) =>
+                                            locale?.value,
+                                        input: (value: string) => {
+                                            return _find([], {
+                                                value,
+                                            });
+                                        },
+                                    }}
+                                />
                             </Form.Row>
                         </AppCard>
                     </Col>
@@ -446,6 +520,25 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                         <AppCard>
                             <Row>
                                 {renderUserFields()}
+
+                                {container &&
+                                    container.configuration &&
+                                    (container.configuration as any)
+                                        .isDisclaimerEnable && (
+                                        <Form.Group className="p-2">
+                                            <div className="agreement-box mt-2 p-2">
+                                                <div className="agreement-box--inner">
+                                                    <div
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: getValue(
+                                                                "disclaimerTextProfile"
+                                                            ),
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </Form.Group>
+                                    )}
 
                                 <Col
                                     md={12}

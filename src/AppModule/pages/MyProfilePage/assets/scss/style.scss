@@ -1,0 +1,38 @@
+@import "../../../../assets/scss/variables";
+@import "../../../../assets/scss/screens-sizes";
+
+.agreement-box {
+    border: 1px solid var(--border-text-box);
+    border-radius: var(--border-radius);
+
+    &--inner {
+        height: 149px;
+        min-height: 100px;
+        overflow: auto;
+        scrollbar-color: var(--secondary) var(--agree-scrollbar-track-bg-clr);
+        scrollbar-width: thin;
+
+        &::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: var(--agree-scrollbar-track-bg-clr);
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: var(--secondary);
+        }
+
+        &::-webkit-scrollbar-thumb:hover {
+            opacity: 50%;
+        }
+
+        // p {
+        //     font-size: 14px;
+        //     font-weight: 400;
+        //     color: var(--secondary);
+        //     text-align: left;
+        // }
+    }
+}

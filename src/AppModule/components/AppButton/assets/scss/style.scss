@@ -51,3 +51,24 @@
         border: 1px solid var(--btn-hover-border-clr) !important;
     }
 }
+
+.btn-link {
+    display: flex;
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    line-height: 10px !important;
+    color: var(--btn-hover-bg-clr) !important;
+
+    &:focus,
+    &:active,
+    &:hover {
+        color: var(--btn-hover-bg-clr) !important;
+        box-shadow: unset !important;
+        outline: unset !important;
+
+    }
+}

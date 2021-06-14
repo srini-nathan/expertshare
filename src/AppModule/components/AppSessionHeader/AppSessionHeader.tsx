@@ -1,11 +1,12 @@
 import React, { FC } from "react";
 import { Row, Col } from "react-bootstrap";
+import { format } from "date-fns";
 // import { Link } from "@reach/router";
 import { AppButton } from "../AppButton";
 import "./assets/scss/style.scss";
 import { AppStreamManager } from "../AppStreamManager";
 import { Session } from "../../../AdminModule/models";
-import { getTime, getDateFormat } from "../../utils";
+import { useGlobalData } from "../../contexts";
 
 export interface AppSessionHeaderProps {
     session: Session;
@@ -14,6 +15,8 @@ export interface AppSessionHeaderProps {
 export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
     session,
 }): JSX.Element => {
+    const { container } = useGlobalData();
+
     return (
         <Col sm={12} className="session-details-header p-0">
             <Row className="session-details-header--detail mb-3 px-4 pt-4">
@@ -141,10 +144,42 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                             className="session-details-header--detail--title--time text-lg-right text-left mr-0 ml-auto mt-2 mt-lg-0"
                         >
                             <span className="date mb-1">
-                                {getDateFormat(session.start)}
+                                {session.start &&
+                                    format(
+                                        new Date(session.start),
+                                        container &&
+                                            container.configuration &&
+                                            (container.configuration as any)
+                                                .shortDate
+                                            ? (container.configuration as any)
+                                                  .shortDate
+                                            : "EEEE MMMM, dd"
+                                    )}
                             </span>
                             <span className="period">
-                                {getTime(session.start)}- {getTime(session.end)}
+                                {session.start &&
+                                    format(
+                                        new Date(session.start),
+                                        container &&
+                                            container.configuration &&
+                                            (container.configuration as any)
+                                                .shortTime
+                                            ? (container.configuration as any)
+                                                  .shortTime
+                                            : "hh:mm a"
+                                    )}{" "}
+                                -{" "}
+                                {session.end &&
+                                    format(
+                                        new Date(session.end),
+                                        container &&
+                                            container.configuration &&
+                                            (container.configuration as any)
+                                                .shortTime
+                                            ? (container.configuration as any)
+                                                  .shortTime
+                                            : "hh:mm a"
+                                    )}
                             </span>
                         </Col>
                     </Row>

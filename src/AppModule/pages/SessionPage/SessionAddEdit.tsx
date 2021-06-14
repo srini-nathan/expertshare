@@ -111,6 +111,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
         SimpleObject<string>[]
     >([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [loadingCat, setLoadingCat] = useState<boolean>(true);
     const [showExtraLinks, isExtraLink] = useState<boolean>(
         data.isExternalLinkEnable
     );
@@ -197,9 +198,6 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                 }
             );
         }
-        /* eslint-disable no-console */
-        console.log(selectedFiles);
-        /* eslint-enable no-console */
     };
 
     const onRemoveDoc = (index: number) => {
@@ -209,83 +207,80 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
         ]);
     };
 
-    const submitForm = (formData: Session) => {
+    const submitForm = async (formData: Session) => {
         /* eslint-disable no-console */
         console.log(formData.end);
         /* eslint-enable no-console */
-        if (checkTranslation()) {
-            formData.translations = getTranslation();
-            formData.sessionDocs = docsFile.map((e) => {
-                return {
-                    fileName: e.fileName,
-                    name: e.name,
-                    container: e.container,
-                };
-            });
-            formData.container = ContainerApi.toResourceUrl(containerId);
-            formData.conference = ConferenceApi.toResourceUrl(conferenceId);
-            formData.sessionTags = selectedSessionTags.map((e) => {
-                if (e.id)
-                    return SessionTagApi.toResourceUrl(parseInt(e.id, 10));
-                return {
-                    name: e.value,
-                    container: ContainerApi.toResourceUrl(containerId),
-                };
-            });
-            formData.speakers = selectedSpeakers.map((e) => {
-                return UserApi.toResourceUrl(e.id);
-            });
-            formData.moderators = selectedModerators.map((e) => {
-                return UserApi.toResourceUrl(e.id);
-            });
-            formData.start = `${getDate(formData.start)} ${getTime24(
-                formData.start
-            )}`;
-            formData.end = `${getDate(formData.end)} ${getTime24(
-                formData.end
-            )}`;
-            /* eslint-disable no-console */
-            console.log(formData.end);
-            /* eslint-enable no-console */
-            SessionApi.createOrUpdate<Session>(id, formData).then(
-                ({ error, errorMessage }) => {
-                    if (error instanceof UnprocessableEntityErrorResponse) {
-                        setViolations<Session>(error, setError);
-                    } else if (errorMessage) {
-                        errorToast(errorMessage);
-                    } else {
-                        navigator(`/event/${conferenceId}/agenda`).then(() => {
-                            successToast(
-                                isEditMode ? "Event updated" : "Event created"
-                            );
-                        });
-                    }
+        formData.translations = getTranslation();
+        formData.sessionDocs = docsFile.map((e) => {
+            return {
+                fileName: e.fileName,
+                name: e.name,
+                container: e.container,
+            };
+        });
+        formData.container = ContainerApi.toResourceUrl(containerId);
+        formData.conference = ConferenceApi.toResourceUrl(conferenceId);
+        formData.sessionTags = selectedSessionTags.map((e) => {
+            if (e.id) return SessionTagApi.toResourceUrl(parseInt(e.id, 10));
+            return {
+                name: e.value,
+                container: ContainerApi.toResourceUrl(containerId),
+            };
+        });
+        formData.speakers = selectedSpeakers.map((e) => {
+            return UserApi.toResourceUrl(e.id);
+        });
+        formData.moderators = selectedModerators.map((e) => {
+            return UserApi.toResourceUrl(e.id);
+        });
+        formData.start = `${getDate(formData.start)} ${getTime24(
+            formData.start
+        )}`;
+        formData.end = `${getDate(formData.end)} ${getTime24(formData.end)}`;
+        /* eslint-disable no-console */
+        console.log(formData.end);
+        /* eslint-enable no-console */
+        return SessionApi.createOrUpdate<Session>(id, formData).then(
+            ({ error, errorMessage }) => {
+                if (error instanceof UnprocessableEntityErrorResponse) {
+                    setViolations<Session>(error, setError);
+                } else if (errorMessage) {
+                    errorToast(errorMessage);
+                } else {
+                    navigator(`/event/${conferenceId}/agenda`).then(() => {
+                        successToast(
+                            isEditMode ? "Event updated" : "Event created"
+                        );
+                    });
                 }
-            );
-        }
+            }
+        );
     };
 
     const onSubmit = async (formData: Session) => {
         if (files.length > 0) {
-            const fd = new FormData();
-            fd.set("file", files[0], files[0].name);
-            fd.set("fileType", FILETYPE_SESSION_POSTER);
+            if (checkTranslation()) {
+                const fd = new FormData();
+                fd.set("file", files[0], files[0].name);
+                fd.set("fileType", FILETYPE_SESSION_POSTER);
 
-            return UploadAPI.createResource<Upload, FormData>(fd).then(
-                ({ errorMessage, response }) => {
-                    if (errorMessage) {
-                        errorToast(errorMessage);
+                return UploadAPI.createResource<Upload, FormData>(fd).then(
+                    ({ errorMessage, response }) => {
+                        if (errorMessage) {
+                            errorToast(errorMessage);
+                            return submitForm(formData);
+                        }
+
+                        if (response && response.fileName) {
+                            formData.imageName = response.fileName;
+                        }
+
+                        successToast("Image uploaded");
                         return submitForm(formData);
                     }
-
-                    if (response && response.fileName) {
-                        formData.imageName = response.fileName;
-                    }
-
-                    successToast("Image uploaded");
-                    return submitForm(formData);
-                }
-            );
+                );
+            }
         }
         return submitForm(formData);
     };
@@ -450,6 +445,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
         SessionCategoryApi.find<SessionCategory>(1, {
             "container.id": containerId,
         }).then(({ error, response }) => {
+            setLoadingCat(false);
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
@@ -466,7 +462,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                 );
             }
         });
-    }, [data]);
+    }, []);
 
     const renderLinksValue = () => {
         return !showExtraLinks ? "d-none" : "d-flex";
@@ -474,11 +470,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
 
     const { errors } = formState;
 
-    /* eslint-disable no-console */
-    console.log(errors);
-    /* eslint-enable no-console */
-
-    if (loading) {
+    if (loading || loadingCat) {
         return <AppLoader />;
     }
 

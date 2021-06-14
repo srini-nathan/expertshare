@@ -1,13 +1,14 @@
 import React, { FC } from "react";
+import { format } from "date-fns";
 import { Link } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { PConference } from "../../../AdminModule/models";
 import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath } from "../../hooks";
-import { getDateFormat, getTime } from "../../utils";
 import "./assets/scss/style.scss";
 import placeholder from "./assets/images/imgthumb.svg";
 import { FileTypeInfo } from "../../models";
+import { useGlobalData } from "../../contexts";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -35,6 +36,9 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
         conferenceTags = [],
         description,
     } = conference;
+
+    const { container } = useGlobalData();
+
     const imagePath = useBuildAssetPath(
         FILETYPEINFO_CONFERENCE_POSTER as FileTypeInfo,
         imageName
@@ -93,11 +97,31 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                                 <>
                                     <div className="inner-container--det--time--spec--date">
                                         <h3 className="mb-0">
-                                            {getDateFormat(startAt)}
+                                            {format(
+                                                new Date(startAt),
+                                                container &&
+                                                    container.configuration &&
+                                                    (container.configuration as any)
+                                                        .shortDate
+                                                    ? (container.configuration as any)
+                                                          .shortDate
+                                                    : "EEEE MMMM, dd"
+                                            )}
                                         </h3>
                                     </div>
                                     <div className="inner-container--det--time--spec--period">
-                                        <span>{getTime(startAt)}</span>
+                                        <span>
+                                            {format(
+                                                new Date(startAt),
+                                                container &&
+                                                    container.configuration &&
+                                                    (container.configuration as any)
+                                                        .shortTime
+                                                    ? (container.configuration as any)
+                                                          .shortTime
+                                                    : "hh:mm a"
+                                            )}
+                                        </span>
                                     </div>
                                 </>
                             )}

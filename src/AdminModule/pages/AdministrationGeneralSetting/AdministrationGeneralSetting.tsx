@@ -153,6 +153,7 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
             } else if (response !== null) {
                 setContainerConfiguration(response.configuration);
                 setConfiguration(parseData(response.configurationTypes));
+
                 dispatch({
                     type: ContainerTypes.SUCCESS,
                     payload: response,

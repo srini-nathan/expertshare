@@ -12,6 +12,7 @@ import {
     EventAgenda,
     SessionDetailsPage,
     AttendeeOverview,
+    OnBoardingPage,
 } from "./pages";
 import { ModuleRouter } from "./models";
 
@@ -43,6 +44,7 @@ export const routers: ModuleRouter[] = [
                     <AttendeeOverview path={"attendee"} />
                     <AttendeeOverview path={"attendee/:view"} />
                     <UserProfilePage path={"attendee/:id/show"} />
+                    <OnBoardingPage path={"onboarding"} />
                 </Router>
             );
         },
