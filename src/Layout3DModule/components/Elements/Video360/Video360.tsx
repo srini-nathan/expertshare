@@ -1,0 +1,70 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useEffect, useState } from "react";
+import { BackSide } from "three";
+
+interface Video360Props {
+    props?: JSX.IntrinsicElements["mesh"];
+    roomId: number;
+    panelId: number;
+    targetId: number;
+    videoUrl: string;
+    tempUrl: string;
+    startPlaying: boolean;
+    visible?: boolean;
+    //  ref: any;
+    onVideoEnded: () => void;
+}
+
+export const Video360 = ({
+    props,
+    roomId,
+    panelId,
+    targetId,
+    videoUrl,
+    //  ref,
+    tempUrl,
+    startPlaying = false,
+    onVideoEnded,
+}: Video360Props): JSX.Element => {
+    const [play, setPlay] = useState<boolean>(false);
+
+    // eslint-disable-next-line no-console
+    // console.log("vid 360 details: ", roomId, panelId, targetId, videoUrl, play);
+    const videoEnded = () => {
+        setPlay(false);
+        onVideoEnded();
+    };
+
+    const [videoTexture] = useState(() => {
+        const vid = document.createElement("video");
+        vid.src = tempUrl;
+        vid.crossOrigin = "Anonymous";
+        vid.loop = false;
+        vid.onended = videoEnded;
+        return vid;
+    });
+
+    useEffect(() => {
+        if (startPlaying) {
+            // eslint-disable-next-line no-console
+            setPlay(true);
+            videoTexture.currentTime = 0;
+            videoTexture.play();
+        }
+    }, [startPlaying]);
+
+    return (
+        <>
+            <mesh visible={startPlaying} {...props}>
+                <sphereBufferGeometry args={[49, 32, 32]} />
+                <meshBasicMaterial
+                    side={BackSide}
+                    toneMapped={false}
+                    color={"black"}
+                >
+                    <videoTexture attach="map" args={[videoTexture]} />
+                </meshBasicMaterial>
+            </mesh>
+        </>
+    );
+};

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { FC, useEffect, useState, useRef } from "react";
 import { isString as _isString } from "lodash";
 import {
@@ -150,6 +151,14 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             isVisible: isGranted(role, ROLE_SUPER_ADMIN),
         },
         {
+            label: "Layout 3D",
+            path: "/admin/layout3d",
+            icon: {
+                name: "",
+            },
+            roles: [ROLE_ADMIN],
+        },
+        {
             label: "Containers",
             path: "/admin/containers",
             icon: {
@@ -296,6 +305,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                             )}
                         </ListGroup>
                     </Accordion.Collapse>
+                    {/* @ts-ignore */}
                     <Accordion.Toggle
                         as={ListGroupItem}
                         className={`nav-item py-2 px-lg-4`}

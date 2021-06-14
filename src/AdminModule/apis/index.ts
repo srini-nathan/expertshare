@@ -11,6 +11,7 @@ export * from "./UserFieldApi";
 export * from "./UserApi";
 export * from "./UserTagApi";
 export * from "./RoleApi";
+export * from "./Layout3DApi";
 export * from "./ConferenceApi";
 export * from "./ConferenceTagApi";
 export * from "./SessionApi";
