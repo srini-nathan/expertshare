@@ -1,8 +1,10 @@
 import React, { ReactElement } from "react";
 import { ICellRendererParams } from "ag-grid-community";
-import { AppGridAction, AppGridActionProps, AppSwitch } from "../../components";
+import { useTranslation } from "react-i18next";
+import { AppGridAction, AppGridActionProps, AppRadio } from "../../components";
 import { AFrameRoom } from "../../../AdminModule/models";
 import { AFrameRoomApi } from "../../../AdminModule/apis";
+import { errorToast, successToast } from "../../utils";
 import { AppCellActionParams } from "../../models";
 
 export interface AppCellActionWithRenderParams
@@ -10,22 +12,33 @@ export interface AppCellActionWithRenderParams
         ICellRendererParams {}
 
 export const appGridFrameworkComponents = {
-    appSwitch: (params: ICellRendererParams): ReactElement => {
-        const { data } = params;
+    AppFormRadio: (params: ICellRendererParams): ReactElement => {
+        const { data, api } = params;
         const { id, isEntryRoom = false } = data as AFrameRoom;
+        const { t } = useTranslation();
 
         return (
-            <AppSwitch
+            <AppRadio
                 name={`isEntryRoom-${id}`}
                 id={`isEntryRoom-${id}`}
-                value={isEntryRoom}
-                size={"sm"}
-                onChange={(event) => {
-                    AFrameRoomApi.update<AFrameRoom, Partial<AFrameRoom>>(id, {
-                        isEntryRoom: event.currentTarget.checked,
-                    }).then();
+                defaultChecked={isEntryRoom}
+                onChange={() => {
+                    AFrameRoomApi.setDefaultRoom<AFrameRoom>(id).then(
+                        ({ errorMessage, error }) => {
+                            if (error) {
+                                errorToast(errorMessage);
+                            } else {
+                                api.refreshServerSideStore({ purge: true });
+                                successToast(
+                                    t(
+                                        "admin.language.list:defaultlanguage.toast.success"
+                                    )
+                                );
+                            }
+                        }
+                    );
                 }}
-            />
+            ></AppRadio>
         );
     },
     appGridActionRenderer: (

@@ -1,5 +1,7 @@
+import { AxiosError, AxiosRequestConfig } from "axios";
 import { EntityAPI } from "../../AppModule/apis/EntityAPI";
-import { ROUTES } from "../../config";
+import { FinalResponse, ServerError } from "../../AppModule/models";
+import { route, ROUTES } from "../../config";
 
 const {
     api_a_frame_rooms_delete_item: API_DELETE_ITEM,
@@ -8,6 +10,7 @@ const {
     api_a_frame_rooms_put_item: API_PUT_ITEM,
     api_a_frame_rooms_patch_item: API_PATCH_ITEM,
     api_a_frame_rooms_post_collection: API_POST_COLLECTION,
+    api_a_frame_rooms_set_default_collection: API_SET_DEFAULT,
 } = ROUTES;
 
 export abstract class AFrameRoomApi extends EntityAPI {
@@ -22,4 +25,20 @@ export abstract class AFrameRoomApi extends EntityAPI {
     protected static PATCH_ITEM = API_PATCH_ITEM;
 
     protected static DELETE_ITEM = API_DELETE_ITEM;
+
+    public static async setDefaultRoom<R, P = null>(
+        id: number
+    ): Promise<FinalResponse<R | null>> {
+        const config: AxiosRequestConfig = this.getPatchRequestConfig();
+        return this.makePatch<R, P>(
+            route(API_SET_DEFAULT, { id }),
+            JSON.stringify({}),
+            {},
+            config
+        )
+            .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
+            .catch((error: AxiosError | ServerError) =>
+                this.handleErrorDuringCreatingOrUpdating(error)
+            );
+    }
 }

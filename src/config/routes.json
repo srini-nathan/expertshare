@@ -163,6 +163,7 @@
     "api_a_frame_rooms_delete_item": "/api/a_frame_rooms/{id}",
     "api_a_frame_rooms_put_item": "/api/a_frame_rooms/{id}",
     "api_a_frame_rooms_patch_item": "/api/a_frame_rooms/{id}",
+    "api_a_frame_rooms_set_default_collection": "/api/a_frame_rooms/{id}/set-default",
     "api_languages_get_collection": "/api/languages",
     "api_languages_post_collection": "/api/languages",
     "api_languages_get_item": "/api/languages/{id}",
