@@ -205,7 +205,7 @@ export const AFrameRoomGrid: FC<RouteComponentProps> = (): JSX.Element => {
             <AppPageHeader title={"Rooms"} customToolbar>
                 <div className="d-flex pt-2 mb-5">
                     <AppListPageToolbar
-                        createLink={"/admin/rooms/new"}
+                        createLink={"/admin/room/new"}
                         onQuickFilterChange={handleFilter}
                         cancelTokenSources={cancelTokenSourcesRef.current}
                     />
