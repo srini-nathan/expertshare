@@ -1,0 +1,19 @@
+.canvas-3d {
+    margin-left: -3rem;
+    margin-top: -3rem;
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    z-index: 10;
+}
+
+.iframeHolder {
+    z-index: 5000;
+    position: absolute;
+    display: block;
+    width: 86%;
+    height: 86%;
+    top: 7%;
+    left: 7%;
+    background-color: #FFFFFF;
+}

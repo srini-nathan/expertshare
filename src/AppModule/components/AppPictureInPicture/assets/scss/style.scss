@@ -1,0 +1,46 @@
+@import "../../../../assets/scss/variables";
+
+.draggable-container.box {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: #fff;
+    border: 1px solid #999;
+    border-radius: 8px;
+    margin: 10px;
+    overflow: hidden;
+    z-index: 99999999999;
+
+
+    .close-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+    }
+
+    .icon-btn {
+        cursor: pointer;
+        width: 36px;
+        height: 36px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #999;
+        border-radius: var(--border-radius);
+        box-shadow: 0 3px 9px var(--secondary-10);
+        background-color: white;
+        i {
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--btn-secondary-fg-clr);
+            background-color: var(--btn-secondary-bg-clr);
+        }
+    }
+
+    .move-btn {
+        position: absolute;
+        top: 8px;
+        left: 8px;
+        cursor: move;
+    }
+}

@@ -1,0 +1,91 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+
+.event-detail-admin--days {
+    &--container {
+        .inner-container {
+            display: flex;
+            align-items: center;
+            height: 100px;
+            overflow: auto;
+            margin-left: -5px;
+
+            .swiper-container {
+                padding: 10px 5px;
+            }
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+
+            &--item {
+                width: auto;
+
+                a {
+                    display: flex;
+                    align-items: center;
+                    width: 222px;
+                    height: 76px;
+                    padding: 10px;
+                    background-color: var(--light-clr);
+                    border-radius: var(--border-radius);
+                    box-shadow: 0 3px 9px var(--secondary-20);
+
+                    .num-day {
+                        display: flex;
+                        align-items: center;
+                        height: 95%;
+                        padding-right: 10px;
+                        padding-left: 2px;
+                        border-right: 1px solid var(--secondary-20);
+
+                        span {
+                            display: block;
+                            height: inherit;
+                            margin-bottom: 5px;
+                            font-size: 42px;
+                            font-weight: 700;
+                            color: var(--secondary);
+                        }
+                    }
+
+                    .date-day {
+                        display: inline-grid;
+                        padding: 0 13px;
+
+                        &--dofw {
+                            font-size: 20px;
+                            font-weight: 700;
+                            color: var(--secondary);
+                        }
+
+                        &--dofy {
+                            font-size: 12px;
+                            font-weight: 500;
+                            color: var(--secondary);
+                        }
+                    }
+                }
+
+                &.active {
+                    a {
+                        background-color: var(--primary-10);
+
+                        .num-day {
+                            span {
+                                color: var(--primary);
+                            }
+                        }
+
+                        .date-day {
+                            &--dofw {
+                                color: var(--primary);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

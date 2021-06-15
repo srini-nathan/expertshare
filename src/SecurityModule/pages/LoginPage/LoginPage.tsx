@@ -1,0 +1,360 @@
+import React, { FC, useState, useEffect, useRef } from "react";
+import { Link, RouteComponentProps } from "@reach/router";
+import { useForm } from "react-hook-form";
+import { Container, Row, Col, Form } from "react-bootstrap";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { AppButton } from "../../../AppModule/components/AppButton";
+import { AuthContext, loginAction } from "../../contexts/AuthContext";
+import { useGlobalData } from "../../../AppModule/contexts";
+import { AppAuthHeader, AppAuthFooter } from "../../components";
+import {
+    AppFormInput,
+    AppFormInputPassword,
+} from "../../../AppModule/components";
+import {
+    errorToast,
+    setViolations,
+    validation,
+} from "../../../AppModule/utils";
+import { API_HOST } from "../../../AppModule/config/app-env";
+import "./assets/scss/styles.scss";
+import { UserApi } from "../../../AdminModule/apis";
+import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
+
+type LoginForm = {
+    email: string;
+    password?: string;
+};
+
+const schema = yup.object().shape({
+    email: yup.string().email().required(),
+    // password: yup.string().min(6).required(),
+});
+
+export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
+    const [emailStatus, setEmailStatus] = useState<string>("");
+    const [agree, isAgree] = useState<boolean>(false);
+    const [readed, isReaded] = useState<boolean>(false);
+    const [activeLanguage, setActiveLanguage] = useState<string>("");
+    const [userEmail, setUserEmail] = useState<string>("");
+    const { control, handleSubmit, formState, setError } = useForm<LoginForm>({
+        resolver: yupResolver(schema),
+        mode: "all",
+    });
+    const desclaimer = useRef<HTMLDivElement>(null);
+    const { container } = useGlobalData();
+    const { errors } = formState;
+
+    useEffect(() => {
+        container?.languages?.forEach((e) => {
+            if (e.isDefault) setActiveLanguage(e.locale);
+        });
+    }, [container]);
+
+    const getValue = (name: string) => {
+        let val = "";
+        if (
+            container &&
+            container.configuration &&
+            (container?.configuration as any).translations
+        )
+            (container?.configuration as any).translations.forEach((e: any) => {
+                if (e.locale === activeLanguage) val = e[name];
+            });
+        return val;
+    };
+
+    const onSubmitCheckUser = async ({ email }: LoginForm) => {
+        setUserEmail(email);
+        return UserApi.emailExist({
+            email,
+        }).then(({ error, errorMessage, response }) => {
+            if (error instanceof UnprocessableEntityErrorResponse) {
+                setViolations<LoginForm>(error, setError);
+            } else if (errorMessage) {
+                errorToast(errorMessage);
+            } else if (response) {
+                if (response[0]) setEmailStatus("exist");
+                else setEmailStatus("notexist");
+            }
+        });
+    };
+    const { dispatch } = React.useContext(AuthContext);
+    const onSubmit = async ({ password }: LoginForm) => {
+        await loginAction(userEmail, password as string, dispatch);
+    };
+    const renderView = () => {
+        switch (emailStatus) {
+            case "notexist":
+                return (
+                    <>
+                        <AppAuthHeader
+                            title="Not Registered!"
+                            description="This Email is not registered, Please contact support!"
+                        />
+                    </>
+                );
+
+            default:
+                return (
+                    <>
+                        <AppAuthHeader
+                            title="Login"
+                            description="Login description"
+                        />
+                        <div className="active-account-box">
+                            <Col
+                                md={12}
+                                className="active-account-box--auth-form"
+                            >
+                                <Form
+                                    onSubmit={handleSubmit(
+                                        emailStatus === "exist"
+                                            ? onSubmit
+                                            : onSubmitCheckUser
+                                    )}
+                                >
+                                    <Form.Group>
+                                        <Form.Row>
+                                            <AppFormInput
+                                                md={12}
+                                                lg={12}
+                                                xl={12}
+                                                type={"email"}
+                                                name={"email"}
+                                                placeholder="Email"
+                                                label={""}
+                                                required={true}
+                                                {...validation(
+                                                    "email",
+                                                    formState,
+                                                    false
+                                                )}
+                                                errorMessage={
+                                                    errors.email?.message
+                                                }
+                                                control={control}
+                                            />
+                                        </Form.Row>
+                                        {emailStatus === "exist" && (
+                                            <Form.Row>
+                                                <AppFormInputPassword
+                                                    md={12}
+                                                    lg={12}
+                                                    xl={12}
+                                                    className="m-0"
+                                                    name={"password"}
+                                                    label={""}
+                                                    placeholder="Password"
+                                                    required={true}
+                                                    {...validation(
+                                                        "password",
+                                                        formState,
+                                                        false
+                                                    )}
+                                                    errorMessage={
+                                                        errors.password?.message
+                                                    }
+                                                    control={control}
+                                                />
+                                            </Form.Row>
+                                        )}
+
+                                        <Link
+                                            to={"/auth/forgot-password"}
+                                            className="forgot-password "
+                                        >
+                                            Forgot Password
+                                        </Link>
+                                        {container &&
+                                            container.configuration &&
+                                            (container.configuration as any)
+                                                .isDisclaimerEnable && (
+                                                <Form.Group>
+                                                    <div className="agreement-box mt-2 p-2">
+                                                        <div
+                                                            ref={desclaimer}
+                                                            onScroll={() => {
+                                                                if (
+                                                                    desclaimer &&
+                                                                    desclaimer.current
+                                                                ) {
+                                                                    if (
+                                                                        desclaimer
+                                                                            .current
+                                                                            .scrollTop ===
+                                                                        desclaimer
+                                                                            .current
+                                                                            ?.scrollHeight -
+                                                                            desclaimer
+                                                                                .current
+                                                                                ?.offsetHeight
+                                                                    ) {
+                                                                        isReaded(
+                                                                            true
+                                                                        );
+                                                                    }
+                                                                }
+                                                            }}
+                                                            className="agreement-box--inner"
+                                                        >
+                                                            <div
+                                                                dangerouslySetInnerHTML={{
+                                                                    __html: getValue(
+                                                                        "disclaimerText"
+                                                                    ),
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                    <Form.Check
+                                                        onChange={() => {
+                                                            isAgree(!agree);
+                                                        }}
+                                                        disabled={!readed}
+                                                        className="mt-2"
+                                                        type="checkbox"
+                                                        label="I agree with those Terms"
+                                                        id="checkbox-des"
+                                                    />
+                                                </Form.Group>
+                                            )}
+                                    </Form.Group>
+                                    <AppButton
+                                        block={true}
+                                        type={"submit"}
+                                        loadingTxt={"Login In..."}
+                                        disabled={
+                                            formState.isSubmitting ||
+                                            (container &&
+                                                container.configuration &&
+                                                (container.configuration as any)
+                                                    .isDisclaimerEnable &&
+                                                !agree)
+                                        }
+                                        isLoading={formState.isSubmitting}
+                                    >
+                                        Login
+                                    </AppButton>
+                                    <Row className={"mt-3"}>
+                                        {container &&
+                                            container.configuration &&
+                                            ((container.configuration as any)
+                                                .isLoginGoogleEnable ||
+                                                (container.configuration as any)
+                                                    .isLoginLinkedinEnable ||
+                                                (container.configuration as any)
+                                                    .isLoginAzureEnable) && (
+                                                <Col
+                                                    sm={12}
+                                                    className={
+                                                        "text-center my-4 normal-label"
+                                                    }
+                                                >
+                                                    <span>Or login with</span>
+                                                </Col>
+                                            )}
+                                        {container &&
+                                            container.configuration &&
+                                            (container.configuration as any)
+                                                .isLoginGoogleEnable && (
+                                                <Col
+                                                    md={4}
+                                                    xl={4}
+                                                    lg={4}
+                                                    sm={12}
+                                                >
+                                                    <a
+                                                        className={
+                                                            "btn mb-3 btn-secondary justify-content-center social-media-button" +
+                                                            " google"
+                                                        }
+                                                        href={`${API_HOST}/social/connect/google`}
+                                                    >
+                                                        Google
+                                                    </a>
+                                                </Col>
+                                            )}
+                                        {container &&
+                                            container.configuration &&
+                                            (container.configuration as any)
+                                                .isLoginLinkedinEnable && (
+                                                <Col
+                                                    md={4}
+                                                    xl={4}
+                                                    lg={4}
+                                                    sm={12}
+                                                >
+                                                    <a
+                                                        className={
+                                                            "btn mb-3 btn-secondary justify-content-center social-media-button linkedin"
+                                                        }
+                                                        href={`${API_HOST}/social/connect/linkedin`}
+                                                    >
+                                                        LinkedIn
+                                                    </a>
+                                                </Col>
+                                            )}
+                                        {container &&
+                                            container.configuration &&
+                                            (container.configuration as any)
+                                                .isLoginAzureEnable && (
+                                                <Col
+                                                    md={4}
+                                                    xl={4}
+                                                    lg={4}
+                                                    sm={12}
+                                                >
+                                                    <a
+                                                        className={
+                                                            "btn mb-3 btn-secondary justify-content-center social-media-button azure"
+                                                        }
+                                                        href={`${API_HOST}/social/connect/azure`}
+                                                    >
+                                                        Azure
+                                                    </a>
+                                                </Col>
+                                            )}
+                                    </Row>
+                                </Form>
+                            </Col>
+                        </div>
+                    </>
+                );
+        }
+    };
+
+    return (
+        <Container fluid className="active-account auth-container">
+            <div className="auth-container--box">
+                <Row className="p-0 m-auto">
+                    <div className="tabs-translation-auth mb-3">
+                        {container &&
+                            container.languages &&
+                            container.languages.map((e, i) => {
+                                return (
+                                    <AppButton
+                                        variant="secondary"
+                                        className={`${e.locale} ${
+                                            activeLanguage === e.locale &&
+                                            "active"
+                                        } mx-1`}
+                                        onClick={() => {
+                                            setActiveLanguage(e.locale);
+                                        }}
+                                        key={i}
+                                    >
+                                        <i></i>
+                                        {e.name}
+                                    </AppButton>
+                                );
+                            })}
+                    </div>
+                    {renderView()}
+                </Row>
+            </div>
+            <AppAuthFooter copyRight={getValue("copyrightContent")} />
+        </Container>
+    );
+};

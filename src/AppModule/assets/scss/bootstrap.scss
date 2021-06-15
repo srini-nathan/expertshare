@@ -1,0 +1,9 @@
+@import "./variables";
+
+// bootstrap variables
+$breadcrumb-padding-y: 0 !default;
+$breadcrumb-padding-x: 0 !default;
+$breadcrumb-bg: transparent !default;
+
+@import "../../../../node_modules/bootstrap/scss/bootstrap";
+@import "./bootstrap_extention";

@@ -1,4 +1,4 @@
-import AdminModule from "../AdminModule";
-import SharedModule from "../SharedModule";
+import { adminModuleConfig } from "../AdminModule";
+import { securityModuleConfig } from "../SecurityModule";
 
-export default [AdminModule, SharedModule];
+export const registeredModules = [adminModuleConfig, securityModuleConfig];

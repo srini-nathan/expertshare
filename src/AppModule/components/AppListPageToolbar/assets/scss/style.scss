@@ -1,0 +1,20 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.input-group {
+    .form-control {
+        border-right: 0 !important;
+
+    }
+
+    .input-group-text {
+        padding: 9px;
+        color: var(--input-fg-clr) !important;
+        background-color: var(--input-bg-clr) !important;
+        border: 1px solid var(--input-border-clr) !important;
+        border-left: 0 !important;
+        border-top-right-radius: var(--border-radius) !important;
+        border-bottom-right-radius: var(--border-radius) !important;
+
+    }
+}

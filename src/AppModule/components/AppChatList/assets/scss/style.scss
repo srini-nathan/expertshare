@@ -1,0 +1,137 @@
+@import "../../../../assets/scss/variables";
+
+.chat-list-container {
+    .divider-time {
+        text-align: center;
+
+        span {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--secondary-70);
+
+            &::before,
+            &::after {
+                flex-grow: 1;
+                height: 1px;
+                content: "";
+                background-color: var(--secondary-70);
+            }
+
+            &::before {
+                margin-right: 7px;
+            }
+
+            &::after {
+                margin-left: 7px;
+            }
+        }
+
+        &.new {
+            span {
+                color: var(--primary);
+
+                &::before,
+                &::after {
+                    background-color: var(--primary);
+                }
+            }
+        }
+    }
+
+    .message-item {
+        display: flex;
+
+        .avatar {
+            i {
+                display: block;
+                width: 36px;
+                height: 36px;
+                background-repeat: no-repeat;
+                background-size: cover;
+                border-radius: 50%;
+            }
+        }
+
+        .content {
+            &--header {
+                h4 {
+                    margin-bottom: 0;
+                    font-size: 16px;
+                    font-weight: 500;
+                    color: var(--secondary);
+
+                    .time {
+                        padding-left: 4px;
+                        font-size: 12px;
+                        font-weight: 400;
+                        color: var(--secondary-70);
+                    }
+                }
+            }
+
+            &--comment {
+                p {
+                    font-size: 14px;
+                    font-weight: 400;
+                    line-height: 150%;
+                    color: var(--secondary);
+                }
+            }
+        }
+
+        &.in {
+            .avatar {
+                i {
+                    // background-image: url(/v2/assets/images/profiles_pic_speakers/user-8.png);
+                }
+            }
+
+            .content {
+                padding-left: 12px;
+
+                &--comment {
+                    p {
+                        background-color: var(--secondary-10);
+                        border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius);
+                    }
+                }
+            }
+        }
+
+        &.out {
+            flex-direction: row-reverse;
+
+            .avatar {
+                i {
+                    // background-image: url(/v2/assets/images/profiles_pic_speakers/user-2.png);
+                }
+            }
+
+            .content {
+                padding-right: 12px;
+
+                &--header {
+                    h4 {
+                        display: flex;
+                        flex-direction: row-reverse;
+                        align-items: baseline;
+
+                        span {
+                            padding-right: 4px;
+                            padding-left: 0;
+                        }
+                    }
+                }
+
+                &--comment {
+                    p {
+                        background-color: var(--message-in-box-fg-clr);
+                        border-radius: var(--border-radius) 0 var(--border-radius) var(--border-radius);
+                    }
+                }
+            }
+        }
+    }
+}

@@ -20,6 +20,22 @@ yarn-error.log*
 
 .eslintcache
 
+/src/translation/**
+!/src/translation/.gitkeep
+
 # IDE
 .idea
 .run
+
+# SASS watcher - compiled css and maps
+**/scss/**/*.{css,css.map}
+
+# Translations
+/src/translations
+!/src/translations/.gitkeep
+
+# Dynamic Configuration
+/src/config/routes.json
+/src/config/constants.json
+
+/TIMELINE.md

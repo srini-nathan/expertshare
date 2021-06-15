@@ -1,0 +1,39 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.pagination {
+    .page-item {
+        margin-left: 5px;
+
+        &.active {
+            .page-link {
+                color: var(--primary);
+                background-color: var(--primary-20);
+            }
+        }
+
+        .page-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--secondary);
+            background-color: var(--i-bg-clr);
+            border: unset;
+            border-radius: var(--border-radius);
+            box-shadow: 0 3px 9px var(--box-shadow-box-clr);
+
+            &:hover {
+                color: var(--primary);
+                background-color: var(--i-bg-clr);
+            }
+
+            &:focus {
+                box-shadow: none;
+            }
+        }
+    }
+}

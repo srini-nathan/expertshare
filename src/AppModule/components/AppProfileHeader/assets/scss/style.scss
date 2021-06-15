@@ -1,0 +1,308 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.user-profile--det {
+    &--container {
+        .inner-container {
+            &--profile-pic {
+                &--content {
+                    position: relative;
+                    display: block;
+                    width: 200px;
+                    height: 200px;
+                    margin: auto;
+                    background-color: var(--secondary-10);
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    background-size: contain;
+                    border-radius: 50%;
+
+                    &.online {
+                        &::after {
+                            position: absolute;
+                            top: 10px;
+                            right: 20px;
+                            display: block;
+                            width: 32px;
+                            height: 32px;
+                            content: "";
+                            background-color: #30B7A7;
+                            border-radius: 50%;
+                        }
+                    }
+
+                    &.offline {
+                        &::after {
+                            position: absolute;
+                            top: 10px;
+                            right: 20px;
+                            display: block;
+                            width: 32px;
+                            height: 32px;
+                            content: "";
+                            background-color: var(--primary);
+                            border-radius: 50%;
+                        }
+                    }
+
+
+                    .speaker-btn {
+                        position: absolute;
+                        bottom: -10px;
+                        left: 50px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        width: 104px;
+                        height: 36px;
+                        padding-top: 3px;
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: var(--btn-fg-clr);
+                        background-color: var(--speaker-btn-bg-clr);
+                        border-radius: var(--border-radius);
+
+                        i {
+                            margin-bottom: 4px;
+
+                            &::before {
+                                content: '\e000' !important;
+                            }
+                        }
+                    }
+                }
+            }
+
+            &--main-det {
+                &--title {
+                    h2 {
+                        font-size: 42px;
+                        font-weight: 700;
+                        color: var(--secondary);
+
+                        @include media("xl") {
+                            font-size: 30px;
+                        }
+                    }
+                }
+
+                &--major {
+                    p {
+                        font-size: 20px;
+                        font-weight: 500;
+                        color: var(--secondary-70);
+                    }
+                }
+
+                &--mail {
+                    span {
+                        font-size: 14px;
+                        font-weight: 700;
+                        color: var(--primary);
+                    }
+                }
+
+                &--tags {
+                    .row {
+                        @include media("mobile") {
+                            justify-content: center;
+                        }
+                    }
+
+                    &--item {
+                        a {
+                            text-decoration: none;
+                            display: inline-grid;
+                            align-content: center;
+                            height: 26px;
+                            padding: 0 15px;
+                            padding-top: 2px;
+                            font-size: 12px;
+                            font-weight: 700;
+                            color: var(--primary);
+                            background-color: var(--primary-10);
+                            border: 1px solid var(--primary);
+                            border-radius: 17px;
+                        }
+                    }
+                }
+            }
+
+            &--right-btn {
+                position: absolute;
+                right: 0;
+
+                &--content {
+                    display: flex;
+                    align-items: center;
+
+                    button {
+
+                        .popup {
+                            position: absolute;
+                            top: 35px;
+                            right: 10px;
+                            z-index: 4;
+                            display: none;
+                            width: 169px;
+                            padding: 10px;
+                            background-color: var(--light-clr);
+                            border-radius: var(--border-radius);
+                            box-shadow: 0 12px 38px var(--secondary-20);
+
+                            &--inner {
+                                &--item {
+                                    padding: 2px 5px;
+                                    text-align: left;
+
+                                    a {
+                                        display: flex;
+                                        align-items: center;
+                                        font-size: 12px;
+                                        font-weight: 700;
+                                        line-height: 30px;
+                                        color: var(--secondary);
+
+                                        i {
+                                            font-size: 15px;
+                                        }
+
+                                        svg {
+                                            width: 1.2em;
+                                            margin-right: 5px;
+                                            text-align: left;
+                                        }
+                                    }
+
+                                    &.video-chat {
+                                        a {
+                                            i {
+                                                &::before {
+                                                    content: "\e007";
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        &:hover {
+                            &>.popup {
+                                display: block;
+                            }
+                        }
+                    }
+
+                    a {
+                        text-decoration: none;
+
+                        i {
+                            font-size: 17px;
+                        }
+
+                        &.get-contact {
+                            i {}
+                        }
+
+                        &.add-user-btn {
+                            width: 36px;
+
+                            i {}
+                        }
+                    }
+                }
+            }
+
+            &--portfolio {
+                border-top: 1px solid var(--secondary-10);
+
+                @include media("xl") {
+                    overflow: auto;
+
+                    &::-webkit-scrollbar {
+                        display: none;
+                    }
+                }
+
+                &--content {
+                    display: flex;
+                    align-items: center;
+
+                    @include media("xl") {
+                        width: fit-content;
+                    }
+
+                    &--item {
+                        width: 14.28%;
+
+                        @include media("xl") {
+                            width: 190px;
+                        }
+
+                        border-right: 1px solid var(--secondary-20);
+
+                        &:last-child {
+                            border-right: none;
+                        }
+
+                        a {
+                            display: flex;
+                            text-decoration: none;
+
+                            i {
+                                font-size: 20px;
+                                font-weight: 500;
+                                color: var(--secondary);
+                            }
+
+                            .det {
+                                display: grid;
+
+                                h3 {
+                                    font-size: 20px;
+                                    font-weight: 700;
+                                    color: var(--secondary);
+                                }
+
+                                span {
+                                    font-size: 14px;
+                                    font-weight: 400;
+                                    color: var(--secondary-70);
+                                }
+                            }
+                        }
+
+                        &.followers {
+                            i {
+                                &::before {
+                                    content: '\e00a';
+                                }
+                            }
+                        }
+
+                        &.following {}
+
+                        &.events {}
+
+                        &.sessions {
+                            i {
+                                font-weight: 600;
+                            }
+                        }
+
+                        &.containers {
+                            i {
+                                font-weight: 600;
+                            }
+                        }
+
+                        &.feeds {}
+
+                        &.favorite-feeds {}
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,20 @@
+@import "../../../../assets/scss/variables";
+
+.loaderContainer {
+    position: absolute;
+    display: flex;
+    width: 97%;
+    height: 76vh;
+    z-index: 10;
+
+    &.custom-btn-loader {
+        position: relative;
+        display: block;
+        width: unset;
+        height: unset;
+    }
+
+    .appLoader {
+        margin: auto;
+    }
+}

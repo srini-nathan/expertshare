@@ -1,0 +1,85 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.app-feed-shower-wrapper {
+    margin-top: 2em;
+    background: white;
+    border-radius: 5px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    .details {
+        &--content {
+            display: flex;
+            align-items: center;
+            .avatar {
+                i {
+                    display: block;
+                    width: 36px;
+                    height: 36px;
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    &::after {
+                        position: relative;
+                        top: -3px;
+                        left: 24px;
+                        display: block;
+                        width: 11px;
+                        height: 11px;
+                        content: "";
+                        background-color: var(--primary);
+                        border: 2px solid var(--border-border-radius-clr);
+                        border-radius: var(--circle-border-radius);
+                    }
+                }
+            }
+        }
+    }
+
+    .app-thread-shower {
+        .show-more-btn {
+            color: var(--primary);
+        }
+    }
+
+    .action {
+        .text {
+            width: 100%;
+            margin-bottom: 1em;
+        }
+        .btns-flex {
+            width: 130px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .green-bg {
+            background: var(--primary-90) !important;
+            height: 36px;
+            width: 36px;
+            border: 1px solid var(--primary-90) !important;
+        }
+        .green {
+            color: white;
+        }
+    }
+    &--posted-text {
+        margin-left: 3.5em !important;
+        &--image {
+            margin-top: 1em;
+            width: 100%;
+        }
+        .video-player {
+        }
+    }
+
+    &--button-comments {
+        margin-left: 1em !important;
+        .green {
+            background: var(--primary-90) !important;
+            height: 36px;
+            width: 56px;
+            border: 1px solid var(--primary-90) !important;
+        }
+    }
+
+    &--type-your-comment {
+    }
+}

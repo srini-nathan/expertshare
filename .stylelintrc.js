@@ -1,5 +1,7 @@
 module.exports = {
-    extends: "stylelint-config-standard",
+    extends: [
+        "stylelint-config-twbs-bootstrap/scss"
+    ],
     rules: {
         "at-rule-no-unknown": [
             true,
@@ -10,6 +12,10 @@ module.exports = {
                     "responsive",
                     "variants",
                     "screen",
+                    "mixin",
+                    "each",
+                    "media",
+                    "include"
                 ],
             },
         ],
@@ -20,5 +26,15 @@ module.exports = {
         "no-eol-whitespace": null,
         "value-list-comma-newline-after": null,
         "declaration-colon-newline-after": null,
+        "string-quotes": "double",
+        "selector-max-compound-selectors": 5,
+        "max-nesting-depth": 5,
+        "selector-no-qualifying-type": [
+            true,
+            {
+                "ignore": ["attribute"]
+            }
+        ],
+        "color-hex-case": "upper",
     },
 };

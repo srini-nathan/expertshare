@@ -1,0 +1,27 @@
+@import "../../../../assets/scss/variables";
+
+.nav-tabs {
+    // No need to show, because haven other tabs
+    // display: none !important;
+    border-bottom: unset !important;
+
+    a {
+        &.nav-item {
+            border-radius: var(--border-radius);
+            background-color: var(--light-clr);
+            margin: 3px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--secondary);
+            box-shadow: 0 3px 9px var(--box-shadow-box-clr);
+
+            &:hover,
+            &.active {
+                color: var(--primary);
+                background-color: var(--primary-20);
+                border-color: transparent;
+                border-radius: var(--border-radius);
+            }
+        }
+    }
+}

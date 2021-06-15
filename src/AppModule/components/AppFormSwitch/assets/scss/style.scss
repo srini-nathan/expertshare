@@ -1,0 +1,109 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.custom-switch {
+    display: flex !important;
+    padding-left: 0 !important;
+
+    &.lg {
+        label {
+            width: 70px;
+            height: 36px;
+        }
+
+        [type="checkbox"]+label::before {
+            width: 34px;
+            height: 30px;
+        }
+    }
+
+    &.sm {
+        label {
+            width: 40px;
+            height: 24px;
+        }
+
+        [type="checkbox"]+label::before {
+            top: 2px;
+            width: 20px;
+            height: 20px;
+        }
+
+        [type="checkbox"]:checked+label::before {
+            transform: translateX(50px);
+        }
+
+        [type="checkbox"]:not(:checked)+label::before {
+            transform: translateX(38px);
+        }
+    }
+
+    label {
+        margin: auto 0;
+        cursor: pointer;
+        border-radius: var(--border-radius);
+        box-shadow: 0 2px 9px var(--secondary-20);
+        transition: all .2s;
+    }
+
+    [type="checkbox"]+label::before {
+        position: absolute;
+        display: block;
+        content: "";
+        top: 3px;
+        border: none;
+        border-radius: var(--border-radius);
+        transition: all .2s;
+        appearance: none;
+    }
+
+    [type="checkbox"]:not(:checked)+label::before {
+        background-color: var(--secondary-30);
+        transform: translateX(40px);
+    }
+
+    [type="checkbox"]:not(:checked)+label {
+        background-color: var(--light-clr);
+    }
+
+    [type="checkbox"]:checked {
+        &+label {
+            background-color: var(--primary-20);
+
+        }
+
+        &+label::before {
+            background-color: var(--primary);
+            transform: translateX(68px);
+            outline: unset !important;
+            border-color: transparent !important;
+
+        }
+    }
+
+    label::after,
+    [type="checkbox"]:checked+label::after {
+        background-color: unset !important;
+    }
+}
+
+.custom-control-input:not(:disabled):active~.custom-control-label::before {
+    background-color: var(--primary) !important;
+    border-color: transparent !important;
+    outline: unset !important;
+}
+
+.custom-control-input:disabled~.custom-control-label::before {
+    background-color: var(--secondary-20) !important;
+    border-color: transparent !important;
+    box-shadow: unset !important;
+}
+
+
+.custom-control-input:focus~.custom-control-label::before {
+    box-shadow: unset !important;
+}
+
+.custom-control-input:focus:not(:checked)~.custom-control-label::before {
+    box-shadow: unset !important;
+}

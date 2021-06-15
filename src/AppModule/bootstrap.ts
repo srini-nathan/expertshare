@@ -1,13 +1,23 @@
-import _merge from "lodash/merge";
-import { i18n } from "./config";
-import registeredModules from "./module-register";
-import appModuleTranslations from "./translations";
-import ModuleConfig from "../SharedModule/models/ModuleConfig";
+import { axios, i18n } from "./config";
+import { registeredModules } from "./module-register";
+import appNavigation from "./navigation";
+import appRouter from "./routers";
+import { ModuleConfig, ModuleRouter } from "./models";
+import { AppNavigationItemProps } from "./components/AppNavigationItem";
 
-let i18Resources = appModuleTranslations;
+const appRouters: ModuleRouter[] = [...appRouter];
+const appNavigations: AppNavigationItemProps[] = [...appNavigation];
 
-registeredModules.forEach((module: ModuleConfig) => {
-    i18Resources = _merge(i18Resources, module.translations);
-});
+// all registered modules' navigation and routing injecting within AppModule
+registeredModules.forEach(
+    ({ routers, navigation }: ModuleConfig<AppNavigationItemProps>) => {
+        if (routers) appRouters.push(...routers);
+        if (navigation) appNavigations.push(...navigation);
+    }
+);
 
-i18n.init(i18Resources);
+// initialize global packages and libraries
+i18n.init({});
+axios.init();
+
+export { appRouters, appNavigations };

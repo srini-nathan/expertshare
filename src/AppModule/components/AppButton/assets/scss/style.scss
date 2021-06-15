@@ -1,0 +1,74 @@
+@import "../../../../assets/scss/variables";
+
+.btn {
+    padding: 0 20px !important;
+    font-size: 14px !important;
+    line-height: 36px !important;
+}
+
+.btn-secondary {
+    display: flex !important;
+    align-items: center;
+    height: 36px;
+    justify-content: center;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    color: var(--btn-secondary-fg-clr) !important;
+    background-color: var(--btn-secondary-bg-clr) !important;
+    border: 1px solid var(--btn-secondary-border-clr) !important;
+    border-radius: var(--border-radius) !important;
+    box-shadow: 0 3px 9px var(--box-shadow-box-clr) !important;
+
+    &:focus,
+    &:active,
+    &:hover {
+        color: var(--btn-hover-secondary-fg-clr) !important;
+        background-color: var(--btn-hover-secondary-bg-clr) !important;
+        border: 1px solid var(--btn-hover-secondary-border-clr) !important;
+        box-shadow: 0 3px 9px var(--box-shadow-box-clr);
+    }
+}
+
+.btn-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    line-height: 10px !important;
+    color: var(--btn-fg-clr) !important;
+    background-color: var(--btn-bg-clr) !important;
+    border: 1px solid var(--btn-border-clr) !important;
+    border-radius: var(--border-radius) !important;
+    box-shadow: 0 3px 9px var(--box-shadow-box-clr) !important;
+
+    &:focus,
+    &:active,
+    &:hover {
+        color: var(--btn-hover-fg-clr) !important;
+        background-color: var(--btn-hover-bg-clr) !important;
+        border: 1px solid var(--btn-hover-border-clr) !important;
+    }
+}
+
+.btn-link {
+    display: flex;
+    text-decoration: none;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    line-height: 10px !important;
+    color: var(--btn-hover-bg-clr) !important;
+
+    &:focus,
+    &:active,
+    &:hover {
+        color: var(--btn-hover-bg-clr) !important;
+        box-shadow: unset !important;
+        outline: unset !important;
+
+    }
+}
