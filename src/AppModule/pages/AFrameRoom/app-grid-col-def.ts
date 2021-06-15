@@ -17,7 +17,7 @@ export const appGridColDef = ({
             },
             {
                 headerName: "Is Entry Room",
-                cellRenderer: "appSwitch",
+                cellRenderer: "AppFormRadio",
                 sortable: true,
                 minWidth: 40,
             },
