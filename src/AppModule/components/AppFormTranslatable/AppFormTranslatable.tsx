@@ -106,7 +106,7 @@ export const AppFormTranslatable: FC<AppFormTranslatableProps> = ({
                         );
                     })}
             </Col>
-            <Form.Group as={Col} md={12}>
+            <Form.Group className="mb-0 px-3 w-100">
                 <AppFormLabel
                     label={`${t("event.form:label.title")} (${active})`}
                     required
@@ -125,7 +125,7 @@ export const AppFormTranslatable: FC<AppFormTranslatableProps> = ({
                 </Form.Control.Feedback>
             </Form.Group>
 
-            <Form.Group as={Col} md={12}>
+            <Form.Group className="mb-0 px-3 w-100">
                 <AppFormLabel
                     label={`${t("event.form:label.description")} (${active})`}
                     required

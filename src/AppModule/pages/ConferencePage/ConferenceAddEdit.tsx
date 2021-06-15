@@ -316,6 +316,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                                 md={12}
                                 lg={12}
                                 xl={12}
+                                className="p-0"
                                 name={"isVisible"}
                                 label={t("event.form:label.isVisible")}
                                 {...validation(

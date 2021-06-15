@@ -23,6 +23,7 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
     session,
 }): JSX.Element => {
     const [time, setTime] = useState<Duration>();
+    const [startedSession, isSessionStarted] = useState<boolean>(false);
     const conferencePosterPath = useBuildAssetPath(
         FILETYPEINFO_SESSION_POSTER as FileTypeInfo,
         session.imageName
@@ -33,47 +34,52 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
           }
         : {
               backgroundImage: `url(${placeholder})`,
+              backgroundRepeat: "no-repeat",
               backgroundSize: "inherit",
               backgroundPosition: "center",
           };
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            if (session.start) {
-                const timeLeft = intervalToDuration({
-                    start: new Date(),
-                    end: new Date(session.start),
-                });
-                setTime(timeLeft);
-            }
-        }, 1000);
-
+        let timer: any;
+        if (!startedSession) {
+            timer = setInterval(() => {
+                if (new Date() <= new Date(session.start)) {
+                    if (session.start) {
+                        const timeLeft = intervalToDuration({
+                            start: new Date(),
+                            end: new Date(session.start),
+                        });
+                        setTime(timeLeft);
+                    }
+                } else {
+                    isSessionStarted(true);
+                }
+            }, 1000);
+        }
         return () => {
-            clearInterval(timer);
+            if (timer) clearInterval(timer);
         };
     });
 
     const renderStream = () => {
-        if (
-            (time && time.years && time.years > 0) ||
-            (time && time.days && time.days > 0) ||
-            (time && time.hours && time.hours > 0) ||
-            (time && time.minutes && time.minutes > 0) ||
-            (time && time.months && time.months > 0) ||
-            (time && time.seconds && time.seconds > 0)
-        ) {
+        if (!startedSession) {
             return (
                 <div className="imageContainer">
                     <i style={style}></i>
                     <div className="overlay">
                         <h1>
-                            {time.years && `${time.years} Year(s) `}
-                            {time.months && `${time.months} Month(s) `}
-                            {time.months && `${time.months} Month(s) `}
-                            {time.days && `${time.days} day(s) `}
-                            {time.hours && `${time.hours} : `}
-                            {time.minutes && `${time.minutes} : `}
-                            {time.seconds && `${time.seconds}`}
+                            Session will be started at:
+                            <br />
+                            {time && time.years ? `${time.years} Year(s) ` : ""}
+                            {time && time.months
+                                ? `${time.months} Month(s) `
+                                : ""}
+                            {time && time.days ? `${time.days} day(s) ` : ""}
+                            {time && time.hours ? `${time.hours} : ` : " 0 : "}
+                            {time && time.minutes
+                                ? `${time.minutes} : `
+                                : "0 : "}
+                            {time && time.seconds ? `${time.seconds}` : " 0"}
                         </h1>
                     </div>
                 </div>
