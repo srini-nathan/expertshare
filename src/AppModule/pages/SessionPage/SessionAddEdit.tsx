@@ -608,7 +608,10 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                         name="streamValue"
                                         activeLanguage={activeLanguage}
                                         changeValue={setValue}
-                                        streamType={data.streamType.toUpperCase()}
+                                        streamType={
+                                            data.streamType &&
+                                            data.streamType.toUpperCase()
+                                        }
                                         languages={languages}
                                         control={control}
                                         formState={formState}

@@ -469,13 +469,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                     <Col md={12}>
                         <AppCard>
                             <Form.Row>
-                                <Form.Group
-                                    as={Col}
-                                    sm={12}
-                                    md={12}
-                                    lg={12}
-                                    xl={12}
-                                >
+                                <Form.Group className="mb-0  px-3  w-100">
                                     <Form.Label>Profile Picture</Form.Label>
                                     <AppUploader
                                         withCropper={true}

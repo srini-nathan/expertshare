@@ -203,11 +203,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                                                 dangerouslySetInnerHTML={{
                                                                     __html: getValue(
                                                                         "disclaimerText"
-                                                                    )
-                                                                        ? getValue(
-                                                                              "disclaimerText"
-                                                                          )
-                                                                        : "",
+                                                                    ),
                                                                 }}
                                                             />
                                                         </div>

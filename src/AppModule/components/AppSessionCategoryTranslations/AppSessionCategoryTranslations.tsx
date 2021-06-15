@@ -76,22 +76,19 @@ export const AppSessionCategoryTranslations: FC<AppSessionCategoryTranslationsPr
                         );
                     })}
             </Col>
-            <Form.Group as={Col} md={12}>
+            <Col className="mb-0" md={12}>
                 <AppFormLabel label={`Name (${active})`} required />
-
                 <Form.Control
                     value={getValue("name")}
                     {...register(`name_${active}`)}
-                    // required
                     onChange={(e: any) => {
                         handleValueChange(e.target.value, "name");
                     }}
                 />
-
                 <Form.Control.Feedback className={"d-block"} type="invalid">
                     {formState?.errors[`name_${active}`]?.message}
                 </Form.Control.Feedback>
-            </Form.Group>
+            </Col>
         </Row>
     );
 };

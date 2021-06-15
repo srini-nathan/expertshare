@@ -29,7 +29,8 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
     isGrantedControl,
 }): JSX.Element => {
     const conferencePosterPath = useBuildAssetPath(
-        FILETYPEINFO_CONFERENCE_POSTER as FileTypeInfo
+        FILETYPEINFO_CONFERENCE_POSTER as FileTypeInfo,
+        conference?.imageName
     );
     const { t } = useTranslation();
 
@@ -40,7 +41,7 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                     <Col
                         md={12}
                         lg={7}
-                        xl={9}
+                        xl={7}
                         className="inner-container--title px-0 pl-sm-0"
                     >
                         <Link to="#">
@@ -110,7 +111,7 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                     >
                         <i
                             style={{
-                                backgroundImage: `url(${conferencePosterPath}/${conference?.imageName})`,
+                                backgroundImage: `url(${conferencePosterPath})`,
                             }}
                         ></i>
                     </Col>

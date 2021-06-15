@@ -18,8 +18,10 @@ export const onRequestFulfilled = (
     }
 
     const locale = localStorage.getItem(USER_LOCALE);
-    // eslint-disable-next-line @typescript-eslint/dot-notation, no-console,no-param-reassign
-    config.params["locale"] = locale;
+    if (config.params) {
+        // eslint-disable-next-line @typescript-eslint/dot-notation, no-console,no-param-reassign
+        config.params["locale"] = locale;
+    }
     return config;
 };
 
