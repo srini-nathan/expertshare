@@ -70,10 +70,16 @@ a {
 
 //Custom CSS Joshua for CS
 
-.sidebar .navbar {
-    box-shadow: 0 3px 9px rgb(155 167 186 / 52%);
+.sidebar {
+    .navbar {
+        box-shadow: 0 3px 9px rgba(155, 167, 186, .52);
+    }
 }
 
-.active-account-box--auth-form .form-group .agreement-box--inner p {
-    padding-right: 10px !important;
+.active-account-box--auth-form {
+    .form-group {
+        .agreement-box--inner {
+            padding-right: 10px !important;
+        }
+    }
 }
