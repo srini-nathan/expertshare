@@ -17,13 +17,15 @@ export interface AppMessageInboxProps {
 export const AppMessageInbox: FC<AppMessageInboxProps> = ({
     isOpen = false,
 }) => {
+    const [closed, setClosed] = useState(!isOpen);
+    const [collapsed, setCollapsed] = useState(false);
     const { getThreads } = useInitChatBox();
     const [loading, setLoading] = useState(true);
     const { user } = useAuthState();
     const [threads, setThreads] = useState<ChatThread[]>([]);
 
     useEffect(() => {
-        if (isOpen) {
+        if (closed === false) {
             setLoading(true);
             getThreads(1)
                 .then(({ response }) => {
@@ -35,20 +37,28 @@ export const AppMessageInbox: FC<AppMessageInboxProps> = ({
                     setLoading(false);
                 });
         }
-    }, [isOpen]);
+    }, [closed]);
 
-    if (isOpen !== true) {
+    if (closed === true) {
         return null;
     }
 
     return (
         <div className="app-message-inbox">
             <div className="app-message-inbox--container">
-                <div className="app-message-inbox--index">
+                <div
+                    className={`app-message-inbox--index ${
+                        collapsed ? "collapsed" : ""
+                    }`}
+                >
                     <div className="inner-container">
                         <AppMessageInboxHeader
-                            onCollapseAction={() => {}}
-                            onCloseAction={() => {}}
+                            onCollapseAction={() => {
+                                setCollapsed(!collapsed);
+                            }}
+                            onCloseAction={() => {
+                                setClosed(true);
+                            }}
                             newMsgCounter={10}
                             user={user}
                         />

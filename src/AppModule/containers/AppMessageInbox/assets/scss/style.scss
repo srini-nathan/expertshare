@@ -305,13 +305,15 @@
             }
         }
     }
-}
-.hide {
-    height: 74px !important;
-    margin-top: auto;
-    margin-bottom: 0;
-    overflow: hidden;
-}
-.btn-collapse-on {
-    transform: rotate(180deg);
+
+    .collapsed {
+        height: 74px;
+        margin-top: auto;
+        margin-bottom: 0;
+        overflow: hidden;
+
+        .btn-collapse {
+            transform: rotate(180deg);
+        }
+    }
 }
