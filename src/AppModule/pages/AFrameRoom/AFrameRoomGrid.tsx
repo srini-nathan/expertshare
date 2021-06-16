@@ -149,25 +149,7 @@ export const AFrameRoomGrid: FC<RouteComponentProps> = (): JSX.Element => {
 
     const renderView = () => {
         switch (view) {
-            case "list":
-                return (
-                    <Col className="p-0">
-                        <AppGrid
-                            frameworkComponents={appGridFrameworkComponents}
-                            columnDef={appGridColDef({
-                                onPressDelete: handleDelete,
-                                isGrantedControl,
-                            })}
-                            dataSource={getDataSource()}
-                            totalItems={totalItems}
-                            onReady={(event) => {
-                                appGridApi.current = event.api;
-                            }}
-                        />
-                    </Col>
-                );
             case "grid":
-            default:
                 if (loading) {
                     return <AppLoader />;
                 }
@@ -197,22 +179,42 @@ export const AFrameRoomGrid: FC<RouteComponentProps> = (): JSX.Element => {
                         />
                     </Row>
                 );
+            case "list":
+            default:
+                return (
+                    <Col className="p-0">
+                        <AppGrid
+                            frameworkComponents={appGridFrameworkComponents}
+                            columnDef={appGridColDef({
+                                onPressDelete: handleDelete,
+                                isGrantedControl,
+                            })}
+                            dataSource={getDataSource()}
+                            totalItems={totalItems}
+                            onReady={(event) => {
+                                appGridApi.current = event.api;
+                            }}
+                        />
+                    </Col>
+                );
         }
     };
 
     return (
         <Fragment>
-            <AppPageHeader title={"AFrameRoom"} customToolbar>
+            <AppPageHeader title={"Rooms"} customToolbar>
                 <div className="d-flex pt-2 mb-5">
                     <AppListPageToolbar
-                        createLink={"/aframeroom/new"}
+                        createLink={"/admin/room/new"}
                         onQuickFilterChange={handleFilter}
                         cancelTokenSources={cancelTokenSourcesRef.current}
                     />
-                    <AppSwitchView
-                        link={"/aframerooms"}
-                        activeLink={view || "grid"}
-                    />
+                    {false && (
+                        <AppSwitchView
+                            link={"/admin/rooms"}
+                            activeLink={view || "grid"}
+                        />
+                    )}
                 </div>
             </AppPageHeader>
 

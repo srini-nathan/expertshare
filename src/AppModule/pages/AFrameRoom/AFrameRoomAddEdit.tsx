@@ -1,6 +1,7 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -10,7 +11,8 @@ import {
     AppCard,
     AppUploader,
     AppFormSwitch,
-    AppFormLabel,
+    AppFormInput,
+    AppLoader,
 } from "../../components";
 import {
     Upload,
@@ -31,7 +33,7 @@ import {
     useAuthState,
     useBuildAssetPath,
 } from "../../hooks";
-import { schema } from "./schema";
+import { schema, validations } from "./schema";
 import { CONSTANTS } from "../../../config";
 import { UploadAPI } from "../../apis";
 
@@ -40,6 +42,16 @@ const {
     FILETYPE: { FILETYPE_AFRAMEROOM_MEDIA },
     FILETYPEINFO: { FILETYPEINFO_AFRAMEROOM_MEDIA },
 } = UPLOAD;
+
+const {
+    name,
+    camPosX,
+    camPosY,
+    camPosZ,
+    camRotX,
+    camRotY,
+    camRotZ,
+} = validations;
 
 export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
     navigate,
@@ -54,6 +66,8 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
     const aframeroomImagePath = useBuildAssetPath(
         FILETYPEINFO_AFRAMEROOM_MEDIA as FileTypeInfo
     );
+    const [loading, setLoading] = useState<boolean>(true);
+    const { t } = useTranslation();
 
     const {
         handleSubmit,
@@ -81,11 +95,9 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
                 } else if (errorMessage) {
                     errorToast(errorMessage);
                 } else {
-                    navigator("/aframerooms").then(() => {
+                    navigator("/admin/rooms").then(() => {
                         successToast(
-                            isEditMode
-                                ? "AFrameRoom updated"
-                                : "AFrameRoom created"
+                            isEditMode ? "Rooms updated" : "Rooms created"
                         );
                     });
                 }
@@ -130,54 +142,53 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
                         setData(response);
                         trigger();
                     }
+                    setLoading(false);
                 }
             );
+        }
+        if (!isEditMode) {
+            setLoading(false);
         }
     }, [id, isEditMode, trigger]);
 
     const { errors } = formState;
 
+    if (loading) {
+        return <AppLoader />;
+    }
+
     return (
         <Fragment>
-            <AppBreadcrumb linkText={"AFrameRooms"} linkUrl={"/aframerooms"} />
-            <AppPageHeader
-                title={isEditMode ? "Edit AFrameRooms" : "Add AFrameRooms"}
-            />
+            <AppBreadcrumb linkText={"Rooms"} linkUrl={"/admin/rooms"} />
+            <AppPageHeader title={isEditMode ? "Edit Rooms" : "Add Rooms"} />
             <Row>
                 <Col>
                     <AppCard>
                         <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                             <Form.Row>
                                 <Form.Group as={Col}>
-                                    <AppFormLabel label={`Name`} required />
-                                    <Form.Control
-                                        value={data.name}
-                                        name={`name`}
-                                        onChange={(e: any) => {
-                                            setValue("name", e.target.value);
-                                            setData({
-                                                ...data,
-                                                name: e.target.value,
-                                            });
-                                        }}
+                                    <AppFormInput
+                                        name={"name"}
+                                        label={t(
+                                            "admin.aframeroom.form:label.name"
+                                        )}
+                                        maxCount={name.max}
+                                        {...validation(
+                                            "name",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={errors.name?.message}
+                                        defaultValue={data.name}
+                                        control={control}
                                     />
-
-                                    <Form.Control.Feedback
-                                        className={"d-block"}
-                                        type="invalid"
-                                    >
-                                        {errors.name?.message &&
-                                            "This feild is required"}
-                                    </Form.Control.Feedback>
                                 </Form.Group>
                             </Form.Row>
                             <AppFormSwitch
-                                sm={12}
-                                md={12}
-                                lg={12}
-                                xl={12}
                                 name={"isEntryRoom"}
-                                label={"Is EntryRoom?"}
+                                label={t(
+                                    "admin.aframeroom.form:label.isEntryRoom"
+                                )}
                                 {...validation(
                                     "isEntryRoom",
                                     formState,
@@ -187,198 +198,124 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
                                 defaultChecked={data.isEntryRoom}
                                 control={control}
                             />
+                            <Form.Group as={Col} sm={12} md={12} lg={6} xl={6}>
+                                <Form.Label>
+                                    {t("admin.aframeroom.form:label.image")}
+                                </Form.Label>
+                                <AppUploader
+                                    withCropper
+                                    accept="image/*"
+                                    imagePath={
+                                        data.image
+                                            ? `${aframeroomImagePath}/${data.image}`
+                                            : ""
+                                    }
+                                    onFileSelect={onFileSelect}
+                                    onDelete={() => {
+                                        setValue("image", "");
+                                        setData({
+                                            ...data,
+                                            image: "",
+                                        });
+                                    }}
+                                />
+                            </Form.Group>
                             <Form.Row>
-                                <Form.Group
-                                    as={Col}
-                                    sm={12}
-                                    md={12}
-                                    lg={6}
-                                    xl={6}
-                                >
-                                    <Form.Label>Image</Form.Label>
-                                    <AppUploader
-                                        withCropper
-                                        accept="image/*"
-                                        imagePath={
-                                            data.image
-                                                ? `${aframeroomImagePath}/${data.image}`
-                                                : ""
-                                        }
-                                        onFileSelect={onFileSelect}
-                                        onDelete={() => {
-                                            setValue("image", "");
-                                            setData({
-                                                ...data,
-                                                image: "",
-                                            });
-                                        }}
-                                    />
-                                </Form.Group>
-                            </Form.Row>
-                            <Form.Row>
-                                <Form.Group as={Col} md={4}>
-                                    <AppFormLabel
-                                        label={`Camera Position X`}
-                                        required
-                                    />
-
-                                    <Form.Control
-                                        value={data.camPosX}
-                                        name={`camPosX`}
-                                        onChange={(e: any) => {
-                                            setValue("camPosX", e.target.value);
-                                            setData({
-                                                ...data,
-                                                camPosX: e.target.value,
-                                            });
-                                        }}
-                                    />
-
-                                    <Form.Control.Feedback
-                                        className={"d-block"}
-                                        type="invalid"
-                                    >
-                                        {errors.camPosX?.message &&
-                                            "This feild is required"}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                                <Form.Group as={Col} md={4}>
-                                    <AppFormLabel
-                                        label={`Camera Position Y`}
-                                        required
-                                    />
-
-                                    <Form.Control
-                                        value={data.camPosY}
-                                        name={`camPosY`}
-                                        onChange={(e: any) => {
-                                            setValue("camPosY", e.target.value);
-                                            setData({
-                                                ...data,
-                                                camPosY: e.target.value,
-                                            });
-                                        }}
-                                    />
-
-                                    <Form.Control.Feedback
-                                        className={"d-block"}
-                                        type="invalid"
-                                    >
-                                        {errors.camPosY?.message &&
-                                            "This feild is required"}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                                <Form.Group as={Col} md={4}>
-                                    <AppFormLabel
-                                        label={`Camera Position Z`}
-                                        required
-                                    />
-
-                                    <Form.Control
-                                        value={data.camPosZ}
-                                        name={`camPosZ`}
-                                        onChange={(e: any) => {
-                                            setValue("camPosZ", e.target.value);
-                                            setData({
-                                                ...data,
-                                                camPosZ: e.target.value,
-                                            });
-                                        }}
-                                    />
-
-                                    <Form.Control.Feedback
-                                        className={"d-block"}
-                                        type="invalid"
-                                    >
-                                        {errors.camPosZ?.message &&
-                                            "This feild is required"}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                            </Form.Row>
-                            <Form.Row>
-                                <Form.Group as={Col} md={4}>
-                                    <AppFormLabel
-                                        label={`Camera Rotation X`}
-                                        required
-                                    />
-
-                                    <Form.Control
-                                        value={data.camRotX}
-                                        name={`camRotX`}
-                                        onChange={(e: any) => {
-                                            setValue("camRotX", e.target.value);
-                                            setData({
-                                                ...data,
-                                                camRotX: e.target.value,
-                                            });
-                                        }}
-                                    />
-
-                                    <Form.Control.Feedback
-                                        className={"d-block"}
-                                        type="invalid"
-                                    >
-                                        {errors.camRotX?.message &&
-                                            "This feild is required"}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                                <Form.Group as={Col} md={4}>
-                                    <AppFormLabel
-                                        label={`Camera Rotation Y`}
-                                        required
-                                    />
-
-                                    <Form.Control
-                                        value={data.camRotY}
-                                        name={`camRotY`}
-                                        onChange={(e: any) => {
-                                            setValue("camRotY", e.target.value);
-                                            setData({
-                                                ...data,
-                                                camRotY: e.target.value,
-                                            });
-                                        }}
-                                    />
-
-                                    <Form.Control.Feedback
-                                        className={"d-block"}
-                                        type="invalid"
-                                    >
-                                        {errors.camRotY?.message &&
-                                            "This feild is required"}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
-                                <Form.Group as={Col} md={4}>
-                                    <AppFormLabel
-                                        label={`Camera Rotation Z`}
-                                        required
-                                    />
-
-                                    <Form.Control
-                                        value={data.camRotZ}
-                                        name={`camRotZ`}
-                                        onChange={(e: any) => {
-                                            setValue("camRotZ", e.target.value);
-                                            setData({
-                                                ...data,
-                                                camRotZ: e.target.value,
-                                            });
-                                        }}
-                                    />
-
-                                    <Form.Control.Feedback
-                                        className={"d-block"}
-                                        type="invalid"
-                                    >
-                                        {errors.camRotZ?.message &&
-                                            "This feild is required"}
-                                    </Form.Control.Feedback>
-                                </Form.Group>
+                                <AppFormInput
+                                    name={"camPosX"}
+                                    label={t(
+                                        "admin.aframeroom.form:label.camPosX"
+                                    )}
+                                    maxCount={camPosX.max}
+                                    {...validation(
+                                        "camPosX",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.camPosX?.message}
+                                    defaultValue={data.camPosX}
+                                    control={control}
+                                />
+                                <AppFormInput
+                                    name={"camPosY"}
+                                    label={t(
+                                        "admin.aframeroom.form:label.camPosY"
+                                    )}
+                                    maxCount={camPosY.max}
+                                    {...validation(
+                                        "camPosY",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.camPosY?.message}
+                                    defaultValue={data.camPosY}
+                                    control={control}
+                                />
+                                <AppFormInput
+                                    name={"camPosZ"}
+                                    label={t(
+                                        "admin.aframeroom.form:label.camPosZ"
+                                    )}
+                                    maxCount={camPosZ.max}
+                                    {...validation(
+                                        "camPosZ",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.camPosZ?.message}
+                                    defaultValue={data.camPosZ}
+                                    control={control}
+                                />
+                                <AppFormInput
+                                    name={"camRotX"}
+                                    label={t(
+                                        "admin.aframeroom.form:label.camRotX"
+                                    )}
+                                    maxCount={camRotX.max}
+                                    {...validation(
+                                        "camRotX",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.camRotX?.message}
+                                    defaultValue={data.camRotX}
+                                    control={control}
+                                />
+                                <AppFormInput
+                                    name={"camRotY"}
+                                    label={t(
+                                        "admin.aframeroom.form:label.camRotY"
+                                    )}
+                                    maxCount={camRotY.max}
+                                    {...validation(
+                                        "camRotY",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.camRotY?.message}
+                                    defaultValue={data.camRotY}
+                                    control={control}
+                                />
+                                <AppFormInput
+                                    name={"camRotZ"}
+                                    label={t(
+                                        "admin.aframeroom.form:label.camRotZ"
+                                    )}
+                                    maxCount={camRotZ.max}
+                                    {...validation(
+                                        "camRotZ",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.camRotZ?.message}
+                                    defaultValue={data.camRotZ}
+                                    control={control}
+                                />
                             </Form.Row>
                             <AppFormActions
                                 isEditMode={isEditMode}
                                 navigation={navigator}
-                                backLink={"/aframerooms"}
+                                backLink={"/admin/rooms"}
                                 isLoading={formState.isSubmitting}
                             />
                         </Form>
