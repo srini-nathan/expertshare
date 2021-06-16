@@ -3,10 +3,11 @@ import { Link } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { AppIcon } from "../AppIcon";
 import "./assets/scss/list.scss";
-import { useBuildAssetPath } from "../../hooks";
+import { useAuthState, useBuildAssetPath, useInitChat } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 import { FileTypeInfo, User } from "../../models";
 import placeholder from "../../assets/images/user-avatar.png";
+import { useGlobalData } from "../../contexts";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -34,11 +35,16 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
         isAllowCommunication,
         userTags,
         userType,
+        id,
     } = attendee as User;
     const profilePicturePath = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         imageName
     );
+    const { container } = useGlobalData();
+    const { startChat } = useInitChat();
+    const { user } = useAuthState();
+
     const style = imageName
         ? {
               backgroundImage: `url(${profilePicturePath})`,
@@ -158,8 +164,19 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                                             Start Video Chat
                                         </a>
                                     </div> */}
-                                    {isAllowCommunication && (
-                                        <div className="popup--inner--item conversation">
+                                    {isAllowCommunication && container && user && (
+                                        <div
+                                            className="popup--inner--item conversation"
+                                            onClick={() => {
+                                                if (user.id) {
+                                                    startChat(
+                                                        user.id,
+                                                        id,
+                                                        container.id
+                                                    );
+                                                }
+                                            }}
+                                        >
                                             <a href="#">
                                                 <AppIcon name="Conversation" />
                                                 {t(
