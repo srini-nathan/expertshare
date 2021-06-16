@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { Row, Col } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { AppCard } from "../AppCard";
 import { AppSessionTags } from "../AppSessionTags";
 import "./assets/scss/style.scss";
@@ -12,13 +13,14 @@ export interface AppSessionDetailsProps {
 export const AppSessionDetails: FC<AppSessionDetailsProps> = ({
     session,
 }): JSX.Element => {
+    const { t } = useTranslation();
     return (
         <AppCard>
             <Row className="m-0 mb-3 mb-lg-4">
                 <Col md={6} className="session-details-info my-4 px-4">
                     <h2>
                         <i className="fak fa-session-details"></i>
-                        Session Details
+                        {t("sessionDetails:section.sessionDetails")}
                     </h2>
                     <div className="session-details-info--container mt-4">
                         <Row className="m-0 p-0">
@@ -28,7 +30,7 @@ export const AppSessionDetails: FC<AppSessionDetailsProps> = ({
                             >
                                 <span>
                                     <i className="fak fa-seat"></i>
-                                    56/120 Seats
+                                    56/120 {t("sessionDetails:label.seats")}
                                 </span>
                             </Col>
                             {session.isJoinRequired && (
@@ -38,7 +40,7 @@ export const AppSessionDetails: FC<AppSessionDetailsProps> = ({
                                 >
                                     <span>
                                         <i className="fak fa-icn-user-check"></i>
-                                        Mandatory
+                                        {t("sessionDetails:label.mandatory")}
                                     </span>
                                 </Col>
                             )}
@@ -73,7 +75,7 @@ export const AppSessionDetails: FC<AppSessionDetailsProps> = ({
                 >
                     <h2>
                         <i className="fak fa-like-share"></i>
-                        Like & Share
+                        {t("sessionDetails:label.likeAndShare")}
                     </h2>
                     <div className="session-details-share--container mt-1">
                         <div className="row m-0 p-0">
@@ -81,13 +83,13 @@ export const AppSessionDetails: FC<AppSessionDetailsProps> = ({
                                 <button>
                                     <i className="fak fa-hearts"></i>
                                     <span>1293</span>
-                                    Likes
+                                    {t("sessionDetails:label.likes")}
                                 </button>
                             </div>
                             <div className="session-details-share--container--item share col-auto pl-0 mt-2">
                                 <button>
                                     <i className="fak fa-share-alt"></i>
-                                    Share
+                                    {t("sessionDetails:label.share")}
                                     <div className="share--popup">
                                         <div className="share--popup--container w-100">
                                             <div className="row m-0 p-0">
@@ -138,13 +140,13 @@ export const AppSessionDetails: FC<AppSessionDetailsProps> = ({
                             <div className="session-details-share--container--item favorite col-auto pl-0 mt-2">
                                 <button>
                                     <i className="fak fa-sponsors-white"></i>
-                                    Add to Favorites
+                                    {t("sessionDetails:button.addToFavorite")}
                                 </button>
                             </div>
                             <div className="session-details-share--container--item calendar col-auto pl-0 mt-2">
                                 <button>
                                     <i className="fak fa-calendar-plus"></i>
-                                    Add to Calendar
+                                    {t("sessionDetails:button.addToCalendar")}
                                 </button>
                             </div>
                         </div>
