@@ -166,60 +166,65 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
                     <AppCard>
                         <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                             <Form.Row>
-                                <Form.Group as={Col}>
-                                    <AppFormInput
-                                        name={"name"}
-                                        label={t(
-                                            "admin.aframeroom.form:label.name"
-                                        )}
-                                        maxCount={name.max}
-                                        {...validation(
-                                            "name",
-                                            formState,
-                                            isEditMode
-                                        )}
-                                        errorMessage={errors.name?.message}
-                                        defaultValue={data.name}
-                                        control={control}
+                                <AppFormInput
+                                    name={"name"}
+                                    label={t(
+                                        "admin.aframeroom.form:label.name"
+                                    )}
+                                    maxCount={name.max}
+                                    {...validation(
+                                        "name",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.name?.message}
+                                    defaultValue={data.name}
+                                    control={control}
+                                />
+                            </Form.Row>
+                            <Form.Row>
+                                <AppFormSwitch
+                                    name={"isEntryRoom"}
+                                    label={t(
+                                        "admin.aframeroom.form:label.isEntryRoom"
+                                    )}
+                                    {...validation(
+                                        "isEntryRoom",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.isEntryRoom?.message}
+                                    defaultChecked={data.isEntryRoom}
+                                    control={control}
+                                />
+                            </Form.Row>
+                            <Form.Row>
+                                <Form.Group className={"col w-100"}>
+                                    <Form.Label>
+                                        {t("admin.aframeroom.form:label.image")}
+                                    </Form.Label>
+                                    <AppUploader
+                                        withCropper
+                                        accept="image/*"
+                                        imagePath={
+                                            data.image
+                                                ? `${aframeroomImagePath}/${data.image}`
+                                                : ""
+                                        }
+                                        onFileSelect={onFileSelect}
+                                        onDelete={() => {
+                                            setValue("image", "");
+                                            setData({
+                                                ...data,
+                                                image: "",
+                                            });
+                                        }}
+                                        fileInfo={
+                                            FILETYPEINFO_AFRAMEROOM_MEDIA as FileTypeInfo
+                                        }
                                     />
                                 </Form.Group>
                             </Form.Row>
-                            <AppFormSwitch
-                                name={"isEntryRoom"}
-                                label={t(
-                                    "admin.aframeroom.form:label.isEntryRoom"
-                                )}
-                                {...validation(
-                                    "isEntryRoom",
-                                    formState,
-                                    isEditMode
-                                )}
-                                errorMessage={errors.isEntryRoom?.message}
-                                defaultChecked={data.isEntryRoom}
-                                control={control}
-                            />
-                            <Form.Group as={Col} sm={12} md={12} lg={6} xl={6}>
-                                <Form.Label>
-                                    {t("admin.aframeroom.form:label.image")}
-                                </Form.Label>
-                                <AppUploader
-                                    withCropper
-                                    accept="image/*"
-                                    imagePath={
-                                        data.image
-                                            ? `${aframeroomImagePath}/${data.image}`
-                                            : ""
-                                    }
-                                    onFileSelect={onFileSelect}
-                                    onDelete={() => {
-                                        setValue("image", "");
-                                        setData({
-                                            ...data,
-                                            image: "",
-                                        });
-                                    }}
-                                />
-                            </Form.Group>
                             <Form.Row>
                                 <AppFormInput
                                     name={"camPosX"}

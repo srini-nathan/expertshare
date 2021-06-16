@@ -10,7 +10,7 @@ const {
     api_a_frame_rooms_put_item: API_PUT_ITEM,
     api_a_frame_rooms_patch_item: API_PATCH_ITEM,
     api_a_frame_rooms_post_collection: API_POST_COLLECTION,
-    api_a_frame_rooms_set_default_collection: API_SET_DEFAULT,
+    api_aframeroom_set_default_collection: API_SET_DEFAULT,
 } = ROUTES;
 
 export abstract class AFrameRoomApi extends EntityAPI {

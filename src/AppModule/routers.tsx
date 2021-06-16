@@ -11,7 +11,6 @@ import {
     EventAgenda,
     SessionDetailsPage,
     AttendeeOverview,
-    NewsFeedPage,
     OnBoardingPage,
     AFrameRoomGrid,
     AFrameRoomAddEdit,
