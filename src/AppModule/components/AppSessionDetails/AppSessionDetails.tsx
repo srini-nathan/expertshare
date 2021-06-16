@@ -68,6 +68,15 @@ export const AppSessionDetails: FC<AppSessionDetailsProps> = ({
                             </Col>
                         </Row>
                     </div>
+
+                    {session.isExternalLinkEnable && (
+                        <a target="_blank" href={session.externalLinkUrl}>
+                            <h2>
+                                <i className="far fa-link"></i>
+                                {session.externalLinkLabel}
+                            </h2>
+                        </a>
+                    )}
                 </Col>
                 <Col
                     md={6}

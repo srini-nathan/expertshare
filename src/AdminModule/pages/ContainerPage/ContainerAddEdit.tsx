@@ -109,6 +109,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
             bucketEndpoint: Yup.string().nullable(),
         };
     }
+
     const {
         register,
         control,
@@ -126,6 +127,10 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
     const onFileSelect = (selectedFiles: File[]) => {
         setFiles(selectedFiles);
     };
+
+    useEffect(() => {
+        setValue("storage", storageType);
+    }, [storageType]);
 
     useEffect(() => {
         ClientApi.findById<Client>(clientId).then(
