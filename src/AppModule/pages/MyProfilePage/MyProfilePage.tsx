@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Tab, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import {
     AppProfileHeader,
     AppTabWithIcon,
@@ -17,6 +18,7 @@ import { UpdatePrivacy } from "./UpdatePrivacy";
 export const MyProfilePage: FC<RouteComponentProps> = (): JSX.Element => {
     const { state } = React.useContext(AuthContext);
     const { user } = state as AuthState;
+    const { t } = useTranslation();
     return (
         <>
             <AppProfileHeader {...user} />
@@ -25,31 +27,41 @@ export const MyProfilePage: FC<RouteComponentProps> = (): JSX.Element => {
                     <AppTabWithIcon
                         className="mr-3"
                         eventKey="Feeds"
-                        title="My Feeds"
+                        title={t("profile.update:tab.myFeed")}
                         icon="fak fa-columns-regular"
                     ></AppTabWithIcon>
                     <AppTabWithIcon
                         eventKey="Profile"
-                        title="Profile"
+                        title={t("profile.update:tab.pofile")}
                         icon="fak fa-user-regular"
                     ></AppTabWithIcon>
                 </Row>
                 <Tab.Pane className="mt-4 " eventKey="Profile">
                     <AppTabs defaultKeyValue="General">
-                        <AppTab eventKey="General" title="General">
+                        <AppTab
+                            eventKey="General"
+                            title={t("profile.update:tab.general")}
+                        >
                             <UpdateProfile />
                         </AppTab>
 
-                        <AppTab eventKey="Setings" title="Setings">
+                        <AppTab
+                            eventKey="Setings"
+                            title={t("profile.update:tab.setting")}
+                        >
                             <Row className="m-0 pt-3">
-                                <AppCard title="Privacy & Communication">
+                                <AppCard
+                                    title={t(
+                                        "profile.update:label.sectionPrivacyAndCommunication"
+                                    )}
+                                >
                                     <UpdatePrivacy />
                                 </AppCard>
                             </Row>
                         </AppTab>
                         <AppTab
                             eventKey="ChangePassword"
-                            title="Change Password"
+                            title={t("profile.update:tab.changePassword")}
                         >
                             <ChangePassword />
                         </AppTab>

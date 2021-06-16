@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { isString as _isString } from "lodash";
+import { useTranslation } from "react-i18next";
 import { Col, Form, Row } from "react-bootstrap";
 import { Canceler } from "axios";
 import { Client, Package } from "../../models";
@@ -39,6 +40,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
 }): JSX.Element => {
     const { id, isEditMode } = useParamId();
     const navigator = useNavigator(navigate);
+    const { t } = useTranslation();
 
     const [data, setData] = React.useState<PartialClient>(new Client());
     const [packages, setPackages] = React.useState<Package[]>([]);
@@ -129,8 +131,17 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
 
     return (
         <Fragment>
-            <AppBreadcrumb linkText={"Client"} linkUrl={".."} />
-            <AppPageHeader title={isEditMode ? "Edit Client" : "Add Client"} />
+            <AppBreadcrumb
+                linkText={t("common.breadcrumb:clients")}
+                linkUrl={".."}
+            />
+            <AppPageHeader
+                title={
+                    isEditMode
+                        ? t("admin.client.form:header.titleEdit")
+                        : t("admin.client.form:header.title")
+                }
+            />
             <Row>
                 <Col>
                     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
@@ -140,7 +151,10 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
                                     lg={6}
                                     xl={6}
                                     name={"name"}
-                                    label={"Name"}
+                                    label={t("admin.client.form:label.name")}
+                                    placeholder={t(
+                                        "admin.client.form:label.name"
+                                    )}
                                     {...validation(
                                         "name",
                                         formState,
@@ -154,7 +168,10 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
                                     lg={6}
                                     xl={6}
                                     name={"notes"}
-                                    label={"Notes"}
+                                    label={t("admin.client.form:label.notes")}
+                                    placeholder={t(
+                                        "admin.client.form:label.notes"
+                                    )}
                                     {...validation(
                                         "notes",
                                         formState,
@@ -166,7 +183,7 @@ export const ClientAddEdit: FC<RouteComponentProps> = ({
                                 />
                             </Form.Row>
                         </AppCard>
-                        <AppCard title="Default Packages">
+                        <AppCard title={t("admin.client.form:label.packages")}>
                             <Form.Row>
                                 <AppPackageSwitches
                                     packages={packages}

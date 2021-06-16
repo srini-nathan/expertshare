@@ -1,6 +1,7 @@
 import React, { FC, Fragment, useState, useEffect, useRef } from "react";
 import { RouteComponentProps, useParams } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { find as _find, isString as _isString } from "lodash";
 import { Canceler } from "axios";
@@ -107,6 +108,8 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         FILETYPEINFO_USER_PROFILE as FileTypeInfo
     );
     const [files, setFiles] = useState<File[]>([]);
+
+    const { t } = useTranslation();
 
     const {
         control,
@@ -462,15 +465,28 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
 
     return (
         <Fragment>
-            <AppBreadcrumb linkText={"Users"} linkUrl={".."} />
-            <AppPageHeader title={isEditMode ? "Edit User" : "Add User"} />
+            <AppBreadcrumb
+                linkText={t("common.breadcrumb:users")}
+                linkUrl={".."}
+            />
+            <AppPageHeader
+                title={
+                    isEditMode
+                        ? t("admin.users.form:header.editTitle")
+                        : t("admin.users.form:header.title")
+                }
+            />
             <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                 <Row>
                     <Col md={12}>
                         <AppCard>
                             <Form.Row>
-                                <Form.Group className="mb-0  px-3  w-100">
-                                    <Form.Label>Profile Picture</Form.Label>
+                                <Form.Group className="mb-3 px-1 w-100">
+                                    <Form.Label>
+                                        {t(
+                                            "admin.users.form:label.profilePicture"
+                                        )}
+                                    </Form.Label>
                                     <AppUploader
                                         withCropper={true}
                                         accept="image/*"
@@ -496,7 +512,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     lg={6}
                                     xl={6}
                                     name={"firstName"}
-                                    label={"First Name"}
+                                    label={t(
+                                        "admin.users.form:label.firstName"
+                                    )}
                                     defaultValue={data.firstName}
                                     required={false}
                                     {...validation(
@@ -512,7 +530,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     xl={6}
                                     name={"lastName"}
                                     defaultValue={data.lastName}
-                                    label={"Last Name"}
+                                    label={t("admin.users.form:label.lastName")}
                                     required={false}
                                     {...validation(
                                         "lastName",
@@ -528,7 +546,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     xl={6}
                                     name={"company"}
                                     defaultValue={data.company}
-                                    label={"Company"}
+                                    label={t(
+                                        "admin.users.form:label.companyName"
+                                    )}
                                     required={false}
                                     {...validation(
                                         "company",
@@ -543,7 +563,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     xl={6}
                                     defaultValue={data.jobTitle}
                                     name={"jobTitle"}
-                                    label={"Job Title"}
+                                    label={t("admin.users.form:label.jobTitle")}
                                     required={false}
                                     {...validation(
                                         "jobTitle",
@@ -558,7 +578,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     xl={6}
                                     defaultValue={data.email}
                                     name={"email"}
-                                    label={"Email"}
+                                    label={t("admin.users.form:label.email")}
                                     required={true}
                                     {...validation(
                                         "email",
@@ -571,7 +591,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                 <AppFormSelect
                                     id={"locale"}
                                     name={"locale"}
-                                    label={"Locale"}
+                                    label={t("admin.users.form:label.locale")}
                                     md={12}
                                     className="local-container"
                                     lg={6}
@@ -603,7 +623,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                         className="mb-0"
                                         xl={6}
                                         name={"plainPassword"}
-                                        label={"Password"}
+                                        label={t(
+                                            "admin.users.form:label.password"
+                                        )}
                                         required={true}
                                         {...validation(
                                             "plainPassword",
@@ -620,7 +642,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                         xl={6}
                                         className="mb-0"
                                         name={"confirmPassword"}
-                                        label={"Confirm Password"}
+                                        label={t(
+                                            "admin.users.form:label.confirmPassword"
+                                        )}
                                         required={true}
                                         {...validation(
                                             "confirmPassword",
@@ -637,7 +661,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                 <AppFormSelect
                                     id={"role"}
                                     name={"role"}
-                                    label={"Select Role"}
+                                    label={t("admin.users.form:label.userRole")}
                                     className="role-container"
                                     md={12}
                                     lg={6}
@@ -666,7 +690,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                 <AppFormSelect
                                     id={"relationManager"}
                                     name={"relationManager"}
-                                    label={"Relation Manager"}
+                                    label={t(
+                                        "admin.users.form:label.relationManager"
+                                    )}
                                     md={12}
                                     className="role-container"
                                     lg={6}
@@ -698,7 +724,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
 
                                 <AppFormSelectCreatable
                                     name="userTags"
-                                    label={"User Tags"}
+                                    label={t("admin.users.form:label.userTags")}
                                     md={12}
                                     sm={12}
                                     lg={12}
@@ -713,7 +739,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     <AppTagSelect
                                         options={userGroups}
                                         selectedItems={selectedUserGroups}
-                                        label="User Groups"
+                                        label={t(
+                                            "admin.users.form:label.userGroups"
+                                        )}
                                         onChange={(item) => {
                                             let index = -1;
                                             selectedUserGroups.filter(
@@ -746,7 +774,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                 <AppFormSelect
                                     id={"timezone"}
                                     name={"timezone"}
-                                    label={"Select Timezone"}
+                                    label={t("admin.users.form:label.timeZone")}
                                     md={12}
                                     lg={6}
                                     xl={6}
@@ -781,7 +809,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                 <AppFormSwitch
                                     id={"isBlocked"}
                                     name={"isBlocked"}
-                                    label={"Is Blocked"}
+                                    label={t(
+                                        "admin.users.form:label.isBlocked"
+                                    )}
                                     required={false}
                                     md={12}
                                     lg={6}
@@ -800,13 +830,17 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                 </Col>
                                 <Col md={12} lg={6} xl={6}>
                                     <AppFormLabel
-                                        label={`Source: ${data?.source}`}
+                                        label={`${t(
+                                            "admin.users.form:label.source"
+                                        )}: ${data?.source}`}
                                         required={false}
                                     />
                                 </Col>
                                 <Col md={12} lg={6} xl={6}>
                                     <AppFormLabel
-                                        label={`Is Onboarded: ${
+                                        label={`${t(
+                                            "admin.users.form:label.isOnBoarded"
+                                        )}: ${
                                             data?.isOnboarded ? "Yes" : "No"
                                         }`}
                                         required={false}
@@ -816,7 +850,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                 {data?.lastLoginAt && (
                                     <Col className="mt-3" md={12} lg={6} xl={6}>
                                         <AppFormLabel
-                                            label={`Last Login: ${data?.lastLoginAt}`}
+                                            label={`${t(
+                                                "admin.users.form:label.lastLogin"
+                                            )}: ${data?.lastLoginAt}`}
                                             required={false}
                                         />
                                     </Col>
@@ -824,7 +860,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                 {data?.isOnboarded && (
                                     <Col className="mt-3" md={12} lg={6} xl={6}>
                                         <AppFormLabel
-                                            label={`Onboarder at: ${data?.onboardedAt}`}
+                                            label={`${t(
+                                                "admin.users.form:label.onBoardedAt"
+                                            )}: ${data?.onboardedAt}`}
                                             required={false}
                                         />
                                     </Col>
@@ -846,7 +884,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                 <AppFormSwitch
                                     id={"isDisplayAsGuest"}
                                     name={"isDisplayAsGuest"}
-                                    label={"Is Display as Guest?"}
+                                    label={t(
+                                        "admin.users.form:label.isDisplayAsGuest"
+                                    )}
                                     md={12}
                                     lg={4}
                                     xl={4}
@@ -865,7 +905,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                 <AppFormSwitch
                                     id={"isExposeEmail"}
                                     name={"isExposeEmail"}
-                                    label={"Is Expose Email?"}
+                                    label={t(
+                                        "admin.users.form:label.isExposeEmail"
+                                    )}
                                     md={12}
                                     lg={4}
                                     xl={4}
@@ -882,7 +924,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                 <AppFormSwitch
                                     id={"isAllowCommunication"}
                                     name={"isAllowCommunication"}
-                                    label={"Is Allow Communication?"}
+                                    label={t(
+                                        "admin.users.form:label.isAllowCommunication"
+                                    )}
                                     md={12}
                                     lg={4}
                                     xl={4}

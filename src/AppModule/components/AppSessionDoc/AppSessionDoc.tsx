@@ -1,4 +1,5 @@
 import React, { FC, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { FileTypeInfo, SimpleObject } from "../../models";
 import { AppButton } from "../AppButton";
 import { bytesToSize } from "../AppUploader/bytes-to-size";
@@ -24,6 +25,7 @@ export const AppSessionDoc: FC<AppSessionDocProps> = ({
     files,
     showAddDelete = false,
 }): JSX.Element => {
+    const { t } = useTranslation();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const sessionDocPath = useBuildAssetPath(
         FILETYPEINFO_SESSION_DOC as FileTypeInfo
@@ -112,8 +114,8 @@ export const AppSessionDoc: FC<AppSessionDocProps> = ({
                     <div className="row m-0 p-0">
                         <div className="create-session--docs--header--name col-auto px-0">
                             <h3>
-                                <i className="fak fa-documents"></i>
-                                Documents
+                                <i className="fak fa-documents mr-2"></i>
+                                {t("session.form:label.documents")}
                             </h3>
                         </div>
                         {showAddDelete && (
@@ -124,7 +126,7 @@ export const AppSessionDoc: FC<AppSessionDocProps> = ({
                                     className=" add-btn"
                                 >
                                     <i className="fak fa-plus-light"></i>
-                                    Add
+                                    {t("common.button:add")}
                                 </AppButton>
                             </div>
                         )}

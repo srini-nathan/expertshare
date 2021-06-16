@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Control } from "react-hook-form";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { find as _find } from "lodash";
 import { AppFormInput } from "../AppFormInput";
 import { AppFormTextArea } from "../AppFormTextArea";
@@ -38,6 +39,9 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
     xl = 6,
 }) => {
     const { items } = properties;
+
+    const { t } = useTranslation();
+
     const renderText = (type: string) => {
         return (
             <AppFormInput
@@ -45,7 +49,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                 sm={sm}
                 lg={lg}
                 xl={xl}
-                label={properties.labelKey}
+                label={t(properties.labelKey)}
                 type={type}
                 required={properties.isRequired}
                 name={`userField./api/user_fields/${properties.id}`}
@@ -65,7 +69,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                 lg={lg}
                 xl={xl}
                 {...validation}
-                label={properties.labelKey}
+                label={t(properties.labelKey)}
                 required={properties.isRequired}
                 name={`userField./api/user_fields/${properties.id}`}
                 defaultValue={defaultValue ? defaultValue.value : ""}
@@ -78,7 +82,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
         return (
             <Col className="react-datepicker-container">
                 <AppFormLabel
-                    label={properties.labelKey}
+                    label={t(properties.labelKey)}
                     required={properties.isRequired}
                 />
                 <AppDatePicker
@@ -87,7 +91,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                     lg={lg}
                     xl={xl}
                     {...validation}
-                    label={properties.labelKey}
+                    label={t(properties.labelKey)}
                     required={properties.isRequired}
                     name={`userField./api/user_fields/${properties.id}`}
                     defaultValue={
@@ -103,7 +107,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
         return (
             <Col className="p-0" md={"6"} sm={"12"} lg={"6"} xl={"6"}>
                 <AppFormSwitch
-                    label={properties.labelKey}
+                    label={t(properties.labelKey)}
                     md={md}
                     sm={sm}
                     lg={lg}
@@ -132,7 +136,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
         return (
             <Col md={6} sm={12}>
                 <AppFormLabel
-                    label={properties.labelKey}
+                    label={t(properties.labelKey)}
                     required={properties.isRequired}
                 />
                 <Row className="m-0">
@@ -166,7 +170,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
         return (
             <Col md={6} sm={12}>
                 <AppFormLabel
-                    label={properties.labelKey}
+                    label={t(properties.labelKey)}
                     required={properties.isRequired}
                 />
                 <Row className="m-0">
@@ -235,7 +239,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                 sm={sm}
                 lg={lg}
                 xl={xl}
-                label={properties.labelKey}
+                label={t(properties.labelKey)}
                 required={properties.isRequired}
                 name={`userField./api/user_fields/${properties.id}`}
                 id={properties.labelKey}

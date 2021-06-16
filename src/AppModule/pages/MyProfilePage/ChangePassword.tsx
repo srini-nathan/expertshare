@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { forEach as _forEach } from "lodash";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -41,6 +42,8 @@ export const ChangePassword: FC<RouteComponentProps> = (): JSX.Element => {
         resolver: yupResolver(validationSchema),
         mode: "all",
     });
+    const { t } = useTranslation();
+
     const { errors } = formState;
 
     const onSubmit = async ({ Password }: RestPasswordForm) => {
@@ -76,7 +79,9 @@ export const ChangePassword: FC<RouteComponentProps> = (): JSX.Element => {
                                     lg={6}
                                     xl={6}
                                     name={"Password"}
-                                    label={"New Password"}
+                                    label={t(
+                                        "profile.update:label.newPassword"
+                                    )}
                                     required={true}
                                     {...validation(
                                         "Password",
@@ -90,7 +95,9 @@ export const ChangePassword: FC<RouteComponentProps> = (): JSX.Element => {
                                     lg={6}
                                     xl={6}
                                     name={"confirmPassword"}
-                                    label={"Confirm New Password"}
+                                    label={t(
+                                        "profile.update:label.confirmNewPassword"
+                                    )}
                                     required={true}
                                     {...validation(
                                         "confirmPassword",
@@ -110,7 +117,7 @@ export const ChangePassword: FC<RouteComponentProps> = (): JSX.Element => {
                                             variant="primary"
                                             type="submit"
                                         >
-                                            Save
+                                            {t("common.button:save")}
                                         </AppButton>
                                     )}
                                 </Col>

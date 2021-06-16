@@ -1,6 +1,7 @@
 import React, { FC, Fragment, useEffect, useRef, useState } from "react";
 import { RouteComponentProps, useParams } from "@reach/router";
 import { Canceler } from "axios";
+import { useTranslation } from "react-i18next";
 import { Row, Col } from "react-bootstrap";
 import {
     GridApi,
@@ -8,7 +9,7 @@ import {
     IServerSideGetRowsParams,
 } from "ag-grid-community";
 import { isString as _isString } from "lodash";
-import { errorToast, successToast } from "../../utils";
+import { errorToast, successToast } from "../../../AppModule/utils";
 import {
     AppPageHeader,
     AppAFrameRoomCard,
@@ -18,24 +19,24 @@ import {
     AppGridPagination,
     AppFormDropdown,
     AppModal,
-} from "../../components";
-import { AFrameRoomApi } from "../../../AdminModule/apis";
-import { useAuthState, useIsGranted } from "../../hooks";
-import { PAFrameRoom } from "../../../AdminModule/models";
+} from "../../../AppModule/components";
+import { AFrameRoomApi } from "../../apis";
+import { useAuthState, useIsGranted } from "../../../AppModule/hooks";
+import { PAFrameRoom } from "../../models";
 import {
     AppGrid,
     buildFilterParams,
     buildSortParams,
-} from "../../containers/AppGrid";
+} from "../../../AppModule/containers/AppGrid";
 import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
-import { appGridConfig } from "../../config";
+import { appGridConfig } from "../../../AppModule/config";
 import { CONSTANTS } from "../../../config";
 import "./assets/scss/style.scss";
 import {
     defaultPageSize,
     pageSizeOptions,
-} from "../../containers/AppGrid/app-grid-helpers";
+} from "../../../AppModule/containers/AppGrid/app-grid-helpers";
 
 const { Role: ROLE } = CONSTANTS;
 
@@ -54,6 +55,7 @@ export const AFrameRoomGrid: FC<RouteComponentProps> = (): JSX.Element => {
     const [pageSize, setPageSize] = useState<number>(30);
     const [active, setActive] = useState<number>(1);
     const [showDelete, setDeleteShow] = useState(0);
+    const { t } = useTranslation();
 
     const fetchData = (params = {}) => {
         isLoading(true);
@@ -202,7 +204,10 @@ export const AFrameRoomGrid: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <Fragment>
-            <AppPageHeader title={"Rooms"} customToolbar>
+            <AppPageHeader
+                title={t("admin.rooms.list:header.title")}
+                customToolbar
+            >
                 <div className="d-flex pt-2 mb-5">
                     <AppListPageToolbar
                         createLink={"/admin/room/new"}

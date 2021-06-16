@@ -30,7 +30,7 @@ export const AppFormActions: FC<AppFormActionsProps> = ({
                         : navigation("..").then()
                 }
             >
-                Cancel
+                {t("common.button:cancel")}
             </AppButton>
             <AppButton
                 type="submit"

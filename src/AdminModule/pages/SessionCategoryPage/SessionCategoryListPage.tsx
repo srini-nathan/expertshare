@@ -1,6 +1,7 @@
 import React, { FC, Fragment, useState, useRef } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { isString as _isString } from "lodash";
 import {
     GridApi,
@@ -33,7 +34,7 @@ export const SessionCategoryListPage: FC<RouteComponentProps> = () => {
     const { state } = React.useContext(AuthContext);
     const { user } = state as AuthState;
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
-
+    const { t } = useTranslation();
     function getDataSource(): IServerSideDatasource {
         return {
             getRows(params: IServerSideGetRowsParams) {
@@ -99,10 +100,8 @@ export const SessionCategoryListPage: FC<RouteComponentProps> = () => {
 
     return (
         <Fragment>
-            {/* {loading && <AppLoader />} */}
-
             <AppPageHeader
-                title={"Session Category"}
+                title={t("admin.sessionCategory.list:header.title")}
                 createLink={"/admin/session-categories/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}

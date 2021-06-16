@@ -1,6 +1,7 @@
 import React, { FC, Fragment, useEffect, useRef, useState } from "react";
 import { RouteComponentProps, useParams } from "@reach/router";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { Col, Form, Row } from "react-bootstrap";
@@ -81,6 +82,8 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
     );
     const cancelTokenSourceRef = useRef<Canceler>();
     const [files, setFiles] = useState<File[]>([]);
+
+    const { t } = useTranslation();
 
     let schema = {
         domain: Yup.string().required("Domain is Required"),
@@ -266,14 +269,25 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
 
     return (
         <Fragment>
-            <AppBreadcrumb linkText={"Container"} linkUrl={".."} />
+            <AppBreadcrumb
+                linkText={t("common.breadcrumb:containers")}
+                linkUrl={".."}
+            />
             <AppPageHeader
-                title={isEditMode ? "Edit Container" : "Add Container"}
+                title={
+                    isEditMode
+                        ? t("admin.clients.containers.form:header.titleEdit")
+                        : t("admin.clients.containers.for:header.title")
+                }
             />
             <Row>
                 <Col>
                     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
-                        <AppCard title="Details">
+                        <AppCard
+                            title={t(
+                                "admin.clients.containers.form:label.sectionDetails"
+                            )}
+                        >
                             <Form.Row>
                                 <Col md={6} sm={12}>
                                     <AppFormInput
@@ -282,7 +296,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         lg={12}
                                         xl={12}
                                         name={"name"}
-                                        label={"Name"}
+                                        label={t(
+                                            "admin.clients.containers.form:label.name"
+                                        )}
                                         {...validation(
                                             "name",
                                             formState,
@@ -298,7 +314,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         lg={12}
                                         xl={12}
                                         name={"domain"}
-                                        label={"Domain"}
+                                        label={t(
+                                            "admin.clients.containers.form:label.domain"
+                                        )}
                                         {...validation(
                                             "domain",
                                             formState,
@@ -315,7 +333,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         xl={12}
                                         required={false}
                                         name={"containerGroup"}
-                                        label={"Container Group"}
+                                        label={t(
+                                            "admin.clients.containers.form:label.containerGroup"
+                                        )}
                                         {...validation(
                                             "containerGroup",
                                             formState,
@@ -333,7 +353,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         lg={12}
                                         xl={12}
                                         name={"description"}
-                                        label={"Description"}
+                                        label={t(
+                                            "admin.clients.containers.form:label.description"
+                                        )}
                                         required={false}
                                         {...validation(
                                             "description",
@@ -357,7 +379,11 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                         lg={12}
                                         xl={12}
                                     >
-                                        <Form.Label>Poster</Form.Label>
+                                        <Form.Label>
+                                            {t(
+                                                "admin.clients.containers.form:label.image"
+                                            )}
+                                        </Form.Label>
                                         <AppUploader
                                             withCropper
                                             fileInfo={
@@ -382,7 +408,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     <AppFormCheckBox
                                         className="container-checkbox"
                                         name={"isActive"}
-                                        label={"Active"}
+                                        label={t(
+                                            "admin.clients.containers.form:label.isActive"
+                                        )}
                                         labelPosition={"top"}
                                         value={1}
                                         defaultChecked={true}
@@ -391,23 +419,33 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                 </Col>
                             </Form.Row>
                         </AppCard>
-                        <AppCard title="Storage">
+                        <AppCard
+                            title={t(
+                                "admin.clients.containers.form:label.sectionStorage"
+                            )}
+                        >
                             <Row className="p-3">
                                 <AppFormRadioSwitch
                                     name={"storage"}
                                     defaultValue={data.storage}
-                                    label={"storage"}
+                                    label={t(
+                                        "admin.clients.containers.form:label.storage"
+                                    )}
                                     control={control}
                                     onChange={setStorageType}
                                     required={true}
                                     options={[
                                         {
                                             value: STORAGE_S3,
-                                            label: STORAGE_S3,
+                                            label: t(
+                                                "admin.clients.containers.form:label.storage.s3"
+                                            ).toString(),
                                         },
                                         {
                                             value: STORAGE_LOCAL,
-                                            label: STORAGE_LOCAL,
+                                            label: t(
+                                                "admin.clients.containers.form:label.storage.local"
+                                            ).toString(),
                                         },
                                     ]}
                                     {...validation(
@@ -430,7 +468,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     lg={"6"}
                                     xl={"6"}
                                     name={"bucketKey"}
-                                    label={"AWS S3 Bucket Key"}
+                                    label={t(
+                                        "admin.clients.containers.form:label.storage.s3.bucketKey"
+                                    )}
                                     {...validation(
                                         "bucketKey",
                                         formState,
@@ -447,7 +487,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     lg={"6"}
                                     xl={"6"}
                                     name={"bucketSecret"}
-                                    label={"AWS S3 Bucket Secret"}
+                                    label={t(
+                                        "admin.clients.containers.form:label.storage.s3.bucketSecret"
+                                    )}
                                     {...validation(
                                         "bucketSecret",
                                         formState,
@@ -464,7 +506,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     lg={"6"}
                                     xl={"6"}
                                     name={"bucketName"}
-                                    label={"AWS S3 Bucket Name"}
+                                    label={t(
+                                        "admin.clients.containers.form:label.storage.s3.bucketName"
+                                    )}
                                     {...validation(
                                         "bucketName",
                                         formState,
@@ -480,7 +524,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     lg={"6"}
                                     xl={"6"}
                                     name={"bucketRegion"}
-                                    label={"AWS S3 Bucket Region"}
+                                    label={t(
+                                        "admin.clients.containers.form:label.storage.s3.bucketRegion"
+                                    )}
                                     {...validation(
                                         "bucketRegion",
                                         formState,
@@ -497,7 +543,9 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                     xl={"6"}
                                     name={"bucketEndpoint"}
                                     required={false}
-                                    label={"AWS S3 Bucket Endpoint"}
+                                    label={t(
+                                        "admin.clients.containers.form:label.storage.s3.bucketEndpoint"
+                                    )}
                                     {...validation(
                                         "bucketEndpoint",
                                         formState,
@@ -512,7 +560,11 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                 />
                             </Row>
                         </AppCard>
-                        <AppCard title="Packages">
+                        <AppCard
+                            title={t(
+                                "admin.clients.containers.form:label.packages"
+                            )}
+                        >
                             <Form.Row>
                                 <AppPackageSwitches
                                     packages={packages}
@@ -527,14 +579,19 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                 />
                             </Form.Row>
                         </AppCard>
-                        <AppCard title="User Groups">
-                            <Form.Row>
+                        <AppCard
+                            title={t(
+                                "admin.clients.containers.form:label.sectionUserGroups"
+                            )}
+                        >
+                            <Form.Row className="m-0">
                                 <AppTagSelect
                                     options={userGroups}
                                     selectedItems={selectedUserGroups}
-                                    label="User Groups"
-                                    required
-                                    description="Hi this is description for this field"
+                                    label={t(
+                                        "admin.clients.containers.form:label.userGroups"
+                                    )}
+                                    required={false}
                                     onChange={(item) => {
                                         let index = -1;
                                         selectedUserGroups.filter((e, i) => {
