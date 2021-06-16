@@ -52,7 +52,7 @@ export const AppFeedAdder: FC<AppFeedAdderProps> = ({
     const [data, setData] = useState<string>("");
 
     const { className = "", container } = props;
-    const groupProps = { className, as: Col };
+    const groupProps = { className };
 
     const [showEmogiModal, setShowEmogiModal] = useState(false);
     const [collaspseSettings, setCollapseSettings] = useState<boolean>(false);

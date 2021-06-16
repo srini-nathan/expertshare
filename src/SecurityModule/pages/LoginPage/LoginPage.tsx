@@ -1,5 +1,6 @@
 import React, { FC, useState, useEffect, useRef } from "react";
 import { Link, RouteComponentProps } from "@reach/router";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import * as yup from "yup";
@@ -35,6 +36,7 @@ const schema = yup.object().shape({
 export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [emailStatus, setEmailStatus] = useState<string>("");
     const [agree, isAgree] = useState<boolean>(false);
+    const [onboarded, isOnboarded] = useState<boolean>(false);
     const [readed, isReaded] = useState<boolean>(false);
     const [activeLanguage, setActiveLanguage] = useState<string>("");
     const [userEmail, setUserEmail] = useState<string>("");
@@ -45,6 +47,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     const desclaimer = useRef<HTMLDivElement>(null);
     const { container } = useGlobalData();
     const { errors } = formState;
+    const { t } = useTranslation();
 
     useEffect(() => {
         container?.languages?.forEach((e) => {
@@ -75,8 +78,14 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
             } else if (errorMessage) {
                 errorToast(errorMessage);
             } else if (response) {
-                if (response[0]) setEmailStatus("exist");
-                else setEmailStatus("notexist");
+                if (response.isExist) {
+                    setEmailStatus("exist");
+                    if (response.isOnboarded) {
+                        isOnboarded(true);
+                    }
+                } else {
+                    setEmailStatus("notexist");
+                }
             }
         });
     };
@@ -90,8 +99,10 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                 return (
                     <>
                         <AppAuthHeader
-                            title="Not Registered!"
-                            description="This Email is not registered, Please contact support!"
+                            title={t("login.form:notRegisteredTitle")}
+                            description={t(
+                                "login.form:notRegisteredDescription"
+                            )}
                         />
                     </>
                 );
@@ -100,8 +111,8 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                 return (
                     <>
                         <AppAuthHeader
-                            title="Login"
-                            description="Login description"
+                            title={t("login.form:title")}
+                            description={t("login.form:description")}
                         />
                         <div className="active-account-box">
                             <Col
@@ -165,12 +176,13 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                             to={"/auth/forgot-password"}
                                             className="forgot-password "
                                         >
-                                            Forgot Password
+                                            {t("login.form:forgotPassword")}
                                         </Link>
                                         {container &&
                                             container.configuration &&
                                             (container.configuration as any)
-                                                .isDisclaimerEnable && (
+                                                .isDisclaimerEnable &&
+                                            onboarded && (
                                                 <Form.Group>
                                                     <div className="agreement-box mt-2 p-2">
                                                         <div
@@ -215,7 +227,9 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                                         disabled={!readed}
                                                         className="mt-2"
                                                         type="checkbox"
-                                                        label="I agree with those Terms"
+                                                        label={t(
+                                                            "login.form:disclaimerAgree"
+                                                        )}
                                                         id="checkbox-des"
                                                     />
                                                 </Form.Group>
@@ -224,18 +238,21 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                     <AppButton
                                         block={true}
                                         type={"submit"}
-                                        loadingTxt={"Login In..."}
+                                        loadingTxt={`${t(
+                                            "login.form:login"
+                                        )} ...`}
                                         disabled={
                                             formState.isSubmitting ||
                                             (container &&
                                                 container.configuration &&
                                                 (container.configuration as any)
                                                     .isDisclaimerEnable &&
-                                                !agree)
+                                                !agree &&
+                                                onboarded)
                                         }
                                         isLoading={formState.isSubmitting}
                                     >
-                                        Login
+                                        {t("login.form:login")}
                                     </AppButton>
                                     <Row className={"mt-3"}>
                                         {container &&
@@ -252,7 +269,11 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                                         "text-center my-4 normal-label"
                                                     }
                                                 >
-                                                    <span>Or login with</span>
+                                                    <span>
+                                                        {t(
+                                                            "login.form:orLoginWith"
+                                                        )}
+                                                    </span>
                                                 </Col>
                                             )}
                                         {container &&

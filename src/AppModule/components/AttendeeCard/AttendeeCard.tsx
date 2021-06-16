@@ -1,5 +1,6 @@
 import React, { FC, useState } from "react";
 import { Link } from "@reach/router";
+import { useTranslation } from "react-i18next";
 import { AppIcon } from "../AppIcon";
 import "./assets/scss/list.scss";
 import { useBuildAssetPath } from "../../hooks";
@@ -20,6 +21,8 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
     attendee,
 }): JSX.Element => {
     const [online] = useState(false);
+    const { t } = useTranslation();
+
     const {
         imageName,
         firstName,
@@ -30,6 +33,7 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
         isExposeEmail,
         isAllowCommunication,
         userTags,
+        userType,
     } = attendee as User;
     const profilePicturePath = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo,
@@ -46,6 +50,35 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
               backgroundRepeat: "no-repeat",
               backgroundImage: `url(${placeholder})`,
           };
+
+    const getUserType = () => {
+        switch (userType) {
+            case "exhibitor":
+                return (
+                    <span className="speaker-btn">
+                        <i className="fak fa-speakers" aria-hidden="true"></i>
+                        <span>{t(`common.user.badge:${userType}`)}</span>
+                    </span>
+                );
+            case "speaker":
+                return (
+                    <span className="speaker-btn">
+                        <i className="fak fa-speakers" aria-hidden="true"></i>
+                        <span>{t(`common.user.badge:${userType}`)}</span>
+                    </span>
+                );
+            case "moderator":
+                return (
+                    <span className="speaker-btn">
+                        <i className="fak fa-speakers" aria-hidden="true"></i>
+                        <span>{t(`common.user.badge:${userType}`)}</span>
+                    </span>
+                );
+
+            default:
+                return <></>;
+        }
+    };
 
     return (
         <div className="card p-3">
@@ -65,13 +98,7 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                 >
                     <i style={style}></i>
                 </Link>
-                {attendee.category && (
-                    <a href="#" className="speaker-btn">
-                        <AppIcon name={"Microphone"} />
-                        &nbsp;
-                        {attendee.category}
-                    </a>
-                )}
+                {userType && getUserType()}
             </div>
             <div className="card--title text-center mt-3">
                 <a href="#" className="card--title--name">

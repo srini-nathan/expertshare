@@ -6,6 +6,7 @@ export interface User extends BaseEntity {
     firstName: string;
     id: number;
     lastName: string;
+    userType?: string;
     locale: string;
     jobTitle: string;
     company: string;
