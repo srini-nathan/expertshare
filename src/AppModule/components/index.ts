@@ -79,3 +79,6 @@ export * from "./AppAFrameRoomCard";
 export * from "./AppUserListItem";
 export * from "./AppFormFile";
 export * from "./AppSwisscomFrame";
+export * from "./AppMessageInboxHeader";
+export * from "./AppMessageInboxFilters";
+export * from "./AppMessageInboxThread";

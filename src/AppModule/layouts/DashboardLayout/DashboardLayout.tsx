@@ -7,7 +7,7 @@ import {
     AppDashboardLayoutOptions,
     appDashboardLayoutOptions,
 } from "../../atoms";
-import { AppMessageBox } from "../../containers/AppMessageBox";
+import { AppMessageInbox } from "../../containers/AppMessageInbox";
 
 export const DashboardLayout: FC = ({ children }) => {
     const {
@@ -26,7 +26,7 @@ export const DashboardLayout: FC = ({ children }) => {
                 <div className="col-md-12 col-sm-12 col-xl-12 p-3 p-lg-4 mb-2">
                     {children}
                 </div>
-                {hideMessenger ? null : <AppMessageBox userChatID={() => {}} />}
+                <AppMessageInbox isOpen={!hideMessenger} />
             </div>
         </Container>
     );
