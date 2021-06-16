@@ -20,7 +20,6 @@ import {
     SessionCategoryAddEditPage,
 } from "./pages";
 import { Layout3D } from "../Layout3DModule";
-
 import { AFrameRoomGrid, AFrameRoomAddEdit } from "../AppModule/pages";
 
 import { ModuleRouter } from "../AppModule/models";
