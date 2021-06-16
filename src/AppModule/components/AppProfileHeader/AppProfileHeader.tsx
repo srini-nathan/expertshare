@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { Link } from "@reach/router";
 import { AppCard } from "../AppCard";
 import { AppButton } from "../AppButton";
@@ -24,6 +25,7 @@ export interface AppProfileHeaderProps {
     isExposeEmail?: boolean;
     isProfilePage?: boolean;
     email?: string;
+    userType?: string;
     userTags?: any[];
 }
 
@@ -37,7 +39,10 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
     isProfilePage = true,
     email,
     userTags,
+    userType,
 }): JSX.Element => {
+    const { t } = useTranslation();
+
     const profilePicturePath = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         imageName
@@ -53,7 +58,34 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
           };
+    const getUserType = () => {
+        switch (userType) {
+            case "exhibitor":
+                return (
+                    <span className="speaker-btn">
+                        <i className="fak fa-speakers" aria-hidden="true"></i>
+                        <span>{t(`common.user.badge:${userType}`)}</span>
+                    </span>
+                );
+            case "speaker":
+                return (
+                    <span className="speaker-btn">
+                        <i className="fak fa-speakers" aria-hidden="true"></i>
+                        <span>{t(`common.user.badge:${userType}`)}</span>
+                    </span>
+                );
+            case "moderator":
+                return (
+                    <span className="speaker-btn">
+                        <i className="fak fa-speakers" aria-hidden="true"></i>
+                        <span>{t(`common.user.badge:${userType}`)}</span>
+                    </span>
+                );
 
+            default:
+                return <></>;
+        }
+    };
     return (
         <AppCard className="user-profile--det--container mb-3 pt-4 px-0">
             <Col className="inner-container p-0">
@@ -66,13 +98,7 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                             style={style}
                             className="inner-container--profile-pic--content online"
                         >
-                            <span className="speaker-btn">
-                                <i
-                                    className="fak fa-speakers"
-                                    aria-hidden="true"
-                                ></i>
-                                Speaker
-                            </span>
+                            {userType && getUserType()}
                         </Col>
                     </Col>
                     <Col

@@ -53,21 +53,25 @@
                         display: flex;
                         align-items: center;
                         justify-content: center;
-                        width: 104px;
+                        width: fit-content;
+                        min-width: 104px;
+                        padding: 3px 5px;
                         height: 36px;
-                        padding-top: 3px;
                         font-size: 14px;
                         font-weight: 400;
                         color: var(--btn-fg-clr);
                         background-color: var(--speaker-btn-bg-clr);
                         border-radius: var(--border-radius);
 
-                        i {
-                            margin-bottom: 4px;
+                        span {
+                            margin-top: 4px;
+                        }
 
-                            &::before {
-                                content: '\e000' !important;
-                            }
+                        i {
+                            margin-right: 5px;
+                            margin-bottom: 1px;
+                            font-size: 20px;
+
                         }
                     }
                 }

@@ -86,7 +86,10 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
                                 );
                         }
 
-                        if (key.includes("name")) {
+                        if (
+                            defaultLanguage &&
+                            key === `name_${defaultLanguage}`
+                        ) {
                             return yup
                                 .string()
                                 .required("Name is a required field.");
