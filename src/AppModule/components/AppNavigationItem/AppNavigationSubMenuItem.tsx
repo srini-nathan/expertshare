@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { Link, Match } from "@reach/router";
+import { useTranslation } from "react-i18next";
 import { ListGroupItem } from "react-bootstrap";
 import { AppSubNavigationItemProps } from "./AppSubNavigationItemProps";
 
@@ -8,6 +9,7 @@ export const AppNavigationSubMenuItem: FC<AppSubNavigationItemProps> = ({
     path,
     className = "",
 }) => {
+    const { t } = useTranslation();
     return (
         <Match path={path}>
             {(props) => {
@@ -20,7 +22,7 @@ export const AppNavigationSubMenuItem: FC<AppSubNavigationItemProps> = ({
                         }`}
                     >
                         <Link to={path} className="nav-link">
-                            <span>{label}</span>
+                            <span>{t(label)}</span>
                         </Link>
                     </ListGroupItem>
                 );

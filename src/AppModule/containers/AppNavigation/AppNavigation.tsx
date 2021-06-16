@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { FC, useEffect, useState, useRef } from "react";
 import { isString as _isString } from "lodash";
+import { useTranslation } from "react-i18next";
 import {
     ListGroup,
     ListGroupItem,
@@ -59,6 +60,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const [overflowItems, setOverflowItems] = useState<
         AppNavigationItemProps[] | AppSubNavigationItemProps[]
     >([]);
+    const { t } = useTranslation();
     const profilePicturePath = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         user.imageName
@@ -79,23 +81,23 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
 
     const [subMenuItems] = useState<AppSubNavigationItemProps[]>([
         {
-            label: "Settings",
+            label: "navigation:administration.settings",
             path: "/admin/settings",
             icon: {
                 name: "",
             },
             isVisible: isGranted(role, ROLE_OPERATOR),
         },
+        // {
+        //     label: "navigation:administration.design",
+        //     path: "/admin/design",
+        //     icon: {
+        //         name: "",
+        //     },
+        //     isVisible: isGranted(role, ROLE_OPERATOR),
+        // },
         {
-            label: "Design",
-            path: "/admin/design",
-            icon: {
-                name: "",
-            },
-            isVisible: isGranted(role, ROLE_OPERATOR),
-        },
-        {
-            label: "Users",
+            label: "navigation:administration.users",
             path: "/admin/users",
             icon: {
                 name: "",
@@ -103,7 +105,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             isVisible: isGranted(role, ROLE_ADMIN),
         },
         {
-            label: "User Groups",
+            label: "navigation:administration.userGroups",
             path: "/admin/user-groups",
             icon: {
                 name: "",
@@ -111,7 +113,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             isVisible: isGranted(role, ROLE_ADMIN),
         },
         {
-            label: "User Fields",
+            label: "navigation:administration.userFields",
             path: "/admin/user-fields",
             icon: {
                 name: "",
@@ -119,7 +121,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             isVisible: isGranted(role, ROLE_OPERATOR),
         },
         {
-            label: "Email Templates",
+            label: "navigation:administration.emailTemplates",
             path: "/admin/email-templates",
             icon: {
                 name: "",
@@ -127,7 +129,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             isVisible: isGranted(role, ROLE_OPERATOR),
         },
         {
-            label: "Languages",
+            label: "navigation:administration.languages",
             path: "/admin/languages",
             icon: {
                 name: "",
@@ -135,7 +137,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             isVisible: isGranted(role, ROLE_OPERATOR),
         },
         {
-            label: "Translations",
+            label: "navigation:administration.tranlsations",
             path: "/admin/translations",
             icon: {
                 name: "",
@@ -143,7 +145,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             isVisible: isGranted(role, ROLE_OPERATOR),
         },
         {
-            label: "Clients",
+            label: "navigation:administration.clients",
             path: "/admin/clients",
             icon: {
                 name: "",
@@ -151,7 +153,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             isVisible: isGranted(role, ROLE_SUPER_ADMIN),
         },
         {
-            label: "Layout 3D",
+            label: "navigation:administration.layout3D",
             path: "/admin/layout3d",
             icon: {
                 name: "",
@@ -159,7 +161,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             isVisible: isGranted(role, ROLE_ADMIN),
         },
         {
-            label: "Containers",
+            label: "navigation:administration.containers",
             path: "/admin/containers",
             icon: {
                 name: "",
@@ -169,7 +171,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 isGranted(role, ROLE_ADMIN),
         },
         {
-            label: "Session Category",
+            label: "navigation:administration.sessionCategory",
             path: "/admin/session-categories",
             icon: {
                 name: "",
@@ -177,7 +179,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             isVisible: isGranted(role, ROLE_OPERATOR),
         },
         {
-            label: "Rooms",
+            label: "navigation:administration.rooms",
             path: "/admin/rooms",
             icon: {
                 name: "",
@@ -338,7 +340,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             return (
                 <>
                     <AppNavigationItem
-                        label={"Administration"}
+                        label={"navigation:administration"}
                         path={""}
                         icon={{ name: "Settings" }}
                         className="active main-menu "
@@ -446,8 +448,12 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                     </div>
                                                     <span>
                                                         {showSubMenuItems
-                                                            ? "Back to App"
-                                                            : "Administration"}
+                                                            ? t(
+                                                                  "navigation:backToApp"
+                                                              )
+                                                            : t(
+                                                                  "navigation:administration"
+                                                              )}
                                                     </span>
                                                 </div>
                                             </ListGroupItem>
@@ -510,12 +516,16 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                             iconClassName="profile-picture"
                                             subDropDownItems={[
                                                 {
-                                                    label: "Profile",
+                                                    label: t(
+                                                        "navigation:profile"
+                                                    ),
                                                     path: "/my-profile",
                                                     icon: "User",
                                                 },
                                                 {
-                                                    label: "Log out",
+                                                    label: t(
+                                                        "navigation:logOut"
+                                                    ),
                                                     action: handleLogoutEvent,
                                                     icon: "SignOut",
                                                 },

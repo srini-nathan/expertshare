@@ -1,5 +1,6 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps, useParams } from "@reach/router";
+import { useTranslation } from "react-i18next";
 import { Row, Col } from "react-bootstrap";
 import {
     AppLoader,
@@ -17,6 +18,7 @@ import { useAuthState } from "../../hooks";
 import "./assets/scss/style.scss";
 
 export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
+    const { t } = useTranslation();
     const { id, confereneceId } = useParams();
     const [loading, isLoading] = useState<boolean>(true);
     const { containerResourceId, containerId } = useAuthState();
@@ -59,7 +61,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
                                     md={12}
                                     sm={12}
                                     selectedUsers={data.speakers as User[]}
-                                    title="Speakers"
+                                    title={t("sessionDetails:label.speakers")}
                                     icon="speakers"
                                 />
                             </Col>
@@ -74,7 +76,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
                                     md={12}
                                     sm={12}
                                     selectedUsers={data.moderators as User[]}
-                                    title="Moderators"
+                                    title={t("sessionDetails:label.moderators")}
                                     icon="moderators"
                                 />
                             </Col>
@@ -85,7 +87,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
                 </Col>
                 <Col md={12} sm={12} lg={4} className="pr-0">
                     <AppQuestionsAndAnswers
-                        name="Questions & Answers"
+                        name={t("sessionDetails:section.questionAndAnswers")}
                         conferenceNumber={confereneceId}
                         session={id}
                         container={containerId}
