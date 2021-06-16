@@ -25,7 +25,7 @@ export const appGridColDef = ({
     },
 
     {
-        headerName: "Name",
+        headerName: "admin.users.list:column.Name",
         field: "firstName",
         cellRenderer: "appNameTemplateRenderer",
         maxWidth: 220,
@@ -33,26 +33,26 @@ export const appGridColDef = ({
     },
 
     {
-        headerName: "Company",
+        headerName: "admin.users.list:column.companyName",
         field: "company",
         sortable: true,
         minWidth: 40,
     },
     {
-        headerName: "Job Title",
+        headerName: "admin.users.list:column.jobTitle",
         field: "jobTitle",
         sortable: true,
         minWidth: 40,
     },
 
     {
-        headerName: "Email",
+        headerName: "admin.users.list:column.email",
         field: "email",
         sortable: true,
         minWidth: 40,
     },
     {
-        headerName: "Role",
+        headerName: "admin.users.list:column.role",
         field: "role",
         cellRenderer: "appSelect",
         flex: 1,
@@ -64,7 +64,7 @@ export const appGridColDef = ({
     },
 
     {
-        headerName: "Is Blocked",
+        headerName: "admin.users.list:column.isBlocked",
         field: "isBlocked",
         cellRenderer: "appSwitch",
         flex: 1,
@@ -72,7 +72,7 @@ export const appGridColDef = ({
         sortable: true,
     },
     {
-        headerName: "Actions",
+        headerName: "admin.users.list:column.actions",
         field: "id",
         sortable: false,
         maxWidth: 160,

@@ -348,7 +348,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                                 </Form.Group>
                                 <Col md={12} sm={12} lg={6} xl={6}>
                                     <AppFormSelectCreatable
-                                        name="userTags"
+                                        name="conferenceTags"
                                         label={t("event.form:label.tags")}
                                         md={12}
                                         sm={12}

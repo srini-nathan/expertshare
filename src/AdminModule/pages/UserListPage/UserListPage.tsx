@@ -3,6 +3,7 @@ import { RouteComponentProps } from "@reach/router";
 import { Col, Row, Modal } from "react-bootstrap";
 import { isString as _isString } from "lodash";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import {
     GridApi,
     IServerSideDatasource,
@@ -96,7 +97,7 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const FilterRoute = filterRoles(role);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [updateLink] = useDownloadFile();
-
+    const { t } = useTranslation();
     const { control, setValue } = useForm<{ [key: string]: string }>();
     function getDataSource(): IServerSideDatasource {
         return {
@@ -255,13 +256,15 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
                     }}
                     closeButton
                 >
-                    <Modal.Title>Invite Users</Modal.Title>
+                    <Modal.Title>
+                        {t("admin.users.list:inviteUser")}
+                    </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className="text-left px-2">
-                        <h5>Add user emails and seperate with coma</h5>
+                        <h5>{t("admin.users.list:inviteUserTitle")}</h5>
                         <span>
-                            example: user1@example.com,user2@example.com
+                            {t("admin.users.list:inviteUserDescription")}
                         </span>
                         <AppFormTextArea
                             md={12}
@@ -288,10 +291,10 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
                             setInviteList("");
                         }}
                     >
-                        Cancel
+                        {t("common.button:cancel")}
                     </AppButton>
                     <AppButton variant="primary" onClick={handleInvite}>
-                        Invite
+                        {t("common.button:invite")}
                     </AppButton>
                 </Modal.Footer>
             </Modal>
@@ -304,7 +307,7 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
                 <div className="d-flex pt-2 mb-5">
                     <AppButton className="mr-2 p-3" variant="secondary">
                         <AppIcon className="mr-2" name="Filter" />
-                        Filter
+                        {t("common.button:filter")}
                     </AppButton>
                     <AppListPageToolbar
                         createLink={"/admin/users/new"}
@@ -320,7 +323,7 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
                         variant="secondary"
                     >
                         <AppIcon className="mr-2" name="Email" />
-                        Invite
+                        {t("common.button:invite")}
                     </AppButton>
                     <AppButton
                         onClick={() => {
@@ -330,7 +333,7 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
                         variant="secondary"
                     >
                         <AppIcon className="mr-2" name="Upload" />
-                        Export
+                        {t("common.button:export")}
                     </AppButton>
                     <AppButton
                         onClick={() => {
@@ -340,7 +343,7 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
                         variant="secondary"
                     >
                         <AppIcon className="mr-2" name="Download" />
-                        Import
+                        {t("common.button:import")}
                     </AppButton>
                 </div>
             </AppPageHeader>

@@ -5,12 +5,12 @@ export const appGridColDef = ({
     onPressDelete,
 }: AppCellActionParams): ColDef[] => [
     {
-        headerName: "Name",
+        headerName: "admin.userGroup.list:column.name",
         field: "name",
         filter: "text",
     },
     {
-        headerName: "Actions",
+        headerName: "admin.userGroup.list:column.actions",
         field: "id",
         sortable: false,
         maxWidth: 120,

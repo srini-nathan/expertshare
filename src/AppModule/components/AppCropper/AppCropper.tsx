@@ -52,8 +52,8 @@ export const AppCropper: FC<AppCropperProps> = ({
         }
     };
     const getRatio = (): number => {
-        const ratios = ratio?.split("/");
-        if (ratios && ratios.length > 0)
+        const ratios = ratio?.split(":");
+        if (ratios && ratios.length > 1)
             return parseInt(ratios[0], 10) / parseInt(ratios[1], 10);
         return 16 / 9;
     };

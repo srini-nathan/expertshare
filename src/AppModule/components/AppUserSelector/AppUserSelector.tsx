@@ -127,8 +127,10 @@ export const AppUserSelector: FC<AppUserSelectorProps> = ({
                                 {users
                                     .filter(
                                         (e) =>
-                                            e.firstName.includes(sreach) ||
-                                            e.lastName.includes(sreach)
+                                            (e.firstName &&
+                                                e.firstName.includes(sreach)) ||
+                                            (e.lastName &&
+                                                e.lastName.includes(sreach))
                                     )
                                     .map((user: User) => {
                                         return (

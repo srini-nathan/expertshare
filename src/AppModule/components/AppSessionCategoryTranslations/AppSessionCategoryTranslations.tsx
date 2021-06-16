@@ -1,11 +1,11 @@
 import React, { FC } from "react";
 import { Row, Col, Form } from "react-bootstrap";
-import "./assets/scss/style.scss";
+import { useTranslation } from "react-i18next";
 import { useFormContext } from "react-hook-form";
 import { Language } from "../../../AdminModule/models";
 import { AppButton } from "../AppButton";
 import { AppFormLabel } from "../AppFormLabel";
-// import { validation } from "../../utils";
+import "./assets/scss/style.scss";
 
 export interface SessionCategoryTranslationsType {
     locale: string;
@@ -27,6 +27,7 @@ export const AppSessionCategoryTranslations: FC<AppSessionCategoryTranslationsPr
 }) => {
     const { formState, register } = useFormContext();
     const [active, setActive] = React.useState<string>(defaultLanguage);
+    const { t } = useTranslation();
     const handleValueChange = (value: string, name: string) => {
         const newTranslatiosn = translations.map((e) => {
             if (e.locale === active)
@@ -77,7 +78,12 @@ export const AppSessionCategoryTranslations: FC<AppSessionCategoryTranslationsPr
                     })}
             </Col>
             <Col className="mb-0" md={12}>
-                <AppFormLabel label={`Name (${active})`} required />
+                <AppFormLabel
+                    label={`${t(
+                        "admin.sessionCategory.form:label.name"
+                    )} (${active})`}
+                    required
+                />
                 <Form.Control
                     value={getValue("name")}
                     {...register(`name_${active}`)}
