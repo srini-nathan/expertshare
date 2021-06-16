@@ -373,13 +373,15 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                     }
                 } else if (response !== null) {
                     setUserGroups(
-                        response.items.map((user) => {
-                            return {
-                                label: user.name,
-                                value: `${user.id}`,
-                                id: `${user.id}`,
-                            };
-                        })
+                        response.items
+                            .filter((e) => !e.isGenerated)
+                            .map((user) => {
+                                return {
+                                    label: user.name,
+                                    value: `${user.id}`,
+                                    id: `${user.id}`,
+                                };
+                            })
                     );
                 }
             }
