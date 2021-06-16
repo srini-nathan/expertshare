@@ -75,6 +75,7 @@ export * from "./AttendeeCard";
 export * from "./AppFeedAdder";
 export * from "./AppFeedShower";
 export * from "./AppPictureInPicture";
+export * from "./AppAFrameRoomCard";
 export * from "./AppUserListItem";
 export * from "./AppFormFile";
 export * from "./AppSwisscomFrame";

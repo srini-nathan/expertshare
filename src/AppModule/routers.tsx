@@ -5,15 +5,15 @@ import {
     UserProfilePage,
     MyProfilePage,
     ContainerOverview,
-    // SessionDetailsPage,
     ConferenceGrid,
     ConferenceAddEdit,
     SessionAddEdit,
     EventAgenda,
     SessionDetailsPage,
     AttendeeOverview,
-    NewsFeedPage,
     OnBoardingPage,
+    AFrameRoomGrid,
+    AFrameRoomAddEdit,
 } from "./pages";
 import { ModuleRouter } from "./models";
 
@@ -47,13 +47,20 @@ export const routers: ModuleRouter[] = [
                     <ConferenceGrid path={"conferences/:view"} />
                     <ConferenceAddEdit path={"conference/new"} />
                     <ConferenceAddEdit path={"conference/:id"} />
+                    <SessionAddEdit path={"sessions/:conferenceId/new"} />
+                    <SessionAddEdit path={"sessions/:conferenceId/:id"} />
+                    <EventAgenda path={"conferences/:id/agenda"} />
+                    <SessionDetailsPage path={"sessions/:id"} />
                     <AttendeeOverview path={"attendees"} />
                     <AttendeeOverview path={"attendees/:view"} />
-                    <NewsFeedPage path={"newsfeed"} />
                     <AttendeeOverview path={"attendee"} />
                     <AttendeeOverview path={"attendee/:view"} />
                     <UserProfilePage path={"attendee/:id/show"} />
                     <OnBoardingPage path={"onboarding"} />
+                    <AFrameRoomGrid path={"aframerooms"} />
+                    <AFrameRoomGrid path={"aframerooms/:view"} />
+                    <AFrameRoomAddEdit path={"aframeroom/new"} />
+                    <AFrameRoomAddEdit path={"aframeroom/:id"} />
                 </Router>
             );
         },

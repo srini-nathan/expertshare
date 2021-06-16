@@ -311,23 +311,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                                 translations={translations}
                                 onChange={setTranslations}
                             />
-                            <AppFormSwitch
-                                sm={12}
-                                md={12}
-                                lg={12}
-                                xl={12}
-                                className="p-0"
-                                name={"isVisible"}
-                                label={t("event.form:label.isVisible")}
-                                {...validation(
-                                    "isVisible",
-                                    formState,
-                                    isEditMode
-                                )}
-                                errorMessage={errors.isVisible?.message}
-                                defaultChecked={data.isVisible}
-                                control={control}
-                            />
+
                             <Form.Row>
                                 {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                                 {/* @ts-ignore */}
@@ -362,19 +346,39 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                                         }}
                                     />
                                 </Form.Group>
-                                <AppFormSelectCreatable
-                                    name="userTags"
-                                    label={t("event.form:label.tags")}
-                                    md={12}
-                                    sm={12}
-                                    lg={12}
-                                    xl={12}
-                                    id="where-filter"
-                                    onChangeHandler={setSelectedConferenceTags}
-                                    value={selectedConferenceTags}
-                                    options={conferenceTags}
-                                    control={control}
-                                />
+                                <Col md={12} sm={12} lg={6} xl={6}>
+                                    <AppFormSelectCreatable
+                                        name="userTags"
+                                        label={t("event.form:label.tags")}
+                                        md={12}
+                                        sm={12}
+                                        lg={12}
+                                        xl={12}
+                                        id="where-filter"
+                                        onChangeHandler={
+                                            setSelectedConferenceTags
+                                        }
+                                        value={selectedConferenceTags}
+                                        options={conferenceTags}
+                                        control={control}
+                                    />
+                                    <AppFormSwitch
+                                        sm={12}
+                                        md={12}
+                                        lg={12}
+                                        xl={12}
+                                        name={"isVisible"}
+                                        label={t("event.form:label.isVisible")}
+                                        {...validation(
+                                            "isVisible",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={errors.isVisible?.message}
+                                        defaultChecked={data.isVisible}
+                                        control={control}
+                                    />
+                                </Col>
                             </Form.Row>
                             <AppFormActions
                                 isEditMode={isEditMode}

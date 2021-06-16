@@ -18,3 +18,4 @@ export * from "./SessionApi";
 export * from "./SessionTagApi";
 export * from "./SessionCategoryApi";
 export * from "./SessionDocumentApi";
+export * from "./AFrameRoomApi";
