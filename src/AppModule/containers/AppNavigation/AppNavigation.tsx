@@ -56,6 +56,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const { dispatch, state } = React.useContext(AuthContext);
     const { role, containerId } = useAuthState();
     const { user } = state;
+
     const { locale, setLocale, containerLocale } = useUserLocale();
     const [overflowItems, setOverflowItems] = useState<
         AppNavigationItemProps[] | AppSubNavigationItemProps[]

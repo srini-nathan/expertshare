@@ -958,7 +958,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     errorMessage={
                                         errors.externalLinkUrl?.message
                                     }
-                                    defaultValue={data.externalLinkLabel}
+                                    defaultValue={data.externalLinkUrl}
                                     control={control}
                                 />
                             </Row>
