@@ -2,7 +2,7 @@
 source ./bin/dotenv
 .env --file .env.local get REACT_APP_API_HOST
 ES_API_HOST=$REPLY
-ES_CONTAINERS_ID=(1 2 3 4)
+ES_CONTAINERS_ID=(1 2 3 4 5 6 7 8)
 ES_LOCALES=(en de fr it)
 GENERATE_TRANSLATIONS="${ES_API_HOST}/generate/translations"
 TRANSLATION_DUMP_PATH="./src/translations"
