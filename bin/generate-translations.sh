@@ -14,13 +14,13 @@ echo -n "" > "${TRANSLATION_DEFAULT_EXPORT_FILE}"
 
 for containerId in "${ES_CONTAINERS_ID[@]}"
 do
+  mkdir -p "${TRANSLATION_DUMP_PATH}/${containerId}"
+  mkdir -p ${TRANSLATION_BUILD_DUMP_PATH}/${containerId}
   touch "${TRANSLATION_DUMP_PATH}/${containerId}/index.ts"
   echo -n "" > "${TRANSLATION_DUMP_PATH}/${containerId}/index.ts"
   for locale in "${ES_LOCALES[@]}"
   do
-    mkdir -p "${TRANSLATION_DUMP_PATH}/${containerId}"
     wget "${GENERATE_TRANSLATIONS}/${containerId}/${locale}" -O "${TRANSLATION_DUMP_PATH}/${containerId}/${locale}.json"
-    mkdir -p ${TRANSLATION_BUILD_DUMP_PATH}/${containerId}
     cp "${TRANSLATION_DUMP_PATH}/${containerId}/${locale}.json" "${TRANSLATION_BUILD_DUMP_PATH}/${containerId}/"
     echo "import ${locale} from \"./${locale}.json\";" >> "${TRANSLATION_DUMP_PATH}/${containerId}/index.ts"
   done
