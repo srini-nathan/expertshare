@@ -10,14 +10,8 @@ import { ChatThread } from "../../models/entities/ChatThread";
 
 import "./assets/scss/style.scss";
 
-export interface AppMessageInboxProps {
-    isOpen?: boolean;
-}
-
-export const AppMessageInbox: FC<AppMessageInboxProps> = ({
-    isOpen = false,
-}) => {
-    const [closed, setClosed] = useState(!isOpen);
+export const AppMessageInbox: FC = () => {
+    const [closed, setClosed] = useState(false);
     const [collapsed, setCollapsed] = useState(false);
     const { getThreads } = useInitChatBox();
     const [loading, setLoading] = useState(true);
@@ -44,40 +38,36 @@ export const AppMessageInbox: FC<AppMessageInboxProps> = ({
     }
 
     return (
-        <div className="app-message-inbox">
-            <div className="app-message-inbox--container">
-                <div
-                    className={`app-message-inbox--index ${
-                        collapsed ? "collapsed" : ""
-                    }`}
-                >
-                    <div className="inner-container">
-                        <AppMessageInboxHeader
-                            onCollapseAction={() => {
-                                setCollapsed(!collapsed);
-                            }}
-                            onCloseAction={() => {
-                                setClosed(true);
-                            }}
-                            newMsgCounter={10}
-                            user={user}
-                        />
-                        <AppMessageInboxFilters />
-                        <div className="inner-container--message mt-2">
-                            <div className="row m-0 p-0">
-                                {loading ? (
-                                    <AppLoader />
-                                ) : (
-                                    threads.map((t: ChatThread) => (
-                                        <AppMessageInboxThread
-                                            key={t.id}
-                                            thread={t}
-                                            loginUser={user}
-                                        />
-                                    ))
-                                )}
-                            </div>
-                        </div>
+        <div
+            className={`app-message-inbox--index ${
+                collapsed ? "collapsed" : ""
+            }`}
+        >
+            <div className="inner-container">
+                <AppMessageInboxHeader
+                    onCollapseAction={() => {
+                        setCollapsed(!collapsed);
+                    }}
+                    onCloseAction={() => {
+                        setClosed(true);
+                    }}
+                    newMsgCounter={10}
+                    user={user}
+                />
+                <AppMessageInboxFilters />
+                <div className="inner-container--message mt-2">
+                    <div className="row m-0 p-0">
+                        {loading ? (
+                            <AppLoader />
+                        ) : (
+                            threads.map((t: ChatThread) => (
+                                <AppMessageInboxThread
+                                    key={t.id}
+                                    thread={t}
+                                    loginUser={user}
+                                />
+                            ))
+                        )}
                     </div>
                 </div>
             </div>
