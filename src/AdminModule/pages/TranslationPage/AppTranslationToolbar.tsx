@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useRef } from "react";
 import { Row, Col, Form, InputGroup } from "react-bootstrap";
 import { ActionMeta, ValueType } from "react-select";
+import { useTranslation } from "react-i18next";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 import {
@@ -53,7 +54,7 @@ export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
     });
     const search$ = useRef(new Subject<string>());
     const destroy$ = new Subject<string>();
-
+    const { t } = useTranslation();
     useEffect(() => {
         search$.current
             .pipe(
@@ -94,15 +95,21 @@ export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
                     onChange={onChangeSelectFilter}
                     options={[
                         {
-                            label: "Translation Group",
+                            label: t(
+                                "admin.translation.filter:searchBy.translationGroup"
+                            ).toString(),
                             value: "translationGroup.tgKey",
                         },
                         {
-                            label: "Translation Key",
+                            label: t(
+                                "admin.translation.filter:searchBy.translationKey"
+                            ).toString(),
                             value: "tKey",
                         },
                         {
-                            label: "Translation Value",
+                            label: t(
+                                "admin.translation.filter:searchBy.translationValue"
+                            ).toString(),
                             value: "translationValues.val",
                         },
                     ]}

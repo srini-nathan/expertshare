@@ -1,6 +1,7 @@
 import React, { FC, Fragment, useState, useRef } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { isString as _isString } from "lodash";
 import {
     GridApi,
@@ -27,7 +28,7 @@ export const EmailTemplateListPage: FC<RouteComponentProps> = (): JSX.Element =>
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const { containerId } = useAuthState();
-
+    const { t } = useTranslation();
     function getDataSource(): IServerSideDatasource {
         return {
             getRows(params: IServerSideGetRowsParams) {
@@ -92,7 +93,7 @@ export const EmailTemplateListPage: FC<RouteComponentProps> = (): JSX.Element =>
     return (
         <Fragment>
             <AppPageHeader
-                title={"Email Templates"}
+                title={t("admin.emailTemplate.list:header.title")}
                 createLink={"/admin/email-templates/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}

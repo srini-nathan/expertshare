@@ -1,5 +1,6 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
+import { useTranslation } from "react-i18next";
 import { Row, Col, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -39,6 +40,7 @@ export const UserGroupAddEditPage: FC<RouteComponentProps> = ({
         new UserGroup(clientResourceId)
     );
     const [loading, setLoading] = useState<boolean>(isEditMode);
+    const { t } = useTranslation();
 
     const {
         control,
@@ -97,9 +99,16 @@ export const UserGroupAddEditPage: FC<RouteComponentProps> = ({
 
     return (
         <Fragment>
-            <AppBreadcrumb linkText={"User Group"} linkUrl={".."} />
+            <AppBreadcrumb
+                linkText={t("common.breadcrumb:userGroups")}
+                linkUrl={".."}
+            />
             <AppPageHeader
-                title={isEditMode ? "Edit User Group" : "Add User Group"}
+                title={
+                    isEditMode
+                        ? t("admin.userGroup.form:header.titleEdit")
+                        : t("admin.userGroup.form:header.title")
+                }
             />
             <Row>
                 <Col>
@@ -108,7 +117,7 @@ export const UserGroupAddEditPage: FC<RouteComponentProps> = ({
                             <Form.Row>
                                 <AppFormInput
                                     name={"name"}
-                                    label={"Name"}
+                                    label={t("admin.userGroup.form:label.name")}
                                     maxCount={name.max}
                                     {...validation(
                                         "name",

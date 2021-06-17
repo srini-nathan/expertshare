@@ -1,11 +1,15 @@
 import React, { ReactElement } from "react";
 import { ICellRendererParams } from "ag-grid-community";
 import { useTranslation } from "react-i18next";
-import { AppGridAction, AppGridActionProps, AppRadio } from "../../components";
-import { AFrameRoom } from "../../../AdminModule/models";
-import { AFrameRoomApi } from "../../../AdminModule/apis";
-import { errorToast, successToast } from "../../utils";
-import { AppCellActionParams } from "../../models";
+import {
+    AppGridAction,
+    AppGridActionProps,
+    AppRadio,
+} from "../../../AppModule/components";
+import { AFrameRoom } from "../../models";
+import { AFrameRoomApi } from "../../apis";
+import { errorToast, successToast } from "../../../AppModule/utils";
+import { AppCellActionParams } from "../../../AppModule/models";
 
 export interface AppCellActionWithRenderParams
     extends AppCellActionParams,

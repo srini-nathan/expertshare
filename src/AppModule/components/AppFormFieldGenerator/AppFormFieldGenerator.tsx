@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
 import { Control } from "react-hook-form";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { find as _find } from "lodash";
 import { AppFormInput } from "../AppFormInput";
 import { AppFormTextArea } from "../AppFormTextArea";
@@ -38,6 +39,9 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
     xl = 6,
 }) => {
     const { items } = properties;
+
+    const { t } = useTranslation();
+
     const renderText = (type: string) => {
         return (
             <AppFormInput
@@ -45,12 +49,12 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                 sm={sm}
                 lg={lg}
                 xl={xl}
-                label={properties.labelKey}
+                label={t(properties.labelKey)}
                 type={type}
                 required={properties.isRequired}
                 name={`userField./api/user_fields/${properties.id}`}
                 defaultValue={defaultValue ? defaultValue.value : ""}
-                {...properties.attr}
+                // {...properties.attr}
                 control={control}
                 {...validation}
                 errorMessage={errorMessage}
@@ -65,11 +69,11 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                 lg={lg}
                 xl={xl}
                 {...validation}
-                label={properties.labelKey}
+                label={t(properties.labelKey)}
                 required={properties.isRequired}
                 name={`userField./api/user_fields/${properties.id}`}
                 defaultValue={defaultValue ? defaultValue.value : ""}
-                {...properties.attr}
+                // {...properties.attr}
                 control={control}
             />
         );
@@ -78,7 +82,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
         return (
             <Col className="react-datepicker-container">
                 <AppFormLabel
-                    label={properties.labelKey}
+                    label={t(properties.labelKey)}
                     required={properties.isRequired}
                 />
                 <AppDatePicker
@@ -87,13 +91,13 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                     lg={lg}
                     xl={xl}
                     {...validation}
-                    label={properties.labelKey}
+                    label={t(properties.labelKey)}
                     required={properties.isRequired}
                     name={`userField./api/user_fields/${properties.id}`}
                     defaultValue={
                         defaultValue ? new Date(defaultValue.value) : null
                     }
-                    {...properties.attr}
+                    // {...properties.attr}
                     control={control}
                 />
             </Col>
@@ -103,12 +107,12 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
         return (
             <Col className="p-0" md={"6"} sm={"12"} lg={"6"} xl={"6"}>
                 <AppFormSwitch
-                    label={properties.labelKey}
+                    label={t(properties.labelKey)}
                     md={md}
                     sm={sm}
                     lg={lg}
                     xl={xl}
-                    {...properties.attr}
+                    // {...properties.attr}
                     name={`userField./api/user_fields/${properties.id}`}
                     defaultChecked={defaultValue ? defaultValue.value : false}
                     control={control}
@@ -132,7 +136,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
         return (
             <Col md={6} sm={12}>
                 <AppFormLabel
-                    label={properties.labelKey}
+                    label={t(properties.labelKey)}
                     required={properties.isRequired}
                 />
                 <Row className="m-0">
@@ -142,7 +146,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                         name={`userField./api/user_fields/${properties.id}`}
                         options={options}
                         {...validation}
-                        {...properties.attr}
+                        // {...properties.attr}
                         control={control}
                     />
                 </Row>
@@ -166,7 +170,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
         return (
             <Col md={6} sm={12}>
                 <AppFormLabel
-                    label={properties.labelKey}
+                    label={t(properties.labelKey)}
                     required={properties.isRequired}
                 />
                 <Row className="m-0">
@@ -179,7 +183,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                                 {...validation}
                                 value={e.value}
                                 label={e.label}
-                                {...properties.attr}
+                                // {...properties.attr}
                                 defaultChecked={e.defaultCheck}
                                 control={control}
                             />
@@ -235,13 +239,13 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                 sm={sm}
                 lg={lg}
                 xl={xl}
-                label={properties.labelKey}
+                label={t(properties.labelKey)}
                 required={properties.isRequired}
                 name={`userField./api/user_fields/${properties.id}`}
                 id={properties.labelKey}
                 {...prps}
                 {...validation}
-                {...properties.attr}
+                // {...properties.attr}
                 control={control}
                 transform={{
                     output: (template: PrimitiveObject) => template?.value,

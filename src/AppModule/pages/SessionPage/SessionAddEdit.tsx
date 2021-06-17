@@ -3,6 +3,7 @@ import { RouteComponentProps, useParams } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
 import { find as _find, isString as _isString } from "lodash";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
     AppPageHeader,
@@ -126,7 +127,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
     const [userGroups, setUserGroups] = React.useState<SimpleObject<string>[]>(
         data.sessionDocs
     );
-
+    const { t } = useTranslation();
     const [selectedUserGroups, setSelectedUserGroups] = React.useState<
         SimpleObject<string>[]
     >([]);
@@ -245,7 +246,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                 } else {
                     navigator(`/event/${conferenceId}/agenda`).then(() => {
                         successToast(
-                            isEditMode ? "Event updated" : "Event created"
+                            isEditMode
+                                ? t("session.form:update.infoMessage")
+                                : t("session.form:add.infoMessage")
                         );
                     });
                 }
@@ -271,7 +274,6 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                             formData.imageName = response.fileName;
                         }
 
-                        successToast("Image uploaded");
                         return submitForm(formData);
                     }
                 );
@@ -371,13 +373,15 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                     }
                 } else if (response !== null) {
                     setUserGroups(
-                        response.items.map((user) => {
-                            return {
-                                label: user.name,
-                                value: `${user.id}`,
-                                id: `${user.id}`,
-                            };
-                        })
+                        response.items
+                            .filter((e) => !e.isGenerated)
+                            .map((user) => {
+                                return {
+                                    label: user.name,
+                                    value: `${user.id}`,
+                                    id: `${user.id}`,
+                                };
+                            })
                     );
                 }
             }
@@ -472,11 +476,15 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
     return (
         <Fragment>
             <AppBreadcrumb
-                linkText={"Events"}
+                linkText={t("common.breadcrumb:event")}
                 linkUrl={`/event/${conferenceId}/agenda`}
             />
             <AppPageHeader
-                title={isEditMode ? "Edit Session" : "Add Session"}
+                title={
+                    isEditMode
+                        ? t("session.form:header.edit")
+                        : t("session.form:header.add")
+                }
             />
             <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                 <Row>
@@ -494,7 +502,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                     <Col md={12} lg={6} xl={6}>
                         <AppCard
                             className={" mt-2 p-4 card-height"}
-                            title="Conver Image"
+                            title={t("session.form:label.photo").toString()}
                         >
                             <AppUploader
                                 withCropper
@@ -513,7 +521,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                     </Col>
 
                     <Col md={12} lg={6} xl={6}>
-                        <AppCard title="Session Details">
+                        <AppCard title={t("session.form:label.sessionDetails")}>
                             <Row>
                                 <Col
                                     md={12}
@@ -522,7 +530,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                 >
                                     <AppFormLabel
                                         required={false}
-                                        label="Start Date"
+                                        label={t(
+                                            "session.form:label.startDate"
+                                        )}
                                     />
                                     <AppDatePicker
                                         showTimeInput
@@ -547,7 +557,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     className="react-datepicker-container mb-2"
                                 >
                                     <AppFormLabel
-                                        label="End Date"
+                                        label={t("session.form:label.endDate")}
                                         required={false}
                                     />
                                     <AppDatePicker
@@ -570,7 +580,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                 <AppFormSelect
                                     id={"category"}
                                     name={"sessionCategory"}
-                                    label={"Choose Category"}
+                                    label={t(
+                                        "session.form:label.chooseCategory"
+                                    )}
                                     md={12}
                                     lg={12}
                                     xl={12}
@@ -590,7 +602,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                                 .id
                                         )
                                     }
-                                    placeholder={"Category"}
+                                    placeholder={t(
+                                        "session.form:label.chooseCategory"
+                                    )}
                                     options={SessionCategories}
                                     control={control}
                                     transform={{
@@ -633,7 +647,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                             <AppTagSelect
                                 options={userGroups}
                                 selectedItems={selectedUserGroups}
-                                label="User Groups"
+                                label={t("session.form:label.userGroups")}
                                 required
                                 onChange={(item) => {
                                     let index = -1;
@@ -668,7 +682,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                         <AppCard className={" mt-2 p-4 card-height2"}>
                             <AppFormSelectCreatable
                                 name="SessionTags"
-                                label="Session Tags"
+                                label={t("session.form:label.sessionTags")}
                                 md={12}
                                 sm={12}
                                 lg={12}
@@ -690,7 +704,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     lg={3}
                                     xl={3}
                                     name={"isVisible"}
-                                    label={"Visible"}
+                                    label={t("session.form:label.isVisible")}
                                     {...validation(
                                         "isVisible",
                                         formState,
@@ -706,7 +720,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     lg={3}
                                     xl={3}
                                     name={"isCommentEnable"}
-                                    label={"Enable Comments / Questions"}
+                                    label={t(
+                                        "session.form:label.isCommentEnable"
+                                    )}
                                     {...validation(
                                         "isCommentEnable",
                                         formState,
@@ -725,7 +741,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     lg={3}
                                     xl={3}
                                     name={"isCommentModerated"}
-                                    label={"Moderated Comments"}
+                                    label={t(
+                                        "session.form:label.isModeratedComment"
+                                    )}
                                     {...validation(
                                         "isCommentModerated",
                                         formState,
@@ -743,7 +761,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     lg={3}
                                     xl={3}
                                     name={"isSharingEnable"}
-                                    label={"Enable Sharing"}
+                                    label={t("session.form:label.isSharing")}
                                     {...validation(
                                         "isSharingEnable",
                                         formState,
@@ -761,7 +779,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     lg={3}
                                     xl={3}
                                     name={"isLikeEnable"}
-                                    label={"Enable Likes"}
+                                    label={t("session.form:label.isLikeEnable")}
                                     {...validation(
                                         "isLikeEnable",
                                         formState,
@@ -777,7 +795,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     lg={3}
                                     xl={3}
                                     name={"isJoinRequired"}
-                                    label={"Moderated Join"}
+                                    label={t(
+                                        "session.form:label.isModeratedJoin"
+                                    )}
                                     {...validation(
                                         "isJoinRequired",
                                         formState,
@@ -793,7 +813,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     lg={3}
                                     xl={3}
                                     name={"isSessionPublic"}
-                                    label={"Public Session"}
+                                    label={t(
+                                        "session.form:label.isPublicSession"
+                                    )}
                                     {...validation(
                                         "isSessionPublic",
                                         formState,
@@ -827,7 +849,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                             setSelectedSpeakers
                                         }
                                         selectedUsers={selectedSpeakers}
-                                        title="Speakers"
+                                        title={t(
+                                            "session.form:label.speakers"
+                                        ).toString()}
                                         icon="speakers"
                                         users={speakers}
                                     />
@@ -847,7 +871,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                             setSelectedModerators
                                         }
                                         selectedUsers={selectedModerators}
-                                        title="Moderators"
+                                        title={t(
+                                            "session.form:label.moderators"
+                                        ).toString()}
                                         icon="moderators"
                                         users={moderatores}
                                     />
@@ -875,7 +901,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                 xl={3}
                                 className="p-0"
                                 name={"isExternalLinkEnable"}
-                                label={"Enable Extra Link"}
+                                label={t(
+                                    "session.form:label.isExtraLinkEnable"
+                                )}
                                 {...validation(
                                     "isExternalLinkEnable",
                                     formState,
@@ -899,7 +927,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     lg={6}
                                     xl={6}
                                     required={true}
-                                    label="Extra Link Label"
+                                    label={t(
+                                        "session.form:label.extraLinkLabel"
+                                    )}
                                     {...validation(
                                         "externalLinkLabel",
                                         formState,
@@ -919,7 +949,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     lg={6}
                                     xl={6}
                                     required={true}
-                                    label="Extra Link Url"
+                                    label={t("session.form:label.extraLinkUrl")}
                                     {...validation(
                                         "externalLinkUrl",
                                         formState,
@@ -928,7 +958,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     errorMessage={
                                         errors.externalLinkUrl?.message
                                     }
-                                    defaultValue={data.externalLinkLabel}
+                                    defaultValue={data.externalLinkUrl}
                                     control={control}
                                 />
                             </Row>
@@ -940,7 +970,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                 xl={3}
                                 className="p-0"
                                 name={"isSessionAutoSwitch"}
-                                label={"Auto Switch Session"}
+                                label={t(
+                                    "session.form:label.isAutoSwitchSession"
+                                )}
                                 {...validation(
                                     "isSessionAutoSwitch",
                                     formState,
@@ -959,7 +991,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                 xl={3}
                                 className="p-0"
                                 name={"isShowInVideoLibrary"}
-                                label={"Show in Video Library"}
+                                label={t(
+                                    "session.form:label.isShowInVideoLibrary"
+                                )}
                                 {...validation(
                                     "isShowInVideoLibrary",
                                     formState,
@@ -974,7 +1008,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                             <AppFormSelect
                                 id={"cardSize"}
                                 name={"cardSize"}
-                                label={"Choose Card Size"}
+                                label={t("session.form:label.chooseCardSize")}
                                 md={12}
                                 lg={12}
                                 xl={12}
@@ -985,7 +1019,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                 )}
                                 errorMessage={errors.cardSize?.message}
                                 defaultValue={data.cardSize}
-                                placeholder={"Card Size"}
+                                placeholder={t(
+                                    "session.form:label.chooseCardSize"
+                                )}
                                 className={"p-0 editSession cardsize"}
                                 options={cardSizeOptions}
                                 control={control}
@@ -1002,7 +1038,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                             <AppFormSelect
                                 id={"cardType"}
                                 name={"cardType"}
-                                label={"Choose Card Type"}
+                                label={t("session.form:label.chooseCardType")}
                                 md={12}
                                 lg={12}
                                 xl={12}
@@ -1014,7 +1050,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                 )}
                                 errorMessage={errors.cardType?.message}
                                 defaultValue={data.cardType}
-                                placeholder={"Card Type"}
+                                placeholder={t(
+                                    "session.form:label.chooseCardType"
+                                )}
                                 options={cardTypeOptions}
                                 control={control}
                                 transform={{
@@ -1035,7 +1073,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                 lg={12}
                                 xl={12}
                                 required={false}
-                                label="Order"
+                                label={t("session.form:label.order")}
                                 {...validation("ord", formState, isEditMode)}
                                 errorMessage={errors.ord?.message}
                                 defaultValue={`${data?.ord}`}

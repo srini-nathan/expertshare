@@ -146,7 +146,9 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                                             name="Conversation"
                                             className="mr-2"
                                         />
-                                        Start Conversation
+                                        {t(
+                                            "attendee.form:button.startConversation"
+                                        )}
                                     </AppButton>
                                 )}
 

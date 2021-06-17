@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { isString as _isString } from "lodash";
+import { useTranslation } from "react-i18next";
 import {
     AppPageHeader,
     AppLoader,
@@ -32,7 +33,7 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const [pageSize, setPageSize] = useState<number>(30);
     const [active, setActive] = useState<number>(1);
     const [activeFilter, setActiveFilter] = useState<string>("tKey");
-
+    const { t } = useTranslation();
     const [translataionCombines, setTranslationCombines] = useState<
         TranslationCombineList[]
     >([]);
@@ -152,11 +153,16 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <>
-            <AppPageHeader customToolbar title={"Administration"}>
+            <AppPageHeader
+                customToolbar
+                title={t("admin.translation:header.title")}
+            >
                 <AppTranslationToolbar
                     options={languages}
                     selectedItems={selectedLanguages}
-                    label={`Included Languages (${selectedLanguages.length})`}
+                    label={`${t("admin.translation:includedLanguages")} (${
+                        selectedLanguages.length
+                    })`}
                     onChangeSelectFilter={(e: any) => {
                         setActiveFilter(e.value);
                     }}

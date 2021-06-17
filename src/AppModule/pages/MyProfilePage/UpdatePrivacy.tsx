@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { RouteComponentProps } from "@reach/router";
+import { useTranslation } from "react-i18next";
 import { Row, Col, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -29,6 +30,7 @@ export const UpdatePrivacy: FC<RouteComponentProps> = (): JSX.Element => {
     const { user } = state as AuthState;
     const [loading, isLoading] = React.useState<boolean>(false);
 
+    const { t } = useTranslation();
     const validationShape = {};
     const validationSchema = Yup.object().shape(validationShape);
 
@@ -78,7 +80,7 @@ export const UpdatePrivacy: FC<RouteComponentProps> = (): JSX.Element => {
                     <AppFormSwitch
                         id={"isDisplayAsGuest"}
                         name={"isDisplayAsGuest"}
-                        label={"Is Display as Guest?"}
+                        label={t("profile.update:label.isDisplayAsGuest")}
                         md={12}
                         lg={4}
                         xl={4}
@@ -91,7 +93,7 @@ export const UpdatePrivacy: FC<RouteComponentProps> = (): JSX.Element => {
                     <AppFormSwitch
                         id={"isExposeEmail"}
                         name={"isExposeEmail"}
-                        label={"Is Expose Email?"}
+                        label={t("profile.update:label.isExposeEmail")}
                         md={12}
                         lg={4}
                         xl={4}
@@ -104,7 +106,7 @@ export const UpdatePrivacy: FC<RouteComponentProps> = (): JSX.Element => {
                     <AppFormSwitch
                         id={"isAllowCommunication"}
                         name={"isAllowCommunication"}
-                        label={"Is Allow Communication?"}
+                        label={t("profile.update:label.isAllowCommunication")}
                         md={12}
                         lg={4}
                         xl={4}

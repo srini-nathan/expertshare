@@ -156,6 +156,16 @@
             background-size: 24px;
         }
 
+        &.fr {
+            background: url("../images/fr_flag.png") no-repeat center;
+            background-size: 24px;
+        }
+
+        &.it {
+            background: url("../images/italian.jpg") no-repeat center;
+            background-size: 24px;
+        }
+
     }
 
     .list-group {
@@ -331,7 +341,8 @@
                 color: var(--sidebar-icon-clr);
                 border-radius: var(--border-radius);
 
-                svg, i {
+                svg,
+                i {
                     width: 20px;
                     height: 20px;
                     margin: auto;

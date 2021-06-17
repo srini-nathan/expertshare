@@ -210,15 +210,15 @@ export const EventAgenda: FC<RouteComponentProps> = ({
     const getSize = (size: string) => {
         switch (size) {
             case "SMALL":
-                return "col-3";
+                return "col-lg-3 col-md-6 col-sm-12 ";
             case "MEDIUM":
-                return "col-4";
+                return "col-lg-4 col-md-6 col-sm-12";
             case "LARGE":
-                return "col-6";
+                return "col-lg-6 col-md-12 col-sm-12";
             case "XLARGE":
-                return "col-12";
+                return "col-lg-12 col-md-12 col-sm-12";
             default:
-                return "col-3";
+                return "col-lg-4 col-md-6 col-sm-12";
         }
     };
 

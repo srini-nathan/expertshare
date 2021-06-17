@@ -1,6 +1,7 @@
 import React, { FC, Fragment, useEffect, useRef, useState } from "react";
 import { RouteComponentProps, useParams } from "@reach/router";
 import { isString as _isString } from "lodash";
+import { useTranslation } from "react-i18next";
 import {
     GridApi,
     IServerSideDatasource,
@@ -35,6 +36,7 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
     const { clientId } = useParams();
     const cId = clientId || loginUserClientId;
     const [client, setClient] = useState<Client>();
+    const { t } = useTranslation();
 
     useEffect(() => {
         ClientApi.findById<Client>(cId).then(
@@ -136,10 +138,13 @@ export const ContainerList: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Fragment>
             {clientId ? (
-                <AppBreadcrumb linkText={"Client"} linkUrl={"../.."} />
+                <AppBreadcrumb
+                    linkText={t("common.breadcrumb:clients")}
+                    linkUrl={"../.."}
+                />
             ) : null}
             <AppPageHeader
-                title={"Container"}
+                title={t("admin.clients.containers.list:header.title")}
                 createLink={
                     clientId
                         ? `/admin/clients/${cId}/containers/new`

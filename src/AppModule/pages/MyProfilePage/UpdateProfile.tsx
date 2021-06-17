@@ -2,6 +2,7 @@ import React, { FC, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
 import { find as _find, isString as _isString } from "lodash";
+import { useTranslation } from "react-i18next";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -74,8 +75,9 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     const { state, dispatch } = React.useContext(AuthContext);
     const { clientId, user } = state as AuthState;
     const [loading, isLoading] = React.useState<boolean>(false);
-    const [, isDataLoading] = React.useState<boolean>(true);
-    const [, isFieldLoading] = React.useState<boolean>(true);
+    const [languageLoading, isLanguageLoading] = React.useState<boolean>(true);
+    const [dataLoading, isDataLoading] = React.useState<boolean>(true);
+    const [fieldLoading, isFieldLoading] = React.useState<boolean>(true);
     const [userTags, setUserTags] = useState<SimpleObject<string>[]>([]);
     const [selectedUserTags, setSelectedUserTag] = useState<
         SimpleObject<string>[]
@@ -89,7 +91,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
         FILETYPEINFO_USER_PROFILE as FileTypeInfo
     );
     const { container } = useGlobalData();
-
+    const { t } = useTranslation();
     const validationShape = {
         firstName: Yup.string().min(2).required(),
         lastName: Yup.string().min(2).required(),
@@ -313,6 +315,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     useEffect(() => {
         LanguageApi.find<Language>(1, { "container.id": containerId }).then(
             ({ error, response }) => {
+                isLanguageLoading(false);
                 if (error !== null) {
                     if (_isString(error)) {
                         errorToast(error);
@@ -358,6 +361,9 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
         }
         return submitForm(formData);
     };
+
+    if (languageLoading || dataLoading || fieldLoading) return <AppLoader />;
+
     return (
         <>
             <Form onSubmit={handleSubmit(onSubmit)}>
@@ -365,14 +371,10 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                     <Col md={12} sm={12}>
                         <AppCard>
                             <Form.Row>
-                                <Form.Group
-                                    as={Col}
-                                    sm={12}
-                                    md={12}
-                                    lg={12}
-                                    xl={12}
-                                >
-                                    <Form.Label>Profile Picture</Form.Label>
+                                <Form.Group className="col">
+                                    <Form.Label>
+                                        {t("profile.update:label.image")}
+                                    </Form.Label>
                                     <AppUploader
                                         withCropper={true}
                                         fileInfo={
@@ -398,7 +400,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                     lg={6}
                                     xl={6}
                                     name={"firstName"}
-                                    label={"First Name"}
+                                    label={t("profile.update:label.firstName")}
                                     defaultValue={user?.firstName}
                                     required={true}
                                     {...validation(
@@ -414,7 +416,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                     xl={6}
                                     name={"lastName"}
                                     defaultValue={user?.lastName}
-                                    label={"Last Name"}
+                                    label={t("profile.update:label.lastName")}
                                     required={true}
                                     {...validation("lastName", formState, true)}
                                     errorMessage={errors.lastName?.message}
@@ -426,7 +428,9 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                     xl={6}
                                     name={"company"}
                                     defaultValue={user?.company}
-                                    label={"Company"}
+                                    label={t(
+                                        "profile.update:label.companyName"
+                                    )}
                                     required={true}
                                     {...validation("company", formState, true)}
                                     errorMessage={errors.Company?.message}
@@ -437,7 +441,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                     xl={6}
                                     defaultValue={user?.jobTitle}
                                     name={"jobTitle"}
-                                    label={"Job Title"}
+                                    label={t("profile.update:label.jobTitile")}
                                     required={true}
                                     {...validation("jobTitle", formState, true)}
                                     errorMessage={errors.jobTitle?.message}
@@ -447,7 +451,9 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                     <Form.Row className="m-0">
                                         <AppFormSelectCreatable
                                             name="userTags"
-                                            label={"User Tags"}
+                                            label={t(
+                                                "profile.update:label.userTags"
+                                            )}
                                             md={12}
                                             sm={12}
                                             lg={12}
@@ -463,7 +469,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                 <AppFormSelect
                                     id={"timezone"}
                                     name={"timezone"}
-                                    label={"Select Timezone"}
+                                    label={t("profile.update:label.timezone")}
                                     md={12}
                                     lg={6}
                                     xl={6}
@@ -494,7 +500,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                 <AppFormSelect
                                     id={"locale"}
                                     name={"locale"}
-                                    label={"Locale"}
+                                    label={t("profile.update:label.locale")}
                                     md={12}
                                     className="local-container"
                                     lg={6}
@@ -554,7 +560,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                             variant="primary"
                                             type="submit"
                                         >
-                                            Save
+                                            {t("common.button:save")}
                                         </AppButton>
                                     )}
                                 </Col>

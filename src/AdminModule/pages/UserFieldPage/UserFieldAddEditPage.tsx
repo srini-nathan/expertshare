@@ -1,6 +1,7 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { forEach as _forEach, find as _find } from "lodash";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -44,6 +45,8 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
     const { id, isEditMode } = useParamId();
     const navigator = useNavigator(navigate);
 
+    const { t } = useTranslation();
+
     const [data, setData] = useState<UserFieldEntity>(new UserFieldEntity());
     const [loading, setLoading] = useState<boolean>(isEditMode);
     const [selected, setSelected] = useState<string>(FIELDTYPE.FIELDTYPE_TEXT);
@@ -62,21 +65,24 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
 
     const onSubmit = async (formData: UserFieldEntity) => {
         if (formData.options) {
-            const choice = (formData.options as any).map((e: any) => {
-                return {
-                    [e.key]: e.value,
-                };
+            const choice: { [key: string]: string } = {};
+            (formData.options as any).forEach((e: any) => {
+                choice[e.key] = e.value;
             });
             formData.options = {
                 choice,
             };
         }
-        if (formData.attr)
-            formData.attr = (formData.attr as any).map((e: any) => {
-                return {
-                    [e.key]: e.value,
-                };
+        if (formData.attr) {
+            const items: any[] = [];
+            (formData.attr as any).forEach((e: any) => {
+                if (e.key !== "")
+                    items.push({
+                        [e.key]: e.value,
+                    });
             });
+            formData.attr = items;
+        }
 
         return UserFieldApi.createOrUpdate<UserFieldEntity>(id, formData).then(
             ({ error, errorMessage }) => {
@@ -142,9 +148,16 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
 
     return (
         <Fragment>
-            <AppBreadcrumb linkText={"User Fields"} linkUrl={".."} />
+            <AppBreadcrumb
+                linkText={t("common.breadcrumb:userFields")}
+                linkUrl={".."}
+            />
             <AppPageHeader
-                title={isEditMode ? "Edit User Fields" : "Add User Fields"}
+                title={
+                    isEditMode
+                        ? t("admin.userFields.form:header.titleEdit")
+                        : t("admin.userFields.form:header.title")
+                }
             />
             <Row>
                 <Col md={12}>
@@ -153,7 +166,9 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                             <Row>
                                 <AppFormInput
                                     name={"name"}
-                                    label={"User Field Name"}
+                                    label={t(
+                                        "admin.userFields.form:label.name"
+                                    )}
                                     maxCount={name.max}
                                     lg={6}
                                     xl={6}
@@ -168,7 +183,9 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                                 />
                                 <AppFormInput
                                     name={"fieldKey"}
-                                    label={"User Field Key"}
+                                    label={t(
+                                        "admin.userFields.form:label.fieldKey"
+                                    )}
                                     maxCount={fieldKey.max}
                                     lg={6}
                                     xl={6}
@@ -185,7 +202,9 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                             <Row>
                                 <AppFormInput
                                     name={"labelKey"}
-                                    label={"User Label Key"}
+                                    label={t(
+                                        "admin.userFields.form:label.labelKey"
+                                    )}
                                     maxCount={labelKey.max}
                                     lg={6}
                                     xl={6}
@@ -201,7 +220,9 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                                 <AppFormSelect
                                     id={"ddFieldType"}
                                     name={"fieldType"}
-                                    label={"Select fieldType"}
+                                    label={t(
+                                        "admin.userFields.form:label.fieldType"
+                                    )}
                                     lg={6}
                                     xl={6}
                                     {...validation(
@@ -236,7 +257,9 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                                     <Col xs={12}>
                                         <AppFieldTypeElement
                                             name={"attr"}
-                                            header={"Attributes"}
+                                            header={t(
+                                                "admin.userFields.form:label.attr"
+                                            )}
                                             isEditMode={isEditMode}
                                             control={control}
                                             defaultValue={data.attr}
@@ -252,7 +275,9 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                             {renderOptions(selected) ? (
                                 <AppFieldTypeElement
                                     name={"options"}
-                                    header={"Options"}
+                                    header={t(
+                                        "admin.userFields.form:label.options"
+                                    )}
                                     isEditMode={isEditMode}
                                     control={control}
                                     defaultValue={data.options}
@@ -272,7 +297,9 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                                     sm={6}
                                     name={"isActive"}
                                     required={false}
-                                    label={"Is Active ?"}
+                                    label={t(
+                                        "admin.userFields.form:label.isActive"
+                                    )}
                                     {...validation(
                                         "isActive",
                                         formState,
@@ -286,7 +313,9 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                                     sm={6}
                                     name={"isExport"}
                                     required={false}
-                                    label={"Is Exportable ?"}
+                                    label={t(
+                                        "admin.userFields.form:label.isExport"
+                                    )}
                                     {...validation(
                                         "isExport",
                                         formState,
@@ -300,7 +329,9 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                                     sm={6}
                                     name={"isImport"}
                                     required={false}
-                                    label={"Is Importable ?"}
+                                    label={t(
+                                        "admin.userFields.form:label.isImport"
+                                    )}
                                     {...validation(
                                         "isImport",
                                         formState,
@@ -314,7 +345,9 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                                     sm={6}
                                     name={"isVcf"}
                                     required={false}
-                                    label={"Is VCF ?"}
+                                    label={t(
+                                        "admin.userFields.form:label.isVcf"
+                                    )}
                                     {...validation(
                                         "isVcf",
                                         formState,
@@ -328,7 +361,9 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                                     sm={6}
                                     name={"isRequired"}
                                     required={false}
-                                    label={"Is Required ?"}
+                                    label={t(
+                                        "admin.userFields.form:label.isRequired"
+                                    )}
                                     {...validation(
                                         "isRequired",
                                         formState,

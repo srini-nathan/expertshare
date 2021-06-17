@@ -8,19 +8,19 @@ export const appGridColDef = ({
     hideParentFromUrl,
 }: AppCellActionWithCustom): ColDef[] => [
     {
-        headerName: "Domain",
+        headerName: "admin.clients.containers.list:column.domain",
         field: "domain",
         filter: "text",
         flex: 1,
     },
     {
-        headerName: "Storage",
+        headerName: "admin.clients.containers.list:column.storage",
         field: "storage",
         sortable: false,
         flex: 1,
     },
     {
-        headerName: "Actions",
+        headerName: "admin.clients.containers.list:column.actions",
         field: "id",
         sortable: false,
         cellRenderer: "appGridActionRenderer",
