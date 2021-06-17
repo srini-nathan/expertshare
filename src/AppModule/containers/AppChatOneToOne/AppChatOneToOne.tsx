@@ -1,85 +1,88 @@
 import React, { FC, useState, useEffect } from "react";
+import { find } from "lodash";
 import {
     AppLoader,
-    AppMessageInboxHeader,
-    AppMessageInboxFilters,
-    AppMessageInboxThread,
+    AppChatOneToOneHeader,
+    AppChatOneToOneComposer,
+    AppChatOneToOneMessage,
 } from "../../components";
-import { useAuthState, useInitChatBox } from "../../hooks";
-import { ChatThread } from "../../models/entities/ChatThread";
+import { ChatMessage } from "../../models/entities/ChatMessage";
+import {
+    useAuthState,
+    useInitChatOneToOne,
+    useOpenChatOneToOne,
+} from "../../hooks";
+import { PUser } from "../../../AdminModule/models";
 
 import "./assets/scss/style.scss";
 
-export interface AppChatOneToOneProps {
-    isOpen?: boolean;
-}
-
-export const AppChatOneToOne: FC<AppChatOneToOneProps> = ({
-    isOpen = false,
-}) => {
-    const [closed, setClosed] = useState(!isOpen);
+export const AppChatOneToOne: FC = () => {
     const [collapsed, setCollapsed] = useState(false);
-    const { getThreads } = useInitChatBox();
     const [loading, setLoading] = useState(true);
-    const { user } = useAuthState();
-    const [threads, setThreads] = useState<ChatThread[]>([]);
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const { getMessages } = useInitChatOneToOne();
+    const { user: loginUser } = useAuthState();
+    const { openThread } = useOpenChatOneToOne();
+    const [closed, setClosed] = useState(openThread === null);
 
     useEffect(() => {
-        if (closed === false) {
+        if (openThread !== null) {
             setLoading(true);
-            getThreads(1)
+            getMessages(1)
                 .then(({ response }) => {
                     if (response && response.items) {
-                        setThreads(response.items);
+                        setMessages(response.items);
                     }
                 })
                 .finally(() => {
                     setLoading(false);
                 });
         }
-    }, [closed]);
+        setClosed(openThread === null);
+    }, [openThread]);
 
     if (closed === true) {
         return null;
     }
 
+    const user = find(
+        openThread?.users,
+        (u: PUser) => loginUser.id !== u.id
+    ) as PUser;
+
     return (
-        <div className="app-message-inbox">
-            <div className="app-message-inbox--container">
-                <div
-                    className={`app-message-inbox--index ${
-                        collapsed ? "collapsed" : ""
-                    }`}
-                >
-                    <div className="inner-container">
-                        <AppMessageInboxHeader
-                            onCollapseAction={() => {
-                                setCollapsed(!collapsed);
-                            }}
-                            onCloseAction={() => {
-                                setClosed(true);
-                            }}
-                            newMsgCounter={10}
-                            user={user}
-                        />
-                        <AppMessageInboxFilters />
-                        <div className="inner-container--message mt-2">
-                            <div className="row m-0 p-0">
-                                {loading ? (
-                                    <AppLoader />
-                                ) : (
-                                    threads.map((t: ChatThread) => (
-                                        <AppMessageInboxThread
-                                            key={t.id}
-                                            thread={t}
-                                            loginUser={user}
-                                        />
-                                    ))
-                                )}
-                            </div>
+        <div className={`app-chat-one-to-one ${collapsed ? "collapsed" : ""}`}>
+            <div className="inner-container">
+                <AppChatOneToOneHeader
+                    onCollapseAction={() => {
+                        setCollapsed(!collapsed);
+                    }}
+                    onCloseAction={() => {
+                        setClosed(true);
+                    }}
+                    user={user}
+                />
+                <div className="row m-0 px-0 pt-1 pb-3">
+                    <div className="chat-list col-auto p-0 w-100">
+                        <div className="chat-list--container p-3 ">
+                            {loading ? (
+                                <AppLoader />
+                            ) : (
+                                messages.map((t: ChatMessage) => (
+                                    <AppChatOneToOneMessage
+                                        key={t.id}
+                                        chat={t}
+                                        loginUser={loginUser}
+                                    />
+                                ))
+                            )}
                         </div>
                     </div>
                 </div>
+                <AppChatOneToOneComposer
+                    onSendAction={() => {}}
+                    onTypingAction={() => {}}
+                />
             </div>
         </div>
     );
