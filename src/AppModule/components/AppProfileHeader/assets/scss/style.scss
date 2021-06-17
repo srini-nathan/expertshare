@@ -26,7 +26,7 @@
                             width: 32px;
                             height: 32px;
                             content: "";
-                            background-color: #30B7A7;
+                            background-color: var(--live-badge-bg-clr);
                             border-radius: 50%;
                         }
                     }
@@ -44,7 +44,6 @@
                             border-radius: 50%;
                         }
                     }
-
 
                     .speaker-btn {
                         position: absolute;
@@ -71,7 +70,6 @@
                             margin-right: 5px;
                             margin-bottom: 1px;
                             font-size: 20px;
-
                         }
                     }
                 }
@@ -141,7 +139,6 @@
                     align-items: center;
 
                     button {
-
                         .popup {
                             position: absolute;
                             top: 35px;
@@ -192,7 +189,7 @@
                         }
 
                         &:hover {
-                            &>.popup {
+                            & > .popup {
                                 display: block;
                             }
                         }
@@ -206,13 +203,15 @@
                         }
 
                         &.get-contact {
-                            i {}
+                            i {
+                            }
                         }
 
                         &.add-user-btn {
                             width: 36px;
 
-                            i {}
+                            i {
+                            }
                         }
                     }
                 }
@@ -280,14 +279,16 @@
                         &.followers {
                             i {
                                 &::before {
-                                    content: '\e00a';
+                                    content: "\e00a";
                                 }
                             }
                         }
 
-                        &.following {}
+                        &.following {
+                        }
 
-                        &.events {}
+                        &.events {
+                        }
 
                         &.sessions {
                             i {
@@ -301,9 +302,11 @@
                             }
                         }
 
-                        &.feeds {}
+                        &.feeds {
+                        }
 
-                        &.favorite-feeds {}
+                        &.favorite-feeds {
+                        }
                     }
                 }
             }

@@ -30,7 +30,7 @@
         }
 
         [type="checkbox"]:checked+label::before {
-            transform: translateX(50px);
+            transform: translateX(53px);
         }
 
         [type="checkbox"]:not(:checked)+label::before {
