@@ -1,20 +1,44 @@
 import { AxiosResponse } from "axios";
 import { I18nData } from "../models/I18nData";
 import { API } from "../../AppModule/apis/API";
-import { route, ROUTES } from "../../config";
+import { route } from "../../config";
+import { APP_ENV } from "../../AppModule/config/app-env";
 
-const { api_generate_export_translation: GENERATE_TRANSLATION } = ROUTES;
+import * as translations from "../../translations";
+
+const GENERATE_TRANSLATION = "static/translations/{containerId}/{locale}.json";
 
 export abstract class GenerateApi extends API {
     public static async getTranslations(
         containerId: number,
         locale: string
     ): Promise<AxiosResponse<I18nData>> {
+        if (APP_ENV === "development") {
+            const allTrans = translations;
+            const containerTransName = `container${containerId}`;
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            const containerTrans = allTrans[containerTransName] as any;
+            const i18n: I18nData = containerTrans[locale];
+            return new Promise((resolve, reject) => {
+                if (!i18n) {
+                    reject();
+                    throw new Error(
+                        `Translation not exist for locale ${locale} on container#${containerId}`
+                    );
+                }
+                resolve({ data: i18n } as AxiosResponse<I18nData>);
+            });
+        }
         return this.makeGet<I18nData>(
             route(GENERATE_TRANSLATION, {
                 locale,
                 containerId,
-            })
+            }),
+            {},
+            {
+                baseURL: "/",
+            }
         );
     }
 }
