@@ -82,3 +82,6 @@ export * from "./AppSwisscomFrame";
 export * from "./AppMessageInboxHeader";
 export * from "./AppMessageInboxFilters";
 export * from "./AppMessageInboxThread";
+export * from "./AppChatOneToOneHeader";
+export * from "./AppChatOneToOneComposer";
+export * from "./AppChatOneToOneMessage";

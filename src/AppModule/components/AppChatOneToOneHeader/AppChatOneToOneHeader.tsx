@@ -10,14 +10,14 @@ const {
     FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
 } = UPLOAD;
 
-export interface AppOneToOneChatHeaderProps {
+export interface AppChatOneToOneHeaderProps {
     user: PUser;
     isOnline?: boolean;
     onCloseAction: () => void;
     onCollapseAction: () => void;
 }
 
-export const AppOneToOneChatHeader: FC<AppOneToOneChatHeaderProps> = ({
+export const AppChatOneToOneHeader: FC<AppChatOneToOneHeaderProps> = ({
     user,
     isOnline = false,
     onCloseAction,
