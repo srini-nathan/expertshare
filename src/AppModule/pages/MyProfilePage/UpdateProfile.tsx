@@ -75,8 +75,9 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     const { state, dispatch } = React.useContext(AuthContext);
     const { clientId, user } = state as AuthState;
     const [loading, isLoading] = React.useState<boolean>(false);
-    const [, isDataLoading] = React.useState<boolean>(true);
-    const [, isFieldLoading] = React.useState<boolean>(true);
+    const [languageLoading, isLanguageLoading] = React.useState<boolean>(true);
+    const [dataLoading, isDataLoading] = React.useState<boolean>(true);
+    const [fieldLoading, isFieldLoading] = React.useState<boolean>(true);
     const [userTags, setUserTags] = useState<SimpleObject<string>[]>([]);
     const [selectedUserTags, setSelectedUserTag] = useState<
         SimpleObject<string>[]
@@ -314,6 +315,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     useEffect(() => {
         LanguageApi.find<Language>(1, { "container.id": containerId }).then(
             ({ error, response }) => {
+                isLanguageLoading(false);
                 if (error !== null) {
                     if (_isString(error)) {
                         errorToast(error);
@@ -359,6 +361,9 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
         }
         return submitForm(formData);
     };
+
+    if (languageLoading || dataLoading || fieldLoading) return <AppLoader />;
+
     return (
         <>
             <Form onSubmit={handleSubmit(onSubmit)}>

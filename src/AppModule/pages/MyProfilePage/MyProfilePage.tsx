@@ -32,7 +32,7 @@ export const MyProfilePage: FC<RouteComponentProps> = (): JSX.Element => {
                     ></AppTabWithIcon>
                     <AppTabWithIcon
                         eventKey="Profile"
-                        title={t("profile.update:tab.pofile")}
+                        title={t("profile.update:tab.profile")}
                         icon="fak fa-user-regular"
                     ></AppTabWithIcon>
                 </Row>

@@ -9,20 +9,20 @@ export const appGridColDef = ({
     if (isGrantedControl)
         return [
             {
-                headerName: "admin.rooms.list:column:name",
+                headerName: "admin.aframeroom.list:column.name",
                 field: "name",
                 filter: "translations.name",
                 sortable: true,
                 minWidth: 80,
             },
             {
-                headerName: "admin.rooms.list:column:isEntryRoom",
+                headerName: "admin.aframeroom.list:column.isEntryRoom",
                 cellRenderer: "AppFormRadio",
                 sortable: true,
                 minWidth: 40,
             },
             {
-                headerName: "admin.rooms.list:column:actions",
+                headerName: "admin.aframeroom.list:column.actions",
                 field: "id",
                 sortable: false,
                 maxWidth: 220,
@@ -39,14 +39,14 @@ export const appGridColDef = ({
 
     return [
         {
-            headerName: "admin.rooms.list:column:name",
+            headerName: "admin.aframeroom.list:column.name",
             field: "name",
             filter: "translations.name",
             sortable: true,
             minWidth: 80,
         },
         {
-            headerName: "admin.rooms.list:column:actions",
+            headerName: "admin.aframeroom.list:column.actions",
             field: "id",
             sortable: false,
             maxWidth: 160,
