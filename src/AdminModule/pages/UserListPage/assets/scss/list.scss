@@ -42,7 +42,7 @@
                 width: 11px;
                 height: 11px;
                 content: "";
-                background-color: var(--primary);
+                background-color: var(--live-badge-bg-clr);
                 border: 2px solid var(--border-border-radius-clr);
                 border-radius: var(--circle-border-radius);
             }
@@ -71,7 +71,6 @@
         outline: none;
         border: none;
     }
-
 }
 
 .list-checkbox {
