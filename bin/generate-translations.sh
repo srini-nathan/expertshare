@@ -23,6 +23,14 @@ do
     mkdir -p ${TRANSLATION_BUILD_DUMP_PATH}/${containerId}
     cp "${TRANSLATION_DUMP_PATH}/${containerId}/${locale}.json" "${TRANSLATION_BUILD_DUMP_PATH}/${containerId}/"
     echo "import ${locale} from \"./${locale}.json\";" >> "${TRANSLATION_DUMP_PATH}/${containerId}/index.ts"
+  done
+  echo "" >> "${TRANSLATION_DUMP_PATH}/${containerId}/index.ts"
+  for locale in "${ES_LOCALES[@]}"
+  do
+    mkdir -p "${TRANSLATION_DUMP_PATH}/${containerId}"
+    wget "${GENERATE_TRANSLATIONS}/${containerId}/${locale}" -O "${TRANSLATION_DUMP_PATH}/${containerId}/${locale}.json"
+    mkdir -p ${TRANSLATION_BUILD_DUMP_PATH}/${containerId}
+    cp "${TRANSLATION_DUMP_PATH}/${containerId}/${locale}.json" "${TRANSLATION_BUILD_DUMP_PATH}/${containerId}/"
     echo "export { ${locale} };" >> "${TRANSLATION_DUMP_PATH}/${containerId}/index.ts"
   done
   echo "export * as container${containerId} from \"./${containerId}\";" >> "${TRANSLATION_DEFAULT_EXPORT_FILE}"

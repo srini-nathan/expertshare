@@ -23,7 +23,7 @@ export function useBuildAssetPath(
 
     if (storage === STORAGE.STORAGE_S3) {
         if (bucketEndpoint) {
-            basePath = `https://${bucketEndpoint}/${bucketName}`;
+            basePath = `${bucketEndpoint}/${bucketName}`;
         } else {
             basePath = `https://${bucketName}.s3.${bucketRegion}.amazonaws.com`;
         }

@@ -65,21 +65,24 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
 
     const onSubmit = async (formData: UserFieldEntity) => {
         if (formData.options) {
-            const choice = (formData.options as any).map((e: any) => {
-                return {
-                    [e.key]: e.value,
-                };
+            const choice: { [key: string]: string } = {};
+            (formData.options as any).forEach((e: any) => {
+                choice[e.key] = e.value;
             });
             formData.options = {
                 choice,
             };
         }
-        if (formData.attr)
-            formData.attr = (formData.attr as any).map((e: any) => {
-                return {
-                    [e.key]: e.value,
-                };
+        if (formData.attr) {
+            const items: any[] = [];
+            (formData.attr as any).forEach((e: any) => {
+                if (e.key !== "")
+                    items.push({
+                        [e.key]: e.value,
+                    });
             });
+            formData.attr = items;
+        }
 
         return UserFieldApi.createOrUpdate<UserFieldEntity>(id, formData).then(
             ({ error, errorMessage }) => {

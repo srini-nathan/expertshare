@@ -54,7 +54,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                 required={properties.isRequired}
                 name={`userField./api/user_fields/${properties.id}`}
                 defaultValue={defaultValue ? defaultValue.value : ""}
-                {...properties.attr}
+                // {...properties.attr}
                 control={control}
                 {...validation}
                 errorMessage={errorMessage}
@@ -73,7 +73,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                 required={properties.isRequired}
                 name={`userField./api/user_fields/${properties.id}`}
                 defaultValue={defaultValue ? defaultValue.value : ""}
-                {...properties.attr}
+                // {...properties.attr}
                 control={control}
             />
         );
@@ -97,7 +97,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                     defaultValue={
                         defaultValue ? new Date(defaultValue.value) : null
                     }
-                    {...properties.attr}
+                    // {...properties.attr}
                     control={control}
                 />
             </Col>
@@ -112,7 +112,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                     sm={sm}
                     lg={lg}
                     xl={xl}
-                    {...properties.attr}
+                    // {...properties.attr}
                     name={`userField./api/user_fields/${properties.id}`}
                     defaultChecked={defaultValue ? defaultValue.value : false}
                     control={control}
@@ -146,7 +146,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                         name={`userField./api/user_fields/${properties.id}`}
                         options={options}
                         {...validation}
-                        {...properties.attr}
+                        // {...properties.attr}
                         control={control}
                     />
                 </Row>
@@ -183,7 +183,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                                 {...validation}
                                 value={e.value}
                                 label={e.label}
-                                {...properties.attr}
+                                // {...properties.attr}
                                 defaultChecked={e.defaultCheck}
                                 control={control}
                             />
@@ -245,7 +245,7 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                 id={properties.labelKey}
                 {...prps}
                 {...validation}
-                {...properties.attr}
+                // {...properties.attr}
                 control={control}
                 transform={{
                     output: (template: PrimitiveObject) => template?.value,
