@@ -301,8 +301,6 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                 } else if (isNotFound) {
                     errorToast("Session not exist");
                 } else if (response) {
-                    // eslint-disable-next-line no-console
-                    console.log(response.items[0]);
                     if (response.items[0]) {
                         const res: Session = (response.items as PSession[])[0] as Session;
                         setData(res);
