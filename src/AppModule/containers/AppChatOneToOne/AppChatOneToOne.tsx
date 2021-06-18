@@ -11,6 +11,7 @@ import {
     useAuthState,
     useInitChatOneToOne,
     useOpenChatOneToOne,
+    useChatSocketEvents,
 } from "../../hooks";
 import { PUser } from "../../../AdminModule/models";
 
@@ -24,9 +25,11 @@ export const AppChatOneToOne: FC = () => {
     const { user: loginUser } = useAuthState();
     const { openThread } = useOpenChatOneToOne();
     const [closed, setClosed] = useState(openThread === null);
+    const { emitJoinChatThread, emitLeaveChatThread } = useChatSocketEvents();
 
     useEffect(() => {
-        if (openThread !== null) {
+        if (openThread !== null && openThread.id) {
+            emitJoinChatThread(openThread.id);
             setLoading(true);
             getMessages(1)
                 .then(({ response }) => {
@@ -39,6 +42,11 @@ export const AppChatOneToOne: FC = () => {
                 });
         }
         setClosed(openThread === null);
+        return () => {
+            if (openThread !== null && openThread.id) {
+                emitLeaveChatThread(openThread.id);
+            }
+        };
     }, [openThread]);
 
     if (closed === true) {

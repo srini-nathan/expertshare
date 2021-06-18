@@ -11,6 +11,10 @@ export const EVENTS = {
     PAGE_CHANGE: "on-page-change",
     USER_LOGIN: "on-user-login",
     USER_LOGOUT: "on-user-logout",
+    JOIN_CHAT_THREAD: "join-chat-thread",
+    LEAVE_CHAT_THREAD: "leave-chat-thread",
+    TYPING_IN_CHAT_THREAD: "typing-chat-thread",
+    TYPED_IN_CHAT_THREAD: "typed-chat-thread",
 };
 
 type OnPageChangePayload = {
@@ -46,5 +50,29 @@ export const onUserLogout = (): void => {
     socket.emit(EVENTS.USER_LOGOUT, {
         token: null,
         userId: null,
+    });
+};
+
+export const joinChatThread = (threadId: number): void => {
+    socket.emit(EVENTS.JOIN_CHAT_THREAD, {
+        threadId,
+    });
+};
+
+export const leaveChatThread = (threadId: number): void => {
+    socket.emit(EVENTS.LEAVE_CHAT_THREAD, {
+        threadId,
+    });
+};
+
+export const typingInChatThread = (threadId: number): void => {
+    socket.emit(EVENTS.TYPING_IN_CHAT_THREAD, {
+        threadId,
+    });
+};
+
+export const typedInChatThread = (threadId: number): void => {
+    socket.emit(EVENTS.TYPED_IN_CHAT_THREAD, {
+        threadId,
     });
 };

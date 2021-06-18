@@ -17,3 +17,4 @@ export * from "./useDateTime";
 export * from "./useInitChatOneToOne";
 export * from "./useOpenChatOneToOne";
 export * from "./useUserSocketEvents";
+export * from "./useChatSocketEvents";
