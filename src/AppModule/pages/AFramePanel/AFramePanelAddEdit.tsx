@@ -186,13 +186,12 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
         Promise.all(
             ["image", "remoteImage"].map((imageFieldName: any) => {
                 const files = filesToUpload[imageFieldName];
-                (formData as any)[imageFieldName] = null;
                 if (files && files.length > 0) {
                     const fd = new FormData();
                     fd.set("file", files[0], files[0].name);
                     fd.set("fileType", FILETYPE_AFRAMEPANEL_MEDIA);
 
-                    UploadAPI.createResource<Upload, FormData>(fd).then(
+                    return UploadAPI.createResource<Upload, FormData>(fd).then(
                         ({ errorMessage, response }) => {
                             if (errorMessage) {
                                 errorToast(errorMessage);
