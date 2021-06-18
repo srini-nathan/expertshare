@@ -161,17 +161,18 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
     };
 
     useEffect(() => {
-        LanguageApi.find<Language>(1, { "container.id": containerId }).then(
-            ({ error, response }) => {
-                if (error !== null) {
-                    if (_isString(error)) {
-                        errorToast(error);
-                    }
-                } else if (response !== null) {
-                    setLanguages(response.items);
+        LanguageApi.find<Language>(1, {
+            "container.id": containerId,
+            "order[isDefault]": "desc",
+        }).then(({ error, response }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
                 }
+            } else if (response !== null) {
+                setLanguages(response.items);
             }
-        );
+        });
     }, []);
     useEffect(() => {
         if (containerConfiguration) {

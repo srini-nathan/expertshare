@@ -92,7 +92,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     );
     const { container } = useGlobalData();
     const { t } = useTranslation();
-    const validationShape = {
+    let validationShape = {
         firstName: Yup.string().min(2).required(),
         lastName: Yup.string().min(2).required(),
         company: Yup.string().min(2).required(),
@@ -100,13 +100,15 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
         timezone: Yup.string().min(2).required(),
         locale: Yup.string().min(2).required(),
     };
-    // userFields.forEach((e) => {
-    //     if (e.isActive && e.isRequired)
-    //         validationShape = {
-    //             ...validationShape,
-    //             [UserFieldApi.toResourceUrl(e.id)]: Yup.string().required(),
-    //         };
-    // });
+    userFields.forEach((e) => {
+        if (e.isActive && e.isRequired)
+            validationShape = {
+                ...validationShape,
+                [UserFieldApi.toResourceUrl(e.id)]: Yup.string().required(
+                    `${t(e.labelKey)} is a required field`
+                ),
+            };
+    });
     const validationSchema = Yup.object().shape(validationShape);
 
     const { control, handleSubmit, formState, setError, setValue } = useForm({
@@ -226,6 +228,9 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                             true
                         ),
                     }}
+                    errorMessage={
+                        errors[UserFieldApi.toResourceUrl(e.id)]?.message
+                    }
                     control={control}
                 />
             );
@@ -370,8 +375,163 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                 <Row className="pt-3">
                     <Col md={12} sm={12}>
                         <AppCard>
-                            <Form.Row>
-                                <Form.Group className="col">
+                            <Row className="m-0">
+                                <Col className="p-0">
+                                    <AppFormInput
+                                        lg={12}
+                                        xl={12}
+                                        name={"firstName"}
+                                        label={t(
+                                            "profile.update:label.firstName"
+                                        )}
+                                        defaultValue={user?.firstName}
+                                        required={true}
+                                        {...validation(
+                                            "firstName",
+                                            formState,
+                                            true
+                                        )}
+                                        errorMessage={errors.firstName?.message}
+                                        control={control}
+                                    />
+                                    <AppFormInput
+                                        lg={12}
+                                        xl={12}
+                                        name={"lastName"}
+                                        defaultValue={user?.lastName}
+                                        label={t(
+                                            "profile.update:label.lastName"
+                                        )}
+                                        required={true}
+                                        {...validation(
+                                            "lastName",
+                                            formState,
+                                            true
+                                        )}
+                                        errorMessage={errors.lastName?.message}
+                                        control={control}
+                                    />
+
+                                    <AppFormInput
+                                        lg={12}
+                                        xl={12}
+                                        name={"company"}
+                                        defaultValue={user?.company}
+                                        label={t(
+                                            "profile.update:label.companyName"
+                                        )}
+                                        required={true}
+                                        {...validation(
+                                            "company",
+                                            formState,
+                                            true
+                                        )}
+                                        errorMessage={errors.Company?.message}
+                                        control={control}
+                                    />
+                                    <AppFormInput
+                                        lg={12}
+                                        xl={12}
+                                        defaultValue={user?.jobTitle}
+                                        name={"jobTitle"}
+                                        label={t(
+                                            "profile.update:label.jobTitile"
+                                        )}
+                                        required={true}
+                                        {...validation(
+                                            "jobTitle",
+                                            formState,
+                                            true
+                                        )}
+                                        errorMessage={errors.jobTitle?.message}
+                                        control={control}
+                                    />
+
+                                    <AppFormSelect
+                                        id={"locale"}
+                                        name={"locale"}
+                                        label={t("profile.update:label.locale")}
+                                        className="local-container "
+                                        md={12}
+                                        lg={12}
+                                        xl={12}
+                                        required={true}
+                                        {...validation(
+                                            "locale",
+                                            formState,
+                                            true
+                                        )}
+                                        defaultValue={getLocale()}
+                                        placeholder={"Locale"}
+                                        errorMessage={errors.locale?.message}
+                                        options={languages}
+                                        control={control}
+                                        transform={{
+                                            output: (locale: PrimitiveObject) =>
+                                                locale?.value,
+                                            input: (value: string) => {
+                                                return _find([], {
+                                                    value,
+                                                });
+                                            },
+                                        }}
+                                    />
+                                    <AppFormSelect
+                                        id={"timezone"}
+                                        name={"timezone"}
+                                        label={t(
+                                            "profile.update:label.timezone"
+                                        )}
+                                        md={12}
+                                        lg={12}
+                                        xl={12}
+                                        required={true}
+                                        {...validation(
+                                            "timezone",
+                                            formState,
+                                            true
+                                        )}
+                                        defaultValue={{
+                                            value: user?.timezone
+                                                ? user?.timezone
+                                                : "",
+                                            label: user?.timezone
+                                                ? user?.timezone
+                                                : "",
+                                        }}
+                                        placeholder={"Timezone"}
+                                        errorMessage={errors.timezone?.message}
+                                        options={options}
+                                        control={control}
+                                        transform={{
+                                            output: (
+                                                template: PrimitiveObject
+                                            ) => template?.value,
+                                            input: (value: string) => {
+                                                return _find([], {
+                                                    value,
+                                                });
+                                            },
+                                        }}
+                                    />
+                                    <AppFormSelectCreatable
+                                        name="userTags"
+                                        label={t(
+                                            "profile.update:label.userTags"
+                                        )}
+                                        md={12}
+                                        sm={12}
+                                        lg={12}
+                                        xl={12}
+                                        id="where-filter"
+                                        onChangeHandler={setSelectedUserTag}
+                                        value={selectedUserTags}
+                                        options={userTags}
+                                        control={control}
+                                    />
+                                </Col>
+
+                                <Form.Group className="px-3 col-sm-12 col-lg-6 ">
                                     <Form.Label>
                                         {t("profile.update:label.image")}
                                     </Form.Label>
@@ -396,138 +556,12 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                         }}
                                     />
                                 </Form.Group>
-                                <AppFormInput
-                                    lg={6}
-                                    xl={6}
-                                    name={"firstName"}
-                                    label={t("profile.update:label.firstName")}
-                                    defaultValue={user?.firstName}
-                                    required={true}
-                                    {...validation(
-                                        "firstName",
-                                        formState,
-                                        true
-                                    )}
-                                    errorMessage={errors.firstName?.message}
-                                    control={control}
-                                />
-                                <AppFormInput
-                                    lg={6}
-                                    xl={6}
-                                    name={"lastName"}
-                                    defaultValue={user?.lastName}
-                                    label={t("profile.update:label.lastName")}
-                                    required={true}
-                                    {...validation("lastName", formState, true)}
-                                    errorMessage={errors.lastName?.message}
-                                    control={control}
-                                />
-
-                                <AppFormInput
-                                    lg={6}
-                                    xl={6}
-                                    name={"company"}
-                                    defaultValue={user?.company}
-                                    label={t(
-                                        "profile.update:label.companyName"
-                                    )}
-                                    required={true}
-                                    {...validation("company", formState, true)}
-                                    errorMessage={errors.Company?.message}
-                                    control={control}
-                                />
-                                <AppFormInput
-                                    lg={6}
-                                    xl={6}
-                                    defaultValue={user?.jobTitle}
-                                    name={"jobTitle"}
-                                    label={t("profile.update:label.jobTitile")}
-                                    required={true}
-                                    {...validation("jobTitle", formState, true)}
-                                    errorMessage={errors.jobTitle?.message}
-                                    control={control}
-                                />
-                                <Col className="p-0" md={12}>
-                                    <Form.Row className="m-0">
-                                        <AppFormSelectCreatable
-                                            name="userTags"
-                                            label={t(
-                                                "profile.update:label.userTags"
-                                            )}
-                                            md={12}
-                                            sm={12}
-                                            lg={12}
-                                            xl={12}
-                                            id="where-filter"
-                                            onChangeHandler={setSelectedUserTag}
-                                            value={selectedUserTags}
-                                            options={userTags}
-                                            control={control}
-                                        />
-                                    </Form.Row>
-                                </Col>
-                                <AppFormSelect
-                                    id={"timezone"}
-                                    name={"timezone"}
-                                    label={t("profile.update:label.timezone")}
-                                    md={12}
-                                    lg={6}
-                                    xl={6}
-                                    required={true}
-                                    {...validation("timezone", formState, true)}
-                                    defaultValue={{
-                                        value: user?.timezone
-                                            ? user?.timezone
-                                            : "",
-                                        label: user?.timezone
-                                            ? user?.timezone
-                                            : "",
-                                    }}
-                                    placeholder={"Timezone"}
-                                    errorMessage={errors.timezone?.message}
-                                    options={options}
-                                    control={control}
-                                    transform={{
-                                        output: (template: PrimitiveObject) =>
-                                            template?.value,
-                                        input: (value: string) => {
-                                            return _find([], {
-                                                value,
-                                            });
-                                        },
-                                    }}
-                                />
-                                <AppFormSelect
-                                    id={"locale"}
-                                    name={"locale"}
-                                    label={t("profile.update:label.locale")}
-                                    md={12}
-                                    className="local-container"
-                                    lg={6}
-                                    xl={6}
-                                    required={true}
-                                    {...validation("locale", formState, true)}
-                                    defaultValue={getLocale()}
-                                    placeholder={"Locale"}
-                                    errorMessage={errors.locale?.message}
-                                    options={languages}
-                                    control={control}
-                                    transform={{
-                                        output: (locale: PrimitiveObject) =>
-                                            locale?.value,
-                                        input: (value: string) => {
-                                            return _find([], {
-                                                value,
-                                            });
-                                        },
-                                    }}
-                                />
-                            </Form.Row>
+                            </Row>
                         </AppCard>
                     </Col>
                     <Col md={12}>
                         <AppCard>
-                            <Row>
+                            <Row className="m-0">
                                 {renderUserFields()}
 
                                 {container &&
