@@ -1066,7 +1066,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                 }}
                             />
                             <AppFormInput
-                                className="pl-0"
+                                className="px-0"
                                 name={"ord"}
                                 type={"number"}
                                 md={12}

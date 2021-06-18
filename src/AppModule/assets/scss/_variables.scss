@@ -11,7 +11,6 @@
 
 // //custom colors
 
-
 // :root {
 //     //font
 //     --font-family-sans-serif: "grotesque";
@@ -54,7 +53,6 @@
 //     --input-border-clr: #A7A7A7;
 //     --border-radius: 5px;
 
-
 //     //widget colors
 //     --widget-bg-color: #36999C15;
 //     --widget-bg-clr: #A0B2C020;
@@ -86,7 +84,6 @@
 //     --checkbox-block-bg-clr: #F7FBFB;
 //     --checkbox-block-border-radius: var(--border-radius);
 
-
 //     // sidebar colors
 //     --sidebar-bg-clr: #FFF;
 //     --sidebar-item-hover-bg-clr: #30B7A710;
@@ -97,7 +94,6 @@
 //     --sidebar-hover-icon-clr: #30B7A7;
 //     --sidebar-menu-extra-bg-clr: #D4EBEA;
 //     --sidebar-sub-menu-bg-clr: #D4E7E8;
-
 
 //     //Login Page
 //     --agree-bg-clr: #A0B2C033;
@@ -127,7 +123,6 @@
 //     --circle-border-radius: 50%;
 // }
 
-
 // Variables
 //
 // Variables should follow the `$component-state-property-size` formula for
@@ -141,18 +136,17 @@
 
 //custom colors
 
-
 :root {
     //font
     --font-family-sans-serif: "grotesque";
-    --divider-clr: #E6E8E8;
+    --divider-clr: #e6e8e8;
 
     //main colors
     --body-bg-clr: #ffffff;
-    --light-clr: #FFF;
+    --light-clr: #fff;
     //Grid Colors
     --row-odd-bg-clr: #00000010;
-    --box-shadow-box-clr: rgba(181, 181, 181, .52);
+    --box-shadow-box-clr: rgba(181, 181, 181, 0.52);
 
     //primary color range
     --primary: #000;
@@ -179,15 +173,14 @@
     --secondary-80: #44444480;
     --secondary-90: #44444490;
     //input colors
-    --input-bg-clr: #FCFCFC;
+    --input-bg-clr: #fcfcfc;
     --input-fg-clr: #051515;
-    --input-border-clr: #A7A7A7;
+    --input-border-clr: #a7a7a7;
     --border-radius: 0px;
 
-
     //widget colors
-    --widget-bg-color: #36999C15;
-    --widget-bg-clr: #A0B2C020;
+    --widget-bg-color: #36999c15;
+    --widget-bg-clr: #a0b2c020;
     --widget-border-clr: #000000;
 
     //button colors
@@ -195,62 +188,61 @@
     --btn-border-clr: #000000;
     --btn-bg-clr-20: #00000020;
     --btn-hover-bg-clr: #000000;
-    --btn-hover-fg-clr: #FFF;
+    --btn-hover-fg-clr: #fff;
     --btn-hover-border-clr: #000000;
-    --btn-fg-clr: #FFF;
-    --btn-fg-clr-60: #FFFFFF60;
+    --btn-fg-clr: #fff;
+    --btn-fg-clr-60: #ffffff60;
     --btn-hover-border-clr: transparent;
     --btn-secondary-fg-clr: #444;
-    --btn-secondary-bg-clr: #FFF;
-    --btn-secondary-border-clr: #FFF;
+    --btn-secondary-bg-clr: #fff;
+    --btn-secondary-border-clr: #fff;
     --btn-hover-secondary-fg-clr: #444;
-    --btn-hover-secondary-bg-clr: #FFF;
-    --btn-hover-secondary-border-clr: #FFF;
-    --speaker-btn-bg-clr: #7EBDE9;
+    --btn-hover-secondary-bg-clr: #fff;
+    --btn-hover-secondary-border-clr: #fff;
+    --speaker-btn-bg-clr: #7ebde9;
+    --live-badge-bg-clr: #2cda9d;
 
     //check box color
     --checkbox-checked-bg: #000000;
-    --checkbox-not-checked-bg: #D7EAEB;
-    --checkbox-toggler-not-checked-clr: #98CBCC;
-    --checkbox-toggler-checked-clr: #FCFCFC;
-    --checkbox-block-bg-clr: #F7FBFB;
+    --checkbox-not-checked-bg: #d7eaeb;
+    --checkbox-toggler-not-checked-clr: #98cbcc;
+    --checkbox-toggler-checked-clr: #fcfcfc;
+    --checkbox-block-bg-clr: #f7fbfb;
     --checkbox-block-border-radius: var(--border-radius);
 
-
     // sidebar colors
-    --sidebar-bg-clr: #FFF;
+    --sidebar-bg-clr: #fff;
     --sidebar-item-hover-bg-clr: #00000010;
     --sidebar-hover-bg-clr: #00000010;
     --sidebar-fg-clr: #444;
     --sidebar-hover-fg-clr: #000000;
     --sidebar-icon-clr: #444;
     --sidebar-hover-icon-clr: #000000;
-    --sidebar-menu-extra-bg-clr: #D4EBEA;
-    --sidebar-sub-menu-bg-clr: #D4E7E8;
-
+    --sidebar-menu-extra-bg-clr: #d4ebea;
+    --sidebar-sub-menu-bg-clr: #d4e7e8;
 
     //Login Page
     --agree-bg-clr: #ffffff;
-    --agree-scrollbar-track-bg-clr: #A0B2C0;
-    --placeholder-fg-clr: #939AA7;
-    --placeholder-auth-fg-clr: #A0B2C0;
-    --border-text-box: #A0B2C0;
-    --border-inner-box: #A0B2C030;
-    --border-separate-box: #A0B2C050;
+    --agree-scrollbar-track-bg-clr: #a0b2c0;
+    --placeholder-fg-clr: #939aa7;
+    --placeholder-auth-fg-clr: #a0b2c0;
+    --border-text-box: #a0b2c0;
+    --border-inner-box: #a0b2c030;
+    --border-separate-box: #a0b2c050;
     --checkbox-border-radius: 1px;
-    --checkbox-label-fg-clr: #939AA7;
-    --checkbox-not-checked-bg: #EAF8F6;
-    --container-box-bg-clr: #FFF;
-    --sub-text-fg-clr: #A0B2C0;
-    --p-sub-fg-clr: #5B6275;
-    --i-fg-clr: #FFF;
-    --i-bg-clr: #FFF;
-    --docx-i-bg-clr: #3B6CC7;
-    --pdf-i-bg-clr: #C72424;
-    --pptx-i-bg-clr: #F88703;
-    --xls-i-bg-clr: #11824C;
-    --file-icon-bg-clr: #FFF;
-    --live-btn-bg-clr: #EB5353;
+    --checkbox-label-fg-clr: #939aa7;
+    --checkbox-not-checked-bg: #eaf8f6;
+    --container-box-bg-clr: #fff;
+    --sub-text-fg-clr: #a0b2c0;
+    --p-sub-fg-clr: #5b6275;
+    --i-fg-clr: #fff;
+    --i-bg-clr: #fff;
+    --docx-i-bg-clr: #3b6cc7;
+    --pdf-i-bg-clr: #c72424;
+    --pptx-i-bg-clr: #f88703;
+    --xls-i-bg-clr: #11824c;
+    --file-icon-bg-clr: #fff;
+    --live-btn-bg-clr: #eb5353;
     --spc-btn-border-radius: 17px;
     --circle-border-radius: 50%;
 }
