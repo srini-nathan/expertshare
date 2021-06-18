@@ -1,13 +1,22 @@
 import React, { FunctionComponent, useState, useEffect } from "react";
 import { Row, Col, Button } from "react-bootstrap";
-import { AuthState } from "../../../SecurityModule/models";
 import { AppСhoseMethodMessage } from "../AppСhoseMethodMessage";
 import { AppButton } from "../AppButton";
 import { AppIcon } from "../AppIcon";
-import DefaultAvatar from "./assets/images/default-avatar.png";
-import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
-import GreateGroup from "./assets/images/greate-group.svg";
 import "./assets/scss/style.scss";
+import UserAvatar from "../../assets/images/user-avatar.png";
+import { CONSTANTS } from "../../../config";
+import { useBuildAssetPath, useAuthState, useIsGranted } from "../../hooks";
+import { FileTypeInfo } from "../../models";
+
+const { Upload: UPLOAD, Role: ROLE } = CONSTANTS;
+
+const {
+    ROLE: { ROLE_SPEAKER },
+} = ROLE;
+const {
+    FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
+} = UPLOAD;
 
 export interface AppDetailsActionProps {
     defaultAvatar?: string;
@@ -28,9 +37,7 @@ export interface AppDetailsActionProps {
     userObj?: any;
 }
 export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
-    defaultAvatar = DefaultAvatar,
     newMessagesCount = 0,
-    avatarImg,
     isPTOP,
     handleHidePTOPMessages,
     handleCloseMessages,
@@ -45,8 +52,22 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
     questionId,
     userObj,
 }) => {
-    const { state } = React.useContext(AuthContext);
-    const { user } = state as AuthState;
+    const { user } = useAuthState();
+    const userProfilePath = useBuildAssetPath(
+        FILETYPEINFO_USER_PROFILE as FileTypeInfo,
+        userObj.imageName
+    );
+    const isGrantedControl = useIsGranted(ROLE_SPEAKER);
+
+    const style = userObj.imageName
+        ? {
+              backgroundImage: `url(${userProfilePath})`,
+          }
+        : {
+              backgroundImage: `url(${UserAvatar})`,
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+          };
 
     const [rotateBtn, setRotateBtn] = useState(false);
     const [openMessageArea, setOpenMessageArea] = useState<boolean>(false);
@@ -112,13 +133,7 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                             className={`details--content--profile ${
                                 group && "no-after"
                             }`}
-                            style={{
-                                backgroundImage: `url(${
-                                    group
-                                        ? GreateGroup
-                                        : avatarImg || defaultAvatar
-                                })`,
-                            }}
+                            style={style}
                         ></i>
                         {!isPTOP ? (
                             <h2 className="details--content--title">
@@ -138,7 +153,15 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                                     </h3>
                                 </div>
                                 <div className="name--comment">
-                                    <span>Product Development @Snapchat</span>
+                                    <span>
+                                        {userObj.jobTitle && userObj.jobTitle}
+                                        {userObj.jobTitle &&
+                                            userObj.jobTitle !== "" &&
+                                            userObj.company &&
+                                            userObj.company !== "" &&
+                                            ", "}
+                                        {userObj.company && userObj.company}
+                                    </span>
                                 </div>
                             </div>
                         )}
@@ -185,17 +208,18 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
 
                     {addComment && (
                         <Row className="row m-0 p-0">
-                            {showShareBtn && (
+                            {showShareBtn && isGrantedControl && (
                                 <Col
                                     className="btn-close col-auto px-1 p-0 pl-2"
                                     id="btn-close-index"
                                 >
                                     <Button
-                                        variant="link"
+                                        variant="secondary"
                                         onClick={handleAnswer}
+                                        className=" mr-2"
                                     >
                                         <i
-                                            className={`fal fa-share ${
+                                            className={`fak fa-reply ${
                                                 openMessageArea && "active"
                                             }`}
                                         ></i>
@@ -203,7 +227,8 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                                 </Col>
                             )}
 
-                            {user && user.id === userObj.id && (
+                            {((user && user.id === userObj.id) ||
+                                isGrantedControl) && (
                                 <Col
                                     className="btn-collapse col-auto p-0"
                                     id="btn-collapse-index"
