@@ -4,3 +4,4 @@ bash "./bin/generate-jsons.sh"
 yarn run fix:config
 bash "./bin/generate-translations.sh"
 yarn run fix:translations
+cp -r ./src/translations/ ./build/static
