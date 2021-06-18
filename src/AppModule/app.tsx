@@ -7,7 +7,12 @@ import { AuthLayout } from "./layouts/AuthLayout";
 import { ModuleRouter } from "./models";
 import AppProvider from "./contexts/AppContext";
 import { AuthContext } from "../SecurityModule/contexts/AuthContext";
-import { useChosenContainer, useNavigator, useSkipOnboarding } from "./hooks";
+import {
+    useChosenContainer,
+    useNavigator,
+    useSkipOnboarding,
+    useUserSocketEvents,
+} from "./hooks";
 import {
     AppLoader,
     AppPictureInPicture,
@@ -15,16 +20,15 @@ import {
     AppWelcomeModal,
 } from "./components";
 import { LandingHelper } from "./pages";
-import { socket, EVENTS, onPageChange } from "./socket";
+import { socket, EVENTS } from "./socket";
 import { useGlobalData } from "./contexts";
 import { successToast } from "./utils";
-import { UserApi, ContainerApi } from "../AdminModule/apis";
 
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
 import { AuthState } from "../SecurityModule/models";
 
-const { CONNECT, DISCONNECT, USER_LOGIN, USER_LOGOUT } = EVENTS;
+const { CONNECT, DISCONNECT } = EVENTS;
 interface Props {
     location: {
         pathname: string;
@@ -65,7 +69,7 @@ const AppFullScreenLoader = (): JSX.Element => {
 const App = (): JSX.Element => {
     const { status, container } = useGlobalData();
     const { state } = React.useContext(AuthContext);
-    const { isAuthenticated, user, token } = state as AuthState;
+    const { isAuthenticated, user } = state as AuthState;
     const navigator = useNavigator();
     const { isChosen } = useChosenContainer();
     const { isSkipOnboarding } = useSkipOnboarding();
@@ -81,43 +85,29 @@ const App = (): JSX.Element => {
     const autoLoginPage = useMatch("/auth/auto-login/:token");
     const isOverViewPage = overViewPage !== null;
     const isAutoLoginPage = autoLoginPage !== null;
+    const { emitLogin, emitLogout, emitPageChange } = useUserSocketEvents();
 
     useEffect(() => {
         socket.on(CONNECT, () => {
-            if (isAuthenticated === true && user) {
-                socket.emit(USER_LOGIN, {
-                    token,
-                    userId: user.id,
-                });
+            if (isAuthenticated === true) {
+                emitLogin();
             }
 
             if (isAuthenticated === false) {
-                socket.emit(USER_LOGOUT, {
-                    token: null,
-                    userId: null,
-                });
+                emitLogout();
             }
         });
 
-        if (isAuthenticated === true && user) {
-            socket.emit(USER_LOGIN, {
-                token,
-                userId: user.id,
-            });
+        if (isAuthenticated === true) {
+            emitLogin();
         }
 
         if (isAuthenticated === false) {
-            socket.emit(USER_LOGOUT, {
-                token: null,
-                userId: null,
-            });
+            emitLogout();
         }
 
         socket.on(DISCONNECT, () => {
-            socket.emit(USER_LOGOUT, {
-                token: null,
-                userId: null,
-            });
+            emitLogout();
         });
 
         socket.on("online", ({ userId }) => {
@@ -135,8 +125,6 @@ const App = (): JSX.Element => {
     }
 
     if (!isAutoLoginPage && isAuthenticated === true && user && container) {
-        const { id: uId } = user;
-        const { id: cId } = container;
         if (!user.isOnboarded && !isSkipOnboarding() && !onBoardingPage) {
             navigator("/onboarding").then();
         } else if (!isChosen() && !isOverViewPage && !onBoardingPage) {
@@ -158,16 +146,7 @@ const App = (): JSX.Element => {
                         <OnRouteChange
                             action={() => {
                                 window.scrollTo(0, 0);
-                                if (uId) {
-                                    onPageChange({
-                                        url: window.location.href,
-                                        pageTitle: document.title,
-                                        user: UserApi.toResourceUrl(uId),
-                                        container: ContainerApi.toResourceUrl(
-                                            cId
-                                        ),
-                                    });
-                                }
+                                emitPageChange();
                             }}
                         />
                     </DashboardLayout>
@@ -202,13 +181,7 @@ const App = (): JSX.Element => {
             <OnRouteChange
                 action={() => {
                     window.scrollTo(0, 0);
-                    if (container) {
-                        onPageChange({
-                            url: window.location.href,
-                            pageTitle: document.title,
-                            container: ContainerApi.toResourceUrl(container.id),
-                        });
-                    }
+                    emitPageChange();
                 }}
             />
         </AuthLayout>
