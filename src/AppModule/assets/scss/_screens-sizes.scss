@@ -1,7 +1,8 @@
 $site-content-width: 1024px;
 
-$media-queries: ("mobile": "only screen and (max-width: 767px)",
-    "not-mobile" : "(min-width: 767px)",
+$media-queries: (
+    "mobile": "only screen and (max-width: 767px)",
+    "not-mobile": "(min-width: 767px)",
     "tablet": "only screen and (min-width: 668px) and (max-width: $site-content-width)",
     "md": "only screen and (max-width: 900px)",
     "md2": "only screen and (max-width: 999px)",
@@ -45,12 +46,14 @@ $media-queries: ("mobile": "only screen and (max-width: 767px)",
     "lr-7": "only screen and (min-width: 2801px)",
     //custom for left and right container
     "mb-1": "only screen and (max-width: 1100px)",
-    //custom for attendees grid 
+    //custom for attendees grid
     "ag-1": "only screen and (min-width: 767px) and (max-width: 997px)",
     "ag-2": "only screen and (min-width: 998px) and (max-width: 1383px)",
     "ag-3": "only screen and (min-width: 1384px) and (max-width: 1824px)",
     //custom for translation super admin
     "tsa-1": "only screen and (max-width: 1200px)",
+    //custom for event agenda
+    "ea-1": "only screen and (max-width: 991.9px)",
 );
 
 @mixin media($breakpoints) {

@@ -11,7 +11,7 @@
         }
 
         @include media("lr-0") {
-            position: relative;
+            position: relative !important;
             width: 100%;
         }
 
@@ -48,7 +48,6 @@
         .navbar-nav,
         .navbar-collapse {
             height: 100%;
-
             .accordion {
                 .collapse:not(.collapse.show) ~ .nav-item .nav-link {
                     &::after {
@@ -186,7 +185,9 @@
             bottom: 0;
             width: 100%;
             background-color: var(--sidebar-bg-clr);
-
+            @include media("lr-0") {
+                position: relative;
+            }
             .nav-item.collapseable {
                 max-height: unset;
 
@@ -446,6 +447,16 @@
     .navbar-toggler {
         background: unset;
         border-color: transparent !important;
+        @include media("mobile") {
+            position: absolute;
+            top: 10px;
+            right: 0;
+        }
+        @include media("lr-0") {
+            position: absolute;
+            top: 10px;
+            right: 0;
+        }
     }
 
     .main-logo-container {
@@ -454,10 +465,13 @@
         height: 90px;
 
         @include media("mobile") {
-            width: 86%;
-            height: 65px;
+            width: auto;
+            height: 60px;
         }
-
+        @include media("lr-0") {
+            width: auto;
+            height: 60px;
+        }
         a.main-logo {
             width: 100%;
             height: 100%;
@@ -467,14 +481,15 @@
             background-size: contain;
 
             @include media("mobile") {
-                width: 95%;
-                height: 60px;
+                width: 135px;
+                height: 100%;
+                margin-left: 15px;
                 background-position: left center;
             }
-
             @include media("lr-0") {
-                width: 95%;
-                height: 60px;
+                width: 135px;
+                height: 100%;
+                margin-left: 15px;
                 background-position: left center;
             }
         }
@@ -610,13 +625,17 @@
     @include media("mobile") {
         position: relative !important;
     }
-
+    @include media("lr-0") {
+        height: auto;
+    }
     .main-menu-container {
         @include media("not-mobile") {
             height: calc(100% - 365px);
             overflow: auto;
         }
-
+        @include media("lr-0") {
+            height: 100%;
+        }
         &::-webkit-scrollbar {
             width: 3px;
         }
