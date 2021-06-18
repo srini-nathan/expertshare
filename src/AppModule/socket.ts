@@ -1,5 +1,6 @@
 import { io } from "socket.io-client";
 import { SOCKET_HOST } from "./config/app-env";
+import { ChatThreadApi } from "./apis";
 
 export const socket = io(SOCKET_HOST, {
     transports: ["websocket"],
@@ -15,6 +16,7 @@ export const EVENTS = {
     LEAVE_CHAT_THREAD: "leave-chat-thread",
     TYPING_IN_CHAT_THREAD: "typing-chat-thread",
     TYPED_IN_CHAT_THREAD: "typed-chat-thread",
+    CHAT_MESSAGE: "chat-message",
 };
 
 type OnPageChangePayload = {
@@ -75,4 +77,14 @@ export const typedInChatThread = (threadId: number): void => {
     socket.emit(EVENTS.TYPED_IN_CHAT_THREAD, {
         threadId,
     });
+};
+
+export const sendChatMessage = (content: string, threadId: number): void => {
+    if (socket.connected) {
+        socket.emit(EVENTS.CHAT_MESSAGE, {
+            threadId,
+            content,
+            chatThread: ChatThreadApi.toResourceUrl(threadId),
+        });
+    }
 };

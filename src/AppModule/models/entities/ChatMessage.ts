@@ -1,8 +1,10 @@
 import { ChatThread } from "./ChatThread";
 import { User } from "../../../AdminModule/models";
-import { ChatMessageApi } from "../../apis";
+import { ChatMessageApi, ChatThreadApi } from "../../apis";
 import { BaseEntity } from "./BaseEntity";
 import { CONSTANTS } from "../../../config";
+import { JsonResponseData } from "../apis";
+import { UserApi } from "../../../AdminModule/apis";
 
 const {
     ChatMessage: { CONTENT, STATUS },
@@ -41,5 +43,31 @@ export class ChatMessage extends BaseEntity {
 
     toString(): string {
         return ChatMessageApi.toResourceUrl(this.id);
+    }
+
+    toJSON(addExtraData = false): JsonResponseData {
+        let data: JsonResponseData = {
+            content: this.content,
+            status: this.status,
+            user: this.user as string,
+            chatThread: this.chatThread as string,
+            contentType: this.contentType,
+        };
+        if (addExtraData) {
+            data = { ...data, ...super.toJSON(addExtraData) };
+        }
+        return data;
+    }
+
+    static createFrom(
+        threadId: number,
+        senderId: number,
+        content: string
+    ): ChatMessage {
+        return new ChatMessage(
+            ChatThreadApi.toResourceUrl(threadId),
+            content,
+            UserApi.toResourceUrl(senderId)
+        );
     }
 }

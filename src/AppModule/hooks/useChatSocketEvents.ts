@@ -3,6 +3,7 @@ import {
     leaveChatThread,
     typedInChatThread,
     typingInChatThread,
+    sendChatMessage,
 } from "../socket";
 
 type ChatSocketEventsType = {
@@ -10,6 +11,7 @@ type ChatSocketEventsType = {
     emitLeaveChatThread: (threadId: number) => void;
     emitTyping: (threadId: number) => void;
     emitStopTyping: (threadId: number) => void;
+    emitChatMessage: (threadId: number, content: string) => void;
 };
 
 export function useChatSocketEvents(): ChatSocketEventsType {
@@ -29,10 +31,15 @@ export function useChatSocketEvents(): ChatSocketEventsType {
         typedInChatThread(threadId);
     };
 
+    const emitChatMessage = (threadId: number, content: string): void => {
+        sendChatMessage(content, threadId);
+    };
+
     return {
         emitJoinChatThread,
         emitLeaveChatThread,
         emitTyping,
         emitStopTyping,
+        emitChatMessage,
     };
 }
