@@ -20,6 +20,7 @@ export interface AppProfileHeaderProps {
     firstName?: string;
     lastName?: string;
     jobTitle?: string;
+    company?: string;
     imageName?: string;
     isAllowCommunication?: boolean;
     isExposeEmail?: boolean;
@@ -40,6 +41,7 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
     email,
     userTags,
     userType,
+    company,
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -113,7 +115,16 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                             </h2>
                         </Col>
                         <Col className="inner-container--main-det--major p-0">
-                            <p>{jobTitle && jobTitle}</p>
+                            <p>
+                                {jobTitle && jobTitle}
+
+                                {jobTitle &&
+                                    jobTitle !== "" &&
+                                    company &&
+                                    company !== "" &&
+                                    ", "}
+                                {company && company}
+                            </p>
                         </Col>
                         <Col className="inner-container--main-det--mail p-0">
                             <span>{isExposeEmail && email}</span>

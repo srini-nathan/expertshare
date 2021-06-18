@@ -54,7 +54,6 @@ export const AppСhoseMethodMessage: FC<AppСhoseMethodMessageProps> = ({
                         editMessage={editMessage}
                         isEdit={isEdit}
                         enterToPost={enterToPost}
-                        className="main-messages"
                         handleUpdateData={(message) => {
                             if (handleUpdateMessage) {
                                 handleUpdateMessage(message);

@@ -3,6 +3,7 @@ import { SessionApi } from "../../apis";
 import { PSessionTag } from "./SessionTag";
 import { PSessionCategory } from "./SessionCategory";
 import { User } from "./User";
+import { UserGroup } from "./UserGroup";
 
 export class Session extends BaseEntity {
     title: string;
@@ -77,6 +78,8 @@ export class Session extends BaseEntity {
 
     speakers: string[] | User[];
 
+    userGroups: string[] | UserGroup[];
+
     moderators: string[] | User[];
 
     constructor({
@@ -96,6 +99,7 @@ export class Session extends BaseEntity {
         externalLinkLabel = "",
         sessionCategory = "",
         sessionDocs = [],
+        userGroups = [],
         speakers = [],
         moderators = [],
         conference = "",
@@ -121,6 +125,7 @@ export class Session extends BaseEntity {
     }: Partial<Session> = {}) {
         super(id, createdAt, updatedAt);
         this.ord = ord;
+        this.userGroups = userGroups;
         this.container = container;
         this.webexMeetingPassword = webexMeetingPassword;
         this.speakers = speakers;
@@ -169,6 +174,37 @@ export class Session extends BaseEntity {
             imageName: this.imageName,
             isVisible: this.isVisible,
             description: this.description,
+            ord: this.ord,
+            userGroups: this.userGroups,
+            container: this.container,
+            webexMeetingPassword: this.webexMeetingPassword,
+            speakers: this.speakers,
+            moderators: this.moderators,
+            sessionDocs: this.sessionDocs,
+            webexUrl: this.webexUrl,
+            cardSize: this.cardSize,
+            cardType: this.cardType,
+            zoomMeetingPassword: this.zoomMeetingPassword,
+            zoomMeetingNumber: this.zoomMeetingNumber,
+            zoomUrl: this.zoomUrl,
+            streamUrl: this.streamUrl,
+            streamType: this.streamType,
+            isSessionAutoSwitch: this.isSessionAutoSwitch,
+            isShowInVideoLibrary: this.isShowInVideoLibrary,
+            externalLinkUrl: this.externalLinkUrl,
+            externalLinkLabel: this.externalLinkLabel,
+            isExternalLinkEnable: this.isExternalLinkEnable,
+            isSessionPublic: this.isSessionPublic,
+            isJoinRequired: this.isJoinRequired,
+            isLikeEnable: this.isLikeEnable,
+            isSharingEnable: this.isSharingEnable,
+            isCommentModerated: this.isCommentModerated,
+            isCommentEnable: this.isCommentEnable,
+            sessionCategory: this.sessionCategory,
+            sessionTags: this.sessionTags,
+            conference: this.conference,
+            start: this.start,
+            translations: this.translations,
         };
     }
 }

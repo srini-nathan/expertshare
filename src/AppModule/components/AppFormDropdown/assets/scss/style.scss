@@ -23,7 +23,7 @@
         color: var(--input-fg-clr);
         background: var(--input-bg-clr) !important;
         border: 1px solid var(--input-border-clr);
-        border-radius: var(--border-radius);
+        border-radius: var(--border-radius) !important;
     }
 
     &__control {

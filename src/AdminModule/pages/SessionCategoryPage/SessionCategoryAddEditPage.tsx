@@ -38,8 +38,8 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
     const navigator = useNavigator(navigate);
     const { containerResourceId, containerId } = useAuthState();
     const [languages, setLanguages] = useState<Language[]>([]);
-    const [defaultLanguage, setDefaultLanguage] = useState<string>("en");
-    const [loading, setLoading] = useState<boolean>(isEditMode);
+    const [defaultLanguage, setDefaultLanguage] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(true);
     const [data, setData] = useState<SessionCategory>(
         new SessionCategory(containerResourceId)
     );
@@ -215,18 +215,19 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
     }, [languages]);
 
     useEffect(() => {
-        LanguageApi.find<Language>(1, { "container.id": containerId }).then(
-            ({ error, response }) => {
-                if (error !== null) {
-                    if (_isString(error)) {
-                        errorToast(error);
-                    }
-                } else if (response !== null) {
-                    setLanguages(response.items);
+        LanguageApi.find<Language>(1, {
+            "container.id": containerId,
+            "order[isDefault]": "desc",
+        }).then(({ error, response }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
                 }
-                setLoading(false);
+            } else if (response !== null) {
+                setLanguages(response.items);
             }
-        );
+            setLoading(false);
+        });
     }, [data]);
 
     if (loading) {

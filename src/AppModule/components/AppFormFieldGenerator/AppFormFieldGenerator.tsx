@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useEffect } from "react";
 import { Control } from "react-hook-form";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
@@ -42,6 +42,12 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
 
     const { t } = useTranslation();
 
+    useEffect(() => {
+        if (setValue && defaultValue) {
+            setValue(`/api/user_fields/${properties.id}`, defaultValue.value);
+        }
+    }, []);
+
     const renderText = (type: string) => {
         return (
             <AppFormInput
@@ -51,6 +57,11 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                 xl={xl}
                 label={t(properties.labelKey)}
                 type={type}
+                onChange={(e) => {
+                    if (setValue) {
+                        setValue(`/api/user_fields/${properties.id}`, e);
+                    }
+                }}
                 required={properties.isRequired}
                 name={`userField./api/user_fields/${properties.id}`}
                 defaultValue={defaultValue ? defaultValue.value : ""}
@@ -74,6 +85,14 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                 name={`userField./api/user_fields/${properties.id}`}
                 defaultValue={defaultValue ? defaultValue.value : ""}
                 // {...properties.attr}
+                onChange={(e) => {
+                    if (setValue) {
+                        setValue(
+                            `/api/user_fields/${properties.id}`,
+                            e.target.value
+                        );
+                    }
+                }}
                 control={control}
             />
         );
@@ -213,7 +232,13 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
         return <Col md={6} sm={12} lg={4} xl={4}></Col>;
     };
     const renderDropDown = () => {
-        const dropDownOptions: PrimitiveObject[] = [];
+        const dropDownOptions: PrimitiveObject[] = [
+            {
+                label: t("userField.label:selectOptionBlank").toString(),
+                name: "",
+                value: "",
+            },
+        ];
         let dropDownDefaultValue = {};
 
         Object.keys(properties.options.choice).forEach((key) => {
@@ -247,9 +272,19 @@ export const AppFormFieldGenerator: FunctionComponent<AppFormFieldGeneratorProps
                 {...validation}
                 // {...properties.attr}
                 control={control}
+                errorMessage={errorMessage}
                 transform={{
-                    output: (template: PrimitiveObject) => template?.value,
+                    output: (template: PrimitiveObject) => {
+                        if (setValue) {
+                            setValue(
+                                `/api/user_fields/${properties.id}`,
+                                template?.value
+                            );
+                        }
+                        return template?.value;
+                    },
                     input: (value: string) => {
+                        setValue(`/api/user_fields/${properties.id}`, value);
                         return _find([], {
                             value,
                         });
