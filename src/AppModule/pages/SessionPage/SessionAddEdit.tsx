@@ -226,6 +226,13 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                 container: ContainerApi.toResourceUrl(containerId),
             };
         });
+
+        const userGroupsSelectedItems = selectedUserGroups.map((e) => {
+            return UserGroupApi.toResourceUrl(parseInt(e.id, 10));
+        });
+
+        formData.userGroups = userGroupsSelectedItems;
+
         formData.speakers = selectedSpeakers.map((e) => {
             return UserApi.toResourceUrl(e.id);
         });
@@ -326,6 +333,18 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                             };
                         }
                     );
+                    const groups = response.userGroups as UserGroup[];
+                    const selectedUg: SimpleObject<string>[] = groups.map(
+                        ({ id: ugId, name }) => {
+                            return {
+                                label: name,
+                                value: `${ugId}`,
+                                id: `${ugId}`,
+                            };
+                        }
+                    );
+                    setSelectedUserGroups(selectedUg);
+
                     setDocsFile(sessionDocs);
                     isExtraLink(response.isExternalLinkEnable);
                     setSelectedModerators(response.moderators as User[]);
@@ -410,18 +429,19 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                 setSpeakers(response.items);
             }
         });
-        LanguageApi.find<Language>(1, { "container.id": containerId }).then(
-            ({ error, response }) => {
-                if (error !== null) {
-                    if (_isString(error)) {
-                        errorToast(error);
-                    }
-                } else if (response !== null) {
-                    setLanguages(response.items);
+        LanguageApi.find<Language>(1, {
+            "container.id": containerId,
+            "order[isDefault]": "desc",
+        }).then(({ error, response }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
                 }
-                setLoading(false);
+            } else if (response !== null) {
+                setLanguages(response.items);
             }
-        );
+            setLoading(false);
+        });
         SessionTagApi.find<SessionTag>(1, {
             "container.id": containerId,
         }).then(({ error, response }) => {

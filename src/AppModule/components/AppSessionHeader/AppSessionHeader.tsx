@@ -19,7 +19,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
     const { container } = useGlobalData();
     const { t } = useTranslation();
     return (
-        <Col sm={12} className="session-details-header p-0">
+        <Col sm={12} className="session-details-header mb-4 p-0">
             <Row className="session-details-header--detail mb-3 px-4 pt-4">
                 <Col
                     md={6}
