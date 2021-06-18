@@ -19,53 +19,6 @@ textarea.form-control {
     }
 }
 
-.main-messages {
-    position: relative;
-    margin-top: 1em;
-    textarea.form-control {
-        min-height: 36px;
-        resize: none;
-    }
-    .is-send-wrapper {
-        position: absolute;
-        top: 0;
-        right: 16px;
-        .smile-icon {
-            right: 0;
-            color: var(--input-border-clr);
-        }
-    }
-
-    .sent-btn {
-        background: transparent;
-        border: none;
-        color: var(--primary);
-        font-weight: 700;
-        &:hover {
-            color: var(--primary-90);
-            background: transparent;
-            border: none;
-        }
-        &:focus {
-            border: none;
-            box-shadow: none !important;
-            background: none !important;
-            border: none !important;
-        }
-        &:active {
-            border: none;
-            background: none !important;
-            box-shadow: none !important;
-            border: none !important;
-        }
-    }
-    .smile-icon {
-        &::before {
-            position: relative;
-            right: 18px;
-        }
-    }
-}
 
 .form-label {
     position: relative;
@@ -101,7 +54,7 @@ textarea.form-control {
         position: relative;
         cursor: pointer;
 
-        &:hover > &-content {
+        &:hover>&-content {
             display: block;
         }
 

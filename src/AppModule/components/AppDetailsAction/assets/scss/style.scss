@@ -1,9 +1,19 @@
 @import "../../../../assets/scss/variables";
 
+.fa-reply {
+    font-size: 18px !important;
+    font-weight: 400;
+
+    &::before {
+        content: "\e00c";
+    }
+}
+
 .details {
     &--content {
         display: flex;
         align-items: center;
+
         &--profile {
             display: block;
             width: 36px;
@@ -12,6 +22,7 @@
             background-repeat: no-repeat;
             background-size: cover;
             border-radius: 20px;
+
             &::after {
                 position: relative;
                 top: -1px;
@@ -25,11 +36,13 @@
                 border-radius: 20px;
             }
         }
+
         .no-after {
             &::after {
                 content: none !important;
             }
         }
+
         &--title {
             display: flex;
             align-items: center;
@@ -37,6 +50,7 @@
             font-size: 20px;
             font-weight: 700;
             color: var(--secondary);
+
             &--count {
                 display: inline-flex;
                 align-items: center;
@@ -52,6 +66,7 @@
             }
         }
     }
+
     .name {
         &--sender {
             h3 {
@@ -59,6 +74,7 @@
                 font-size: 16px;
                 font-weight: 500;
                 color: var(--secondary);
+
                 .time {
                     font-size: 12px;
                     font-weight: 400;
@@ -66,6 +82,7 @@
                 }
             }
         }
+
         &--comment {
             p {
                 margin-bottom: 0;
@@ -73,6 +90,7 @@
                 font-weight: 500;
                 color: var(--secondary);
             }
+
             span {
                 font-size: 12px;
                 font-weight: 400;
@@ -91,6 +109,7 @@
             cursor: pointer;
             text-decoration: none;
             padding: 0 !important;
+
             i {
                 display: flex;
                 align-items: center;
@@ -107,36 +126,41 @@
                 transform: rotate(180deg);
             }
         }
+
         .btns-flex-questions {
             display: flex;
             justify-content: space-between;
             width: 80px;
+
             .btn-delete {
                 padding: 0 3px !important;
             }
+
             .edit-btn {
                 padding: 0 9px !important;
             }
         }
     }
+
     .btn-close {
         button {
             cursor: pointer;
             padding: 0 !important;
             text-decoration: none;
+
             i {
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 width: 36px;
                 height: 36px;
-                font-size: 22px;
                 color: var(--secondary);
                 border-radius: var(--border-radius);
-                box-shadow: 0 3px 9px var(--secondary-10);
+
             }
         }
     }
+
     .active {
         outline: none;
         color: var(--primary) !important;
