@@ -21,7 +21,6 @@ export function useUserSocketEvents(): UserSocketEventsType {
             onUserLogin({
                 token,
                 userId: user.id,
-                user,
             });
         }
     };

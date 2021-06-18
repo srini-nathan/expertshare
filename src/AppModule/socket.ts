@@ -1,6 +1,5 @@
 import { io } from "socket.io-client";
 import { SOCKET_HOST } from "./config/app-env";
-import { PUser } from "../AdminModule/models";
 
 export const socket = io(SOCKET_HOST, {
     transports: ["websocket"],
@@ -34,18 +33,12 @@ export const onPageChange = ({
 type OnUserLoginPayload = {
     token: string | null;
     userId: number | null;
-    user: PUser | null;
 };
 
-export const onUserLogin = ({
-    token,
-    userId,
-    user,
-}: OnUserLoginPayload): void => {
+export const onUserLogin = ({ token, userId }: OnUserLoginPayload): void => {
     socket.emit(EVENTS.USER_LOGIN, {
         token,
         userId,
-        user,
     });
 };
 
@@ -53,6 +46,5 @@ export const onUserLogout = (): void => {
     socket.emit(EVENTS.USER_LOGOUT, {
         token: null,
         userId: null,
-        user: null,
     });
 };
