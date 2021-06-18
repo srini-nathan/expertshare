@@ -34,7 +34,7 @@ do
     cp "${TRANSLATION_DUMP_PATH}/${containerId}/${locale}.json" "${TRANSLATION_BUILD_DUMP_PATH}/${containerId}/"
     echo "import ${locale} from \"./${locale}.json\";" >> "${TRANSLATION_DUMP_PATH}/${containerId}/index.ts"
   done
-  echo "" >> "${TRANSLATION_DUMP_PATH}/${containerId}/index.ts"
+  echo "export {};" >> "${TRANSLATION_DUMP_PATH}/${containerId}/index.ts"
   for locale in "${ES_LOCALES[@]}"
   do
     mkdir -p "${TRANSLATION_DUMP_PATH}/${containerId}"
