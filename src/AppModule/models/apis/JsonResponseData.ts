@@ -10,5 +10,7 @@ export class JsonResponseData {
         | null[]
         | JsonResponseData
         | JsonResponseData[]
-        | undefined;
+        | undefined
+        | any[]
+        | any;
 }

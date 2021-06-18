@@ -39,6 +39,7 @@ import {
     SessionTag,
     UserGroup,
     User,
+    PSession,
 } from "../../../AdminModule/models";
 import {
     ConferenceApi,
@@ -291,64 +292,70 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (isEditMode) {
-            SessionApi.findById<Session>(id, {
+            SessionApi.getSession<Session[]>({
+                id,
                 "groups[]": "SessionTranslationsGroup",
             }).then(({ response, isNotFound, errorMessage }) => {
                 if (errorMessage) {
                     errorToast(errorMessage);
                 } else if (isNotFound) {
-                    errorToast("Language not exist");
-                } else if (response !== null) {
-                    setData(response);
-                    trigger();
-                    const selected = [] as SimpleObject<string>[];
-                    response.sessionTags?.forEach(({ id: ugId, name }) => {
-                        selected.push({
-                            label: name as string,
-                            value: name as string,
-                            id: `${ugId}`,
-                        });
-                    });
-                    setSelectedSessionTags(selected);
-                    const items: TranslationsType[] = Object.keys(
-                        response.translations
-                    ).map((key) => {
-                        return {
-                            locale: response.translations[key].locale,
-                            title: response.translations[key].title,
-                            description: response.translations[key].description,
-                            streamUrl: response.translations[key].streamUrl,
-                        };
-                    });
-                    setTranslations(items);
-                    const sessionDocs: SimpleObject<string>[] = response.sessionDocs.map(
-                        (e) => {
-                            return {
-                                fileName: e.fileName,
-                                name: e.name,
-                                size: "",
-                                container: ContainerApi.toResourceUrl(
-                                    containerId
-                                ),
-                            };
-                        }
-                    );
-                    const groups = response.userGroups as UserGroup[];
-                    const selectedUg: SimpleObject<string>[] = groups.map(
-                        ({ id: ugId, name }) => {
-                            return {
-                                label: name,
-                                value: `${ugId}`,
+                    errorToast("Session not exist");
+                } else if (response) {
+                    // eslint-disable-next-line no-console
+                    console.log(response.items[0]);
+                    if (response.items[0]) {
+                        const res: Session = (response.items as PSession[])[0] as Session;
+                        setData(res);
+                        trigger();
+                        const selected = [] as SimpleObject<string>[];
+                        res.sessionTags?.forEach(({ id: ugId, name }) => {
+                            selected.push({
+                                label: name as string,
+                                value: name as string,
                                 id: `${ugId}`,
+                            });
+                        });
+                        setSelectedSessionTags(selected);
+                        const items: TranslationsType[] = Object.keys(
+                            res.translations
+                        ).map((key) => {
+                            return {
+                                locale: res.translations[key].locale,
+                                title: res.translations[key].title,
+                                description: res.translations[key].description,
+                                streamUrl: res.translations[key].streamUrl,
                             };
-                        }
-                    );
-                    setSelectedUserGroups(selectedUg);
+                        });
+                        setTranslations(items);
+                        const sessionDocs: SimpleObject<string>[] = res.sessionDocs.map(
+                            (e) => {
+                                return {
+                                    fileName: e.fileName,
+                                    name: e.name,
+                                    size: "",
+                                    container: ContainerApi.toResourceUrl(
+                                        containerId
+                                    ),
+                                };
+                            }
+                        );
+                        const groups = res.userGroups as UserGroup[];
+                        const selectedUg: SimpleObject<string>[] = groups.map(
+                            ({ id: ugId, name }) => {
+                                return {
+                                    label: name,
+                                    value: `${ugId}`,
+                                    id: `${ugId}`,
+                                };
+                            }
+                        );
+                        setSelectedUserGroups(selectedUg);
 
-                    setDocsFile(sessionDocs);
-                    isExtraLink(response.isExternalLinkEnable);
-                    setSelectedModerators(response.moderators as User[]);
-                    setSelectedSpeakers(response.speakers as User[]);
+                        setDocsFile(sessionDocs);
+                        isExtraLink(res.isExternalLinkEnable);
+                        setSelectedModerators(res.moderators as User[]);
+                        setSelectedSpeakers(res.speakers as User[]);
+                    }
                 }
             });
         }
