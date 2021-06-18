@@ -12,8 +12,6 @@ import {
     SessionDetailsPage,
     AttendeeOverview,
     OnBoardingPage,
-    AFrameRoomGrid,
-    AFrameRoomAddEdit,
 } from "./pages";
 import { ModuleRouter } from "./models";
 
@@ -57,10 +55,6 @@ export const routers: ModuleRouter[] = [
                     <AttendeeOverview path={"attendee/:view"} />
                     <UserProfilePage path={"attendee/:id/show"} />
                     <OnBoardingPage path={"onboarding"} />
-                    <AFrameRoomGrid path={"aframerooms"} />
-                    <AFrameRoomGrid path={"aframerooms/:view"} />
-                    <AFrameRoomAddEdit path={"aframeroom/new"} />
-                    <AFrameRoomAddEdit path={"aframeroom/:id"} />
                 </Router>
             );
         },

@@ -5,14 +5,14 @@ export const appGridColDef = ({
     onPressDelete,
 }: AppCellActionParams): ColDef[] => [
     {
-        headerName: "Name",
+        headerName: "admin.sessionCategory.list:column.name",
         field: "name",
         filter: "text",
         minWidth: 80,
         flex: 0.35,
     },
     {
-        headerName: "Color",
+        headerName: "admin.sessionCategory.list:column.Color",
         field: "color",
         cellRenderer: "AppColorPickerRender",
         minWidth: 40,
@@ -21,7 +21,7 @@ export const appGridColDef = ({
     },
 
     {
-        headerName: "Text Color",
+        headerName: "admin.sessionCategory.list:column.textColor",
         field: "textColor",
         cellRenderer: "AppColorPickerRender",
         minWidth: 40,
@@ -29,7 +29,7 @@ export const appGridColDef = ({
         sortable: false,
     },
     {
-        headerName: "Actions",
+        headerName: "admin.sessionCategory.list:column.action",
         field: "id",
         sortable: false,
         maxWidth: 120,

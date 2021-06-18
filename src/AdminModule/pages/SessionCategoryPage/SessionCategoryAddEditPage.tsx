@@ -1,6 +1,7 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { useForm, FormProvider } from "react-hook-form";
 import { isString as _isString } from "lodash";
 import mapValues from "lodash/mapValues";
@@ -37,15 +38,15 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
     const navigator = useNavigator(navigate);
     const { containerResourceId, containerId } = useAuthState();
     const [languages, setLanguages] = useState<Language[]>([]);
-    const [defaultLanguage, setDefaultLanguage] = useState<string>("en");
-    const [loading, setLoading] = useState<boolean>(isEditMode);
+    const [defaultLanguage, setDefaultLanguage] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(true);
     const [data, setData] = useState<SessionCategory>(
         new SessionCategory(containerResourceId)
     );
     const [translations, setTranslations] = useState<
         SessionCategoryTranslationsType[]
     >([]);
-
+    const { t } = useTranslation();
     const {
         control,
         handleSubmit,
@@ -214,18 +215,19 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
     }, [languages]);
 
     useEffect(() => {
-        LanguageApi.find<Language>(1, { "container.id": containerId }).then(
-            ({ error, response }) => {
-                if (error !== null) {
-                    if (_isString(error)) {
-                        errorToast(error);
-                    }
-                } else if (response !== null) {
-                    setLanguages(response.items);
+        LanguageApi.find<Language>(1, {
+            "container.id": containerId,
+            "order[isDefault]": "desc",
+        }).then(({ error, response }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
                 }
-                setLoading(false);
+            } else if (response !== null) {
+                setLanguages(response.items);
             }
-        );
+            setLoading(false);
+        });
     }, [data]);
 
     if (loading) {
@@ -236,12 +238,15 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
 
     return (
         <Fragment>
-            <AppBreadcrumb linkText={"Session Category"} linkUrl={".."} />
+            <AppBreadcrumb
+                linkText={t("common.breadcrumb:sessionCategory")}
+                linkUrl={".."}
+            />
             <AppPageHeader
                 title={
                     isEditMode
-                        ? "Edit Session Category"
-                        : "Add Session Category"
+                        ? t("admin.sessionCategory.form:header.titleEdit")
+                        : t("admin.sessionCategory.form:header.title")
                 }
             />
 
@@ -269,7 +274,9 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
                                 />
                                 <Form.Row>
                                     <AppFormInputColorPicker
-                                        label={"Color"}
+                                        label={t(
+                                            "admin.sessionCategory.form:label.color"
+                                        )}
                                         {...register("color")}
                                         xl={12}
                                         lg={12}
@@ -279,7 +286,9 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
                                         setValue={setValue}
                                     />
                                     <AppFormInputColorPicker
-                                        label={"Text Color"}
+                                        label={t(
+                                            "admin.sessionCategory.form:label.textColor"
+                                        )}
                                         {...register("textColor")}
                                         xl={12}
                                         lg={12}

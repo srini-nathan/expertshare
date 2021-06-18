@@ -107,7 +107,13 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                     </h2>
                 </a>
                 <p className="card--title--bio mb-1 mx-2">
-                    {jobTitle}, {company}
+                    {jobTitle && jobTitle}
+                    {attendee.jobTitle &&
+                        attendee.jobTitle !== "" &&
+                        attendee.company &&
+                        attendee.company !== "" &&
+                        ", "}
+                    {company && company}
                 </p>
                 <a href="#" className="card--title--mail mb-3 d-block">
                     {isExposeEmail && email}
@@ -130,11 +136,11 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
 
                             return <></>;
                         })}
-                        {userTags.length > 2 && (
+                        {/* {userTags.length > 2 && (
                             <div className="card--tags--item show-more col-auto px-0 mb-2">
                                 <a href="#">+ Show More</a>
                             </div>
-                        )}
+                        )} */}
                     </div>
                 </div>
             )}
@@ -149,7 +155,7 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                     <div className="card--buttons--get-in-contact col-12 px-2">
                         <button className="btn btn-secondary">
                             <AppIcon name="Conversation" />
-                            Get In Contact
+                            {t("attendee.form:button.getInContact")}
                             <div className="popup">
                                 <div className="popup--inner">
                                     {/* <div className="popup--inner--item video-chat">
@@ -162,7 +168,9 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                                         <div className="popup--inner--item conversation">
                                             <a href="#">
                                                 <AppIcon name="Conversation" />
-                                                Start Conversation
+                                                {t(
+                                                    "attendee.form:button.startConversation"
+                                                )}
                                             </a>
                                         </div>
                                     )}
@@ -176,7 +184,9 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                                             }
                                         >
                                             <AppIcon name="AddUserPlus" />
-                                            View Profile
+                                            {t(
+                                                "attendee.form:button.viewProfile"
+                                            )}
                                         </Link>
                                     </div>
                                     {/* <div className="popup--inner--item view-profile">

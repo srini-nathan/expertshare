@@ -2,6 +2,7 @@ import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Row, Col, Form, OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { find as _find } from "lodash";
@@ -67,6 +68,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
     );
     const [loading, setLoading] = useState<boolean>(isEditMode);
     const [selectedTemplate, setSelectedTemplate] = useState<string>("");
+    const { t } = useTranslation();
 
     const {
         control,
@@ -164,10 +166,15 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
 
     return (
         <Fragment>
-            <AppBreadcrumb linkText={"Email Templates"} linkUrl={".."} />
+            <AppBreadcrumb
+                linkText={t("common.breadcrumb:emailTemplates")}
+                linkUrl={".."}
+            />
             <AppPageHeader
                 title={
-                    isEditMode ? "Edit Email Template" : "Add Email Template"
+                    isEditMode
+                        ? t("admin.emailTemplate.form:header.titleEdit")
+                        : t("admin.emailTemplate.form:header.title")
                 }
             />
             <Row>
@@ -178,7 +185,9 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                 <AppFormSelect
                                     id={"etKey"}
                                     name={"etKey"}
-                                    label={"Select template"}
+                                    label={t(
+                                        "admin.emailTemplate.form:label.template"
+                                    )}
                                     md={12}
                                     lg={12}
                                     xl={12}
@@ -189,7 +198,9 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                     )}
                                     errorMessage={errors.etKey?.message}
                                     defaultValue={data.etKey}
-                                    placeholder={"Email Template"}
+                                    placeholder={t(
+                                        "admin.emailTemplate.form:label.template"
+                                    )}
                                     options={options}
                                     control={control}
                                     transform={{
@@ -210,7 +221,9 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                             <Form.Row>
                                 <AppFormInput
                                     name={"name"}
-                                    label={"Name"}
+                                    label={t(
+                                        "admin.emailTemplate.form:label.name"
+                                    )}
                                     md={12}
                                     lg={12}
                                     sm={12}
@@ -229,7 +242,9 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                             <Form.Row>
                                 <AppFormInput
                                     name={"subject"}
-                                    label={"Subject"}
+                                    label={t(
+                                        "admin.emailTemplate.form:label.subject"
+                                    )}
                                     md={12}
                                     lg={12}
                                     xl={12}
@@ -246,7 +261,9 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                             <Form.Row>
                                 <AppFormRichTextArea
                                     name={"content"}
-                                    label={"Content"}
+                                    label={t(
+                                        "admin.emailTemplate.form:label.content"
+                                    )}
                                     md={12}
                                     lg={12}
                                     xl={12}
@@ -270,7 +287,11 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                         </Form>
                     </AppCard>
 
-                    <AppCard title="Placeholders">
+                    <AppCard
+                        title={t(
+                            "admin.emailTemplate.form:label.sectionPlaceholder"
+                        )}
+                    >
                         <div className="email-template-container">
                             {getPlaceholders().map((e, i) => {
                                 let show = false;

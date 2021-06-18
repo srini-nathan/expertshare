@@ -192,7 +192,7 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                     fd.set("file", files[0], files[0].name);
                     fd.set("fileType", FILETYPE_AFRAMEPANEL_MEDIA);
 
-                    return UploadAPI.createResource<Upload, FormData>(fd).then(
+                    UploadAPI.createResource<Upload, FormData>(fd).then(
                         ({ errorMessage, response }) => {
                             if (errorMessage) {
                                 errorToast(errorMessage);
@@ -212,7 +212,7 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                 return true;
             })
         ).then((results: boolean[]) => {
-            if (results.every((result) => result)) {
+            if (results.every((result: boolean) => result)) {
                 submitForm(formData);
             }
         });

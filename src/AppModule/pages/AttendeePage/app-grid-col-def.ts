@@ -7,7 +7,7 @@ export const appGridColDef = ({
     onPressAddNewUser,
 }: AppCellActionWithCustom): ColDef[] => [
     {
-        headerName: "Name",
+        headerName: "attendee.list:column.name",
         field: "name",
         filter: "name",
         cellRenderer: "appNameTemplateRenderer",
@@ -15,28 +15,28 @@ export const appGridColDef = ({
         flex: 0.65,
     },
     {
-        headerName: "Email",
+        headerName: "attendee.list:column.email",
         cellRenderer: "appEmailRenderer",
         field: "email",
         minWidth: 40,
         flex: 0.33,
     },
     {
-        headerName: "Tags",
+        headerName: "attendee.list:column.tags",
         field: "tags",
         cellRenderer: "appTagTemplateRenderer",
         minWidth: 40,
         flex: 0.8,
     },
     {
-        headerName: "Category",
+        headerName: "attendee.list:column.category",
         field: "role",
         cellRenderer: "appCategoryTemplateRenderer",
         minWidth: 30,
         flex: 0.3,
     },
     {
-        headerName: "Actions",
+        headerName: "attendee.list:column.actions",
         sortable: false,
         maxWidth: 290,
         flex: 0.9,

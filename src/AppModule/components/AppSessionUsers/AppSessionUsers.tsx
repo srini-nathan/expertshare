@@ -1,5 +1,6 @@
 import React, { FC, useState } from "react";
 import { Row, Col } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { AppUserSelector } from "../AppUserSelector";
 import { AppButton } from "../AppButton";
 import "./assets/scss/style.scss";
@@ -32,7 +33,7 @@ export const AppSessionUsers: FC<AppSessionUsersProps> = ({
     selectedUsers = [],
 }): JSX.Element => {
     const [show, isShow] = useState<boolean>(false);
-
+    const { t } = useTranslation();
     return (
         <Row className="m-0">
             <Col sm={12} className="create-session--speakers--header px-0">
@@ -59,8 +60,8 @@ export const AppSessionUsers: FC<AppSessionUsersProps> = ({
                                     variant={"secondary"}
                                     className=" add-btn"
                                 >
-                                    <i className="fak fa-plus-light"></i>
-                                    Add
+                                    <i className="fak fa-plus-light mr-2"></i>
+                                    {t("common.button:add")}
                                 </AppButton>
                             </Col>
                             <AppUserSelector

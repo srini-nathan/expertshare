@@ -1,6 +1,7 @@
 import React, { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { isString as _isString } from "lodash";
+import { useTranslation } from "react-i18next";
 import {
     AppIcon,
     AppButton,
@@ -61,6 +62,7 @@ export const AppTranslation: FC<AppTranslationProps> = ({
     const [indexItem, setIndex] = useState<number>(0);
     const [showItem, isShowItem] = useState<boolean>(false);
     const [storing, isStoring] = useState<boolean>(false);
+    const { t } = useTranslation();
 
     const addNewItem = () => {
         if (translation)
@@ -387,7 +389,9 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                                 "tKey"
                                             );
                                         }}
-                                        placeholder="Item Key"
+                                        placeholder={t(
+                                            "admin.translation:column.translationKey"
+                                        )}
                                         md={12}
                                         sm={12}
                                         lg={12}
@@ -400,7 +404,9 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                 <div className="content--item--value--name col-6 px-1">
                                     <AppFormTextArea
                                         name={`translation_default_value_${item.itemKey}`}
-                                        placeholder="Default Value"
+                                        placeholder={t(
+                                            "admin.translation:column.defaultValue"
+                                        )}
                                         onBlurHandler={(
                                             value: React.FocusEvent<HTMLTextAreaElement>
                                         ) => {
@@ -440,13 +446,17 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                 show={show}
                 handleClose={handleHideModal}
                 handleDelete={removeTranslationGroup}
-                bodyContent="Are you sure you want to delete this item?"
+                bodyContent={t(
+                    "admin.translation:delete.group.confirmatio.message"
+                )}
             />
             <AppModal
                 show={showItem}
                 handleClose={handleHideModal}
                 handleDelete={removeTranslation}
-                bodyContent="Are you sure you want to delete this item?"
+                bodyContent={t(
+                    "admin.translation:delete.key.confirmation.message"
+                )}
             />
             <div className="translation-super-admin--container col-12 mt-4 px-0">
                 <div className="translation-super-admin--container--inner">
@@ -457,10 +467,18 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                 <div className="group-col--header--value w-100">
                                     <div className="row m-0 p-0">
                                         <div className="group-col--header--value--item col-6 px-1">
-                                            <label>Translation Key</label>
+                                            <label>
+                                                {t(
+                                                    "admin.translation:column.translationKey"
+                                                )}
+                                            </label>
                                         </div>
                                         <div className="group-col--header--value--item col-6 px-1">
-                                            <label>Default Value</label>
+                                            <label>
+                                                {t(
+                                                    "admin.translation:column.defaultValue"
+                                                )}
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -499,6 +517,9 @@ export const AppTranslation: FC<AppTranslationProps> = ({
                                                 control={control}
                                                 className="m-0 p-0"
                                                 name="GroupName"
+                                                placeholder={t(
+                                                    "admin.translation:column.groupName"
+                                                )}
                                                 defaultValue={
                                                     translationGroupName
                                                         ? translationGroupName.tgKey

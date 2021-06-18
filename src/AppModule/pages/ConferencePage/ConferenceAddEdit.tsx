@@ -249,18 +249,19 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
         }
     }, [languages]);
     useEffect(() => {
-        LanguageApi.find<Language>(1, { "container.id": containerId }).then(
-            ({ error, response }) => {
-                if (error !== null) {
-                    if (_isString(error)) {
-                        errorToast(error);
-                    }
-                } else if (response !== null) {
-                    setLanguages(response.items);
+        LanguageApi.find<Language>(1, {
+            "container.id": containerId,
+            "order[isDefault]": "desc",
+        }).then(({ error, response }) => {
+            setLoading(false);
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
                 }
-                setLoading(false);
+            } else if (response !== null) {
+                setLanguages(response.items);
             }
-        );
+        });
         ConferenceTagApi.find<ConferenceTag>(1, {
             "container.id": containerId,
         }).then(({ error, response }) => {
@@ -348,7 +349,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                                 </Form.Group>
                                 <Col md={12} sm={12} lg={6} xl={6}>
                                     <AppFormSelectCreatable
-                                        name="userTags"
+                                        name="conferenceTags"
                                         label={t("event.form:label.tags")}
                                         md={12}
                                         sm={12}

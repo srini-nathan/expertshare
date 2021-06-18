@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { format } from "date-fns";
 import { Link } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { PConference } from "../../../AdminModule/models";
 import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath } from "../../hooks";
@@ -28,6 +29,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
     handleDelete,
     isGrantedControl,
 }): JSX.Element => {
+    const { t } = useTranslation();
     const {
         id,
         title,
@@ -132,7 +134,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                             {conferenceTags.length > 0 && (
                                 <>
                                     <i className="fak fa-tags mr-2"></i>
-                                    <span>Tags</span>
+                                    <span>{t("event.form:label.tags")}</span>
                                 </>
                             )}
                         </div>

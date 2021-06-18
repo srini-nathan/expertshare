@@ -5,6 +5,7 @@ import {
     IServerSideDatasource,
     IServerSideGetRowsParams,
 } from "ag-grid-community";
+import { useTranslation } from "react-i18next";
 import { Col, Row } from "react-bootstrap";
 import { Canceler } from "axios";
 import { isString as _isString } from "lodash";
@@ -27,7 +28,7 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
-
+    const { t } = useTranslation();
     function getDataSource(): IServerSideDatasource {
         return {
             getRows(params: IServerSideGetRowsParams) {
@@ -91,7 +92,7 @@ export const ClientList: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Fragment>
             <AppPageHeader
-                title={"Clients"}
+                title={t("admin.client.list:header.title")}
                 createLink={"/admin/clients/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}

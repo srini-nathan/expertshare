@@ -13,29 +13,29 @@ import {
     AppFormSwitch,
     AppFormInput,
     AppLoader,
-} from "../../components";
+} from "../../../AppModule/components";
 import {
     Upload,
     UnprocessableEntityErrorResponse,
     FileTypeInfo,
-} from "../../models";
-import { AFrameRoom, PAFrameRoom } from "../../../AdminModule/models";
-import { AFrameRoomApi, ContainerApi } from "../../../AdminModule/apis";
+} from "../../../AppModule/models";
+import { AFrameRoom, PAFrameRoom } from "../../models";
+import { AFrameRoomApi, ContainerApi } from "../../apis";
 import {
     errorToast,
     setViolations,
     successToast,
     validation,
-} from "../../utils";
+} from "../../../AppModule/utils";
 import {
     useParamId,
     useNavigator,
     useAuthState,
     useBuildAssetPath,
-} from "../../hooks";
+} from "../../../AppModule/hooks";
 import { schema, validations } from "./schema";
 import { CONSTANTS } from "../../../config";
-import { UploadAPI } from "../../apis";
+import { UploadAPI } from "../../../AppModule/apis";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -159,8 +159,17 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
 
     return (
         <Fragment>
-            <AppBreadcrumb linkText={"Rooms"} linkUrl={"/admin/rooms"} />
-            <AppPageHeader title={isEditMode ? "Edit Rooms" : "Add Rooms"} />
+            <AppBreadcrumb
+                linkText={t("common.breadcrumb:aframeroom")}
+                linkUrl={"/admin/rooms"}
+            />
+            <AppPageHeader
+                title={
+                    isEditMode
+                        ? t("admin.aframeroom.form:header.titleEdit")
+                        : t("admin.aframeroom.form:header.title")
+                }
+            />
             <Row>
                 <Col>
                     <AppCard>

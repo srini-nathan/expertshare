@@ -1,40 +1,46 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps, useParams } from "@reach/router";
+import { useTranslation } from "react-i18next";
 import { Row, Col } from "react-bootstrap";
 import {
     AppLoader,
     AppCard,
     AppSessionHeader,
-    AppSessionDetails,
+    // AppSessionDetails,
     AppSessionDescription,
     AppSessionUsers,
     AppQuestionsAndAnswers,
+    AppSessionTags,
 } from "../../components";
-import { Session, User } from "../../../AdminModule/models";
+import { Session, User, PSession } from "../../../AdminModule/models";
 import { SessionApi } from "../../../AdminModule/apis";
 import { errorToast } from "../../utils";
 import { useAuthState } from "../../hooks";
 import "./assets/scss/style.scss";
 
 export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
+    const { t } = useTranslation();
     const { id, confereneceId } = useParams();
     const [loading, isLoading] = useState<boolean>(true);
     const { containerResourceId, containerId } = useAuthState();
     const [data, setData] = useState<Session>(new Session(containerResourceId));
 
     useEffect(() => {
-        SessionApi.findById<Session>(id).then(
-            ({ response, isNotFound, errorMessage }) => {
-                isLoading(false);
-                if (errorMessage) {
-                    errorToast(errorMessage);
-                } else if (isNotFound) {
-                    errorToast("Session not exist");
-                } else if (response !== null) {
-                    setData(response);
+        SessionApi.getSession<Session[]>({
+            id,
+        }).then(({ response, isNotFound, errorMessage }) => {
+            isLoading(false);
+            if (errorMessage) {
+                errorToast(errorMessage);
+            } else if (isNotFound) {
+                errorToast("Session not exist");
+            } else if (response !== null) {
+                if (response.items[0]) {
+                    const res: Session = (response.items as PSession[])[0] as Session;
+                    setData(res);
                 }
             }
-        );
+        });
     }, [id]);
 
     if (loading) {
@@ -44,10 +50,17 @@ export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Fragment>
             <Row className="m-0">
-                <Col className="pl-0" md={12} sm={12} lg={8}>
+                <Col
+                    className={data.isCommentEnable ? "pl-0" : "px-0"}
+                    md={12}
+                    sm={12}
+                    lg={data.isCommentEnable ? 8 : 12}
+                >
                     <AppCard className="p-0">
                         <AppSessionHeader session={data} />
-                        <Row className="my-5 mx-0 px-4">
+                        <AppSessionTags session={data} />
+
+                        <Row className="my-5 mx-0 px-2">
                             <Col
                                 md={12}
                                 lg={8}
@@ -59,7 +72,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
                                     md={12}
                                     sm={12}
                                     selectedUsers={data.speakers as User[]}
-                                    title="Speakers"
+                                    title={t("sessionDetails:label.speakers")}
                                     icon="speakers"
                                 />
                             </Col>
@@ -74,23 +87,27 @@ export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
                                     md={12}
                                     sm={12}
                                     selectedUsers={data.moderators as User[]}
-                                    title="Moderators"
+                                    title={t("sessionDetails:label.moderators")}
                                     icon="moderators"
                                 />
                             </Col>
                         </Row>
                     </AppCard>
-                    <AppSessionDetails session={data} />
+                    {/* <AppSessionDetails session={data} /> */}
                     <AppSessionDescription session={data} />
                 </Col>
-                <Col md={12} sm={12} lg={4} className="pr-0">
-                    <AppQuestionsAndAnswers
-                        name="Questions & Answers"
-                        conferenceNumber={confereneceId}
-                        session={id}
-                        container={containerId}
-                    />
-                </Col>
+                {data.isCommentEnable && (
+                    <Col md={12} sm={12} lg={4} className="pr-0">
+                        <AppQuestionsAndAnswers
+                            name={t(
+                                "sessionDetails:section.questionAndAnswers"
+                            )}
+                            conferenceNumber={confereneceId}
+                            session={id}
+                            container={containerId}
+                        />
+                    </Col>
+                )}
             </Row>
         </Fragment>
     );

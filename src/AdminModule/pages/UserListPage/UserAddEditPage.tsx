@@ -1,6 +1,7 @@
 import React, { FC, Fragment, useState, useEffect, useRef } from "react";
 import { RouteComponentProps, useParams } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { find as _find, isString as _isString } from "lodash";
 import { Canceler } from "axios";
@@ -107,6 +108,8 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         FILETYPEINFO_USER_PROFILE as FileTypeInfo
     );
     const [files, setFiles] = useState<File[]>([]);
+
+    const { t } = useTranslation();
 
     const {
         control,
@@ -462,15 +465,156 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
 
     return (
         <Fragment>
-            <AppBreadcrumb linkText={"Users"} linkUrl={".."} />
-            <AppPageHeader title={isEditMode ? "Edit User" : "Add User"} />
+            <AppBreadcrumb
+                linkText={t("common.breadcrumb:users")}
+                linkUrl={".."}
+            />
+            <AppPageHeader
+                title={
+                    isEditMode
+                        ? t("admin.users.form:header.editTitle")
+                        : t("admin.users.form:header.title")
+                }
+            />
             <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                 <Row>
                     <Col md={12}>
                         <AppCard>
-                            <Form.Row>
-                                <Form.Group className="mb-0  px-3  w-100">
-                                    <Form.Label>Profile Picture</Form.Label>
+                            <Row className="m-0">
+                                <Col className="p-0" md={12} lg={6}>
+                                    <AppFormInput
+                                        lg={12}
+                                        xl={12}
+                                        className=""
+                                        defaultValue={data.email}
+                                        name={"email"}
+                                        label={t(
+                                            "admin.users.form:label.email"
+                                        )}
+                                        required={true}
+                                        {...validation(
+                                            "email",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={errors.email?.message}
+                                        control={control}
+                                    />
+                                    {!isEditMode && [
+                                        <AppFormInputPassword
+                                            lg={12}
+                                            className=" mb-0"
+                                            xl={12}
+                                            name={"plainPassword"}
+                                            label={t(
+                                                "admin.users.form:label.password"
+                                            )}
+                                            required={true}
+                                            {...validation(
+                                                "plainPassword",
+                                                formState,
+                                                isEditMode
+                                            )}
+                                            errorMessage={
+                                                errors.plainPassword?.message
+                                            }
+                                            control={control}
+                                        />,
+                                        <AppFormInputPassword
+                                            lg={12}
+                                            xl={12}
+                                            className=" mb-0"
+                                            name={"confirmPassword"}
+                                            label={t(
+                                                "admin.users.form:label.confirmPassword"
+                                            )}
+                                            required={true}
+                                            {...validation(
+                                                "confirmPassword",
+                                                formState,
+                                                isEditMode
+                                            )}
+                                            errorMessage={
+                                                errors.confirmPassword?.message
+                                            }
+                                            control={control}
+                                        />,
+                                    ]}
+                                    <AppFormSelect
+                                        id={"role"}
+                                        name={"role"}
+                                        label={t(
+                                            "admin.users.form:label.userRole"
+                                        )}
+                                        className="role-container "
+                                        md={12}
+                                        lg={12}
+                                        xl={12}
+                                        required={true}
+                                        {...validation(
+                                            "role",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        defaultValue={getUserRole()}
+                                        placeholder={"Role"}
+                                        errorMessage={errors.role?.message}
+                                        options={getRolesOption()}
+                                        control={control}
+                                        transform={{
+                                            output: (
+                                                template: PrimitiveObject
+                                            ) => template?.value,
+                                            input: (value: string) => {
+                                                return _find([], {
+                                                    value,
+                                                });
+                                            },
+                                        }}
+                                    />
+
+                                    <AppFormSelect
+                                        id={"relationManager"}
+                                        name={"relationManager"}
+                                        label={t(
+                                            "admin.users.form:label.relationManager"
+                                        )}
+                                        md={12}
+                                        className="rm-container"
+                                        lg={12}
+                                        xl={12}
+                                        required={false}
+                                        {...validation(
+                                            "relationManager",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        defaultValue={getRelationalManager()}
+                                        placeholder={"Relation Manager"}
+                                        errorMessage={
+                                            errors.relationManager?.message
+                                        }
+                                        options={relationalManager}
+                                        control={control}
+                                        transform={{
+                                            output: (
+                                                relationManager: PrimitiveObject
+                                            ) => relationManager?.value,
+                                            input: (value: string) => {
+                                                return _find([], {
+                                                    value,
+                                                });
+                                            },
+                                        }}
+                                    />
+                                </Col>
+
+                                <Form.Group className="mb-3 px-3 col-md-12 col-lg-6">
+                                    <Form.Label>
+                                        {t(
+                                            "admin.users.form:label.profilePicture"
+                                        )}
+                                    </Form.Label>
                                     <AppUploader
                                         withCropper={true}
                                         accept="image/*"
@@ -492,11 +636,14 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                         }}
                                     />
                                 </Form.Group>
+
                                 <AppFormInput
                                     lg={6}
                                     xl={6}
                                     name={"firstName"}
-                                    label={"First Name"}
+                                    label={t(
+                                        "admin.users.form:label.firstName"
+                                    )}
                                     defaultValue={data.firstName}
                                     required={false}
                                     {...validation(
@@ -512,7 +659,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     xl={6}
                                     name={"lastName"}
                                     defaultValue={data.lastName}
-                                    label={"Last Name"}
+                                    label={t("admin.users.form:label.lastName")}
                                     required={false}
                                     {...validation(
                                         "lastName",
@@ -528,7 +675,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     xl={6}
                                     name={"company"}
                                     defaultValue={data.company}
-                                    label={"Company"}
+                                    label={t(
+                                        "admin.users.form:label.companyName"
+                                    )}
                                     required={false}
                                     {...validation(
                                         "company",
@@ -543,7 +692,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     xl={6}
                                     defaultValue={data.jobTitle}
                                     name={"jobTitle"}
-                                    label={"Job Title"}
+                                    label={t("admin.users.form:label.jobTitle")}
                                     required={false}
                                     {...validation(
                                         "jobTitle",
@@ -553,25 +702,11 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     errorMessage={errors.jobTitle?.message}
                                     control={control}
                                 />
-                                <AppFormInput
-                                    lg={6}
-                                    xl={6}
-                                    defaultValue={data.email}
-                                    name={"email"}
-                                    label={"Email"}
-                                    required={true}
-                                    {...validation(
-                                        "email",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    errorMessage={errors.email?.message}
-                                    control={control}
-                                />
+
                                 <AppFormSelect
                                     id={"locale"}
                                     name={"locale"}
-                                    label={"Locale"}
+                                    label={t("admin.users.form:label.locale")}
                                     md={12}
                                     className="local-container"
                                     lg={6}
@@ -597,156 +732,10 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                         },
                                     }}
                                 />
-                                {!isEditMode && [
-                                    <AppFormInputPassword
-                                        lg={6}
-                                        className="mb-0"
-                                        xl={6}
-                                        name={"plainPassword"}
-                                        label={"Password"}
-                                        required={true}
-                                        {...validation(
-                                            "plainPassword",
-                                            formState,
-                                            isEditMode
-                                        )}
-                                        errorMessage={
-                                            errors.plainPassword?.message
-                                        }
-                                        control={control}
-                                    />,
-                                    <AppFormInputPassword
-                                        lg={6}
-                                        xl={6}
-                                        className="mb-0"
-                                        name={"confirmPassword"}
-                                        label={"Confirm Password"}
-                                        required={true}
-                                        {...validation(
-                                            "confirmPassword",
-                                            formState,
-                                            isEditMode
-                                        )}
-                                        errorMessage={
-                                            errors.confirmPassword?.message
-                                        }
-                                        control={control}
-                                    />,
-                                ]}
-
-                                <AppFormSelect
-                                    id={"role"}
-                                    name={"role"}
-                                    label={"Select Role"}
-                                    className="role-container"
-                                    md={12}
-                                    lg={6}
-                                    xl={6}
-                                    required={true}
-                                    {...validation(
-                                        "role",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    defaultValue={getUserRole()}
-                                    placeholder={"Role"}
-                                    errorMessage={errors.role?.message}
-                                    options={getRolesOption()}
-                                    control={control}
-                                    transform={{
-                                        output: (template: PrimitiveObject) =>
-                                            template?.value,
-                                        input: (value: string) => {
-                                            return _find([], {
-                                                value,
-                                            });
-                                        },
-                                    }}
-                                />
-                                <AppFormSelect
-                                    id={"relationManager"}
-                                    name={"relationManager"}
-                                    label={"Relation Manager"}
-                                    md={12}
-                                    className="role-container"
-                                    lg={6}
-                                    xl={6}
-                                    required={false}
-                                    {...validation(
-                                        "relationManager",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    defaultValue={getRelationalManager()}
-                                    placeholder={"Relation Manager"}
-                                    errorMessage={
-                                        errors.relationManager?.message
-                                    }
-                                    options={relationalManager}
-                                    control={control}
-                                    transform={{
-                                        output: (
-                                            relationManager: PrimitiveObject
-                                        ) => relationManager?.value,
-                                        input: (value: string) => {
-                                            return _find([], {
-                                                value,
-                                            });
-                                        },
-                                    }}
-                                />
-
-                                <AppFormSelectCreatable
-                                    name="userTags"
-                                    label={"User Tags"}
-                                    md={12}
-                                    sm={12}
-                                    lg={12}
-                                    xl={12}
-                                    id="where-filter"
-                                    onChangeHandler={setSelectedUserTag}
-                                    value={selectedUserTags}
-                                    options={userTags}
-                                    control={control}
-                                />
-                                <Col className="mb-4" md={12}>
-                                    <AppTagSelect
-                                        options={userGroups}
-                                        selectedItems={selectedUserGroups}
-                                        label="User Groups"
-                                        onChange={(item) => {
-                                            let index = -1;
-                                            selectedUserGroups.filter(
-                                                (e, i) => {
-                                                    if (e.id === item.id) {
-                                                        index = i;
-                                                    }
-                                                    return e;
-                                                }
-                                            );
-                                            if (index !== -1) {
-                                                setSelectedUserGroups([
-                                                    ...selectedUserGroups.slice(
-                                                        0,
-                                                        index
-                                                    ),
-                                                    ...selectedUserGroups.slice(
-                                                        index + 1
-                                                    ),
-                                                ]);
-                                            } else {
-                                                setSelectedUserGroups([
-                                                    ...selectedUserGroups,
-                                                    item,
-                                                ]);
-                                            }
-                                        }}
-                                    ></AppTagSelect>
-                                </Col>
                                 <AppFormSelect
                                     id={"timezone"}
                                     name={"timezone"}
-                                    label={"Select Timezone"}
+                                    label={t("admin.users.form:label.timeZone")}
                                     md={12}
                                     lg={6}
                                     xl={6}
@@ -778,75 +767,143 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                         },
                                     }}
                                 />
-                                <AppFormSwitch
-                                    id={"isBlocked"}
-                                    name={"isBlocked"}
-                                    label={"Is Blocked"}
-                                    required={false}
-                                    md={12}
-                                    lg={6}
-                                    xl={6}
-                                    {...validation(
-                                        "isBlocked",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    defaultChecked={data?.isBlocked}
-                                    errorMessage={errors.isBlocked?.message}
-                                    control={control}
-                                />
+                                <Col className="mb-4" md={6}>
+                                    <AppTagSelect
+                                        options={userGroups}
+                                        selectedItems={selectedUserGroups}
+                                        label={t(
+                                            "admin.users.form:label.userGroups"
+                                        )}
+                                        onChange={(item) => {
+                                            let index = -1;
+                                            selectedUserGroups.filter(
+                                                (e, i) => {
+                                                    if (e.id === item.id) {
+                                                        index = i;
+                                                    }
+                                                    return e;
+                                                }
+                                            );
+                                            if (index !== -1) {
+                                                setSelectedUserGroups([
+                                                    ...selectedUserGroups.slice(
+                                                        0,
+                                                        index
+                                                    ),
+                                                    ...selectedUserGroups.slice(
+                                                        index + 1
+                                                    ),
+                                                ]);
+                                            } else {
+                                                setSelectedUserGroups([
+                                                    ...selectedUserGroups,
+                                                    item,
+                                                ]);
+                                            }
+                                        }}
+                                    ></AppTagSelect>
+                                </Col>
+
+                                <Col className="p-0">
+                                    <AppFormSelectCreatable
+                                        name="userTags"
+                                        label={t(
+                                            "admin.users.form:label.userTags"
+                                        )}
+                                        md={12}
+                                        sm={12}
+                                        lg={12}
+                                        xl={12}
+                                        id="where-filter"
+                                        onChangeHandler={setSelectedUserTag}
+                                        value={selectedUserTags}
+                                        options={userTags}
+                                        control={control}
+                                    />
+
+                                    <AppFormSwitch
+                                        id={"isBlocked"}
+                                        name={"isBlocked"}
+                                        label={t(
+                                            "admin.users.form:label.isBlocked"
+                                        )}
+                                        required={false}
+                                        md={12}
+                                        lg={12}
+                                        xl={12}
+                                        {...validation(
+                                            "isBlocked",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        defaultChecked={data?.isBlocked}
+                                        errorMessage={errors.isBlocked?.message}
+                                        control={control}
+                                    />
+                                </Col>
                                 <Col md={12}>
                                     <hr />
                                 </Col>
-                                <Col md={12} lg={6} xl={6}>
+                                <Col md={12} lg={3} xl={3}>
                                     <AppFormLabel
-                                        label={`Source: ${data?.source}`}
+                                        label={`${t(
+                                            "admin.users.form:label.source"
+                                        )}: ${data?.source}`}
                                         required={false}
                                     />
                                 </Col>
-                                <Col md={12} lg={6} xl={6}>
+
+                                {data?.lastLoginAt && (
+                                    <Col md={12} lg={3} xl={3}>
+                                        <AppFormLabel
+                                            label={`${t(
+                                                "admin.users.form:label.lastLogin"
+                                            )}: ${data?.lastLoginAt}`}
+                                            required={false}
+                                        />
+                                    </Col>
+                                )}
+                                <Col md={12} lg={3} xl={3}>
                                     <AppFormLabel
-                                        label={`Is Onboarded: ${
+                                        label={`${t(
+                                            "admin.users.form:label.isOnBoarded"
+                                        )}: ${
                                             data?.isOnboarded ? "Yes" : "No"
                                         }`}
                                         required={false}
                                     />
                                 </Col>
 
-                                {data?.lastLoginAt && (
-                                    <Col className="mt-3" md={12} lg={6} xl={6}>
+                                {data?.onboardedAt && (
+                                    <Col md={12} lg={3} xl={3}>
                                         <AppFormLabel
-                                            label={`Last Login: ${data?.lastLoginAt}`}
+                                            label={`${t(
+                                                "admin.users.form:label.onBoardedAt"
+                                            )}: ${data?.onboardedAt}`}
                                             required={false}
                                         />
                                     </Col>
                                 )}
-                                {data?.isOnboarded && (
-                                    <Col className="mt-3" md={12} lg={6} xl={6}>
-                                        <AppFormLabel
-                                            label={`Onboarder at: ${data?.onboardedAt}`}
-                                            required={false}
-                                        />
-                                    </Col>
-                                )}
-                            </Form.Row>
+                            </Row>
                         </AppCard>
                     </Col>
                     {userFields.length > 0 && (
                         <Col md={12}>
                             <AppCard>
-                                <Row>{renderUserFields()}</Row>
+                                <Row className="m-0">{renderUserFields()}</Row>
                             </AppCard>
                         </Col>
                     )}
 
                     <Col className={"mb-3"} md={12}>
                         <AppCard title="Privacy & Communication">
-                            <Form.Row>
+                            <Row className="m-0">
                                 <AppFormSwitch
                                     id={"isDisplayAsGuest"}
                                     name={"isDisplayAsGuest"}
-                                    label={"Is Display as Guest?"}
+                                    label={t(
+                                        "admin.users.form:label.isDisplayAsGuest"
+                                    )}
                                     md={12}
                                     lg={4}
                                     xl={4}
@@ -865,7 +922,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                 <AppFormSwitch
                                     id={"isExposeEmail"}
                                     name={"isExposeEmail"}
-                                    label={"Is Expose Email?"}
+                                    label={t(
+                                        "admin.users.form:label.isExposeEmail"
+                                    )}
                                     md={12}
                                     lg={4}
                                     xl={4}
@@ -882,7 +941,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                 <AppFormSwitch
                                     id={"isAllowCommunication"}
                                     name={"isAllowCommunication"}
-                                    label={"Is Allow Communication?"}
+                                    label={t(
+                                        "admin.users.form:label.isAllowCommunication"
+                                    )}
                                     md={12}
                                     lg={4}
                                     xl={4}
@@ -898,7 +959,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     }
                                     control={control}
                                 />
-                            </Form.Row>
+                            </Row>
                         </AppCard>
                     </Col>
                 </Row>

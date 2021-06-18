@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { Row, Col, Tab } from "react-bootstrap";
 import { UseFormSetValue } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import "./assets/scss/style.scss";
 import { Language, Session } from "../../../AdminModule/models";
 import { AppCustomTab } from "../AppCustomTab";
@@ -37,6 +38,7 @@ export const AppSelectStream: FC<AppSelectStreamProps> = ({
     control,
     data,
 }) => {
+    const { t } = useTranslation();
     const [activeKey, setActiveKey] = React.useState(streamType);
     const handleValueChange = (value: string) => {
         const newTranslatiosn = translations.map((e) => {
@@ -67,7 +69,10 @@ export const AppSelectStream: FC<AppSelectStreamProps> = ({
     return (
         <Row className="streams-container">
             <Col md={12}>
-                <AppFormLabel label="Choose your stream platform" required />
+                <AppFormLabel
+                    label={t("session.form:label.chooseStreaming")}
+                    required
+                />
             </Col>
             <Col md={12} className="d-flex mb-4">
                 <Tab.Container
@@ -138,7 +143,9 @@ export const AppSelectStream: FC<AppSelectStreamProps> = ({
                                     lg={12}
                                     xl={12}
                                     required={true}
-                                    label={`Youtube Url (${activeLanguage.toUpperCase()})`}
+                                    label={`${t(
+                                        "session.form:label.streamingYoutubeUrl"
+                                    )} (${activeLanguage.toUpperCase()})`}
                                     {...validation(
                                         "streamUrlYoutube",
                                         formState,
@@ -162,7 +169,9 @@ export const AppSelectStream: FC<AppSelectStreamProps> = ({
                                     xl={12}
                                     required={true}
                                     value={getValue("streamUrlKnovio")}
-                                    label={`Knovio Url (${activeLanguage.toUpperCase()})`}
+                                    label={`${t(
+                                        "session.form:label.streamingKnovioUrl"
+                                    )} (${activeLanguage.toUpperCase()})`}
                                     {...validation(
                                         "streamUrlKnovio",
                                         formState,
@@ -186,7 +195,9 @@ export const AppSelectStream: FC<AppSelectStreamProps> = ({
                                     xl={12}
                                     required={true}
                                     value={getValue("streamUrlDacast")}
-                                    label={`Dacast Url (${activeLanguage.toUpperCase()})`}
+                                    label={`${t(
+                                        "session.form:label.streamingDacastUrl"
+                                    )} (${activeLanguage.toUpperCase()})`}
                                     {...validation(
                                         "streamUrlDacast",
                                         formState,
@@ -210,7 +221,9 @@ export const AppSelectStream: FC<AppSelectStreamProps> = ({
                                     xl={12}
                                     required={true}
                                     value={getValue("streamUrlSwisscom")}
-                                    label={`Swisscom Url (${activeLanguage.toUpperCase()})`}
+                                    label={`${t(
+                                        "session.form:label.streamingSwisscom"
+                                    )} (${activeLanguage.toUpperCase()})`}
                                     {...validation(
                                         "streamUrlSwisscom",
                                         formState,
@@ -234,7 +247,9 @@ export const AppSelectStream: FC<AppSelectStreamProps> = ({
                                     xl={12}
                                     required={true}
                                     value={getValue("streamUrlVimeo")}
-                                    label={`Vimeo Url (${activeLanguage.toUpperCase()})`}
+                                    label={`${t(
+                                        "session.form:label.streamingVimeoUrl"
+                                    )} (${activeLanguage.toUpperCase()})`}
                                     {...validation(
                                         "streamUrlVimeo",
                                         formState,
@@ -257,7 +272,9 @@ export const AppSelectStream: FC<AppSelectStreamProps> = ({
                                     lg={12}
                                     xl={12}
                                     required={true}
-                                    label={"Webex Meeting Url"}
+                                    label={t(
+                                        "session.form:label.streamingWebexMeetingUrl"
+                                    )}
                                     {...validation(
                                         "webexUrl",
                                         formState,
@@ -274,7 +291,9 @@ export const AppSelectStream: FC<AppSelectStreamProps> = ({
                                     lg={12}
                                     xl={12}
                                     required={true}
-                                    label={"Webex Meeting Url"}
+                                    label={t(
+                                        "session.form:label.streamingWebexMeetingPassword"
+                                    )}
                                     {...validation(
                                         "webexMeetingPassword",
                                         formState,
@@ -295,7 +314,9 @@ export const AppSelectStream: FC<AppSelectStreamProps> = ({
                                     lg={12}
                                     xl={12}
                                     required={true}
-                                    label={"Zoom Meeting Url"}
+                                    label={t(
+                                        "session.form:label.streamingZoomMeetingUrl"
+                                    )}
                                     {...validation(
                                         "zoomurl",
                                         formState,
@@ -313,7 +334,9 @@ export const AppSelectStream: FC<AppSelectStreamProps> = ({
                                     lg={12}
                                     xl={12}
                                     required={true}
-                                    label={"Zoom Meeting Number"}
+                                    label={t(
+                                        "session.form:label.streamingZoomMeetingNumber"
+                                    )}
                                     {...validation(
                                         "zoomMeetingNumber",
                                         formState,
@@ -332,7 +355,9 @@ export const AppSelectStream: FC<AppSelectStreamProps> = ({
                                     lg={12}
                                     xl={12}
                                     required={true}
-                                    label={"Zoom Meeting Password"}
+                                    label={t(
+                                        "session.form:label.streamingZoomMeetingPassword"
+                                    )}
                                     {...validation(
                                         "zoomMeetingPassword",
                                         formState,

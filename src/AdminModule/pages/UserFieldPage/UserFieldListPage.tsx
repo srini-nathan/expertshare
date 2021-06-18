@@ -2,6 +2,7 @@ import React, { FC, Fragment, useState, useRef } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { isString as _isString } from "lodash";
+import { useTranslation } from "react-i18next";
 import {
     GridApi,
     IServerSideDatasource,
@@ -27,6 +28,7 @@ export const UserFieldListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { clientId } = useAuthState();
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
+    const { t } = useTranslation();
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -92,7 +94,7 @@ export const UserFieldListPage: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Fragment>
             <AppPageHeader
-                title={"User Fields"}
+                title={t("admin.userFields.list:header.title")}
                 createLink={"/admin/user-fields/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}

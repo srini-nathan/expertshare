@@ -1,5 +1,5 @@
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
-import { AppCellActionParams } from "../../models";
+import { AppCellActionParams } from "../../../AppModule/models";
 
 export const appGridColDef = ({
     onPressDelete,
@@ -9,20 +9,20 @@ export const appGridColDef = ({
     if (isGrantedControl)
         return [
             {
-                headerName: "Name",
+                headerName: "admin.aframeroom.list:column.name",
                 field: "name",
                 filter: "translations.name",
                 sortable: true,
                 minWidth: 80,
             },
             {
-                headerName: "Is Entry Room",
+                headerName: "admin.aframeroom.list:column.isEntryRoom",
                 cellRenderer: "AppFormRadio",
                 sortable: true,
                 minWidth: 40,
             },
             {
-                headerName: "Actions",
+                headerName: "admin.aframeroom.list:column.actions",
                 field: "id",
                 sortable: false,
                 maxWidth: 220,
@@ -39,14 +39,14 @@ export const appGridColDef = ({
 
     return [
         {
-            headerName: "Name",
+            headerName: "admin.aframeroom.list:column.name",
             field: "name",
             filter: "translations.name",
             sortable: true,
             minWidth: 80,
         },
         {
-            headerName: "Actions",
+            headerName: "admin.aframeroom.list:column.actions",
             field: "id",
             sortable: false,
             maxWidth: 160,

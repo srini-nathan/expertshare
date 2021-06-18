@@ -1,5 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import { intervalToDuration } from "date-fns";
+import { useTranslation } from "react-i18next";
 import { AppVimeoFrame } from "../AppVimeoFrame";
 import { AppYoutubeFrame } from "../AppYoutubeFrame";
 import { AppDacastFrame } from "../AppDacastFrame";
@@ -22,6 +23,7 @@ interface AppStreamManagerProps {
 export const AppStreamManager: FC<AppStreamManagerProps> = ({
     session,
 }): JSX.Element => {
+    const { t } = useTranslation();
     const [time, setTime] = useState<Duration>();
     const [startedSession, isSessionStarted] = useState<boolean>(false);
     const conferencePosterPath = useBuildAssetPath(
@@ -68,13 +70,21 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
                     <i style={style}></i>
                     <div className="overlay">
                         <h1>
-                            Session will be started at:
-                            <br />
-                            {time && time.years ? `${time.years} Year(s) ` : ""}
-                            {time && time.months
-                                ? `${time.months} Month(s) `
+                            {time && time.years
+                                ? `${time.years} ${t(
+                                      "sessionDetails:label.years"
+                                  )} `
                                 : ""}
-                            {time && time.days ? `${time.days} day(s) ` : ""}
+                            {time && time.months
+                                ? `${time.months} ${t(
+                                      "sessionDetails:label.month"
+                                  )} `
+                                : ""}
+                            {time && time.days
+                                ? `${time.days} ${t(
+                                      "sessionDetails:label.days"
+                                  )} `
+                                : ""}
                             {time && time.hours ? `${time.hours} : ` : " 0 : "}
                             {time && time.minutes
                                 ? `${time.minutes} : `

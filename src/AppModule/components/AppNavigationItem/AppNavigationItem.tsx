@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { Link, Match } from "@reach/router";
 import { ListGroupItem } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { AppNavigationItemProps } from "./AppNavigationItemProps";
 
 export const AppNavigationItem: FC<AppNavigationItemProps> = ({
@@ -9,6 +10,8 @@ export const AppNavigationItem: FC<AppNavigationItemProps> = ({
     icon,
     className = "",
 }) => {
+    const { t } = useTranslation();
+
     return (
         <Match path={path}>
             {(props) => {
@@ -24,7 +27,7 @@ export const AppNavigationItem: FC<AppNavigationItemProps> = ({
                             <div className="nav-icon">
                                 <i className={icon.name} />
                             </div>
-                            <span>{label}</span>
+                            <span>{t(label)}</span>
                         </Link>
                     </ListGroupItem>
                 );
