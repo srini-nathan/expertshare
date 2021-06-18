@@ -16,11 +16,13 @@ const {
 export interface AppMessageInboxThreadProps {
     thread: ChatThread;
     loginUser: PUser;
+    onClick: () => void;
 }
 
 export const AppMessageInboxThread: FC<AppMessageInboxThreadProps> = ({
     thread,
     loginUser,
+    onClick,
 }) => {
     const [newMessageCounter] = useState<number>(0);
     const [lastMsgTime] = useState<Date>(new Date());
@@ -38,7 +40,10 @@ export const AppMessageInboxThread: FC<AppMessageInboxThreadProps> = ({
     const avatarUrl = user?.imageName ? avatar : placeholder;
 
     return (
-        <div className="app-message-inbox-thread inner-container--message--item message-1 col-12 py-3">
+        <div
+            className="app-message-inbox-thread inner-container--message--item message-1 col-12 py-3"
+            onClick={onClick}
+        >
             <a href="#">
                 <div className="inner-container--message--item--container">
                     <div className="content">

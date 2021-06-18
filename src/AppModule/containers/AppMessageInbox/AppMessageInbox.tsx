@@ -5,7 +5,7 @@ import {
     AppMessageInboxFilters,
     AppMessageInboxThread,
 } from "../../components";
-import { useAuthState, useInitChatBox } from "../../hooks";
+import { useAuthState, useInitChatBox, useOpenChatOneToOne } from "../../hooks";
 import { ChatThread } from "../../models/entities/ChatThread";
 
 import "./assets/scss/style.scss";
@@ -16,6 +16,7 @@ export const AppMessageInbox: FC = () => {
     const { getThreads } = useInitChatBox();
     const [loading, setLoading] = useState(true);
     const { user } = useAuthState();
+    const { set } = useOpenChatOneToOne();
     const [threads, setThreads] = useState<ChatThread[]>([]);
 
     useEffect(() => {
@@ -65,6 +66,9 @@ export const AppMessageInbox: FC = () => {
                                     key={t.id}
                                     thread={t}
                                     loginUser={user}
+                                    onClick={() => {
+                                        set(t);
+                                    }}
                                 />
                             ))
                         )}
