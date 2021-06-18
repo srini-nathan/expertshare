@@ -301,13 +301,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                         <Col md={12} className="active-account-box--auth-form">
                             <Form onSubmit={handleSubmit(onSubmit)}>
                                 <Form.Row>
-                                    <Form.Group
-                                        as={Col}
-                                        sm={12}
-                                        md={12}
-                                        lg={12}
-                                        xl={12}
-                                    >
+                                    <Form.Group className="col-12">
                                         <AppUploader
                                             withCropper={true}
                                             fileInfo={

@@ -107,7 +107,13 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                     </h2>
                 </a>
                 <p className="card--title--bio mb-1 mx-2">
-                    {jobTitle}, {company}
+                    {jobTitle && jobTitle}
+                    {attendee.jobTitle &&
+                        attendee.jobTitle !== "" &&
+                        attendee.company &&
+                        attendee.company !== "" &&
+                        ", "}
+                    {company && company}
                 </p>
                 <a href="#" className="card--title--mail mb-3 d-block">
                     {isExposeEmail && email}
@@ -130,11 +136,11 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
 
                             return <></>;
                         })}
-                        {userTags.length > 2 && (
+                        {/* {userTags.length > 2 && (
                             <div className="card--tags--item show-more col-auto px-0 mb-2">
                                 <a href="#">+ Show More</a>
                             </div>
-                        )}
+                        )} */}
                     </div>
                 </div>
             )}

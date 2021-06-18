@@ -3,6 +3,7 @@ import { SessionApi } from "../../apis";
 import { PSessionTag } from "./SessionTag";
 import { PSessionCategory } from "./SessionCategory";
 import { User } from "./User";
+import { UserGroup } from "./UserGroup";
 
 export class Session extends BaseEntity {
     title: string;
@@ -77,6 +78,8 @@ export class Session extends BaseEntity {
 
     speakers: string[] | User[];
 
+    userGroups: string[] | UserGroup[];
+
     moderators: string[] | User[];
 
     constructor({
@@ -96,6 +99,7 @@ export class Session extends BaseEntity {
         externalLinkLabel = "",
         sessionCategory = "",
         sessionDocs = [],
+        userGroups = [],
         speakers = [],
         moderators = [],
         conference = "",
@@ -121,6 +125,7 @@ export class Session extends BaseEntity {
     }: Partial<Session> = {}) {
         super(id, createdAt, updatedAt);
         this.ord = ord;
+        this.userGroups = userGroups;
         this.container = container;
         this.webexMeetingPassword = webexMeetingPassword;
         this.speakers = speakers;

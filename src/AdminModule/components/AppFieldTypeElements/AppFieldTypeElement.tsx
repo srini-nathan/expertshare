@@ -63,10 +63,6 @@ export const AppFieldTypeElement: FC<AppFieldTypeElementProps> = ({
             setValues([{ key: "", value: "" }]);
         }
     }, []);
-    useEffect(() => {
-        // eslint-disable-next-line no-console
-        console.log(values);
-    }, [values]);
     return (
         <Container>
             <AppFormLabel label={header} required={required} />

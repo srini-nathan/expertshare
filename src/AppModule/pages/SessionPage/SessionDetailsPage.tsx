@@ -6,10 +6,11 @@ import {
     AppLoader,
     AppCard,
     AppSessionHeader,
-    AppSessionDetails,
+    // AppSessionDetails,
     AppSessionDescription,
     AppSessionUsers,
     AppQuestionsAndAnswers,
+    AppSessionTags,
 } from "../../components";
 import { Session, User } from "../../../AdminModule/models";
 import { SessionApi } from "../../../AdminModule/apis";
@@ -46,10 +47,17 @@ export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Fragment>
             <Row className="m-0">
-                <Col className="pl-0" md={12} sm={12} lg={8}>
+                <Col
+                    className={data.isCommentEnable ? "pl-0" : "px-0"}
+                    md={12}
+                    sm={12}
+                    lg={data.isCommentEnable ? 8 : 12}
+                >
                     <AppCard className="p-0">
                         <AppSessionHeader session={data} />
-                        <Row className="my-5 mx-0 px-4">
+                        <AppSessionTags session={data} />
+
+                        <Row className="my-5 mx-0 px-2">
                             <Col
                                 md={12}
                                 lg={8}
@@ -82,17 +90,21 @@ export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
                             </Col>
                         </Row>
                     </AppCard>
-                    <AppSessionDetails session={data} />
+                    {/* <AppSessionDetails session={data} /> */}
                     <AppSessionDescription session={data} />
                 </Col>
-                <Col md={12} sm={12} lg={4} className="pr-0">
-                    <AppQuestionsAndAnswers
-                        name={t("sessionDetails:section.questionAndAnswers")}
-                        conferenceNumber={confereneceId}
-                        session={id}
-                        container={containerId}
-                    />
-                </Col>
+                {data.isCommentEnable && (
+                    <Col md={12} sm={12} lg={4} className="pr-0">
+                        <AppQuestionsAndAnswers
+                            name={t(
+                                "sessionDetails:section.questionAndAnswers"
+                            )}
+                            conferenceNumber={confereneceId}
+                            session={id}
+                            container={containerId}
+                        />
+                    </Col>
+                )}
             </Row>
         </Fragment>
     );

@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { Link } from "@reach/router";
 import { User } from "../../../AdminModule/models";
 import "./assets/scss/style.scss";
 import { useBuildAssetPath } from "../../hooks";
@@ -35,7 +36,7 @@ export const AppUserListItem: FC<AppUserListItemProps> = ({
 
     return (
         <div className="inner-container--det--content--speakers--item">
-            <a href="#">
+            <Link to={`/attendee/${user.id}/show`}>
                 <div className="inner-container--det--content--speakers--item--profile pr-2">
                     <i style={style}></i>
                 </div>
@@ -43,9 +44,17 @@ export const AppUserListItem: FC<AppUserListItemProps> = ({
                     <h4 className="name mb-0">
                         {user.firstName} {user.lastName}
                     </h4>
-                    <span className="major">{user.jobTitle}</span>
+                    <span className="major">
+                        {user.jobTitle && user.jobTitle}
+                        {user.jobTitle &&
+                            user.jobTitle !== "" &&
+                            user.company &&
+                            user.company !== "" &&
+                            ", "}
+                        {user.company && user.company}
+                    </span>
                 </div>
-            </a>
+            </Link>
         </div>
     );
 };
