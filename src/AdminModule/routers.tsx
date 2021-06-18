@@ -21,7 +21,12 @@ import {
 } from "./pages";
 import { Layout3D } from "../Layout3DModule";
 
-import { AFrameRoomGrid, AFrameRoomAddEdit } from "../AppModule/pages";
+import {
+    AFrameRoomGrid,
+    AFrameRoomAddEdit,
+    AFramePanelGrid,
+    AFramePanelAddEdit,
+} from "../AppModule/pages";
 
 import { ModuleRouter } from "../AppModule/models";
 import { ContainerAddEdit } from "./pages/ContainerPage/ContainerAddEdit";
@@ -79,6 +84,11 @@ export const routers: ModuleRouter[] = [
                     <AFrameRoomGrid path={"rooms/:view"} />
                     <AFrameRoomAddEdit path={"room/new"} />
                     <AFrameRoomAddEdit path={"room/:id"} />
+                    <AFramePanelGrid path={"room/:roomId/:panelType"} />
+                    <AFramePanelGrid path={"panels"} />
+                    <AFramePanelGrid path={"panels/:view"} />
+                    <AFramePanelAddEdit path={"room/:roomId/:panelType/new"} />
+                    <AFramePanelAddEdit path={"room/:roomId/:panelType/:id"} />
                 </Router>
             );
         },

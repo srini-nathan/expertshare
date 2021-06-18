@@ -8,4 +8,5 @@ export * from "./AttendeePage";
 export * from "./NewsFeedPage";
 export * from "./ExtraPage";
 export * from "./AFrameRoom";
+export * from "./AFramePanel";
 export * from "./OnBoardingPage";

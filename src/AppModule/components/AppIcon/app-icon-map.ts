@@ -34,6 +34,10 @@ import {
     faCalendarPlus,
     faCommentAlt,
     faShare,
+    faDoorOpen,
+    faDesktop,
+    faGlobe,
+    faProjector,
 } from "@fortawesome/pro-regular-svg-icons";
 import { AppIconMap } from "../../models";
 
@@ -79,4 +83,8 @@ export const appIconMap: AppIconMap = {
     AddUserPlus: faUserPlus,
     Conversation: faCommentAltLines,
     CalendarPlus: faCalendarPlus,
+    DoorOpen: faDoorOpen,
+    Desktop: faDesktop,
+    Globe: faGlobe,
+    Projector: faProjector,
 };

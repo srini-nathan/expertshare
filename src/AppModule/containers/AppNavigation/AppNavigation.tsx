@@ -184,6 +184,14 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             },
             isVisible: isGranted(role, ROLE_OPERATOR),
         },
+        {
+            label: "Panels",
+            path: "/admin/panels",
+            icon: {
+                name: "",
+            },
+            isVisible: isGranted(role, ROLE_OPERATOR),
+        },
     ]);
     const [showSubMenuItems, isSubMenuItems] = useState<boolean>(false);
     const [languages, setLanguages] = useState<Language[]>([]);
