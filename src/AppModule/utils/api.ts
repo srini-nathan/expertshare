@@ -13,6 +13,7 @@ export const generateKeyHeader = (saltLen = 6): string => {
     return `${prefixSalt}${hostBase64}${suffixSalt}`;
 };
 
+// @TODO: use from handleDateTime file, remove duplicate
 export const getUserTimeZone = (): string => {
     return Intl.DateTimeFormat().resolvedOptions().timeZone;
 };

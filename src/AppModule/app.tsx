@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Redirect, Router, Location, useMatch } from "@reach/router";
 import { appRouters } from "./bootstrap";
 import { DashboardLayout } from "./layouts/DashboardLayout";
@@ -7,19 +7,28 @@ import { AuthLayout } from "./layouts/AuthLayout";
 import { ModuleRouter } from "./models";
 import AppProvider from "./contexts/AppContext";
 import { AuthContext } from "../SecurityModule/contexts/AuthContext";
-import { useChosenContainer, useNavigator, useSkipOnboarding } from "./hooks";
+import {
+    useChosenContainer,
+    useNavigator,
+    useSkipOnboarding,
+    useUserSocketEvents,
+} from "./hooks";
 import {
     AppLoader,
-    // AppPictureInPicture,
-    // AppYoutubeFrame,
+    AppPictureInPicture,
+    AppYoutubeFrame,
     AppWelcomeModal,
 } from "./components";
 import { LandingHelper } from "./pages";
+import { socket, EVENTS } from "./socket";
+import { useGlobalData } from "./contexts";
+import { successToast } from "./utils";
 
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
-import { useGlobalData } from "./contexts";
+import { AuthState } from "../SecurityModule/models";
 
+const { CONNECT, DISCONNECT } = EVENTS;
 interface Props {
     location: {
         pathname: string;
@@ -58,14 +67,13 @@ const AppFullScreenLoader = (): JSX.Element => {
     );
 };
 const App = (): JSX.Element => {
-    const { status } = useGlobalData();
+    const { status, container } = useGlobalData();
     const { state } = React.useContext(AuthContext);
-    const { user } = state;
+    const { isAuthenticated, user } = state as AuthState;
     const navigator = useNavigator();
     const { isChosen } = useChosenContainer();
     const { isSkipOnboarding } = useSkipOnboarding();
     const [showWelcomeModal, setShowWelcomeModal] = React.useState(true);
-
     const dashboardRoutes: ModuleRouter[] = appRouters.filter(
         ({ layout }) => layout === "dashboard"
     );
@@ -77,12 +85,46 @@ const App = (): JSX.Element => {
     const autoLoginPage = useMatch("/auth/auto-login/:token");
     const isOverViewPage = overViewPage !== null;
     const isAutoLoginPage = autoLoginPage !== null;
+    const { emitLogin, emitLogout, emitPageChange } = useUserSocketEvents();
 
-    if (status === "LOADING" || state.isAuthenticated === null) {
+    useEffect(() => {
+        socket.on(CONNECT, () => {
+            if (isAuthenticated === true) {
+                emitLogin();
+            }
+
+            if (isAuthenticated === false) {
+                emitLogout();
+            }
+        });
+
+        if (isAuthenticated === true) {
+            emitLogin();
+        }
+
+        if (isAuthenticated === false) {
+            emitLogout();
+        }
+
+        socket.on(DISCONNECT, () => {
+            emitLogout();
+        });
+
+        socket.on("online", ({ userId }) => {
+            successToast(`User online ${userId}`);
+        });
+        return () => {
+            socket.off(CONNECT);
+            socket.off("online");
+            socket.off(DISCONNECT);
+        };
+    }, [container, isAuthenticated]);
+
+    if (status === "LOADING" || isAuthenticated === null) {
         return <AppFullScreenLoader />;
     }
 
-    if (!isAutoLoginPage && state.isAuthenticated) {
+    if (!isAutoLoginPage && isAuthenticated === true && user && container) {
         if (!user.isOnboarded && !isSkipOnboarding() && !onBoardingPage) {
             navigator("/onboarding").then();
         } else if (!isChosen() && !isOverViewPage && !onBoardingPage) {
@@ -104,6 +146,7 @@ const App = (): JSX.Element => {
                         <OnRouteChange
                             action={() => {
                                 window.scrollTo(0, 0);
+                                emitPageChange();
                             }}
                         />
                     </DashboardLayout>
@@ -113,7 +156,7 @@ const App = (): JSX.Element => {
                             setShowWelcomeModal(false);
                         }}
                     />
-                    {/* <AppPictureInPicture show={true}>
+                    <AppPictureInPicture show={false}>
                         <AppYoutubeFrame
                             url={
                                 "https://www.youtube.com/watch?v=aqz-KE-bpKQ&t=253s"
@@ -121,7 +164,7 @@ const App = (): JSX.Element => {
                             height={"200"}
                             width={"100%"}
                         />
-                    </AppPictureInPicture> */}
+                    </AppPictureInPicture>
                 </AppConfiguration>
             </AppProvider>
         );
@@ -135,6 +178,12 @@ const App = (): JSX.Element => {
                 })}
                 <Redirect noThrow from="*" to="/auth" />
             </Router>
+            <OnRouteChange
+                action={() => {
+                    window.scrollTo(0, 0);
+                    emitPageChange();
+                }}
+            />
         </AuthLayout>
     );
 };
