@@ -134,7 +134,11 @@ export const RoomBuilder = ({
                         active={room.id === currentRoomId}
                         key={i}
                         skyImage={textureRoom}
-                        skyUrl={`${paths.ROOM_ASSETS_PATH}/${room.sky.assetId}`}
+                        skyUrl={
+                            room.sky.assetId
+                                ? `${paths.ROOM_ASSETS_PATH}/${room.sky.assetId}`
+                                : ""
+                        }
                         onClickScene={onClickScene}
                         onClickPanel={onClickObject}
                         panels={room.panels}

@@ -3,15 +3,34 @@ import { AuthContext } from "../../SecurityModule/contexts";
 import { AuthState } from "../../SecurityModule/models";
 import { errorToast } from "../utils";
 import { ClientApi, ContainerApi } from "../../AdminModule/apis";
+import { PUser } from "../../AdminModule/models/entities/User";
 
-export function useAuthState() {
+type AuthStateType = {
+    clientId: number;
+    role: string;
+    clientResourceId: string;
+    containerId: number;
+    containerResourceId: string;
+    token: string;
+    user: PUser;
+    userId: number;
+};
+
+export function useAuthState(): AuthStateType {
     const { state } = useContext(AuthContext);
     const { clientId, containerId, roles, token, user } = state as AuthState;
 
-    if (clientId === null || containerId === null) {
-        errorToast("ClientId or ContainerId is null.");
-        throw new Error("ClientId or ContainerId is null.");
+    if (
+        clientId === null ||
+        containerId === null ||
+        token === null ||
+        !user ||
+        !user.id
+    ) {
+        errorToast("Auth state is null.");
+        throw new Error("Auth is null.");
     }
+
     const role = roles[0] ? roles[0] : "";
 
     return {
@@ -22,5 +41,6 @@ export function useAuthState() {
         containerResourceId: ContainerApi.toResourceUrl(containerId),
         token,
         user,
+        userId: user.id,
     };
 }

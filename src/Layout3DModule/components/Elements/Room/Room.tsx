@@ -59,9 +59,6 @@ export const Room = ({
     const group = useRef<JSX.IntrinsicElements["group"]>(null!);
     const [currentActive, setCurrentActive] = useState<boolean>(active);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-
-    // console.log("sky : ", skyImage, skyUrl);
-
     const roomImagePath = skyUrl !== "" ? skyUrl : skyImage.default;
 
     useEffect(() => {

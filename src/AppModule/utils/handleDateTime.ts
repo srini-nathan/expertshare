@@ -1,3 +1,5 @@
+import { zonedTimeToUtc, utcToZonedTime } from "date-fns-tz";
+
 export const getDate = (date: string): string => {
     const newDate = new Date(date);
     const year = newDate.getFullYear();
@@ -49,4 +51,20 @@ export const getFullDate = (date: string): string => {
 
 export const getTomorrowDate = (date: string): string => {
     return `${getTomorrow(date)} 00:00:00`;
+};
+
+export const getTimeZone = (): string => {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+};
+
+export const toUTCDate = (date: Date | number | string): Date => {
+    return zonedTimeToUtc(date, getTimeZone());
+};
+
+export const toLocalDate = (date: Date | number | string): Date => {
+    return utcToZonedTime(date, getTimeZone());
+};
+
+export const getUTCDate = (): Date => {
+    return new Date(new Date().toISOString());
 };

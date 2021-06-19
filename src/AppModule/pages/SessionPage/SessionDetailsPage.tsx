@@ -12,7 +12,7 @@ import {
     AppQuestionsAndAnswers,
     AppSessionTags,
 } from "../../components";
-import { Session, User } from "../../../AdminModule/models";
+import { Session, User, PSession } from "../../../AdminModule/models";
 import { SessionApi } from "../../../AdminModule/apis";
 import { errorToast } from "../../utils";
 import { useAuthState } from "../../hooks";
@@ -26,18 +26,21 @@ export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [data, setData] = useState<Session>(new Session(containerResourceId));
 
     useEffect(() => {
-        SessionApi.findById<Session>(id).then(
-            ({ response, isNotFound, errorMessage }) => {
-                isLoading(false);
-                if (errorMessage) {
-                    errorToast(errorMessage);
-                } else if (isNotFound) {
-                    errorToast("Session not exist");
-                } else if (response !== null) {
-                    setData(response);
+        SessionApi.getSession<Session[]>({
+            id,
+        }).then(({ response, isNotFound, errorMessage }) => {
+            isLoading(false);
+            if (errorMessage) {
+                errorToast(errorMessage);
+            } else if (isNotFound) {
+                errorToast("Session not exist");
+            } else if (response !== null) {
+                if (response.items[0]) {
+                    const res: Session = (response.items as PSession[])[0] as Session;
+                    setData(res);
                 }
             }
-        );
+        });
     }, [id]);
 
     if (loading) {

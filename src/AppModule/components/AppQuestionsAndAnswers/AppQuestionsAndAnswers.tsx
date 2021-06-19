@@ -1,5 +1,5 @@
 import React, { useState, FunctionComponent, useEffect } from "react";
-import { Row, Col } from "react-bootstrap";
+import { Col } from "react-bootstrap";
 import { AppСhoseMethodMessage } from "../AppСhoseMethodMessage";
 import { AppQAThread } from "../AppQAThread";
 import { errorToast } from "../../utils";
@@ -119,15 +119,12 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
     }, []);
 
     return (
-        <Col className="questions-and-answers-wrapper p-0">
-            <Col className="questions-and-answers-wrapper--column">
-                <Row>
-                    <Col className="questions-and-answers-wrapper--title">
-                        <h4>
-                            <i className="far fa-comments-alt"></i> {name}
-                        </h4>
-                    </Col>
-                </Row>
+        <Col className="session-details-question py-3">
+            <Col className="session-details-question--text-box pb-3 px-0 mb-3">
+                <h2>
+                    <i className="fak fa-faq"></i>
+                    {name}
+                </h2>
                 <div className="tabs-messages m-0 pt-1 pb-2">
                     <AppСhoseMethodMessage
                         activeTab="Text"
@@ -140,7 +137,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                     />
                 </div>
                 <div
-                    className="questions-and-answers-wrapper--thread"
+                    className="session-details-question--container"
                     onScroll={handleScroll}
                 >
                     <AppQAThread

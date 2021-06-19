@@ -11,3 +11,4 @@ export const ACCEPTABLE_RESPONSE = process.env.REACT_APP_ACCEPTABLE_RESPONSE || 
 export const USER_LOCALE = process.env.REACT_APP_USER_LOCALE || "es_locale";
 export const CONTAINER_LOCALE = "es_container_locale";
 export const APP_ENV = process.env.NODE_ENV;
+export const SOCKET_HOST = process.env.REACT_APP_SOCKET_HOST || "/socket.io";
