@@ -249,7 +249,9 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                         {e.map((item: Session) => {
                             return (
                                 <SwiperSlide
-                                    className={`${getSize(item.cardSize)} p-0`}
+                                    className={`${getSize(
+                                        item.cardSize
+                                    )} p-0 mx-3`}
                                 >
                                     <AppSessionItem
                                         conference={id}

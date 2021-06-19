@@ -65,9 +65,11 @@
                     }
                 }
             }
+
             .swiper-button-disabled {
                 cursor: unset !important;
-                opacity: 0.5;
+                display: none !important;
+
             }
         }
 
@@ -205,11 +207,9 @@
                                         align-items: center;
                                     }
 
-                                    &--profile {
-                                    }
+                                    &--profile {}
 
-                                    &--det {
-                                    }
+                                    &--det {}
 
                                     &.user-1 {
                                         i {
