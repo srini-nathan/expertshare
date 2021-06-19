@@ -20,3 +20,9 @@ export const randomInteger = (): number => {
         Math.floor(Math.random() * 10000 + 1000)
     );
 };
+
+export const getRandomId = (): number => {
+    const min = Math.ceil(0);
+    const max = Math.floor(new Date().getTime());
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+};

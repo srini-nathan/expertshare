@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { Link } from "@reach/router";
 import { Session, SessionCategory, User } from "../../../AdminModule/models";
 import "./assets/scss/style.scss";
+import placeholder from "../../assets/images/imgthumb.svg";
 import { useBuildAssetPath } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 import { AppButton } from "../AppButton";
@@ -11,6 +12,7 @@ import { AppCard } from "../AppCard";
 import { AppUserListItem } from "../AppUserListItem";
 import { FileTypeInfo } from "../../models";
 import { useGlobalData } from "../../contexts";
+import { getDateTimeWithoutTimezone } from "../../utils";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -30,10 +32,19 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
     handleDelete,
     isGrantedControl,
 }): JSX.Element => {
-    const conferencePosterPath = useBuildAssetPath(
+    const sessionPosterPath = useBuildAssetPath(
         FILETYPEINFO_SESSION_POSTER as FileTypeInfo,
         session.imageName
     );
+    const styles = session?.imageName
+        ? {
+              backgroundImage: `url(${sessionPosterPath})`,
+          }
+        : {
+              backgroundImage: `url(${placeholder})`,
+              backgroundSize: "inherit",
+              backgroundPosition: "center",
+          };
     const [showMore, isShowMore] = useState<boolean>(false);
     const { container } = useGlobalData();
 
@@ -46,7 +57,13 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
             case "LARGE":
                 return ["col-12", "large-size", "col-12", "col-6", "w-100"];
             case "XLARGE":
-                return ["col-12", "xlarge-size", "col-6", "col-12", "col-3"];
+                return [
+                    "col-12",
+                    "xlarge-size",
+                    "col-xl-6 col-lg-6 col-12",
+                    "col-12",
+                    "col-xl-3 col-lg-6 col-12",
+                ];
             default:
                 return ["col-12", "small-size", "col-12", "col-12", "w-100"];
         }
@@ -81,7 +98,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
         <Col className={`p-0 ${getSize()[0]}`}>
             <Col
                 sm={12}
-                className={`event-detail-admin--workshop--container--content--item py-2`}
+                className={`event-detail-admin--workshop--container--content--item p-0`}
             >
                 <AppCard className={`inner-container p-0  ${getSize()[1]}`}>
                     <Row className="m-0 p-0">
@@ -102,7 +119,9 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                     <Col className="inner-container--header--time--content pl-3">
                                         <h2 className="mb-0">
                                             {format(
-                                                new Date(session.start),
+                                                getDateTimeWithoutTimezone(
+                                                    session.start
+                                                ),
                                                 container &&
                                                     container.configuration &&
                                                     (container.configuration as any)
@@ -141,9 +160,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                 to={`/event/${conference}/session/${session.id}`}
                             >
                                 <div
-                                    style={{
-                                        backgroundImage: `url(${conferencePosterPath})`,
-                                    }}
+                                    style={styles}
                                     className="inner-container--banner--content"
                                 >
                                     <div className="inner-container--banner--content--button">

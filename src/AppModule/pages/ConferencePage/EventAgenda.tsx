@@ -249,7 +249,9 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                         {e.map((item: Session) => {
                             return (
                                 <SwiperSlide
-                                    className={`${getSize(item.cardSize)} p-0`}
+                                    className={`${getSize(
+                                        item.cardSize
+                                    )} p-0 mx-3`}
                                 >
                                     <AppSessionItem
                                         conference={id}
@@ -305,7 +307,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                                 handleCategoryFilter(e.id);
                             }}
                             variant="secondary"
-                            className="ml-1 category-btn"
+                            className="ml-1 mb-2 category-btn"
                         >
                             <span
                                 style={{
