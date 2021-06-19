@@ -485,6 +485,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                         md={12}
                                         lg={12}
                                         xl={12}
+                                        className="rm-container"
                                         required={true}
                                         {...validation(
                                             "timezone",

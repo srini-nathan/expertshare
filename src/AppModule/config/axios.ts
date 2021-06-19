@@ -7,7 +7,7 @@ import { AcceptableResponse } from "../models";
 
 const defaultConfig: AxiosRequestConfig = {
     baseURL: API_HOST,
-    timeout: 1000 * 60,
+    timeout: 1000 * 300,
     headers: {
         accept: AcceptableResponse.header(ACCEPTABLE_RESPONSE),
     },

@@ -738,6 +738,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     label={t("admin.users.form:label.timeZone")}
                                     md={12}
                                     lg={6}
+                                    className="rm-container"
                                     xl={6}
                                     required={false}
                                     {...validation(

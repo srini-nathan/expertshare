@@ -10,6 +10,7 @@ import "./assets/scss/style.scss";
 import placeholder from "../../assets/images/imgthumb.svg";
 import { FileTypeInfo } from "../../models";
 import { useGlobalData } from "../../contexts";
+import { getDateTimeWithoutTimezone } from "../../utils";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -100,7 +101,9 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                                     <div className="inner-container--det--time--spec--date">
                                         <h3 className="mb-0">
                                             {format(
-                                                new Date(startAt),
+                                                getDateTimeWithoutTimezone(
+                                                    startAt
+                                                ),
                                                 container &&
                                                     container.configuration &&
                                                     (container.configuration as any)
@@ -114,7 +117,9 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                                     <div className="inner-container--det--time--spec--period">
                                         <span>
                                             {format(
-                                                new Date(startAt),
+                                                getDateTimeWithoutTimezone(
+                                                    startAt
+                                                ),
                                                 container &&
                                                     container.configuration &&
                                                     (container.configuration as any)

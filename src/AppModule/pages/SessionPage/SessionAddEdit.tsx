@@ -58,6 +58,7 @@ import {
     validation,
     getDate,
     getTime24,
+    getDateTimeWithoutTimezone,
 } from "../../utils";
 import {
     useParamId,
@@ -571,7 +572,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                         control={control}
                                         defaultValue={
                                             data.start
-                                                ? new Date(data.start)
+                                                ? getDateTimeWithoutTimezone(
+                                                      data.start
+                                                  )
                                                 : new Date()
                                         }
                                     />
@@ -597,7 +600,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                         control={control}
                                         defaultValue={
                                             data.end
-                                                ? new Date(data.end)
+                                                ? getDateTimeWithoutTimezone(
+                                                      data.end
+                                                  )
                                                 : new Date()
                                         }
                                     />

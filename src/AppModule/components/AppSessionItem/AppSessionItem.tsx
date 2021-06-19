@@ -12,6 +12,7 @@ import { AppCard } from "../AppCard";
 import { AppUserListItem } from "../AppUserListItem";
 import { FileTypeInfo } from "../../models";
 import { useGlobalData } from "../../contexts";
+import { getDateTimeWithoutTimezone } from "../../utils";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -118,7 +119,9 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                     <Col className="inner-container--header--time--content pl-3">
                                         <h2 className="mb-0">
                                             {format(
-                                                new Date(session.start),
+                                                getDateTimeWithoutTimezone(
+                                                    session.start
+                                                ),
                                                 container &&
                                                     container.configuration &&
                                                     (container.configuration as any)
