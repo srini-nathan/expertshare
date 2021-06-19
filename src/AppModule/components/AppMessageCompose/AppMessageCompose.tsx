@@ -5,7 +5,7 @@ import React, {
     useEffect,
     useRef,
 } from "react";
-import { Col, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { Picker, BaseEmoji } from "emoji-mart";
 
 import { AppFormElementProps } from "../../models";
@@ -44,7 +44,7 @@ export const AppMessageCompose: FC<AppMessageComposeProps> = ({
     const [data, setData] = useState<string>("");
     const controlId = id;
     const { className = "" } = props;
-    const groupProps = { controlId, className, as: Col };
+    const groupProps = { controlId, className };
 
     const [showEmogiModal, setShowEmogiModal] = useState(false);
 
@@ -94,39 +94,36 @@ export const AppMessageCompose: FC<AppMessageComposeProps> = ({
     };
 
     return (
-        <div className={`${enterToPost && "message-compose-wrapper"}`}>
+        <div className={"text-box-container mt-3"}>
             <Form.Group {...groupProps}>
-                <div className={`${enterToPost && "qa-area"}`}>
-                    <Form.Control
-                        as="textarea"
-                        rows={rows}
-                        value={data}
-                        className={`${
-                            enterToPost && "form-control-without-border"
-                        }`}
-                        onChange={(e) => {
-                            if (onChange) {
-                                onChange(e);
-                            }
-                            setData(e.target.value);
-                        }}
-                    />
+                <Form.Control
+                    as="textarea"
+                    rows={rows}
+                    value={data}
+                    className={`${
+                        enterToPost && "form-control-without-border"
+                    }`}
+                    onChange={(e) => {
+                        if (onChange) {
+                            onChange(e);
+                        }
+                        setData(e.target.value);
+                    }}
+                />
 
-                    <div
-                        className={`is-send-wrapper ${
-                            enterToPost && "wrapper-space-beetween"
-                        }`}
-                        ref={wrapperRef}
-                    >
-                        <div className="picker-wrapper">
+                <div
+                    className={"text-box-container--options pb-1"}
+                    ref={wrapperRef}
+                >
+                    <div className="row m-0 p-0">
+                        <div className="text-box-container--options--char col-auto px-2">
                             <AppButton
-                                className="sent-btn sent-btn--emoji"
+                                className="sent-btn sent-btn--emoji smile-icon"
                                 variant="light"
                                 onClick={() => setShowEmogiModal(true)}
                             >
-                                <i className="far fa-smile smile-icon"></i>
+                                <i className="fak fa-smile-light"></i>
                             </AppButton>
-
                             <Picker
                                 onSelect={addEmoji}
                                 style={
@@ -142,8 +139,8 @@ export const AppMessageCompose: FC<AppMessageComposeProps> = ({
                             />
                         </div>
 
-                        <div className="post-comment">
-                            {enterToPost && (
+                        <div className="text-box-container--options--send col-auto px-2 mr-0 ml-auto">
+                            {/* {enterToPost && (
                                 <div className="comment">
                                     <Form.Check
                                         type="checkbox"
@@ -152,10 +149,9 @@ export const AppMessageCompose: FC<AppMessageComposeProps> = ({
                                         className="checkbox"
                                     />
                                 </div>
-                            )}
-                            <span className="btn-separator">|</span>
+                            )} */}
                             <AppButton
-                                className="sent-btn"
+                                className="btn-send"
                                 variant="light"
                                 onClick={isEdit ? updateData : sendData}
                                 disabled={data.length === 0}

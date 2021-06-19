@@ -28,7 +28,7 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
     const { state } = React.useContext(AuthContext);
     const { containerId, clientId } = state as AuthState;
 
-    const [editMode, setEditMode] = useState<boolean>(true);
+    const [editMode, setEditMode] = useState<boolean>(false);
     const [selectedItem, setSelectedItem] = useState<Object3D>(null!);
     const [roomsData, setRoomsData] = useState(null!);
     const [mainRoom, setMainRoom] = useState<number>(null!);

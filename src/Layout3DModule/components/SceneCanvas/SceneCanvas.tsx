@@ -20,7 +20,7 @@ import {
 import { simulatedParams } from "../Helpers/Simdata";
 
 interface SceneProps {
-    editMode?: boolean;
+    editMode: boolean;
     roomsData: any[];
     currentMainRoom: number;
     paths: { ROOM_ASSETS_PATH: string; PANEL_ASSETS_PATH: string };
@@ -36,7 +36,7 @@ interface ToFromProps {
 }
 
 export const SceneCanvas = ({
-    editMode = true,
+    editMode,
     onItemSelected,
     roomsData,
     currentMainRoom,

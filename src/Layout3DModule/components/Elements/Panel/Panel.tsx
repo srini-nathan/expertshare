@@ -148,7 +148,7 @@ export const Panel = ({
     const isIframe = type === PanelTypes.IFRAME;
 
     const defaultVideoUrl =
-        panelData.source.assetId !== ""
+        panelData.source.assetId !== "" && panelData.source.assetId !== null
             ? `${panelsPath}/${panelData.source.assetId}`
             : defaultVideo.default;
     const defaultImageUrl = textureImage; // defaultImage.default;
