@@ -17,6 +17,9 @@
         }
         .modal-body {
             padding-top: 1em !important;
+            .cropper-bg {
+                background-image: none;
+            }
         }
     }
 
