@@ -5,6 +5,7 @@ import { BaseEntity } from "./BaseEntity";
 import { JsonResponseData } from "../apis";
 import { CONSTANTS } from "../../../config";
 import { UserApi } from "../../../AdminModule/apis";
+import { getRandomId, getUTCDate } from "../../utils";
 
 const {
     ChatMessage: { CONTENT, STATUS },
@@ -67,7 +68,11 @@ export class ChatMessage extends BaseEntity {
         return new ChatMessage(
             ChatThreadApi.toResourceUrl(threadId),
             content,
-            UserApi.toResourceUrl(senderId)
+            UserApi.toResourceUrl(senderId),
+            {
+                id: getRandomId(),
+                createdAt: getUTCDate(),
+            }
         );
     }
 }

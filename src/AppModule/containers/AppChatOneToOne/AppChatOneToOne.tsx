@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useRef } from "react";
 import { find } from "lodash";
 import {
     AppLoader,
@@ -17,14 +17,16 @@ import { PUser } from "../../../AdminModule/models";
 import { socket, EVENTS } from "../../socket";
 
 import "./assets/scss/style.scss";
+import { ChatMessageApi } from "../../apis";
 
 export const AppChatOneToOne: FC = () => {
     const [collapsed, setCollapsed] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [messages, setMessages] = useState<ChatMessage[]>([]);
+    const pastMessages = useRef<ChatMessage[]>([]);
+    const [data, setData] = useState<ChatMessage[]>([]);
     const { getMessages } = useInitChatOneToOne();
     const { user: loginUser } = useAuthState();
-    const { openThread } = useOpenChatOneToOne();
+    const { openThread, set } = useOpenChatOneToOne();
     const [closed, setClosed] = useState(openThread === null);
     const {
         emitJoinChatThread,
@@ -33,6 +35,12 @@ export const AppChatOneToOne: FC = () => {
         emitTyping,
     } = useChatSocketEvents();
     const [otherUser, setOtherUser] = useState<PUser | null>(null);
+    const bottomLine = useRef<HTMLDivElement>(null);
+    const scrollToBottom = () => {
+        bottomLine?.current?.scrollIntoView({
+            behavior: "smooth",
+        });
+    };
 
     useEffect(() => {
         if (openThread !== null && openThread.id) {
@@ -43,18 +51,24 @@ export const AppChatOneToOne: FC = () => {
             setOtherUser(secondPerson);
             setLoading(true);
             emitJoinChatThread(openThread.id);
-            getMessages(1)
+            getMessages(1, {
+                "chatThread.id": openThread.id,
+            })
                 .then(({ response }) => {
                     if (response && response.items) {
-                        setMessages(response.items);
+                        setData(response.items);
+                        pastMessages.current = response.items;
                     }
                 })
                 .finally(() => {
                     setLoading(false);
+                    scrollToBottom();
                 });
         }
-        socket.on(EVENTS.CHAT_MESSAGE, (payload) => {
-            setMessages([...messages, payload]);
+        socket.on(EVENTS.CHAT_MESSAGE, (payload: ChatMessage) => {
+            pastMessages.current.push(payload);
+            setData([...pastMessages.current]);
+            scrollToBottom();
         });
         setClosed(openThread === null);
         return () => {
@@ -77,7 +91,7 @@ export const AppChatOneToOne: FC = () => {
                         setCollapsed(!collapsed);
                     }}
                     onCloseAction={() => {
-                        setClosed(true);
+                        set(null);
                     }}
                     user={otherUser}
                 />
@@ -87,14 +101,19 @@ export const AppChatOneToOne: FC = () => {
                             {loading ? (
                                 <AppLoader />
                             ) : (
-                                messages.map((t: ChatMessage) => (
+                                data.map((t: ChatMessage) => (
                                     <AppChatOneToOneMessage
                                         key={t.id}
                                         chat={t}
                                         loginUser={loginUser}
+                                        otherUser={otherUser}
                                     />
                                 ))
                             )}
+                            <div
+                                style={{ float: "left", clear: "both" }}
+                                ref={bottomLine}
+                            ></div>
                         </div>
                     </div>
                 </div>
@@ -106,14 +125,19 @@ export const AppChatOneToOne: FC = () => {
                             loginUser &&
                             loginUser.id
                         ) {
-                            emitChatMessage(
+                            const obj = ChatMessage.createFrom(
                                 openThread.id,
-                                ChatMessage.createFrom(
-                                    openThread.id,
-                                    loginUser.id,
-                                    txt
-                                ).toJSON()
+                                loginUser.id,
+                                txt
                             );
+                            emitChatMessage(openThread.id, obj);
+                            pastMessages.current.push(obj);
+                            setData([...pastMessages.current]);
+                            ChatMessageApi.create<ChatMessage, ChatMessage>(
+                                obj
+                            ).finally(() => {
+                                scrollToBottom();
+                            });
                         }
                     }}
                     onTypingAction={() => {

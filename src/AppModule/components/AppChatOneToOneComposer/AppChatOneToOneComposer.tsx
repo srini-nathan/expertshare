@@ -1,4 +1,5 @@
 import React, { FC, useState } from "react";
+import { AppButton } from "../AppButton";
 
 export interface AppChatOneToOneComposerProps {
     onTypingAction: (txt: string) => void;
@@ -22,22 +23,28 @@ export const AppChatOneToOneComposer: FC<AppChatOneToOneComposerProps> = ({
                         </div>
                     </div>
                     <input
+                        name="msg-composer"
                         placeholder="Write your message ..."
+                        value={data}
                         type="text"
-                        onInput={(e) => {
+                        onChange={(e) => {
                             setData(e.currentTarget.value);
                             onTypingAction(e.currentTarget.value);
                         }}
                     />
-                    <a
-                        href="#"
-                        className="send"
+                    <AppButton
+                        className={"btn-send"}
+                        variant={"link"}
+                        disabled={data.length === 0}
                         onClick={() => {
-                            onSendAction(data);
+                            if (data.length > 0) {
+                                onSendAction(data);
+                                setData("");
+                            }
                         }}
                     >
                         Send
-                    </a>
+                    </AppButton>
                 </div>
             </div>
         </div>

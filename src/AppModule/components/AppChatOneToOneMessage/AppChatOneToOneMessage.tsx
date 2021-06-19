@@ -4,6 +4,7 @@ import { ChatMessage } from "../../models/entities/ChatMessage";
 import { FileTypeInfo } from "../../models";
 import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath, useDateTime } from "../../hooks";
+import { UserApi } from "../../../AdminModule/apis";
 import placeholder from "../../assets/images/user-avatar.png";
 
 const { Upload: UPLOAD } = CONSTANTS;
@@ -14,22 +15,29 @@ const {
 export interface AppChatOneToOneMessageProps {
     chat: ChatMessage;
     loginUser: PUser;
+    otherUser: PUser;
 }
 
 export const AppChatOneToOneMessage: FC<AppChatOneToOneMessageProps> = ({
     chat,
     loginUser,
+    otherUser,
 }) => {
-    const user = chat.user as PUser;
-    const isMe = user.id === loginUser.id;
+    const senderResourceUrl = chat.user;
+    const isMe = loginUser.id
+        ? senderResourceUrl === UserApi.toResourceUrl(loginUser.id)
+        : false;
     const { content, createdAt } = chat;
+    const senderUser = isMe ? loginUser : otherUser;
     const avatar = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo,
-        user?.imageName
+        senderUser?.imageName
     );
     const { toShortTime } = useDateTime();
-    const avatarUrl = user?.imageName ? avatar : placeholder;
-    const name = isMe ? `${user?.firstName} ${user?.lastName}` : "You";
+    const avatarUrl = senderUser?.imageName ? avatar : placeholder;
+    const name = isMe
+        ? "You"
+        : `${senderUser?.firstName} ${senderUser?.lastName}`;
 
     return (
         <div className={`message-item ${isMe ? "out" : "in"}`}>
@@ -44,9 +52,11 @@ export const AppChatOneToOneMessage: FC<AppChatOneToOneMessageProps> = ({
                 <div className="content--header">
                     <h4>
                         {name}
-                        <span className="time">
-                            {toShortTime(new Date(createdAt))}
-                        </span>
+                        {createdAt ? (
+                            <span className="time">
+                                {toShortTime(new Date())}
+                            </span>
+                        ) : null}
                     </h4>
                 </div>
                 <div className="content--comment">

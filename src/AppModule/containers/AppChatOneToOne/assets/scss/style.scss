@@ -363,14 +363,17 @@
                     }
                 }
 
-                .send {
-                    position: absolute;
-                    right: 10px;
-                    padding-left: 10px;
-                    font-size: 12px;
-                    font-weight: 700;
-                    color: var(--primary);
-                    border-left: 1px solid var(--secondary-20);
+
+                .btn-link{
+                    &.btn-send{
+                        position: absolute;
+                        right: 10px;
+                        padding-right: 10px;
+                        font-size: 12px !important;
+                        font-weight: 700 !important;
+                        color: var(--primary) !important;
+                        border-left: 1px solid var(--secondary-20);
+                    }
                 }
 
                 .char {
