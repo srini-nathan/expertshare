@@ -32,8 +32,8 @@ export const AppSessionSlot: FC<AppSessionSlotProps> = ({
     const { t } = useTranslation();
     return (
         <div className="event-detail-admin--workshop larg-size larg-carousel col-12 my-4 px-0">
-            <div className="event-detail-admin--workshop--container p-3">
-                <div className="event-detail-admin--workshop--container--header mt-2 mb-3">
+            <div className="event-detail-admin--workshop--container py-3">
+                <div className="event-detail-admin--workshop--container--header mt-2 mb-3 px-3">
                     <div className="row m-0 p-0">
                         <div className="event-detail-admin--workshop--container--header--left col-auto px-0">
                             <div className="event-detail-admin--workshop--container--header--left--content">

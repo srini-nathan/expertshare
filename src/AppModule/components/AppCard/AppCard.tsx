@@ -26,7 +26,7 @@ export const AppCard: FC<AppCardProps> = ({
                     {subtitle}
                 </Card.Subtitle>
             )}
-            <Card.Body className="mt-2 p-0">{children}</Card.Body>
+            <Card.Body className="p-0">{children}</Card.Body>
         </Card>
     );
 };
