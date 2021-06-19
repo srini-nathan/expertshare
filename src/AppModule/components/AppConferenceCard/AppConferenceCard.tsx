@@ -7,7 +7,7 @@ import { PConference } from "../../../AdminModule/models";
 import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath } from "../../hooks";
 import "./assets/scss/style.scss";
-import placeholder from "./assets/images/imgthumb.svg";
+import placeholder from "../../assets/images/imgthumb.svg";
 import { FileTypeInfo } from "../../models";
 import { useGlobalData } from "../../contexts";
 

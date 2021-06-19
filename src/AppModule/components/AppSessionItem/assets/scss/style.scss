@@ -1,9 +1,9 @@
 @import "../../../../assets/scss/screens-sizes";
 @import "../../../../assets/scss/variables";
 
-
 .event-detail-admin--workshop {
     overflow: auto;
+    box-shadow: 0 2px 12px var(--secondary-20);
 
     &::-webkit-scrollbar {
         display: none;
@@ -13,15 +13,12 @@
         background-color: var(--light-clr);
         border-radius: var(--border-radius);
 
-
         &--content {
-
             &--item {
                 .inner-container {
                     overflow: hidden;
 
                     &.small-size {
-
                         .inner-container--header {
                             background-color: var(--morning-workshops-bg-clr);
 
@@ -45,18 +42,16 @@
                                 }
                             }
                         }
-
                     }
 
                     &.medium-size {
-
                         .inner-container--header {
                             background-color: var(--morning-bg-clr);
                         }
 
                         .inner-container--banner {
                             &--content {
-                                height: 180px;
+                                // height: 180px;
                             }
                         }
 
@@ -75,18 +70,16 @@
                                 }
                             }
                         }
-
                     }
 
                     &.large-size {
-
                         .inner-container--header {
                             background-color: var(--main-stage-purple-bg-clr);
                         }
 
                         .inner-container--banner {
                             &--content {
-                                height: 276px;
+                                // height: 276px;
                             }
                         }
 
@@ -105,18 +98,16 @@
                                 }
                             }
                         }
-
                     }
 
                     &.xlarge-size {
-
                         .inner-container--header {
                             background-color: var(--main-stage-orange-bg-clr);
                         }
 
                         .inner-container--banner {
                             &--content {
-                                height: 436px;
+                                // height: 436px;
                             }
                         }
 
@@ -126,7 +117,9 @@
                             margin-left: -50px !important;
                             background-color: var(--light-clr);
                             border-radius: var(--border-radius);
-
+                            @include media("ea-1") {
+                                margin-left: 0 !important;
+                            }
                             &--title {
                                 a {
                                     h2 {
@@ -136,7 +129,6 @@
                                 }
                             }
                         }
-
 
                         .inner-container--action {
                             position: absolute;
@@ -214,12 +206,18 @@
                     }
 
                     &--banner {
+                        a {
+                            width: 100%;
+                            height: 100%;
+                        }
                         &--content {
                             position: relative;
-                            width: auto;
-                            height: 133px;
+                            width: 100%;
+                            height: 100%;
+                            padding-bottom: 56.5%;
                             cursor: pointer;
                             background-repeat: no-repeat;
+                            background-position: center;
                             background-size: cover;
 
                             &--button {
@@ -315,7 +313,7 @@
                                                 width: 10px;
                                                 height: 10px;
                                                 content: "";
-                                                background-color: var(--primary);
+                                                background-color: var(--live-badge-bg-clr);
                                                 border: 1px solid var(--border-radius-clr);
                                                 border-radius: 50%;
                                             }
@@ -394,7 +392,6 @@
 
                             &--other {
                                 &--item {
-
                                     a,
                                     button {
                                         i {
@@ -430,6 +427,4 @@
             }
         }
     }
-
-
 }

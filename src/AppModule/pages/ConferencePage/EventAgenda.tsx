@@ -305,7 +305,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                                 handleCategoryFilter(e.id);
                             }}
                             variant="secondary"
-                            className="ml-1 category-btn"
+                            className="ml-1 mb-2 category-btn"
                         >
                             <span
                                 style={{
