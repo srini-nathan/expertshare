@@ -15,8 +15,6 @@ import {
 } from "../../hooks";
 import { PUser } from "../../../AdminModule/models";
 import { socket, EVENTS } from "../../socket";
-import { ChatThreadApi } from "../../apis";
-import { UserApi } from "../../../AdminModule/apis";
 
 import "./assets/scss/style.scss";
 
@@ -55,21 +53,8 @@ export const AppChatOneToOne: FC = () => {
                     setLoading(false);
                 });
         }
-        socket.on(EVENTS.CHAT_MESSAGE, ({ content, threadId, from }) => {
-            if (otherUser && otherUser.id && loginUser && loginUser.id) {
-                const senderId =
-                    from === loginUser.id ? loginUser.id : otherUser.id;
-                // eslint-disable-next-line no-console
-                console.log(
-                    messages,
-                    "messages",
-                    ChatMessage.createFrom(threadId, senderId, content)
-                );
-                setMessages([
-                    ...messages,
-                    ChatMessage.createFrom(threadId, senderId, content),
-                ]);
-            }
+        socket.on(EVENTS.CHAT_MESSAGE, (payload) => {
+            setMessages([...messages, payload]);
         });
         setClosed(openThread === null);
         return () => {
@@ -115,8 +100,20 @@ export const AppChatOneToOne: FC = () => {
                 </div>
                 <AppChatOneToOneComposer
                     onSendAction={(txt: string) => {
-                        if (openThread && openThread.id) {
-                            emitChatMessage(openThread.id, txt);
+                        if (
+                            openThread &&
+                            openThread.id &&
+                            loginUser &&
+                            loginUser.id
+                        ) {
+                            emitChatMessage(
+                                openThread.id,
+                                ChatMessage.createFrom(
+                                    openThread.id,
+                                    loginUser.id,
+                                    txt
+                                ).toJSON()
+                            );
                         }
                     }}
                     onTypingAction={() => {

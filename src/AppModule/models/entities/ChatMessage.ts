@@ -2,8 +2,8 @@ import { ChatThread } from "./ChatThread";
 import { User } from "../../../AdminModule/models";
 import { ChatMessageApi, ChatThreadApi } from "../../apis";
 import { BaseEntity } from "./BaseEntity";
-import { CONSTANTS } from "../../../config";
 import { JsonResponseData } from "../apis";
+import { CONSTANTS } from "../../../config";
 import { UserApi } from "../../../AdminModule/apis";
 
 const {
@@ -71,3 +71,5 @@ export class ChatMessage extends BaseEntity {
         );
     }
 }
+
+export type PChatMessage = Partial<ChatMessage>;

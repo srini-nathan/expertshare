@@ -5,13 +5,15 @@ import {
     typingInChatThread,
     sendChatMessage,
 } from "../socket";
+import { PChatThread } from "../models/entities/ChatThread";
+import { PChatMessage } from "../models/entities/ChatMessage";
 
 type ChatSocketEventsType = {
     emitJoinChatThread: (threadId: number) => void;
     emitLeaveChatThread: (threadId: number) => void;
     emitTyping: (threadId: number) => void;
     emitStopTyping: (threadId: number) => void;
-    emitChatMessage: (threadId: number, content: string) => void;
+    emitChatMessage: (threadId: number, payload: PChatThread) => void;
 };
 
 export function useChatSocketEvents(): ChatSocketEventsType {
@@ -31,8 +33,8 @@ export function useChatSocketEvents(): ChatSocketEventsType {
         typedInChatThread(threadId);
     };
 
-    const emitChatMessage = (threadId: number, content: string): void => {
-        sendChatMessage(content, threadId);
+    const emitChatMessage = (threadId: number, payload: PChatMessage): void => {
+        sendChatMessage(threadId, payload);
     };
 
     return {

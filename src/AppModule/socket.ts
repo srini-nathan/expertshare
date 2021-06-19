@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 import { SOCKET_HOST } from "./config/app-env";
-import { ChatThreadApi } from "./apis";
+import { PChatMessage } from "./models/entities/ChatMessage";
 
 export const socket = io(SOCKET_HOST, {
     transports: ["websocket"],
@@ -79,12 +79,14 @@ export const typedInChatThread = (threadId: number): void => {
     });
 };
 
-export const sendChatMessage = (content: string, threadId: number): void => {
+export const sendChatMessage = (
+    threadId: number,
+    payload: PChatMessage
+): void => {
     if (socket.connected) {
         socket.emit(EVENTS.CHAT_MESSAGE, {
             threadId,
-            content,
-            chatThread: ChatThreadApi.toResourceUrl(threadId),
+            payload,
         });
     }
 };
