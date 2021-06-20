@@ -9,7 +9,7 @@ import {
     Nav,
     Navbar,
 } from "react-bootstrap";
-import { Link } from "@reach/router";
+import { Link, navigate } from "@reach/router";
 import { AppIcon } from "../../components/AppIcon";
 import {
     AppNavigationDropDown,
@@ -490,6 +490,17 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                         action: () => {
                                                             setUserLocale(e);
                                                             setLocale(e.locale);
+                                                            navigate(
+                                                                "/reloading",
+                                                                {
+                                                                    state: {
+                                                                        url:
+                                                                            window
+                                                                                .location
+                                                                                .pathname,
+                                                                    },
+                                                                }
+                                                            );
                                                         },
                                                     };
                                                 })}

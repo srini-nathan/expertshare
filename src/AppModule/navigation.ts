@@ -15,13 +15,13 @@ export const navigation: AppNavigationItemProps[] = [
             name: "far fa-user-plus",
         },
     },
-    {
-        label: "Social Feed",
-        path: "/newsfeed",
-        icon: {
-            name: "fak fa-message-dot",
-        },
-    },
+    // {
+    //     label: "Social Feed",
+    //     path: "/newsfeed",
+    //     icon: {
+    //         name: "fak fa-message-dot",
+    //     },
+    // },
 ];
 
 export default navigation;
