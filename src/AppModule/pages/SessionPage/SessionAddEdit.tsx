@@ -114,6 +114,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
         SimpleObject<string>[]
     >([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [loadingData, setLoadingData] = useState<boolean>(true);
     const [loadingCat, setLoadingCat] = useState<boolean>(true);
     const [showExtraLinks, isExtraLink] = useState<boolean>(
         data.isExternalLinkEnable
@@ -356,7 +357,10 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                         setSelectedSpeakers(res.speakers as User[]);
                     }
                 }
+                setLoadingData(false);
             });
+        } else {
+            setLoadingData(false);
         }
     }, [id, isEditMode, trigger]);
 
@@ -470,7 +474,6 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
         SessionCategoryApi.find<SessionCategory>(1, {
             "container.id": containerId,
         }).then(({ error, response }) => {
-            setLoadingCat(false);
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
@@ -486,6 +489,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                     })
                 );
             }
+            setLoadingCat(false);
         });
     }, []);
 
@@ -495,7 +499,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
 
     const { errors } = formState;
 
-    if (loading || loadingCat) {
+    if (loading || loadingCat || loadingData) {
         return <AppLoader />;
     }
 
