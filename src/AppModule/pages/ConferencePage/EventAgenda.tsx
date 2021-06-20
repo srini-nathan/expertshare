@@ -103,7 +103,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
             "container.id": containerId,
             "conference.id": id,
             "start[after]": `${getDateWT(activeDate)} 00:00:00`,
-            "end[strictly_before]": getTomorrowDate(activeDate),
+            "start[strictly_before]": getTomorrowDate(activeDate),
             "sessionCategory.id": categoryFilter,
         }).then(({ error, response }) => {
             isLoadingSession(false);
