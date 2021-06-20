@@ -35,7 +35,7 @@ import {
 } from "../../hooks";
 import {
     errorToast,
-    getDate,
+    getDateWT,
     getTomorrowDate,
     successToast,
 } from "../../utils";
@@ -102,7 +102,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
         SessionApi.getAgenda<Session>({
             "container.id": containerId,
             "conference.id": id,
-            "start[after]": `${getDate(activeDate)} 00:00:00`,
+            "start[after]": `${getDateWT(activeDate)} 00:00:00`,
             "end[strictly_before]": getTomorrowDate(activeDate),
             "sessionCategory.id": categoryFilter,
         }).then(({ error, response }) => {

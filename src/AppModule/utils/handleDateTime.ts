@@ -46,6 +46,11 @@ export const getDateTimeWithoutTimezone = (date: string) => {
     }
     return new Date(date);
 };
+
+export const getDateWT = (date: string): string => {
+    return format(getDateTimeWithoutTimezone(date), "yyyy-MM-dd");
+};
+
 export const getTomorrowDate = (date: string): string => {
     return `${getTomorrow(date)} 00:00:00`;
 };
