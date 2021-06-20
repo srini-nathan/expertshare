@@ -257,24 +257,31 @@ export const AFramePanelGrid: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Fragment>
             {panelType && (
-                <AppBreadcrumb linkText={"Rooms"} linkUrl={"/admin/panels"} />
+                <AppBreadcrumb linkText={"Rooms"} linkUrl={"/admin/rooms"} />
             )}
             <AppPageHeader
                 title={panelType ? pageTitle[panelType] : "Rooms"}
                 customToolbar
             >
                 <div className="d-flex pt-2 mb-5">
-                    {panelType && (
+                    {panelType ? (
                         <AppListPageToolbar
                             createLink={`/admin/room/${roomId}/${panelType}/new`}
                             createLabel={`Create ${pageTitle[panelType]}`}
                             onQuickFilterChange={handleFilter}
                             cancelTokenSources={cancelTokenSourcesRef.current}
                         />
+                    ) : (
+                        <AppListPageToolbar
+                            createLink={"room/new"}
+                            createLabel={`Create New Room`}
+                            onQuickFilterChange={handleFilter}
+                            cancelTokenSources={cancelTokenSourcesRef.current}
+                        />
                     )}
                     {false && (
                         <AppSwitchView
-                            link={"/admin/panels"}
+                            link={"/admin/rooms"}
                             activeLink={view || "grid"}
                         />
                     )}

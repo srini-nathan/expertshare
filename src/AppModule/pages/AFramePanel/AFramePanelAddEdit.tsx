@@ -1,10 +1,11 @@
-import React, { FC, Fragment, useState, useEffect } from "react";
+import React, { FC, Fragment, useState, useEffect, useRef } from "react";
 import { RouteComponentProps, useParams } from "@reach/router";
+import { Canceler } from "axios";
 import { Row, Col, Form } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { find as _find } from "lodash";
+import { find as _find, isString as _isString } from "lodash";
 import {
     AppPageHeader,
     AppBreadcrumb,
@@ -15,6 +16,9 @@ import {
     AppFormInput,
     AppLoader,
     AppFormSelect,
+    AppFormInputColorPicker,
+    AppFormFile,
+    AppFormRichTextArea,
 } from "../../components";
 import {
     Upload,
@@ -22,8 +26,16 @@ import {
     UnprocessableEntityErrorResponse,
     FileTypeInfo,
 } from "../../models";
-import { AFramePanel, PAFramePanel } from "../../../AdminModule/models";
-import { AFramePanelApi, ContainerApi } from "../../../AdminModule/apis";
+import {
+    AFramePanel,
+    PAFramePanel,
+    PAFrameRoom,
+} from "../../../AdminModule/models";
+import {
+    AFramePanelApi,
+    ContainerApi,
+    AFrameRoomApi,
+} from "../../../AdminModule/apis";
 import {
     errorToast,
     setViolations,
@@ -83,7 +95,6 @@ const {
     width,
     depth,
     padding,
-    color,
     opacity,
     pX,
     pY,
@@ -105,7 +116,6 @@ const {
     remoteRotZ,
     remoteAnimationSpeed,
     textValue,
-    textColor,
     textWidth,
     textPosX,
     textPosY,
@@ -116,10 +126,7 @@ const {
     textRotX,
     textRotY,
     textRotZ,
-    targetId,
     targetUrl,
-    source,
-    transitionVideo,
     content,
 } = validations;
 
@@ -129,6 +136,7 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
     const { id, isEditMode } = useParamId();
     const { roomId, panelType } = useParams();
 
+    const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const navigator = useNavigator(navigate);
     const { containerResourceId, containerId } = useAuthState();
     const [data, setData] = useState<PAFramePanel>(
@@ -140,8 +148,20 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
     const aframepanelImagePath = useBuildAssetPath(
         FILETYPEINFO_AFRAMEPANEL_MEDIA as FileTypeInfo
     );
+
     const [loading, setLoading] = useState<boolean>(true);
+    const [loadingForRooms, setLoadingForRooms] = useState<boolean>(true);
     const { t } = useTranslation();
+    const [targetIdOptions, setTargetIdOptions] = useState<PrimitiveObject[]>(
+        []
+    );
+
+    const [
+        transitionVideoFileName,
+        setTransitionVideoFileName,
+    ] = useState<string>("");
+
+    const [sourceVideoFileName, setSourceVideoFileName] = useState<string>("");
 
     const {
         handleSubmit,
@@ -155,7 +175,36 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
         mode: "all",
     });
 
+    const fileUpload = (fieldName: string, files: File[]) => {
+        if (files && files.length > 0) {
+            const fd = new FormData();
+            fd.set("file", files[0], files[0].name);
+            fd.set("fileType", FILETYPE_AFRAMEPANEL_MEDIA);
+
+            UploadAPI.createResource<Upload, FormData>(fd).then(
+                ({ errorMessage, response }) => {
+                    if (errorMessage) {
+                        errorToast(errorMessage);
+                    }
+
+                    if (response && response.fileName) {
+                        successToast("Image uploaded");
+                        if (fieldName === "transitionVideo") {
+                            setTransitionVideoFileName(response.fileName);
+                        }
+                        if (fieldName === "source") {
+                            setSourceVideoFileName(response.fileName);
+                        }
+                    }
+                }
+            );
+        }
+    };
+
     const onFileSelect = (fieldName: string) => (selectedFiles: File[]) => {
+        if (fieldName === "transitionVideo" || fieldName === "source") {
+            fileUpload(fieldName, selectedFiles);
+        }
         setFilesToUpload({ ...filesToUpload, [fieldName]: selectedFiles });
     };
 
@@ -164,6 +213,7 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
         formData.container = ContainerApi.toResourceUrl(containerId);
         formData.aFrameRoom = `/api/a_frame_rooms/${roomId}`;
         formData.type = panelType;
+        formData.transitionVideo = transitionVideoFileName;
 
         return AFramePanelApi.createOrUpdate<AFramePanel>(id, formData).then(
             ({ error, errorMessage }) => {
@@ -172,7 +222,7 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                 } else if (errorMessage) {
                     errorToast(errorMessage);
                 } else {
-                    navigator("/admin/panels").then(() => {
+                    navigator("/admin/rooms").then(() => {
                         successToast(
                             isEditMode ? "Panels updated" : "Panels created"
                         );
@@ -216,6 +266,7 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
             }
         });
     };
+
     useEffect(() => {
         if (isEditMode) {
             AFramePanelApi.findById<AFramePanel>(id).then(
@@ -226,6 +277,9 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                         errorToast("data not exist");
                     } else if (response !== null) {
                         setData(response);
+                        setTransitionVideoFileName(
+                            response.transitionVideo || ""
+                        );
                         trigger();
                     }
                     setLoading(false);
@@ -237,15 +291,41 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
         }
     }, [id, isEditMode, trigger]);
 
+    useEffect(() => {
+        setLoadingForRooms(true);
+        AFrameRoomApi.find<PAFrameRoom>(
+            1,
+            {
+                "container.id": containerId,
+            },
+            (c: any) => {
+                cancelTokenSourcesRef.current.push(c);
+            }
+        ).then(({ response, error }) => {
+            setLoadingForRooms(false);
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                }
+            } else if (response !== null) {
+                const targetRoomOptions = response.items.map((item) => ({
+                    value: item.id,
+                    label: item.name,
+                }));
+                setTargetIdOptions(targetRoomOptions as any);
+            }
+        });
+    }, []);
+
     const { errors } = formState;
 
-    if (loading) {
+    if (loading || loadingForRooms) {
         return <AppLoader />;
     }
 
     return (
         <Fragment>
-            <AppBreadcrumb linkText={"Panels"} linkUrl={"/admin/panels"} />
+            <AppBreadcrumb linkText={"Panels"} linkUrl={"/admin/rooms"} />
             <AppPageHeader title={isEditMode ? "Edit Panels" : "Add Panels"} />
             <Row>
                 <Col>
@@ -345,20 +425,20 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                                     defaultValue={data.padding}
                                     control={control}
                                 />
-                                <AppFormInput
-                                    name={"color"}
+                                <AppFormInputColorPicker
                                     label={t(
                                         "admin.aframepanel.form:label.color"
                                     )}
-                                    maxCount={color.max}
+                                    name={"color"}
+                                    errorMessage={errors.color?.message}
+                                    defaultValue={data.color}
+                                    control={control}
+                                    setValue={setValue}
                                     {...validation(
                                         "color",
                                         formState,
                                         isEditMode
                                     )}
-                                    errorMessage={errors.color?.message}
-                                    defaultValue={data.color}
-                                    control={control}
                                 />
                                 <AppFormInput
                                     name={"opacity"}
@@ -781,21 +861,21 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                                     defaultValue={data.textValue}
                                     control={control}
                                 />
-                                <AppFormInput
+                                <AppFormInputColorPicker
                                     required={false}
-                                    name={"textColor"}
                                     label={t(
                                         "admin.aframepanel.form:label.textColor"
                                     )}
-                                    maxCount={textColor.max}
+                                    name={"textColor"}
+                                    errorMessage={errors.textColor?.message}
+                                    defaultValue={data.textColor}
+                                    control={control}
+                                    setValue={setValue}
                                     {...validation(
                                         "textColor",
                                         formState,
                                         isEditMode
                                     )}
-                                    errorMessage={errors.textColor?.message}
-                                    defaultValue={data.textColor}
-                                    control={control}
                                 />
                                 <AppFormInput
                                     required={false}
@@ -959,112 +1039,152 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                                 />
                             </Form.Row>
                             <Form.Row>
-                                <AppFormSelect
-                                    required={false}
-                                    id={"targetType"}
-                                    name={"targetType"}
-                                    label={t(
-                                        "admin.aframepanel.form:label.targetType"
-                                    )}
-                                    md={3}
-                                    lg={3}
-                                    xl={3}
-                                    {...validation(
-                                        "targetType",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    errorMessage={errors.targetType?.message}
-                                    defaultValue={data.targetType as any}
-                                    options={targetTypeOptions}
-                                    control={control}
-                                    transform={{
-                                        output: (template: PrimitiveObject) => {
-                                            setValue(
+                                {false && (
+                                    <>
+                                        <AppFormSelect
+                                            required={false}
+                                            id={"targetType"}
+                                            name={"targetType"}
+                                            label={t(
+                                                "admin.aframepanel.form:label.targetType"
+                                            )}
+                                            md={3}
+                                            lg={3}
+                                            xl={3}
+                                            {...validation(
                                                 "targetType",
-                                                template?.value as string
-                                            );
-                                            return template?.value;
-                                        },
-                                        input: (value: string) => {
-                                            return _find(targetTypeOptions, {
-                                                value,
-                                            });
-                                        },
-                                    }}
-                                />
-                                <AppFormSelect
-                                    required={false}
-                                    id={"targetAction"}
-                                    name={"targetAction"}
-                                    label={t(
-                                        "admin.aframepanel.form:label.targetAction"
-                                    )}
-                                    md={3}
-                                    lg={3}
-                                    xl={3}
-                                    {...validation(
-                                        "targetAction",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    errorMessage={errors.targetAction?.message}
-                                    defaultValue={data.targetAction as any}
-                                    options={targetActionOptions}
-                                    control={control}
-                                    transform={{
-                                        output: (template: PrimitiveObject) => {
-                                            setValue(
+                                                formState,
+                                                isEditMode
+                                            )}
+                                            errorMessage={
+                                                errors.targetType?.message
+                                            }
+                                            defaultValue={
+                                                data.targetType as any
+                                            }
+                                            options={targetTypeOptions}
+                                            control={control}
+                                            transform={{
+                                                output: (
+                                                    template: PrimitiveObject
+                                                ) => {
+                                                    setValue(
+                                                        "targetType",
+                                                        template?.value as string
+                                                    );
+                                                    return template?.value;
+                                                },
+                                                input: (value: string) => {
+                                                    return _find(
+                                                        targetTypeOptions,
+                                                        {
+                                                            value,
+                                                        }
+                                                    );
+                                                },
+                                            }}
+                                        />
+                                        <AppFormSelect
+                                            required={false}
+                                            id={"targetAction"}
+                                            name={"targetAction"}
+                                            label={t(
+                                                "admin.aframepanel.form:label.targetAction"
+                                            )}
+                                            md={3}
+                                            lg={3}
+                                            xl={3}
+                                            {...validation(
                                                 "targetAction",
-                                                template?.value as string
-                                            );
-                                            return template?.value;
-                                        },
-                                        input: (value: string) => {
-                                            return _find(targetActionOptions, {
-                                                value,
-                                            });
-                                        },
-                                    }}
-                                />
-                                <AppFormInput
-                                    required={false}
-                                    md={3}
-                                    lg={3}
-                                    xl={3}
-                                    name={"targetId"}
-                                    label={t(
-                                        "admin.aframepanel.form:label.targetId"
-                                    )}
-                                    maxCount={targetId.max}
-                                    {...validation(
-                                        "targetId",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    errorMessage={errors.targetId?.message}
-                                    defaultValue={data.targetId?.toString()}
-                                    control={control}
-                                />
-                                <AppFormInput
-                                    required={false}
-                                    md={3}
-                                    lg={3}
-                                    xl={3}
-                                    name={"targetUrl"}
-                                    label={t(
-                                        "admin.aframepanel.form:label.targetUrl"
-                                    )}
-                                    maxCount={targetUrl.max}
-                                    {...validation(
-                                        "targetUrl",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    errorMessage={errors.targetUrl?.message}
-                                    defaultValue={data.targetUrl}
-                                    control={control}
-                                />
+                                                formState,
+                                                isEditMode
+                                            )}
+                                            errorMessage={
+                                                errors.targetAction?.message
+                                            }
+                                            defaultValue={
+                                                data.targetAction as any
+                                            }
+                                            options={targetActionOptions}
+                                            control={control}
+                                            transform={{
+                                                output: (
+                                                    template: PrimitiveObject
+                                                ) => {
+                                                    setValue(
+                                                        "targetAction",
+                                                        template?.value as string
+                                                    );
+                                                    return template?.value;
+                                                },
+                                                input: (value: string) => {
+                                                    return _find(
+                                                        targetActionOptions,
+                                                        {
+                                                            value,
+                                                        }
+                                                    );
+                                                },
+                                            }}
+                                        />
+                                    </>
+                                )}
+                                {panelType === "door" && (
+                                    <AppFormSelect
+                                        required={false}
+                                        id={"targetId"}
+                                        name={"targetId"}
+                                        label={t(
+                                            "admin.aframepanel.form:label.targetId"
+                                        )}
+                                        {...validation(
+                                            "targetId",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={errors.targetId?.message}
+                                        defaultValue={data.targetId as any}
+                                        options={targetIdOptions}
+                                        control={control}
+                                        transform={{
+                                            output: (
+                                                template: PrimitiveObject
+                                            ) => {
+                                                setValue(
+                                                    "targetId",
+                                                    template?.value as any
+                                                );
+                                                return template?.value;
+                                            },
+                                            input: (value: string) => {
+                                                return _find(targetIdOptions, {
+                                                    value,
+                                                });
+                                            },
+                                        }}
+                                    />
+                                )}
+                                {panelType === "screen" && (
+                                    <AppFormInput
+                                        required={false}
+                                        md={3}
+                                        lg={3}
+                                        xl={3}
+                                        name={"targetUrl"}
+                                        label={t(
+                                            "admin.aframepanel.form:label.targetUrl"
+                                        )}
+                                        maxCount={targetUrl.max}
+                                        {...validation(
+                                            "targetUrl",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={errors.targetUrl?.message}
+                                        defaultValue={data.targetUrl}
+                                        control={control}
+                                    />
+                                )}
                             </Form.Row>
                             {false && (
                                 <Form.Row>
@@ -1106,84 +1226,102 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                                     />
                                 </Form.Row>
                             )}
-                            <Form.Row>
-                                <AppFormInput
-                                    required={false}
-                                    name={"source"}
-                                    label={t(
-                                        "admin.aframepanel.form:label.source"
-                                    )}
-                                    maxCount={source.max}
-                                    {...validation(
-                                        "source",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    errorMessage={errors.source?.message}
-                                    defaultValue={data.source}
-                                    control={control}
-                                />
-                            </Form.Row>
-                            <Form.Row>
-                                <AppFormInput
-                                    required={false}
-                                    name={"transitionVideo"}
-                                    label={t(
-                                        "admin.aframepanel.form:label.transitionVideo"
-                                    )}
-                                    maxCount={transitionVideo.max}
-                                    {...validation(
-                                        "transitionVideo",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    errorMessage={
-                                        errors.transitionVideo?.message
-                                    }
-                                    defaultValue={data.transitionVideo}
-                                    control={control}
-                                />
-                            </Form.Row>
-                            <Form.Row>
-                                <AppFormInput
-                                    required={false}
-                                    name={"content"}
-                                    label={t(
-                                        "admin.aframepanel.form:label.content"
-                                    )}
-                                    maxCount={content.max}
-                                    {...validation(
-                                        "content",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    errorMessage={errors.content?.message}
-                                    defaultValue={data.content}
-                                    control={control}
-                                />
-                            </Form.Row>
-                            <Form.Row>
-                                <AppFormSwitch
-                                    name={"isTransitionEnabled"}
-                                    label={t(
-                                        "admin.aframepanel.form:label.isTransitionEnabled"
-                                    )}
-                                    {...validation(
-                                        "isTransitionEnabled",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    errorMessage={
-                                        errors.isTransitionEnabled?.message
-                                    }
-                                    defaultChecked={data.isTransitionEnabled}
-                                    control={control}
-                                />
-                            </Form.Row>
+
+                            {panelType === "door" && (
+                                <Form.Row>
+                                    <AppFormFile
+                                        required={false}
+                                        label={t(
+                                            "admin.aframepanel.form:label.transitionVideo"
+                                        )}
+                                        {...validation(
+                                            "transitionVideo",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        name={"transitionVideo"}
+                                        defaultValue={data.transitionVideo}
+                                        onFileSelect={onFileSelect(
+                                            "transitionVideo"
+                                        )}
+                                        errorMessage={
+                                            errors.transitionVideo?.message
+                                        }
+                                        control={control}
+                                        value={transitionVideoFileName}
+                                        filePath={aframepanelImagePath}
+                                    />
+                                </Form.Row>
+                            )}
+                            {panelType === "projector" && (
+                                <Form.Row>
+                                    <AppFormFile
+                                        required={false}
+                                        label={t(
+                                            "admin.aframepanel.form:label.source"
+                                        )}
+                                        {...validation(
+                                            "source",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        name={"source"}
+                                        defaultValue={data.source}
+                                        onFileSelect={onFileSelect("source")}
+                                        errorMessage={errors.source?.message}
+                                        control={control}
+                                        value={sourceVideoFileName}
+                                        filePath={aframepanelImagePath}
+                                    />
+                                </Form.Row>
+                            )}
+                            {panelType === "billboard" && (
+                                <Form.Row>
+                                    <AppFormRichTextArea
+                                        xl={12}
+                                        required={false}
+                                        name={"content"}
+                                        label={t(
+                                            "admin.aframepanel.form:label.content"
+                                        )}
+                                        maxCount={content.max}
+                                        {...validation(
+                                            "content",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={errors.content?.message}
+                                        defaultValue={data.content}
+                                        control={control}
+                                    />
+                                </Form.Row>
+                            )}
+                            {panelType === "door" && (
+                                <Form.Row>
+                                    <AppFormSwitch
+                                        name={"isTransitionEnabled"}
+                                        label={t(
+                                            "admin.aframepanel.form:label.isTransitionEnabled"
+                                        )}
+                                        {...validation(
+                                            "isTransitionEnabled",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={
+                                            errors.isTransitionEnabled?.message
+                                        }
+                                        defaultChecked={
+                                            data.isTransitionEnabled
+                                        }
+                                        control={control}
+                                    />
+                                </Form.Row>
+                            )}
                             <AppFormActions
                                 isEditMode={isEditMode}
                                 navigation={navigator}
-                                backLink={"/admin/panels"}
+                                backLink={"/admin/rooms"}
                                 isLoading={formState.isSubmitting}
                             />
                         </Form>
