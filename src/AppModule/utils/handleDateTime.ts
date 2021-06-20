@@ -1,19 +1,12 @@
-export const getDate = (date: string): string => {
-    const newDate = new Date(date);
-    const year = newDate.getFullYear();
-    const month = newDate.getMonth() + 1;
-    const dt = newDate.getDate();
+import { zonedTimeToUtc, utcToZonedTime } from "date-fns-tz";
+import { addDays, format } from "date-fns";
 
-    return `${year}-${month}-${dt}`;
+export const getDate = (date: string): string => {
+    return format(new Date(date), "yyyy-MM-dd");
 };
 
 export const getTomorrow = (date: string): string => {
-    const newDate = new Date(date);
-    const year = newDate.getFullYear();
-    const month = newDate.getMonth() + 1;
-    const dt = newDate.getDate() + 1;
-
-    return `${year}-${month}-${dt}`;
+    return format(addDays(new Date(date), 1), "yyyy-MM-dd");
 };
 
 export const getDateFormat = (date: string) => {
@@ -46,7 +39,34 @@ export const getTime24 = (date: string): string => {
 export const getFullDate = (date: string): string => {
     return `${getDate(date)} ${getTime24(date)}`;
 };
+export const getDateTimeWithoutTimezone = (date: string) => {
+    const newDateTime = date.split("+");
+    if (newDateTime.length > 1) {
+        return new Date(newDateTime[0]);
+    }
+    return new Date(date);
+};
+
+export const getDateWT = (date: string): string => {
+    return format(getDateTimeWithoutTimezone(date), "yyyy-MM-dd");
+};
 
 export const getTomorrowDate = (date: string): string => {
     return `${getTomorrow(date)} 00:00:00`;
+};
+
+export const getTimeZone = (): string => {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone;
+};
+
+export const toUTCDate = (date: Date | number | string): Date => {
+    return zonedTimeToUtc(date, getTimeZone());
+};
+
+export const toLocalDate = (date: Date | number | string): Date => {
+    return utcToZonedTime(date, getTimeZone());
+};
+
+export const getUTCDate = (): Date => {
+    return new Date(new Date().toISOString());
 };

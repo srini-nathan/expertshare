@@ -187,14 +187,6 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             },
             isVisible: isGranted(role, ROLE_OPERATOR),
         },
-        {
-            label: "Panels",
-            path: "/admin/panels",
-            icon: {
-                name: "",
-            },
-            isVisible: isGranted(role, ROLE_OPERATOR),
-        },
     ]);
     const [showSubMenuItems, isSubMenuItems] = useState<boolean>(false);
     const [languages, setLanguages] = useState<Language[]>([]);
@@ -403,9 +395,9 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                     <div className="logo-holder row">
                         <div
                             ref={logoHolder}
-                            className="main-logo-container m-0 my-2 p-md-4"
+                            className="main-logo-container my-0 my-md-2 p-md-4"
                         >
-                            <a href="#" className="main-logo col-xl-9"></a>
+                            <Link to="/" className="main-logo col-xl-9"></Link>
                         </div>
                         <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     </div>

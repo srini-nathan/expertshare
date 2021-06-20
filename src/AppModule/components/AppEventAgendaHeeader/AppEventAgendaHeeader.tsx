@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Row, Col } from "react-bootstrap";
 import { Conference } from "../../../AdminModule/models";
 import "./assets/scss/style.scss";
-
+import placeholder from "../../assets/images/imgthumb.svg";
 import { useBuildAssetPath } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 import { AppButton } from "../AppButton";
@@ -33,6 +33,15 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
         conference?.imageName
     );
     const { t } = useTranslation();
+    const styles = conference?.imageName
+        ? {
+              backgroundImage: `url(${conferencePosterPath})`,
+          }
+        : {
+              backgroundImage: `url(${placeholder})`,
+              backgroundSize: "inherit",
+              backgroundPosition: "center",
+          };
 
     return (
         <Col className="event-detail-admin--det--container col-12 mb-3 px-0">
@@ -104,20 +113,16 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                 </Row>
                 <Row className="m-0 p-0 mt-3">
                     <Col
-                        lg={5}
-                        xl={3}
+                        lg={6}
+                        xl={4}
                         sm={12}
                         className="inner-container--cover px-0 pr-lg-3"
                     >
-                        <i
-                            style={{
-                                backgroundImage: `url(${conferencePosterPath})`,
-                            }}
-                        ></i>
+                        <i style={styles}></i>
                     </Col>
                     <Col
-                        lg={7}
-                        xl={9}
+                        lg={6}
+                        xl={8}
                         sm={12}
                         className="inner-container--det mt-3 mt-lg-0 px-0 pl-lg-4 pr-lg-0"
                     >

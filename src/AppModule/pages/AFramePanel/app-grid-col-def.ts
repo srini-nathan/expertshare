@@ -15,11 +15,10 @@ export const appGridColDefForRooms = ({
                 minWidth: 80,
             },
             {
-                headerName: "ID",
-                field: "id",
-                filter: "id",
+                headerName: "admin.aframeroom.list:column.isEntryRoom",
+                cellRenderer: "AppFormRadio",
                 sortable: true,
-                minWidth: 80,
+                minWidth: 40,
             },
             {
                 headerName: "Actions",

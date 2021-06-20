@@ -260,11 +260,42 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
             );
             perspectiveHelper.current = perspectiveFirstPerson.current;
         }
-    }, [perspectiveFirstPerson.current]);
+
+        if (orbit.current && perspectiveFirstPerson.current) {
+            if (!editMode) {
+                // first person mode
+                perspectiveHelper.current = null!;
+                const tgt = getNewTarget(perspectiveFirstPerson.current, 0.01);
+                orbit.current.object = perspectiveFirstPerson.current as any;
+                setParamsToOrbitControls(
+                    orbit.current,
+                    tgt,
+                    0.4,
+                    false,
+                    0.01,
+                    0.01,
+                    0.01
+                );
+            } else {
+                // edit mode
+                perspectiveHelper.current = perspectiveFirstPerson.current;
+                orbit.current.object = perspectiveOrbit.current as any;
+                setParamsToOrbitControls(
+                    orbit.current,
+                    new Vector3(0, 1.6, 0),
+                    1,
+                    true,
+                    1,
+                    1,
+                    10
+                );
+            }
+        }
+    }, [perspectiveFirstPerson.current, orbit.current]);
 
     useEffect(() => {
         // Changing edit mode
-        console.log("-----  USE EFFECT: editMode");
+        // console.log("-----  USE EFFECT: editMode");
         if (orbit.current) {
             if (!editMode) {
                 // first person mode
@@ -431,15 +462,45 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
 
     useEffect(() => {
         if (orbit.current) {
-            orbit.current.enableDamping = true;
-            orbit.current.dampingFactor = 0.2;
-            orbit.current.maxDistance = 500;
+            if (!editMode) {
+                // first person mode
+                perspectiveHelper.current = null!;
+                const tgt = getNewTarget(perspectiveFirstPerson.current, 0.01);
+                orbit.current.object = perspectiveFirstPerson.current as any;
+                setParamsToOrbitControls(
+                    orbit.current,
+                    tgt,
+                    0.4,
+                    false,
+                    0.01,
+                    0.01,
+                    0.01
+                );
+            } else {
+                // edit mode
+                perspectiveHelper.current = perspectiveFirstPerson.current;
+                orbit.current.object = perspectiveOrbit.current as any;
+                setParamsToOrbitControls(
+                    orbit.current,
+                    new Vector3(0, 1.6, 0),
+                    1,
+                    true,
+                    1,
+                    1,
+                    10
+                );
+                orbit.current.enableDamping = true;
+                orbit.current.dampingFactor = 0.2;
+                orbit.current.maxDistance = 500;
+            }
+
             // console.log("sett orbit: ", orbit.current);
         }
     }, [orbit.current]);
 
     useEffect(() => {
-        // console.log("-----  USE EFFECT: []");
+        // console.log("-----  USE EFFECT: []", editMode, orbit.current);
+
         if (orbit.current) {
             // add callbacks to stop orbit while dragging
             const { current: controls } = orbit;

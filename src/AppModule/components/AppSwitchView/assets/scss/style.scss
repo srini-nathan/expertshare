@@ -3,11 +3,11 @@
 
 .switch-view {
     display: flex;
+    height: fit-content;
     background-color: var(--light-clr);
     border: none;
     border-radius: var(--border-radius);
     box-shadow: 0 3px 9px var(--box-shadow-box-clr);
-
 
     a {
         display: flex;
@@ -29,7 +29,6 @@
 
         &:hover {
             color: var(--secondary);
-
         }
     }
 }

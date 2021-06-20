@@ -45,7 +45,9 @@ export const PanelBuilder = ({
     return (
         <>
             {panels.map((panel, i) => {
-                const image = `${panelsPath}/${panels[i].image.assetId}`;
+                const image = panels[i].image.assetId
+                    ? `${panelsPath}/${panels[i].image.assetId}`
+                    : textureDoor.default;
                 return (
                     <Panel
                         key={i}

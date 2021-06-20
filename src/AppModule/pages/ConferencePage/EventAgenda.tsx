@@ -35,7 +35,7 @@ import {
 } from "../../hooks";
 import {
     errorToast,
-    getDate,
+    getDateWT,
     getTomorrowDate,
     successToast,
 } from "../../utils";
@@ -102,8 +102,8 @@ export const EventAgenda: FC<RouteComponentProps> = ({
         SessionApi.getAgenda<Session>({
             "container.id": containerId,
             "conference.id": id,
-            "start[after]": `${getDate(activeDate)} 00:00:00`,
-            "end[strictly_before]": getTomorrowDate(activeDate),
+            "start[after]": `${getDateWT(activeDate)} 00:00:00`,
+            "start[strictly_before]": getTomorrowDate(activeDate),
             "sessionCategory.id": categoryFilter,
         }).then(({ error, response }) => {
             isLoadingSession(false);
@@ -249,7 +249,9 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                         {e.map((item: Session) => {
                             return (
                                 <SwiperSlide
-                                    className={`${getSize(item.cardSize)} p-0`}
+                                    className={`${getSize(
+                                        item.cardSize
+                                    )} p-0 mx-3`}
                                 >
                                     <AppSessionItem
                                         conference={id}
@@ -305,7 +307,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                                 handleCategoryFilter(e.id);
                             }}
                             variant="secondary"
-                            className="ml-1 category-btn"
+                            className="ml-1 mb-2 category-btn"
                         >
                             <span
                                 style={{

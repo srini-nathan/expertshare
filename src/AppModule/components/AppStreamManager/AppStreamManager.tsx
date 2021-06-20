@@ -33,6 +33,9 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
     const style = session.imageName
         ? {
               backgroundImage: `url(${conferencePosterPath})`,
+              backgroundRepeat: "no-repeat",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
           }
         : {
               backgroundImage: `url(${placeholder})`,

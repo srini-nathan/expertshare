@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "./assets/scss/style.scss";
 import { useGlobalData } from "../../contexts";
+import { getDateTimeWithoutTimezone } from "../../utils";
 
 export interface AppSessionDatesProps {
     sessionDates: { [key: string]: string };
@@ -45,7 +46,9 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
                                         <div className="num-day">
                                             <span>
                                                 {format(
-                                                    new Date(sessionDates[key]),
+                                                    getDateTimeWithoutTimezone(
+                                                        sessionDates[key]
+                                                    ),
                                                     "dd"
                                                 )}
                                             </span>
@@ -53,20 +56,24 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
                                         <div className="date-day">
                                             <span className="date-day--dofw">
                                                 {format(
-                                                    new Date(sessionDates[key]),
+                                                    getDateTimeWithoutTimezone(
+                                                        sessionDates[key]
+                                                    ),
                                                     "EEEE"
                                                 )}
                                             </span>
                                             <span className="date-day--dofy">
                                                 {format(
-                                                    new Date(sessionDates[key]),
+                                                    getDateTimeWithoutTimezone(
+                                                        sessionDates[key]
+                                                    ),
                                                     container &&
                                                         container.configuration &&
                                                         (container.configuration as any)
                                                             .longDate
                                                         ? (container.configuration as any)
                                                               .longDate
-                                                        : "MMMM dd, yyyy"
+                                                        : "MMMM , yyyy"
                                                 )}
                                             </span>
                                         </div>

@@ -8,6 +8,7 @@ import "./assets/scss/style.scss";
 import { AppStreamManager } from "../AppStreamManager";
 import { Session } from "../../../AdminModule/models";
 import { useGlobalData } from "../../contexts";
+import { getDateTimeWithoutTimezone } from "../../utils";
 
 export interface AppSessionHeaderProps {
     session: Session;
@@ -147,7 +148,9 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                             <span className="date mb-1">
                                 {session.start &&
                                     format(
-                                        new Date(session.start),
+                                        getDateTimeWithoutTimezone(
+                                            session.start
+                                        ),
                                         container &&
                                             container.configuration &&
                                             (container.configuration as any)
@@ -160,7 +163,9 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                             <span className="period">
                                 {session.start &&
                                     format(
-                                        new Date(session.start),
+                                        getDateTimeWithoutTimezone(
+                                            session.start
+                                        ),
                                         container &&
                                             container.configuration &&
                                             (container.configuration as any)
@@ -172,7 +177,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                                 -{" "}
                                 {session.end &&
                                     format(
-                                        new Date(session.end),
+                                        getDateTimeWithoutTimezone(session.end),
                                         container &&
                                             container.configuration &&
                                             (container.configuration as any)

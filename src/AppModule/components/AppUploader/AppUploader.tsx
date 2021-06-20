@@ -8,6 +8,7 @@ import { FileTypeInfo, Upload } from "../../models";
 import imageTemp from "./assets/images/imgthumb.svg";
 
 import "./assets/scss/style.scss";
+import { AppButton } from "../AppButton";
 
 type Options = Cropper.Options;
 
@@ -154,11 +155,13 @@ export const AppUploader: FC<AppUploaderProps> = ({
             <div {...getRootProps({ className: "dropzone" })}>
                 <input {...getInputProps()} />
                 <div className="image-container" style={getBackgroundStyles()}>
-                    {thumb.length > 0 || imagePath ? (
-                        <span onClick={handleDelete}>
-                            <i className="fak fa-trash-light"></i>
-                        </span>
-                    ) : null}
+                    <AppButton
+                        variant="secondary"
+                        disabled={!(thumb.length > 0 || imagePath)}
+                        onClick={handleDelete}
+                    >
+                        <i className="fak fa-trash-light"></i>
+                    </AppButton>
                 </div>
             </div>
 
