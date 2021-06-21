@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useRef } from "react";
 import { Accordion, ListGroupItem, ListGroup } from "react-bootstrap";
 import { Link, Match } from "@reach/router";
 import { AppIcon } from "../AppIcon";
@@ -23,15 +23,23 @@ export const AppNavigationDropDown: FC<AppNavigationDropDownProps> = ({
     action = () => {},
 }) => {
     const [open, isOpen] = React.useState<boolean>(false);
+    const accordionRef = useRef<HTMLDivElement>(null);
+
+    const closeMenu = () => {
+        if (accordionRef && accordionRef.current) {
+            accordionRef?.current?.click();
+        }
+    };
+
     return (
         <Accordion>
             <Accordion.Toggle
-                as={ListGroupItem}
+                ref={accordionRef}
                 onClick={() => {
                     action();
                     isOpen(!open);
                 }}
-                className={`nav-link py-2 px-lg-4 custom-dropdown-toggle ${className}`}
+                className={`nav-link py-2 px-lg-4 custom-dropdown-toggle list-group-item ${className}`}
                 eventKey="0"
             >
                 <div className="nav-icon img-container">
@@ -49,7 +57,12 @@ export const AppNavigationDropDown: FC<AppNavigationDropDownProps> = ({
                                     <Match path={e.path} key={e.path}>
                                         {(props) => {
                                             return (
-                                                <Link to={e.path as string}>
+                                                <Link
+                                                    onClick={() => {
+                                                        closeMenu();
+                                                    }}
+                                                    to={e.path as string}
+                                                >
                                                     <ListGroupItem
                                                         className={`nav-item px-lg-4 ${className} ${
                                                             props.location.pathname.includes(
@@ -81,7 +94,12 @@ export const AppNavigationDropDown: FC<AppNavigationDropDownProps> = ({
                                 );
                             return (
                                 <ListGroupItem
-                                    onClick={e.action && e.action}
+                                    onClick={() => {
+                                        if (e.action) {
+                                            e.action();
+                                        }
+                                        closeMenu();
+                                    }}
                                     href={e.path}
                                     key={e.label}
                                 >
