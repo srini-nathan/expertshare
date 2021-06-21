@@ -54,7 +54,11 @@ export const SceneCanvas = ({
         false
     );
     const [initialCameraRotation, setInitialCameraRotation] = useState<Euler>(
-        new Euler(0, 0, 0)
+        new Euler(
+            roomsData[currentMainRoom].camera.rotation.x,
+            roomsData[currentMainRoom].camera.rotation.y,
+            roomsData[currentMainRoom].camera.rotation.z
+        )
     );
     const [targetPosition, setTargetPosition] = useState<ToFromProps>(null!);
     const contentRef = useRef<any>(null);
@@ -183,6 +187,9 @@ export const SceneCanvas = ({
                         currentRoom={currentRoom}
                         // nextRoom={}
                         initialCameraRotation={initialCameraRotation}
+                        initialCameraPosition={
+                            roomsData[currentMainRoom].camera.position
+                        }
                         onOrbitDrag={onOrbitDrag}
                         onClickObject={onClickObject}
                         changeRoomNow={changeRoomNow}

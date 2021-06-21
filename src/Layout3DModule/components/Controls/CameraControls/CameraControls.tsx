@@ -77,6 +77,7 @@ interface OrbitControlsProps
     };
     currentRoom: number;
     initialCameraRotation: Euler;
+    initialCameraPosition: any;
     rooms: RoomProps[];
 }
 
@@ -94,6 +95,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
         isTransitionEnabled,
         targetData,
         initialCameraRotation,
+        initialCameraPosition,
         onOrbitDrag,
         onClickObject,
         currentRoom,
@@ -124,7 +126,13 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
     // const fromTargetReference = useRef<Euler>(null!);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const firstPersonCameraRotation = useRef(initialCameraRotation.clone()); // useRef(initialCameraRotation!);
-    const firtPersonCameraPosition = useRef(new Vector3(0.1, 1.6, 0.1));
+    const firtPersonCameraPosition = useRef(
+        new Vector3(
+            parseFloat(initialCameraPosition.x),
+            parseFloat(initialCameraPosition.y),
+            parseFloat(initialCameraPosition.z)
+        )
+    );
     // const videoSpheres = useRef<typeof Video360[]>([]);
 
     useHelper(perspectiveHelper, CameraHelper, "black");

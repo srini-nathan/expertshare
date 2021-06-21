@@ -353,7 +353,6 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                                         )}
                                     </Form.Label>
                                     <AppUploader
-                                        withCropper
                                         accept="image/*"
                                         imagePath={
                                             data.image
@@ -580,7 +579,6 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                                         )}
                                     </Form.Label>
                                     <AppUploader
-                                        withCropper
                                         accept="image/*"
                                         imagePath={
                                             data.remoteImage
