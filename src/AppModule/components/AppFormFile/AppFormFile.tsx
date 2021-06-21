@@ -16,10 +16,10 @@ const {
 export interface AppFormFileProps {
     id?: string;
     name: string;
-    sm?: string | number;
-    md?: string | number;
-    lg?: string | number;
-    xl?: string | number;
+    sm?: number;
+    md?: number;
+    lg?: number;
+    xl?: number;
     defaultValue?: string;
     placeholder?: string | boolean;
     required?: boolean;
@@ -31,6 +31,7 @@ export interface AppFormFileProps {
     maxCount?: number;
     onFileSelect?: (files: File[]) => void;
     control?: Control<any>;
+    filePath?: string;
 }
 
 export const AppFormFile: FC<AppFormFileProps> = ({
@@ -48,6 +49,7 @@ export const AppFormFile: FC<AppFormFileProps> = ({
     required = false,
     control,
     onFileSelect = () => {},
+    filePath,
 }): JSX.Element => {
     const controlId = id || name;
     let placeholderText = "";
@@ -63,14 +65,7 @@ export const AppFormFile: FC<AppFormFileProps> = ({
     }
 
     return (
-        <Form.Group
-            as={Col}
-            md={md}
-            sm={sm}
-            lg={lg}
-            xl={xl}
-            controlId={controlId}
-        >
+        <Col md={md} sm={sm} lg={lg} xl={xl}>
             {label?.length > 0 ? (
                 <Form.Label>
                     {label}
@@ -91,7 +86,7 @@ export const AppFormFile: FC<AppFormFileProps> = ({
                     control={control}
                     render={({ field }) => (
                         <Form.File
-                            label={label}
+                            label={value || label}
                             id={controlId}
                             placeholder={placeholderText}
                             {...field}
@@ -105,7 +100,7 @@ export const AppFormFile: FC<AppFormFileProps> = ({
 
                 <a
                     target="_blank"
-                    href={settingFilePath}
+                    href={filePath ? `${filePath}/${value}` : settingFilePath}
                     onClick={(e) => {
                         if (!value) {
                             e.preventDefault();
@@ -123,6 +118,6 @@ export const AppFormFile: FC<AppFormFileProps> = ({
             >
                 {errorMessage}
             </Form.Control.Feedback>
-        </Form.Group>
+        </Col>
     );
 };

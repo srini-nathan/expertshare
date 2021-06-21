@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { Container, Row, Col, Form } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { find as _find, isString as _isString } from "lodash";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -101,6 +102,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
     const setLayoutOptions = useSetRecoilState<AppDashboardLayoutOptions>(
         appDashboardLayoutOptions
     );
+
+    const { t } = useTranslation();
+
     useEffect(() => {
         isDataLoading(true);
         UserApi.findById<User>(user?.id as number).then(
@@ -355,7 +359,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                         lg={12}
                                         xl={12}
                                         name={"firstName"}
-                                        label={"First Name"}
+                                        label={t(
+                                            "profile.update:label.firstName"
+                                        )}
                                         required={true}
                                         {...validation(
                                             "firstName",
@@ -371,7 +377,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                         lg={12}
                                         xl={12}
                                         name={"lastName"}
-                                        label={"Last Name"}
+                                        label={t(
+                                            "profile.update:label.lastName"
+                                        )}
                                         defaultValue={user?.lastName}
                                         required={true}
                                         {...validation(
@@ -387,7 +395,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                         lg={12}
                                         xl={12}
                                         name={"company"}
-                                        label={"Company"}
+                                        label={t(
+                                            "profile.update:label.company"
+                                        )}
                                         defaultValue={user?.company}
                                         required={true}
                                         {...validation(
@@ -404,7 +414,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                         xl={12}
                                         defaultValue={user?.jobTitle}
                                         name={"jobTitle"}
-                                        label={"Job Title"}
+                                        label={t(
+                                            "profile.update:label.jobTitle"
+                                        )}
                                         {...validation(
                                             "jobTitle",
                                             formState,
@@ -442,13 +454,13 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                                 }}
                                             />
                                         )}
-                                    <AppFormInput
+                                    {/* <AppFormInput
                                         md={12}
                                         lg={12}
                                         xl={12}
                                         defaultValue={user?.email}
                                         name={"email"}
-                                        label={"Email"}
+                                        label={t("profile.update:label.email")}
                                         {...validation(
                                             "email",
                                             formState,
@@ -456,14 +468,16 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                         )}
                                         errorMessage={errors.email?.message}
                                         control={control}
-                                    />
+                                    /> */}
                                     <AppFormInputPassword
                                         md={12}
                                         lg={12}
                                         xl={12}
                                         name={"plainPassword"}
                                         className="mb-0"
-                                        label={"Password"}
+                                        label={t(
+                                            "profile.update:label.password"
+                                        )}
                                         required={true}
                                         {...validation(
                                             "plainPassword",
@@ -480,7 +494,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                         xl={12}
                                         name={"confirmPassword"}
                                         className="mb-0"
-                                        label={"Confirm Password"}
+                                        label={t(
+                                            "profile.update:label.confirmPassword"
+                                        )}
                                         required={true}
                                         {...validation(
                                             "confirmPassword",
@@ -652,7 +668,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                         id={"locale"}
                                         defaultValue={getLocale()}
                                         name={"locale"}
-                                        label={"Language"}
+                                        label={t("profile.update:label.locale")}
                                         md={12}
                                         lg={12}
                                         xl={12}
@@ -678,10 +694,17 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                     />
                                 </Form.Row>
                                 <Form.Row className="mb-3">
+                                    <Col sm="12" className="mb-3  text-center">
+                                        <span className="onboarding-sectoin">
+                                            {t("onboarding.section:privacy")}
+                                        </span>
+                                    </Col>
                                     <AppFormSwitch
                                         id={"isDisplayAsGuest"}
                                         name={"isDisplayAsGuest"}
-                                        label={"Is Display as Guest?"}
+                                        label={t(
+                                            "profile.update:label.isDisplayAsGuest"
+                                        )}
                                         md={12}
                                         lg={4}
                                         xl={4}
@@ -691,7 +714,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                             formState,
                                             true
                                         )}
-                                        defaultChecked={user?.isDisplayAsGuest}
+                                        defaultChecked={true}
                                         errorMessage={
                                             errors.isDisplayAsGuest?.message
                                         }
@@ -700,7 +723,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                     <AppFormSwitch
                                         id={"isExposeEmail"}
                                         name={"isExposeEmail"}
-                                        label={"Is Expose Email?"}
+                                        label={t(
+                                            "profile.update:label.isExposeEmail"
+                                        )}
                                         md={12}
                                         lg={4}
                                         xl={4}
@@ -710,7 +735,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                             formState,
                                             true
                                         )}
-                                        defaultChecked={user?.isExposeEmail}
+                                        defaultChecked={false}
                                         errorMessage={
                                             errors.isExposeEmail?.message
                                         }
@@ -719,7 +744,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                     <AppFormSwitch
                                         id={"isAllowCommunication"}
                                         name={"isAllowCommunication"}
-                                        label={"Is Allow Communication?"}
+                                        label={t(
+                                            "profile.update:label.isAllowCommunication"
+                                        )}
                                         md={12}
                                         lg={4}
                                         xl={4}
@@ -729,9 +756,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                             formState,
                                             true
                                         )}
-                                        defaultChecked={
-                                            user?.isAllowCommunication
-                                        }
+                                        defaultChecked={true}
                                         errorMessage={
                                             errors.isAllowCommunication?.message
                                         }
@@ -741,11 +766,11 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                 <AppButton
                                     block={true}
                                     type={"submit"}
-                                    loadingTxt={"Submit ..."}
+                                    loadingTxt={t("common.button:submit")}
                                     disabled={formState.isSubmitting}
                                     isLoading={formState.isSubmitting}
                                 >
-                                    Submit
+                                    {t("common.button:submit")}
                                 </AppButton>
 
                                 <AppButton
@@ -756,7 +781,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                     variant="link"
                                     className="btn-block mt-3"
                                 >
-                                    Skip and Continue Anonimously
+                                    {t("onboarding.lable:skip")}
                                 </AppButton>
                             </Form>
                         </Col>

@@ -58,23 +58,26 @@ export const RoomBuilder = ({
         currentRoom: number,
         fromRoom: number
     ): Vector3 => {
-        const room = rooms.filter((r) => r.id === currentRoom);
+        const room = rooms.filter((r) => r.id === fromRoom);
+        console.log("to panel: ", room, currentRoom, fromRoom);
+
         const pan = room[0].panels.filter(
             (pa: { target: { type: string; id: number } }) => {
                 return (
                     pa.target.type === TargetTypes.ROOM &&
-                    pa.target.id === fromRoom
+                    pa.target.id === currentRoom
                 );
             }
         );
-        // console.log("to panel: ", pan);
+        console.log("to panel: ", pan);
+
         return new Vector3(
-            // pan[0].position.x,
-            // pan[0].position.y,
-            // pan[0].position.z
-            pan[pan.length - 1].position.x,
-            pan[pan.length - 1].position.y,
-            pan[pan.length - 1].position.z
+            pan[0].position.x,
+            pan[0].position.y,
+            pan[0].position.z
+            // pan[pan.length - 1].position.x,
+            // pan[pan.length - 1].position.y,
+            // pan[pan.length - 1].position.z
         );
     };
 
