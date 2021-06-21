@@ -2,8 +2,6 @@
 @import "./../../../../assets/scss/variables";
 
 .app-grid {
-
-
     &.table-responsive {
         min-height: 65vh;
     }
@@ -41,7 +39,7 @@
 
                 &.disabled {
                     cursor: not-allowed;
-                    opacity: .5;
+                    opacity: 0.5;
                 }
 
                 svg {
@@ -58,11 +56,9 @@
                 }
             }
         }
-
     }
 
     .ag-theme-alpine {
-
         padding: 5px 15px;
         background-color: var(--light-clr);
         border-radius: var(--border-radius);
@@ -187,7 +183,7 @@
                     font-size: 12px;
                     font-weight: 400;
                     color: var(--secondary);
-                    opacity: .6;
+                    opacity: 0.6;
                 }
             }
 

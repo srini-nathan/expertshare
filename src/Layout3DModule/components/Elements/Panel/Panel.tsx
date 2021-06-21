@@ -101,7 +101,7 @@ export const Panel = ({
     const labelFontSize = label.width;
 
     const DEFAULT_DURATION = 3000;
-    // console.log("panel data: ", panelData);
+    console.log("panel data: ", panelData);
 
     // const mesh = useRef<THREE.Mesh>(null!);
     const group = useRef<Group>(null!);
@@ -188,7 +188,12 @@ export const Panel = ({
     const panelCliked = () => {
         const { isTransitionEnabled, video } = panelData;
         const positionPanel = group.current.position.clone();
-        // console.log("current panel: ", group.current.position, panelData);
+        console.log(
+            "current panel: ",
+            group.current.position,
+            panelData,
+            positionPanel
+        );
         switch (target.type) {
             case TargetTypes.ROOM:
                 // console.log("change door to: ", target.id);

@@ -78,8 +78,8 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
             selectedLocale
         ).then((response) => {
             console.log("response: ", response);
-            // response.forEach(room => {
-            //     if (room.)
+            // response.forEach(room:any => {
+            //     if (room.isE)
             // });
             setMainRoom(0);
             setRoomsData(response);

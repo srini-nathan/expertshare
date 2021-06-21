@@ -79,7 +79,7 @@ export const SceneCanvas = ({
 
     const onClickObject = (object: THREE.Object3D) => {
         selected.current = object;
-        // console.log("set selected: ", selected.current, selectedMesh);
+        console.log("set selected: ", selected.current, selectedMesh);
 
         if (object.type === "PerspectiveCamera") {
             setTransformType("rotate");
@@ -128,7 +128,7 @@ export const SceneCanvas = ({
     ) => {
         setCurrentRoom(roomNumber);
         setIsTransitionEnabled(isTransEn);
-        // console.log("from pos: ", tgtPos, " to pos: ", toPos);
+        console.log("from pos: ", tgtPos, " to pos: ", toPos);
         setTargetPosition({
             duration,
             fromPosition: tgtPos,
@@ -199,7 +199,9 @@ export const SceneCanvas = ({
             </Canvas>
             {iframeVisible && (
                 <div className="iframeHolder" ref={iframeWindow}>
-                    <button onClick={closeIframe}>Close</button>
+                    <button onClick={closeIframe}>
+                        <i className="fal fa-chevron-left"></i>
+                    </button>
                     <iframe
                         src={urlContent.url}
                         // url={urlContent.url}

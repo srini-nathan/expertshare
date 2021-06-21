@@ -4,7 +4,7 @@ import { AFrameRoomApi } from "../../apis";
 export class AFrameRoom extends BaseEntity {
     name: string;
 
-    image: string;
+    image?: string;
 
     camPosX: string;
 
@@ -20,11 +20,11 @@ export class AFrameRoom extends BaseEntity {
 
     isEntryRoom?: boolean;
 
-    container: string;
+    container?: string;
 
     constructor({
         name = "",
-        image = "",
+        image,
         camPosX = "",
         camPosY = "",
         camPosZ = "",

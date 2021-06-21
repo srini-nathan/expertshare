@@ -40,7 +40,7 @@ export const LandingHelper: FC<RouteComponentProps> = ({
         if (!isChosen()) {
             nav("/container").then();
         } else {
-            nav("/event").then();
+            nav("/a3d").then();
         }
     });
     return <AppLoader />;
