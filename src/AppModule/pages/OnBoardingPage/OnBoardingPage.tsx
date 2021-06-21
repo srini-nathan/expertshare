@@ -694,6 +694,11 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                     />
                                 </Form.Row>
                                 <Form.Row className="mb-3">
+                                    <Col sm="12" className="mb-3  text-center">
+                                        <span className="onboarding-sectoin">
+                                            {t("onboarding.section:privacy")}
+                                        </span>
+                                    </Col>
                                     <AppFormSwitch
                                         id={"isDisplayAsGuest"}
                                         name={"isDisplayAsGuest"}

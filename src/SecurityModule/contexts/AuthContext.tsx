@@ -150,7 +150,7 @@ export const socialLogin = async (
                     containerId: cntid,
                 },
             });
-            await navigate("/event");
+            await navigate("/a3d");
         }
     } catch (err) {
         if (localStorage.getItem(AUTH_TOKEN_KEY)) {
@@ -217,7 +217,7 @@ export const loginAction = async (
                     containerId: cntid,
                 },
             });
-            await navigate("/event");
+            await navigate("/a3d");
         }
     } catch (err) {
         if (localStorage.getItem(AUTH_TOKEN_KEY)) {

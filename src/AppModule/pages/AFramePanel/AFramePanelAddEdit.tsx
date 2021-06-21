@@ -208,11 +208,25 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
         setFilesToUpload({ ...filesToUpload, [fieldName]: selectedFiles });
     };
 
+    const getPanelType = () => {
+        // eslint-disable-next-line no-console
+        console.log(panelType);
+        switch (panelType) {
+            case "screen":
+                return "iframe";
+            case "door":
+                return "room";
+            default:
+                return panelType;
+        }
+    };
+
     const submitForm = async (formData: AFramePanel) => {
         setFilesToUpload({});
         formData.container = ContainerApi.toResourceUrl(containerId);
         formData.aFrameRoom = `/api/a_frame_rooms/${roomId}`;
         formData.type = panelType;
+        formData.targetType = getPanelType();
         formData.transitionVideo = transitionVideoFileName;
 
         return AFramePanelApi.createOrUpdate<AFramePanel>(id, formData).then(

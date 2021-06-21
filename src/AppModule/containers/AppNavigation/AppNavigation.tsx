@@ -380,6 +380,26 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                             />
                         );
                     })}
+                {location.includes("a3d") ? (
+                    <AppNavigationItem
+                        label={"2D View"}
+                        path={"/event"}
+                        icon={{
+                            name: "fal fa-desktop",
+                        }}
+                        className="main-menu"
+                    />
+                ) : (
+                    <AppNavigationItem
+                        label={"3D View"}
+                        path={"/a3d"}
+                        icon={{
+                            name: "fab fa-unity",
+                        }}
+                        className="main-menu"
+                    />
+                )}
+
                 {renderMoreMenu()}
             </>
         );
