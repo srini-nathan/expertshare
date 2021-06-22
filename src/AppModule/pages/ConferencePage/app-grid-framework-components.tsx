@@ -33,7 +33,7 @@ export const appGridFrameworkComponents = {
         const { data } = params;
         const { title, id } = data as Conference;
 
-        return <Link to={`/event/${id}/update`}>{title}</Link>;
+        return <Link to={`/event/${id}/agenda`}>{title}</Link>;
     },
     appGridActionRenderer: (
         params: AppCellActionWithRenderParams
