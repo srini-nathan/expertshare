@@ -203,7 +203,7 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                     return <AppLoader />;
                 }
                 return (
-                    <Row className="events-grid--container mt-4 mx-0">
+                    <Row className="events-grid--container mt-4">
                         {conferences.map((conference: PConference) => (
                             <AppConferenceCard
                                 isGrantedControl={isGrantedControl}
@@ -249,7 +249,7 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Fragment>
             <AppPageHeader title={t("event.list:header.title")} customToolbar>
-                <div className="d-flex pt-2 mb-5">
+                <div className="d-flex pt-2 mb-3 mb-md-4">
                     <AppListPageToolbar
                         createLink={"/event/create"}
                         onQuickFilterChange={handleFilter}

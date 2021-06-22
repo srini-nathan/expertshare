@@ -100,9 +100,12 @@
     }
 
     .copyright {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 0 0;
         font-size: 13px !important;
         border-top: 1px solid var(--secondary-30);
-
         @include media("xl") {
             font-size: 9px !important;
         }
@@ -114,7 +117,9 @@
             color: var(--secondary-70) !important;
 
             img {
-                margin-top: -5px;
+                width: 80px;
+                padding-bottom: 4px;
+                margin-top: 1px;
                 margin-left: 5px;
             }
         }
@@ -449,13 +454,31 @@
         border-color: transparent !important;
         @include media("mobile") {
             position: absolute;
-            top: 10px;
+            top: 2px;
             right: 0;
         }
         @include media("lr-0") {
             position: absolute;
-            top: 10px;
+            top: 2px;
             right: 0;
+        }
+        .navbar-toggler-icon {
+            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            align-items: center;
+            font-family: "Font Awesome Kit";
+            font-size: 2rem;
+            font-style: normal;
+            font-variant: normal;
+            text-rendering: auto;
+            line-height: 1;
+            color: var(--secondary);
+            background-image: unset;
+            transform: rotate(180deg);
+            &::before {
+                content: "\e003";
+            }
         }
     }
 

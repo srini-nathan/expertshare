@@ -56,6 +56,17 @@
                 }
             }
         }
+        &.action-cell {
+            justify-content: flex-end;
+        }
+        &.title-cell {
+            width: auto;
+            height: auto;
+            a {
+                font-weight: 500;
+                color: var(--secondary);
+            }
+        }
     }
 
     .ag-theme-alpine {
@@ -184,6 +195,11 @@
                     font-weight: 400;
                     color: var(--secondary);
                     opacity: 0.6;
+                }
+                &.action-header {
+                    .ag-header-cell-label {
+                        justify-content: center;
+                    }
                 }
             }
 

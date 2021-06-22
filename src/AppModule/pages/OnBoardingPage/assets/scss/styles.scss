@@ -3,18 +3,15 @@
 
 .onboarding {
     .custom-select {
-
         &-container,
         &__control,
         &__value-container,
         &__input {
+            align-content: center;
             height: 36px;
-
             input {
                 height: 22px;
-
             }
-
         }
     }
 
@@ -24,10 +21,9 @@
     }
 
     .dropzone {
-
-        margin: 10px auto;
         width: 150px;
         height: 150px;
+        margin: 10px auto;
         border-radius: 50%;
 
         .image-container {
