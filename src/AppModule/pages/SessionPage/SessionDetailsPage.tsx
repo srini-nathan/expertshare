@@ -51,7 +51,9 @@ export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
         <Fragment>
             <Row className="m-0">
                 <Col
-                    className={data.isCommentEnable ? "pl-0" : "px-0"}
+                    className={
+                        data.isCommentEnable ? "pl-0 comment-enable" : "px-0"
+                    }
                     md={12}
                     sm={12}
                     lg={data.isCommentEnable ? 8 : 12}

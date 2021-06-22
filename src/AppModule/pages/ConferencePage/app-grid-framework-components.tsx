@@ -1,5 +1,6 @@
 import React, { ReactElement } from "react";
 import { ICellRendererParams } from "ag-grid-community";
+import { Link } from "@reach/router";
 import { AppGridAction, AppGridActionProps, AppSwitch } from "../../components";
 import { Conference } from "../../../AdminModule/models";
 import { ConferenceApi } from "../../../AdminModule/apis";
@@ -27,6 +28,12 @@ export const appGridFrameworkComponents = {
                 }}
             />
         );
+    },
+    renderName: (params: ICellRendererParams): ReactElement => {
+        const { data } = params;
+        const { title, id } = data as Conference;
+
+        return <Link to={`/event/${id}/agenda`}>{title}</Link>;
     },
     appGridActionRenderer: (
         params: AppCellActionWithRenderParams

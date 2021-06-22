@@ -1,4 +1,5 @@
-import React, { FC } from "react";
+/* eslint-disable no-nested-ternary */
+import React, { FC, useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { AppCard } from "../AppCard";
@@ -14,6 +15,12 @@ export const AppSessionDescription: FC<AppSessionDescriptionProps> = ({
     session,
 }): JSX.Element => {
     const { t } = useTranslation();
+    const [isReadMore, setIsReadMore] = useState(true);
+    const showMore = () => {
+        if (session.description.length < 800) return "";
+        if (isReadMore) return "+Show More";
+        return "-Show Less";
+    };
     return (
         <AppCard>
             <Row className="m-0 mb-3 mb-lg-4">
@@ -28,7 +35,19 @@ export const AppSessionDescription: FC<AppSessionDescriptionProps> = ({
                         {t("sessionDetails:section.description")}
                     </h2>
                     <div className="session-details-desc--container mt-3">
-                        <p>{session.description}</p>
+                        <p>
+                            {isReadMore
+                                ? session.description.slice(0, 800)
+                                : session.description}
+                            <span
+                                onClick={() => {
+                                    setIsReadMore(!isReadMore);
+                                }}
+                                className="read-or-hide mt-3"
+                            >
+                                {showMore()}
+                            </span>
+                        </p>
                     </div>
                 </Col>
                 <Col

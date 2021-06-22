@@ -167,14 +167,10 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             defaultValue: dropDownDefaultValue,
         };
         return (
-            <Form.Group
-                as={Col}
-                {...getLayoutProms()}
-                controlId={properties.title}
-            >
+            <Col className="form-group" {...getLayoutProms()}>
                 <Form.Label>{items.label}</Form.Label>
                 <AppFormDropdown id={properties.title} {...prps} />
-            </Form.Group>
+            </Col>
         );
     };
     const renderTextarea = () => {

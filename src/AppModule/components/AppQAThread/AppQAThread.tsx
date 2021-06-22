@@ -26,7 +26,6 @@ export const AppQAThread: FC<QAThreadProps> = ({
                             key={index}
                             questionId={item.id}
                             userObj={item.user}
-                            handleCloseMessages={() => {}}
                             handleAnswerMessage={(message, qid) => {
                                 sendAnswer(message, qid);
                             }}
@@ -36,32 +35,33 @@ export const AppQAThread: FC<QAThreadProps> = ({
                             updateMessage={(message, iId) => {
                                 updateMessage(message, iId);
                             }}
-                            isPTOP
                             addComment
                             showShareBtn
+                            commentMessage={item.message}
+                            createdAt={item.createdAt}
                         >
-                            {item.message}
+                            <p className="base-text pb-3">{item.message}</p>
                             {item.children.length > 0 &&
                                 item.children.map((answer: any, i: number) => (
-                                    <div className="question-wrapper--child">
-                                        {/* List of aswers */}
-                                        <AppDetailsAction
-                                            key={i}
-                                            questionId={answer.id}
-                                            userObj={answer.user}
-                                            handleCloseMessages={() => {}}
-                                            isPTOP
-                                            handleDeleteQuestion={(qId) => {
-                                                deleteQuestion(qId);
-                                            }}
-                                            updateMessage={(message, iId) => {
-                                                updateMessage(message, iId);
-                                            }}
-                                            addComment
-                                        >
+                                    <AppDetailsAction
+                                        key={i}
+                                        questionId={answer.id}
+                                        userObj={answer.user}
+                                        isChild
+                                        handleDeleteQuestion={(qId) => {
+                                            deleteQuestion(qId);
+                                        }}
+                                        updateMessage={(message, iId) => {
+                                            updateMessage(message, iId);
+                                        }}
+                                        commentMessage={answer.message}
+                                        addComment
+                                        createdAt={answer.createdAt}
+                                    >
+                                        <p className="base-text pb-3">
                                             {answer.message}
-                                        </AppDetailsAction>
-                                    </div>
+                                        </p>
+                                    </AppDetailsAction>
                                 ))}
                         </AppDetailsAction>
                     </>

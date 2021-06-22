@@ -9,7 +9,6 @@ import "./assets/scss/style.scss";
 import { useBuildAssetPath } from "../../hooks";
 import placeholder from "../../assets/images/user-avatar.png";
 import { FileTypeInfo } from "../../models";
-import { AppIcon } from "../AppIcon";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -64,24 +63,39 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
         switch (userType) {
             case "exhibitor":
                 return (
-                    <span className="speaker-btn">
-                        <i className="fak fa-speakers" aria-hidden="true"></i>
-                        <span>{t(`common.user.badge:${userType}`)}</span>
-                    </span>
+                    <div className="badge-content">
+                        <span className="speaker-btn">
+                            <i
+                                className="fak fa-speakers"
+                                aria-hidden="true"
+                            ></i>
+                            <span>{t(`common.user.badge:${userType}`)}</span>
+                        </span>
+                    </div>
                 );
             case "speaker":
                 return (
-                    <span className="speaker-btn">
-                        <i className="fak fa-speakers" aria-hidden="true"></i>
-                        <span>{t(`common.user.badge:${userType}`)}</span>
-                    </span>
+                    <div className="badge-content">
+                        <span className="speaker-btn">
+                            <i
+                                className="fak fa-speakers"
+                                aria-hidden="true"
+                            ></i>
+                            <span>{t(`common.user.badge:${userType}`)}</span>
+                        </span>
+                    </div>
                 );
             case "moderator":
                 return (
-                    <span className="speaker-btn">
-                        <i className="fak fa-speakers" aria-hidden="true"></i>
-                        <span>{t(`common.user.badge:${userType}`)}</span>
-                    </span>
+                    <div className="badge-content">
+                        <span className="speaker-btn">
+                            <i
+                                className="fak fa-speakers"
+                                aria-hidden="true"
+                            ></i>
+                            <span>{t(`common.user.badge:${userType}`)}</span>
+                        </span>
+                    </div>
                 );
 
             default:
@@ -138,7 +152,7 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                                                 key={i}
                                                 className="inner-container--main-det--tags--item col-auto pl-0 mb-2 pr-2"
                                             >
-                                                <Link to={"#"}>{e.name}</Link>
+                                                <a>{e.name}</a>
                                             </Col>
                                         );
                                     })}
@@ -153,10 +167,7 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                                         variant="secondary"
                                         className="get-contact-btn"
                                     >
-                                        <AppIcon
-                                            name="Conversation"
-                                            className="mr-2"
-                                        />
+                                        <i className="fak fa-start-conversation mb-1 mr-2"></i>
                                         {t(
                                             "attendee.form:button.startConversation"
                                         )}

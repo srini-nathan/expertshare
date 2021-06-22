@@ -1,15 +1,20 @@
-/* eslint-disable no-console */
-import { ThreeEvent, useLoader } from "@react-three/fiber";
+import { ThreeEvent, useLoader, useThree } from "@react-three/fiber";
 import React, { Suspense, useEffect, useRef, useState } from "react";
-import * as THREE from "three";
-import { Mesh, MeshBasicMaterial, TextureLoader } from "three";
+import {
+    Mesh,
+    MeshBasicMaterial,
+    TextureLoader,
+    BackSide,
+    EquirectangularRefractionMapping,
+    // sRGBEncoding,
+} from "three";
 import { useSpring, a } from "@react-spring/three";
 import { easeQuadInOut } from "d3-ease";
 import { ROOM_FADE_DURATION } from "../../Helpers/Utils";
 
 interface SkyProps {
     props?: JSX.IntrinsicElements["mesh"];
-    textureImage: any;
+    textureImage: string;
     active: boolean;
     onClick: (e: ThreeEvent<MouseEvent>) => void;
     textureUrl?: string;
@@ -25,14 +30,22 @@ export const Sky = ({
 }: // textureUrl,
 SkyProps): JSX.Element => {
     const mesh = useRef<Mesh>(null!);
+    const { gl } = useThree();
     const material = useRef<MeshBasicMaterial>(null!);
-    // const texture = useRef<MeshBasicMaterial>
     const [localActive, setLocalActive] = useState<boolean>(false);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [currentActive, setCurrentActive] = useState<boolean>(active);
-    // console.log("loading sky: ", textureImage);
     const url: string = textureImage;
     const texture = useLoader(TextureLoader, url);
+    useEffect(() => {
+        if (texture) {
+            texture.mapping = EquirectangularRefractionMapping;
+            texture.anisotropy = gl.getMaxAnisotropy();
+
+            // texture.encoding = sRGBEncoding;
+            // texture.flipY = true;
+            texture.needsUpdate = true;
+        }
+    }, [texture, gl]);
 
     const fadeInOut = useSpring({
         opacity: active ? 1 : 0,
@@ -68,10 +81,13 @@ SkyProps): JSX.Element => {
     });
 
     useEffect(() => {
-        // eslint-disable-next-line no-console
-        // console.log("this room is active: ", localActive, currentActive);
         if (active !== localActive) setLocalActive(active);
     }, [active]);
+
+    // useEffect(() => {
+    //     mesh.current.scale.x = 1;
+    //     mesh.current.updateMatrix();
+    // }, [mesh]);
 
     return (
         <>
@@ -80,19 +96,21 @@ SkyProps): JSX.Element => {
                     {...props}
                     ref={mesh}
                     onClick={onClick}
+                    scale={[1, 1, 1]}
                     visible={localActive || currentActive}
                 >
-                    <sphereBufferGeometry args={[50, 32, 32]} />
-
+                    <sphereBufferGeometry
+                        attach="geometry"
+                        args={[50, 64, 32]}
+                    />
                     {texture && (
-                        <a.meshBasicMaterial
-                            side={THREE.BackSide}
+                        <a.meshLambertMaterial
+                            envMap={texture}
+                            side={BackSide}
+                            opacity={fadeInOut.opacity}
+                            reflectivity={1}
                             ref={material}
                             attach={"material"}
-                            opacity={fadeInOut.opacity}
-                            map={texture}
-                            visible={localActive || currentActive}
-                            transparent={false}
                         />
                     )}
                 </mesh>

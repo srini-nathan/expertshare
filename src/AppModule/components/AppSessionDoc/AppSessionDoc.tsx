@@ -53,7 +53,11 @@ export const AppSessionDoc: FC<AppSessionDocProps> = ({
                             files[parseInt(e, 10)].name
                         )} py-2`}
                     >
-                        <a href="#">
+                        <a
+                            href={`${sessionDocPath}/${
+                                files[parseInt(e, 10)].fileName
+                            }`}
+                        >
                             <div className="doc-row">
                                 <i className="doc-icon">
                                     {getType(

@@ -1,13 +1,15 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
-import { Row, Col, Button } from "react-bootstrap";
+import React, { FunctionComponent, useState } from "react";
+import { Row, Col } from "react-bootstrap";
+import { format } from "date-fns";
 import { AppСhoseMethodMessage } from "../AppСhoseMethodMessage";
 import { AppButton } from "../AppButton";
-import { AppIcon } from "../AppIcon";
 import "./assets/scss/style.scss";
 import UserAvatar from "../../assets/images/user-avatar.png";
 import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath, useAuthState, useIsGranted } from "../../hooks";
 import { FileTypeInfo } from "../../models";
+import { getDateTimeWithoutTimezone } from "../../utils";
+import { useGlobalData } from "../../contexts";
 
 const { Upload: UPLOAD, Role: ROLE } = CONSTANTS;
 
@@ -26,7 +28,7 @@ export interface AppDetailsActionProps {
     group?: boolean;
     addComment?: boolean;
     handleHidePTOPMessages?: () => void;
-    handleCloseMessages: () => void;
+    handleCloseMessages?: () => void;
     handleLike?: () => void;
     handleAnswerMessage?: (message: string, questionId: number) => void;
     handleDeleteQuestion?: (questionId: number) => void;
@@ -35,13 +37,11 @@ export interface AppDetailsActionProps {
     children?: JSX.Element[] | JSX.Element;
     questionId?: number;
     userObj?: any;
+    isChild?: boolean;
+    commentMessage?: string;
+    createdAt?: string;
 }
 export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
-    newMessagesCount = 0,
-    isPTOP,
-    handleHidePTOPMessages,
-    handleCloseMessages,
-    group,
     addComment = false,
     // handleLike,
     handleAnswerMessage,
@@ -51,44 +51,35 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
     children,
     questionId,
     userObj,
+    isChild = false,
+    commentMessage = "",
+    createdAt = "",
 }) => {
     const { user } = useAuthState();
     const userProfilePath = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         userObj.imageName
     );
+    const { container } = useGlobalData();
+
     const isGrantedControl = useIsGranted(ROLE_SPEAKER);
 
     const style = userObj.imageName
         ? {
               backgroundImage: `url(${userProfilePath})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
           }
         : {
               backgroundImage: `url(${UserAvatar})`,
-              backgroundSize: "contain",
+              backgroundSize: "cover",
               backgroundPosition: "center",
           };
 
-    const [rotateBtn, setRotateBtn] = useState(false);
     const [openMessageArea, setOpenMessageArea] = useState<boolean>(false);
     const [openEditArea, setOpenEditArea] = useState(false);
 
     const qId = questionId;
-
-    const handleCloseWindow = () => {
-        if (!isPTOP) {
-            handleCloseMessages();
-        }
-    };
-
-    const handleHideWindow = () => {
-        if (!isPTOP) {
-            if (handleHidePTOPMessages) {
-                handleHidePTOPMessages();
-            }
-            setRotateBtn(!rotateBtn);
-        }
-    };
 
     const handleAnswer = () => {
         setOpenMessageArea(!openMessageArea);
@@ -118,186 +109,121 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
         setOpenEditArea(false);
     };
 
-    const [editMessage, setEditMessage] = useState<any>(children);
+    const getDateFormat = () => {
+        let f = "";
 
-    useEffect(() => {
-        setEditMessage(children);
-    }, [children]);
+        if (container) {
+            if ((container.configuration as any).shortDate)
+                f = `${(container.configuration as any).shortDate}`;
+            else f = `EEEE MMMM, dd`;
+            if ((container.configuration as any).shortTime)
+                f = `${f} ${(container.configuration as any).shortTime}`;
+            else f = `${f} hh:mm a`;
+        }
+        return f;
+    };
 
     return (
-        <>
-            <Row className="m-0 px-3 pt-3 pb-2 first-row">
-                <Col className="details col-auto p-0">
-                    <div className="details--content">
-                        <i
-                            className={`details--content--profile ${
-                                group && "no-after"
-                            }`}
-                            style={style}
-                        ></i>
-                        {!isPTOP ? (
-                            <h2 className="details--content--title">
-                                {group ? "Create Group" : "Messages"}
-                                {newMessagesCount > 0 && (
-                                    <span className="details--content--title--count">
-                                        {newMessagesCount}
-                                    </span>
-                                )}
-                            </h2>
-                        ) : (
-                            <div className="name pl-2">
-                                <div className="name--sender">
-                                    <h3>
-                                        {userObj &&
-                                            `${userObj.firstName} ${userObj.lastName}`}
-                                    </h3>
+        <div className="session-details-question--container--item pb-3">
+            <Row className="row m-0 p-0">
+                <Col className="session-details-question--container--item--profile col-auto px-0 pb-2">
+                    <Row className="row m-0 p-0">
+                        <div className="cont">
+                            <div className="avatar-profile col-auto p-0">
+                                <i
+                                    className="avatar-profile--pic"
+                                    style={style}
+                                ></i>
+                            </div>
+                            <div className="det-profile col-md-auto pl-2">
+                                <div className="det-profile--name">
+                                    {userObj &&
+                                        `${userObj.firstName} ${userObj.lastName}`}
                                 </div>
-                                <div className="name--comment">
-                                    <span>
-                                        {userObj.jobTitle && userObj.jobTitle}
-                                        {userObj.jobTitle &&
-                                            userObj.jobTitle !== "" &&
-                                            userObj.company &&
-                                            userObj.company !== "" &&
-                                            ", "}
-                                        {userObj.company && userObj.company}
-                                    </span>
+                                <div className="det-profile--time">
+                                    {format(
+                                        getDateTimeWithoutTimezone(createdAt),
+
+                                        getDateFormat()
+                                    )}
                                 </div>
                             </div>
-                        )}
-                    </div>
+                        </div>
+                    </Row>
                 </Col>
-                <Col className="action col-auto p-0 mr-0 ml-auto">
-                    {!addComment && (
-                        <Row className="row m-0 p-0">
-                            <Col
-                                className="btn-collapse col-auto p-0"
-                                id="btn-collapse-index"
-                            >
-                                <Button
-                                    variant="link"
-                                    onClick={
-                                        group
-                                            ? handleCloseWindow
-                                            : handleHideWindow
-                                    }
-                                >
-                                    <i
-                                        className={`fas fa-chevron-down ${
-                                            rotateBtn ? "rotate" : ""
-                                        }`}
-                                    ></i>
-                                </Button>
-                            </Col>
-
-                            {!group && (
-                                <Col
-                                    className="btn-close col-auto px-1 p-0 pl-2"
-                                    id="btn-close-index"
-                                >
-                                    <Button
-                                        variant="link"
-                                        onClick={handleCloseWindow}
-                                    >
-                                        <i className="fas fa-times"></i>
-                                    </Button>
-                                </Col>
-                            )}
-                        </Row>
+                <Col className="session-details-question--container--item--action col-auto mr-0 ml-auto px-0 pb-2">
+                    {addComment && showShareBtn && isGrantedControl && (
+                        <AppButton
+                            variant="secondary"
+                            onClick={handleAnswer}
+                            className="reply-btn active ml-2"
+                        >
+                            <i className={`fak fa-reply  `}></i>
+                        </AppButton>
                     )}
-
-                    {addComment && (
-                        <Row className="row m-0 p-0">
-                            {showShareBtn && isGrantedControl && (
-                                <Col
-                                    className="btn-close col-auto px-1 p-0 pl-2"
-                                    id="btn-close-index"
-                                >
-                                    <Button
-                                        variant="secondary"
-                                        onClick={handleAnswer}
-                                        className=" mr-2"
-                                    >
-                                        <i
-                                            className={`fak fa-reply ${
-                                                openMessageArea && "active"
-                                            }`}
-                                        ></i>
-                                    </Button>
-                                </Col>
-                            )}
-
-                            {((user && user.id === userObj.id) ||
-                                isGrantedControl) && (
-                                <Col
-                                    className="btn-collapse col-auto p-0"
-                                    id="btn-collapse-index"
-                                >
-                                    <div className="btns-flex-questions">
-                                        <AppButton
-                                            variant="secondary"
-                                            onClick={editQuestion}
-                                            className={`edit-btn ${
-                                                openEditArea && "active"
-                                            }`}
-                                        >
-                                            <AppIcon
-                                                className={`fas fa-edit ${
-                                                    openEditArea && "active"
-                                                }`}
-                                                name="edit"
-                                            />
-                                        </AppButton>
-                                        <AppButton
-                                            variant="secondary"
-                                            className="btn-delete"
-                                            onClick={deleteQuestion}
-                                        >
-                                            <AppIcon
-                                                className="mr-2 ml-2"
-                                                name="delete"
-                                            />
-                                        </AppButton>
-                                    </div>
-                                    {/* <Button variant="link" onClick={handleLike}>
-                                        <i className="far fa-heart"></i>
-                                    </Button> */}
-                                </Col>
-                            )}
-                        </Row>
+                    {((user && user.id === userObj.id) || isGrantedControl) && (
+                        <>
+                            <AppButton
+                                variant="secondary"
+                                onClick={editQuestion}
+                                className="edit-btn active ml-2"
+                            >
+                                <i className="fak fa-pen-regular"></i>
+                            </AppButton>
+                            <AppButton
+                                variant="secondary"
+                                className="delete-btn active ml-2"
+                                onClick={deleteQuestion}
+                            >
+                                <i className="fak fa-trash-light"></i>
+                            </AppButton>
+                        </>
+                        /* <Button variant="link" onClick={handleLike}>
+                                <i className="far fa-heart"></i>
+                            </Button> */
                     )}
                 </Col>
             </Row>
-            {addComment && (
-                <>
-                    <div className="question-wrapper--question">{children}</div>
-                    <div className="tabs-messages m-0 pt-1 pb-2">
-                        {openMessageArea && (
-                            <AppСhoseMethodMessage
-                                activeTab="Text"
-                                className="ptop-messages"
-                                rows={2}
-                                enterToPost
-                                editMessage={editMessage}
-                                handleMessageSend={answerMessage}
-                            />
-                        )}
+            <Row className="m-0 p-0">
+                {addComment && (
+                    <>
+                        <div className="session-details-question--container--item--text-box col-12 px-0 pb-2">
+                            <div
+                                className={`session-details-question--container--item--text-box--container ${
+                                    isChild && " is-child"
+                                }`}
+                            >
+                                {children}
+                            </div>
+                        </div>
+                        <div className="session-details-question--container--item--reply--container">
+                            {openMessageArea && (
+                                <AppСhoseMethodMessage
+                                    activeTab="Text"
+                                    className="ptop-messages"
+                                    rows={2}
+                                    enterToPost
+                                    editMessage={commentMessage}
+                                    handleMessageSend={answerMessage}
+                                />
+                            )}
 
-                        {openEditArea && (
-                            <AppСhoseMethodMessage
-                                activeTab="Text"
-                                className="ptop-messages"
-                                isEdit
-                                editMessage={editMessage}
-                                rows={2}
-                                enterToPost
-                                handleMessageSend={answerMessage}
-                                handleUpdateMessage={patchMessage}
-                            />
-                        )}
-                    </div>
-                </>
-            )}
-        </>
+                            {openEditArea && (
+                                <AppСhoseMethodMessage
+                                    activeTab="Text"
+                                    className="ptop-messages"
+                                    isEdit
+                                    editMessage={commentMessage}
+                                    rows={2}
+                                    enterToPost
+                                    handleMessageSend={answerMessage}
+                                    handleUpdateMessage={patchMessage}
+                                />
+                            )}
+                        </div>
+                    </>
+                )}
+            </Row>
+        </div>
     );
 };

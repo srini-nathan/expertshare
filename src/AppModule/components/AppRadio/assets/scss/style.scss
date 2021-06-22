@@ -4,55 +4,45 @@
 .form-check {
     padding-left: 0 !important;
 
-    .form-check-input {
-        position: relative;
+    input[type="radio"] {
         display: none;
-        margin-left: 0 !important;
-
-        &:checked ~ .form-check-label::after {
-            background-image: url(../images/svg/circle_radio.svg);
-        }
-
-        &:checked ~ .form-check-label::before {
-            background-color: unset;
-            border-color: var(--primary);
-        }
-
-        &:focus ~ .form-check-label::before {
-            box-shadow: unset;
+        &:checked {
+            & + label {
+                &::after {
+                    position: absolute;
+                    left: 0.25rem;
+                    display: block;
+                    width: 0.5rem;
+                    height: 0.5rem;
+                    content: " ";
+                    background: var(--primary);
+                    border-radius: var(--circle-border-radius);
+                }
+                &::before {
+                    border-color: var(--primary);
+                }
+            }
         }
     }
-
-    &-label {
-        position: relative;
-        padding: 0 20px;
-        margin-bottom: 12px !important;
-        font-size: 12px;
-        color: var(--secondary-70);
-        cursor: pointer;
-
-        &::before {
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: block;
-            width: 1rem;
-            height: 1rem;
-            pointer-events: none;
-            content: "";
-            border: 2px solid var(--primary-50);
-            border-radius: 50%;
+    label {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--secondary);
+        span {
+            padding-top: 3px;
+            padding-left: 7px;
         }
-
-        &::after {
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: block;
+        &::before {
             width: 1rem;
             height: 1rem;
-            content: "";
-            background: 50%/50% 50% no-repeat;
+            cursor: pointer;
+            content: " ";
+            background-color: transparent;
+            border: 1px solid var(--secondary-70);
+            border-radius: var(--circle-border-radius);
         }
     }
 }

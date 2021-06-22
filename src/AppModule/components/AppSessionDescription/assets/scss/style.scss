@@ -20,33 +20,16 @@
 
     &--container {
         p {
-            display: block;
+            display: grid;
             font-size: 14px;
             font-weight: 400;
             line-height: 21px;
             color: var(--secondary);
-
-
-        }
-
-        &--more {
-            font-size: 12px;
-            font-weight: 700;
-            color: var(--primary);
-
-            &:hover {
+            .read-or-hide {
+                font-size: 12px;
+                font-weight: 700;
                 color: var(--primary);
-            }
-
-            &.collapsed {
-                &:after {
-                    content: "+ Show more";
-                }
-            }
-
-            &:not(.collapsed):after {
-                content: "Show More";
-                content: "- Show less";
+                cursor: pointer;
             }
         }
     }

@@ -1,7 +1,6 @@
 import React, { FC } from "react";
 import { Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { Link } from "@reach/router";
 import "./assets/scss/style.scss";
 import { Session } from "../../../AdminModule/models";
 
@@ -27,10 +26,10 @@ export const AppSessionTags: FC<AppSessionTagsProps> = ({
                             return (
                                 <Col
                                     key={i}
-                                    sm={"auto"}
+                                    xs={"auto"}
                                     className="session-details-tags--container--item pl-0 pr-2 mt-3"
                                 >
-                                    <Link to="#">{e.name}</Link>
+                                    <a>{e.name}</a>
                                 </Col>
                             );
                         })}

@@ -1,7 +1,6 @@
 import React, { FC, useState } from "react";
 import { Link } from "@reach/router";
 import { useTranslation } from "react-i18next";
-import { AppIcon } from "../AppIcon";
 import "./assets/scss/list.scss";
 import { useAuthState, useBuildAssetPath, useInitChat } from "../../hooks";
 import { CONSTANTS } from "../../../config";
@@ -107,11 +106,14 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                 {userType && getUserType()}
             </div>
             <div className="card--title text-center mt-3">
-                <a href="#" className="card--title--name">
+                <Link
+                    to={`/attendee/${attendee.id}/show`}
+                    className={"card--title--name"}
+                >
                     <h2>
                         {firstName} {lastName}
                     </h2>
-                </a>
+                </Link>
                 <p className="card--title--bio mb-1 mx-2">
                     {jobTitle && jobTitle}
                     {attendee.jobTitle &&
@@ -121,7 +123,7 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                         ", "}
                     {company && company}
                 </p>
-                <a href="#" className="card--title--mail mb-3 d-block">
+                <a className="card--title--mail mb-3 d-block">
                     {isExposeEmail && email}
                 </a>
             </div>
@@ -160,7 +162,7 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                     </div> */}
                     <div className="card--buttons--get-in-contact col-12 px-2">
                         <button className="btn btn-secondary">
-                            <AppIcon name="Conversation" />
+                            <i className="fak fa-start-conversation"></i>
                             {t("attendee.form:button.getInContact")}
                             <div className="popup">
                                 <div className="popup--inner">
@@ -184,7 +186,7 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                                             }}
                                         >
                                             <a href="#">
-                                                <AppIcon name="Conversation" />
+                                                <i className="fak fa-start-conversation"></i>
                                                 {t(
                                                     "attendee.form:button.startConversation"
                                                 )}
@@ -200,7 +202,7 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                                                     : "profile-avatar"
                                             }
                                         >
-                                            <AppIcon name="AddUserPlus" />
+                                            <i className="fak fa-view-profile"></i>
                                             {t(
                                                 "attendee.form:button.viewProfile"
                                             )}

@@ -23,14 +23,14 @@ export const MyProfilePage: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <>
             <AppProfileHeader {...user} />
-            <Tab.Container defaultActiveKey="Feeds">
+            <Tab.Container defaultActiveKey="Profile">
                 <Row className="m-0">
-                    <AppTabWithIcon
+                    {/* <AppTabWithIcon
                         className="mr-3"
                         eventKey="Feeds"
                         title={t("profile.update:tab.myFeed")}
                         icon="fak fa-columns-regular"
-                    ></AppTabWithIcon>
+                    ></AppTabWithIcon> */}
                     <AppTabWithIcon
                         eventKey="Profile"
                         title={t("profile.update:tab.profile")}

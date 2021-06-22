@@ -53,10 +53,10 @@ export const AppListPageToolbar: FC<AppListPageToolbarProps> = ({
 
     return (
         <Row>
-            <Col className={"d-flex justify-content-end"}>
-                <Form>
-                    <Form.Row>
-                        <Col md="auto">
+            <Col className={"d-flex justify-content-end"} xs="12" sm="auto">
+                <Form className={"w-100"}>
+                    <Form.Row className={"justify-content-end"}>
+                        <Col xs="12" sm="auto" className="mb-2">
                             <InputGroup>
                                 <Form.Control
                                     onChange={handleQuickSearch}
@@ -70,10 +70,10 @@ export const AppListPageToolbar: FC<AppListPageToolbarProps> = ({
                                 </InputGroup.Prepend>
                             </InputGroup>
                         </Col>
-                        <Col md="auto" className="my-2 my-md-0">
+                        <Col xs="12" sm="auto" className="mb-2">
                             {createLink ? (
                                 <AppButton
-                                    className={"text-capitalize"}
+                                    className={"text-capitalize w-100"}
                                     variant={"secondary"}
                                     onClick={() => {
                                         navigate(createLink);

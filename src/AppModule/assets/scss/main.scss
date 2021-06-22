@@ -6,6 +6,20 @@
 body {
     background-color: var(--body-bg-clr);
     font-family: var(--font-family-sans-serif);
+    scrollbar-color: var(--secondary) var(--secondary-10);
+    scrollbar-width: thin;
+    &::-webkit-scrollbar {
+        width: 7px;
+    }
+    &::-webkit-scrollbar-track {
+        background: var(--secondary-10);
+    }
+    &::-webkit-scrollbar-thumb {
+        background: var(--secondary);
+    }
+    &::-webkit-scrollbar-thumb:hover {
+        opacity: 100%;
+    }
 }
 
 a {
@@ -14,7 +28,6 @@ a {
 
 .badge-primary {
     background-color: var(--primary) !important;
-
 }
 
 .text-primary {
@@ -72,7 +85,7 @@ a {
 
 .sidebar {
     .navbar {
-        box-shadow: 0 3px 9px rgba(181, 181, 181, .52);
+        box-shadow: 0 3px 9px rgba(181, 181, 181, 0.52);
     }
 }
 
