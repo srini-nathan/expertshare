@@ -3,32 +3,36 @@
 
 .switch-view {
     display: flex;
-    height: fit-content;
-    background-color: var(--light-clr);
-    border: none;
-    border-radius: var(--border-radius);
-    box-shadow: 0 3px 9px var(--box-shadow-box-clr);
-
-    a {
+    justify-content: flex-end;
+    &--content {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 24px;
-        height: 24px;
-        margin: 6px;
-        font-size: 14px;
-        font-weight: 400;
-        color: var(--secondary);
-        cursor: pointer;
+        width: fit-content;
+        height: fit-content;
+        background-color: var(--light-clr);
+        border: none;
         border-radius: var(--border-radius);
-
-        &.active-view {
-            color: var(--btn-secondary-bg-clr) !important;
-            background-color: var(--btn-secondary-fg-clr);
-        }
-
-        &:hover {
+        box-shadow: 0 3px 9px var(--box-shadow-box-clr);
+        a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            margin: 6px;
+            font-size: 14px;
+            font-weight: 400;
             color: var(--secondary);
+            cursor: pointer;
+            border-radius: var(--border-radius);
+
+            &.active-view {
+                color: var(--btn-secondary-bg-clr) !important;
+                background-color: var(--btn-secondary-fg-clr);
+            }
+
+            &:hover {
+                color: var(--secondary);
+            }
         }
     }
 }

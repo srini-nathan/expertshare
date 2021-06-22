@@ -1,7 +1,11 @@
 @import "../../../../assets/scss/screens-sizes";
 @import "../../../../assets/scss/variables";
 
-
+.event-header-width {
+    @include media("mobtosmall") {
+        width: 100%;
+    }
+}
 .conference-tags {
     display: inline-grid;
     align-content: center;
@@ -17,7 +21,6 @@
 }
 
 .tabs-translation {
-
     .active {
         color: var(--primary) !important;
         background-color: var(--primary-20) !important;

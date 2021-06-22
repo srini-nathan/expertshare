@@ -1,4 +1,5 @@
-import React, { FC } from "react";
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { FC, useState } from "react";
 import { Link } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { Row, Col } from "react-bootstrap";
@@ -14,7 +15,6 @@ const { Upload: UPLOAD } = CONSTANTS;
 const {
     FILETYPEINFO: { FILETYPEINFO_CONFERENCE_POSTER },
 } = UPLOAD;
-
 export interface AppEventAgendaHeeaderProps {
     conference: Conference;
     handleClone: () => void;
@@ -42,7 +42,12 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
               backgroundSize: "inherit",
               backgroundPosition: "center",
           };
-
+    const [isReadMore, setIsReadMore] = useState(true);
+    const showMore = () => {
+        if (conference?.description.length < 800) return "";
+        if (isReadMore) return "+Show More";
+        return "-Show Less";
+    };
     return (
         <Col className="event-detail-admin--det--container col-12 mb-3 px-0">
             <Col className="inner-container top px-4 pt-4 pb-3">
@@ -63,10 +68,10 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                     >
                         {isGrantedControl && (
                             <>
-                                <Col className="inner-container--action--base p-0">
+                                <div className="inner-container--action--base m-auto row">
                                     <Link
                                         to="/admin/session-categories"
-                                        className="manage-cat btn btn-secondary"
+                                        className="manage-cat btn btn-secondary mt-2 mt-sm-0"
                                     >
                                         {t(
                                             "event.agenda:button.manageCategory"
@@ -74,18 +79,18 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                                     </Link>
                                     <Link
                                         to={`/event/${conference.id}/session/create`}
-                                        className="manage-cat ml-2 btn btn-secondary"
+                                        className="manage-cat ml-2 btn btn-secondary mt-2 mt-sm-0"
                                     >
                                         {t("event.agenda:button.createSession")}
                                     </Link>
-                                </Col>
-                                <Col className="inner-container--action--exclusive p-0 mt-2 mt-sm-3">
+                                </div>
+                                <div className="inner-container--action--exclusive p-0 mt-2 mt-sm-3">
                                     <AppButton
                                         variant="secondary"
                                         onClick={() => {
                                             handleClone();
                                         }}
-                                        className="  mr-2"
+                                        className="mr-2"
                                     >
                                         <i className="fak fa-clone-light"></i>
                                     </AppButton>
@@ -106,7 +111,7 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                                     >
                                         <i className="fak fa-trash-light"></i>
                                     </AppButton>
-                                </Col>
+                                </div>
                             </>
                         )}
                     </Col>
@@ -133,7 +138,17 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                                     {t("event.agenda:label.description")}
                                 </h2>
                                 <p className="mb-0">
-                                    {conference?.description}
+                                    {isReadMore
+                                        ? conference?.description.slice(0, 500)
+                                        : conference?.description}
+                                    <span
+                                        onClick={() => {
+                                            setIsReadMore(!isReadMore);
+                                        }}
+                                        className="read-or-hide mt-2"
+                                    >
+                                        {showMore()}
+                                    </span>
                                 </p>
                             </Col>
                         </Col>

@@ -64,24 +64,39 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
         switch (userType) {
             case "exhibitor":
                 return (
-                    <span className="speaker-btn">
-                        <i className="fak fa-speakers" aria-hidden="true"></i>
-                        <span>{t(`common.user.badge:${userType}`)}</span>
-                    </span>
+                    <div className="badge-content">
+                        <span className="speaker-btn">
+                            <i
+                                className="fak fa-speakers"
+                                aria-hidden="true"
+                            ></i>
+                            <span>{t(`common.user.badge:${userType}`)}</span>
+                        </span>
+                    </div>
                 );
             case "speaker":
                 return (
-                    <span className="speaker-btn">
-                        <i className="fak fa-speakers" aria-hidden="true"></i>
-                        <span>{t(`common.user.badge:${userType}`)}</span>
-                    </span>
+                    <div className="badge-content">
+                        <span className="speaker-btn">
+                            <i
+                                className="fak fa-speakers"
+                                aria-hidden="true"
+                            ></i>
+                            <span>{t(`common.user.badge:${userType}`)}</span>
+                        </span>
+                    </div>
                 );
             case "moderator":
                 return (
-                    <span className="speaker-btn">
-                        <i className="fak fa-speakers" aria-hidden="true"></i>
-                        <span>{t(`common.user.badge:${userType}`)}</span>
-                    </span>
+                    <div className="badge-content">
+                        <span className="speaker-btn">
+                            <i
+                                className="fak fa-speakers"
+                                aria-hidden="true"
+                            ></i>
+                            <span>{t(`common.user.badge:${userType}`)}</span>
+                        </span>
+                    </div>
                 );
 
             default:

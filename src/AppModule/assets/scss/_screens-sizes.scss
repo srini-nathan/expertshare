@@ -54,6 +54,7 @@ $media-queries: (
     "tsa-1": "only screen and (max-width: 1200px)",
     //custom for event agenda
     "ea-1": "only screen and (max-width: 991.9px)",
+    "ea-2": "only screen and (min-width: 992px) and (max-width: 1700px)",
 );
 
 @mixin media($breakpoints) {
