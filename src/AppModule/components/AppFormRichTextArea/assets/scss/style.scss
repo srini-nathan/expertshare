@@ -1,6 +1,12 @@
 @import "../../../../assets/scss/screens-sizes";
 @import "../../../../assets/scss/variables";
 
+.fr-second-toolbar {
+    a {
+        visibility: hidden;
+    }
+}
+
 .form-control {
     color: var(--input-fg-clr);
     background-color: var(--input-bg-clr);

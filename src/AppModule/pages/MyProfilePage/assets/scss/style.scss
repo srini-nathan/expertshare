@@ -1,6 +1,13 @@
 @import "../../../../assets/scss/variables";
 @import "../../../../assets/scss/screens-sizes";
 
+.update-profile {
+    .local-container {
+        z-index: 8;
+    }
+
+}
+
 .agreement-box {
     border: 1px solid var(--border-text-box);
     border-radius: var(--border-radius);

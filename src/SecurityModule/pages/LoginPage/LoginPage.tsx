@@ -18,10 +18,18 @@ import {
     setViolations,
     validation,
 } from "../../../AppModule/utils";
-import { API_HOST } from "../../../AppModule/config/app-env";
 import "./assets/scss/styles.scss";
 import { UserApi } from "../../../AdminModule/apis";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
+import {
+    API_HOST,
+    AUTH_CHOSEN_CONTAINER,
+    AUTH_TOKEN_KEY,
+    AUTH_USER_KEY,
+    AUTH_SKIP_ONBOARDING,
+    CONTAINER_LOCALE,
+    USER_LOCALE,
+} from "../../../AppModule/config/app-env";
 
 type LoginForm = {
     email: string;
@@ -80,6 +88,13 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
             } else if (response) {
                 if (response.isExist) {
                     setEmailStatus("exist");
+                    localStorage.removeItem(AUTH_CHOSEN_CONTAINER);
+                    localStorage.removeItem(AUTH_TOKEN_KEY);
+                    localStorage.removeItem(AUTH_USER_KEY);
+                    localStorage.removeItem(AUTH_SKIP_ONBOARDING);
+                    localStorage.removeItem(CONTAINER_LOCALE);
+                    localStorage.removeItem(USER_LOCALE);
+
                     if (response.isOnboarded) {
                         isOnboarded(true);
                     }
