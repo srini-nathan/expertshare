@@ -50,11 +50,9 @@ export const AppMessageCompose: FC<AppMessageComposeProps> = ({
 
     useEffect(() => {
         if (isEdit) {
-            if (Array.isArray(editMessage)) {
-                setData(editMessage[0]);
-            } else {
-                setData(editMessage);
-            }
+            // eslint-disable-next-line no-console
+            console.log(editMessage);
+            setData(editMessage);
         }
     }, [editMessage]);
 
