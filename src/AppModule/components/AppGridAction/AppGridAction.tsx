@@ -4,6 +4,10 @@ import { AppIcon } from "../AppIcon";
 import { AppModal } from "../AppModal";
 
 export interface AppGridActionProps {
+    doorAction?: AppGridLinkAction;
+    screenAction?: AppGridLinkAction;
+    billBoardAction?: AppGridLinkAction;
+    projectorAction?: AppGridLinkAction;
     addAction?: AppGridLinkAction;
     editAction?: AppGridLinkAction;
     viewAction?: AppGridLinkAction;
@@ -134,6 +138,10 @@ const ClickAction: FC<ClickActionProps> = ({
 };
 
 export const AppGridAction: FC<AppGridActionProps> = ({
+    doorAction,
+    screenAction,
+    billBoardAction,
+    projectorAction,
     addAction,
     editAction,
     treeAction,
@@ -157,6 +165,16 @@ export const AppGridAction: FC<AppGridActionProps> = ({
             ))}
             {showItem() ? (
                 <>
+                    <LinkAction icon={"DoorOpen"} {...doorAction}></LinkAction>
+                    <LinkAction icon={"Desktop"} {...screenAction}></LinkAction>
+                    <LinkAction
+                        icon={"Globe"}
+                        {...billBoardAction}
+                    ></LinkAction>
+                    <LinkAction
+                        icon={"Projector"}
+                        {...projectorAction}
+                    ></LinkAction>
                     <LinkAction icon={"edit"} {...editAction}></LinkAction>
                     <ClickAction
                         icon={"delete"}

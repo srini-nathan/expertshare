@@ -1,6 +1,8 @@
+@import "../../../../AppModule/assets/scss/variables";
+
 .canvas-3d {
-    margin-left: -3rem;
-    margin-top: -3rem;
+    margin-left: -24px;
+    margin-top: -24px;
     position: absolute;
     width: 100%;
     height: 100vh;
@@ -15,5 +17,20 @@
     height: 86%;
     top: 7%;
     left: 7%;
-    background-color: #FFFFFF;
+    background-color: rgba($color: #000000, $alpha: .4);
+
+    iframe {
+        border-color: transparent;
+    }
+
+    button {
+        position: absolute;
+        left: -35px;
+        width: 36px;
+        height: 36px;
+        padding: 5px;
+        color: var(--btn-fg-clr);
+        background-color: var(--btn-bg-clr);
+        border-color: var(--btn-border-clr)
+    }
 }

@@ -19,4 +19,5 @@ export * from "./Session";
 export * from "./SessionCategory";
 export * from "./SessionDoc";
 export * from "./AFrameRoom";
+export * from "./AFramePanel";
 export * from "./MyContainer";

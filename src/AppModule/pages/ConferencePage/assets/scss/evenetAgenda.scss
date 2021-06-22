@@ -8,6 +8,12 @@
 
 .category-btn {
     padding: 0 !important;
+    border: none !important;
+    &:hover,
+    &:focus,
+    &:active {
+        border: none !important;
+    }
 
     span {
         padding: 0 15px;

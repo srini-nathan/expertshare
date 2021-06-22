@@ -1,7 +1,8 @@
 import React, { FC, useEffect, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
-import { useForm } from "react-hook-form";
+import { FieldError, useForm } from "react-hook-form";
 import { Container, Row, Col, Form } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { find as _find, isString as _isString } from "lodash";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -61,17 +62,6 @@ const {
     FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
     FILETYPE: { FILETYPE_USER_PROFILE },
 } = UPLOAD;
-const schema = yup.object().shape({
-    plainPassword: yup.string().min(6).required(),
-    firstName: yup.string().required("First Name is Reqired"),
-    lastName: yup.string().required("Last Name is Reqired"),
-    company: yup.string().required(),
-    jobTitle: yup.string().required(),
-    locale: yup.string().required("Locale is Reqired"),
-    confirmPassword: yup
-        .string()
-        .oneOf([yup.ref("plainPassword"), null], "Passwords must be match"),
-});
 
 export const OnBoardingPage: FC<RouteComponentProps> = ({
     navigate,
@@ -88,6 +78,41 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
     const profilePicturePath = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo
     );
+    const { t } = useTranslation();
+
+    let validationShape = {
+        plainPassword: yup.string().min(6).required(),
+        firstName: yup.string().required("First Name is Reqired"),
+        lastName: yup.string().required("Last Name is Reqired"),
+        locale: yup.string().required("Locale is Reqired"),
+        confirmPassword: yup
+            .string()
+            .oneOf([yup.ref("plainPassword"), null], "Passwords must be match"),
+    };
+
+    const staticFields = [
+        "salutation",
+        "industrySector",
+        "postCode",
+        "city",
+        "country",
+        "mobile",
+        "creditSuisseContactFirstname",
+        "creditSuisseContactLastname",
+        "address",
+    ];
+
+    userFields.forEach((e) => {
+        if (e.isActive && e.isRequired && staticFields.includes(e.fieldKey))
+            validationShape = {
+                ...validationShape,
+                [UserFieldApi.toResourceUrl(e.id)]: yup
+                    .string()
+                    .required(`${t(e.labelKey)} is a required field`),
+            };
+    });
+    const validationSchema = yup.object().shape(validationShape);
+
     const {
         control,
         handleSubmit,
@@ -95,12 +120,13 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
         setValue,
         setError,
     } = useForm<User>({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(validationSchema),
         mode: "all",
     });
     const setLayoutOptions = useSetRecoilState<AppDashboardLayoutOptions>(
         appDashboardLayoutOptions
     );
+
     useEffect(() => {
         isDataLoading(true);
         UserApi.findById<User>(user?.id as number).then(
@@ -116,6 +142,12 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
             }
         );
     }, []);
+
+    const getUserFieldId = (id: string) => {
+        const uf = userFields.find((e: any) => e["@id"] === id);
+        if (uf) return uf.fieldKey;
+        return "";
+    };
     const getDynamicFileds = (userField: any[]) => {
         const userFieldValues: any[] = [];
 
@@ -130,30 +162,65 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                         Object.keys(value).filter((item) => value[item])
                     );
                 else if (value === undefined) value = "false";
-                if (data?.userFieldValues && data.userFieldValues?.length > 0) {
-                    let found = false;
-                    data.userFieldValues?.forEach((e: any) => {
-                        if (e.userField["@id"] === key) {
-                            userFieldValues.push({
-                                "@id": `/api/user_field_values/${e.id}`,
-                                value: `${value}`,
-                            });
-                            found = true;
-                        }
-                    });
 
-                    if (!found) {
+                if (staticFields.includes(getUserFieldId(key)))
+                    if (
+                        data?.userFieldValues &&
+                        data.userFieldValues?.length > 0
+                    ) {
+                        let found = false;
+                        data.userFieldValues?.forEach((e: any) => {
+                            if (e.userField["@id"] === key) {
+                                userFieldValues.push({
+                                    "@id": `/api/user_field_values/${e.id}`,
+                                    value: `${value}`,
+                                });
+                                found = true;
+                            }
+                        });
+
+                        if (!found) {
+                            userFieldValues.push({
+                                value: `${value}`,
+                                userField: key,
+                            });
+                        }
+                    } else {
                         userFieldValues.push({
                             value: `${value}`,
                             userField: key,
                         });
                     }
-                } else
-                    userFieldValues.push({
-                        value: `${value}`,
-                        userField: key,
+                else {
+                    data.userFieldValues?.forEach((e: any) => {
+                        if (e.userField["@id"] === key) {
+                            userFieldValues.push({
+                                "@id": `/api/user_field_values/${e.id}`,
+                                value: `${e.value}`,
+                            });
+                        }
                     });
+                }
             });
+
+        data.userFieldValues?.forEach((e: any) => {
+            let found = false;
+
+            userFieldValues?.forEach((item: any) => {
+                if (
+                    e["@id"] === item["@id"] ||
+                    e.userField["@id"] === item.userField
+                ) {
+                    found = true;
+                }
+            });
+            if (!found) {
+                userFieldValues.push({
+                    "@id": `/api/user_field_values/${e.id}`,
+                    value: `${e.value}`,
+                });
+            }
+        });
         return userFieldValues;
     };
 
@@ -271,6 +338,18 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
     const getUserField = (name: string) => {
         return userFields.find((e: any) => e.fieldKey === name);
     };
+    const getUserFieldError = (name: string) => {
+        const userField = userFields.find((e: any) => e.fieldKey === name);
+
+        if (userField) {
+            const userFieldName = UserFieldApi.toResourceUrl(
+                userField.id
+            ) as keyof User;
+            if (errors[userFieldName])
+                return (errors[userFieldName] as FieldError).message;
+        }
+        return "";
+    };
     const getUserValue = (id: number) => {
         let defaultValue: any = null;
         data?.userFieldValues?.forEach((item: any) => {
@@ -355,7 +434,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                         lg={12}
                                         xl={12}
                                         name={"firstName"}
-                                        label={"First Name"}
+                                        label={t(
+                                            "profile.update:label.firstName"
+                                        )}
                                         required={true}
                                         {...validation(
                                             "firstName",
@@ -371,7 +452,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                         lg={12}
                                         xl={12}
                                         name={"lastName"}
-                                        label={"Last Name"}
+                                        label={t(
+                                            "profile.update:label.lastName"
+                                        )}
                                         defaultValue={user?.lastName}
                                         required={true}
                                         {...validation(
@@ -387,9 +470,11 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                         lg={12}
                                         xl={12}
                                         name={"company"}
-                                        label={"Company"}
+                                        label={t(
+                                            "profile.update:label.company"
+                                        )}
                                         defaultValue={user?.company}
-                                        required={true}
+                                        required={false}
                                         {...validation(
                                             "company",
                                             formState,
@@ -403,8 +488,11 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                         lg={12}
                                         xl={12}
                                         defaultValue={user?.jobTitle}
+                                        required={false}
                                         name={"jobTitle"}
-                                        label={"Job Title"}
+                                        label={t(
+                                            "profile.update:label.jobTitle"
+                                        )}
                                         {...validation(
                                             "jobTitle",
                                             formState,
@@ -440,15 +528,18 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                                         false
                                                     ),
                                                 }}
+                                                errorMessage={getUserFieldError(
+                                                    "industrySector"
+                                                )}
                                             />
                                         )}
-                                    <AppFormInput
+                                    {/* <AppFormInput
                                         md={12}
                                         lg={12}
                                         xl={12}
                                         defaultValue={user?.email}
                                         name={"email"}
-                                        label={"Email"}
+                                        label={t("profile.update:label.email")}
                                         {...validation(
                                             "email",
                                             formState,
@@ -456,42 +547,33 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                         )}
                                         errorMessage={errors.email?.message}
                                         control={control}
-                                    />
-                                    <AppFormInputPassword
-                                        md={12}
-                                        lg={12}
-                                        xl={12}
-                                        name={"plainPassword"}
-                                        className="mb-0"
-                                        label={"Password"}
-                                        required={true}
-                                        {...validation(
-                                            "plainPassword",
-                                            formState,
-                                            false
-                                        )}
-                                        errorMessage={
-                                            errors.plainPassword?.message
-                                        }
-                                        control={control}
-                                    />
-                                    <AppFormInputPassword
-                                        lg={12}
-                                        xl={12}
-                                        name={"confirmPassword"}
-                                        className="mb-0"
-                                        label={"Confirm Password"}
-                                        required={true}
-                                        {...validation(
-                                            "confirmPassword",
-                                            formState,
-                                            false
-                                        )}
-                                        errorMessage={
-                                            errors.confirmPassword?.message
-                                        }
-                                        control={control}
-                                    />
+                                    /> */}
+                                    {userFields && getUserField("address") && (
+                                        <AppFormFieldGenerator
+                                            md={12}
+                                            lg={12}
+                                            xl={12}
+                                            properties={getUserField("address")}
+                                            defaultValue={getUserValue(
+                                                getUserField("address")?.id || 0
+                                            )}
+                                            setValue={setValue}
+                                            control={control}
+                                            validation={{
+                                                ...validation(
+                                                    UserFieldApi.toResourceUrl(
+                                                        getUserField("address")
+                                                            ?.id || 0
+                                                    ),
+                                                    formState,
+                                                    false
+                                                ),
+                                            }}
+                                            errorMessage={getUserFieldError(
+                                                "address"
+                                            )}
+                                        />
+                                    )}
                                     {userFields && getUserField("postCode") && (
                                         <AppFormFieldGenerator
                                             md={12}
@@ -516,6 +598,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                                     false
                                                 ),
                                             }}
+                                            errorMessage={getUserFieldError(
+                                                "postCode"
+                                            )}
                                         />
                                     )}
                                     {userFields && getUserField("city") && (
@@ -539,6 +624,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                                     false
                                                 ),
                                             }}
+                                            errorMessage={getUserFieldError(
+                                                "city"
+                                            )}
                                         />
                                     )}
 
@@ -563,6 +651,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                                     false
                                                 ),
                                             }}
+                                            errorMessage={getUserFieldError(
+                                                "country"
+                                            )}
                                         />
                                     )}
                                     {getUserField("mobile") && (
@@ -586,6 +677,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                                     false
                                                 ),
                                             }}
+                                            errorMessage={getUserFieldError(
+                                                "mobile"
+                                            )}
                                         />
                                     )}
                                     {getUserField(
@@ -616,6 +710,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                                     false
                                                 ),
                                             }}
+                                            errorMessage={getUserFieldError(
+                                                "creditSuisseContactFirstname"
+                                            )}
                                         />
                                     )}
                                     {getUserField(
@@ -646,13 +743,16 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                                     false
                                                 ),
                                             }}
+                                            errorMessage={getUserFieldError(
+                                                "creditSuisseContactLastname"
+                                            )}
                                         />
                                     )}
                                     <AppFormSelect
                                         id={"locale"}
                                         defaultValue={getLocale()}
                                         name={"locale"}
-                                        label={"Language"}
+                                        label={t("profile.update:label.locale")}
                                         md={12}
                                         lg={12}
                                         xl={12}
@@ -676,12 +776,58 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                             },
                                         }}
                                     />
+                                    <AppFormInputPassword
+                                        md={12}
+                                        lg={12}
+                                        xl={12}
+                                        name={"plainPassword"}
+                                        className="mb-0"
+                                        label={t(
+                                            "profile.update:label.password"
+                                        )}
+                                        required={true}
+                                        {...validation(
+                                            "plainPassword",
+                                            formState,
+                                            false
+                                        )}
+                                        errorMessage={
+                                            errors.plainPassword?.message
+                                        }
+                                        control={control}
+                                    />
+                                    <AppFormInputPassword
+                                        lg={12}
+                                        xl={12}
+                                        name={"confirmPassword"}
+                                        className="mb-0"
+                                        label={t(
+                                            "profile.update:label.confirmPassword"
+                                        )}
+                                        required={true}
+                                        {...validation(
+                                            "confirmPassword",
+                                            formState,
+                                            false
+                                        )}
+                                        errorMessage={
+                                            errors.confirmPassword?.message
+                                        }
+                                        control={control}
+                                    />
                                 </Form.Row>
                                 <Form.Row className="mb-3">
+                                    <Col sm="12" className="mb-3  text-center">
+                                        <span className="onboarding-sectoin">
+                                            {t("onboarding.section:privacy")}
+                                        </span>
+                                    </Col>
                                     <AppFormSwitch
                                         id={"isDisplayAsGuest"}
                                         name={"isDisplayAsGuest"}
-                                        label={"Is Display as Guest?"}
+                                        label={t(
+                                            "profile.update:label.isDisplayAsGuest"
+                                        )}
                                         md={12}
                                         lg={4}
                                         xl={4}
@@ -691,7 +837,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                             formState,
                                             true
                                         )}
-                                        defaultChecked={user?.isDisplayAsGuest}
+                                        defaultChecked={true}
                                         errorMessage={
                                             errors.isDisplayAsGuest?.message
                                         }
@@ -700,7 +846,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                     <AppFormSwitch
                                         id={"isExposeEmail"}
                                         name={"isExposeEmail"}
-                                        label={"Is Expose Email?"}
+                                        label={t(
+                                            "profile.update:label.isExposeEmail"
+                                        )}
                                         md={12}
                                         lg={4}
                                         xl={4}
@@ -710,7 +858,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                             formState,
                                             true
                                         )}
-                                        defaultChecked={user?.isExposeEmail}
+                                        defaultChecked={false}
                                         errorMessage={
                                             errors.isExposeEmail?.message
                                         }
@@ -719,7 +867,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                     <AppFormSwitch
                                         id={"isAllowCommunication"}
                                         name={"isAllowCommunication"}
-                                        label={"Is Allow Communication?"}
+                                        label={t(
+                                            "profile.update:label.isAllowCommunication"
+                                        )}
                                         md={12}
                                         lg={4}
                                         xl={4}
@@ -729,9 +879,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                             formState,
                                             true
                                         )}
-                                        defaultChecked={
-                                            user?.isAllowCommunication
-                                        }
+                                        defaultChecked={true}
                                         errorMessage={
                                             errors.isAllowCommunication?.message
                                         }
@@ -741,11 +889,11 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                 <AppButton
                                     block={true}
                                     type={"submit"}
-                                    loadingTxt={"Submit ..."}
+                                    loadingTxt={t("common.button:submit")}
                                     disabled={formState.isSubmitting}
                                     isLoading={formState.isSubmitting}
                                 >
-                                    Submit
+                                    {t("common.button:submit")}
                                 </AppButton>
 
                                 <AppButton
@@ -756,7 +904,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                     variant="link"
                                     className="btn-block mt-3"
                                 >
-                                    Skip and Continue Anonimously
+                                    {t("onboarding.lable:skip")}
                                 </AppButton>
                             </Form>
                         </Col>

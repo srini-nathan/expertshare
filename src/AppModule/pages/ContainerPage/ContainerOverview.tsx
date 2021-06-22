@@ -63,20 +63,6 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
         };
     });
 
-    useEffect(() => {
-        ContainerApi.overview<PContainer>(1, { "client.id": clientId }, (c) => {
-            cancelTokenSourcesRef.current.push(c);
-        }).then(({ response, error }) => {
-            if (error !== null) {
-                if (_isString(error)) {
-                    errorToast(error);
-                }
-            } else if (response !== null) {
-                setOverviews(response.items);
-            }
-        });
-    }, []);
-
     const checkForAccess = (container: PContainer) => {
         showLoader("Redirecting...");
         const { domain, id } = container;
@@ -103,6 +89,22 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 });
         }
     };
+
+    useEffect(() => {
+        ContainerApi.overview<PContainer>(1, { "client.id": clientId }, (c) => {
+            cancelTokenSourcesRef.current.push(c);
+        }).then(({ response, error }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                }
+            } else if (response !== null) {
+                if (response.items.length === 1)
+                    checkForAccess(response.items[0]);
+                else setOverviews(response.items);
+            }
+        });
+    }, []);
 
     return (
         <Fragment>

@@ -213,7 +213,6 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
                                         {t("admin.aframeroom.form:label.image")}
                                     </Form.Label>
                                     <AppUploader
-                                        withCropper
                                         accept="image/*"
                                         imagePath={
                                             data.image

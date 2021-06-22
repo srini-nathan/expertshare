@@ -9,14 +9,15 @@ import "froala-editor/css/froala_editor.pkgd.min.css";
 import "froala-editor/js/plugins.pkgd.min";
 
 import "./assets/scss/style.scss";
+import { useGlobalData } from "../../contexts";
 
 export interface AppFormRichTextAreaProps {
     id?: string;
     name: string;
-    sm?: string | number;
-    md?: string | number;
-    lg?: string | number;
-    xl?: string | number;
+    sm?: number;
+    md?: number;
+    lg?: number;
+    xl?: number;
     defaultValue?: string;
     value?: string;
     placeholder?: string | boolean;
@@ -54,7 +55,14 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
     let val = defaultValue;
     if (value) val = value;
     const [model, setModel] = useState<string>(val);
-
+    const { container } = useGlobalData();
+    let authKey = "";
+    if (
+        container &&
+        container.configuration &&
+        (container?.configuration as any).froalaEditorKey
+    )
+        authKey = (container?.configuration as any).froalaEditorKey;
     const controlId = id || name;
     let placeholderText = "";
 
@@ -65,16 +73,9 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
     }
 
     return (
-        <Form.Group
-            as={Col}
-            md={md}
-            sm={sm}
-            lg={lg}
-            xl={xl}
-            controlId={controlId}
-        >
+        <Col md={md} sm={sm} lg={lg} xl={xl} className="form-group">
             {label?.length > 0 ? (
-                <Form.Label>
+                <Form.Label id={controlId}>
                     {label}
                     {required && <span className="required">*</span>}
                     {description && (
@@ -104,6 +105,7 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
                         }}
                         tag="textarea"
                         config={{
+                            key: authKey,
                             placeholderText,
                             value: val,
                             charCounterCount: withCounter,
@@ -119,6 +121,6 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
             >
                 {errorMessage}
             </Form.Control.Feedback>
-        </Form.Group>
+        </Col>
     );
 };

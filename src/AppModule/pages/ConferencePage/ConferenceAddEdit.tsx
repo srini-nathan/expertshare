@@ -223,7 +223,11 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         languages.forEach((e) => {
+            // eslint-disable-next-line no-console
+            console.log(e);
             if (e.isDefault) {
+                // eslint-disable-next-line no-console
+                console.log(e.locale);
                 setDefaultLanguage(e.locale);
             }
         });
@@ -253,7 +257,6 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
             "container.id": containerId,
             "order[isDefault]": "desc",
         }).then(({ error, response }) => {
-            setLoading(false);
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
@@ -261,6 +264,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
             } else if (response !== null) {
                 setLanguages(response.items);
             }
+            setLoading(false);
         });
         ConferenceTagApi.find<ConferenceTag>(1, {
             "container.id": containerId,

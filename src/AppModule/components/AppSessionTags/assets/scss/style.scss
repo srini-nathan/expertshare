@@ -31,10 +31,10 @@
                 font-size: 12px;
                 font-weight: 700;
                 color: var(--primary);
+                user-select: none;
                 background-color: var(--primary-10);
                 border: 1px solid var(--primary);
                 border-radius: 25px;
-
                 &:hover {
                     color: var(--primary);
                     background-color: var(--primary-10);

@@ -211,30 +211,32 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
         return val;
     };
     const renderUserFields = () => {
-        return userFields.map((e) => {
-            const defaultValue: any = (data?.userFieldValues as any[]).find(
-                (item: any) => e.id === item.userField.id
-            );
-            return (
-                <AppFormFieldGenerator
-                    key={e.id}
-                    defaultValue={defaultValue}
-                    properties={e}
-                    setValue={setValue}
-                    validation={{
-                        ...validation(
-                            UserFieldApi.toResourceUrl(e.id),
-                            formState,
-                            true
-                        ),
-                    }}
-                    errorMessage={
-                        errors[UserFieldApi.toResourceUrl(e.id)]?.message
-                    }
-                    control={control}
-                />
-            );
-        });
+        if (data.userFieldValues && data?.userFieldValues?.length > 0)
+            return userFields.map((e) => {
+                const defaultValue: any = (data?.userFieldValues as any[]).find(
+                    (item: any) => e.id === item.userField.id
+                );
+                return (
+                    <AppFormFieldGenerator
+                        key={e.id}
+                        defaultValue={defaultValue}
+                        properties={e}
+                        setValue={setValue}
+                        validation={{
+                            ...validation(
+                                UserFieldApi.toResourceUrl(e.id),
+                                formState,
+                                true
+                            ),
+                        }}
+                        errorMessage={
+                            errors[UserFieldApi.toResourceUrl(e.id)]?.message
+                        }
+                        control={control}
+                    />
+                );
+            });
+        return <></>;
     };
     const getDynamicFileds = (userField: any[]) => {
         const userFieldValues: any[] = [];
@@ -372,7 +374,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <>
             <Form onSubmit={handleSubmit(onSubmit)}>
-                <Row className="pt-3">
+                <Row className="pt-3 update-profile">
                     <Col md={12} sm={12}>
                         <AppCard>
                             <Row className="m-0">
@@ -568,8 +570,10 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                 {container &&
                                     container.configuration &&
                                     (container.configuration as any)
-                                        .isDisclaimerEnable && (
-                                        <Form.Group className="p-2">
+                                        .isDisclaimerEnable &&
+                                    getValue("disclaimerTextProfile") !==
+                                        "" && (
+                                        <Form.Group className="p-3 w-100">
                                             <div className="agreement-box mt-2 p-2">
                                                 <div className="agreement-box--inner">
                                                     <div

@@ -12,8 +12,10 @@ import {
     SessionDetailsPage,
     AttendeeOverview,
     OnBoardingPage,
+    ReloadingPage,
 } from "./pages";
 import { ModuleRouter } from "./models";
+import { Layout3D } from "../Layout3DModule";
 
 export const routers: ModuleRouter[] = [
     {
@@ -55,6 +57,8 @@ export const routers: ModuleRouter[] = [
                     <AttendeeOverview path={"attendee/:view"} />
                     <UserProfilePage path={"attendee/:id/show"} />
                     <OnBoardingPage path={"onboarding"} />
+                    <ReloadingPage path={"reloading"} />
+                    <Layout3D path={"a3d"} />
                 </Router>
             );
         },

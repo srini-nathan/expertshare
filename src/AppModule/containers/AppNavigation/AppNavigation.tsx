@@ -9,7 +9,7 @@ import {
     Nav,
     Navbar,
 } from "react-bootstrap";
-import { Link } from "@reach/router";
+import { Link, navigate } from "@reach/router";
 import { AppIcon } from "../../components/AppIcon";
 import {
     AppNavigationDropDown,
@@ -19,7 +19,7 @@ import {
     AppNavigationItemProps,
 } from "../../components/AppNavigationItem";
 import "./assets/scss/style.scss";
-import FooterLogo from "./assets/images/expertshare_logo_footer.svg";
+import FooterLogo from "./assets/images/expertshare_logo_footer.png";
 import {
     AuthContext,
     logoutAction,
@@ -380,6 +380,26 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                             />
                         );
                     })}
+                {location.includes("a3d") ? (
+                    <AppNavigationItem
+                        label={"2D View"}
+                        path={"/event"}
+                        icon={{
+                            name: "fal fa-desktop",
+                        }}
+                        className="main-menu"
+                    />
+                ) : (
+                    <AppNavigationItem
+                        label={"3D View"}
+                        path={"/a3d"}
+                        icon={{
+                            name: "fab fa-unity",
+                        }}
+                        className="main-menu"
+                    />
+                )}
+
                 {renderMoreMenu()}
             </>
         );
@@ -490,6 +510,17 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                         action: () => {
                                                             setUserLocale(e);
                                                             setLocale(e.locale);
+                                                            navigate(
+                                                                "/reloading",
+                                                                {
+                                                                    state: {
+                                                                        url:
+                                                                            window
+                                                                                .location
+                                                                                .pathname,
+                                                                    },
+                                                                }
+                                                            );
                                                         },
                                                     };
                                                 })}
@@ -535,15 +566,15 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                     </ListGroupItem>
 
                                     <ListGroupItem className={`px-0 py-1`}>
-                                        <Link
-                                            to={"#"}
+                                        <a
+                                            href="https://expertshare.live"
                                             className="nav-link text-center copyright"
                                         >
                                             <span>
                                                 Virtual event platform by
                                                 <img src={FooterLogo} />
                                             </span>
-                                        </Link>
+                                        </a>
                                     </ListGroupItem>
                                 </ListGroup>
                             </ListGroupItem>

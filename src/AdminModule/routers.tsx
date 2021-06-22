@@ -22,6 +22,7 @@ import {
     AFrameRoomAddEdit,
 } from "./pages";
 import { Layout3D } from "../Layout3DModule";
+import { AFramePanelGrid, AFramePanelAddEdit } from "../AppModule/pages";
 import { ModuleRouter } from "../AppModule/models";
 import { ContainerAddEdit } from "./pages/ContainerPage/ContainerAddEdit";
 import { UserFieldAddEditPage, UserFieldListPage } from "./pages/UserFieldPage";
@@ -74,10 +75,14 @@ export const routers: ModuleRouter[] = [
                     <SessionCategoryAddEditPage
                         path={"session-categories/new"}
                     />
-                    <AFrameRoomGrid path={"rooms"} />
                     <AFrameRoomGrid path={"rooms/:view"} />
                     <AFrameRoomAddEdit path={"room/new"} />
                     <AFrameRoomAddEdit path={"room/:id"} />
+                    <AFramePanelGrid path={"rooms"} />
+                    <AFramePanelGrid path={"room/:roomId/:panelType"} />
+                    <AFramePanelGrid path={"panels/:view"} />
+                    <AFramePanelAddEdit path={"room/:roomId/:panelType/new"} />
+                    <AFramePanelAddEdit path={"room/:roomId/:panelType/:id"} />
                 </Router>
             );
         },
