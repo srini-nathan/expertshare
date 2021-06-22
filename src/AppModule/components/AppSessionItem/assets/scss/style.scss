@@ -146,7 +146,7 @@
                             display: flex;
 
                             i {
-                                font-size: 17px;
+                                font-size: 20px;
                                 font-weight: 500;
                                 color: var(--header-desc-fg-clr);
                             }
@@ -159,15 +159,17 @@
                                     font-weight: 700;
 
                                     span {
-                                        font-size: 14px;
+                                        margin-left: 2px;
+                                        font-size: 16px;
                                         font-weight: 700;
-                                        opacity: 0.6;
+                                        opacity: 0.5;
                                     }
                                 }
 
                                 span {
                                     font-size: 12px;
                                     font-weight: 500;
+                                    opacity: 0.5;
                                 }
                             }
                         }

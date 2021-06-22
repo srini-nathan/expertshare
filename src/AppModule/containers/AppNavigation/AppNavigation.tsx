@@ -19,7 +19,7 @@ import {
     AppNavigationItemProps,
 } from "../../components/AppNavigationItem";
 import "./assets/scss/style.scss";
-import FooterLogo from "./assets/images/expertshare_logo_footer.svg";
+import FooterLogo from "./assets/images/expertshare_logo_footer.png";
 import {
     AuthContext,
     logoutAction,
@@ -566,15 +566,15 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                     </ListGroupItem>
 
                                     <ListGroupItem className={`px-0 py-1`}>
-                                        <Link
-                                            to={"#"}
+                                        <a
+                                            href="https://expertshare.live"
                                             className="nav-link text-center copyright"
                                         >
                                             <span>
                                                 Virtual event platform by
                                                 <img src={FooterLogo} />
                                             </span>
-                                        </Link>
+                                        </a>
                                     </ListGroupItem>
                                 </ListGroup>
                             </ListGroupItem>

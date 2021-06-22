@@ -12,7 +12,7 @@ export const navigation: AppNavigationItemProps[] = [
         label: "Attendees",
         path: "/attendee",
         icon: {
-            name: "far fa-user-plus",
+            name: "fak fa-view-profile",
         },
     },
     // {

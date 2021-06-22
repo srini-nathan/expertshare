@@ -13,11 +13,24 @@
         border-radius: var(--border-radius);
 
         &--header {
+            @include media("mobile") {
+                position: relative;
+                height: 70px;
+            }
             &--left {
                 &--content {
+                    @include media("mobile") {
+                        position: absolute;
+                        left: 0;
+                        width: 100%;
+                    }
                     .arrow-left-btn {
                         width: 36px;
-
+                        @include media("mobile") {
+                            position: absolute;
+                            top: 35px;
+                            left: -5px;
+                        }
                         i {
                             font-size: 17px;
                             font-weight: 500;
@@ -34,7 +47,11 @@
             &--right {
                 display: flex;
                 align-items: center;
-
+                @include media("mobile") {
+                    position: absolute !important;
+                    left: 0;
+                    width: 100% !important;
+                }
                 .size-dropdown {
                     display: flex;
                     align-items: center;
@@ -43,7 +60,13 @@
                     background-color: var(--btn-secondary-bg-clr);
                     border-radius: var(--border-radius);
                     box-shadow: 0 6px 30px var(--secondary-20);
-
+                    @include media("mobile") {
+                        position: absolute;
+                        left: 10px;
+                        width: 95px;
+                        height: 33px;
+                        margin-top: 10px;
+                    }
                     .cardsize-dropdown {
                         width: 100%;
                         font-size: 14px;
@@ -51,10 +74,21 @@
                         color: var(--secondary);
                     }
                 }
+                .btn-session {
+                    @include media("mobile") {
+                        position: absolute;
+                        right: 10px;
+                        margin-top: 10px;
+                    }
+                }
 
                 .btn-arrow {
                     width: 36px;
-
+                    @include media("mobile") {
+                        position: absolute;
+                        top: 35px;
+                        right: 10px;
+                    }
                     i {
                         font-size: 17px;
                         font-weight: 500;
@@ -69,7 +103,6 @@
             .swiper-button-disabled {
                 cursor: unset !important;
                 display: none !important;
-
             }
         }
 
@@ -99,14 +132,14 @@
                                     span {
                                         font-size: 16px;
                                         font-weight: 700;
-                                        color: var(--header-sub-desc-fg-clr);
+                                        color: var(--sub-text-fg-clr);
                                     }
                                 }
 
                                 span {
                                     font-size: 12px;
                                     font-weight: 500;
-                                    color: var(--header-sub-desc-fg-clr);
+                                    color: var(--sub-text-fg-clr);
                                 }
                             }
                         }
@@ -207,9 +240,11 @@
                                         align-items: center;
                                     }
 
-                                    &--profile {}
+                                    &--profile {
+                                    }
 
-                                    &--det {}
+                                    &--det {
+                                    }
 
                                     &.user-1 {
                                         i {

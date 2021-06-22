@@ -70,7 +70,7 @@ export const AppSessionSlot: FC<AppSessionSlotProps> = ({
                                     </div>
                                     <Link
                                         to={`/event/${conferenceId}/session/create`}
-                                        className="btn-session btn btn-secondary mr-3"
+                                        className="btn-session btn btn-secondary mr-0 mr-md-2 px-1 px-sm-2"
                                     >
                                         {t("event.agenda:button.createSession")}
                                     </Link>

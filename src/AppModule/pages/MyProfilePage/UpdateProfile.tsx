@@ -570,8 +570,10 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                 {container &&
                                     container.configuration &&
                                     (container.configuration as any)
-                                        .isDisclaimerEnable && (
-                                        <Form.Group className="p-2">
+                                        .isDisclaimerEnable &&
+                                    getValue("disclaimerTextProfile") !==
+                                        "" && (
+                                        <Form.Group className="p-3 w-100">
                                             <div className="agreement-box mt-2 p-2">
                                                 <div className="agreement-box--inner">
                                                     <div
