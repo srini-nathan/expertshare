@@ -38,6 +38,7 @@ export const AppQAThread: FC<QAThreadProps> = ({
                             addComment
                             showShareBtn
                             commentMessage={item.message}
+                            createdAt={item.createdAt}
                         >
                             <p className="base-text pb-3">{item.message}</p>
                             {item.children.length > 0 &&
@@ -55,6 +56,7 @@ export const AppQAThread: FC<QAThreadProps> = ({
                                         }}
                                         commentMessage={answer.message}
                                         addComment
+                                        createdAt={answer.createdAt}
                                     >
                                         <p className="base-text pb-3">
                                             {answer.message}

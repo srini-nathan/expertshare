@@ -1,5 +1,6 @@
 import React, { FunctionComponent, useState } from "react";
 import { Row, Col } from "react-bootstrap";
+import { format } from "date-fns";
 import { AppСhoseMethodMessage } from "../AppСhoseMethodMessage";
 import { AppButton } from "../AppButton";
 import "./assets/scss/style.scss";
@@ -7,6 +8,8 @@ import UserAvatar from "../../assets/images/user-avatar.png";
 import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath, useAuthState, useIsGranted } from "../../hooks";
 import { FileTypeInfo } from "../../models";
+import { getDateTimeWithoutTimezone } from "../../utils";
+import { useGlobalData } from "../../contexts";
 
 const { Upload: UPLOAD, Role: ROLE } = CONSTANTS;
 
@@ -36,6 +39,7 @@ export interface AppDetailsActionProps {
     userObj?: any;
     isChild?: boolean;
     commentMessage?: string;
+    createdAt?: string;
 }
 export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
     addComment = false,
@@ -49,12 +53,15 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
     userObj,
     isChild = false,
     commentMessage = "",
+    createdAt = "",
 }) => {
     const { user } = useAuthState();
     const userProfilePath = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         userObj.imageName
     );
+    const { container } = useGlobalData();
+
     const isGrantedControl = useIsGranted(ROLE_SPEAKER);
 
     const style = userObj.imageName
@@ -102,12 +109,26 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
         setOpenEditArea(false);
     };
 
+    const getDateFormat = () => {
+        let f = "";
+
+        if (container) {
+            if ((container.configuration as any).shortDate)
+                f = `${(container.configuration as any).shortDate}`;
+            else f = `EEEE MMMM, dd`;
+            if ((container.configuration as any).shortTime)
+                f = `${f} ${(container.configuration as any).shortTime}`;
+            else f = `${f} hh:mm a`;
+        }
+        return f;
+    };
+
     return (
         <div className="session-details-question--container--item pb-3">
             <Row className="row m-0 p-0">
                 <Col className="session-details-question--container--item--profile col-auto px-0 pb-2">
                     <Row className="row m-0 p-0">
-                        <div>
+                        <div className="cont">
                             <div className="avatar-profile col-auto p-0">
                                 <i
                                     className="avatar-profile--pic"
@@ -120,13 +141,11 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                                         `${userObj.firstName} ${userObj.lastName}`}
                                 </div>
                                 <div className="det-profile--time">
-                                    {userObj.jobTitle && userObj.jobTitle}
-                                    {userObj.jobTitle &&
-                                        userObj.jobTitle !== "" &&
-                                        userObj.company &&
-                                        userObj.company !== "" &&
-                                        ", "}
-                                    {userObj.company && userObj.company}
+                                    {format(
+                                        getDateTimeWithoutTimezone(createdAt),
+
+                                        getDateFormat()
+                                    )}
                                 </div>
                             </div>
                         </div>

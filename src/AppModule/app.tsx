@@ -150,12 +150,14 @@ const App = (): JSX.Element => {
                             }}
                         />
                     </DashboardLayout>
-                    <AppWelcomeModal
-                        show={showWelcomeModal}
-                        handleClose={() => {
-                            setShowWelcomeModal(false);
-                        }}
-                    />
+                    {isChosen() && (
+                        <AppWelcomeModal
+                            show={showWelcomeModal}
+                            handleClose={() => {
+                                setShowWelcomeModal(false);
+                            }}
+                        />
+                    )}
                     <AppPictureInPicture show={false}>
                         <AppYoutubeFrame
                             url={

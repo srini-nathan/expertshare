@@ -11,6 +11,7 @@
 
     &--text-box {
         position: relative;
+        height: 100%;
 
         h2 {
             display: flex;
@@ -240,7 +241,7 @@
 
         &--item {
             &--profile {
-                div {
+                .cont {
                     display: flex;
 
                     .avatar-profile {

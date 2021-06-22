@@ -5,7 +5,11 @@ import { isString as _isString } from "lodash";
 import { User } from "../../models/entities/User";
 import { errorToast } from "../../utils";
 import { UserApi } from "../../../AdminModule/apis";
-import { AppProfileHeader, AppTabWithIcon, AppLoader } from "../../components";
+import {
+    AppProfileHeader,
+    // AppTabWithIcon,
+    AppLoader,
+} from "../../components";
 
 export const UserProfilePage: FC<RouteComponentProps> = (): JSX.Element => {
     const [user, setUser] = useState<User>();
@@ -32,12 +36,12 @@ export const UserProfilePage: FC<RouteComponentProps> = (): JSX.Element => {
         <>
             <AppProfileHeader isProfilePage={false} {...user} />
             <Tab.Container defaultActiveKey="Feeds">
-                <AppTabWithIcon
+                {/* <AppTabWithIcon
                     eventKey="Feeds"
                     title="My Feeds"
                     icon="fak fa-columns-regular"
                 ></AppTabWithIcon>
-                <Tab.Pane className="mt-4" eventKey="Feeds"></Tab.Pane>
+                <Tab.Pane className="mt-4" eventKey="Feeds"></Tab.Pane> */}
             </Tab.Container>
         </>
     );
