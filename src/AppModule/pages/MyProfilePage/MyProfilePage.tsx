@@ -14,6 +14,7 @@ import { AuthState } from "../../../SecurityModule/models";
 import { ChangePassword } from "./ChangePassword";
 import { UpdateProfile } from "./UpdateProfile";
 import { UpdatePrivacy } from "./UpdatePrivacy";
+import "./assets/scss/style.scss";
 
 export const MyProfilePage: FC<RouteComponentProps> = (): JSX.Element => {
     const { state } = React.useContext(AuthContext);

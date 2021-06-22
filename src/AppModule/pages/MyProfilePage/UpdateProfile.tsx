@@ -372,7 +372,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <>
             <Form onSubmit={handleSubmit(onSubmit)}>
-                <Row className="pt-3">
+                <Row className="pt-3 update-profile">
                     <Col md={12} sm={12}>
                         <AppCard>
                             <Row className="m-0">

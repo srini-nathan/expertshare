@@ -1,6 +1,7 @@
 import React, { FC, useState } from "react";
 import { AgGridReact } from "ag-grid-react";
 import { useTranslation } from "react-i18next";
+import { LicenseManager } from "ag-grid-enterprise";
 import {
     GridApi,
     GridReadyEvent,
@@ -18,7 +19,6 @@ import {
 import { appGridConfig } from "../../config";
 import { AppGridPageSizeOption } from "../../models";
 
-import "ag-grid-enterprise";
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import "./assets/scss/style.scss";
@@ -44,6 +44,10 @@ export const AppGrid: FC<AppGridProps> = ({
     const [, setGridColumnApi] = useState<ColumnApi>();
     const [pageSize, setPageSize] = useState<number>(appGridConfig.pageSize);
     const [active, setActive] = useState<number>(1);
+
+    LicenseManager.setLicenseKey(
+        "CompanyName=expertshare ag,LicensedApplication=expertshare,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-016725,ExpiryDate=22_June_2022_[v2]_MTY1NTg1MjQwMDAwMA==8b2876cda869451b48d10ae8640350d3"
+    );
 
     const onGridReady = (event: GridReadyEvent) => {
         if (onReady) {
