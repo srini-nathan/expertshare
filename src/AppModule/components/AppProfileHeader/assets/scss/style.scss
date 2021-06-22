@@ -44,32 +44,35 @@
                             border-radius: 50%;
                         }
                     }
-
-                    .speaker-btn {
+                    .badge-content {
                         position: absolute;
-                        bottom: -10px;
-                        left: 50px;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        width: fit-content;
-                        min-width: 104px;
-                        padding: 3px 5px;
-                        height: 36px;
-                        font-size: 14px;
-                        font-weight: 400;
-                        color: var(--btn-fg-clr);
-                        background-color: var(--speaker-btn-bg-clr);
-                        border-radius: var(--border-radius);
+                        bottom: 0;
+                        left: 0;
+                        width: 100%;
+                        .speaker-btn {
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            width: fit-content;
+                            min-width: 104px;
+                            height: 36px;
+                            padding: 3px 5px;
+                            margin: auto;
+                            font-size: 14px;
+                            font-weight: 400;
+                            color: var(--btn-fg-clr);
+                            background-color: var(--speaker-btn-bg-clr);
+                            border-radius: var(--border-radius);
+                            span {
+                                margin-top: 4px;
+                            }
 
-                        span {
-                            margin-top: 4px;
-                        }
-
-                        i {
-                            margin-right: 5px;
-                            margin-bottom: 1px;
-                            font-size: 20px;
+                            i {
+                                margin-right: 5px;
+                                margin-bottom: 1px;
+                                font-size: 20px;
+                            }
                         }
                     }
                 }

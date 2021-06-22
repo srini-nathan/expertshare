@@ -365,27 +365,29 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
         <Container fluid className="active-account auth-container">
             <div className="auth-container--box">
                 <Row className="p-0 m-auto">
-                    <div className="tabs-translation-auth mb-3">
-                        {container &&
-                            container.languages &&
-                            container.languages.map((e, i) => {
-                                return (
-                                    <AppButton
-                                        variant="secondary"
-                                        className={`${e.locale} ${
-                                            activeLanguage === e.locale &&
-                                            "active"
-                                        } mx-1`}
-                                        onClick={() => {
-                                            setActiveLanguage(e.locale);
-                                        }}
-                                        key={i}
-                                    >
-                                        <i></i>
-                                        {e.name}
-                                    </AppButton>
-                                );
-                            })}
+                    <div className="tabs-translation-auth mb-3 justify-content-center">
+                        <Row className="m-0 p-0 justify-content-center">
+                            {container &&
+                                container.languages &&
+                                container.languages.map((e, i) => {
+                                    return (
+                                        <AppButton
+                                            variant="secondary"
+                                            className={`${e.locale} ${
+                                                activeLanguage === e.locale &&
+                                                "active"
+                                            } mx-1 px-2 my-1 mx-sm-1 col-auto col-sm-auto`}
+                                            onClick={() => {
+                                                setActiveLanguage(e.locale);
+                                            }}
+                                            key={i}
+                                        >
+                                            <i></i>
+                                            {e.name}
+                                        </AppButton>
+                                    );
+                                })}
+                        </Row>
                     </div>
                     {renderView()}
                 </Row>

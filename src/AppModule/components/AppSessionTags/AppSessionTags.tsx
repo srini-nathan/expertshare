@@ -26,7 +26,7 @@ export const AppSessionTags: FC<AppSessionTagsProps> = ({
                             return (
                                 <Col
                                     key={i}
-                                    sm={"auto"}
+                                    xs={"auto"}
                                     className="session-details-tags--container--item pl-0 pr-2 mt-3"
                                 >
                                     <a>{e.name}</a>

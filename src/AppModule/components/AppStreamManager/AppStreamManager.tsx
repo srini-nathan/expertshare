@@ -72,28 +72,44 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
                 <div className="imageContainer">
                     <i style={style}></i>
                     <div className="overlay">
-                        <h1>
-                            {time && time.years
-                                ? `${time.years} ${t(
-                                      "sessionDetails:label.years"
-                                  )} `
-                                : ""}
-                            {time && time.months
-                                ? `${time.months} ${t(
-                                      "sessionDetails:label.month"
-                                  )} `
-                                : ""}
-                            {time && time.days
-                                ? `${time.days} ${t(
-                                      "sessionDetails:label.days"
-                                  )} `
-                                : ""}
-                            {time && time.hours ? `${time.hours} : ` : " 0 : "}
-                            {time && time.minutes
-                                ? `${time.minutes} : `
-                                : "0 : "}
-                            {time && time.seconds ? `${time.seconds}` : " 0"}
-                        </h1>
+                        <div className="overlay--content">
+                            <div className="overlay--content--item days">
+                                <div className="overlay--content--item--title">
+                                    {t("sessionDetails:label.days")}
+                                </div>
+                                <div className="overlay--content--item--time">
+                                    {time && time.days ? `${time.days}` : "0"}
+                                </div>
+                            </div>
+                            <div className="overlay--content--item hours">
+                                <div className="overlay--content--item--title">
+                                    {t("sessionDetails:label.hours")}
+                                </div>
+                                <div className="overlay--content--item--time">
+                                    {time && time.hours ? `${time.hours}` : "0"}
+                                </div>
+                            </div>
+                            <div className="overlay--content--item minutes">
+                                <div className="overlay--content--item--title">
+                                    {t("sessionDetails:label.minutes")}
+                                </div>
+                                <div className="overlay--content--item--time">
+                                    {time && time.minutes
+                                        ? `${time.minutes}`
+                                        : "0"}
+                                </div>
+                            </div>
+                            <div className="overlay--content--item seconds">
+                                <div className="overlay--content--item--title">
+                                    {t("sessionDetails:label.seconds")}
+                                </div>
+                                <div className="overlay--content--item--time">
+                                    {time && time.seconds
+                                        ? `${time.seconds}`
+                                        : "0"}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             );
