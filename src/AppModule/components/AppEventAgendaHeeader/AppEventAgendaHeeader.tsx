@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 import React, { FC, useState } from "react";
 import { Link } from "@reach/router";
 import { useTranslation } from "react-i18next";

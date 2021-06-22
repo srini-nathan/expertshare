@@ -14,6 +14,7 @@
                     display: block;
                     width: 0.5rem;
                     height: 0.5rem;
+                    margin-bottom: 3px;
                     content: " ";
                     background: var(--primary);
                     border-radius: var(--circle-border-radius);
@@ -27,17 +28,20 @@
     label {
         display: flex;
         align-items: center;
-        margin-bottom: 0;
+        margin-top: 5px;
+        margin-right: 10px;
         font-size: 14px;
         font-weight: 400;
         color: var(--secondary);
         span {
             padding-top: 3px;
-            padding-left: 7px;
+            padding-left: 15px;
         }
         &::before {
             width: 1rem;
             height: 1rem;
+            margin-right: 8px;
+            margin-bottom: 3px;
             cursor: pointer;
             content: " ";
             background-color: transparent;

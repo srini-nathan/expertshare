@@ -16,6 +16,11 @@ export const AppSessionDescription: FC<AppSessionDescriptionProps> = ({
 }): JSX.Element => {
     const { t } = useTranslation();
     const [isReadMore, setIsReadMore] = useState(true);
+    const showMore = () => {
+        if (session.description.length < 800) return "";
+        if (isReadMore) return "+Show More";
+        return "-Show Less";
+    };
     return (
         <AppCard>
             <Row className="m-0 mb-3 mb-lg-4">
@@ -40,11 +45,7 @@ export const AppSessionDescription: FC<AppSessionDescriptionProps> = ({
                                 }}
                                 className="read-or-hide mt-3"
                             >
-                                {session.description.length < 800
-                                    ? ""
-                                    : isReadMore
-                                    ? "+Show More"
-                                    : "-Show Less"}
+                                {showMore()}
                             </span>
                         </p>
                     </div>

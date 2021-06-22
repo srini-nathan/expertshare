@@ -203,7 +203,7 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                     return <AppLoader />;
                 }
                 return (
-                    <Row className="events-grid--container px-2 px-sm-0 mt-2 mt-md-4">
+                    <Row className="events-grid--container px-2 px-sm-0">
                         {conferences.map((conference: PConference) => (
                             <AppConferenceCard
                                 isGrantedControl={isGrantedControl}
