@@ -10,6 +10,7 @@ import {
     Navbar,
 } from "react-bootstrap";
 import { Link, navigate } from "@reach/router";
+import { useRecoilValue } from "recoil";
 import { AppIcon } from "../../components/AppIcon";
 import {
     AppNavigationDropDown,
@@ -38,6 +39,10 @@ import { errorToast, isGranted } from "../../utils";
 import { LanguageApi } from "../../../AdminModule/apis";
 import { Language } from "../../../AdminModule/models";
 import { FileTypeInfo } from "../../models";
+import {
+    AppDashboardLayoutOptions,
+    appDashboardLayoutOptions,
+} from "../../atoms";
 
 const { Upload: UPLOAD, Role } = CONSTANTS;
 const {
@@ -67,7 +72,9 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         user.imageName
     );
     const isGrantedControl = useIsGranted(ROLE_OPERATOR);
-    const [menuLocation] = useState<string>("bottom");
+    const {
+        navPosition: menuLocation,
+    } = useRecoilValue<AppDashboardLayoutOptions>(appDashboardLayoutOptions);
 
     const style = user.imageName
         ? {

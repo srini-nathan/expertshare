@@ -535,6 +535,7 @@
 .bottom-sidebar {
     position: fixed;
     bottom: 0;
+    z-index: 999;
 }
 
 .top-sidebar,

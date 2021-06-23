@@ -13,6 +13,7 @@ export const DashboardLayout: FC = ({ children }) => {
     const {
         hideNav,
         // hideMessenger,
+        navPosition,
     } = useRecoilValue<AppDashboardLayoutOptions>(appDashboardLayoutOptions);
 
     const isA3d = window.location !== window.parent.location;
@@ -22,7 +23,9 @@ export const DashboardLayout: FC = ({ children }) => {
             {hideNav || isA3d ? null : <AppNavigation items={appNavigations} />}
             <div
                 className={`app-container ${
-                    hideNav || isA3d ? " " : "right-container"
+                    hideNav || isA3d || navPosition === "bottom"
+                        ? " "
+                        : "right-container"
                 } mr-0 ml-auto mb-5`}
             >
                 <div className="col-md-12 col-sm-12 col-xl-12 p-3 p-lg-4 mb-2">
