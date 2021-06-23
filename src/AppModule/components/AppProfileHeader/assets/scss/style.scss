@@ -44,11 +44,13 @@
                             border-radius: 50%;
                         }
                     }
+
                     .badge-content {
                         position: absolute;
                         bottom: 0;
                         left: 0;
                         width: 100%;
+
                         .speaker-btn {
                             position: relative;
                             display: flex;
@@ -64,6 +66,7 @@
                             color: var(--btn-fg-clr);
                             background-color: var(--speaker-btn-bg-clr);
                             border-radius: var(--border-radius);
+
                             span {
                                 margin-top: 4px;
                             }
@@ -79,6 +82,22 @@
             }
 
             &--main-det {
+                &--biography {
+                    p {
+                        display: grid;
+                        font-size: 16px;
+                        font-weight: 500;
+                        color: var(--secondary-80);
+
+                        .read-or-hide {
+                            font-size: 12px;
+                            font-weight: 700;
+                            color: var(--primary);
+                            cursor: pointer;
+                        }
+                    }
+                }
+
                 &--title {
                     h2 {
                         font-size: 42px;
@@ -192,7 +211,7 @@
                         }
 
                         &:hover {
-                            & > .popup {
+                            &>.popup {
                                 display: block;
                             }
                         }
@@ -206,15 +225,13 @@
                         }
 
                         &.get-contact {
-                            i {
-                            }
+                            i {}
                         }
 
                         &.add-user-btn {
                             width: 36px;
 
-                            i {
-                            }
+                            i {}
                         }
                     }
                 }
@@ -287,11 +304,9 @@
                             }
                         }
 
-                        &.following {
-                        }
+                        &.following {}
 
-                        &.events {
-                        }
+                        &.events {}
 
                         &.sessions {
                             i {
@@ -305,11 +320,9 @@
                             }
                         }
 
-                        &.feeds {
-                        }
+                        &.feeds {}
 
-                        &.favorite-feeds {
-                        }
+                        &.favorite-feeds {}
                     }
                 }
             }

@@ -362,7 +362,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     };
 
     return (
-        <Container fluid className="active-account auth-container">
+        <Container fluid className="active-account auth-container with-bg">
             <div className="auth-container--box">
                 <Row className="p-0 m-auto">
                     <div className="tabs-translation-auth mb-3 justify-content-center">
