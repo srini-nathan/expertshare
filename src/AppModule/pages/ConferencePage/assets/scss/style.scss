@@ -6,6 +6,7 @@
         width: 100%;
     }
 }
+
 .conference-tags {
     display: inline-grid;
     align-content: center;
@@ -41,6 +42,13 @@
     .en {
         i {
             background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/en_flag.png);
+            background-size: 20px;
+        }
+    }
+
+    .pt {
+        i {
+            background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/pt_flag.png);
             background-size: 20px;
         }
     }
