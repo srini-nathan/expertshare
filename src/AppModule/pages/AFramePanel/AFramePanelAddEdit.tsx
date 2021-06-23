@@ -155,6 +155,7 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
     const [targetIdOptions, setTargetIdOptions] = useState<PrimitiveObject[]>(
         []
     );
+    const [fraolaValue, setFraolaValue] = useState<string>("");
 
     const [
         transitionVideoFileName,
@@ -291,6 +292,8 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                         errorToast("data not exist");
                     } else if (response !== null) {
                         setData(response);
+                        setFraolaValue(response.content || "");
+
                         setTransitionVideoFileName(
                             response.transitionVideo || ""
                         );
@@ -1293,6 +1296,8 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                                         xl={12}
                                         required={false}
                                         name={"content"}
+                                        value={fraolaValue}
+                                        onChange={setFraolaValue}
                                         label={t(
                                             "admin.aframepanel.form:label.content"
                                         )}

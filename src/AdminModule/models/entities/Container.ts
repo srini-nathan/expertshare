@@ -28,13 +28,13 @@ export class Container extends BaseEntity {
 
     description: string;
 
-    configuration: string[];
+    configuration: string[] | any[];
 
-    configurationTypes: string[];
+    configurationTypes: string[] | any[];
 
-    designConfiguration: string[];
+    designConfiguration: string[] | any[];
 
-    designConfigurationTypes: string[];
+    designConfigurationTypes: string[] | any[];
 
     client: string | Client;
 
