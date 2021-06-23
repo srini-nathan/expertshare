@@ -52,7 +52,11 @@ export const GlobalProvider: React.FC = (props) => {
                                 localStorage.setItem(CONTAINER_LOCALE, locale);
                             }
                         })
-                    );
+                    ).catch((e) => {
+                        // @TODO: error happing
+                        // eslint-disable-next-line no-console
+                        console.log(e, "error");
+                    });
                 }
                 setState({
                     status: "LOADED",
