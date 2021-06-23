@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useRef, useState } from "react";
+import React, { FC, Fragment, useRef, useState, useEffect } from "react";
 import { RouteComponentProps, useParams } from "@reach/router";
 import {
     GridApi,
@@ -15,16 +15,21 @@ import {
     AppSwitchView,
     AppListPageToolbar,
     AppLoader,
+    AppGridPagination,
+    AppFormDropdown,
 } from "../../components";
 import "./assets/scss/style.scss";
 import { AttendeeCard } from "../../components/AttendeeCard";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
-import { AppGrid } from "../../containers/AppGrid";
+import {
+    AppGrid,
+    defaultPageSize,
+    pageSizeOptions,
+} from "../../containers/AppGrid";
 import { appGridConfig } from "../../config";
 import { UserApi } from "../../../AdminModule/apis";
 import { User } from "../../models/entities/User";
-import { SimpleObject } from "../../models";
-import { checkAndParseResponse, errorToast } from "../../utils";
+import { errorToast } from "../../utils";
 
 export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
     const appGridApi = useRef<GridApi>();
@@ -33,10 +38,15 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
     const [total, setTotal] = useState<number>(0);
     const [loading, isLoading] = useState<boolean>(true);
     const [attendees, setAttendees] = useState<User[]>([]);
+    const [pageSize, setPageSize] = useState<number>(30);
+    const [active, setActive] = useState<number>(1);
+    const [totalItems, setTotalItems] = useState<number>(0);
     const { t } = useTranslation();
-    const fetchData = () => {
+    const fetchData = (params = {}) => {
         isLoading(true);
-        UserApi.getAttendeeList<User>().then(({ response, error }) => {
+        UserApi.getAttendeeList<User>(active, {
+            ...params,
+        }).then(({ response, error }) => {
             isLoading(false);
 
             if (error !== null) {
@@ -44,27 +54,26 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                     errorToast(error);
                 }
             } else if (response !== null) {
-                const parsedData: SimpleObject<any> = checkAndParseResponse(
-                    response
-                );
-                // setAttendees(response.items);
-                setAttendees(parsedData["hydra:member"]);
+                setTotalItems(response.totalItems);
+                setAttendees(response.items);
             }
         });
     };
-
+    useEffect(() => {
+        fetchData();
+    }, [active, pageSize]);
     React.useEffect(() => {
         fetchData();
     }, []);
 
-    if (loading) return <AppLoader />;
-
     async function handleFilter(search: string) {
-        appGridApi.current?.setFilterModel({
-            name: {
-                filter: search,
-            },
-        });
+        if (view === "list")
+            appGridApi.current?.setFilterModel({
+                firstName: {
+                    filter: search,
+                },
+            });
+        else fetchData({ firstName: search });
     }
     function getDataSource(): IServerSideDatasource {
         return {
@@ -81,14 +90,11 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                                 errorToast(error);
                             }
                         } else if (response !== null) {
-                            const parsedData: SimpleObject<any> = checkAndParseResponse(
-                                response
-                            );
-                            setAttendees(parsedData["hydra:member"]);
-                            setTotal(parsedData["hydra:member"].length);
+                            setAttendees(response.items);
+                            setTotal(response.totalItems);
                             params.successCallback(
-                                parsedData["hydra:member"],
-                                parsedData["hydra:member"].length
+                                response.items,
+                                response.totalItems
                             );
                         }
                     }
@@ -128,6 +134,8 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 );
             case "grid":
             default:
+                if (loading) return <AppLoader />;
+
                 return (
                     <Row>
                         {attendees.map((item, index) => (
@@ -162,6 +170,26 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 </div>
             </AppPageHeader>
             {renderView()}
+            <div className="d-flex flex-row app-grid-action py-3">
+                <AppGridPagination
+                    className="mr-3"
+                    itemsPerPage={pageSize}
+                    totalItems={totalItems}
+                    active={active}
+                    onClick={setActive}
+                />
+                {totalItems > 0 ? (
+                    <div className="pagination-container">
+                        <AppFormDropdown
+                            id={"pageSize"}
+                            defaultValue={defaultPageSize()}
+                            options={pageSizeOptions()}
+                            onChange={(e: any) => setPageSize(e.value)}
+                            menuPlacement={"top"}
+                        />
+                    </div>
+                ) : null}
+            </div>
         </Fragment>
     );
 };

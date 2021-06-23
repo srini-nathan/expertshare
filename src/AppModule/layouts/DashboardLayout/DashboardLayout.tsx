@@ -16,6 +16,7 @@ export const DashboardLayout: FC = ({ children }) => {
     } = useRecoilValue<AppDashboardLayoutOptions>(appDashboardLayoutOptions);
 
     const isA3d = window.location !== window.parent.location;
+    const onBoarding = window.location.pathname;
 
     return (
         <Container className={"p-0 unfixed"} fluid={true}>
@@ -23,9 +24,11 @@ export const DashboardLayout: FC = ({ children }) => {
             <div
                 className={`app-container ${
                     hideNav || isA3d ? " " : "right-container"
-                } mr-0 ml-auto mb-5`}
+                } mr-0 ml-auto ${
+                    onBoarding === "/onboarding" ? " with-bg mb-0" : " mb-5"
+                }`}
             >
-                <div className="col-md-12 col-sm-12 col-xl-12 p-3 p-lg-4 mb-2">
+                <div className="col-md-12 col-sm-12 col-xl-12 p-3 p-lg-4">
                     {children}
                 </div>
                 {/* <AppMessages disable={hideMessenger} /> */}
