@@ -11,13 +11,13 @@ export interface AppDashboardLayoutOptions {
 export const normalLayout: AppDashboardLayoutOptions = {
     hideNav: false,
     hideMessenger: false,
-    navPosition: "left",
+    navPosition: "bottom",
 };
 
 export const overViewLayout: AppDashboardLayoutOptions = {
     hideNav: true,
     hideMessenger: true,
-    navPosition: "left",
+    navPosition: "bottom",
 };
 
 export const appDashboardLayoutOptions = atom<AppDashboardLayoutOptions>({

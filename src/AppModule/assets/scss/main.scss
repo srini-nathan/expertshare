@@ -47,6 +47,16 @@ a {
     color: var(--primary) !important;
 }
 
+.bottom-nav {
+    margin-bottom: 220px !important;
+
+    .app-grid-action,
+    .footer-action {
+        bottom: 100px;
+    }
+
+}
+
 .right-container {
     @include media("mobile") {
         width: 100%;

@@ -8,7 +8,8 @@ export const appGridColDef = ({
 }: AppCellActionWithCustom): ColDef[] => [
     {
         headerName: "attendee.list:column.name",
-        field: "firstName",
+        field: "user_search",
+        filter: "text",
         cellRenderer: "appNameTemplateRenderer",
         minWidth: 40,
         flex: 0.65,

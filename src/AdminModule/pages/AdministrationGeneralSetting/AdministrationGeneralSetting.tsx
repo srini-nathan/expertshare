@@ -2,7 +2,6 @@ import React, { FC, Fragment, useEffect } from "react";
 import { RouteComponentProps, useNavigate } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import { isString as _isString } from "lodash";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import { useTranslation } from "react-i18next";
@@ -17,7 +16,7 @@ import {
     AppButton,
 } from "../../../AppModule/components";
 import { AppContext } from "../../../AppModule/contexts/AppContext";
-import { ContainerApi, LanguageApi } from "../../apis";
+import { ContainerApi } from "../../apis";
 import { successToast, errorToast } from "../../../AppModule/utils";
 import { AuthContext } from "../../../SecurityModule/contexts";
 import { AuthState } from "../../../SecurityModule/models";
@@ -26,6 +25,7 @@ import { Container, Language } from "../../models";
 import { CONSTANTS } from "../../../config";
 import { UploadAPI } from "../../../AppModule/apis";
 import { Upload } from "../../../AppModule/models";
+import { useLanguages } from "../../../AppModule/hooks";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -67,7 +67,6 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
     const { containerId } = Auth.state as AuthState;
     const { isLoading } = state;
     const [configuration, setConfiguration] = React.useState<any>();
-    const [languages, setLanguages] = React.useState<Language[]>([]);
     const [loadingData, isLoadingData] = React.useState<boolean>(false);
     const [active, setActive] = React.useState<string>("");
     const [
@@ -79,6 +78,7 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
     const [files, setFiles] = React.useState<ContainerFormType>(
         {} as ContainerFormType
     );
+    const { Languages } = useLanguages();
     const { t } = useTranslation();
 
     const hookNav = useNavigate();
@@ -174,20 +174,6 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
     };
 
     useEffect(() => {
-        LanguageApi.find<Language>(1, {
-            "container.id": containerId,
-            "order[isDefault]": "desc",
-        }).then(({ error, response }) => {
-            if (error !== null) {
-                if (_isString(error)) {
-                    errorToast(error);
-                }
-            } else if (response !== null) {
-                setLanguages(response.items);
-            }
-        });
-    }, []);
-    useEffect(() => {
         if (containerConfiguration) {
             setTranslations(containerConfiguration.translations);
         }
@@ -221,14 +207,14 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (active === "")
-            languages.forEach((e) => {
+            Languages().forEach((e) => {
                 if (e.isDefault) {
                     setActive(e.locale);
                 }
             });
 
-        if (languages.length !== translations.length) {
-            const items: any[] = languages.map((e) => {
+        if (Languages().length !== translations.length) {
+            const items: any[] = Languages().map((e) => {
                 let item = {
                     locale: e.locale,
                 };
@@ -244,7 +230,7 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
             });
             setTranslations(items);
         }
-    }, [languages]);
+    }, [Languages()]);
     const renderTabs = () => {
         if (configuration?.length > 0 && activeTab === "")
             setActiveTab(`${configuration[0].title}_key`);
@@ -263,46 +249,30 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
                                             md={12}
                                             className="d-flex mb-4 tabs-translation"
                                         >
-                                            {languages
-                                                // .sort(
-                                                //     (
-                                                //         a: Language,
-                                                //         b: Language
-                                                //     ) =>
-                                                //         b.isDefault >
-                                                //         a.isDefault
-                                                //             ? 1
-                                                //             : -1
-                                                // )
-                                                .map(
-                                                    (
-                                                        lang: Language,
-                                                        i: number
-                                                    ) => {
-                                                        return (
-                                                            <AppButton
-                                                                className={`mr-2 ${
-                                                                    active ===
+                                            {Languages().map(
+                                                (lang: Language, i: number) => {
+                                                    return (
+                                                        <AppButton
+                                                            className={`mr-2 ${
+                                                                active ===
+                                                                lang.locale
+                                                                    ? "active"
+                                                                    : ""
+                                                            } ${lang.locale}`}
+                                                            onClick={() => {
+                                                                setActive(
                                                                     lang.locale
-                                                                        ? "active"
-                                                                        : ""
-                                                                } ${
-                                                                    lang.locale
-                                                                }`}
-                                                                onClick={() => {
-                                                                    setActive(
-                                                                        lang.locale
-                                                                    );
-                                                                }}
-                                                                variant="secondary"
-                                                                key={i}
-                                                            >
-                                                                <i></i>
-                                                                {lang.name}
-                                                            </AppButton>
-                                                        );
-                                                    }
-                                                )}
+                                                                );
+                                                            }}
+                                                            variant="secondary"
+                                                            key={i}
+                                                        >
+                                                            <i></i>
+                                                            {lang.name}
+                                                        </AppButton>
+                                                    );
+                                                }
+                                            )}
                                         </Col>
                                     )}
 
