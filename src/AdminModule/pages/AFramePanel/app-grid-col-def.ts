@@ -1,5 +1,5 @@
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
-import { AppCellActionParams } from "../../models";
+import { AppCellActionParams } from "../../../AppModule/models";
 
 export const appGridColDefForRooms = ({
     onPressDelete,
@@ -76,7 +76,7 @@ export const appGridColDefForPanels = ({
                 headerName: "Actions",
                 field: "id",
                 sortable: false,
-                maxWidth: 320,
+                maxWidth: 160,
                 cellClass: "text-right",
                 headerClass: "action-header",
                 cellRenderer: "appGridActionRenderer",

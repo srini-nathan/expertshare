@@ -8,7 +8,7 @@ import {
     IServerSideGetRowsParams,
 } from "ag-grid-community";
 import { isString as _isString } from "lodash";
-import { errorToast, successToast } from "../../utils";
+import { errorToast, successToast } from "../../../AppModule/utils";
 import {
     AppPageHeader,
     AppSwitchView,
@@ -16,15 +16,15 @@ import {
     AppGridPagination,
     AppFormDropdown,
     AppBreadcrumb,
-} from "../../components";
-import { AFrameRoomApi, AFramePanelApi } from "../../../AdminModule/apis";
-import { useAuthState, useIsGranted } from "../../hooks";
-import { PAFrameRoom, PAFramePanel } from "../../../AdminModule/models";
+} from "../../../AppModule/components";
+import { AFrameRoomApi, AFramePanelApi } from "../../apis";
+import { useAuthState, useIsGranted } from "../../../AppModule/hooks";
+import { PAFrameRoom, PAFramePanel } from "../../models";
 import {
     AppGrid,
     buildFilterParams,
     buildSortParams,
-} from "../../containers/AppGrid";
+} from "../../../AppModule/containers/AppGrid";
 import {
     appGridColDefForRooms,
     appGridColDefForPanels,
@@ -33,13 +33,13 @@ import {
     appGridFrameworkComponentsForPanels,
     appGridFrameworkComponentsForRooms,
 } from "./app-grid-framework-components";
-import { appGridConfig } from "../../config";
+import { appGridConfig } from "../../../AppModule/config";
 import { CONSTANTS } from "../../../config";
 import "./assets/scss/style.scss";
 import {
     defaultPageSize,
     pageSizeOptions,
-} from "../../containers/AppGrid/app-grid-helpers";
+} from "../../../AppModule/containers/AppGrid/app-grid-helpers";
 
 const {
     Role: ROLE,

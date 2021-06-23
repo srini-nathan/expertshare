@@ -19,38 +19,30 @@ import {
     AppFormInputColorPicker,
     AppFormFile,
     AppFormRichTextArea,
-} from "../../components";
+} from "../../../AppModule/components";
 import {
     Upload,
     PrimitiveObject,
     UnprocessableEntityErrorResponse,
     FileTypeInfo,
-} from "../../models";
-import {
-    AFramePanel,
-    PAFramePanel,
-    PAFrameRoom,
-} from "../../../AdminModule/models";
-import {
-    AFramePanelApi,
-    ContainerApi,
-    AFrameRoomApi,
-} from "../../../AdminModule/apis";
+} from "../../../AppModule/models";
+import { AFramePanel, PAFramePanel, PAFrameRoom } from "../../models";
+import { AFramePanelApi, ContainerApi, AFrameRoomApi } from "../../apis";
 import {
     errorToast,
     setViolations,
     successToast,
     validation,
-} from "../../utils";
+} from "../../../AppModule/utils";
 import {
     useParamId,
     useNavigator,
     useAuthState,
     useBuildAssetPath,
-} from "../../hooks";
+} from "../../../AppModule/hooks";
 import { schema, validations } from "./schema";
 import { CONSTANTS } from "../../../config";
-import { UploadAPI } from "../../apis";
+import { UploadAPI } from "../../../AppModule/apis";
 
 const {
     Upload: UPLOAD,

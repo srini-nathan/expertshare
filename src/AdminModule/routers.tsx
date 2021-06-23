@@ -20,9 +20,10 @@ import {
     SessionCategoryAddEditPage,
     AFrameRoomGrid,
     AFrameRoomAddEdit,
+    AFramePanelGrid,
+    AFramePanelAddEdit,
 } from "./pages";
 import { Layout3D } from "../Layout3DModule";
-import { AFramePanelGrid, AFramePanelAddEdit } from "../AppModule/pages";
 import { ModuleRouter } from "../AppModule/models";
 import { ContainerAddEdit } from "./pages/ContainerPage/ContainerAddEdit";
 import { UserFieldAddEditPage, UserFieldListPage } from "./pages/UserFieldPage";
