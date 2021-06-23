@@ -6,7 +6,7 @@ import {
     TextureLoader,
     BackSide,
     EquirectangularRefractionMapping,
-    // sRGBEncoding,
+    sRGBEncoding,
 } from "three";
 import { useSpring, a } from "@react-spring/three";
 import { easeQuadInOut } from "d3-ease";
@@ -39,9 +39,9 @@ SkyProps): JSX.Element => {
     useEffect(() => {
         if (texture) {
             texture.mapping = EquirectangularRefractionMapping;
-            texture.anisotropy = gl.getMaxAnisotropy();
+            texture.anisotropy = gl.capabilities.getMaxAnisotropy();
 
-            // texture.encoding = sRGBEncoding;
+            texture.encoding = sRGBEncoding;
             // texture.flipY = true;
             texture.needsUpdate = true;
         }
@@ -111,6 +111,7 @@ SkyProps): JSX.Element => {
                             reflectivity={1}
                             ref={material}
                             attach={"material"}
+                            toneMapped={false}
                         />
                     )}
                 </mesh>
