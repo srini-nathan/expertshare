@@ -1,5 +1,5 @@
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
-import { AppCellActionParams } from "../../models";
+import { AppCellActionParams } from "../../../AppModule/models";
 
 export const appGridColDefForRooms = ({
     onPressDelete,

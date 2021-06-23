@@ -7,6 +7,5 @@ export * from "./SessionPage";
 export * from "./AttendeePage";
 export * from "./NewsFeedPage";
 export * from "./ExtraPage";
-export * from "./AFramePanel";
 export * from "./OnBoardingPage";
 export * from "./ReloadingPage";
