@@ -68,6 +68,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
     );
     const [loading, setLoading] = useState<boolean>(isEditMode);
     const [selectedTemplate, setSelectedTemplate] = useState<string>("");
+    const [fraolaValue, setFraolaValue] = useState<string>("");
     const { t } = useTranslation();
 
     const {
@@ -151,6 +152,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                         errorToast("Email template not exist");
                     } else if (response !== null) {
                         setData(response);
+                        setFraolaValue(response.content || "");
                     }
                     setLoading(false);
                 }
@@ -267,6 +269,8 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                     md={12}
                                     lg={12}
                                     xl={12}
+                                    value={fraolaValue}
+                                    onChange={setFraolaValue}
                                     required={true}
                                     {...validation(
                                         "content",

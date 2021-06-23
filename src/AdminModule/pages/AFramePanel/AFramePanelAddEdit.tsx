@@ -19,38 +19,30 @@ import {
     AppFormInputColorPicker,
     AppFormFile,
     AppFormRichTextArea,
-} from "../../components";
+} from "../../../AppModule/components";
 import {
     Upload,
     PrimitiveObject,
     UnprocessableEntityErrorResponse,
     FileTypeInfo,
-} from "../../models";
-import {
-    AFramePanel,
-    PAFramePanel,
-    PAFrameRoom,
-} from "../../../AdminModule/models";
-import {
-    AFramePanelApi,
-    ContainerApi,
-    AFrameRoomApi,
-} from "../../../AdminModule/apis";
+} from "../../../AppModule/models";
+import { AFramePanel, PAFramePanel, PAFrameRoom } from "../../models";
+import { AFramePanelApi, ContainerApi, AFrameRoomApi } from "../../apis";
 import {
     errorToast,
     setViolations,
     successToast,
     validation,
-} from "../../utils";
+} from "../../../AppModule/utils";
 import {
     useParamId,
     useNavigator,
     useAuthState,
     useBuildAssetPath,
-} from "../../hooks";
+} from "../../../AppModule/hooks";
 import { schema, validations } from "./schema";
 import { CONSTANTS } from "../../../config";
-import { UploadAPI } from "../../apis";
+import { UploadAPI } from "../../../AppModule/apis";
 
 const {
     Upload: UPLOAD,
@@ -155,6 +147,7 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
     const [targetIdOptions, setTargetIdOptions] = useState<PrimitiveObject[]>(
         []
     );
+    const [fraolaValue, setFraolaValue] = useState<string>("");
 
     const [
         transitionVideoFileName,
@@ -291,6 +284,8 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                         errorToast("data not exist");
                     } else if (response !== null) {
                         setData(response);
+                        setFraolaValue(response.content || "");
+
                         setTransitionVideoFileName(
                             response.transitionVideo || ""
                         );
@@ -1293,6 +1288,8 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                                         xl={12}
                                         required={false}
                                         name={"content"}
+                                        value={fraolaValue}
+                                        onChange={setFraolaValue}
                                         label={t(
                                             "admin.aframepanel.form:label.content"
                                         )}

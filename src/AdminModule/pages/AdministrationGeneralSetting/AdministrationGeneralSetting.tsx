@@ -68,6 +68,7 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
     const { isLoading } = state;
     const [configuration, setConfiguration] = React.useState<any>();
     const [languages, setLanguages] = React.useState<Language[]>([]);
+    const [loadingData, isLoadingData] = React.useState<boolean>(false);
     const [active, setActive] = React.useState<string>("");
     const [
         containerConfiguration,
@@ -131,9 +132,10 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
     const onSubmit = async (formData: ContainerFormType) => {
         let container = 0;
         if (containerId) container = containerId;
-        dispatch({
-            type: ContainerTypes.LOADING,
-        });
+        // dispatch({
+        //     type: ContainerTypes.LOADING,
+        // });
+        isLoadingData(true);
         formData.translations = translations;
         const newFormData: ContainerFormType = {
             ...formData,
@@ -148,12 +150,23 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
             } else if (isNotFound) {
                 errorToast("Container not exist");
             } else if (response !== null) {
-                setContainerConfiguration(response.configuration);
-                setConfiguration(parseData(response.configurationTypes));
+                // // eslint-disable-next-line no-console
+                // console.log(
+                //     response.configuration,
+                //     response.configurationTypes
+                // );
+                // setContainerConfiguration(response.configuration);
+                // setConfiguration(parseData(response.configurationTypes));
+                // // isLoadingData(false);
 
-                dispatch({
-                    type: ContainerTypes.SUCCESS,
-                    payload: response,
+                // // dispatch({
+                // //     type: ContainerTypes.SUCCESS,
+                // //     payload: response,
+                // // });
+                nav("/reloading", {
+                    state: {
+                        url: window.location.pathname,
+                    },
                 });
                 successToast("Configuration updated successfully");
             }
@@ -330,7 +343,7 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
     return (
         <Fragment>
             <AppPageHeader title={"Administration"} />
-            {isLoading ? (
+            {isLoading || loadingData ? (
                 <AppLoader />
             ) : (
                 <Row className="pb-5 m-0">

@@ -22,7 +22,6 @@ export interface AppFormElementGeneratorProps {
 }
 export interface AppDataProps {
     type: string;
-    name: string;
     label: string;
     value?: string;
     defaultValue: any;
@@ -99,7 +98,6 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             label: items.label ? items.label : "",
             defaultValue,
             placeholder: "",
-            name: properties.title,
         };
         if (items.translation && translations)
             prps = {
@@ -109,7 +107,12 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                 onChange: handleTranslationValue,
             };
         return (
-            <AppFormInput {...getLayoutProms()} {...prps} control={control} />
+            <AppFormInput
+                name={properties.title}
+                {...getLayoutProms()}
+                {...prps}
+                control={control}
+            />
         );
     };
 
@@ -179,7 +182,6 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             label: items.label ? items.label : "",
             defaultValue,
             placeholder: "",
-            name: properties.title,
         };
         if (items.translation && translations) {
             delete prps.defaultValue;
@@ -194,6 +196,7 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
         }
         return (
             <AppFormTextArea
+                name={properties.title}
                 {...getLayoutProms()}
                 {...prps}
                 control={control}
@@ -206,7 +209,6 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             label: items.label ? items.label : "",
             defaultValue,
             placeholder: "",
-            name: properties.title,
         };
         if (items.translation && translations) {
             delete prps.defaultValue;
@@ -219,6 +221,7 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
         }
         return (
             <AppFormRichTextArea
+                name={properties.title}
                 {...getLayoutProms()}
                 {...prps}
                 control={control}
@@ -231,7 +234,6 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             label: items.label ? items.label : "",
             defaultValue,
             placeholder: "",
-            name: properties.title,
         };
         if (items.translation && translations)
             prps = {
@@ -242,6 +244,7 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             };
         return (
             <AppFormFile
+                name={properties.title}
                 {...getLayoutProms()}
                 onFileSelect={(files: File[]) => {
                     if (onFileSelect)

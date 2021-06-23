@@ -94,13 +94,14 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
                 control={control}
                 render={({ field }) => (
                     <FroalaEditorComponent
-                        model={value && onChange ? value : model}
+                        model={value}
                         onModelChange={(e: string) => {
                             if (onChange) {
                                 onChange(e);
-                            } else {
                                 field.onChange(e);
+                            } else {
                                 setModel(e);
+                                field.onChange(e);
                             }
                         }}
                         tag="textarea"

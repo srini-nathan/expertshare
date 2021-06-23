@@ -1,6 +1,8 @@
 import React, { FC, ChangeEventHandler } from "react";
-import { Form, Col, FormCheck } from "react-bootstrap";
+import { Form, FormCheck } from "react-bootstrap";
 import { Control, Controller } from "react-hook-form";
+import { useGridHelper } from "../../hooks";
+
 import "./assets/scss/style.scss";
 
 export interface AppFormSwitchProps {
@@ -44,6 +46,8 @@ export const AppFormSwitch: FC<AppFormSwitchProps> = ({
     onChange = () => {},
 }): JSX.Element => {
     const controlId = id || name;
+    const { getColumnClasses } = useGridHelper();
+    const colClasses = getColumnClasses(sm, md, lg, xl);
 
     let classes = "lg ";
     classes += isInvalid ? "is-invalid" : "";
@@ -51,12 +55,7 @@ export const AppFormSwitch: FC<AppFormSwitchProps> = ({
 
     return (
         <Form.Group
-            as={Col}
-            md={md}
-            sm={sm}
-            lg={lg}
-            xl={xl}
-            className={className}
+            className={`col form-group ${colClasses} ${className}`}
             controlId={controlId}
         >
             <Form.Label>
