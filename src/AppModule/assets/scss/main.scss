@@ -8,18 +8,31 @@ body {
     font-family: var(--font-family-sans-serif);
     scrollbar-color: var(--secondary) var(--secondary-10);
     scrollbar-width: thin;
+
     &::-webkit-scrollbar {
         width: 7px;
     }
+
     &::-webkit-scrollbar-track {
         background: var(--secondary-10);
     }
+
     &::-webkit-scrollbar-thumb {
         background: var(--secondary);
     }
+
     &::-webkit-scrollbar-thumb:hover {
         opacity: 100%;
     }
+
+
+    .with-bg {
+
+        background: url("../images/bg_cs.jpeg") no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+    }
+
 }
 
 a {
@@ -96,6 +109,7 @@ a {
         }
     }
 }
+
 .auth-container {
-    background-color: #eee !important;
+    // background-color: #eee !important;
 }

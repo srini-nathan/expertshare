@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { Link } from "@reach/router";
@@ -27,6 +27,7 @@ export interface AppProfileHeaderProps {
     email?: string;
     userType?: string;
     userTags?: any[];
+    userFieldValues?: any[];
 }
 
 export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
@@ -41,9 +42,23 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
     userTags,
     userType,
     company,
+    userFieldValues,
 }): JSX.Element => {
     const { t } = useTranslation();
 
+    const getUserValue = (name: string): string => {
+        let defaultValue = "";
+        userFieldValues?.forEach((item: any) => {
+            if (name === item.userField.fieldKey) defaultValue = item.value;
+        });
+        return defaultValue;
+    };
+    const [isReadMore, setIsReadMore] = useState(true);
+    const showMore = () => {
+        if (getUserValue("biography").length < 800) return "";
+        if (isReadMore) return "+Show More";
+        return "-Show Less";
+    };
     const profilePicturePath = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         imageName
@@ -157,6 +172,26 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                                         );
                                     })}
                             </Col>
+                        </Col>
+                    </Col>
+                    <Col
+                        sm={12}
+                        className="inner-container--main-det--biography mt-4 px-4"
+                    >
+                        <Col className="row m-0 p-0">
+                            <p>
+                                {isReadMore
+                                    ? getUserValue("biography").slice(0, 500)
+                                    : getUserValue("biography")}
+                                <span
+                                    onClick={() => {
+                                        setIsReadMore(!isReadMore);
+                                    }}
+                                    className="read-or-hide mt-2"
+                                >
+                                    {showMore()}
+                                </span>
+                            </p>
                         </Col>
                     </Col>
                     {!isProfilePage && (

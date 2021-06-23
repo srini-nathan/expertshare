@@ -55,14 +55,20 @@ export abstract class UserApi extends EntityAPI {
     public static async getAttendeeList<R>(
         page = 1,
         extraParams = {}
-    ): Promise<FinalResponse<R | null>> {
-        return this.makeGet<R>(
-            route(API_GET_ATTENDEE_LIST_COLLECTION, {
-                ...extraParams,
-                page,
+    ): Promise<FinalResponse<ListResponse<R> | null>> {
+        return this.makeGet<R>(API_GET_ATTENDEE_LIST_COLLECTION, {
+            ...extraParams,
+            page,
+        })
+
+            .then(({ data }) => {
+                const list = this.acceptHydra
+                    ? onFindAllResponseHydra<R>(data)
+                    : onFindAllResponseJson<R>(data);
+                return Promise.resolve(
+                    new FinalResponse<ListResponse<R>>(list)
+                );
             })
-        )
-            .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
             .catch((error: AxiosError | ServerError) => {
                 const { message } = error;
                 return Promise.resolve(new FinalResponse(null, message));

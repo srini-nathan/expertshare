@@ -8,6 +8,34 @@
         display: flex;
         background-color: #7ebde990;
     }
+
+    &.fullscreen {
+        .modal-dialog {
+            width: 100% !important;
+            height: 100%;
+
+            .modal-content {
+                height: 100%;
+
+                .modal-body {
+                    height: 100%;
+
+                    .welcome-modal-body {
+                        height: 100%;
+
+                    }
+                }
+
+            }
+        }
+    }
+
+    .welcome-modal-body {
+        padding: 15px;
+        max-height: 800px;
+        overflow: auto;
+    }
+
     .close-btn {
         position: fixed;
         top: 20px;
@@ -15,14 +43,19 @@
         color: white;
         font-size: 25px;
     }
+
     .video-container {
         min-height: 623px;
+        height: 100%;
+        width: 100%;
+
         .video-player {
-            height: 623px;
+            height: 100%;
+            width: 100%;
             display: flex;
-            border-radius: 5px;
             margin: auto;
         }
+
         i.fa-pause::before {
             display: flex;
             align-items: center;
@@ -34,6 +67,7 @@
             background-color: var(--primary);
             border-radius: var(--circle-border-radius);
         }
+
         i.fa-play-solid::before {
             display: flex;
             align-items: center;
@@ -46,6 +80,7 @@
             background-color: var(--primary);
             border-radius: var(--circle-border-radius);
         }
+
         .play-button-overlay {
             display: flex;
             align-items: center;
@@ -55,9 +90,11 @@
             position: absolute;
             top: 0;
             cursor: pointer;
+
             a i.fa-pause {
                 display: none;
             }
+
             &:hover {
                 a i.fa-pause {
                     display: block;
@@ -73,7 +110,7 @@
             display: flex;
             height: 100%;
             margin: auto;
-            width: 1000px !important;
+            width: 1000px;
             max-width: unset !important;
             max-height: 100vh;
         }
@@ -92,9 +129,11 @@
             font-weight: 400;
             color: var(--secondary);
             text-align: left;
+
             .base-container {
                 background-color: white;
                 min-height: 623px;
+
                 &--logo {
                     display: block;
                     width: auto;
@@ -102,6 +141,7 @@
                     background-repeat: no-repeat;
                     background-size: contain;
                 }
+
                 &--title {
                     h1 {
                         font-size: 42px;
@@ -110,6 +150,7 @@
                     }
                 }
             }
+
             .image-container i {
                 display: block;
                 width: auto;
