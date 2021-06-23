@@ -136,7 +136,7 @@ export const AppWelcomeModal: FC<AppWelcomeModalProps> = ({
 
     return (
         <Modal
-            show={showedWelcomeModal && show && enable}
+            show={!showedWelcomeModal && show && enable}
             onHide={handleCloseModal}
             keyboard={false}
             className={`app-welcome-model p-0 ${
