@@ -65,7 +65,7 @@ export const AppFormFile: FC<AppFormFileProps> = ({
     }
 
     return (
-        <Col md={md} sm={sm} lg={lg} xl={xl}>
+        <Col md={md} sm={sm} lg={lg} xl={xl} className="form-group">
             {label?.length > 0 ? (
                 <Form.Label>
                     {label}
