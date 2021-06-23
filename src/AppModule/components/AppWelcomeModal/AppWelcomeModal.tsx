@@ -108,12 +108,14 @@ export const AppWelcomeModal: FC<AppWelcomeModalProps> = ({
                         onClick={() => videoPlayPausehandler()}
                     >
                         <a href="#">
-                            {isPlaying ? (
-                                <i
-                                    className="fas fa-pause"
-                                    aria-hidden="true"
-                                ></i>
-                            ) : (
+                            {!isPlaying && (
+                                // (
+                                //     <i
+                                //         className="fas fa-pause"
+                                //         aria-hidden="true"
+                                //     ></i>
+                                // )
+                                //  :
                                 <i
                                     className="fak fa-play-solid"
                                     aria-hidden="true"
@@ -134,7 +136,7 @@ export const AppWelcomeModal: FC<AppWelcomeModalProps> = ({
 
     return (
         <Modal
-            show={!showedWelcomeModal && show && enable}
+            show={showedWelcomeModal && show && enable}
             onHide={handleCloseModal}
             keyboard={false}
             className={`app-welcome-model p-0 ${
