@@ -275,6 +275,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                                 (container.configuration as any)
                                                     .isDisclaimerEnable &&
                                                 !agree &&
+                                                emailStatus === "exist" &&
                                                 !onboarded)
                                         }
                                         isLoading={formState.isSubmitting}
