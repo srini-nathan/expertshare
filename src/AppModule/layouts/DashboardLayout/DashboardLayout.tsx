@@ -19,15 +19,16 @@ export const DashboardLayout: FC = ({ children }) => {
     const isA3d = window.location !== window.parent.location;
     const onBoarding = window.location.pathname;
 
+    const renderClass = () => {
+        if (hideNav || isA3d) return "";
+        if (navPosition === "bottom") return " bottom-nav ";
+        return "right-container";
+    };
     return (
         <Container className={"p-0 unfixed"} fluid={true}>
             {hideNav || isA3d ? null : <AppNavigation items={appNavigations} />}
             <div
-                className={`app-container ${
-                    hideNav || isA3d || navPosition === "bottom"
-                        ? " "
-                        : "right-container"
-                } mr-0 ml-auto ${
+                className={`app-container ${renderClass()} mr-0 ml-auto ${
                     onBoarding === "/onboarding" ? " with-bg mb-0" : " mb-5"
                 }`}
             >

@@ -247,7 +247,7 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
 
     async function handleFilter(search: string) {
         appGridApi.current?.setFilterModel({
-            firstName: {
+            user_search: {
                 filter: search,
             },
         });

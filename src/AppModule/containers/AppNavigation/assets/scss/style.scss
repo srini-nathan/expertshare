@@ -107,7 +107,6 @@
         justify-content: center;
         padding: 4px 0 0;
         font-size: 13px !important;
-        border-top: 1px solid var(--secondary-30);
 
         @include media("xl") {
             font-size: 9px !important;
@@ -222,9 +221,7 @@
 
                     &.active,
                     &:hover {
-                        background-color: var(
-                            --sidebar-item-hover-bg-clr
-                        ) !important;
+                        background-color: var(--sidebar-item-hover-bg-clr) !important;
 
                         .nav-icon {
                             color: var(--sidebar-hover-icon-clr) !important;
@@ -251,9 +248,7 @@
 
                         &.active,
                         &:hover {
-                            background-color: var(
-                                --sidebar-item-hover-bg-clr
-                            ) !important;
+                            background-color: var(--sidebar-item-hover-bg-clr) !important;
 
                             .nav-icon {
                                 color: var(--sidebar-hover-icon-clr) !important;
@@ -714,63 +709,79 @@
     position: fixed;
     bottom: 0;
     border-top: 1px solid lightgray;
-    > .navbar {
+
+    >.navbar {
         display: flex !important;
-        > div:first-child {
+
+        >div:first-child {
             width: 200px;
             flex-basis: unset;
         }
-        > div:nth-child(2) {
+
+        >div:nth-child(2) {
             overflow: auto;
-            > .navbar-nav > .list-group {
-                > div:first-child {
+
+            >.navbar-nav>.list-group {
+                >div:first-child {
                     height: 100% !important;
                     display: flex;
+
                     .list-group-item.nav-item {
                         max-height: unset;
                         height: 100%;
                         display: flex;
                         align-items: center;
                     }
+
                     .list-group-item.nav-item.sub-menu {
                         height: 100%;
+
                         .nav-link span {
                             margin: auto;
                             max-width: unset;
                         }
                     }
+
                     .accordion {
                         display: flex;
-                        > .collapse {
+
+                        >.collapse {
                             display: block;
-                            > .list-group {
+
+                            >.list-group {
                                 flex-direction: row;
                                 height: 100%;
                             }
                         }
-                        > .nav-item {
+
+                        >.nav-item {
                             display: none;
                         }
                     }
                 }
-                > div:nth-child(2) {
+
+                >div:nth-child(2) {
                     position: fixed !important;
                     width: 370px !important;
                     right: 0px;
                     bottom: 100px !important;
                     border: 1px solid lightgray;
-                    > .list-group {
-                        > .seperator.list-group-item:first-child {
+
+                    >.list-group {
+                        >.seperator.list-group-item:first-child {
                             display: none;
                         }
                     }
+
                     visibility: hidden;
+
                     &.show {
                         visibility: visible;
                     }
                 }
             }
         }
+
         #show-menu-toggler {
             cursor: pointer;
             display: flex;
@@ -778,6 +789,7 @@
             justify-content: center;
             width: 90px;
             height: 100%;
+
             &:hover {
                 background-color: var(--sidebar-item-hover-bg-clr);
             }

@@ -10,7 +10,7 @@ import {
     Navbar,
 } from "react-bootstrap";
 import { useRecoilValue } from "recoil";
-import { Link, navigate } from "@reach/router";
+import { Link, navigate, useLocation } from "@reach/router";
 import { AppIcon } from "../../components/AppIcon";
 import {
     AppNavigationDropDown,
@@ -27,7 +27,6 @@ import {
 } from "../../../SecurityModule/contexts/AuthContext";
 import {
     useWindowSize,
-    useWindowLocation,
     useBuildAssetPath,
     useIsGranted,
     useAuthState,
@@ -202,7 +201,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
 
     const [showMore, isShowMore] = useState<boolean>(false);
     const { width, height } = useWindowSize();
-    const { location } = useWindowLocation();
+    const location = useLocation();
     const logoHolder = useRef<HTMLDivElement>(null);
     const bottomMenu = useRef<HTMLDivElement>(null);
 
@@ -264,7 +263,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     }, [width, height, showSubMenuItems]);
 
     useEffect(() => {
-        if (subMenuItems.some((e) => e && e.path === location)) {
+        if (subMenuItems.some((e) => e && e.path === location.pathname)) {
             isSubMenuItems(true);
         }
     }, []);
@@ -272,7 +271,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         if (
             overflowItems.some(
                 (e: AppNavigationItemProps | AppSubNavigationItemProps) =>
-                    e && e.path === location
+                    e && e.path === location.pathname
             )
         ) {
             isShowMore(true);
@@ -294,15 +293,6 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         );
     }, []);
 
-    const getMenuLocation = () => {
-        switch (menuLocation) {
-            case "left":
-                return "left";
-            default:
-                return "bottom";
-        }
-    };
-
     const renderMoreMenu = () => {
         return (
             overflowItems.length > 0 && (
@@ -317,7 +307,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                 ) => {
                                     if (e)
                                         return showSubMenuItems &&
-                                            getMenuLocation() !== "bottom" ? (
+                                            menuLocation !== "bottom" ? (
                                             <AppNavigationSubMenuItem
                                                 label={e.label}
                                                 path={e.path}
@@ -386,7 +376,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         );
     };
     const renderMenu = () => {
-        if (showSubMenuItems && getMenuLocation() === "left") {
+        if (showSubMenuItems && menuLocation === "left") {
             return renderSubMenu();
         }
         return (
@@ -404,7 +394,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                             />
                         );
                     })}
-                {location.includes("a3d") ? (
+                {location.pathname.includes("a3d") ? (
                     <AppNavigationItem
                         label={"2D View"}
                         path={"/event"}
@@ -451,7 +441,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                             <div
                                 className="main-menu-container"
                                 style={
-                                    getMenuLocation() !== "bottom"
+                                    menuLocation !== "bottom"
                                         ? getMenuHeightStyle()
                                         : {}
                                 }
@@ -464,17 +454,17 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                 }`}
                             >
                                 <ListGroup ref={bottomMenu}>
-                                    {getMenuLocation() === "bottom" && (
+                                    {menuLocation === "bottom" && (
                                         <ListGroupItem className={`px-0 py-1`}>
-                                            <Link
-                                                to={"#"}
-                                                className="nav-link text-center"
+                                            <a
+                                                href="https://expertshare.live"
+                                                className="nav-link text-center copyright"
                                             >
                                                 <span>
                                                     Virtual event platform by
                                                     <img src={FooterLogo} />
                                                 </span>
-                                            </Link>
+                                            </a>
                                         </ListGroupItem>
                                     )}
                                     <ListGroupItem
@@ -555,9 +545,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                                 {
                                                                     state: {
                                                                         url:
-                                                                            window
-                                                                                .location
-                                                                                .pathname,
+                                                                            location.pathname,
                                                                     },
                                                                 }
                                                             );
@@ -605,18 +593,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                         />
                                     </ListGroupItem>
 
-                                    <ListGroupItem className={`px-0 py-1`}>
-                                        <a
-                                            href="https://expertshare.live"
-                                            className="nav-link text-center copyright"
-                                        >
-                                            <span>
-                                                Virtual event platform by
-                                                <img src={FooterLogo} />
-                                            </span>
-                                        </a>
-                                    </ListGroupItem>
-                                    {getMenuLocation() === "left" && (
+                                    {menuLocation === "left" && (
                                         <>
                                             <ListGroupItem
                                                 className={`seperator  p-0 mx-4`}
@@ -624,20 +601,20 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                             <ListGroupItem
                                                 className={`px-0 py-1`}
                                             >
-                                                <Link
-                                                    to={"#"}
-                                                    className="nav-link text-center"
+                                                <a
+                                                    href="https://expertshare.live"
+                                                    className="nav-link text-center copyright"
                                                 >
                                                     <span>
                                                         Virtual event platform
                                                         by
                                                         <img src={FooterLogo} />
                                                     </span>
-                                                </Link>
+                                                </a>
                                             </ListGroupItem>
                                         </>
                                     )}
-                                    {getMenuLocation() === "bottom" &&
+                                    {menuLocation === "bottom" &&
                                         showSubMenuItems && (
                                             <ListGroupItem
                                                 className={`seperator  p-0 mx-4`}
@@ -646,7 +623,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                 </ListGroup>
                                 <ListGroup>
                                     {showSubMenuItems &&
-                                        getMenuLocation() === "bottom" && (
+                                        menuLocation === "bottom" && (
                                             <div
                                                 className="main-menu-container"
                                                 style={getMenuHeightStyle()}

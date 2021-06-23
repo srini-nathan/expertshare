@@ -53,7 +53,12 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
     const placeholderText = useInputPlaceholder(name, placeholder, label);
     const controlId = id || name;
     const { sm = 12, md = 6, lg = 4, xl = 4, className = "" } = props;
-    const groupProps = { sm, md, lg, xl, controlId, as: Col };
+    const groupProps = {
+        sm: sm as number,
+        md: md as number,
+        lg: lg as number,
+        xl: xl as number,
+    };
     const labelProps = { label, required, maxCount, description };
     const controllerProps = { name, defaultValue, control };
     const controlProps = {
@@ -68,12 +73,13 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
             value,
         };
     return (
-        <Form.Group {...groupProps} className={`mb-0 ${className}`}>
+        <Col {...groupProps} className={`mb-0 form-group ${className}`}>
             {!isSend && <AppFormLabel counter={data?.length} {...labelProps} />}
             <Controller
                 {...controllerProps}
                 render={({ field }) => (
                     <Form.Control
+                        id={controlId}
                         {...field}
                         as="textarea"
                         disabled={disabled}
@@ -108,6 +114,6 @@ export const AppFormTextArea: FC<AppFormTextAreaProps> = ({
                     {errorMessage}
                 </Form.Control.Feedback>
             )}
-        </Form.Group>
+        </Col>
     );
 };

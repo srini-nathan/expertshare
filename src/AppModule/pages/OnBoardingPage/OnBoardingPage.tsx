@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
-import { FieldError, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { find as _find, isString as _isString } from "lodash";
@@ -14,7 +14,6 @@ import {
     AppAuthHeader,
 } from "../../../SecurityModule/components";
 import {
-    AppFormFieldGenerator,
     AppFormInput,
     AppFormInputPassword,
     AppFormSelect,
@@ -66,7 +65,7 @@ const {
 export const OnBoardingPage: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
-    const [userFields, setUserFields] = useState<UserField[]>([]);
+    const [, setUserFields] = useState<UserField[]>([]);
     const [languages, setLanguages] = useState<SimpleObject<string>[]>([]);
     const [files, setFiles] = useState<File[]>([]);
     const navigator = useNavigator(navigate);
@@ -74,13 +73,13 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
     const { setSkipOnboarding } = useSkipOnboarding();
     const [dataLoading, isDataLoading] = React.useState<boolean>(true);
     const { clientId, containerId, user, containerResourceId } = useAuthState();
-    const [data, setData] = useState<PUser>(new User(containerResourceId));
+    const [, setData] = useState<PUser>(new User(containerResourceId));
     const profilePicturePath = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo
     );
     const { t } = useTranslation();
 
-    let validationShape = {
+    const validationShape = {
         plainPassword: yup.string().min(6).required(),
         firstName: yup.string().required("First Name is Reqired"),
         lastName: yup.string().required("Last Name is Reqired"),
@@ -90,27 +89,6 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
             .oneOf([yup.ref("plainPassword"), null], "Passwords must be match"),
     };
 
-    const staticFields = [
-        "salutation",
-        "industrySector",
-        "postCode",
-        "city",
-        "country",
-        "mobile",
-        "creditSuisseContactFirstname",
-        "creditSuisseContactLastname",
-        "address",
-    ];
-
-    userFields.forEach((e) => {
-        if (e.isActive && e.isRequired && staticFields.includes(e.fieldKey))
-            validationShape = {
-                ...validationShape,
-                [UserFieldApi.toResourceUrl(e.id)]: yup
-                    .string()
-                    .required(`${t(e.labelKey)} is a required field`),
-            };
-    });
     const validationSchema = yup.object().shape(validationShape);
 
     const {
@@ -143,92 +121,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
         );
     }, []);
 
-    const getUserFieldId = (id: string) => {
-        const uf = userFields.find((e: any) => e["@id"] === id);
-        if (uf) return uf.fieldKey;
-        return "";
-    };
-    const getDynamicFileds = (userField: any[]) => {
-        const userFieldValues: any[] = [];
-
-        if (userField)
-            Object.keys(userField).forEach((key: any) => {
-                let value: any = userField[key];
-
-                if (value instanceof Date)
-                    value = value.toISOString().slice(0, 10);
-                else if (value instanceof Object)
-                    value = JSON.stringify(
-                        Object.keys(value).filter((item) => value[item])
-                    );
-                else if (value === undefined) value = "false";
-
-                if (staticFields.includes(getUserFieldId(key)))
-                    if (
-                        data?.userFieldValues &&
-                        data.userFieldValues?.length > 0
-                    ) {
-                        let found = false;
-                        data.userFieldValues?.forEach((e: any) => {
-                            if (e.userField["@id"] === key) {
-                                userFieldValues.push({
-                                    "@id": `/api/user_field_values/${e.id}`,
-                                    value: `${value}`,
-                                });
-                                found = true;
-                            }
-                        });
-
-                        if (!found) {
-                            userFieldValues.push({
-                                value: `${value}`,
-                                userField: key,
-                            });
-                        }
-                    } else {
-                        userFieldValues.push({
-                            value: `${value}`,
-                            userField: key,
-                        });
-                    }
-                else {
-                    data.userFieldValues?.forEach((e: any) => {
-                        if (e.userField["@id"] === key) {
-                            userFieldValues.push({
-                                "@id": `/api/user_field_values/${e.id}`,
-                                value: `${e.value}`,
-                            });
-                        }
-                    });
-                }
-            });
-
-        data.userFieldValues?.forEach((e: any) => {
-            let found = false;
-
-            userFieldValues?.forEach((item: any) => {
-                if (
-                    e["@id"] === item["@id"] ||
-                    e.userField["@id"] === item.userField
-                ) {
-                    found = true;
-                }
-            });
-            if (!found) {
-                userFieldValues.push({
-                    "@id": `/api/user_field_values/${e.id}`,
-                    value: `${e.value}`,
-                });
-            }
-        });
-        return userFieldValues;
-    };
-
     const submitForm = async (formData: UpdateProfileForm<any>) => {
-        if (formData.userField)
-            formData.userFieldValues = getDynamicFileds(formData.userField);
-        delete formData.userField;
-
         formData.isOnboarded = true;
 
         return UserApi.replace<User, UpdateProfileForm<any>>(
@@ -335,29 +228,6 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
         );
     }, []);
 
-    const getUserField = (name: string) => {
-        return userFields.find((e: any) => e.fieldKey === name);
-    };
-    const getUserFieldError = (name: string) => {
-        const userField = userFields.find((e: any) => e.fieldKey === name);
-
-        if (userField) {
-            const userFieldName = UserFieldApi.toResourceUrl(
-                userField.id
-            ) as keyof User;
-            if (errors[userFieldName])
-                return (errors[userFieldName] as FieldError).message;
-        }
-        return "";
-    };
-    const getUserValue = (id: number) => {
-        let defaultValue: any = null;
-        data?.userFieldValues?.forEach((item: any) => {
-            if (id === item.userField.id) defaultValue = item;
-        });
-        return defaultValue;
-    };
-
     const onFileSelect = (selectedFiles: File[]) => {
         setFiles(selectedFiles);
     };
@@ -402,33 +272,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                             }}
                                         />
                                     </Form.Group>
-                                    {userFields && getUserField("salutation") && (
-                                        <AppFormFieldGenerator
-                                            md={12}
-                                            lg={12}
-                                            xl={12}
-                                            properties={getUserField(
-                                                "salutation"
-                                            )}
-                                            setValue={setValue}
-                                            control={control}
-                                            defaultValue={getUserValue(
-                                                getUserField("salutation")
-                                                    ?.id || 0
-                                            )}
-                                            validation={{
-                                                ...validation(
-                                                    UserFieldApi.toResourceUrl(
-                                                        getUserField(
-                                                            "salutation"
-                                                        )?.id || 0
-                                                    ),
-                                                    formState,
-                                                    false
-                                                ),
-                                            }}
-                                        />
-                                    )}
+
                                     <AppFormInput
                                         md={12}
                                         lg={12}
@@ -501,38 +345,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                         errorMessage={errors.jobTitle?.message}
                                         control={control}
                                     />
-                                    {userFields &&
-                                        getUserField("industrySector") && (
-                                            <AppFormFieldGenerator
-                                                md={12}
-                                                lg={12}
-                                                xl={12}
-                                                defaultValue={getUserValue(
-                                                    getUserField(
-                                                        "industrySector"
-                                                    )?.id || 0
-                                                )}
-                                                properties={getUserField(
-                                                    "industrySector"
-                                                )}
-                                                setValue={setValue}
-                                                control={control}
-                                                validation={{
-                                                    ...validation(
-                                                        UserFieldApi.toResourceUrl(
-                                                            getUserField(
-                                                                "industrySector"
-                                                            )?.id || 0
-                                                        ),
-                                                        formState,
-                                                        false
-                                                    ),
-                                                }}
-                                                errorMessage={getUserFieldError(
-                                                    "industrySector"
-                                                )}
-                                            />
-                                        )}
+
                                     {/* <AppFormInput
                                         md={12}
                                         lg={12}
@@ -548,206 +361,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                         errorMessage={errors.email?.message}
                                         control={control}
                                     /> */}
-                                    {userFields && getUserField("address") && (
-                                        <AppFormFieldGenerator
-                                            md={12}
-                                            lg={12}
-                                            xl={12}
-                                            properties={getUserField("address")}
-                                            defaultValue={getUserValue(
-                                                getUserField("address")?.id || 0
-                                            )}
-                                            setValue={setValue}
-                                            control={control}
-                                            validation={{
-                                                ...validation(
-                                                    UserFieldApi.toResourceUrl(
-                                                        getUserField("address")
-                                                            ?.id || 0
-                                                    ),
-                                                    formState,
-                                                    false
-                                                ),
-                                            }}
-                                            errorMessage={getUserFieldError(
-                                                "address"
-                                            )}
-                                        />
-                                    )}
-                                    {userFields && getUserField("postCode") && (
-                                        <AppFormFieldGenerator
-                                            md={12}
-                                            lg={12}
-                                            xl={12}
-                                            properties={getUserField(
-                                                "postCode"
-                                            )}
-                                            defaultValue={getUserValue(
-                                                getUserField("postCode")?.id ||
-                                                    0
-                                            )}
-                                            setValue={setValue}
-                                            control={control}
-                                            validation={{
-                                                ...validation(
-                                                    UserFieldApi.toResourceUrl(
-                                                        getUserField("postCode")
-                                                            ?.id || 0
-                                                    ),
-                                                    formState,
-                                                    false
-                                                ),
-                                            }}
-                                            errorMessage={getUserFieldError(
-                                                "postCode"
-                                            )}
-                                        />
-                                    )}
-                                    {userFields && getUserField("city") && (
-                                        <AppFormFieldGenerator
-                                            md={12}
-                                            lg={12}
-                                            xl={12}
-                                            defaultValue={getUserValue(
-                                                getUserField("city")?.id || 0
-                                            )}
-                                            properties={getUserField("city")}
-                                            setValue={setValue}
-                                            control={control}
-                                            validation={{
-                                                ...validation(
-                                                    UserFieldApi.toResourceUrl(
-                                                        getUserField("city")
-                                                            ?.id || 0
-                                                    ),
-                                                    formState,
-                                                    false
-                                                ),
-                                            }}
-                                            errorMessage={getUserFieldError(
-                                                "city"
-                                            )}
-                                        />
-                                    )}
 
-                                    {userFields && getUserField("country") && (
-                                        <AppFormFieldGenerator
-                                            md={12}
-                                            lg={12}
-                                            xl={12}
-                                            defaultValue={getUserValue(
-                                                getUserField("country")?.id || 0
-                                            )}
-                                            properties={getUserField("country")}
-                                            setValue={setValue}
-                                            control={control}
-                                            validation={{
-                                                ...validation(
-                                                    UserFieldApi.toResourceUrl(
-                                                        getUserField("country")
-                                                            ?.id || 0
-                                                    ),
-                                                    formState,
-                                                    false
-                                                ),
-                                            }}
-                                            errorMessage={getUserFieldError(
-                                                "country"
-                                            )}
-                                        />
-                                    )}
-                                    {getUserField("mobile") && (
-                                        <AppFormFieldGenerator
-                                            md={12}
-                                            lg={12}
-                                            xl={12}
-                                            properties={getUserField("mobile")}
-                                            setValue={setValue}
-                                            control={control}
-                                            defaultValue={getUserValue(
-                                                getUserField("mobile")?.id || 0
-                                            )}
-                                            validation={{
-                                                ...validation(
-                                                    UserFieldApi.toResourceUrl(
-                                                        getUserField("mobile")
-                                                            ?.id || 0
-                                                    ),
-                                                    formState,
-                                                    false
-                                                ),
-                                            }}
-                                            errorMessage={getUserFieldError(
-                                                "mobile"
-                                            )}
-                                        />
-                                    )}
-                                    {getUserField(
-                                        "creditSuisseContactFirstname"
-                                    ) && (
-                                        <AppFormFieldGenerator
-                                            md={12}
-                                            lg={12}
-                                            xl={12}
-                                            defaultValue={getUserValue(
-                                                getUserField(
-                                                    "creditSuisseContactFirstname"
-                                                )?.id || 0
-                                            )}
-                                            properties={getUserField(
-                                                "creditSuisseContactFirstname"
-                                            )}
-                                            setValue={setValue}
-                                            control={control}
-                                            validation={{
-                                                ...validation(
-                                                    UserFieldApi.toResourceUrl(
-                                                        getUserField(
-                                                            "creditSuisseContactFirstname"
-                                                        )?.id || 0
-                                                    ),
-                                                    formState,
-                                                    false
-                                                ),
-                                            }}
-                                            errorMessage={getUserFieldError(
-                                                "creditSuisseContactFirstname"
-                                            )}
-                                        />
-                                    )}
-                                    {getUserField(
-                                        "creditSuisseContactLastname"
-                                    ) && (
-                                        <AppFormFieldGenerator
-                                            md={12}
-                                            lg={12}
-                                            xl={12}
-                                            properties={getUserField(
-                                                "creditSuisseContactLastname"
-                                            )}
-                                            setValue={setValue}
-                                            defaultValue={getUserValue(
-                                                getUserField(
-                                                    "creditSuisseContactLastname"
-                                                )?.id || 0
-                                            )}
-                                            control={control}
-                                            validation={{
-                                                ...validation(
-                                                    UserFieldApi.toResourceUrl(
-                                                        getUserField(
-                                                            "creditSuisseContactLastname"
-                                                        )?.id || 0
-                                                    ),
-                                                    formState,
-                                                    false
-                                                ),
-                                            }}
-                                            errorMessage={getUserFieldError(
-                                                "creditSuisseContactLastname"
-                                            )}
-                                        />
-                                    )}
                                     <AppFormSelect
                                         id={"locale"}
                                         defaultValue={getLocale()}

@@ -29,7 +29,9 @@ import {
     AUTH_SKIP_ONBOARDING,
     CONTAINER_LOCALE,
     USER_LOCALE,
+    LANGUAGES,
 } from "../../../AppModule/config/app-env";
+import { useLanguages } from "../../../AppModule/hooks";
 
 type LoginForm = {
     email: string;
@@ -46,6 +48,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [agree, isAgree] = useState<boolean>(false);
     const [onboarded, isOnboarded] = useState<boolean>(false);
     const [readed, isReaded] = useState<boolean>(false);
+    const { Languages } = useLanguages();
     const [activeLanguage, setActiveLanguage] = useState<string>("");
     const [userEmail, setUserEmail] = useState<string>("");
     const { control, handleSubmit, formState, setError } = useForm<LoginForm>({
@@ -61,6 +64,8 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
         container?.languages?.forEach((e) => {
             if (e.isDefault) setActiveLanguage(e.locale);
         });
+
+        localStorage.setItem(LANGUAGES, JSON.stringify(container?.languages));
     }, [container]);
 
     const getValue = (name: string) => {
@@ -164,40 +169,47 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                             />
                                         </Form.Row>
                                         {emailStatus === "exist" && (
-                                            <Form.Row>
-                                                <AppFormInputPassword
-                                                    md={12}
-                                                    lg={12}
-                                                    xl={12}
-                                                    className="m-0"
-                                                    name={"password"}
-                                                    label={""}
-                                                    placeholder="Password"
-                                                    required={true}
-                                                    {...validation(
-                                                        "password",
-                                                        formState,
-                                                        false
+                                            <>
+                                                <Form.Row>
+                                                    <AppFormInputPassword
+                                                        md={12}
+                                                        lg={12}
+                                                        xl={12}
+                                                        className="m-0"
+                                                        name={"password"}
+                                                        label={""}
+                                                        placeholder="Password"
+                                                        required={true}
+                                                        {...validation(
+                                                            "password",
+                                                            formState,
+                                                            false
+                                                        )}
+                                                        errorMessage={
+                                                            errors.password
+                                                                ?.message
+                                                        }
+                                                        control={control}
+                                                    />
+                                                </Form.Row>
+
+                                                <Link
+                                                    to={"/auth/forgot-password"}
+                                                    className="forgot-password "
+                                                >
+                                                    {t(
+                                                        "login.form:forgotPassword"
                                                     )}
-                                                    errorMessage={
-                                                        errors.password?.message
-                                                    }
-                                                    control={control}
-                                                />
-                                            </Form.Row>
+                                                </Link>
+                                            </>
                                         )}
 
-                                        <Link
-                                            to={"/auth/forgot-password"}
-                                            className="forgot-password "
-                                        >
-                                            {t("login.form:forgotPassword")}
-                                        </Link>
                                         {container &&
                                             container.configuration &&
                                             (container.configuration as any)
                                                 .isDisclaimerEnable &&
-                                            onboarded && (
+                                            emailStatus === "exist" &&
+                                            !onboarded && (
                                                 <Form.Group>
                                                     <div className="agreement-box mt-2 p-2">
                                                         <div
@@ -368,8 +380,8 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                     <div className="tabs-translation-auth mb-3 justify-content-center">
                         <Row className="m-0 p-0 justify-content-center">
                             {container &&
-                                container.languages &&
-                                container.languages.map((e, i) => {
+                                Languages() &&
+                                Languages().map((e, i) => {
                                     return (
                                         <AppButton
                                             variant="secondary"

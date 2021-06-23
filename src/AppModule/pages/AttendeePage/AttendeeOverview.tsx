@@ -69,11 +69,11 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
     async function handleFilter(search: string) {
         if (view === "list")
             appGridApi.current?.setFilterModel({
-                firstName: {
+                user_search: {
                     filter: search,
                 },
             });
-        else fetchData({ firstName: search });
+        else fetchData({ user_search: search });
     }
     function getDataSource(): IServerSideDatasource {
         return {
