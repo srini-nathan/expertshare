@@ -26,10 +26,11 @@ export const appGridColDef = ({
 
     {
         headerName: "admin.users.list:column.Name",
-        field: "firstName",
+        field: "user_search",
+        filter: "text",
         cellRenderer: "appNameTemplateRenderer",
         maxWidth: 220,
-        sortable: true,
+        sortable: false,
     },
 
     {

@@ -21,7 +21,7 @@
 .auth-container {
     display: grid;
     min-height: 100vh;
-    background-color: var(--body-bg-clr);
+    // background-color: var(--body-bg-clr);
 
     .normal-label {
         span {
@@ -79,6 +79,13 @@
     .en {
         i {
             background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/en_flag.png);
+            background-size: 20px;
+        }
+    }
+
+    .pt {
+        i {
+            background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/pt_flag.png);
             background-size: 20px;
         }
     }

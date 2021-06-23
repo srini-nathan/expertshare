@@ -27,7 +27,7 @@ import {
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
-import { errorToast, successToast } from "../../../AppModule/utils";
+import { errorToast, successToast, isGranted } from "../../../AppModule/utils";
 import "./assets/scss/list.scss";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models/context/AuthState";
@@ -37,7 +37,13 @@ import {
     useRoles,
     useDownloadFile,
 } from "../../../AppModule/hooks";
+import { CONSTANTS } from "../../../config";
 
+const { Role } = CONSTANTS;
+
+const {
+    ROLE: { ROLE_SUPER_ADMIN, ROLE_ADMIN },
+} = Role;
 type UpdateRoleForm = {
     role: string;
 };
@@ -241,7 +247,7 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
 
     async function handleFilter(search: string) {
         appGridApi.current?.setFilterModel({
-            firstName: {
+            user_search: {
                 filter: search,
             },
         });
@@ -325,26 +331,31 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
                         <AppIcon className="mr-2" name="Email" />
                         {t("common.button:invite")}
                     </AppButton>
-                    <AppButton
-                        onClick={() => {
-                            handleExport();
-                        }}
-                        className="mr-2 p-3"
-                        variant="secondary"
-                    >
-                        <AppIcon className="mr-2" name="Upload" />
-                        {t("common.button:export")}
-                    </AppButton>
-                    <AppButton
-                        onClick={() => {
-                            handleImport();
-                        }}
-                        className="p-3"
-                        variant="secondary"
-                    >
-                        <AppIcon className="mr-2" name="Download" />
-                        {t("common.button:import")}
-                    </AppButton>
+                    {!isGranted(role, ROLE_SUPER_ADMIN) &&
+                        isGranted(role, ROLE_ADMIN) && (
+                            <>
+                                <AppButton
+                                    onClick={() => {
+                                        handleExport();
+                                    }}
+                                    className="mr-2 p-3"
+                                    variant="secondary"
+                                >
+                                    <AppIcon className="mr-2" name="Upload" />
+                                    {t("common.button:export")}
+                                </AppButton>
+                                <AppButton
+                                    onClick={() => {
+                                        handleImport();
+                                    }}
+                                    className="p-3"
+                                    variant="secondary"
+                                >
+                                    <AppIcon className="mr-2" name="Download" />
+                                    {t("common.button:import")}
+                                </AppButton>
+                            </>
+                        )}
                 </div>
             </AppPageHeader>
 

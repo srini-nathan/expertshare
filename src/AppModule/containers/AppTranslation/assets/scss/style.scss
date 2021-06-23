@@ -209,6 +209,12 @@
                                         background-size: contain;
                                     }
 
+                                    &.pt {
+                                        background-image: url(../images/pt_flag.png);
+                                        background-repeat: no-repeat;
+                                        background-size: contain;
+                                    }
+
                                     &.fr {
                                         background-image: url(../images/fr_flag.png);
                                         background-repeat: no-repeat;

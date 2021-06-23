@@ -9,6 +9,7 @@ export const AUTH_SKIP_ONBOARDING = process.env.AUTH_SKIP_ONBOARDING|| "es_skip_
  */
 export const ACCEPTABLE_RESPONSE = process.env.REACT_APP_ACCEPTABLE_RESPONSE || "JSON";
 export const USER_LOCALE = process.env.REACT_APP_USER_LOCALE || "es_locale";
+export const LANGUAGES = process.env.REACT_APP_LANGUAGES || "es_languages";
 export const CONTAINER_LOCALE = "es_container_locale";
 export const APP_ENV = process.env.NODE_ENV;
 export const SOCKET_HOST = process.env.REACT_APP_SOCKET_HOST || "/socket.io";
