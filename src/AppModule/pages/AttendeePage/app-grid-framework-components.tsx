@@ -1,6 +1,7 @@
 import { ICellRendererParams } from "ag-grid-community";
 import React, { FC, ReactElement } from "react";
-import { AppGridAction, AppGridActionProps, AppIcon } from "../../components";
+import { Link } from "@reach/router";
+import { AppIcon } from "../../components";
 import { AppCellActionWithRenderWithCustom } from "./app-actions";
 import { FileTypeInfo, User } from "../../models";
 import UserAvatar from "../../assets/images/user-avatar.png";
@@ -16,7 +17,7 @@ interface UserInfo {
     data: User;
 }
 export const UserDetailsInfo: FC<UserInfo> = ({ data }): JSX.Element => {
-    const { firstName, lastName, imageName } = data;
+    const { firstName, lastName, imageName, id } = data;
     const imagePath = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         imageName
@@ -25,24 +26,28 @@ export const UserDetailsInfo: FC<UserInfo> = ({ data }): JSX.Element => {
     const style = imageName
         ? {
               backgroundImage: `url(${imagePath})`,
-              backgroundSize: "contain",
+              backgroundSize: "cover",
               backgroundPosition: "center",
           }
         : {
               backgroundImage: `url(${UserAvatar})`,
-              backgroundSize: "contain",
+              backgroundSize: "cover",
               backgroundPosition: "center",
           };
 
     return (
         <div className="info">
             <div className="info--profile-pic mr-2">
-                <i style={style}></i>
+                <Link to={`/attendee/${id}/show`}>
+                    <i style={style}></i>
+                </Link>
             </div>
             <div className="info--det">
-                <h3 className="mb-1">
-                    {firstName} {lastName}
-                </h3>
+                <Link to={`/attendee/${id}/show`}>
+                    <h3 className="mb-1">
+                        {firstName} {lastName}
+                    </h3>
+                </Link>
             </div>
         </div>
     );
@@ -55,7 +60,7 @@ export const appGridFrameworkComponents = {
     },
     appTagTemplateRenderer: (params: ICellRendererParams): ReactElement => {
         const { data } = params;
-        const { userTags } = data as User;
+        const { userTags, id } = data as User;
         return (
             <div className="tag-container d-flex">
                 {userTags &&
@@ -66,7 +71,7 @@ export const appGridFrameworkComponents = {
                                     className="tag-container--item pr-2"
                                     key={index}
                                 >
-                                    <a href="#">{tag.name}</a>
+                                    <a>{tag.name}</a>
                                 </div>
                             );
                         }
@@ -74,7 +79,7 @@ export const appGridFrameworkComponents = {
                     })}
                 {userTags && userTags.length > 2 && (
                     <div className="tag-container--item more pr-2">
-                        <a href="#">+ Show More</a>
+                        <Link to={`/attendee/${id}/show`}>+ Show More</Link>
                     </div>
                 )}
             </div>
@@ -103,34 +108,41 @@ export const appGridFrameworkComponents = {
     appGridActionRenderer: (
         params: AppCellActionWithRenderWithCustom
     ): ReactElement => {
-        const {
-            // onPressBookSession,
-            onPressGetInContact,
-            // onPressAddNewUser,
-        } = params;
-        const props: AppGridActionProps = {
-            customClickActions: [
-                // {
-                //     text: "Book Session",
-                //     onClick: () => {
-                //         onPressBookSession();
-                //     },
-                // },
-                {
-                    text: "Get In Contact",
-                    onClick: () => {
-                        onPressGetInContact();
-                    },
-                },
-                // {
-                //     icon: "AddUserPlus",
-                //     text: "",
-                //     onClick: () => {
-                //         onPressAddNewUser();
-                //     },
-                // },
-            ],
-        };
-        return <AppGridAction {...props} />;
+        const { data } = params;
+        const { id } = data as User;
+        return (
+            <a href={`/attendee/${id}/show`} className="btn btn-secondary">
+                Get In Contact
+            </a>
+        );
+        // const {
+        //     // onPressBookSession,
+        //     onPressGetInContact,
+        //     // onPressAddNewUser,ap
+        // } = params;
+        // const props: AppGridActionProps = {
+        //     customClickActions: [
+        //         // {
+        //         //     text: "Book Session",
+        //         //     onClick: () => {
+        //         //         onPressBookSession();
+        //         //     },
+        //         // },
+        //         {
+        //             text: "Get In Contact",
+        //             onClick: () => {
+        //                 onPressGetInContact();
+        //             },
+        //         },
+        //         // {
+        //         //     icon: "AddUserPlus",
+        //         //     text: "",
+        //         //     onClick: () => {
+        //         //         onPressAddNewUser();
+        //         //     },
+        //         // },
+        //     ],
+        // };
+        // return <AppGridAction {...props} />;
     },
 };

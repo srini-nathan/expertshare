@@ -144,6 +144,7 @@
                             font-size: 12px;
                             font-weight: 700;
                             color: var(--primary);
+                            user-select: none;
                             background-color: var(--primary-10);
                             border: 1px solid var(--primary);
                             border-radius: 17px;
@@ -211,7 +212,7 @@
                         }
 
                         &:hover {
-                            &>.popup {
+                            & > .popup {
                                 display: block;
                             }
                         }
@@ -225,13 +226,15 @@
                         }
 
                         &.get-contact {
-                            i {}
+                            i {
+                            }
                         }
 
                         &.add-user-btn {
                             width: 36px;
 
-                            i {}
+                            i {
+                            }
                         }
                     }
                 }
@@ -304,9 +307,11 @@
                             }
                         }
 
-                        &.following {}
+                        &.following {
+                        }
 
-                        &.events {}
+                        &.events {
+                        }
 
                         &.sessions {
                             i {
@@ -320,9 +325,11 @@
                             }
                         }
 
-                        &.feeds {}
+                        &.feeds {
+                        }
 
-                        &.favorite-feeds {}
+                        &.favorite-feeds {
+                        }
                     }
                 }
             }

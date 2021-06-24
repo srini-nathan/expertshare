@@ -1,23 +1,23 @@
-@media (min-width: 767px) and (max-width: 997px) {
-    .attendees-grid--container--item {
-        flex: 0 0 100% !important;
-        max-width: 100% !important;
-    }
-}
+// @media (min-width: 767px) and (max-width: 997px) {
+//     .attendees-grid--container--item {
+//         flex: 0 0 100% !important;
+//         max-width: 100% !important;
+//     }
+// }
 
-@media (min-width: 998px) and (max-width: 1383px) {
-    .attendees-grid--container--item {
-        flex: 0 0 50% !important;
-        max-width: 50% !important;
-    }
-}
+// @media (min-width: 998px) and (max-width: 1383px) {
+//     .attendees-grid--container--item {
+//         flex: 0 0 50% !important;
+//         max-width: 50% !important;
+//     }
+// }
 
-@media (min-width: 1384px) and (max-width: 1824px) {
-    .attendees-grid--container--item {
-        flex: 0 0 33.33% !important;
-        max-width: 33.33% !important;
-    }
-}
+// @media (min-width: 1384px) and (max-width: 1824px) {
+//     .attendees-grid--container--item {
+//         flex: 0 0 33.33% !important;
+//         max-width: 33.33% !important;
+//     }
+// }
 
 .attendees-grid {
     &--container {
@@ -176,6 +176,8 @@
                             font-size: 12px;
                             font-weight: 700;
                             color: var(--primary);
+                            cursor: initial !important;
+                            user-select: none;
                             background-color: var(--primary-10);
                             border: 1px solid var(--primary);
                             border-radius: var(--spc-btn-border-radius);

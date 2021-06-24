@@ -8,4 +8,5 @@ export interface AppNavigationItemProps {
     icon: AppIconProps;
     isActive?: boolean;
     subNavigations?: AppSubNavigationItemProps[];
+    onClick?: (value: boolean) => void;
 }

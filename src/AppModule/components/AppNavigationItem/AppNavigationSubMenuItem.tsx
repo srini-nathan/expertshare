@@ -8,6 +8,7 @@ export const AppNavigationSubMenuItem: FC<AppSubNavigationItemProps> = ({
     label,
     path,
     className = "",
+    onClick,
 }) => {
     const { t } = useTranslation();
     return (
@@ -20,6 +21,11 @@ export const AppNavigationSubMenuItem: FC<AppSubNavigationItemProps> = ({
                                 ? "active"
                                 : ""
                         }`}
+                        onClick={() => {
+                            if (onClick) {
+                                onClick(false);
+                            }
+                        }}
                     >
                         <Link to={path} className="nav-link">
                             <span>{t(label)}</span>

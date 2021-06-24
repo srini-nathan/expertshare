@@ -5,14 +5,14 @@ export const navigation: AppNavigationItemProps[] = [
         label: "Event",
         path: "/event",
         icon: {
-            name: "far fa-box",
+            name: "fak fa-agenda-cs",
         },
     },
     {
         label: "Attendees",
         path: "/attendee",
         icon: {
-            name: "fak fa-view-profile",
+            name: "fak fa-atendees-cs",
         },
     },
     // {

@@ -60,9 +60,11 @@
             justify-content: flex-end;
         }
         &.title-cell {
-            width: auto;
-            height: auto;
+            height: 100%;
             a {
+                display: flex;
+                align-items: center;
+                width: 100%;
                 font-weight: 500;
                 color: var(--secondary);
             }
@@ -149,20 +151,19 @@
                 .ag-cell {
                     font-size: 14px;
                     line-height: 60px;
-
+                    border: unset !important;
                     &:focus {
-                        border-color: var(--light-clr);
+                        border: unset !important;
                     }
 
                     a {
-                        width: 44px;
                         height: 44px;
                         text-decoration: none;
                     }
                 }
 
                 .ag-cell-focus {
-                    border-color: var(--light-clr) !important;
+                    border: unset !important;
                 }
 
                 .ag-cell:first-child {

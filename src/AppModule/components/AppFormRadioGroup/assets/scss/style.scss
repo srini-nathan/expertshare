@@ -2,51 +2,53 @@
 @import "../../../../assets/scss/variables";
 
 .form-check {
-    padding-left: 0 !important;
+    &.circle-radio-button {
+        padding-left: 0 !important;
 
-    input[type="radio"] {
-        display: none;
-        &:checked {
-            & + label {
-                &::after {
-                    position: absolute;
-                    left: 0.25rem;
-                    display: block;
-                    width: 0.5rem;
-                    height: 0.5rem;
-                    margin-bottom: 3px;
-                    content: " ";
-                    background: var(--primary);
-                    border-radius: var(--circle-border-radius);
-                }
-                &::before {
-                    border-color: var(--primary);
+        input[type="radio"] {
+            display: none;
+            &:checked {
+                & + label {
+                    &::after {
+                        position: absolute;
+                        left: 0.25rem;
+                        display: block;
+                        width: 0.5rem;
+                        height: 0.5rem;
+                        margin-bottom: 3px;
+                        content: " ";
+                        background: var(--primary);
+                        border-radius: var(--circle-border-radius);
+                    }
+                    &::before {
+                        border-color: var(--primary);
+                    }
                 }
             }
         }
-    }
-    label {
-        display: flex;
-        align-items: center;
-        margin-top: 5px;
-        margin-right: 10px;
-        font-size: 14px;
-        font-weight: 400;
-        color: var(--secondary);
-        span {
-            padding-top: 3px;
-            padding-left: 15px;
-        }
-        &::before {
-            width: 1rem;
-            height: 1rem;
-            margin-right: 8px;
-            margin-bottom: 3px;
-            cursor: pointer;
-            content: " ";
-            background-color: transparent;
-            border: 1px solid var(--secondary-70);
-            border-radius: var(--circle-border-radius);
+        label {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+            margin-right: 10px;
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--secondary);
+            span {
+                padding-top: 3px;
+                padding-left: 15px;
+            }
+            &::before {
+                width: 1rem;
+                height: 1rem;
+                margin-right: 8px;
+                margin-bottom: 3px;
+                cursor: pointer;
+                content: " ";
+                background-color: transparent;
+                border: 1px solid var(--secondary-70);
+                border-radius: var(--circle-border-radius);
+            }
         }
     }
 }

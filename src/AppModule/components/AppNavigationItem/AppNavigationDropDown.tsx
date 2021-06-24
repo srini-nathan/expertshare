@@ -12,6 +12,7 @@ interface AppNavigationDropDownProps {
     path?: string;
     subDropDownItems?: AppNavigationDropDownProps[];
     action?: () => void;
+    onClick?: () => void;
 }
 
 export const AppNavigationDropDown: FC<AppNavigationDropDownProps> = ({
@@ -60,6 +61,9 @@ export const AppNavigationDropDown: FC<AppNavigationDropDownProps> = ({
                                                 <Link
                                                     onClick={() => {
                                                         closeMenu();
+                                                        if (e.onClick) {
+                                                            e.onClick();
+                                                        }
                                                     }}
                                                     to={e.path as string}
                                                 >
@@ -97,6 +101,9 @@ export const AppNavigationDropDown: FC<AppNavigationDropDownProps> = ({
                                     onClick={() => {
                                         if (e.action) {
                                             e.action();
+                                        }
+                                        if (e.onClick) {
+                                            e.onClick();
                                         }
                                         closeMenu();
                                     }}
