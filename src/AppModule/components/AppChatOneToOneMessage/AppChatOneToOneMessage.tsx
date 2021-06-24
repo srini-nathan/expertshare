@@ -55,7 +55,7 @@ export const AppChatOneToOneMessage: FC<AppChatOneToOneMessageProps> = ({
                         {name}
                         {createdAt ? (
                             <span className="time">
-                                {toShortTime(new Date())}
+                                {toShortTime(new Date(createdAt))}
                             </span>
                         ) : null}
                     </h4>
