@@ -19,6 +19,8 @@ import {
     AppFormInputColorPicker,
     AppFormFile,
     AppFormRichTextArea,
+    AppButton,
+    AppFormLabel,
 } from "../../../AppModule/components";
 import {
     Upload,
@@ -26,8 +28,13 @@ import {
     UnprocessableEntityErrorResponse,
     FileTypeInfo,
 } from "../../../AppModule/models";
-import { AFramePanel, PAFramePanel, PAFrameRoom } from "../../models";
-import { AFramePanelApi, ContainerApi, AFrameRoomApi } from "../../apis";
+import { AFramePanel, PAFramePanel, PAFrameRoom, Language } from "../../models";
+import {
+    AFramePanelApi,
+    ContainerApi,
+    AFrameRoomApi,
+    LanguageApi,
+} from "../../apis";
 import {
     errorToast,
     setViolations,
@@ -43,6 +50,13 @@ import {
 import { schema, validations } from "./schema";
 import { CONSTANTS } from "../../../config";
 import { UploadAPI } from "../../../AppModule/apis";
+
+interface TranslationsType {
+    locale: string;
+    textValue: string;
+    content: string;
+    image: string;
+}
 
 const {
     Upload: UPLOAD,
@@ -147,7 +161,12 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
     const [targetIdOptions, setTargetIdOptions] = useState<PrimitiveObject[]>(
         []
     );
-    const [fraolaValue, setFraolaValue] = useState<string>("");
+    // const [fraolaValue, setFraolaValue] = useState<string>("");
+
+    const [languages, setLanguages] = useState<Language[]>([]);
+    const [defaultLanguage, setDefaultLanguage] = useState<string>("");
+    const [translations, setTranslations] = useState<TranslationsType[]>([]);
+    const [active, setActive] = React.useState<string>(defaultLanguage);
 
     const [
         transitionVideoFileName,
@@ -167,6 +186,16 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
         resolver: yupResolver(schema),
         mode: "all",
     });
+
+    const checkTranslation = () => {
+        // return !translations.some(
+        //     (translation) =>
+        //         !translation.content &&
+        //         !translation.textValue &&
+        //         !translation.image
+        // );
+        return true;
+    };
 
     const fileUpload = (fieldName: string, files: File[]) => {
         if (files && files.length > 0) {
@@ -214,16 +243,37 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
         }
     };
 
-    const submitForm = async (formData: AFramePanel) => {
-        setFilesToUpload({});
-        formData.container = ContainerApi.toResourceUrl(containerId);
-        formData.aFrameRoom = `/api/a_frame_rooms/${roomId}`;
-        formData.type = panelType;
-        formData.targetType = getPanelType();
-        formData.transitionVideo = transitionVideoFileName;
+    const getValue = (name: string): any => {
+        const translationItem = translations.filter((e) => e.locale === active);
 
-        return AFramePanelApi.createOrUpdate<AFramePanel>(id, formData).then(
-            ({ error, errorMessage }) => {
+        if (translationItem.length > 0) {
+            if (name === "textValue") {
+                return translationItem[0].textValue;
+            }
+            if (name === "content") {
+                return translationItem[0].content;
+            }
+            if (name === "image") {
+                return translationItem[0].image;
+            }
+        }
+
+        return "";
+    };
+
+    const submitForm = async (formData: AFramePanel) => {
+        if (checkTranslation()) {
+            setFilesToUpload({});
+            formData.container = ContainerApi.toResourceUrl(containerId);
+            formData.aFrameRoom = `/api/a_frame_rooms/${roomId}`;
+            formData.type = panelType;
+            formData.targetType = getPanelType();
+            formData.transitionVideo = transitionVideoFileName;
+
+            return AFramePanelApi.createOrUpdate<AFramePanel>(
+                id,
+                formData
+            ).then(({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
                     setViolations<AFramePanel>(error, setError);
                 } else if (errorMessage) {
@@ -235,14 +285,39 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                         );
                     });
                 }
+            });
+        }
+        return Promise.reject();
+    };
+
+    const onTranslatedFieldChange = (field: any, value: any) => {
+        const newTranslations = translations.map(
+            (translationItem: TranslationsType) => {
+                if (translationItem.locale === active) {
+                    return {
+                        ...translationItem,
+                        [field]: value,
+                    };
+                }
+                return translationItem;
             }
         );
+
+        setTranslations(newTranslations);
     };
 
     const onSubmit = async (formData: AFramePanel) => {
+        formData.translations = translations;
         Promise.all(
-            ["image", "remoteImage"].map((imageFieldName: any) => {
-                const files = filesToUpload[imageFieldName];
+            [...translations, { fieldName: "remoteImage" }].map((item: any) => {
+                if (item.locale && typeof item.image === "string") {
+                    return true;
+                }
+
+                const files = item.locale
+                    ? item.image
+                    : filesToUpload[item.fieldName];
+
                 if (files && files.length > 0) {
                     const fd = new FormData();
                     fd.set("file", files[0], files[0].name);
@@ -256,8 +331,29 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
 
                             if (response && response.fileName) {
                                 successToast("Image uploaded");
-                                (formData as any)[imageFieldName] =
-                                    response.fileName;
+
+                                if (item.fieldName) {
+                                    (formData as any)[item.fieldName] =
+                                        response.fileName;
+                                }
+
+                                if (item.locale) {
+                                    formData.translations = formData.translations.map(
+                                        (translationItem: TranslationsType) => {
+                                            if (
+                                                translationItem.locale ===
+                                                item.locale
+                                            ) {
+                                                return {
+                                                    ...translationItem,
+                                                    image: response.fileName as string,
+                                                };
+                                            }
+                                            return translationItem;
+                                        }
+                                    );
+                                }
+
                                 return true;
                             }
 
@@ -276,24 +372,37 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (isEditMode) {
-            AFramePanelApi.findById<AFramePanel>(id).then(
-                ({ response, isNotFound, errorMessage }) => {
-                    if (errorMessage) {
-                        errorToast(errorMessage);
-                    } else if (isNotFound) {
-                        errorToast("data not exist");
-                    } else if (response !== null) {
-                        setData(response);
-                        setFraolaValue(response.content || "");
+            AFramePanelApi.findById<AFramePanel>(id, {
+                "groups[]": "translations",
+            }).then(({ response, isNotFound, errorMessage }) => {
+                if (errorMessage) {
+                    errorToast(errorMessage);
+                } else if (isNotFound) {
+                    errorToast("data not exist");
+                } else if (response !== null) {
+                    setData(response);
+                    trigger();
+                    // setFraolaValue(response.content || "");
 
-                        setTransitionVideoFileName(
-                            response.transitionVideo || ""
-                        );
-                        trigger();
+                    setTransitionVideoFileName(response.transitionVideo || "");
+
+                    if (response.translations) {
+                        const items: TranslationsType[] = Object.keys(
+                            response.translations
+                        ).map((key) => {
+                            return {
+                                locale: key,
+                                content: response.translations[key].content,
+                                textValue: response.translations[key].textValue,
+                                image: response.translations[key].image,
+                            };
+                        });
+
+                        setTranslations(items);
                     }
-                    setLoading(false);
                 }
-            );
+                setLoading(false);
+            });
         }
         if (!isEditMode) {
             setLoading(false);
@@ -326,6 +435,53 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
         });
     }, []);
 
+    useEffect(() => {
+        languages.forEach((language) => {
+            if (language.isDefault) {
+                setDefaultLanguage(language.locale);
+                setActive(language.locale);
+            }
+        });
+        if (languages.length !== translations.length) {
+            const items: TranslationsType[] = languages.map((languageItem) => {
+                let item = {
+                    locale: languageItem.locale,
+                    content: "",
+                    image: "",
+                    textValue: "",
+                };
+                translations.forEach((translationItem) => {
+                    if (translationItem.locale === languageItem.locale) {
+                        item = {
+                            locale: translationItem.locale,
+                            content: translationItem.content,
+                            image: translationItem.image,
+                            textValue: translationItem.textValue,
+                        };
+                    }
+                });
+                return item;
+            });
+            setTranslations(items);
+        }
+    }, [languages]);
+
+    useEffect(() => {
+        LanguageApi.find<Language>(1, {
+            "container.id": containerId,
+            "order[isDefault]": "desc",
+        }).then(({ error, response }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                }
+            } else if (response !== null) {
+                setLanguages(response.items);
+            }
+            setLoading(false);
+        });
+    }, [data]);
+
     const { errors } = formState;
 
     if (loading || loadingForRooms) {
@@ -336,25 +492,72 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
         <Fragment>
             <AppBreadcrumb linkText={"Panels"} linkUrl={"/admin/rooms"} />
             <AppPageHeader title={isEditMode ? "Edit Panels" : "Add Panels"} />
-            <Row>
+            <Row className="aframepanel-add-edit-container">
                 <Col>
                     <AppCard>
                         <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                             <Form.Row>
+                                <Col md={12}>
+                                    <AppFormLabel
+                                        label={t("common.label:chooseLanguage")}
+                                        required
+                                    />
+                                </Col>
+                            </Form.Row>
+                            <Form.Row className="mb-4">
+                                {languages.map(
+                                    (language: Language, i: number) => {
+                                        return (
+                                            <AppButton
+                                                className={`mr-2 ${
+                                                    active === language.locale
+                                                        ? "active"
+                                                        : ""
+                                                } ${language.locale}`}
+                                                onClick={() => {
+                                                    setActive(language.locale);
+                                                }}
+                                                variant="secondary"
+                                                key={i}
+                                            >
+                                                <i></i>
+                                                {language.name}
+                                            </AppButton>
+                                        );
+                                    }
+                                )}
+                            </Form.Row>
+                            <Form.Row>
                                 <Form.Group className={"col w-100"}>
                                     <Form.Label>
-                                        {t(
+                                        {`${t(
                                             "admin.aframepanel.form:label.image"
-                                        )}
+                                        )} (${active})`}
                                     </Form.Label>
                                     <AppUploader
                                         accept="image/*"
-                                        imagePath={
-                                            data.image
-                                                ? `${aframepanelImagePath}/${data.image}`
-                                                : ""
+                                        {...(typeof getValue("image") ===
+                                        "string"
+                                            ? {
+                                                  imagePath: `${aframepanelImagePath}/${getValue(
+                                                      "image"
+                                                  )}`,
+                                              }
+                                            : {})}
+                                        {...(typeof getValue("image") !==
+                                        "string"
+                                            ? {
+                                                  externalFiles: getValue(
+                                                      "image"
+                                                  ),
+                                              }
+                                            : {})}
+                                        onFileSelect={(files: File[]) =>
+                                            onTranslatedFieldChange(
+                                                "image",
+                                                files
+                                            )
                                         }
-                                        onFileSelect={onFileSelect("image")}
                                         onDelete={() => {
                                             setValue("image", "");
                                             setFilesToUpload({
@@ -854,10 +1057,11 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                             <Form.Row>
                                 <AppFormInput
                                     required={false}
+                                    value={getValue("textValue")}
                                     name={"textValue"}
-                                    label={t(
+                                    label={`${t(
                                         "admin.aframepanel.form:label.textValue"
-                                    )}
+                                    )} (${active})`}
                                     maxCount={textValue.max}
                                     {...validation(
                                         "textValue",
@@ -865,8 +1069,14 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                                         isEditMode
                                     )}
                                     errorMessage={errors.textValue?.message}
-                                    defaultValue={data.textValue}
+                                    defaultValue={getValue("textValue")}
                                     control={control}
+                                    onChange={(val) =>
+                                        onTranslatedFieldChange(
+                                            "textValue",
+                                            val
+                                        )
+                                    }
                                 />
                                 <AppFormInputColorPicker
                                     required={false}
@@ -1288,11 +1498,16 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                                         xl={12}
                                         required={false}
                                         name={"content"}
-                                        value={fraolaValue}
-                                        onChange={setFraolaValue}
-                                        label={t(
+                                        value={getValue("content")}
+                                        onChange={(val) =>
+                                            onTranslatedFieldChange(
+                                                "content",
+                                                val
+                                            )
+                                        }
+                                        label={`${t(
                                             "admin.aframepanel.form:label.content"
-                                        )}
+                                        )} (${active})`}
                                         maxCount={content.max}
                                         {...validation(
                                             "content",
@@ -1300,7 +1515,7 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                                             isEditMode
                                         )}
                                         errorMessage={errors.content?.message}
-                                        defaultValue={data.content}
+                                        defaultValue={getValue("content")}
                                         control={control}
                                     />
                                 </Form.Row>

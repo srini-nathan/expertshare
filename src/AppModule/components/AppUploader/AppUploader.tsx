@@ -32,6 +32,7 @@ export interface AppUploaderProps {
     cropperOptions?: Options;
     onDelete?: () => void;
     fileInfo: FileTypeInfo;
+    externalFiles?: any[];
 }
 
 export const AppUploader: FC<AppUploaderProps> = ({
@@ -45,6 +46,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
     cropperOptions,
     onDelete,
     fileInfo,
+    externalFiles,
 }): JSX.Element => {
     const [files, setFiles] = useState<AppFile[]>([]);
     const [cropperFile, setCropperFile] = useState<any>(undefined);
@@ -77,13 +79,6 @@ export const AppUploader: FC<AppUploaderProps> = ({
         },
     });
 
-    // const acceptedFileItems = acceptedFiles.map((file) => (
-    //     <li key={file.name}>
-    //         File Name: {file.name} <br /> Size:{" "}
-    //         {bytesToSize(cropperFile ? cropperFile.size : file.size)}
-    //     </li>
-    // ));
-
     const fileRejectionItems = fileRejections.map(({ file, errors }) => (
         <li>
             {file.name} -
@@ -100,7 +95,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
     /* eslint-disable no-console */
     console.log(files);
     /* eslint-enable no-console */
-    const thumbs = files.map((f: any) => (
+    const thumbs = (externalFiles || files).map((f: any) => (
         <div className="thumb-container">
             <div className="thumb-inner">
                 <img src={cropUrl || f.preview} />
@@ -108,20 +103,21 @@ export const AppUploader: FC<AppUploaderProps> = ({
         </div>
     ));
 
-    const thumb = files.map((f: any) => {
+    const thumb = (externalFiles || files).map((f: any) => {
         if (withCropper) return cropUrl;
         return f.preview;
     });
 
     const getBackgroundStyles = () => {
-        if (thumb.length > 0)
-            return {
-                backgroundImage: `url(${thumb[0]})`,
-            };
         if (imagePath && imagePath !== "")
             return {
                 backgroundImage: `url(${imagePath})`,
             };
+        if (thumb.length > 0)
+            return {
+                backgroundImage: `url(${thumb[0]})`,
+            };
+
         return {
             backgroundImage: `url(${imageTemp}`,
             backgroundSize: "auto",
@@ -130,7 +126,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
     useEffect(
         () => () => {
             // Make sure to revoke the data uris to avoid memory leaks
-            files.forEach((f: any) => URL.revokeObjectURL(f.preview));
+            // files.forEach((f: any) => URL.revokeObjectURL(f.preview));
             setCropUrl("");
             setCropperFile(undefined);
         },
