@@ -47,7 +47,6 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [emailStatus, setEmailStatus] = useState<string>("");
     const [agree, isAgree] = useState<boolean>(false);
     const [onboarded, isOnboarded] = useState<boolean>(false);
-    const [readed, isReaded] = useState<boolean>(false);
     const { Languages } = useLanguages();
     const [activeLanguage, setActiveLanguage] = useState<string>("");
     const [userEmail, setUserEmail] = useState<string>("");
@@ -214,28 +213,6 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                                     <div className="agreement-box mt-2 p-2">
                                                         <div
                                                             ref={desclaimer}
-                                                            onScroll={() => {
-                                                                if (
-                                                                    desclaimer &&
-                                                                    desclaimer.current
-                                                                ) {
-                                                                    if (
-                                                                        desclaimer
-                                                                            .current
-                                                                            .scrollTop ===
-                                                                        desclaimer
-                                                                            .current
-                                                                            ?.scrollHeight -
-                                                                            desclaimer
-                                                                                .current
-                                                                                ?.offsetHeight
-                                                                    ) {
-                                                                        isReaded(
-                                                                            true
-                                                                        );
-                                                                    }
-                                                                }
-                                                            }}
                                                             className="agreement-box--inner"
                                                         >
                                                             <div
@@ -251,7 +228,6 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                                         onChange={() => {
                                                             isAgree(!agree);
                                                         }}
-                                                        disabled={!readed}
                                                         className="mt-2"
                                                         type="checkbox"
                                                         label={t(

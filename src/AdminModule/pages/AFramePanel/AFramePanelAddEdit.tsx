@@ -334,7 +334,7 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
 
     return (
         <Fragment>
-            <AppBreadcrumb linkText={"Panels"} linkUrl={"/admin/rooms"} />
+            <AppBreadcrumb linkText={"Panels"} linkUrl={".."} />
             <AppPageHeader title={isEditMode ? "Edit Panels" : "Add Panels"} />
             <Row>
                 <Col>
@@ -1330,7 +1330,7 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                             <AppFormActions
                                 isEditMode={isEditMode}
                                 navigation={navigator}
-                                backLink={"/admin/rooms"}
+                                backLink={".."}
                                 isLoading={formState.isSubmitting}
                             />
                         </Form>

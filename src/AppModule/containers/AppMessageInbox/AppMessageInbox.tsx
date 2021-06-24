@@ -11,8 +11,7 @@ import { ChatThread } from "../../models/entities/ChatThread";
 import "./assets/scss/style.scss";
 
 export const AppMessageInbox: FC = () => {
-    const [closed, setClosed] = useState(false);
-    const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(true);
     const { getThreads } = useInitChatBox();
     const [loading, setLoading] = useState(true);
     const { user } = useAuthState();
@@ -20,23 +19,17 @@ export const AppMessageInbox: FC = () => {
     const [threads, setThreads] = useState<ChatThread[]>([]);
 
     useEffect(() => {
-        if (closed === false) {
-            setLoading(true);
-            getThreads(1)
-                .then(({ response }) => {
-                    if (response && response.items) {
-                        setThreads(response.items);
-                    }
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
-        }
-    }, [closed]);
-
-    if (closed === true) {
-        return null;
-    }
+        setLoading(true);
+        getThreads(1)
+            .then(({ response }) => {
+                if (response && response.items) {
+                    setThreads(response.items);
+                }
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, []);
 
     return (
         <div
@@ -49,10 +42,7 @@ export const AppMessageInbox: FC = () => {
                     onCollapseAction={() => {
                         setCollapsed(!collapsed);
                     }}
-                    onCloseAction={() => {
-                        setClosed(true);
-                    }}
-                    newMsgCounter={10}
+                    newMsgCounter={0}
                     user={user}
                 />
                 <AppMessageInboxFilters />

@@ -1,4 +1,4 @@
-import React from "react"; // useEffect
+import React, { useEffect } from "react";
 import { Redirect, Router, Location, useMatch } from "@reach/router";
 import { appRouters } from "./bootstrap";
 import { DashboardLayout } from "./layouts/DashboardLayout";
@@ -11,7 +11,7 @@ import {
     useChosenContainer,
     useNavigator,
     useSkipOnboarding,
-    // useUserSocketEvents,
+    useUserSocketEvents,
 } from "./hooks";
 import {
     AppLoader,
@@ -20,15 +20,14 @@ import {
     AppWelcomeModal,
 } from "./components";
 import { LandingHelper } from "./pages";
-// import { socket, EVENTS } from "./socket";
+import { socket, EVENTS } from "./socket";
 import { useGlobalData } from "./contexts";
-// import { successToast } from "./utils";
 
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
 import { AuthState } from "../SecurityModule/models";
 
-// const { CONNECT, DISCONNECT } = EVENTS;
+const { CONNECT, DISCONNECT } = EVENTS;
 interface Props {
     location: {
         pathname: string;
@@ -85,40 +84,38 @@ const App = (): JSX.Element => {
     const autoLoginPage = useMatch("/auth/auto-login/:token");
     const isOverViewPage = overViewPage !== null;
     const isAutoLoginPage = autoLoginPage !== null;
-    // const { emitLogin, emitLogout, emitPageChange } = useUserSocketEvents();
+    const { emitLogin, emitLogout, emitPageChange } = useUserSocketEvents();
 
-    // useEffect(() => {
-    //     socket.on(CONNECT, () => {
-    //         if (isAuthenticated === true) {
-    //             emitLogin();
-    //         }
+    useEffect(() => {
+        socket.on(CONNECT, () => {
+            if (isAuthenticated === true) {
+                emitLogin();
+            }
 
-    //         if (isAuthenticated === false) {
-    //             emitLogout();
-    //         }
-    //     });
+            if (isAuthenticated === false) {
+                emitLogout();
+            }
+        });
 
-    //     if (isAuthenticated === true) {
-    //         emitLogin();
-    //     }
+        if (isAuthenticated === true) {
+            emitLogin();
+        }
 
-    //     if (isAuthenticated === false) {
-    //         emitLogout();
-    //     }
+        if (isAuthenticated === false) {
+            emitLogout();
+        }
 
-    //     socket.on(DISCONNECT, () => {
-    //         emitLogout();
-    //     });
+        socket.on(DISCONNECT, () => {
+            emitLogout();
+        });
 
-    //     socket.on("online", ({ userId }) => {
-    //         successToast(`User online ${userId}`);
-    //     });
-    //     return () => {
-    //         socket.off(CONNECT);
-    //         socket.off("online");
-    //         socket.off(DISCONNECT);
-    //     };
-    // }, [container, isAuthenticated]);
+        socket.on("online", () => {});
+        return () => {
+            socket.off(CONNECT);
+            socket.off("online");
+            socket.off(DISCONNECT);
+        };
+    }, [container, isAuthenticated]);
 
     if (status === "LOADING" || isAuthenticated === null) {
         return <AppFullScreenLoader />;
@@ -146,7 +143,7 @@ const App = (): JSX.Element => {
                         <OnRouteChange
                             action={() => {
                                 window.scrollTo(0, 0);
-                                // emitPageChange();
+                                emitPageChange();
                             }}
                         />
                     </DashboardLayout>
@@ -183,7 +180,7 @@ const App = (): JSX.Element => {
             <OnRouteChange
                 action={() => {
                     window.scrollTo(0, 0);
-                    // emitPageChange();
+                    emitPageChange();
                 }}
             />
         </AuthLayout>
