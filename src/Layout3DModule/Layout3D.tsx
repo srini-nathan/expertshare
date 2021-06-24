@@ -116,7 +116,7 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
                     />
                 )}
             </div>
-            {selectedItem && (
+            {/* {selectedItem && (
                 <SelectionInspector
                     name={"name"}
                     type={"type"}
@@ -124,7 +124,7 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
                     rooms={roomsData}
                     currentRoom={mainRoom}
                 />
-            )}
+            )} */}
         </>
     );
 };
