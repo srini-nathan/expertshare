@@ -57,7 +57,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
           };
 
     return (
-        <Col md={12} lg={4} xl={4} className="events-grid--container--item">
+        <Col md={12} lg={4} xl={3} className="events-grid--container--item">
             <Col className="inner-container p-0">
                 <div className="inner-container--banner p-0" style={style}>
                     {/* <div className="inner-container--banner--button">

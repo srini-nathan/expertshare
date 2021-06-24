@@ -27,7 +27,7 @@
                     height: 11px;
                     content: "";
                     background-color: var(--primary);
-                    border: 2px solid #FFF;
+                    border: 2px solid #fff;
                     border-radius: 20px;
                 }
             }
@@ -80,8 +80,8 @@
             padding-top: 1px;
             font-size: 12px;
             font-weight: 500;
-            color: #FFF;
-            background-color: #F00;
+            color: #fff;
+            background-color: #f00;
             border-radius: 20px;
         }
     }
@@ -95,7 +95,7 @@
 
         padding-left: 0 !important;
         background: white;
-        box-shadow: 3px 3px 8px 0 rgba(155, 167, 186, .2);
+        box-shadow: 3px 3px 8px 0 rgba(155, 167, 186, 0.2);
 
         .btn-icon {
             padding-top: 12px;
@@ -110,7 +110,7 @@
     }
 }
 
-.list-group-item.active {
+.message-group-container.active {
     background-color: transparent !important;
     border: none;
 }

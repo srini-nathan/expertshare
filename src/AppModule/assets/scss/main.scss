@@ -45,12 +45,16 @@ a {
 }
 
 .bottom-nav {
-    margin-bottom: 220px !important;
-
+    @include media("not-mobile") {
+        margin-bottom: 180px !important;
+    }
     .app-grid-action,
     .footer-action {
         @include media("not-mobile") {
-            bottom: 100px;
+            bottom: 80px;
+            left: 0;
+            padding-left: 20px;
+            align-items: center;
         }
     }
 }
