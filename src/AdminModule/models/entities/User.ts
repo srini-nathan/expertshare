@@ -163,3 +163,7 @@ export class User extends BaseEntity {
 }
 
 export type PUser = Partial<User>;
+
+export type PRUser = {
+    "@id": string;
+} & PUser;

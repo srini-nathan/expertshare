@@ -23,6 +23,8 @@ import { AttendeeCard } from "../../components/AttendeeCard";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import {
     AppGrid,
+    buildFilterParams,
+    buildSortParams,
     defaultPageSize,
     pageSizeOptions,
 } from "../../containers/AppGrid";
@@ -82,23 +84,24 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 const { endRow } = request;
                 const pageNo = endRow / appGridConfig.pageSize;
                 api?.hideOverlay();
-                UserApi.getAttendeeList<User>(pageNo, {}).then(
-                    ({ response, error }) => {
-                        isLoading(false);
-                        if (error !== null) {
-                            if (_isString(error)) {
-                                errorToast(error);
-                            }
-                        } else if (response !== null) {
-                            setAttendees(response.items);
-                            setTotal(response.totalItems);
-                            params.successCallback(
-                                response.items,
-                                response.totalItems
-                            );
+                UserApi.getAttendeeList<User>(pageNo, {
+                    order: buildSortParams(request),
+                    ...buildFilterParams(request),
+                }).then(({ response, error }) => {
+                    isLoading(false);
+                    if (error !== null) {
+                        if (_isString(error)) {
+                            errorToast(error);
                         }
+                    } else if (response !== null) {
+                        setAttendees(response.items);
+                        setTotal(response.totalItems);
+                        params.successCallback(
+                            response.items,
+                            response.totalItems
+                        );
                     }
-                );
+                });
             },
         };
     }

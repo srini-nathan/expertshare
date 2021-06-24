@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { PUser } from "../../../AdminModule/models";
+import { PRUser, PUser } from "../../../AdminModule/models";
 import { ChatMessage } from "../../models/entities/ChatMessage";
 import { FileTypeInfo } from "../../models";
 import { CONSTANTS } from "../../../config";
@@ -23,7 +23,8 @@ export const AppChatOneToOneMessage: FC<AppChatOneToOneMessageProps> = ({
     loginUser,
     otherUser,
 }) => {
-    const senderResourceUrl = chat.user;
+    const user: PRUser = chat.user as PRUser;
+    const senderResourceUrl = user["@id"];
     const isMe = loginUser.id
         ? senderResourceUrl === UserApi.toResourceUrl(loginUser.id)
         : false;
@@ -54,7 +55,7 @@ export const AppChatOneToOneMessage: FC<AppChatOneToOneMessageProps> = ({
                         {name}
                         {createdAt ? (
                             <span className="time">
-                                {toShortTime(new Date())}
+                                {toShortTime(new Date(createdAt))}
                             </span>
                         ) : null}
                     </h4>

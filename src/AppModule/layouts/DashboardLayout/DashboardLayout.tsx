@@ -7,12 +7,12 @@ import {
     AppDashboardLayoutOptions,
     appDashboardLayoutOptions,
 } from "../../atoms";
-// import { AppMessages } from "../../containers/AppMessages";
+import { AppMessages } from "../../containers/AppMessages";
 
 export const DashboardLayout: FC = ({ children }) => {
     const {
         hideNav,
-        // hideMessenger,
+        hideMessenger,
         navPosition,
     } = useRecoilValue<AppDashboardLayoutOptions>(appDashboardLayoutOptions);
 
@@ -35,7 +35,7 @@ export const DashboardLayout: FC = ({ children }) => {
                 <div className="col-md-12 col-sm-12 col-xl-12 p-3 p-lg-4">
                     {children}
                 </div>
-                {/* <AppMessages disable={hideMessenger} /> */}
+                <AppMessages disable={hideMessenger} />
             </div>
         </Container>
     );

@@ -128,7 +128,31 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
             );
         }
     };
+    const getTranslation = () => {
+        let defaultValues: any = {
+            locale: active,
+        };
+        translations.forEach((e) => {
+            if (e.locale === active) defaultValues = e;
+        });
 
+        return translations.map((e) => {
+            if (e !== defaultValues) {
+                let item = e;
+                Object.keys(defaultValues).forEach((key) => {
+                    if (!item[key]) {
+                        item = {
+                            ...item,
+                            [key]: defaultValues[key],
+                        };
+                    }
+                });
+                return item;
+            }
+
+            return e;
+        });
+    };
     const onSubmit = async (formData: ContainerFormType) => {
         let container = 0;
         if (containerId) container = containerId;
@@ -136,7 +160,7 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
         //     type: ContainerTypes.LOADING,
         // });
         isLoadingData(true);
-        formData.translations = translations;
+        formData.translations = getTranslation();
         const newFormData: ContainerFormType = {
             ...formData,
             ...files,

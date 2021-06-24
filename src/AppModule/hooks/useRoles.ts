@@ -22,7 +22,7 @@ export function filterRoles(role: string) {
         });
     } else {
         FilterRoute = roles.filter((e: any) => {
-            return e.role !== "ROLE_SUPER_ADMIN" || e.role === "ROLE_ADMIN";
+            return e.role !== "ROLE_SUPER_ADMIN" || e.role !== "ROLE_ADMIN";
         });
     }
 

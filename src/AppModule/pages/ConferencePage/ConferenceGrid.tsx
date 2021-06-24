@@ -252,9 +252,11 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                 <div className="d-block d-sm-flex pt-2 mb-5 event-header-width">
                     <AppListPageToolbar
                         createLink={"/event/create"}
+                        grantedControl={isGrantedControl}
                         onQuickFilterChange={handleFilter}
                         cancelTokenSources={cancelTokenSourcesRef.current}
                     />
+
                     <AppSwitchView link={"/event"} activeLink={view || ""} />
                 </div>
             </AppPageHeader>

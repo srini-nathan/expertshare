@@ -13,6 +13,7 @@ import {
     AttendeeOverview,
     OnBoardingPage,
     ReloadingPage,
+    InfoPage,
 } from "./pages";
 import { ModuleRouter } from "./models";
 import { Layout3D } from "../Layout3DModule";
@@ -25,6 +26,7 @@ export const routers: ModuleRouter[] = [
         RouterPlug: (): JSX.Element => {
             return (
                 <Router>
+                    <InfoPage path={"info-page"} />
                     <KitchenSink path={"kitchen-sink"} />
                     <MyProfilePage path={"my-profile"} />
                     <ContainerOverview path={"container"} />

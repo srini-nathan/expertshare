@@ -1,6 +1,6 @@
 import React, { FC } from "react";
-// import { AppChatOneToOne } from "../AppChatOneToOne";
-// import { AppMessageInbox } from "../AppMessageInbox";
+import { AppChatOneToOne } from "../AppChatOneToOne";
+import { AppMessageInbox } from "../AppMessageInbox";
 
 export interface AppMessagesProps {
     disable?: boolean;
@@ -14,8 +14,8 @@ export const AppMessages: FC<AppMessagesProps> = ({ disable }) => {
     return (
         <div className="app-message-inbox">
             <div className="app-message-inbox--container">
-                {/* <AppChatOneToOne />
-                <AppMessageInbox /> */}
+                <AppChatOneToOne />
+                <AppMessageInbox />
             </div>
         </div>
     );

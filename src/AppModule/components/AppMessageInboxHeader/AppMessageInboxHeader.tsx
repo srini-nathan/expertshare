@@ -14,7 +14,6 @@ export interface AppMessageInboxHeaderProps {
     user: PUser;
     isOnline?: boolean;
     newMsgCounter?: number;
-    onCloseAction: () => void;
     onCollapseAction: () => void;
 }
 
@@ -22,7 +21,6 @@ export const AppMessageInboxHeader: FC<AppMessageInboxHeaderProps> = ({
     user,
     newMsgCounter = 0,
     isOnline = false,
-    onCloseAction,
     onCollapseAction,
 }) => {
     const avatar = useBuildAssetPath(
@@ -64,15 +62,6 @@ export const AppMessageInboxHeader: FC<AppMessageInboxHeaderProps> = ({
                     >
                         <a>
                             <i className="fak fa-chevron-down"></i>
-                        </a>
-                    </div>
-                    <div
-                        className="btn-close col-auto px-1 p-0 pl-2"
-                        id="btn-close-index"
-                        onClick={onCloseAction}
-                    >
-                        <a>
-                            <i className="fak fa-times-light"></i>
                         </a>
                     </div>
                 </div>
