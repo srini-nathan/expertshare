@@ -3,7 +3,6 @@ import { RouteComponentProps } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useForm, FormProvider } from "react-hook-form";
-import { isString as _isString } from "lodash";
 import mapValues from "lodash/mapValues";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -17,8 +16,8 @@ import {
     AppFormInputColorPicker,
     SessionCategoryTranslationsType,
 } from "../../../AppModule/components";
-import { SessionCategory, Language } from "../../models";
-import { SessionCategoryApi, ContainerApi, LanguageApi } from "../../apis";
+import { SessionCategory } from "../../models";
+import { SessionCategoryApi, ContainerApi } from "../../apis";
 import {
     errorToast,
     setViolations,
@@ -29,6 +28,7 @@ import {
     useParamId,
     useNavigator,
     useAuthState,
+    useLanguages,
 } from "../../../AppModule/hooks";
 
 export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
@@ -37,12 +37,12 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
     const { id, isEditMode } = useParamId();
     const navigator = useNavigator(navigate);
     const { containerResourceId, containerId } = useAuthState();
-    const [languages, setLanguages] = useState<Language[]>([]);
     const [defaultLanguage, setDefaultLanguage] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
     const [data, setData] = useState<SessionCategory>(
         new SessionCategory(containerResourceId)
     );
+    const { Languages } = useLanguages();
     const [translations, setTranslations] = useState<
         SessionCategoryTranslationsType[]
     >([]);
@@ -187,13 +187,13 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
     }, [id, isEditMode]);
 
     useEffect(() => {
-        languages.forEach((e) => {
+        Languages().forEach((e) => {
             if (e.isDefault) {
                 setDefaultLanguage(e.locale);
             }
         });
-        if (languages.length !== translations.length) {
-            const items: SessionCategoryTranslationsType[] = languages.map(
+        if (Languages().length !== translations.length) {
+            const items: SessionCategoryTranslationsType[] = Languages().map(
                 (e) => {
                     let item = {
                         locale: e.locale,
@@ -212,23 +212,8 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
             );
             setTranslations(items);
         }
-    }, [languages]);
-
-    useEffect(() => {
-        LanguageApi.find<Language>(1, {
-            "container.id": containerId,
-            "order[isDefault]": "desc",
-        }).then(({ error, response }) => {
-            if (error !== null) {
-                if (_isString(error)) {
-                    errorToast(error);
-                }
-            } else if (response !== null) {
-                setLanguages(response.items);
-            }
-            setLoading(false);
-        });
-    }, [data]);
+        setLoading(false);
+    }, [Languages()]);
 
     if (loading) {
         return <AppLoader />;
@@ -267,7 +252,7 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
                         >
                             <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                                 <AppSessionCategoryTranslations
-                                    languages={languages}
+                                    languages={Languages()}
                                     defaultLanguage={defaultLanguage}
                                     translations={translations}
                                     onChange={setTranslations}

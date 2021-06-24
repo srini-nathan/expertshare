@@ -28,6 +28,7 @@ import {
     hideLoader,
 } from "../../../AppModule/utils";
 import "./assets/scss/list.scss";
+import { LANGUAGES } from "../../../AppModule/config/app-env";
 
 export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
@@ -66,6 +67,11 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
                             api?.showNoRowsOverlay();
                         }
                         setTotalItems(response.totalItems);
+                        localStorage.setItem(
+                            LANGUAGES,
+                            JSON.stringify(response.items)
+                        );
+
                         params.successCallback(
                             response.items,
                             response.totalItems
