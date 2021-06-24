@@ -14,6 +14,8 @@ import {
     Object3D,
     PerspectiveCamera as PerspectiveCameraOriginal,
     Vector3,
+    LinearEncoding,
+    sRGBEncoding,
 } from "three";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -85,6 +87,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
     const {
         camera,
         gl: { domElement },
+        gl,
     } = useThree();
     // const set = useThree((state) => state.set);
 
@@ -509,6 +512,8 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
     useEffect(() => {
         // console.log("-----  USE EFFECT: []", editMode, orbit.current);
 
+        gl.outputEncoding = sRGBEncoding;
+        gl.gammaFactor = 2.2;
         if (orbit.current) {
             // add callbacks to stop orbit while dragging
             const { current: controls } = orbit;

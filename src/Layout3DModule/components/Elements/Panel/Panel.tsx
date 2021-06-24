@@ -70,9 +70,7 @@ export const Panel = ({
     setSrcUrl,
 }: PanelProps): JSX.Element => {
     let { position, rotation, scale } = props;
-    // const position = {
-    //     x: parseFloat(String(props!.position.x)),
-    // };
+
     position = position as Vector3;
     position = new Vector3(
         parseFloat(String(position.x)),
@@ -101,9 +99,8 @@ export const Panel = ({
     const labelFontSize = label.width;
 
     const DEFAULT_DURATION = 3000;
-    console.log("panel data: ", panelData);
+    // console.log("panel data: ", panelData, depth, labelColor, color);
 
-    // const mesh = useRef<THREE.Mesh>(null!);
     const group = useRef<Group>(null!);
     const positionDyn = useRef<Vector3>(position);
     const rotationDyn = useRef(rotation);
@@ -158,7 +155,14 @@ export const Panel = ({
     // else if (isIframe) defaultImageUrl = ifameImage.default;
     // else if (isBillboard) defaultImageUrl = billBoardImage.default;
 
-    // console.log("panel: ", panelData, position, rotation, scale);
+    // console.log(
+    //     "panel: ",
+    //     panelData,
+    //     position,
+    //     rotation,
+    //     scale,
+    //     remote.assetId
+    // );
 
     const parent: ParentProps = {
         width: parseFloat(String(size.x)),
@@ -188,12 +192,12 @@ export const Panel = ({
     const panelCliked = () => {
         const { isTransitionEnabled, video } = panelData;
         const positionPanel = group.current.position.clone();
-        console.log(
-            "current panel: ",
-            group.current.position,
-            panelData,
-            positionPanel
-        );
+        // console.log(
+        //     "current panel: ",
+        //     group.current.position,
+        //     panelData,
+        //     positionPanel
+        // );
         switch (target.type) {
             case TargetTypes.ROOM:
                 // console.log("change door to: ", target.id);
@@ -254,9 +258,9 @@ export const Panel = ({
     useEffect(() => {
         if (group.current) {
             // const pos = group.current.localToWorld(new Vector3(0, 0, 0));
-            setRemotePosition(
-                new Vector3(positionDyn.current.x, 0, positionDyn.current.z)
-            );
+            // setRemotePosition(
+            //     new Vector3(positionDyn.current.x, 0, positionDyn.current.z)
+            // );
             // setRemoteRotation(
             //     new Euler(
             //         degToRad(parseFloat(String(panelData.remote.rotation.x))),
@@ -305,22 +309,33 @@ export const Panel = ({
         );
     }, [panelData.remote.rotation]);
 
+    useEffect(() => {
+        setRemotePosition(
+            new Vector3(
+                parseFloat(String(panelData.remote.position.x)),
+                parseFloat(String(panelData.remote.position.y)),
+                parseFloat(String(panelData.remote.position.z))
+            )
+        );
+    }, [panelData.remote.position]);
+
     useFrame(() => {
         if (remotePosition && group.current && group.current.position) {
             // if group position is different than remote position, and remote is not active, set remote position
-            if (
-                (remotePosition.x !== group.current.position.x ||
-                    remotePosition.z !== group.current.position.z) &&
-                !remoteActive
-            ) {
-                setRemotePosition(
-                    new Vector3(
-                        group.current.position.x,
-                        0,
-                        group.current.position.z
-                    )
-                );
-            }
+            // removed for now, going with legacy version
+            // if (
+            //     (remotePosition.x !== group.current.position.x ||
+            //         remotePosition.z !== group.current.position.z) &&
+            //     !remoteActive
+            // ) {
+            //     setRemotePosition(
+            //         new Vector3(
+            //             group.current.position.x,
+            //             0,
+            //             group.current.position.z
+            //         )
+            //     );
+            // }
         }
     });
 
@@ -407,7 +422,11 @@ export const Panel = ({
                         disable={remote.disable}
                         animationDisable={remote.animationDisable}
                         animationType={remote.animationType}
-                        image={remote.assetId}
+                        image={
+                            remote.assetId && remote.assetId !== ""
+                                ? `${panelsPath}/${remote.assetId}`
+                                : null!
+                        }
                         onRemoteClick={onRemoteClick}
                         target={target}
                         onRemoteMissed={() => setRemoteActive(false)}
