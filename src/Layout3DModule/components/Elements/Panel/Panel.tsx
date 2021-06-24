@@ -155,7 +155,14 @@ export const Panel = ({
     // else if (isIframe) defaultImageUrl = ifameImage.default;
     // else if (isBillboard) defaultImageUrl = billBoardImage.default;
 
-    // console.log("panel: ", panelData, position, rotation, scale);
+    // console.log(
+    //     "panel: ",
+    //     panelData,
+    //     position,
+    //     rotation,
+    //     scale,
+    //     remote.assetId
+    // );
 
     const parent: ParentProps = {
         width: parseFloat(String(size.x)),
@@ -415,7 +422,11 @@ export const Panel = ({
                         disable={remote.disable}
                         animationDisable={remote.animationDisable}
                         animationType={remote.animationType}
-                        image={remote.assetId}
+                        image={
+                            remote.assetId && remote.assetId !== ""
+                                ? `${panelsPath}/${remote.assetId}`
+                                : null!
+                        }
                         onRemoteClick={onRemoteClick}
                         target={target}
                         onRemoteMissed={() => setRemoteActive(false)}
