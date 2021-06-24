@@ -119,7 +119,7 @@ export const Remote = ({
     };
 
     useEffect(() => {
-        if (image && image === "url") {
+        if (image) {
             setImageUrl(image);
         }
     }, [image]);
@@ -170,7 +170,7 @@ export const Remote = ({
                 {imageUrl && (
                     <Image
                         props={{ position: [0, 0, 0.02] }}
-                        textureUrl={bananaTexture.default}
+                        textureUrl={imageUrl}
                         parent={parent}
                         padding={0}
                         side={DoubleSide}
