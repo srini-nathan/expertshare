@@ -155,7 +155,7 @@ export const SceneCanvas = ({
 
     return (
         <>
-            <Canvas dpr={window.devicePixelRatio}>
+            <Canvas dpr={window.devicePixelRatio} flat={true}>
                 <color attach="background" args={["black"]} />
                 <Suspense fallback={null}>
                     <ambientLight args={["#ffffff"]} />
