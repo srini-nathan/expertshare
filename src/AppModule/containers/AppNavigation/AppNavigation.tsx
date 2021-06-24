@@ -19,6 +19,7 @@ import {
     AppSubNavigationItemProps,
     AppNavigationItemProps,
 } from "../../components/AppNavigationItem";
+import { useGlobalData } from "../../contexts";
 import "./assets/scss/style.scss";
 import FooterLogo from "./assets/images/expertshare_logo_footer.png";
 import {
@@ -74,6 +75,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const {
         navPosition: menuLocation,
     } = useRecoilValue<AppDashboardLayoutOptions>(appDashboardLayoutOptions);
+    const { container } = useGlobalData();
 
     const style = user.imageName
         ? {
@@ -394,6 +396,25 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                             />
                         );
                     })}
+                {container &&
+                    container.configuration &&
+                    (container.configuration as any).isInfoPageEnable && (
+                        <AppNavigationItem
+                            label={
+                                (container &&
+                                    container.configuration &&
+                                    (container.configuration as any)
+                                        .infoPageNavigationTitle) ||
+                                "Info Page"
+                            }
+                            path={"/info-page"}
+                            icon={{
+                                name: "fal fa-info-circle",
+                            }}
+                            className="main-menu"
+                        />
+                    )}
+
                 {location.pathname.includes("a3d") ? (
                     <AppNavigationItem
                         label={"2D View"}
