@@ -72,6 +72,14 @@
                         font-size: 14px;
                         font-weight: 500;
                         color: var(--secondary);
+                        .custom-select__value-container {
+                            flex-wrap: nowrap;
+                            height: 36px;
+                            .custom-select__placeholder {
+                                display: flex;
+                                line-height: 36px;
+                            }
+                        }
                     }
                 }
                 .btn-session {
@@ -132,14 +140,12 @@
                                     span {
                                         font-size: 16px;
                                         font-weight: 700;
-                                        color: var(--sub-text-fg-clr);
                                     }
                                 }
 
                                 span {
                                     font-size: 12px;
                                     font-weight: 500;
-                                    color: var(--sub-text-fg-clr);
                                 }
                             }
                         }

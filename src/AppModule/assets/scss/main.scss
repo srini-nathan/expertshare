@@ -25,14 +25,11 @@ body {
         opacity: 100%;
     }
 
-
     .with-bg {
-
         background: url("../images/bg_cs.jpeg") no-repeat;
         background-size: cover;
         background-attachment: fixed;
     }
-
 }
 
 a {
@@ -52,9 +49,10 @@ a {
 
     .app-grid-action,
     .footer-action {
-        bottom: 100px;
+        @include media("not-mobile") {
+            bottom: 100px;
+        }
     }
-
 }
 
 .right-container {

@@ -176,6 +176,8 @@
                             font-size: 12px;
                             font-weight: 700;
                             color: var(--primary);
+                            cursor: initial !important;
+                            user-select: none;
                             background-color: var(--primary-10);
                             border: 1px solid var(--primary);
                             border-radius: var(--spc-btn-border-radius);

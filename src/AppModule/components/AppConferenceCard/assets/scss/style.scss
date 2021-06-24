@@ -12,7 +12,6 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
-
         }
 
         .conference-tags-container {
@@ -22,7 +21,6 @@
                 i {
                     font-size: 20px;
                     color: var(--secondary);
-
                 }
 
                 span {
@@ -47,6 +45,7 @@
             font-size: 12px;
             font-weight: 700;
             color: var(--primary);
+            user-select: none;
             background-color: var(--primary-10);
             border: 1px solid var(--primary);
             border-radius: 25px;
@@ -210,7 +209,6 @@
                                                 background-color: var(--primary);
                                                 border: 1px solid var(--border-border-radius-clr);
                                                 border-radius: 50%;
-
                                             }
                                         }
                                     }
@@ -233,7 +231,6 @@
                                         }
                                     }
                                 }
-
                             }
                         }
 
@@ -294,14 +291,10 @@
                                 }
                             }
                         }
-
-
                     }
                 }
             }
         }
-
-
     }
 
     &--more {

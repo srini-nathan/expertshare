@@ -7,4 +7,5 @@ export interface AppSubNavigationItemProps {
     className?: string;
     icon: AppIconProps;
     isVisible?: boolean;
+    onClick?: (value: boolean) => void;
 }

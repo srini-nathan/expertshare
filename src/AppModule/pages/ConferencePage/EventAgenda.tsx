@@ -294,6 +294,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                         setCategoryFilter([]);
                     }}
                     variant="secondary"
+                    className="mr-2 mb-2"
                 >
                     {categoryFilter.length === 0 && (
                         <i className="fak fa-check-regular-bold pr-2"></i>
@@ -307,7 +308,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                                 handleCategoryFilter(e.id);
                             }}
                             variant="secondary"
-                            className="ml-2 mb-2 category-btn"
+                            className="mr-2 mb-2 category-btn"
                         >
                             <span
                                 style={{

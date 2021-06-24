@@ -74,6 +74,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const {
         navPosition: menuLocation,
     } = useRecoilValue<AppDashboardLayoutOptions>(appDashboardLayoutOptions);
+    const [navOpen, isNavOpen] = useState<boolean>(false);
 
     const style = user.imageName
         ? {
@@ -369,6 +370,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                 key={label}
                                 icon={icon}
                                 className="main-menu sub-menu"
+                                onClick={() => isNavOpen(!navOpen)}
                             />
                         );
                     })}
@@ -376,7 +378,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         );
     };
     const renderMenu = () => {
-        if (showSubMenuItems && menuLocation === "left") {
+        if (showSubMenuItems && (menuLocation === "left" || width < 768)) {
             return renderSubMenu();
         }
         return (
@@ -391,6 +393,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                 icon={icon}
                                 key={label}
                                 className="main-menu"
+                                onClick={() => isNavOpen(!navOpen)}
                             />
                         );
                     })}
@@ -402,6 +405,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                             name: "fal fa-desktop",
                         }}
                         className="main-menu"
+                        onClick={() => isNavOpen(!navOpen)}
                     />
                 ) : (
                     <AppNavigationItem
@@ -411,6 +415,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                             name: "fab fa-unity",
                         }}
                         className="main-menu"
+                        onClick={() => isNavOpen(!navOpen)}
                     />
                 )}
 
@@ -422,7 +427,12 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         <aside
             className={`${menuLocation}-sidebar left-container d-block navbar-expand-md sidebar`}
         >
-            <Navbar className="row m-0 p-0 mb-md-4 d-block" expand="lg">
+            <Navbar
+                className="row m-0 p-0 mb-md-4 d-block"
+                expand="lg"
+                onToggle={isNavOpen}
+                expanded={navOpen}
+            >
                 <div className="col-md-12">
                     <div className="logo-holder row">
                         <div
@@ -454,11 +464,12 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                 }`}
                             >
                                 <ListGroup ref={bottomMenu}>
-                                    {menuLocation === "bottom" && (
+                                    {menuLocation === "bottom" && width > 768 && (
                                         <ListGroupItem className={`px-0 py-1`}>
                                             <a
                                                 href="https://expertshare.live"
                                                 className="nav-link text-center copyright"
+                                                target="_blank"
                                             >
                                                 <span>
                                                     Virtual event platform by
@@ -537,6 +548,8 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                     return {
                                                         label: e.name,
                                                         iconClassName: `languages ${e.locale}`,
+                                                        onClick: () =>
+                                                            isNavOpen(!navOpen),
                                                         action: () => {
                                                             setUserLocale(e);
                                                             setLocale(e.locale);
@@ -581,11 +594,15 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                     ),
                                                     path: "/my-profile",
                                                     icon: "User",
+                                                    onClick: () =>
+                                                        isNavOpen(!navOpen),
                                                 },
                                                 {
                                                     label: t(
                                                         "navigation:logOut"
                                                     ),
+                                                    onClick: () =>
+                                                        isNavOpen(!navOpen),
                                                     action: handleLogoutEvent,
                                                     icon: "SignOut",
                                                 },
@@ -593,10 +610,11 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                         />
                                     </ListGroupItem>
 
-                                    {menuLocation === "left" && (
+                                    {(menuLocation === "left" ||
+                                        width < 768) && (
                                         <>
                                             <ListGroupItem
-                                                className={`seperator  p-0 mx-4`}
+                                                className={`seperator p-0 mx-4`}
                                             ></ListGroupItem>
                                             <ListGroupItem
                                                 className={`px-0 py-1`}
@@ -604,6 +622,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                 <a
                                                     href="https://expertshare.live"
                                                     className="nav-link text-center copyright"
+                                                    target="_blank"
                                                 >
                                                     <span>
                                                         Virtual event platform
@@ -615,6 +634,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                         </>
                                     )}
                                     {menuLocation === "bottom" &&
+                                        width > 768 &&
                                         showSubMenuItems && (
                                             <ListGroupItem
                                                 className={`seperator  p-0 mx-4`}
@@ -623,7 +643,8 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                 </ListGroup>
                                 <ListGroup>
                                     {showSubMenuItems &&
-                                        menuLocation === "bottom" && (
+                                        menuLocation === "bottom" &&
+                                        width > 768 && (
                                             <div
                                                 className="main-menu-container"
                                                 style={getMenuHeightStyle()}
@@ -642,7 +663,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                     }}
                     id="show-menu-toggler"
                 >
-                    <AppIcon name="Menu" />
+                    <i className="fak fa-text"></i>
                 </div>
             </Navbar>
         </aside>

@@ -50,7 +50,7 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
               backgroundSize: "cover",
           }
         : {
-              backgroundSize: "contain",
+              backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
               backgroundImage: `url(${placeholder})`,
@@ -137,7 +137,7 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                                         className="card--tags--item col-auto px-0 mb-2"
                                         key={index}
                                     >
-                                        <a href="#">{tag.name}</a>
+                                        <a>{tag.name}</a>
                                     </div>
                                 );
                             }

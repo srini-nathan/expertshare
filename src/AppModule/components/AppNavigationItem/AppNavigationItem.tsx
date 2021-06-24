@@ -9,6 +9,7 @@ export const AppNavigationItem: FC<AppNavigationItemProps> = ({
     path,
     icon,
     className = "",
+    onClick,
 }) => {
     const { t } = useTranslation();
 
@@ -22,6 +23,11 @@ export const AppNavigationItem: FC<AppNavigationItemProps> = ({
                                 ? "active"
                                 : ""
                         }`}
+                        onClick={() => {
+                            if (onClick) {
+                                onClick(false);
+                            }
+                        }}
                     >
                         <Link to={path} className="nav-link">
                             <div className="nav-icon">
