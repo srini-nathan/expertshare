@@ -2,12 +2,13 @@ import React, { FC } from "react";
 import { Row, Col } from "react-bootstrap";
 import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
-import { Link } from "@reach/router";
+import { Link, navigate, useLocation } from "@reach/router";
 import "./assets/scss/style.scss";
 import { AppStreamManager } from "../AppStreamManager";
 import { Session } from "../../../AdminModule/models";
 import { useGlobalData } from "../../contexts";
 import { getDateTimeWithoutTimezone } from "../../utils";
+import { useLanguages, useUserLocale } from "../../hooks";
 
 export interface AppSessionHeaderProps {
     session: Session;
@@ -26,6 +27,10 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
 }): JSX.Element => {
     const { container } = useGlobalData();
     const { t } = useTranslation();
+    const { locale, setLocale } = useUserLocale();
+    const { Languages } = useLanguages();
+    const location = useLocation();
+
     return (
         <Col sm={12} className="session-details-header mb-4 p-0">
             <Row className="session-details-header--detail mb-3 px-4 pt-4">
@@ -46,6 +51,45 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                     md={6}
                     className="text-right session-details-header--detail--action mt-2 mt-lg-0"
                 >
+                    <div className="col-auto language-dropdown pr-0 pl-0 pl-lg-2">
+                        <div className="dropdown">
+                            <button
+                                className="dropdown-toggle px-3"
+                                type="button"
+                                id="dropdownMenuButton"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                            >
+                                <i className={`languages ${locale}`}></i>
+                            </button>
+                            <div
+                                className="dropdown-menu"
+                                aria-labelledby="dropdownMenuButton"
+                            >
+                                {Languages().map((e) => {
+                                    return (
+                                        <span
+                                            onClick={() => {
+                                                setLocale(e.locale);
+                                                navigate("/reloading", {
+                                                    state: {
+                                                        url: location.pathname,
+                                                    },
+                                                });
+                                            }}
+                                            className="dropdown-item"
+                                        >
+                                            <i
+                                                className={`languages ${e.locale}`}
+                                            ></i>
+                                            {e.name}
+                                        </span>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
                     <Col sm={"auto"} className="button-action-session pr-0">
                         {prev && (
                             <Link

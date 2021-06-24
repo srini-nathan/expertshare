@@ -43,8 +43,7 @@
             color: var(--primary);
         }
 
-        span {
-        }
+        span {}
 
         i {
             margin-right: 5px;
@@ -155,6 +154,12 @@
                         border-radius: var(--border-radius);
                         box-shadow: 0 3px 9px var(--secondary-10);
 
+                        &:hover {
+                            &~.dropdown-menu {
+                                display: block;
+                            }
+                        }
+
                         &::after {
                             margin-left: 10px;
                             font-family: "Font Awesome Kit";
@@ -169,16 +174,47 @@
                             display: block;
                             width: 24px;
                             height: 24px;
-                            // background: url(../images/en_flag.png) no-repeat;
-                            background-position: center;
-                            background-size: cover;
+
+                            &.en {
+                                background: url(../../../AppFormTranslatable/assets/images/en_flag.png) no-repeat;
+                                background-position: center;
+                                background-size: contain;
+                            }
+
+                            &.it {
+                                background: url(../../../AppFormTranslatable/assets/images/it_flag.jpg) no-repeat;
+                                background-position: center;
+                                background-size: contain;
+                            }
+
+                            &.de {
+                                background: url(../../../AppFormTranslatable/assets/images/de_flag.png) no-repeat;
+                                background-position: center;
+                                background-size: contain;
+                            }
+
+                            &.pt {
+                                background: url(../../../AppFormTranslatable/assets/images/pt_flag.png) no-repeat;
+                                background-position: center;
+                                background-size: contain;
+                            }
+
+                            &.fr {
+                                background: url(../../../AppFormTranslatable/assets/images/fr_flag.png) no-repeat;
+                                background-position: center;
+                                background-size: contain;
+                            }
                         }
                     }
 
                     .dropdown-menu {
+                        &:hover {
+                            display: block;
+                        }
+
                         min-width: unset;
                         padding: 0 5px;
-                        margin-top: 5px;
+                        margin-top: 0;
                         border: none;
                         border-radius: var(--border-radius);
                         box-shadow: 0 3px 9px var(--secondary-10);
@@ -187,15 +223,45 @@
                             display: flex;
                             align-items: center;
                             padding: 5px;
+                            cursor: pointer;
 
                             i {
                                 display: block;
-                                width: 32px;
-                                height: 32px;
+                                width: 28px;
+                                height: 28px;
                                 margin-right: 10px;
-                                // background: url(../images/en_flag.png) no-repeat;
                                 background-position: center;
-                                background-size: 28px;
+                                background-size: 24px;
+
+                                &.en {
+                                    background: url(../../../AppFormTranslatable/assets/images/en_flag.png) no-repeat;
+                                    background-position: center;
+                                    background-size: 24px;
+                                }
+
+                                &.it {
+                                    background: url(../../../AppFormTranslatable/assets/images/it_flag.jpg) no-repeat;
+                                    background-position: center;
+                                    background-size: 24px;
+                                }
+
+                                &.de {
+                                    background: url(../../../AppFormTranslatable/assets/images/de_flag.png) no-repeat;
+                                    background-position: center;
+                                    background-size: 24px;
+                                }
+
+                                &.pt {
+                                    background: url(../../../AppFormTranslatable/assets/images/pt_flag.png) no-repeat;
+                                    background-position: center;
+                                    background-size: 24px;
+                                }
+
+                                &.fr {
+                                    background: url(../../../AppFormTranslatable/assets/images/fr_flag.png) no-repeat;
+                                    background-position: center;
+                                    background-size: 24px;
+                                }
                             }
 
                             &:hover {
@@ -320,7 +386,7 @@
                         }
                     }
 
-                    &:hover > .button-action-session--left--popup {
+                    &:hover>.button-action-session--left--popup {
                         display: flex;
 
                         @include media("md") {
@@ -432,7 +498,7 @@
                         }
                     }
 
-                    &:hover > .button-action-session--right--popup {
+                    &:hover>.button-action-session--right--popup {
                         display: flex;
 
                         @include media("md") {
