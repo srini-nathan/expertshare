@@ -3,6 +3,8 @@ import { AFramePanelApi } from "../../apis";
 import { CONSTANTS } from "../../../config";
 
 export class AFramePanel extends BaseEntity {
+    translations?: any;
+
     image?: string;
 
     height: string;
@@ -112,30 +114,31 @@ export class AFramePanel extends BaseEntity {
     aFrameRoom?: string;
 
     constructor({
+        translations,
         image,
         height = "",
         width = "",
         depth = "",
-        padding = "",
-        color = "",
-        opacity = "",
-        pX = "",
-        pY = "",
-        pZ = "",
-        rX = "",
-        rY = "",
-        rZ = "",
-        sX = "",
-        sY = "",
-        sZ = "",
+        padding = "0.2",
+        color = "#808080",
+        opacity = "0.75",
+        pX = "-1",
+        pY = "1",
+        pZ = "-10",
+        rX = "0",
+        rY = "0",
+        rZ = "0",
+        sX = "1",
+        sY = "1",
+        sZ = "1",
         isRemoteDisabled,
         remoteImage,
-        remotePosX = "0",
-        remotePosY = "0",
-        remotePosZ = "0",
-        remoteScaX = "0",
-        remoteScaY = "0",
-        remoteScaZ = "0",
+        remotePosX = "-1",
+        remotePosY = "-2",
+        remotePosZ = "-10",
+        remoteScaX = "1",
+        remoteScaY = "1",
+        remoteScaZ = "1",
         remoteRotX = "0",
         remoteRotY = "0",
         remoteRotZ = "0",
@@ -144,17 +147,17 @@ export class AFramePanel extends BaseEntity {
         remoteAnimationSpeed = 0,
         isTextDisabled,
         textValue,
-        textColor,
-        textWidth,
-        textPosX,
-        textPosY,
-        textPosZ,
-        textScaX,
-        textScaY,
-        textScaZ,
-        textRotX,
-        textRotY,
-        textRotZ,
+        textColor = "#000000",
+        textWidth = "6",
+        textPosX = "0",
+        textPosY = "0",
+        textPosZ = "0",
+        textScaX = "1",
+        textScaY = "1",
+        textScaZ = "1",
+        textRotX = "0",
+        textRotY = "0",
+        textRotZ = "0",
         targetType,
         targetAction,
         targetId,
@@ -171,6 +174,7 @@ export class AFramePanel extends BaseEntity {
         updatedAt,
     }: Partial<AFramePanel> = {}) {
         super(id, createdAt, updatedAt);
+        this.translations = translations;
         this.image = image;
         this.height = height;
         this.width = width;
