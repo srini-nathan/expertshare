@@ -111,7 +111,7 @@ const App = (): JSX.Element => {
         });
 
         socket.on("online", ({ userId }) => {
-            successToast(`User online ${userId}`);
+            // successToast(`User online ${userId}`);
         });
         return () => {
             socket.off(CONNECT);
