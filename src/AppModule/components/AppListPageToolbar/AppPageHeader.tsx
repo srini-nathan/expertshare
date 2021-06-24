@@ -11,6 +11,7 @@ import "./assets/scss/style.scss";
 
 export interface AppListPageToolbarProps {
     createLink?: string;
+    grantedControl?: boolean;
     createLabel?: string;
     onQuickFilterChange?: (s: string) => void;
     cancelTokenSources?: Canceler[];
@@ -21,6 +22,7 @@ export const AppListPageToolbar: FC<AppListPageToolbarProps> = ({
     createLabel = "common.button:create",
     onQuickFilterChange = () => {},
     cancelTokenSources = [],
+    grantedControl = true,
 }): JSX.Element => {
     const search$ = useRef(new Subject<string>());
     const destroy$ = new Subject<string>();
@@ -71,7 +73,7 @@ export const AppListPageToolbar: FC<AppListPageToolbarProps> = ({
                             </InputGroup>
                         </Col>
                         <Col xs="12" sm="auto" className="mb-2">
-                            {createLink ? (
+                            {createLink && grantedControl ? (
                                 <AppButton
                                     className={"text-capitalize w-100"}
                                     variant={"secondary"}

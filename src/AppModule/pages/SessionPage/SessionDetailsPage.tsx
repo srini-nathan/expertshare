@@ -18,10 +18,18 @@ import { errorToast } from "../../utils";
 import { useAuthState } from "../../hooks";
 import "./assets/scss/style.scss";
 
-export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
+export const SessionDetailsPage: FC<RouteComponentProps> = ({
+    location,
+}): JSX.Element => {
+    // eslint-disable-next-line no-console
+    const { state } = location as any;
+    let sessionList: any = [];
+    if (state) sessionList = (state as any).sessionList;
     const { t } = useTranslation();
-    const { id, confereneceId } = useParams();
+    const { id, conferenceId } = useParams();
     const [loading, isLoading] = useState<boolean>(true);
+    const [next, setNext] = useState<number | null>(null);
+    const [prev, setPrev] = useState<number | null>(null);
     const { containerResourceId, containerId } = useAuthState();
     const [data, setData] = useState<Session>(new Session(containerResourceId));
 
@@ -37,6 +45,17 @@ export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
             } else if (response !== null) {
                 if (response.items[0]) {
                     const res: Session = (response.items as PSession[])[0] as Session;
+
+                    if (sessionList) {
+                        const currentSess = sessionList.find(
+                            (e: any) => e.id === res.id
+                        );
+                        if (currentSess) {
+                            setNext(currentSess.next);
+                            setPrev(currentSess.prev);
+                        }
+                    }
+
                     setData(res);
                 }
             }
@@ -59,7 +78,13 @@ export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
                     lg={data.isCommentEnable ? 8 : 12}
                 >
                     <AppCard className="p-0">
-                        <AppSessionHeader session={data} />
+                        <AppSessionHeader
+                            next={next}
+                            prev={prev}
+                            conferenceId={conferenceId}
+                            session={data}
+                            sessionList={sessionList}
+                        />
                         <AppSessionTags session={data} />
 
                         <Row className="my-5 mx-0 px-2">
@@ -104,7 +129,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = (): JSX.Element => {
                             name={t(
                                 "sessionDetails:section.questionAndAnswers"
                             )}
-                            conferenceNumber={confereneceId}
+                            conferenceNumber={conferenceId}
                             session={id}
                             container={containerId}
                         />
