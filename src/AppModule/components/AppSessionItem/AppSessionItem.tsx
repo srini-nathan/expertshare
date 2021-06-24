@@ -23,6 +23,7 @@ export interface AppSessionItemProps {
     session: Session;
     conference: number;
     isGrantedControl: boolean;
+    sessionList: any[];
     handleDelete: (id: number) => void;
 }
 
@@ -31,6 +32,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
     conference,
     handleDelete,
     isGrantedControl,
+    sessionList,
 }): JSX.Element => {
     const sessionPosterPath = useBuildAssetPath(
         FILETYPEINFO_SESSION_POSTER as FileTypeInfo,
@@ -158,6 +160,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                         >
                             <Link
                                 to={`/event/${conference}/session/${session.id}`}
+                                state={{ sessionList }}
                             >
                                 <div
                                     style={styles}
@@ -183,6 +186,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                             <div className="inner-container--det--title">
                                 <Link
                                     to={`/event/${conference}/session/${session.id}`}
+                                    state={{ sessionList }}
                                 >
                                     <h2 className="mb-0">{session.title}</h2>
                                 </Link>

@@ -1,5 +1,6 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, Fragment, useEffect } from "react";
 import { Helmet } from "react-helmet";
+import ReactGA from "react-ga";
 import { useSetRecoilState } from "recoil";
 import { Container, Role } from "../../../AdminModule/models";
 import { ContainerApi, RoleApi } from "../../../AdminModule/apis";
@@ -64,8 +65,19 @@ export const AppConfiguration: FC = ({ children }) => {
             );
         }
     }, []);
-
+    const injectGA = () => {
+        if (
+            containerConfiguration &&
+            containerConfiguration.googleAnalyticsCode &&
+            containerConfiguration.googleAnalyticsCode !== ""
+        ) {
+            ReactGA.initialize(containerConfiguration.googleAnalyticsCode);
+            ReactGA.pageview(window.location.pathname + window.location.search);
+        }
+        return <></>;
+    };
     const renderScripts = () => {
+        injectGA();
         return (
             <Helmet>
                 {containerConfiguration &&
@@ -73,15 +85,6 @@ export const AppConfiguration: FC = ({ children }) => {
                     containerConfiguration.projectName !== "" && (
                         <title>{containerConfiguration.projectName}</title>
                     )}
-                {containerConfiguration &&
-                    containerConfiguration.googleAnalyticsCode &&
-                    containerConfiguration.googleAnalyticsCode !== "" && (
-                        <script
-                            async
-                            src={`https://www.googletagmanager.com/gtag/js?id=${containerConfiguration.googleAnalyticsCode}`}
-                        ></script>
-                    )}
-
                 {containerConfiguration &&
                     containerConfiguration.isHubspotEnable &&
                     containerConfiguration.hubspotId !== "" && (

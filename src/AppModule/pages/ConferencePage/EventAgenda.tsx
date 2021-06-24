@@ -55,6 +55,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
     const [activeDate, setActiveDate] = useState<string>("");
     const [loading, isLoading] = useState<boolean>(true);
     const [loadingSession, isLoadingSession] = useState<boolean>(false);
+    const [sessionList, setSessionList] = useState<any[]>([]);
     const [categoryFilter, setCategoryFilter] = useState<number[]>([]);
     const [SessionCategories, setSessionCategories] = React.useState<
         SessionCategory[]
@@ -127,6 +128,28 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                         currentCat = [];
                     }
                 });
+
+                const sessionItems: any[] = [];
+                diffCat.forEach((e, i) => {
+                    e.forEach((k: any) => {
+                        const sessionState = {
+                            id: k.id,
+                            prev: null,
+                            next: null,
+                        };
+                        if (i !== 0) {
+                            if (diffCat[i - 1][0])
+                                sessionState.prev = diffCat[i - 1][0].id;
+                        }
+                        if (i < diffCat.length - 1) {
+                            if (diffCat[i + 1][0])
+                                sessionState.next = diffCat[i + 1][0].id;
+                        }
+
+                        sessionItems.push(sessionState);
+                    });
+                });
+                setSessionList(sessionItems);
                 setSessions(diffCat);
             }
         });
@@ -255,6 +278,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                                 >
                                     <AppSessionItem
                                         conference={id}
+                                        sessionList={sessionList}
                                         session={item}
                                         handleDelete={handleDeleteSession}
                                         isGrantedControl={isGrantedControl}
