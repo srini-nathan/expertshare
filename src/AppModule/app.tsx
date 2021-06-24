@@ -22,7 +22,6 @@ import {
 import { LandingHelper } from "./pages";
 import { socket, EVENTS } from "./socket";
 import { useGlobalData } from "./contexts";
-import { successToast } from "./utils";
 
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
@@ -110,9 +109,7 @@ const App = (): JSX.Element => {
             emitLogout();
         });
 
-        socket.on("online", ({ userId }) => {
-            // successToast(`User online ${userId}`);
-        });
+        socket.on("online", () => {});
         return () => {
             socket.off(CONNECT);
             socket.off("online");
