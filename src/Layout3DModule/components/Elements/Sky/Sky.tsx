@@ -6,7 +6,6 @@ import {
     TextureLoader,
     BackSide,
     EquirectangularRefractionMapping,
-    // sRGBEncoding,
 } from "three";
 import { useSpring, a } from "@react-spring/three";
 import { easeQuadInOut } from "d3-ease";
@@ -39,10 +38,13 @@ SkyProps): JSX.Element => {
     useEffect(() => {
         if (texture) {
             texture.mapping = EquirectangularRefractionMapping;
-            texture.anisotropy = gl.getMaxAnisotropy();
-
-            // texture.encoding = sRGBEncoding;
-            // texture.flipY = true;
+            texture.anisotropy = gl.capabilities.getMaxAnisotropy();
+            // texture.encoding = LinearEncoding;
+            // texture.generateMipmaps = true;
+            // texture.magFilter = LinearFilter;
+            // texture.minFilter = LinearFilter;
+            // texture.format = RGBEFormat;
+            texture.flipY = true;
             texture.needsUpdate = true;
         }
     }, [texture, gl]);
@@ -84,10 +86,10 @@ SkyProps): JSX.Element => {
         if (active !== localActive) setLocalActive(active);
     }, [active]);
 
-    // useEffect(() => {
-    //     mesh.current.scale.x = 1;
-    //     mesh.current.updateMatrix();
-    // }, [mesh]);
+    useEffect(() => {
+        mesh.current.scale.x = -1;
+        mesh.current.updateMatrix();
+    }, [mesh]);
 
     return (
         <>
@@ -104,13 +106,16 @@ SkyProps): JSX.Element => {
                         args={[50, 64, 32]}
                     />
                     {texture && (
-                        <a.meshLambertMaterial
-                            envMap={texture}
+                        // <a.meshLambertMaterial
+                        <a.meshBasicMaterial
+                            map={texture}
+                            // envMap={texture}
                             side={BackSide}
                             opacity={fadeInOut.opacity}
                             reflectivity={1}
                             ref={material}
                             attach={"material"}
+                            toneMapped={true}
                         />
                     )}
                 </mesh>

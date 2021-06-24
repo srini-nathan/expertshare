@@ -1,13 +1,11 @@
 @import "../../../../assets/scss/screens-sizes";
 @import "../../../../assets/scss/variables";
 
-
 .editSession {
     z-index: 7;
 
     &.cardsize {
         z-index: 8;
-
     }
 }
 
@@ -20,6 +18,7 @@
     font-size: 12px;
     font-weight: 700;
     color: var(--primary);
+    user-select: none;
     background-color: var(--primary-10);
     border: 1px solid var(--primary);
     border-radius: 25px;

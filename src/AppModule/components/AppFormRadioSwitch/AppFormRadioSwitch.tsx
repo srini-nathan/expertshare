@@ -80,6 +80,7 @@ export const AppFormRadioSwitch: FC<AppFormRadioSwitchProps> = ({
                         render={({ field }) => (
                             <Form.Check
                                 type="radio"
+                                className={"radio-button-text"}
                                 id={`${controlId}_${value}`}
                                 required={required}
                                 label={radioLabel}

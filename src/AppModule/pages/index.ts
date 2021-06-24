@@ -9,3 +9,4 @@ export * from "./NewsFeedPage";
 export * from "./ExtraPage";
 export * from "./OnBoardingPage";
 export * from "./ReloadingPage";
+export * from "./InfoPage";

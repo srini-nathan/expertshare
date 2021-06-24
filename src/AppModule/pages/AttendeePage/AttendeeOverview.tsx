@@ -164,7 +164,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 title={t("attendee.list:header.title")}
                 customToolbar
             >
-                <div className="d-flex pt-2 mb-5">
+                <div className="d-flex pt-2 mb-2 mb-md-5 attendee-header-width">
                     <AppListPageToolbar
                         onQuickFilterChange={handleFilter}
                         cancelTokenSources={cancelTokenSourcesRef.current}
@@ -173,7 +173,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 </div>
             </AppPageHeader>
             {renderView()}
-            <div className="d-flex flex-row app-grid-action py-3">
+            <div className="d-flex flex-row app-grid-action py-2">
                 <AppGridPagination
                     className="mr-3"
                     itemsPerPage={pageSize}

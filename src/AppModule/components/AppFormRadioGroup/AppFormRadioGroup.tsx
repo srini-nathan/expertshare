@@ -39,6 +39,7 @@ export const AppFormRadioGroup: FC<AppFormRadioGroupProps> = ({
                         key={e.value}
                         id={`radio_${e.value}`}
                         name={`radio_${e.name}`}
+                        className={"circle-radio-button"}
                         onChange={(element) => {
                             setValue(name, element.target.value, {});
                         }}

@@ -25,14 +25,11 @@ body {
         opacity: 100%;
     }
 
-
     .with-bg {
-
         background: url("../images/bg_cs.jpeg") no-repeat;
         background-size: cover;
         background-attachment: fixed;
     }
-
 }
 
 a {
@@ -48,13 +45,18 @@ a {
 }
 
 .bottom-nav {
-    margin-bottom: 220px !important;
-
+    @include media("not-mobile") {
+        margin-bottom: 180px !important;
+    }
     .app-grid-action,
     .footer-action {
-        bottom: 100px;
+        @include media("not-mobile") {
+            bottom: 80px;
+            left: 0;
+            padding-left: 20px;
+            align-items: center;
+        }
     }
-
 }
 
 .right-container {

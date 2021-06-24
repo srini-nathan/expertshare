@@ -61,18 +61,18 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
         if (item && item.userData && item.userData.panel) {
             setSelectedPanel(item.userData.panel);
         }
-        console.log("selecting item: ", item);
+        // console.log("selecting item: ", item);
         setSelectedItem(item);
     };
 
     useEffect(() => {
-        console.log(
-            "make request with: clientId: ",
-            clientId,
-            "\n containerId: ",
-            containerId,
-            selectedLocale
-        );
+        // console.log(
+        //     "make request with: clientId: ",
+        //     clientId,
+        //     "\n containerId: ",
+        //     containerId,
+        //     selectedLocale
+        // );
         Layout3DApi.exportLayout3DData(
             containerId as number,
             selectedLocale
@@ -116,7 +116,7 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
                     />
                 )}
             </div>
-            {selectedItem && (
+            {/* {selectedItem && (
                 <SelectionInspector
                     name={"name"}
                     type={"type"}
@@ -124,7 +124,7 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
                     rooms={roomsData}
                     currentRoom={mainRoom}
                 />
-            )}
+            )} */}
         </>
     );
 };

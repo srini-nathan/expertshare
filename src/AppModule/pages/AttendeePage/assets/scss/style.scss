@@ -1,3 +1,10 @@
+@import "../../../../assets/scss/screens-sizes";
+
+.attendee-header-width {
+    @include media("mobtosmall") {
+        width: 100%;
+    }
+}
 .attendee-overview-page {
     .ag-cell {
         .email {
@@ -22,6 +29,8 @@
                         font-size: 12px;
                         font-weight: 700;
                         color: var(--primary);
+                        cursor: initial !important;
+                        user-select: none;
                         background-color: var(--primary-10);
                         border: 1px solid var(--primary);
                         border-radius: var(--spc-btn-border-radius);
@@ -29,6 +38,7 @@
 
                     &.more {
                         a {
+                            cursor: pointer !important;
                             background-color: unset;
                             border: none;
                             border-radius: none;
@@ -111,7 +121,7 @@
                         width: 36px;
                         height: 36px;
                         background-repeat: no-repeat;
-                        background-size: contain;
+                        background-size: cover !important;
                         border-radius: var(--circle-border-radius);
 
                         &::after {
@@ -134,8 +144,8 @@
                         display: flex;
                         font-size: 14px;
                         font-weight: 500;
-                        color: var(--secondary);
                         line-height: 20px;
+                        color: var(--secondary);
                     }
 
                     p {
