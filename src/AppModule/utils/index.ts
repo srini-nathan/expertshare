@@ -5,3 +5,4 @@ export * from "./react-hook-form";
 export * from "./array";
 export * from "./authorization";
 export * from "./handleDateTime";
+export * from "./misc";
