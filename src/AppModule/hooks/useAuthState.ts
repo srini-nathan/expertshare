@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { AuthContext } from "../../SecurityModule/contexts";
 import { AuthState } from "../../SecurityModule/models";
-import { errorToast } from "../utils";
+import { errorToast, parseIdFromResourceUrl } from "../utils";
 import { ClientApi, ContainerApi } from "../../AdminModule/apis";
 import { PUser } from "../../AdminModule/models/entities/User";
 
@@ -14,6 +14,7 @@ type AuthStateType = {
     token: string;
     user: PUser;
     userId: number;
+    relationManagerId: number | null;
 };
 
 export function useAuthState(): AuthStateType {
@@ -32,6 +33,7 @@ export function useAuthState(): AuthStateType {
     }
 
     const role = roles[0] ? roles[0] : "";
+    const rm = user?.relationManager;
 
     return {
         clientId,
@@ -42,5 +44,6 @@ export function useAuthState(): AuthStateType {
         token,
         user,
         userId: user.id,
+        relationManagerId: rm ? parseIdFromResourceUrl(rm) : null,
     };
 }
