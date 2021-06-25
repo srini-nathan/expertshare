@@ -112,46 +112,55 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                 color: getCategory().textColor,
                             }}
                         >
-                            <Row className="m-0 p-0">
-                                <Col
-                                    sm={8}
-                                    className="inner-container--header--time px-0"
-                                >
-                                    <i className="fak fa-clock-light"></i>
-                                    <Col className="inner-container--header--time--content pl-3">
-                                        <h2 className="mb-0">
-                                            {format(
-                                                getDateTimeWithoutTimezone(
-                                                    session.start
-                                                ),
-                                                container &&
-                                                    container.configuration &&
-                                                    (container.configuration as any)
-                                                        .shortTime
-                                                    ? (container.configuration as any)
-                                                          .shortTime
-                                                    : "hh:mm a"
-                                            )}
-                                            <span className="value">
-                                                {getDiffTime()}
+                            <Link
+                                to={`/event/${conference}/session/${session.id}`}
+                                state={{ sessionList }}
+                                style={{
+                                    backgroundColor: getCategory().color,
+                                    color: getCategory().textColor,
+                                }}
+                            >
+                                <Row className="m-0 p-0">
+                                    <Col
+                                        sm={8}
+                                        className="inner-container--header--time px-0"
+                                    >
+                                        <i className="fak fa-clock-light"></i>
+                                        <Col className="inner-container--header--time--content pl-3">
+                                            <h2 className="mb-0">
+                                                {format(
+                                                    getDateTimeWithoutTimezone(
+                                                        session.start
+                                                    ),
+                                                    container &&
+                                                        container.configuration &&
+                                                        (container.configuration as any)
+                                                            .shortTime
+                                                        ? (container.configuration as any)
+                                                              .shortTime
+                                                        : "hh:mm a"
+                                                )}
+                                                <span className="value">
+                                                    {getDiffTime()}
+                                                </span>
+                                            </h2>
+                                            <span className="desc">
+                                                {getCategory().name}
                                             </span>
-                                        </h2>
-                                        <span className="desc">
-                                            {getCategory().name}
-                                        </span>
+                                        </Col>
                                     </Col>
-                                </Col>
-                                <Col
-                                    sm={4}
-                                    className="inner-container--header--seats col-6 px-0"
-                                >
-                                    {/* <i className="fak fa-seat"></i> */}
-                                    <div className="inner-container--header--seats--content pl-3">
-                                        {/* <h2 className="mb-0">1150</h2> */}
-                                        {/* <span>Seats</span> */}
-                                    </div>
-                                </Col>
-                            </Row>
+                                    <Col
+                                        sm={4}
+                                        className="inner-container--header--seats col-6 px-0"
+                                    >
+                                        {/* <i className="fak fa-seat"></i> */}
+                                        <div className="inner-container--header--seats--content pl-3">
+                                            {/* <h2 className="mb-0">1150</h2> */}
+                                            {/* <span>Seats</span> */}
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Link>
                         </Col>
                         <div
                             className={`inner-container--banner ${

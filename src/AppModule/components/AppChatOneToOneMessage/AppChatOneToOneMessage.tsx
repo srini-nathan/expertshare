@@ -25,10 +25,15 @@ export const AppChatOneToOneMessage: FC<AppChatOneToOneMessageProps> = ({
     otherUser,
 }) => {
     const { content, createdAt, user: senderUser } = chat;
-    const isMe =
-        isString(senderUser) && loginUser.id
-            ? senderUser === UserApi.toResourceUrl(loginUser.id)
-            : otherUser.id === loginUser.id;
+    let isMe = false;
+    if (loginUser.id) {
+        if (isString(senderUser)) {
+            isMe = senderUser === UserApi.toResourceUrl(loginUser.id);
+        } else {
+            isMe = senderUser.id === loginUser.id;
+        }
+    }
+
     const { imageName, firstName, lastName } = isMe ? loginUser : otherUser;
     const avatar = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo,
@@ -37,7 +42,6 @@ export const AppChatOneToOneMessage: FC<AppChatOneToOneMessageProps> = ({
     const { toShortTime } = useDateTime();
     const avatarUrl = imageName ? avatar : placeholder;
     const name = isMe ? "You" : `${firstName} ${lastName}`;
-
     return (
         <div className={`message-item ${isMe ? "out" : "in"}`}>
             <div className="avatar">

@@ -1,7 +1,5 @@
 import React, { FC, useState } from "react";
-import { find } from "lodash";
-import { PUser } from "../../../AdminModule/models";
-import { ChatThread } from "../../models/entities/ChatThread";
+import { User } from "../../../AdminModule/models";
 
 import { FileTypeInfo } from "../../models";
 import { CONSTANTS } from "../../../config";
@@ -14,22 +12,16 @@ const {
 } = UPLOAD;
 
 export interface AppMessageInboxThreadProps {
-    thread: ChatThread;
-    loginUser: PUser;
+    user: User;
     onClick: () => void;
 }
 
 export const AppMessageInboxThread: FC<AppMessageInboxThreadProps> = ({
-    thread,
-    loginUser,
+    user,
     onClick,
 }) => {
     const [newMessageCounter] = useState<number>(0);
     const [online] = useState<boolean>(false);
-    const user = find(
-        thread.users,
-        (u: PUser) => loginUser.id !== u.id
-    ) as PUser;
     const avatar = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         user?.imageName

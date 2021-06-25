@@ -120,7 +120,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
         data.isExternalLinkEnable
     );
     const [activeLanguage, setActiveLanguage] = useState<string>("");
-    const [translations, setTranslations] = useState<TranslationsType[]>([]);
+    const [translations, setTranslations] = useState<any[]>([]);
     const [defaultLanguage, setDefaultLanguage] = useState<string>("");
     const [files, setFiles] = useState<File[]>([]);
     const [docsFile, setDocsFile] = useState<SimpleObject<string>[]>([]);
@@ -147,7 +147,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
     });
 
     const getTranslation = () => {
-        let defaultValues: TranslationsType = {
+        let defaultValues: any = {
             locale: defaultLanguage,
             title: "",
             description: "",
@@ -156,11 +156,19 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
             if (e.locale === defaultLanguage) defaultValues = e;
         });
         return translations.map((e) => {
-            if (e.title === "")
-                return {
-                    ...defaultValues,
-                    locale: e.locale,
-                };
+            if (e !== defaultValues) {
+                let item = e;
+                Object.keys(defaultValues).forEach((key: any) => {
+                    if (!item[key]) {
+                        item = {
+                            ...item,
+                            [key]: defaultValues[key],
+                        };
+                    }
+                });
+                return item;
+            }
+
             return e;
         });
     };

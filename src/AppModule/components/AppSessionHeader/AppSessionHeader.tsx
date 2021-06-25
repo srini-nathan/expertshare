@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
@@ -28,6 +28,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
     const { container } = useGlobalData();
     const { t } = useTranslation();
     const { locale, setLocale } = useUserLocale();
+    const [live, isLive] = useState<boolean>(false);
     const { Languages } = useLanguages();
     const location = useLocation();
 
@@ -38,10 +39,13 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                     md={6}
                     className="session-details-header--detail--buttons d-flex"
                 >
-                    <a href="#" className="live-now-btn mr-3">
-                        <i className="fak fa-live"></i>
-                        {t("sessionDetails:lable.liveNow")}
-                    </a>
+                    {live && (
+                        <a href="#" className="live-now-btn mr-3">
+                            <i className="fak fa-live"></i>
+                            {t("sessionDetails:lable.liveNow")}
+                        </a>
+                    )}
+
                     {/* <a href="#" className="watching-btn">
                         <i className="fak fa-users-tg"></i>
                         <span className="pr-1">1521</span>Watching
@@ -250,7 +254,9 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
             </Row>
             <Row className="session-details-header--banner m-0 p-0">
                 <Col sm={12} className="p-0">
-                    <AppStreamManager session={session} />
+                    {session.start && (
+                        <AppStreamManager isLive={isLive} session={session} />
+                    )}
                 </Col>
             </Row>
         </Col>
