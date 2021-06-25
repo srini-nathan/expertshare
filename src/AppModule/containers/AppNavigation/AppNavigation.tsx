@@ -379,6 +379,25 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             </>
         );
     };
+
+    const getTitle = () => {
+        let title = "Info Page";
+        if (
+            container &&
+            container.configuration &&
+            (container.configuration as any).translations
+        ) {
+            title =
+                ((container.configuration as any).translations.find(
+                    (e: any) => e.locale === locale
+                ) &&
+                    (container.configuration as any).translations.find(
+                        (e: any) => e.locale === locale
+                    ).infoPageNavigationTitle) ||
+                "Info Page";
+        }
+        return title;
+    };
     const renderMenu = () => {
         if (showSubMenuItems && (menuLocation === "left" || width < 768)) {
             return renderSubMenu();
@@ -403,13 +422,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                     container.configuration &&
                     (container.configuration as any).isInfoPageEnable && (
                         <AppNavigationItem
-                            label={
-                                (container &&
-                                    container.configuration &&
-                                    (container.configuration as any)
-                                        .infoPageNavigationTitle) ||
-                                "Info Page"
-                            }
+                            label={getTitle()}
                             path={"/info-page"}
                             onClick={() => isNavOpen(!navOpen)}
                             icon={{
@@ -418,7 +431,21 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                             className="main-menu"
                         />
                     )}
-
+                <ListGroupItem
+                    className={`nav-item py-2 collapseable px-lg-4`}
+                    onClick={() => isNavOpen(!navOpen)}
+                >
+                    <a
+                        target="_blank"
+                        href={`https://www.credit-suisse.com/microsites/cssw-event-support/${locale}.html`}
+                        className="nav-link"
+                    >
+                        <div className="nav-icon">
+                            <i className="fak fa-userguide-cs" />
+                        </div>
+                        <span>{t("navigation:userGuide")}</span>
+                    </a>
+                </ListGroupItem>
                 {location.pathname.includes("a3d") ? (
                     <AppNavigationItem
                         label={"2D View"}
