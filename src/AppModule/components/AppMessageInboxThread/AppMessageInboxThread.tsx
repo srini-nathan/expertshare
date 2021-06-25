@@ -5,7 +5,7 @@ import { ChatThread } from "../../models/entities/ChatThread";
 
 import { FileTypeInfo } from "../../models";
 import { CONSTANTS } from "../../../config";
-import { useBuildAssetPath, useDateTime } from "../../hooks";
+import { useBuildAssetPath } from "../../hooks";
 import placeholder from "../../assets/images/user-avatar.png";
 
 const { Upload: UPLOAD } = CONSTANTS;
@@ -25,9 +25,7 @@ export const AppMessageInboxThread: FC<AppMessageInboxThreadProps> = ({
     onClick,
 }) => {
     const [newMessageCounter] = useState<number>(0);
-    const [lastMsgTime] = useState<Date>(new Date());
     const [online] = useState<boolean>(false);
-    const [lastMsg] = useState<string>("No Message");
     const user = find(
         thread.users,
         (u: PUser) => loginUser.id !== u.id
@@ -36,7 +34,6 @@ export const AppMessageInboxThread: FC<AppMessageInboxThreadProps> = ({
         FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         user?.imageName
     );
-    const { toShortTime } = useDateTime();
     const avatarUrl = user?.imageName ? avatar : placeholder;
 
     return (
@@ -58,20 +55,18 @@ export const AppMessageInboxThread: FC<AppMessageInboxThreadProps> = ({
                             <div className="details--sender">
                                 <h3>
                                     {user?.firstName} {user?.lastName}
-                                    <span className="time">
-                                        {" "}
-                                        {toShortTime(lastMsgTime)}{" "}
-                                    </span>
                                 </h3>
                             </div>
                             <div className="details--comment">
-                                <p>{lastMsg}</p>
+                                <p>
+                                    {user?.jobTitle} @ {user?.company}
+                                </p>
                             </div>
                         </div>
                     </div>
                     {newMessageCounter && newMessageCounter > 0 ? (
                         <div className="count">
-                            <span>3</span>
+                            <span>{newMessageCounter}</span>
                         </div>
                     ) : null}
                 </div>
