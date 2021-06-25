@@ -66,7 +66,7 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
     const aframeroomImagePath = useBuildAssetPath(
         FILETYPEINFO_AFRAMEROOM_MEDIA as FileTypeInfo
     );
-    const [loading, setLoading] = useState<boolean>(isEditMode);
+    const [loading, setLoading] = useState<boolean>(true);
     const { t } = useTranslation();
 
     const {
@@ -146,7 +146,10 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
                 }
             );
         }
-    }, [id, isEditMode]);
+        if (!isEditMode) {
+            setLoading(false);
+        }
+    }, [id, isEditMode, trigger]);
 
     const { errors } = formState;
 
