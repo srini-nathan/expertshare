@@ -345,7 +345,8 @@ export const Panel = ({
                         rotation={rotationDyn.current}
                         scale={(scaleGropu.scale as unknown) as Vector3} // {scaleDyn.current}
                         ref={group}
-                        onClick={groupClicked}
+                        // onClick={groupClicked}
+                        onPointerDown={groupClicked}
                         onPointerMissed={() => {
                             if (isVisible && editMode) setActive(false);
                         }}
