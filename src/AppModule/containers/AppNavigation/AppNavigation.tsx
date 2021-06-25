@@ -413,7 +413,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                             path={"/info-page"}
                             onClick={() => isNavOpen(!navOpen)}
                             icon={{
-                                name: "fal fa-info-circle",
+                                name: "fak fa-publicationsv2-cs",
                             }}
                             className="main-menu"
                         />

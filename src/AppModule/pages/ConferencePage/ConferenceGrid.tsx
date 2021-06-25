@@ -129,12 +129,12 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                 }
             } else {
                 successToast(t("event.list:delete.info.message"));
-                if (view === "grid") fetchData();
-                else
+                if (view === "list")
                     appGridApi.current?.refreshServerSideStore({
                         purge: false,
                         route: [],
                     });
+                else fetchData();
             }
         });
     }
@@ -217,6 +217,7 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                                 key={conference.id}
                             />
                         ))}
+
                         <AppModal
                             show={showDelete > 0}
                             title={t("event.list:delete.confirm.title")}

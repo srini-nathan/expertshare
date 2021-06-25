@@ -30,13 +30,7 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
     const [startedSession, isSessionStarted] = useState<boolean>(
         new Date() > new Date(session.start)
     );
-    // eslint-disable-next-line no-console
-    console.log(
-        new Date() > new Date(session.start),
-        new Date(),
-        new Date(session.start),
-        session.start
-    );
+
     const conferencePosterPath = useBuildAssetPath(
         FILETYPEINFO_SESSION_POSTER as FileTypeInfo,
         session.imageName
