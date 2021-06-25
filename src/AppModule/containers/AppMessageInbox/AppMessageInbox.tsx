@@ -12,15 +12,17 @@ import "./assets/scss/style.scss";
 
 export const AppMessageInbox: FC = () => {
     const [collapsed, setCollapsed] = useState(true);
-    const { getThreads } = useInitChatBox();
     const [loading, setLoading] = useState(true);
-    const { user } = useAuthState();
-    const { set } = useOpenChatOneToOne();
     const [threads, setThreads] = useState<ChatThread[]>([]);
+    const { getThreads } = useInitChatBox();
+    const { user, containerId } = useAuthState();
+    const { set } = useOpenChatOneToOne();
 
     useEffect(() => {
         setLoading(true);
-        getThreads(1)
+        getThreads(1, {
+            "container.id": containerId,
+        })
             .then(({ response }) => {
                 if (response && response.items) {
                     setThreads(response.items);
