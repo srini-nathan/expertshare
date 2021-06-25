@@ -50,7 +50,13 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { Languages } = useLanguages();
     const [activeLanguage, setActiveLanguage] = useState<string>("");
     const [userEmail, setUserEmail] = useState<string>("");
-    const { control, handleSubmit, formState, setError } = useForm<LoginForm>({
+    const {
+        control,
+        handleSubmit,
+        formState,
+        setFocus,
+        setError,
+    } = useForm<LoginForm>({
         resolver: yupResolver(schema),
         mode: "all",
     });
@@ -92,6 +98,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
             } else if (response) {
                 if (response.isExist) {
                     setEmailStatus("exist");
+                    setFocus("password");
                     localStorage.removeItem(AUTH_CHOSEN_CONTAINER);
                     localStorage.removeItem(AUTH_TOKEN_KEY);
                     localStorage.removeItem(AUTH_USER_KEY);
