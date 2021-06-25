@@ -13,6 +13,7 @@ import {
     AppLoader,
     AppSessionDates,
     AppPageHeader,
+    AppModal,
 } from "../../components";
 import "./assets/scss/evenetAgenda.scss";
 import "swiper/swiper.min.css";
@@ -66,6 +67,10 @@ export const EventAgenda: FC<RouteComponentProps> = ({
     const navigator = useNavigator(navigate);
     const isGrantedControl = useIsGranted(ROLE_OPERATOR);
     const { t } = useTranslation();
+
+    const [showDelete, setDeleteShow] = useState(0);
+    const [showClone, setCloneShow] = useState(0);
+    const [showDeleteSession, setDeleteShowSession] = useState(0);
 
     useEffect(() => {
         ConferenceApi.findById<Conference>(id).then(
@@ -280,7 +285,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                                         conference={id}
                                         sessionList={sessionList}
                                         session={item}
-                                        handleDelete={handleDeleteSession}
+                                        handleDelete={setDeleteShowSession}
                                         isGrantedControl={isGrantedControl}
                                     />
                                 </SwiperSlide>
@@ -295,10 +300,50 @@ export const EventAgenda: FC<RouteComponentProps> = ({
     if (loading) return <AppLoader />;
     return (
         <Fragment>
+            <AppModal
+                show={showDelete > 0}
+                title={t("event.list:delete.confirm.title")}
+                handleClose={() => {
+                    setDeleteShow(0);
+                }}
+                handleDelete={() => {
+                    setDeleteShow(0);
+                    handleDelete().then();
+                }}
+                bodyContent={t("event.list:delete.confirm.message")}
+            />
+            <AppModal
+                show={showClone > 0}
+                title={t("event.list:clone.confirm.title")}
+                handleClose={() => {
+                    setCloneShow(0);
+                }}
+                handleDelete={() => {
+                    setCloneShow(0);
+                    handleClone().then();
+                }}
+                bodyContent={t("event.list:clone.confirm.message")}
+            />
+            <AppModal
+                show={showDeleteSession > 0}
+                title={t("event.agenda:session.delete.confirm.title")}
+                handleClose={() => {
+                    setDeleteShowSession(0);
+                }}
+                handleDelete={() => {
+                    setDeleteShowSession(0);
+                    handleDeleteSession(showDeleteSession).then();
+                }}
+                bodyContent={t("event.agenda:session.delete.confirm.message")}
+            />
             {data && (
                 <AppEventAgendaHeeader
-                    handleClone={handleClone}
-                    handleDelete={handleDelete}
+                    handleClone={() => {
+                        setCloneShow(1);
+                    }}
+                    handleDelete={() => {
+                        setDeleteShow(1);
+                    }}
                     conference={data}
                     isGrantedControl={isGrantedControl}
                 />

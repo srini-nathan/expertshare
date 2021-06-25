@@ -39,6 +39,14 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                     md={6}
                     className="session-details-header--detail--buttons d-flex"
                 >
+                    <Link
+                        to={`/event/${conferenceId}/agenda`}
+                        state={{ sessionList }}
+                        className="btn btn-secondary back-btn  mr-3"
+                    >
+                        <i className="fak fa-chevron-left"></i>
+                        {t("sessionDetails:lable.back")}
+                    </Link>
                     {live && (
                         <a href="#" className="live-now-btn mr-3">
                             <i className="fak fa-live"></i>
@@ -99,7 +107,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                             <Link
                                 to={`/event/${conferenceId}/session/${prev}`}
                                 state={{ sessionList }}
-                                className="btn btn-secondary button-action-session--left"
+                                className="btn btn-secondary button-action-session--left  ml-2"
                             >
                                 <i className="fak fa-chevron-left"></i>
                                 {/* <div className="button-action-session--left--popup">

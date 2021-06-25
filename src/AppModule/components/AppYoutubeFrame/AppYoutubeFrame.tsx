@@ -12,9 +12,11 @@ export const AppYoutubeFrame: FC<AppYoutube> = ({
     url,
     height,
     width,
-    configuration,
+    // configuration,
 }): JSX.Element => {
     let videoID = url.split("v=")[1];
+    // eslint-disable-next-line no-console
+    console.log(videoID);
     if (videoID) {
         const ampersandPosition = videoID.indexOf("&");
 
@@ -24,7 +26,7 @@ export const AppYoutubeFrame: FC<AppYoutube> = ({
         const opts: Options = {
             height,
             width,
-            playerVars: configuration,
+            // playerVars: configuration,
         };
 
         return <YouTube videoId={videoID} opts={opts} />;

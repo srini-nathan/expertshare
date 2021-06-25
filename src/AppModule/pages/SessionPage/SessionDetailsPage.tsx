@@ -34,10 +34,11 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
     const [data, setData] = useState<Session>(new Session(containerResourceId));
 
     useEffect(() => {
+        isLoading(true);
+
         SessionApi.getSession<Session[]>({
             id,
         }).then(({ response, isNotFound, errorMessage }) => {
-            isLoading(false);
             if (errorMessage) {
                 errorToast(errorMessage);
             } else if (isNotFound) {
@@ -59,6 +60,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                     setData(res);
                 }
             }
+            isLoading(false);
         });
     }, [id]);
 
