@@ -53,6 +53,9 @@ export const AppSelectStream: FC<AppSelectStreamProps> = ({
 
         onChange(newTranslatiosn);
     };
+    if (streamType) {
+        if (changeValue) changeValue("streamType", streamType);
+    }
 
     const getValue = (name: any): string => {
         const item = translations.find((e) => e.locale === activeLanguage);

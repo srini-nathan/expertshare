@@ -59,32 +59,44 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
     return (
         <Col md={12} lg={4} xl={3} className="events-grid--container--item">
             <Col className="inner-container p-0">
-                <div className="inner-container--banner p-0" style={style}>
-                    {/* <div className="inner-container--banner--button">
+                <Link to={`/event/${id}/agenda`}>
+                    <div className="inner-container--banner p-0" style={style}>
+                        {/* <div className="inner-container--banner--button">
                         <a href="#" className="live-now-btn mr-3">
                             <i className="fak fa-live"></i>
                             Live Now
                         </a>
                     </div> */}
-                    <div className="inner-container--banner--icons ">
-                        {isGrantedControl && (
-                            <>
-                                <span onClick={() => handleClone(id as number)}>
-                                    <i className="far fa-clone"></i>
-                                </span>
-                                <Link to={`/event/${id}/update`}>
-                                    <i className="fak fa-pen-regular"></i>
-                                </Link>
-                                <span
-                                    onClick={() => handleDelete(id as number)}
-                                >
-                                    <i className="fak fa-trash-light"></i>
-                                </span>
-                            </>
-                        )}
-                    </div>
-                </div>
 
+                        <div className="inner-container--banner--icons ">
+                            {isGrantedControl && (
+                                <>
+                                    <Link
+                                        to={"#"}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            handleClone(id as number);
+                                        }}
+                                    >
+                                        <i className="far fa-clone"></i>
+                                    </Link>
+                                    <Link to={`/event/${id}/update`}>
+                                        <i className="fak fa-pen-regular"></i>
+                                    </Link>
+                                    <Link
+                                        to={"#"}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            handleDelete(id as number);
+                                        }}
+                                    >
+                                        <i className="fak fa-trash-light"></i>
+                                    </Link>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                </Link>
                 <div className="inner-container--det p-3 mx-2">
                     <Col className="inner-container--det--title p-0">
                         <Link to={`/event/${id}/agenda`}>
