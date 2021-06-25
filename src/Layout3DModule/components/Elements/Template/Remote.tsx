@@ -16,7 +16,8 @@ export const Remote = ({ props }: RemoteProps) => {
                 {...props}
                 ref={mesh}
                 scale={active ? 1 : 1}
-                onClick={() => {
+                // onClick={() => {
+                onPointerDown={() => {
                     setActive(true);
                 }}
                 onPointerMissed={() => {
