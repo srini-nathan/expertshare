@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { Form, Col, InputGroup } from "react-bootstrap";
+import { Form, InputGroup } from "react-bootstrap";
 import { Controller } from "react-hook-form";
 import { AppIcon } from "../AppIcon";
 import {
@@ -7,7 +7,7 @@ import {
     AppFormLayoutProps,
     AppReactHookFormProps,
 } from "../../models";
-import { useInputPlaceholder } from "../../hooks";
+import { useGridHelper, useInputPlaceholder } from "../../hooks";
 import { AppFormLabel } from "../AppFormLabel";
 
 import "./assets/scss/style.scss";
@@ -38,7 +38,6 @@ export const AppFormInputPassword: FC<AppFormInputPasswordProps> = ({
     const placeholderText = useInputPlaceholder(name, placeholder, label);
     const controlId = id || name;
     const { sm = 12, md = 6, lg = 4, xl = 4, className = "" } = props;
-    const groupProps = { sm, md, lg, xl, controlId, className, as: Col };
     const labelProps = { label, required, maxCount, description };
     const controllerProps = { name, defaultValue, control };
     const controlProps = {
@@ -47,8 +46,15 @@ export const AppFormInputPassword: FC<AppFormInputPasswordProps> = ({
         isInvalid,
     };
     const [showPass, isShowPass] = useState<boolean>(false);
+
+    const { getColumnClasses } = useGridHelper();
+    const colClasses = getColumnClasses(sm, md, lg, xl);
+
     return (
-        <Form.Group {...groupProps} className={className}>
+        <Form.Group
+            className={`col form-group ${colClasses} ${className}`}
+            controlId={controlId}
+        >
             <AppFormLabel counter={data?.length} {...labelProps} />
             <InputGroup>
                 <Controller
