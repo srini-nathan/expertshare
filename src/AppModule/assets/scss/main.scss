@@ -31,7 +31,106 @@ body {
         background-attachment: fixed;
     }
 }
-
+.swal2-container {
+    .swal2-actions {
+        .swal2-loader {
+            border-color: var(--primary) transparent var(--primary) transparent;
+        }
+    }
+    .swal2-toast {
+        display: block !important;
+        width: 350px !important;
+        padding: 15px;
+        padding-left: 60px;
+        border: none;
+        box-shadow: 0 3px 9px var(--secondary-20);
+        @include media("smallmob") {
+            width: 270px !important;
+        }
+        .swal2-header {
+            .swal2-icon {
+                position: absolute;
+                top: 18px;
+                left: 15px;
+                border: unset;
+                > div,
+                > span {
+                    display: none;
+                }
+                &::after {
+                    position: absolute;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 36px;
+                    height: 36px;
+                    font-family: "Font Awesome Kit";
+                    font-size: 21px;
+                    color: var(--toast-fg-clr);
+                    background-color: var(--success-toast-clr);
+                    border-radius: var(--circle-border-radius);
+                }
+            }
+            .swal2-title {
+                font-size: 20px;
+                font-weight: 700;
+                color: var(--success-toast-clr);
+            }
+        }
+        .swal2-content {
+            text-align: left;
+            padding: 0;
+            .swal2-html-container {
+                padding-top: 2px;
+                font-size: 14px;
+                font-weight: 400;
+                color: var(--secondary-70);
+            }
+        }
+        .swal2-actions {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            .swal2-confirm {
+                font-size: 0;
+                background-color: unset;
+                &:hover {
+                    background-image: unset;
+                }
+                &::after {
+                    display: block;
+                    font-family: "Font Awesome Kit";
+                    font-size: 20px;
+                    font-weight: 400;
+                    color: var(--secondary);
+                    content: "\e028";
+                }
+            }
+        }
+        &.swal2-icon-success {
+            .swal2-icon {
+                &::after {
+                    content: "\e059";
+                    background-color: var(--success-toast-clr);
+                }
+            }
+            .swal2-title {
+                color: var(--success-toast-clr);
+            }
+        }
+        &.swal2-icon-error {
+            .swal2-icon {
+                &::after {
+                    content: "\e028";
+                    background-color: var(--error-toast-clr);
+                }
+            }
+            .swal2-title {
+                color: var(--error-toast-clr);
+            }
+        }
+    }
+}
 a {
     text-decoration: none !important;
 }

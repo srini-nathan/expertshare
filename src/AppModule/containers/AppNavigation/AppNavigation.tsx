@@ -209,6 +209,11 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const bottomMenu = useRef<HTMLDivElement>(null);
 
     const [showMenu, setShowMenu] = useState<boolean>(false);
+    useEffect(() => {
+        if (!navOpen) {
+            setShowMenu(false);
+        }
+    }, [navOpen]);
 
     useEffect(() => {
         if (locale === "") {
@@ -486,7 +491,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                     <div className="logo-holder row">
                         <div
                             ref={logoHolder}
-                            className="main-logo-container my-0 my-lg-2 p-md-4"
+                            className="main-logo-container my-0 my-lg-2 p-md-4 p-xl-2"
                         >
                             <Link to="/" className="main-logo col-xl-9"></Link>
                         </div>
@@ -729,6 +734,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 <div
                     onClick={() => {
                         setShowMenu(!showMenu);
+                        isNavOpen(!navOpen);
                     }}
                     id="show-menu-toggler"
                 >
