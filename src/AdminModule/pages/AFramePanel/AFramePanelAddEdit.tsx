@@ -475,7 +475,7 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
             }
             setLoadingLanguages(false);
         });
-    });
+    }, []);
 
     const { errors } = formState;
 
