@@ -19,16 +19,23 @@ const {
 } = UPLOAD;
 interface AppStreamManagerProps {
     session: Session;
+    isLive: (value: boolean) => void;
 }
 export const AppStreamManager: FC<AppStreamManagerProps> = ({
     session,
+    isLive,
 }): JSX.Element => {
     const { t } = useTranslation();
     const [time, setTime] = useState<Duration>();
     const [startedSession, isSessionStarted] = useState<boolean>(
-        (): boolean => {
-            return !(new Date() <= new Date(session.start));
-        }
+        new Date() > new Date(session.start)
+    );
+    // eslint-disable-next-line no-console
+    console.log(
+        new Date() > new Date(session.start),
+        new Date(),
+        new Date(session.start),
+        session.start
     );
     const conferencePosterPath = useBuildAssetPath(
         FILETYPEINFO_SESSION_POSTER as FileTypeInfo,
@@ -62,6 +69,9 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
                     }
                 } else {
                     isSessionStarted(true);
+                    if (isLive && !(new Date() > new Date(session.end))) {
+                        isLive(true);
+                    }
                 }
             }, 1000);
         }

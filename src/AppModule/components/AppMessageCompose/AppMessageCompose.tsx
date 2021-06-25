@@ -97,6 +97,7 @@ export const AppMessageCompose: FC<AppMessageComposeProps> = ({
                 <Form.Control
                     as="textarea"
                     rows={rows}
+                    placeholder={placeholder}
                     value={data}
                     className={`${
                         enterToPost && "form-control-without-border"
