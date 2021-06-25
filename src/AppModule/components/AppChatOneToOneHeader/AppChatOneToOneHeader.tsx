@@ -50,7 +50,7 @@ export const AppChatOneToOneHeader: FC<AppChatOneToOneHeaderProps> = ({
                             </div>
                             <div className="name--comment">
                                 <span>
-                                    {user?.jobTitle} @{user?.company}
+                                    {user?.jobTitle} @ {user?.company}
                                 </span>
                             </div>
                         </div>

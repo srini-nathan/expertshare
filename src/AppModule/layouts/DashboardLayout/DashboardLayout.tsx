@@ -8,6 +8,7 @@ import {
     appDashboardLayoutOptions,
 } from "../../atoms";
 import { AppMessages } from "../../containers/AppMessages";
+import { useChosenContainer } from "../../hooks";
 
 export const DashboardLayout: FC = ({ children }) => {
     const {
@@ -18,6 +19,7 @@ export const DashboardLayout: FC = ({ children }) => {
 
     const isA3d = window.location !== window.parent.location;
     const onBoarding = window.location.pathname;
+    const { isChosen } = useChosenContainer();
 
     const renderClass = () => {
         if (hideNav || isA3d) return "";
@@ -35,7 +37,7 @@ export const DashboardLayout: FC = ({ children }) => {
                 <div className="col-md-12 col-sm-12 col-xl-12 p-3 p-lg-4">
                     {children}
                 </div>
-                <AppMessages disable={hideMessenger} />
+                {isChosen() && <AppMessages disable={hideMessenger} />}
             </div>
         </Container>
     );

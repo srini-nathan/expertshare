@@ -25,7 +25,11 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
 }): JSX.Element => {
     const { t } = useTranslation();
     const [time, setTime] = useState<Duration>();
-    const [startedSession, isSessionStarted] = useState<boolean>(false);
+    const [startedSession, isSessionStarted] = useState<boolean>(
+        (): boolean => {
+            return !(new Date() <= new Date(session.start));
+        }
+    );
     const conferencePosterPath = useBuildAssetPath(
         FILETYPEINFO_SESSION_POSTER as FileTypeInfo,
         session.imageName
