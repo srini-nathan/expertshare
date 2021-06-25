@@ -13,7 +13,7 @@ export const onResponseRejected = (error: AxiosError): Promise<any> => {
 
     // status code available
     if (status) {
-        if (status === 401 || status === 403) {
+        if (status === 401) {
             navigate("/auth/login", { state: {} }).then(() => {
                 if (message) {
                     errorToast(message);
@@ -21,6 +21,9 @@ export const onResponseRejected = (error: AxiosError): Promise<any> => {
                     errorToast("You need to login!");
                 }
             });
+        }
+        if (status === 403) {
+            errorToast("You are not suppose to be here!");
         }
         if (status >= 500 && status <= 599) {
             return Promise.reject(new ServerError());
