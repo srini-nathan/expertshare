@@ -5,27 +5,33 @@ import {
     AppMessageInboxFilters,
     AppMessageInboxThread,
 } from "../../components";
-import { useAuthState, useInitChatBox, useOpenChatOneToOne } from "../../hooks";
-import { ChatThread } from "../../models/entities/ChatThread";
+import { useAuthState, useInitChat, useInitChatBox } from "../../hooks";
+import { User } from "../../../AdminModule/models";
 
 import "./assets/scss/style.scss";
 
 export const AppMessageInbox: FC = () => {
     const [collapsed, setCollapsed] = useState(true);
     const [loading, setLoading] = useState(true);
-    const [threads, setThreads] = useState<ChatThread[]>([]);
-    const { getThreads } = useInitChatBox();
+    const [users, setUsers] = useState<User[]>([]);
+    const { getAttendeeList } = useInitChatBox();
+    const { startChat } = useInitChat();
     const { user, containerId } = useAuthState();
-    const { set } = useOpenChatOneToOne();
 
     useEffect(() => {
         setLoading(true);
-        getThreads(1, {
+        getAttendeeList(1, {
             "container.id": containerId,
         })
             .then(({ response }) => {
                 if (response && response.items) {
-                    setThreads(response.items);
+                    setUsers(
+                        response.items.filter(
+                            (attendee) =>
+                                attendee.id !== user.id &&
+                                attendee.isAllowCommunication
+                        )
+                    );
                 }
             })
             .finally(() => {
@@ -53,13 +59,18 @@ export const AppMessageInbox: FC = () => {
                         {loading ? (
                             <AppLoader />
                         ) : (
-                            threads.map((t: ChatThread) => (
+                            users.map((u: User) => (
                                 <AppMessageInboxThread
-                                    key={t.id}
-                                    thread={t}
-                                    loginUser={user}
+                                    key={u.id}
+                                    user={u}
                                     onClick={() => {
-                                        set(t);
+                                        if (user.id) {
+                                            startChat(
+                                                user.id,
+                                                u.id,
+                                                containerId
+                                            );
+                                        }
                                     }}
                                 />
                             ))
