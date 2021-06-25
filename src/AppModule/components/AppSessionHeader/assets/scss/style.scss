@@ -26,6 +26,27 @@
         }
     }
 
+    .back-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        height: 36px;
+        padding: 0 10px;
+        font-size: 14px;
+        font-weight: 400;
+
+        i {
+            margin-right: 15px;
+            margin-bottom: 1px;
+            font-size: 15px;
+
+            &::before {
+                content: "\e017";
+            }
+        }
+    }
+
     .watching-btn {
         display: flex;
         align-items: center;
