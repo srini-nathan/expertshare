@@ -155,15 +155,15 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
         FILETYPEINFO_AFRAMEPANEL_MEDIA as FileTypeInfo
     );
 
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(isEditMode);
     const [loadingForRooms, setLoadingForRooms] = useState<boolean>(true);
     const { t } = useTranslation();
     const [targetIdOptions, setTargetIdOptions] = useState<PrimitiveObject[]>(
         []
     );
-    // const [fraolaValue, setFraolaValue] = useState<string>("");
 
     const [languages, setLanguages] = useState<Language[]>([]);
+    const [loadingLanguages, setLoadingLanguages] = useState<boolean>(true);
     const [defaultLanguage, setDefaultLanguage] = useState<string>("");
     const [translations, setTranslations] = useState<TranslationsType[]>([]);
     const [active, setActive] = React.useState<string>(defaultLanguage);
@@ -382,8 +382,6 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                 } else if (response !== null) {
                     setData(response);
                     trigger();
-                    // setFraolaValue(response.content || "");
-
                     setTransitionVideoFileName(response.transitionVideo || "");
 
                     if (response.translations) {
@@ -403,9 +401,6 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                 }
                 setLoading(false);
             });
-        }
-        if (!isEditMode) {
-            setLoading(false);
         }
     }, [id, isEditMode, trigger]);
 
@@ -478,13 +473,13 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
             } else if (response !== null) {
                 setLanguages(response.items);
             }
-            setLoading(false);
+            setLoadingLanguages(false);
         });
-    }, [data]);
+    });
 
     const { errors } = formState;
 
-    if (loading || loadingForRooms) {
+    if (loading || loadingForRooms || loadingLanguages) {
         return <AppLoader />;
     }
 
