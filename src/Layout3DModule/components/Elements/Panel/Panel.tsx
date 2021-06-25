@@ -119,7 +119,6 @@ export const Panel = ({
     const [remoteVisible, setRemoteVisible] = useState<boolean>(false);
     const [iframe] = useState(() => {
         const ifram = document.createElement("iframe");
-        // document.body.appendChild(iframe);
         return ifram;
     });
 
@@ -131,6 +130,9 @@ export const Panel = ({
         config: {
             duration: !isVisible ? 300 : 500,
             easing: !isVisible ? easeSinIn : easeElasticOut,
+        },
+        onStart: () => {
+            if (isVisible && !isVisibleNow) setIsVisibleNow(isVisible);
         },
         onResolve: () => {
             if (!isVisible) setIsVisibleNow(isVisible);
@@ -192,12 +194,6 @@ export const Panel = ({
     const panelCliked = () => {
         const { isTransitionEnabled, video } = panelData;
         const positionPanel = group.current.position.clone();
-        // console.log(
-        //     "current panel: ",
-        //     group.current.position,
-        //     panelData,
-        //     positionPanel
-        // );
         switch (target.type) {
             case TargetTypes.ROOM:
                 // console.log("change door to: ", target.id);
@@ -253,40 +249,41 @@ export const Panel = ({
     useEffect(() => {
         if (isVisible) setIsVisibleNow(true);
         else setRemoteVisible(false);
+
+        // console.log("is visible changed: ", isVisible, isVisibleNow, panelData);
     }, [isVisible]);
 
-    useEffect(() => {
-        if (group.current) {
-            // const pos = group.current.localToWorld(new Vector3(0, 0, 0));
-            // setRemotePosition(
-            //     new Vector3(positionDyn.current.x, 0, positionDyn.current.z)
-            // );
-            // setRemoteRotation(
-            //     new Euler(
-            //         degToRad(parseFloat(String(panelData.remote.rotation.x))),
-            //         degToRad(parseFloat(String(panelData.remote.rotation.y))),
-            //         degToRad(parseFloat(String(panelData.remote.rotation.z)))
-            //     )
-            // );
-            // setRemoteScale(
-            //     new Vector3(
-            //         parseFloat(String(panelData.remote.scale.x)),
-            //         parseFloat(String(panelData.remote.scale.y)),
-            //         parseFloat(String(panelData.remote.scale.z)),
-            //     )
-            // );
-            // console.log(
-            //     "setting values to: ",
-            //     panelData.remote.scale,
-            //     panelData.remote.rotation
-            // );
-        }
-        // if (isVisible) setIsVisibleNow(true);
-    }, [group, isVisible]);
+    // useEffect(() => {
+    //     if (group.current) {
+    //         // const pos = group.current.localToWorld(new Vector3(0, 0, 0));
+    //         // setRemotePosition(
+    //         //     new Vector3(positionDyn.current.x, 0, positionDyn.current.z)
+    //         // );
+    //         // setRemoteRotation(
+    //         //     new Euler(
+    //         //         degToRad(parseFloat(String(panelData.remote.rotation.x))),
+    //         //         degToRad(parseFloat(String(panelData.remote.rotation.y))),
+    //         //         degToRad(parseFloat(String(panelData.remote.rotation.z)))
+    //         //     )
+    //         // );
+    //         // setRemoteScale(
+    //         //     new Vector3(
+    //         //         parseFloat(String(panelData.remote.scale.x)),
+    //         //         parseFloat(String(panelData.remote.scale.y)),
+    //         //         parseFloat(String(panelData.remote.scale.z)),
+    //         //     )
+    //         // );
+    //         // console.log(
+    //         //     "setting values to: ",
+    //         //     panelData.remote.scale,
+    //         //     panelData.remote.rotation
+    //         // );
+    //     }
+    //     // if (isVisible) setIsVisibleNow(true);
+    // }, [group, isVisible]);
 
     useEffect(() => {
         if (group.current) group.current.userData = { panel: panelData };
-        // console.log("group.current: ", group.current);
     }, [group.current]);
 
     useEffect(() => {
@@ -319,25 +316,25 @@ export const Panel = ({
         );
     }, [panelData.remote.position]);
 
-    useFrame(() => {
-        if (remotePosition && group.current && group.current.position) {
-            // if group position is different than remote position, and remote is not active, set remote position
-            // removed for now, going with legacy version
-            // if (
-            //     (remotePosition.x !== group.current.position.x ||
-            //         remotePosition.z !== group.current.position.z) &&
-            //     !remoteActive
-            // ) {
-            //     setRemotePosition(
-            //         new Vector3(
-            //             group.current.position.x,
-            //             0,
-            //             group.current.position.z
-            //         )
-            //     );
-            // }
-        }
-    });
+    // useFrame(() => {
+    //     if (remotePosition && group.current && group.current.position) {
+    //         // if group position is different than remote position, and remote is not active, set remote position
+    //         // removed for now, going with legacy version
+    //         // if (
+    //         //     (remotePosition.x !== group.current.position.x ||
+    //         //         remotePosition.z !== group.current.position.z) &&
+    //         //     !remoteActive
+    //         // ) {
+    //         //     setRemotePosition(
+    //         //         new Vector3(
+    //         //             group.current.position.x,
+    //         //             0,
+    //         //             group.current.position.z
+    //         //         )
+    //         //     );
+    //         // }
+    //     }
+    // });
 
     return (
         <>

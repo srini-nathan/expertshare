@@ -1,13 +1,9 @@
-/* eslint-disable no-console */
 import { ReactThreeFiber } from "@react-three/fiber";
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { Object3D, Vector3 } from "three";
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { useAuthState, useBuildAssetPath } from "../../../../AppModule/hooks";
 import { PanelBuilder } from "../../Builders/PanelBuilder";
 import { PanelInterfaceProps, Video360Props } from "../../Types/Interfaces";
-// import { Door } from "../Door";
 import { Sky } from "../Sky";
 
 interface RoomProps

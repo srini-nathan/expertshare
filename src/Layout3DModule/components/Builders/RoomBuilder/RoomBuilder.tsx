@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import React, { useEffect, useState } from "react";
 // import { useThree } from "@react-three/fiber";
 import { Euler, Object3D, Vector3 } from "three";
@@ -10,7 +9,6 @@ import * as textureRoom from "../../../assets/images/rooms/10300.jpeg";
 import { Video360Props } from "../../Types/Interfaces";
 
 interface RoomBuilderParams {
-    // props: JSX.IntrinsicElements["mesh"];
     rooms: any[];
     editMode: boolean;
     changeActiveRoom: number;
@@ -37,7 +35,6 @@ interface RoomBuilderParams {
 }
 
 export const RoomBuilder = ({
-    // props,
     rooms,
     editMode,
     paths,
@@ -49,35 +46,32 @@ export const RoomBuilder = ({
     onChangeRoom,
     setInitialCameraRotation,
 }: RoomBuilderParams): JSX.Element => {
-    // const videoSpheres = useRef<any[]>(null!);
-
     const [currentRoomId, setCurrentRoomId] = useState<number>(rooms[0].id);
-    // const createdPath = `${paths.ROOM_ASSETS_PATH}/${skyImage}`;
 
     const findPanelPosition = (
         currentRoom: number,
         fromRoom: number
     ): Vector3 => {
-        const room = rooms.filter((r) => r.id === fromRoom);
-        console.log("to panel: ", room, currentRoom, fromRoom);
+        const room = rooms.filter((r) => r.id === currentRoom);
+        // console.log("current, from: ", currentRoom, fromRoom);
 
         const pan = room[0].panels.filter(
             (pa: { target: { type: string; id: number } }) => {
                 return (
                     pa.target.type === TargetTypes.ROOM &&
-                    pa.target.id === currentRoom
+                    pa.target.id === fromRoom
                 );
             }
         );
-        console.log("to panel: ", pan);
+        // console.log("to panel: ", pan);
 
         return new Vector3(
-            pan[0].position.x,
-            pan[0].position.y,
-            pan[0].position.z
-            // pan[pan.length - 1].position.x,
-            // pan[pan.length - 1].position.y,
-            // pan[pan.length - 1].position.z
+            // pan[0].position.x,
+            // pan[0].position.y,
+            // pan[0].position.z
+            pan[pan.length - 1].position.x,
+            pan[pan.length - 1].position.y,
+            pan[pan.length - 1].position.z
         );
     };
 
@@ -117,10 +111,9 @@ export const RoomBuilder = ({
     };
 
     useEffect(() => {
-        // eslint-disable-next-line no-console
         // console.log("changing room? ", changeActiveRoom);
         if (changeActiveRoom && changeActiveRoom >= 0) {
-            console.log("asking for room change: ", changeActiveRoom);
+            // console.log("asking for room change: ", changeActiveRoom);
             changeRoomNow(changeActiveRoom);
         } else if (changeActiveRoom && changeActiveRoom === -2) {
             changeRoomNow(-1);
