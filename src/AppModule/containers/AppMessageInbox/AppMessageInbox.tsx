@@ -23,7 +23,7 @@ export const AppMessageInbox: FC = () => {
 
     useEffect(() => {
         if (relationManagerId !== null) {
-            UserApi.findById<User>(relationManagerId)
+            UserApi.getAttendeeView<User>(relationManagerId)
                 .then(({ response }) => {
                     if (response) {
                         setRm(response);
@@ -60,7 +60,7 @@ export const AppMessageInbox: FC = () => {
             .finally(() => {
                 setLoading(false);
             });
-    }, []);
+    }, [rm]);
 
     return (
         <div
