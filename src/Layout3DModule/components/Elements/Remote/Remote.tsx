@@ -63,7 +63,7 @@ export const Remote = ({
 
     const scaleGlowing = useSpring({
         scale: loop ? [1.2, 1.2, 1] : [0.3, 0.3, 1],
-        onRest: () => {
+        onResolve: () => {
             if (setLoop) setLoop(!loop);
         },
         config: { duration: 800 },
@@ -189,7 +189,7 @@ export const Remote = ({
                             side={DoubleSide}
                             map={texture}
                             transparent={true}
-                            color={"#666666"}
+                            color={"#AAAAAA"}
                             toneMapped={false}
                             depthWrite={false}
                             depthTest={true}

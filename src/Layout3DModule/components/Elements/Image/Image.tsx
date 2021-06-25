@@ -47,7 +47,7 @@ export const Image = ({
         const { height, width, depth } = parent!;
         const using = height < width ? height * percent : width * percent;
         setScaleSt(new Vector3(using, using, 1));
-        setPositionSt(new Vector3(0, 0, depth + ownDepth));
+        setPositionSt(new Vector3(0, 0, depth / 2 + ownDepth));
     };
 
     const reCalculateSize = () => {
@@ -55,7 +55,7 @@ export const Image = ({
         const h = height - padding * 2;
         const w = width - padding * 2;
         setScaleSt(new Vector3(w, h, 1));
-        setPositionSt(new Vector3(0, 0, depth));
+        setPositionSt(new Vector3(0, 0, depth / 2 + 0.01));
     };
 
     useEffect(() => {
