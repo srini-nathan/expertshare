@@ -25,5 +25,4 @@ export const AppLoadable = (
         }
     );
 };
-
 export default AppLoadable;

@@ -64,7 +64,7 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
     });
 
     const checkForAccess = (container: PContainer) => {
-        showLoader("Redirecting...");
+        showLoader(t("container:label.redirecting"));
         const { domain, id } = container;
         // @TODO: do something with hardcoded paths
         const path = `${window.location.protocol}//${domain}/auth/auto-login/{token}`;
@@ -75,9 +75,7 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
                     hideLoader();
                     if (token) {
                         if (token === false) {
-                            errorToast(
-                                "You're not allowed to login on this container."
-                            );
+                            errorToast(t("container:message.notallowed"));
                         } else {
                             window.location.href = route(path, { token });
                         }
