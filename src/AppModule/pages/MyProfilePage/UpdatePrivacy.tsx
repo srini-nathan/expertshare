@@ -5,7 +5,7 @@ import { Row, Col, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { AppFormSwitch, AppButton, AppLoader } from "../../components";
+import { AppFormSwitch, AppButton, AppLoader, AppCard } from "../../components";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models";
 import {
@@ -75,47 +75,82 @@ export const UpdatePrivacy: FC<RouteComponentProps> = (): JSX.Element => {
     };
     return (
         <>
-            <Form onSubmit={handleSubmit(onSubmit)}>
-                <Row className="pt-3">
-                    <AppFormSwitch
-                        id={"isDisplayAsGuest"}
-                        name={"isDisplayAsGuest"}
-                        label={t("profile.update:label.isDisplayAsGuest")}
-                        md={12}
-                        lg={4}
-                        xl={4}
-                        required={true}
-                        {...validation("isDisplayAsGuest", formState, true)}
-                        defaultChecked={user?.isDisplayAsGuest}
-                        errorMessage={errors.isDisplayAsGuest?.message}
-                        control={control}
-                    />
-                    <AppFormSwitch
-                        id={"isExposeEmail"}
-                        name={"isExposeEmail"}
-                        label={t("profile.update:label.isExposeEmail")}
-                        md={12}
-                        lg={4}
-                        xl={4}
-                        required={true}
-                        {...validation("isExposeEmail", formState, true)}
-                        defaultChecked={user?.isExposeEmail}
-                        errorMessage={errors.isExposeEmail?.message}
-                        control={control}
-                    />
-                    <AppFormSwitch
-                        id={"isAllowCommunication"}
-                        name={"isAllowCommunication"}
-                        label={t("profile.update:label.isAllowCommunication")}
-                        md={12}
-                        lg={4}
-                        xl={4}
-                        required={true}
-                        {...validation("isAllowCommunication", formState, true)}
-                        defaultChecked={user?.isAllowCommunication}
-                        errorMessage={errors.isAllowCommunication?.message}
-                        control={control}
-                    />
+            <Form className="w-100" onSubmit={handleSubmit(onSubmit)}>
+                <Row className="pt-3 update-profile">
+                    <Col md={12} sm={12}>
+                        <AppCard
+                            title={t(
+                                "profile.update:label.sectionPrivacyAndCommunication"
+                            )}
+                        >
+                            <Row className="m-0">
+                                <AppFormSwitch
+                                    id={"isDisplayAsGuest"}
+                                    name={"isDisplayAsGuest"}
+                                    label={t(
+                                        "profile.update:label.isDisplayAsGuest"
+                                    )}
+                                    md={12}
+                                    lg={4}
+                                    xl={4}
+                                    required={true}
+                                    {...validation(
+                                        "isDisplayAsGuest",
+                                        formState,
+                                        true
+                                    )}
+                                    defaultChecked={user?.isDisplayAsGuest}
+                                    errorMessage={
+                                        errors.isDisplayAsGuest?.message
+                                    }
+                                    control={control}
+                                />
+                                <AppFormSwitch
+                                    id={"isExposeEmail"}
+                                    name={"isExposeEmail"}
+                                    label={t(
+                                        "profile.update:label.isExposeEmail"
+                                    )}
+                                    md={12}
+                                    lg={4}
+                                    xl={4}
+                                    required={true}
+                                    {...validation(
+                                        "isExposeEmail",
+                                        formState,
+                                        true
+                                    )}
+                                    defaultChecked={user?.isExposeEmail}
+                                    errorMessage={errors.isExposeEmail?.message}
+                                    control={control}
+                                />
+                                <AppFormSwitch
+                                    id={"isAllowCommunication"}
+                                    name={"isAllowCommunication"}
+                                    label={t(
+                                        "profile.update:label.isAllowCommunication"
+                                    )}
+                                    md={12}
+                                    lg={4}
+                                    xl={4}
+                                    required={true}
+                                    {...validation(
+                                        "isAllowCommunication",
+                                        formState,
+                                        true
+                                    )}
+                                    defaultChecked={user?.isAllowCommunication}
+                                    errorMessage={
+                                        errors.isAllowCommunication?.message
+                                    }
+                                    control={control}
+                                />
+                            </Row>
+                        </AppCard>
+                    </Col>
+                </Row>
+
+                <Row>
                     <Col md={12} className="justify-content-end d-flex">
                         {loading ? (
                             <AppLoader containerClassName="custom-btn-loader" />

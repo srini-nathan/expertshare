@@ -109,20 +109,19 @@ export const ChangePassword: FC<RouteComponentProps> = (): JSX.Element => {
                                     }
                                     control={control}
                                 />
-                                <Col className="justify-content-end d-flex">
-                                    {loading ? (
-                                        <AppLoader containerClassName="custom-btn-loader" />
-                                    ) : (
-                                        <AppButton
-                                            variant="primary"
-                                            type="submit"
-                                        >
-                                            {t("common.button:save")}
-                                        </AppButton>
-                                    )}
-                                </Col>
                             </Row>
                         </AppCard>
+                        <Row>
+                            <Col className="justify-content-end d-flex">
+                                {loading ? (
+                                    <AppLoader containerClassName="custom-btn-loader" />
+                                ) : (
+                                    <AppButton variant="primary" type="submit">
+                                        {t("common.button:save")}
+                                    </AppButton>
+                                )}
+                            </Col>
+                        </Row>
                     </Form>
                 </Col>
             </Row>

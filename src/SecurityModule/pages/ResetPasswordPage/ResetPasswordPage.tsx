@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { RouteComponentProps, useLocation } from "@reach/router";
+import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { parse } from "qs";
 import { Container, Row, Col, Form } from "react-bootstrap";
@@ -46,6 +47,7 @@ export const ResetPasswordPage: FC<RouteComponentProps> = ({
     });
     const [loading, isLoading] = React.useState<boolean>(false);
     const [errorMessage, setErrorMessage] = React.useState<string>("");
+    const { t } = useTranslation();
 
     const { errors } = formState;
     const location = useLocation();
@@ -83,10 +85,9 @@ export const ResetPasswordPage: FC<RouteComponentProps> = ({
             <div className="auth-container--box">
                 <Row className="p-0 m-auto">
                     <AppAuthHeader
-                        title="Resset Password"
                         errorMessage={errorMessage}
-                        description="Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
-            velit mollit. Exercitation veniam consequat sunt nostrud amet."
+                        title={t("resetPassword:title")}
+                        description={t("resetPassword:description")}
                     />
                     <div className="active-account-box">
                         <Col md={12} className="active-account-box--auth-form">
@@ -138,8 +139,12 @@ export const ResetPasswordPage: FC<RouteComponentProps> = ({
                                     type={"submit"}
                                 >
                                     {loading
-                                        ? "Please wait..."
-                                        : "Reset Password"}
+                                        ? `${t(
+                                              "resetPassword.form:button.resetPassword"
+                                          )}...`
+                                        : t(
+                                              "resetPassword.form:button.resetPassword"
+                                          )}
                                 </AppButton>
                             </Form>
                         </Col>

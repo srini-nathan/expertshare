@@ -738,7 +738,6 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     label={t("admin.users.form:label.timeZone")}
                                     md={12}
                                     lg={6}
-                                    className="rm-container"
                                     xl={6}
                                     required={false}
                                     {...validation(
@@ -963,12 +962,12 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                             </Row>
                         </AppCard>
                     </Col>
+                    <AppFormActions
+                        isEditMode={isEditMode}
+                        navigation={navigator}
+                        isLoading={formState.isSubmitting}
+                    />
                 </Row>
-                <AppFormActions
-                    isEditMode={isEditMode}
-                    navigation={navigator}
-                    isLoading={formState.isSubmitting}
-                />
             </Form>
         </Fragment>
     );

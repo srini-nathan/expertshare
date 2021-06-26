@@ -237,20 +237,20 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
 
             <Row>
                 <Col>
-                    <AppCard>
-                        <FormProvider
-                            {...{
-                                control,
-                                handleSubmit,
-                                formState,
-                                setError,
-                                trigger,
-                                setValue,
-                                register,
-                                ...rest,
-                            }}
-                        >
-                            <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+                    <FormProvider
+                        {...{
+                            control,
+                            handleSubmit,
+                            formState,
+                            setError,
+                            trigger,
+                            setValue,
+                            register,
+                            ...rest,
+                        }}
+                    >
+                        <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+                            <AppCard>
                                 <AppSessionCategoryTranslations
                                     languages={Languages()}
                                     defaultLanguage={defaultLanguage}
@@ -283,14 +283,16 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
                                         setValue={setValue}
                                     />
                                 </Form.Row>
+                            </AppCard>
+                            <Row>
                                 <AppFormActions
                                     isEditMode={isEditMode}
                                     navigation={navigator}
                                     isLoading={formState.isSubmitting}
                                 />
-                            </Form>
-                        </FormProvider>
-                    </AppCard>
+                            </Row>
+                        </Form>
+                    </FormProvider>
                 </Col>
             </Row>
         </Fragment>

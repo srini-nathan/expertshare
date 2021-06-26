@@ -15,8 +15,6 @@ export const AppYoutubeFrame: FC<AppYoutube> = ({
     // configuration,
 }): JSX.Element => {
     let videoID = url.split("v=")[1];
-    // eslint-disable-next-line no-console
-    console.log(videoID);
     if (videoID) {
         const ampersandPosition = videoID.indexOf("&");
 

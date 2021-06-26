@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
@@ -6,7 +6,7 @@ import { Link, navigate, useLocation } from "@reach/router";
 import "./assets/scss/style.scss";
 import { AppStreamManager } from "../AppStreamManager";
 import { Session } from "../../../AdminModule/models";
-import { useGlobalData } from "../../contexts";
+import { SessionContext, SessionType, useGlobalData } from "../../contexts";
 import { getDateTimeWithoutTimezone } from "../../utils";
 import { useLanguages, useUserLocale } from "../../hooks";
 
@@ -25,12 +25,31 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
     conferenceId,
     sessionList,
 }): JSX.Element => {
+    const { dispatch } = React.useContext(SessionContext);
     const { container } = useGlobalData();
     const { t } = useTranslation();
     const { locale, setLocale } = useUserLocale();
     const [live, isLive] = useState<boolean>(false);
     const { Languages } = useLanguages();
     const location = useLocation();
+
+    useEffect(() => {
+        return () => {
+            dispatch({
+                type: SessionType.REMOVE,
+            });
+            if (live) {
+                dispatch({
+                    type: SessionType.LOAD,
+                    payload: {
+                        isLive: live,
+                        streamType: session.streamType,
+                        streamUrl: session.streamUrl,
+                    },
+                });
+            }
+        };
+    }, [live]);
 
     return (
         <Col sm={12} className="session-details-header mb-4 p-0">

@@ -1,29 +1,25 @@
-import React, { FC } from "react";
-import Draggable, { DraggableProps } from "react-draggable";
-
+import React, { useEffect } from "react";
+import Draggable from "react-draggable";
+import { SessionType } from "../../contexts";
+import { SessionContext } from "../../contexts/SessionContext";
+import { renderStreams } from "../AppStreamManager";
 import "./assets/scss/style.scss";
 
-interface AppPictureInPictureProps extends Partial<DraggableProps> {
-    show?: boolean;
-    width?: string | number;
-    height?: string | number;
-}
+export const AppPictureInPicture = (): JSX.Element => {
+    const { state, dispatch } = React.useContext(SessionContext);
 
-export const AppPictureInPicture: FC<AppPictureInPictureProps> = ({
-    show = true,
-    width = 336,
-    height = 192,
-    children,
-    ...others
-}): JSX.Element => {
-    const [showDraggable, setShowDraggable] = React.useState(true);
+    const { isLive, streamType, streamUrl } = state;
 
-    React.useEffect(() => {
-        setShowDraggable(show);
-    }, []);
+    const [showDraggable, setShowDraggable] = React.useState(isLive);
+
+    useEffect(() => {
+        setShowDraggable(isLive);
+    }, [isLive]);
 
     const closeDraggable = () => {
-        setShowDraggable(false);
+        dispatch({
+            type: SessionType.REMOVE,
+        });
     };
 
     return (
@@ -34,9 +30,8 @@ export const AppPictureInPicture: FC<AppPictureInPictureProps> = ({
                     handle=".handle"
                     scale={1}
                     defaultClassName="draggable-container"
-                    {...others}
                 >
-                    <div className="box" style={{ width, height }}>
+                    <div className="box">
                         <span className="handle icon-btn move-btn">
                             <i className="fas fa-arrows-alt"></i>
                         </span>
@@ -46,7 +41,7 @@ export const AppPictureInPicture: FC<AppPictureInPictureProps> = ({
                         >
                             <i className="fas fa-times"></i>
                         </span>
-                        {children}
+                        {renderStreams(streamType, streamUrl)}
                     </div>
                 </Draggable>
             )}

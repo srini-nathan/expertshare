@@ -625,11 +625,13 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
                                 ></AppTagSelect>
                             </Form.Row>
                         </AppCard>
-                        <AppFormActions
-                            isEditMode={isEditMode}
-                            navigation={navigator}
-                            isLoading={formState.isSubmitting}
-                        />
+                        <Row>
+                            <AppFormActions
+                                isEditMode={isEditMode}
+                                navigation={navigator}
+                                isLoading={formState.isSubmitting}
+                            />
+                        </Row>
                     </Form>
                 </Col>
             </Row>
