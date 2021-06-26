@@ -21,6 +21,7 @@ export const EVENTS = {
     LEAVE_NEXT_SESSION: "leave-next-session",
     ON_NEXT_SESSION: "on-next-session",
     SWITCH_NEXT_SESSION: "switch-next-session",
+    NEW_MESSAGE: "new-message",
 };
 
 type OnPageChangePayload = {
@@ -85,12 +86,14 @@ export const typedInChatThread = (threadId: number): void => {
 
 export const sendChatMessage = (
     threadId: number,
-    payload: PChatMessage
+    payload: PChatMessage,
+    sendTo: number
 ): void => {
     if (socket.connected) {
         socket.emit(EVENTS.CHAT_MESSAGE, {
             threadId,
             payload,
+            sendTo,
         });
     }
 };
