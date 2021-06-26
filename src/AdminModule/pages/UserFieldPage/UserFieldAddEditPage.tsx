@@ -373,12 +373,14 @@ export const UserFieldAddEditPage: FC<RouteComponentProps> = ({
                                     control={control}
                                 />
                             </Row>
+                        </AppCard>
+                        <Row>
                             <AppFormActions
                                 isEditMode={isEditMode}
                                 navigation={navigator}
                                 isLoading={formState.isSubmitting}
                             />
-                        </AppCard>
+                        </Row>
                     </Form>
                 </Col>
             </Row>

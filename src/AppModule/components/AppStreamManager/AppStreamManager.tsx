@@ -21,6 +21,57 @@ interface AppStreamManagerProps {
     session: Session;
     isLive: (value: boolean) => void;
 }
+
+export const renderStreams = (
+    streamType: string,
+    streamUrl: string,
+    showImage = false,
+    style = {}
+) => {
+    switch (streamType) {
+        case "VIMEO":
+            return <AppVimeoFrame url={streamUrl} width="10" height="10" />;
+        case "YOUTUBE":
+            return (
+                <AppYoutubeFrame url={streamUrl} width="1522" height="910" />
+            );
+        case "DACAST":
+            return (
+                <AppDacastFrame
+                    id="dacast"
+                    provider="dacast"
+                    width={1522}
+                    height={910}
+                    configuration={{
+                        videoURL: streamUrl,
+                    }}
+                />
+            );
+        case "KNOVIO":
+            return (
+                <AppKnovioPlayer
+                    width={1522}
+                    height={910}
+                    linkUrl={streamUrl}
+                />
+            );
+
+        case "SWISSCOM":
+            return (
+                <AppSwisscomFrame url={streamUrl} width={1522} height={910} />
+            );
+
+        default:
+            if (showImage)
+                return (
+                    <div className="imageContainer">
+                        <i style={style}></i>
+                    </div>
+                );
+            return <></>;
+    }
+};
+
 export const AppStreamManager: FC<AppStreamManagerProps> = ({
     session,
     isLive,
@@ -123,62 +174,12 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
             );
         }
 
-        switch (session.streamType) {
-            case "VIMEO":
-                return (
-                    <AppVimeoFrame
-                        url={session.streamUrl}
-                        width="10"
-                        height="10"
-                    />
-                );
-            case "YOUTUBE":
-                return (
-                    <AppYoutubeFrame
-                        url={session.streamUrl}
-                        width="1522"
-                        height="910"
-                    />
-                );
-            case "DACAST":
-                return (
-                    <AppDacastFrame
-                        id="dacast"
-                        provider="dacast"
-                        width={1522}
-                        height={910}
-                        configuration={{
-                            videoURL: session.streamUrl,
-                        }}
-                    />
-                );
-            case "KNOVIO":
-                return (
-                    <AppKnovioPlayer
-                        width={1522}
-                        height={910}
-                        linkUrl={session.streamUrl}
-                    />
-                );
-
-            case "SWISSCOM":
-                return (
-                    <AppSwisscomFrame
-                        url={session.streamUrl}
-                        width={1522}
-                        height={910}
-                    />
-                );
-
-            default:
-                return (
-                    <>
-                        <div className="imageContainer">
-                            <i style={style}></i>
-                        </div>
-                    </>
-                );
-        }
+        return renderStreams(
+            session.streamType,
+            session.streamUrl,
+            true,
+            style
+        );
     };
 
     return <div className="app-video-stream">{renderStream()}</div>;

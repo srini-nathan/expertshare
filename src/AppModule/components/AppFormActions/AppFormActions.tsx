@@ -18,7 +18,7 @@ export const AppFormActions: FC<AppFormActionsProps> = ({
 }): JSX.Element => {
     const { t } = useTranslation();
     return (
-        <div className="d-flex justify-content-end footer-action w-100 p-4">
+        <div className="d-flex justify-content-end footer-action w-100 p-3">
             <AppButton
                 type="button"
                 variant={"secondary"}

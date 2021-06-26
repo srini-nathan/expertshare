@@ -51,13 +51,7 @@ export const MyProfilePage: FC<RouteComponentProps> = (): JSX.Element => {
                             title={t("profile.update:tab.setting")}
                         >
                             <Row className="m-0 pt-3">
-                                <AppCard
-                                    title={t(
-                                        "profile.update:label.sectionPrivacyAndCommunication"
-                                    )}
-                                >
-                                    <UpdatePrivacy />
-                                </AppCard>
+                                <UpdatePrivacy />
                             </Row>
                         </AppTab>
                         <AppTab

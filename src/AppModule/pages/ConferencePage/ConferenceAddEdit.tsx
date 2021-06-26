@@ -292,15 +292,14 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
             />
             <Row>
                 <Col>
-                    <AppCard>
-                        <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+                    <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+                        <AppCard>
                             <AppFormTranslatable
                                 languages={Languages()}
                                 defaultLanguage={defaultLanguage}
                                 translations={translations}
                                 onChange={setTranslations}
                             />
-
                             <Form.Row>
                                 {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                                 {/* @ts-ignore */}
@@ -369,14 +368,17 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                                     />
                                 </Col>
                             </Form.Row>
+                        </AppCard>
+
+                        <Row>
                             <AppFormActions
                                 isEditMode={isEditMode}
                                 navigation={navigator}
                                 backLink={"/event"}
                                 isLoading={formState.isSubmitting}
                             />
-                        </Form>
-                    </AppCard>
+                        </Row>
+                    </Form>
                 </Col>
             </Row>
         </Fragment>

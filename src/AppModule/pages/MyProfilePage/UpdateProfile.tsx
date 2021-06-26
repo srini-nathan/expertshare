@@ -584,24 +584,17 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                             </div>
                                         </Form.Group>
                                     )}
-
-                                <Col
-                                    md={12}
-                                    className="justify-content-end d-flex"
-                                >
-                                    {loading ? (
-                                        <AppLoader containerClassName="custom-btn-loader" />
-                                    ) : (
-                                        <AppButton
-                                            variant="primary"
-                                            type="submit"
-                                        >
-                                            {t("common.button:save")}
-                                        </AppButton>
-                                    )}
-                                </Col>
                             </Row>
                         </AppCard>
+                    </Col>
+                    <Col md={12} className="justify-content-end d-flex">
+                        {loading ? (
+                            <AppLoader containerClassName="custom-btn-loader" />
+                        ) : (
+                            <AppButton variant="primary" type="submit">
+                                {t("common.button:save")}
+                            </AppButton>
+                        )}
                     </Col>
                 </Row>
             </Form>

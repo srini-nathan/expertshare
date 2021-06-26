@@ -115,8 +115,8 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
             />
             <Row>
                 <Col>
-                    <AppCard>
-                        <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+                    <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+                        <AppCard>
                             <Form.Row>
                                 <AppFormInput
                                     name={"name"}
@@ -161,13 +161,16 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
                                     control={control}
                                 />
                             </Form.Row>
+                        </AppCard>
+
+                        <Row>
                             <AppFormActions
                                 isEditMode={isEditMode}
                                 navigation={navigator}
                                 isLoading={formState.isSubmitting}
                             />
-                        </Form>
-                    </AppCard>
+                        </Row>
+                    </Form>
                 </Col>
             </Row>
         </Fragment>

@@ -6,6 +6,7 @@ import { AppConfiguration } from "./layouts/AppConfiguration";
 import { AuthLayout } from "./layouts/AuthLayout";
 import { ModuleRouter } from "./models";
 import AppProvider from "./contexts/AppContext";
+import SessionProvider from "./contexts/SessionContext";
 import { AuthContext } from "../SecurityModule/contexts/AuthContext";
 import {
     useChosenContainer,
@@ -13,12 +14,7 @@ import {
     useSkipOnboarding,
     useUserSocketEvents,
 } from "./hooks";
-import {
-    AppLoader,
-    AppPictureInPicture,
-    AppYoutubeFrame,
-    AppWelcomeModal,
-} from "./components";
+import { AppLoader, AppPictureInPicture, AppWelcomeModal } from "./components";
 import { LandingHelper } from "./pages";
 import { socket, EVENTS } from "./socket";
 import { useGlobalData } from "./contexts";
@@ -130,41 +126,37 @@ const App = (): JSX.Element => {
         }
         return (
             <AppProvider>
-                <AppConfiguration>
-                    <DashboardLayout>
-                        <Router primary={false}>
-                            <LandingHelper path="/" />
-                            {dashboardRoutes.map(
-                                ({ RouterPlug, key, path }) => {
-                                    return <RouterPlug key={key} path={path} />;
-                                }
-                            )}
-                        </Router>
-                        <OnRouteChange
-                            action={() => {
-                                window.scrollTo(0, 0);
-                                emitPageChange();
-                            }}
-                        />
-                    </DashboardLayout>
-                    {isChosen() && (
-                        <AppWelcomeModal
-                            show={showWelcomeModal}
-                            handleClose={() => {
-                                setShowWelcomeModal(false);
-                            }}
-                        />
-                    )}
-                    <AppPictureInPicture show={false}>
-                        <AppYoutubeFrame
-                            url={
-                                "https://www.youtube.com/watch?v=aqz-KE-bpKQ&t=253s"
-                            }
-                            height={"200"}
-                            width={"100%"}
-                        />
-                    </AppPictureInPicture>
-                </AppConfiguration>
+                <SessionProvider>
+                    <AppConfiguration>
+                        <DashboardLayout>
+                            <Router primary={false}>
+                                <LandingHelper path="/" />
+                                {dashboardRoutes.map(
+                                    ({ RouterPlug, key, path }) => {
+                                        return (
+                                            <RouterPlug key={key} path={path} />
+                                        );
+                                    }
+                                )}
+                            </Router>
+                            <OnRouteChange
+                                action={() => {
+                                    window.scrollTo(0, 0);
+                                    emitPageChange();
+                                }}
+                            />
+                        </DashboardLayout>
+                        {isChosen() && (
+                            <AppWelcomeModal
+                                show={showWelcomeModal}
+                                handleClose={() => {
+                                    setShowWelcomeModal(false);
+                                }}
+                            />
+                        )}
+                        <AppPictureInPicture />
+                    </AppConfiguration>
+                </SessionProvider>
             </AppProvider>
         );
     }

@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { useForm } from "react-hook-form";
+import { useTranslation } from "react-i18next";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -42,6 +43,7 @@ export const ForgotPasswordPage: FC<RouteComponentProps> = ({
     });
     const [errorMessage, setErrorMessage] = React.useState<string>("");
     const { errors, isSubmitting } = formState;
+    const { t } = useTranslation();
 
     const onSubmit = async (dataForm: ForgotPasswordForm) => {
         return AuthApi.resetPasswordRequest<ForgotPasswordForm, ForgotPassword>(
@@ -61,10 +63,9 @@ export const ForgotPasswordPage: FC<RouteComponentProps> = ({
             <div className="auth-container--box">
                 <Row className="p-0 m-auto">
                     <AppAuthHeader
-                        title="Forgot Password?"
                         errorMessage={errorMessage}
-                        description="Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit officia consequat duis enim
-            velit mollit. Exercitation veniam consequat sunt nostrud amet."
+                        title={t("forgotPassword.form:title")}
+                        description={t("forgotPassword.form:description")}
                     />
                     <div className="active-account-box">
                         <Col md={12} className="active-account-box--auth-form">
@@ -85,7 +86,9 @@ export const ForgotPasswordPage: FC<RouteComponentProps> = ({
                                                 false
                                             )}
                                             errorMessage={errors.email?.message}
-                                            placeholder={"Type in your Email"}
+                                            placeholder={t(
+                                                "forgotPassword.form:placeholder.typeEmail"
+                                            )}
                                             control={control}
                                         />
                                     </Form.Row>
@@ -93,11 +96,15 @@ export const ForgotPasswordPage: FC<RouteComponentProps> = ({
                                 <AppButton
                                     disabled={isSubmitting}
                                     isLoading={isSubmitting}
-                                    loadingTxt={"Please wait..."}
+                                    loadingTxt={`${t(
+                                        "forgotPassword.form:button.resetPassword"
+                                    )}...`}
                                     block={true}
                                     type={"submit"}
                                 >
-                                    Reset Password
+                                    {t(
+                                        "forgotPassword.form:button.resetPassword"
+                                    )}
                                 </AppButton>
                             </Form>
                         </Col>
