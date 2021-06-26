@@ -64,12 +64,12 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                         className="btn btn-secondary back-btn  mr-3"
                     >
                         <i className="fak fa-chevron-left"></i>
-                        {t("sessionDetails:lable.back")}
+                        {t("sessionDetails:label.back")}
                     </Link>
                     {live && (
                         <a href="#" className="live-now-btn mr-3">
                             <i className="fak fa-live"></i>
-                            {t("sessionDetails:lable.liveNow")}
+                            {t("sessionDetails:label.liveNow")}
                         </a>
                     )}
 

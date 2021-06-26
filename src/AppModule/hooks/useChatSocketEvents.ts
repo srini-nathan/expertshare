@@ -13,7 +13,11 @@ type ChatSocketEventsType = {
     emitLeaveChatThread: (threadId: number) => void;
     emitTyping: (threadId: number) => void;
     emitStopTyping: (threadId: number) => void;
-    emitChatMessage: (threadId: number, payload: PChatThread) => void;
+    emitChatMessage: (
+        threadId: number,
+        payload: PChatThread,
+        sendTo: number
+    ) => void;
 };
 
 export function useChatSocketEvents(): ChatSocketEventsType {
@@ -33,8 +37,12 @@ export function useChatSocketEvents(): ChatSocketEventsType {
         typedInChatThread(threadId);
     };
 
-    const emitChatMessage = (threadId: number, payload: PChatMessage): void => {
-        sendChatMessage(threadId, payload);
+    const emitChatMessage = (
+        threadId: number,
+        payload: PChatMessage,
+        sendTo: number
+    ): void => {
+        sendChatMessage(threadId, payload, sendTo);
     };
 
     return {

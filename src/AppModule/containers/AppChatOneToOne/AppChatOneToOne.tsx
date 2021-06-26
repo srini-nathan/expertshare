@@ -123,14 +123,16 @@ export const AppChatOneToOne: FC = () => {
                             openThread &&
                             openThread.id &&
                             loginUser &&
-                            loginUser.id
+                            loginUser.id &&
+                            otherUser &&
+                            otherUser.id
                         ) {
                             const obj = ChatMessage.createFrom(
                                 openThread.id,
                                 loginUser.id,
                                 txt
                             );
-                            emitChatMessage(openThread.id, obj);
+                            emitChatMessage(openThread.id, obj, otherUser.id);
                             pastMessages.current.push(obj);
                             setData([...pastMessages.current]);
                             ChatMessageApi.create<ChatMessage, ChatMessage>(

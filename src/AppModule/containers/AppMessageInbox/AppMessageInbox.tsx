@@ -6,11 +6,17 @@ import {
     AppMessageInboxFilters,
     AppMessageInboxThread,
 } from "../../components";
-import { useAuthState, useInitChat, useInitChatBox } from "../../hooks";
+import {
+    useAuthState,
+    useInitChat,
+    useInitChatBox,
+    useOpenChatOneToOne,
+} from "../../hooks";
 import { User } from "../../../AdminModule/models";
 import { UserApi } from "../../../AdminModule/apis";
 import "./assets/scss/style.scss";
 import { PrimitiveObject } from "../../models";
+import { socket, EVENTS } from "../../socket";
 
 export const AppMessageInbox: FC = () => {
     const [collapsed, setCollapsed] = useState(true);
@@ -23,6 +29,7 @@ export const AppMessageInbox: FC = () => {
     const { user, containerId, relationManagerId } = useAuthState();
     const [page] = useState<number>(1);
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
+    const { openThread } = useOpenChatOneToOne();
 
     useEffect(() => {
         if (relationManagerId !== null) {
@@ -81,6 +88,23 @@ export const AppMessageInbox: FC = () => {
             user_search: search,
         });
     }
+
+    useEffect(() => {
+        socket.on(EVENTS.NEW_MESSAGE, (payload, threadId, sender) => {
+            if (user && user.id) {
+                if (!openThread) {
+                    startChat(user.id, sender, containerId);
+                } else if (openThread && openThread.id) {
+                    if (openThread.id !== threadId) {
+                        startChat(user.id, sender, containerId);
+                    }
+                }
+            }
+        });
+        return () => {
+            socket.off(EVENTS.NEW_MESSAGE);
+        };
+    }, []);
 
     return (
         <div
