@@ -3,6 +3,8 @@
 
 
 .app-welcome-model {
+    z-index: 99999;
+
     &.modal {
         overflow-y: hidden !important;
         display: flex;
@@ -13,9 +15,11 @@
         .modal-dialog {
             width: 100% !important;
             height: 100%;
+            z-index: 99999;
 
             .modal-content {
                 height: 100%;
+                z-index: 99999;
 
                 .modal-body {
                     height: 100%;
