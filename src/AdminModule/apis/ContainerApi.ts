@@ -1,7 +1,8 @@
 import { AxiosError, Canceler } from "axios";
 import { EntityAPI } from "../../AppModule/apis/EntityAPI";
-import { ROUTES } from "../../config";
+import { route, ROUTES } from "../../config";
 import {
+    EntityNotFoundErrorResponse,
     FinalResponse,
     ListResponse,
     ServerError,
@@ -21,6 +22,7 @@ const {
     api_containers_clone_collection: API_CLONE_COLLECTION,
     api_containers_get_overview_collection: API_GET_OVERVIEW_COLLECTION,
     api_containers_my_container_collection: API_GET_MY_CONTAINER_COLLECTION,
+    api_containers_get_secure_item: GET_SECURE_ITEM,
 } = ROUTES;
 
 export abstract class ContainerApi extends EntityAPI {
@@ -35,6 +37,33 @@ export abstract class ContainerApi extends EntityAPI {
     protected static PATCH_ITEM = API_PATCH_ITEM;
 
     protected static DELETE_ITEM = API_DELETE_ITEM;
+
+    public static async getSecureContainer<R>(
+        id: number
+    ): Promise<FinalResponse<R | null>> {
+        const path = route(GET_SECURE_ITEM, { id });
+        return this.makeGet<R>(path)
+            .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
+            .catch((error) => {
+                const { response } = error as AxiosError;
+                if (response) {
+                    const { status } = response;
+                    if (status === 404) {
+                        return Promise.resolve(
+                            new FinalResponse(
+                                null,
+                                new EntityNotFoundErrorResponse()
+                            )
+                        );
+                    }
+                }
+                return Promise.reject(error);
+            })
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
+    }
 
     public static async clone<R, P = null>(
         id: number
