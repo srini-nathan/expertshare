@@ -119,6 +119,8 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
                     }
                 }
             }, 1000);
+        } else if (isLive && new Date() < new Date(session.end)) {
+            isLive(true);
         }
         return () => {
             if (timer) clearInterval(timer);

@@ -49,7 +49,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                 });
             }
         };
-    }, [session]);
+    }, [live]);
 
     return (
         <Col sm={12} className="session-details-header mb-4 p-0">
