@@ -119,7 +119,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
     }, []);
 
     return (
-        <Col className="session-details-question py-3">
+        <Col className="session-details-question py-3 card">
             <Col className="session-details-question--text-box pb-3 px-0 mb-3">
                 <h2>
                     <i className="fak fa-faq"></i>

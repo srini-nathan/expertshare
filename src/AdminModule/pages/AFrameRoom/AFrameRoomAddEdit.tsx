@@ -172,8 +172,8 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
             />
             <Row>
                 <Col>
-                    <AppCard>
-                        <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+                    <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+                        <AppCard>
                             <Form.Row>
                                 <AppFormInput
                                     name={"name"}
@@ -325,14 +325,17 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
                                     control={control}
                                 />
                             </Form.Row>
+                        </AppCard>
+
+                        <Row>
                             <AppFormActions
                                 isEditMode={isEditMode}
                                 navigation={navigator}
                                 backLink={"/admin/rooms"}
                                 isLoading={formState.isSubmitting}
                             />
-                        </Form>
-                    </AppCard>
+                        </Row>
+                    </Form>
                 </Col>
             </Row>
         </Fragment>

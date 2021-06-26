@@ -683,6 +683,7 @@
 
         &::-webkit-scrollbar {
             width: 3px;
+            height: 3px;
         }
 
         &::-webkit-scrollbar-track {
@@ -712,6 +713,7 @@
         height: 80px;
         > .navbar {
             display: flex !important;
+            flex-wrap: nowrap;
 
             > div:first-child {
                 width: 200px;
@@ -816,6 +818,11 @@
     @include media("mobile") {
         #show-menu-toggler {
             display: none;
+        }
+    }
+    @include media("lr-0") {
+        .navbar-toggler-icon {
+            display: none !important;
         }
     }
 }

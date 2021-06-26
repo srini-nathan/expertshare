@@ -152,6 +152,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                         errorToast("Email template not exist");
                     } else if (response !== null) {
                         setData(response);
+                        setSelectedTemplate(response.etKey);
                         setFraolaValue(response.content || "");
                     }
                     setLoading(false);

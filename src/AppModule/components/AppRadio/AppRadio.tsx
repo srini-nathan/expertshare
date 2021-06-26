@@ -19,6 +19,7 @@ export const AppRadio: FC<AppRadioProps> = ({
     return (
         <Form.Check
             type="radio"
+            className="circle-radio-button"
             id={id}
             name={name}
             label={""}

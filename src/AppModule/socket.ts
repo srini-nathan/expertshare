@@ -17,6 +17,10 @@ export const EVENTS = {
     TYPING_IN_CHAT_THREAD: "typing-chat-thread",
     TYPED_IN_CHAT_THREAD: "typed-chat-thread",
     CHAT_MESSAGE: "chat-message",
+    JOIN_NEXT_SESSION: "join-next-session",
+    LEAVE_NEXT_SESSION: "leave-next-session",
+    ON_NEXT_SESSION: "on-next-session",
+    SWITCH_NEXT_SESSION: "switch-next-session",
 };
 
 type OnPageChangePayload = {
@@ -89,4 +93,22 @@ export const sendChatMessage = (
             payload,
         });
     }
+};
+
+export const joinNextSession = (sessionId: number): void => {
+    socket.emit(EVENTS.JOIN_NEXT_SESSION, {
+        sessionId,
+    });
+};
+
+export const leaveNextSession = (sessionId: number): void => {
+    socket.emit(EVENTS.LEAVE_NEXT_SESSION, {
+        sessionId,
+    });
+};
+
+export const switchNextSession = (sessionId: number): void => {
+    socket.emit(EVENTS.SWITCH_NEXT_SESSION, {
+        sessionId,
+    });
 };

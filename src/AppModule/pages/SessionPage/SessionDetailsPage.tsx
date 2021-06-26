@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
-import { RouteComponentProps, useParams } from "@reach/router";
+import { RouteComponentProps, useParams, navigate } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { Row, Col } from "react-bootstrap";
 import {
@@ -11,17 +11,30 @@ import {
     AppSessionUsers,
     AppQuestionsAndAnswers,
     AppSessionTags,
+    AppButton,
 } from "../../components";
 import { Session, User, PSession } from "../../../AdminModule/models";
 import { SessionApi } from "../../../AdminModule/apis";
-import { errorToast } from "../../utils";
-import { useAuthState } from "../../hooks";
+import { errorToast, getDateWT, getTomorrowDate } from "../../utils";
+import {
+    useAuthState,
+    useIsGranted,
+    useSessionSocketEvents,
+} from "../../hooks";
 import "./assets/scss/style.scss";
+import { socket, EVENTS } from "../../socket";
+import { CONSTANTS } from "../../../config";
+
+const { ON_NEXT_SESSION } = EVENTS;
+const { Role } = CONSTANTS;
+
+const {
+    ROLE: { ROLE_OPERATOR },
+} = Role;
 
 export const SessionDetailsPage: FC<RouteComponentProps> = ({
     location,
 }): JSX.Element => {
-    // eslint-disable-next-line no-console
     const { state } = location as any;
     let sessionList: any = [];
     if (state) sessionList = (state as any).sessionList;
@@ -32,10 +45,22 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
     const [prev, setPrev] = useState<number | null>(null);
     const { containerResourceId, containerId } = useAuthState();
     const [data, setData] = useState<Session>(new Session(containerResourceId));
+    const {
+        emitSwitchSessionNext,
+        emitJoinNextSession,
+        emitLeaveNextSession,
+    } = useSessionSocketEvents();
+    const getOtherSessions = (sessionId: number) => {
+        const currentSess = sessionList.find((e: any) => e.id === sessionId);
+        if (currentSess) {
+            setNext(currentSess.next);
+            setPrev(currentSess.prev);
+        }
+    };
+    const isGrantedControl = useIsGranted(ROLE_OPERATOR);
 
     useEffect(() => {
         isLoading(true);
-
         SessionApi.getSession<Session[]>({
             id,
         }).then(({ response, isNotFound, errorMessage }) => {
@@ -48,13 +73,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                     const res: Session = (response.items as PSession[])[0] as Session;
 
                     if (sessionList) {
-                        const currentSess = sessionList.find(
-                            (e: any) => e.id === res.id
-                        );
-                        if (currentSess) {
-                            setNext(currentSess.next);
-                            setPrev(currentSess.prev);
-                        }
+                        getOtherSessions(res.id);
                     }
 
                     setData(res);
@@ -63,6 +82,79 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
             isLoading(false);
         });
     }, [id]);
+
+    const switchTonextSession = (nextSession: number) => {
+        if (nextSession) {
+            navigate(`/event/${conferenceId}/session/${nextSession}`, {
+                state: { sessionList },
+            });
+        }
+    };
+
+    socket.once(ON_NEXT_SESSION, (sessionId: string) => {
+        if (parseInt(sessionId, 10) === data.id && next)
+            switchTonextSession(next as number);
+    });
+    useEffect(() => {
+        if (id) emitJoinNextSession(id);
+        return () => {
+            emitLeaveNextSession(id);
+        };
+    }, [id]);
+
+    useEffect(() => {
+        // eslint-disable-next-line no-console
+        console.log(data, sessionList.length > 0);
+        if (data.start && (!sessionList || sessionList.length === 0)) {
+            SessionApi.getAgenda<Session>({
+                "container.id": containerId,
+                "conference.id": conferenceId,
+                "start[after]": `${getDateWT(data.start)} 00:00:00`,
+                "end[strictly_before]": getTomorrowDate(data.end),
+            }).then(({ response }) => {
+                if (response !== null) {
+                    const diffCat: any[] = [];
+                    let currentCat: Session[] = [];
+                    response.items.forEach((e: Session, i: number) => {
+                        if (response.items.length - 1 === i) {
+                            currentCat.push(e);
+                            diffCat.push(currentCat);
+                            currentCat = [];
+                        } else if (e.start === response.items[i + 1].start)
+                            currentCat.push(e);
+                        else {
+                            currentCat.push(e);
+                            diffCat.push(currentCat);
+                            currentCat = [];
+                        }
+                    });
+
+                    const sessionItems: any[] = [];
+                    diffCat.forEach((e, i) => {
+                        e.forEach((k: any) => {
+                            const sessionState = {
+                                id: k.id,
+                                prev: null,
+                                next: null,
+                            };
+                            if (i !== 0) {
+                                if (diffCat[i - 1][0])
+                                    sessionState.prev = diffCat[i - 1][0].id;
+                            }
+                            if (i < diffCat.length - 1) {
+                                if (diffCat[i + 1][0])
+                                    sessionState.next = diffCat[i + 1][0].id;
+                            }
+
+                            sessionItems.push(sessionState);
+                        });
+                    });
+                    sessionList = sessionItems;
+                    getOtherSessions(data.id);
+                }
+            });
+        }
+    }, [loading]);
 
     if (loading) {
         return <AppLoader />;
@@ -122,6 +214,32 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                             </Col>
                         </Row>
                     </AppCard>
+                    {isGrantedControl && (
+                        <AppCard
+                            title={t("sessionDetails:section.operatorActions")}
+                        >
+                            <Row className="my-5 mx-0 px-2">
+                                <Col className="p-0" sm={12} md={6} lg={3}>
+                                    {next && (
+                                        <AppButton
+                                            onClick={() => {
+                                                emitSwitchSessionNext(id);
+                                                switchTonextSession(
+                                                    next as number
+                                                );
+                                            }}
+                                            variant="secondary"
+                                        >
+                                            {t(
+                                                "sessionDetails:label.switchToNextSession"
+                                            )}
+                                        </AppButton>
+                                    )}
+                                </Col>
+                            </Row>
+                        </AppCard>
+                    )}
+
                     {/* <AppSessionDetails session={data} /> */}
                     <AppSessionDescription session={data} />
                 </Col>

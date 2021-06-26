@@ -349,7 +349,12 @@ export const AdministrationGeneralSetting: FC<RouteComponentProps> = ({
                         <AppTabs onSelect={setActiveTab} activeKey={activeTab}>
                             {renderTabs()}
                         </AppTabs>
-                        <AppFormActions isEditMode={true} navigation={nav} />
+                        <Row>
+                            <AppFormActions
+                                isEditMode={true}
+                                navigation={nav}
+                            />
+                        </Row>
                     </Form>
                 </Row>
             )}
