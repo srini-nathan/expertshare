@@ -9,6 +9,10 @@ body {
     scrollbar-color: var(--secondary) var(--secondary-10);
     scrollbar-width: thin;
 
+    &.app-in-iframe{
+        background-color: var(--body-bg-with-iframe-clr) !important;
+    }
+
     &::-webkit-scrollbar {
         width: 7px;
     }
@@ -31,7 +35,6 @@ body {
         background-attachment: fixed;
     }
 }
-
 .swal2-container {
     .swal2-actions {
         .swal2-loader {

@@ -7,3 +7,11 @@ export const parseIdFromResourceUrl = (resourceUrl: string): number | null => {
 
     return null;
 };
+
+export const isAppLoadedInIFrame = () => {
+    try {
+        return window.self !== window.top;
+    } catch (e) {
+        return true;
+    }
+};
