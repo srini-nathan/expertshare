@@ -7,7 +7,6 @@ import {
     AppTabWithIcon,
     AppTabs,
     AppTab,
-    AppCard,
 } from "../../components";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models";
