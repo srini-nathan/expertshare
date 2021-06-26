@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect } from "react";
 import { Row, Col, Tab } from "react-bootstrap";
 import { UseFormSetValue } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -53,10 +53,12 @@ export const AppSelectStream: FC<AppSelectStreamProps> = ({
 
         onChange(newTranslatiosn);
     };
-    if (streamType) {
-        if (changeValue) changeValue("streamType", streamType);
-    }
 
+    useEffect(() => {
+        if (streamType) {
+            if (changeValue) changeValue("streamType", streamType);
+        }
+    }, []);
     const getValue = (name: any): string => {
         const item = translations.find((e) => e.locale === activeLanguage);
 
@@ -85,7 +87,11 @@ export const AppSelectStream: FC<AppSelectStreamProps> = ({
                             if (changeValue) changeValue("streamType", "");
                         } else {
                             setActiveKey(e as string);
+                            // eslint-disable-next-line no-console
+                            console.log(e);
                             if (changeValue) {
+                                // eslint-disable-next-line no-console
+                                console.log(e);
                                 changeValue("streamType", e as string);
                             }
                         }

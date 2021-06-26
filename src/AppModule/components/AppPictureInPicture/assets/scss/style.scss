@@ -13,10 +13,12 @@
     width: 355px;
     height: 200px;
 
-    iframe {
+    video {
         position: absolute;
         width: 100%;
         height: 100%;
+        border-color: transparent;
+
     }
 
     .close-btn {
