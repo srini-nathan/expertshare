@@ -110,7 +110,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                 "container.id": containerId,
                 "conference.id": conferenceId,
                 "start[after]": `${getDateWT(data.start)} 00:00:00`,
-                "end[strictly_before]": getTomorrowDate(data.end),
+                "end[strictly_before]": getTomorrowDate(getDateWT(data.end)),
             }).then(({ response }) => {
                 if (response !== null) {
                     const diffCat: any[] = [];

@@ -31,12 +31,14 @@ body {
         background-attachment: fixed;
     }
 }
+
 .swal2-container {
     .swal2-actions {
         .swal2-loader {
             border-color: var(--primary) transparent var(--primary) transparent;
         }
     }
+
     .swal2-toast {
         display: block !important;
         width: 350px !important;
@@ -44,19 +46,23 @@ body {
         padding-left: 60px;
         border: none;
         box-shadow: 0 3px 9px var(--secondary-20);
+
         @include media("smallmob") {
             width: 270px !important;
         }
+
         .swal2-header {
             .swal2-icon {
                 position: absolute;
                 top: 18px;
                 left: 15px;
                 border: unset;
-                > div,
-                > span {
+
+                >div,
+                >span {
                     display: none;
                 }
+
                 &::after {
                     position: absolute;
                     display: flex;
@@ -71,15 +77,18 @@ body {
                     border-radius: var(--circle-border-radius);
                 }
             }
+
             .swal2-title {
                 font-size: 20px;
                 font-weight: 700;
                 color: var(--success-toast-clr);
             }
         }
+
         .swal2-content {
             text-align: left;
             padding: 0;
+
             .swal2-html-container {
                 padding-top: 2px;
                 font-size: 14px;
@@ -87,16 +96,20 @@ body {
                 color: var(--secondary-70);
             }
         }
+
         .swal2-actions {
             position: absolute;
             top: 5px;
             right: 10px;
+
             .swal2-confirm {
                 font-size: 0;
                 background-color: unset;
+
                 &:hover {
                     background-image: unset;
                 }
+
                 &::after {
                     display: block;
                     font-family: "Font Awesome Kit";
@@ -107,6 +120,7 @@ body {
                 }
             }
         }
+
         &.swal2-icon-success {
             .swal2-icon {
                 &::after {
@@ -114,10 +128,12 @@ body {
                     background-color: var(--success-toast-clr);
                 }
             }
+
             .swal2-title {
                 color: var(--success-toast-clr);
             }
         }
+
         &.swal2-icon-error {
             .swal2-icon {
                 &::after {
@@ -125,12 +141,14 @@ body {
                     background-color: var(--error-toast-clr);
                 }
             }
+
             .swal2-title {
                 color: var(--error-toast-clr);
             }
         }
     }
 }
+
 a {
     text-decoration: none !important;
 }
@@ -147,6 +165,7 @@ a {
     @include media("not-mobile") {
         margin-bottom: 180px !important;
     }
+
     .app-grid-action,
     .footer-action {
         @include media("not-mobile") {
@@ -156,6 +175,11 @@ a {
             align-items: center;
         }
     }
+
+    .app-message-inbox {
+        bottom: 80px;
+    }
+
 }
 
 .right-container {
