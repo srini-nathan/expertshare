@@ -1,4 +1,5 @@
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useState, useEffect, useRef } from "react";
+import { Canceler } from "axios";
 import {
     AppLoader,
     AppMessageInboxHeader,
@@ -7,9 +8,9 @@ import {
 } from "../../components";
 import { useAuthState, useInitChat, useInitChatBox } from "../../hooks";
 import { User } from "../../../AdminModule/models";
-
-import "./assets/scss/style.scss";
 import { UserApi } from "../../../AdminModule/apis";
+import "./assets/scss/style.scss";
+import { PrimitiveObject } from "../../models";
 
 export const AppMessageInbox: FC = () => {
     const [collapsed, setCollapsed] = useState(true);
@@ -20,6 +21,8 @@ export const AppMessageInbox: FC = () => {
     const { getAttendeeList } = useInitChatBox();
     const { startChat } = useInitChat();
     const { user, containerId, relationManagerId } = useAuthState();
+    const [page] = useState<number>(1);
+    const cancelTokenSourcesRef = useRef<Canceler[]>([]);
 
     useEffect(() => {
         if (relationManagerId !== null) {
@@ -38,11 +41,18 @@ export const AppMessageInbox: FC = () => {
         }
     }, [relationManagerId]);
 
-    useEffect(() => {
+    function fetchData(searchParams: PrimitiveObject = {}) {
         setLoading(true);
-        getAttendeeList(1, {
-            "container.id": containerId,
-        })
+        getAttendeeList(
+            page,
+            {
+                "container.id": containerId,
+                ...searchParams,
+            },
+            (c) => {
+                cancelTokenSourcesRef.current.push(c);
+            }
+        )
             .then(({ response }) => {
                 if (response && response.items) {
                     const filteredUsers = response.items.filter(
@@ -60,7 +70,17 @@ export const AppMessageInbox: FC = () => {
             .finally(() => {
                 setLoading(false);
             });
+    }
+
+    useEffect(() => {
+        fetchData();
     }, [rm]);
+
+    async function handleFilter(search: string) {
+        fetchData({
+            user_search: search,
+        });
+    }
 
     return (
         <div
@@ -76,7 +96,10 @@ export const AppMessageInbox: FC = () => {
                     newMsgCounter={0}
                     user={user}
                 />
-                <AppMessageInboxFilters />
+                <AppMessageInboxFilters
+                    onQuickFilterChange={handleFilter}
+                    cancelTokenSources={cancelTokenSourcesRef.current}
+                />
                 <div className="inner-container--message mt-2">
                     <div className="row m-0 p-0">
                         {loading || loadingRm ? (

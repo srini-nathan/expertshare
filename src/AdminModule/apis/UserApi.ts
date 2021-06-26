@@ -1,4 +1,4 @@
-import { AxiosError, AxiosRequestConfig } from "axios";
+import { AxiosError, AxiosRequestConfig, Canceler } from "axios";
 import {
     onFindAllResponseHydra,
     onFindAllResponseJson,
@@ -54,12 +54,25 @@ export abstract class UserApi extends EntityAPI {
 
     public static async getAttendeeList<R>(
         page = 1,
-        extraParams = {}
+        extraParams = {},
+        cancelToken?: (c: Canceler) => void
     ): Promise<FinalResponse<ListResponse<R> | null>> {
-        return this.makeGet<R>(API_GET_ATTENDEE_LIST_COLLECTION, {
-            ...extraParams,
-            page,
-        })
+        const source = this.createCancelTokenSource();
+
+        if (cancelToken) {
+            cancelToken(source.cancel);
+        }
+
+        return this.makeGet<R>(
+            API_GET_ATTENDEE_LIST_COLLECTION,
+            {
+                ...extraParams,
+                page,
+            },
+            {
+                cancelToken: source.token,
+            }
+        )
 
             .then(({ data }) => {
                 const list = this.acceptHydra

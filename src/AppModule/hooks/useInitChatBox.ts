@@ -1,3 +1,4 @@
+import { Canceler } from "axios";
 import { ChatThreadApi } from "../apis";
 import { ListResponse, PrimitiveObject } from "../models";
 import { FinalResponse } from "../models/apis/FinalResponse";
@@ -12,7 +13,8 @@ type InitChatBoxType = {
     ) => Promise<FinalResponse<ListResponse<ChatThread> | null>>;
     getAttendeeList: (
         page: number,
-        otherParams: PrimitiveObject
+        otherParams: PrimitiveObject,
+        cancelToken?: (c: Canceler) => void
     ) => Promise<FinalResponse<ListResponse<User> | null>>;
 };
 
@@ -26,9 +28,10 @@ export function useInitChatBox(): InitChatBoxType {
 
     const getAttendeeList = async (
         page = 1,
-        otherParams = {}
+        otherParams = {},
+        cancelToken?: (c: Canceler) => void
     ): Promise<FinalResponse<ListResponse<User> | null>> => {
-        return UserApi.getAttendeeList<User>(page, otherParams);
+        return UserApi.getAttendeeList<User>(page, otherParams, cancelToken);
     };
 
     return {
