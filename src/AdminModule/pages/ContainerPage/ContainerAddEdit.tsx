@@ -150,7 +150,7 @@ export const ContainerAddEdit: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (isEditMode) {
-            ContainerApi.findById<Container>(id).then(
+            ContainerApi.getSecureContainer<Container>(id).then(
                 ({ response, isNotFound, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);

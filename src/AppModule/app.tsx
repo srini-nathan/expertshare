@@ -22,6 +22,7 @@ import { useGlobalData } from "./contexts";
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
 import { AuthState } from "../SecurityModule/models";
+import { isAppLoadedInIFrame } from "./utils";
 
 const { CONNECT, DISCONNECT } = EVENTS;
 interface Props {
@@ -81,6 +82,12 @@ const App = (): JSX.Element => {
     const isOverViewPage = overViewPage !== null;
     const isAutoLoginPage = autoLoginPage !== null;
     const { emitLogin, emitLogout, emitPageChange } = useUserSocketEvents();
+
+    useEffect(() => {
+        if (isAppLoadedInIFrame()) {
+            document.body.classList.add("app-in-iframe");
+        }
+    }, []);
 
     useEffect(() => {
         socket.on(CONNECT, () => {
