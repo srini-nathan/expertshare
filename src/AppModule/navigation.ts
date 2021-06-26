@@ -2,14 +2,14 @@ import { AppNavigationItemProps } from "./components/AppNavigationItem";
 
 export const navigation: AppNavigationItemProps[] = [
     {
-        label: "Event",
+        label: "navigation:event",
         path: "/event",
         icon: {
             name: "fak fa-agenda-cs",
         },
     },
     {
-        label: "Attendees",
+        label: "navigation:attendee",
         path: "/attendee",
         icon: {
             name: "fak fa-atendees-cs",
