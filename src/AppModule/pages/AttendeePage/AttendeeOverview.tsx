@@ -88,12 +88,14 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                     order: buildSortParams(request),
                     ...buildFilterParams(request),
                 }).then(({ response, error }) => {
-                    isLoading(false);
                     if (error !== null) {
                         if (_isString(error)) {
                             errorToast(error);
                         }
                     } else if (response !== null) {
+                        if (response.items.length === 0) {
+                            api?.showNoRowsOverlay();
+                        }
                         setAttendees(response.items);
                         setTotal(response.totalItems);
                         params.successCallback(
@@ -153,6 +155,28 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                                 <AttendeeCard attendee={item} key={index} />
                             </Col>
                         ))}
+                        <div className="d-flex flex-row app-grid-action py-2">
+                            <AppGridPagination
+                                className="mr-3"
+                                itemsPerPage={pageSize}
+                                totalItems={totalItems}
+                                active={active}
+                                onClick={setActive}
+                            />
+                            {totalItems > 0 ? (
+                                <div className="pagination-container">
+                                    <AppFormDropdown
+                                        id={"pageSize"}
+                                        defaultValue={defaultPageSize()}
+                                        options={pageSizeOptions()}
+                                        onChange={(e: any) =>
+                                            setPageSize(e.value)
+                                        }
+                                        menuPlacement={"top"}
+                                    />
+                                </div>
+                            ) : null}
+                        </div>
                     </Row>
                 );
         }
@@ -173,26 +197,6 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 </div>
             </AppPageHeader>
             {renderView()}
-            <div className="d-flex flex-row app-grid-action py-2">
-                <AppGridPagination
-                    className="mr-3"
-                    itemsPerPage={pageSize}
-                    totalItems={totalItems}
-                    active={active}
-                    onClick={setActive}
-                />
-                {totalItems > 0 ? (
-                    <div className="pagination-container">
-                        <AppFormDropdown
-                            id={"pageSize"}
-                            defaultValue={defaultPageSize()}
-                            options={pageSizeOptions()}
-                            onChange={(e: any) => setPageSize(e.value)}
-                            menuPlacement={"top"}
-                        />
-                    </div>
-                ) : null}
-            </div>
         </Fragment>
     );
 };

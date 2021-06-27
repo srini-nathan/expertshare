@@ -101,6 +101,10 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
     const [languages, setLanguages] = useState<Language[]>([]);
     const [moderatores, setModeratores] = useState<User[]>([]);
     const [speakers, setSpeakers] = useState<User[]>([]);
+    const [totalSpeakers, setTotalSpeakers] = useState<number>(0);
+    const [pageSpeakers, setPageSpeakers] = useState<number>(0);
+    const [totalModerators, setTotalModerators] = useState<number>(0);
+    const [pageModerators, setPageModerators] = useState<number>(0);
     const [selectedModerators, setSelectedModerators] = useState<User[]>([]);
     const [selectedSpeakers, setSelectedSpeakers] = useState<User[]>([]);
     const [sessionTags, setSessionTags] = React.useState<
@@ -400,7 +404,68 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
             });
             setTranslations(items);
         }
-    }, [languages]);
+    }, [languages, translations]);
+
+    const getSpeakers = (search = "") => {
+        const searchStatus = search !== "";
+        if (
+            searchStatus ||
+            totalSpeakers === 0 ||
+            totalSpeakers > speakers.length
+        )
+            UserApi.getLimited<User>(searchStatus ? 1 : pageSpeakers + 1, {
+                user_search: search,
+                "roles.role": "ROLE_SPEAKER",
+                "client.id": clientId,
+            }).then(({ error, response }) => {
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    }
+                } else if (response !== null) {
+                    if (searchStatus) {
+                        setSpeakers(response.items);
+                        setTotalSpeakers(response.totalItems);
+                        setPageSpeakers(0);
+                    } else {
+                        setSpeakers([...speakers, ...response.items]);
+                        setTotalSpeakers(response.totalItems);
+                        setPageSpeakers(pageSpeakers + 1);
+                    }
+                }
+            });
+    };
+
+    const getModerators = (search = "") => {
+        const searchStatus = search !== "";
+        if (
+            searchStatus ||
+            totalModerators === 0 ||
+            totalModerators > moderatores.length
+        )
+            UserApi.getLimited<User>(searchStatus ? 1 : pageModerators + 1, {
+                user_search: search,
+                "roles.role": "ROLE_MODERATOR",
+                "client.id": clientId,
+            }).then(({ error, response }) => {
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    }
+                } else if (response !== null) {
+                    if (searchStatus) {
+                        setModeratores(response.items);
+                        setTotalModerators(response.totalItems);
+                        setPageModerators(0);
+                    } else {
+                        setModeratores([...moderatores, ...response.items]);
+                        setTotalModerators(response.totalItems);
+                        setPageModerators(pageSpeakers + 1);
+                    }
+                }
+            });
+    };
+
     useEffect(() => {
         UserGroupApi.find<UserGroup>(1, { "client.id": clientId }).then(
             ({ response, error }) => {
@@ -423,30 +488,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                 }
             }
         );
-        UserApi.getLimited<User>(1, {
-            "roles.role": "ROLE_MODERATOR",
-            "client.id": clientId,
-        }).then(({ error, response }) => {
-            if (error !== null) {
-                if (_isString(error)) {
-                    errorToast(error);
-                }
-            } else if (response !== null) {
-                setModeratores(response.items);
-            }
-        });
-        UserApi.getLimited<User>(1, {
-            "roles.role": "ROLE_SPEAKER",
-            "client.id": clientId,
-        }).then(({ error, response }) => {
-            if (error !== null) {
-                if (_isString(error)) {
-                    errorToast(error);
-                }
-            } else if (response !== null) {
-                setSpeakers(response.items);
-            }
-        });
+        getModerators();
+
+        getSpeakers();
         LanguageApi.find<Language>(1, {
             "container.id": containerId,
             "order[isDefault]": "desc",
@@ -912,6 +956,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                         ).toString()}
                                         icon="speakers"
                                         users={speakers}
+                                        loadMore={getSpeakers}
                                     />
                                 </Col>
                                 <Col
@@ -934,6 +979,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                         ).toString()}
                                         icon="moderators"
                                         users={moderatores}
+                                        loadMore={getModerators}
                                     />
                                 </Col>
                             </Row>

@@ -116,26 +116,27 @@
             height: 250px;
             overflow: auto;
 
+            &::-webkit-scrollbar {
+                width: 3px;
+                height: 4px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: var(--secondary-10);
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: var(--secondary);
+            }
+
+            &::-webkit-scrollbar-thumb:hover {
+                opacity: 50%;
+            }
+
             &--inner {
                 scrollbar-color: var(--secondary) var(--secondary-10);
                 scrollbar-width: thin;
 
-                &::-webkit-scrollbar {
-                    width: 3px;
-                    height: 4px;
-                }
-
-                &::-webkit-scrollbar-track {
-                    background: var(--secondary-10);
-                }
-
-                &::-webkit-scrollbar-thumb {
-                    background: var(--secondary);
-                }
-
-                &::-webkit-scrollbar-thumb:hover {
-                    opacity: 50%;
-                }
 
                 &--item {
                     border-bottom: 1px solid var(--secondary-20);
@@ -218,73 +219,94 @@
                 }
             }
         }
+    }
 
-        .select-box {
-            &--header {
-                .title {
-                    text-align: left;
 
-                    h4 {
-                        font-size: 12px;
-                        font-weight: 700;
-                        color: var(--secondary);
-                    }
-                }
+    .select-box {
+        &--header {
 
-                .counter {
-                    text-align: right;
 
-                    span {
-                        font-size: 12px;
-                        font-weight: 700;
-                        color: var(--counter-att-select-fg-clr);
-                    }
+            .title {
+                text-align: left;
+
+                h4 {
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: var(--secondary);
                 }
             }
 
-            &--content {
-                &--item {
-                    a {
-                        display: flex;
-                        align-items: center;
-                        padding: 4px 7px;
-                        background-color: var(--primary-10);
-                        border-radius: var(--spc-btn-border-radius);
+            .counter {
+                text-align: right;
 
-                        .avatar {
-                            display: block;
-                            width: 12px;
-                            height: 12px;
-                            background-repeat: no-repeat;
-                            background-size: cover;
-                        }
-
-                        .name {
-                            padding-top: 2px;
-                            font-size: 12px;
-                            font-weight: 700;
-                            color: var(--secondary);
-                        }
-
-                        .close {
-                            font-size: 12px;
-                            color: var(--secondary);
-                        }
-                    }
-
+                span {
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: var(--counter-att-select-fg-clr);
                 }
             }
         }
 
-        .confirm-box {
-            a {
-                position: relative;
+        &--content {
 
-                i {
-                    position: absolute;
-                    left: 8px;
-                    font-size: 19px;
+            &::-webkit-scrollbar {
+                width: 3px;
+                height: 4px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: var(--secondary-10);
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: var(--secondary);
+            }
+
+            &::-webkit-scrollbar-thumb:hover {
+                opacity: 50%;
+            }
+
+            &--item {
+                a {
+                    display: flex;
+                    align-items: center;
+                    padding: 4px 7px;
+                    background-color: var(--primary-10);
+                    border-radius: var(--spc-btn-border-radius);
+
+                    .avatar {
+                        display: block;
+                        width: 12px;
+                        height: 12px;
+                        background-repeat: no-repeat;
+                        background-size: cover;
+                    }
+
+                    .name {
+                        padding-top: 2px;
+                        font-size: 12px;
+                        font-weight: 700;
+                        color: var(--secondary);
+                    }
+
+                    .close {
+                        font-size: 12px;
+                        color: var(--secondary);
+                    }
                 }
+
+            }
+        }
+    }
+
+    .confirm-box {
+        a {
+            position: relative;
+
+            i {
+                position: absolute;
+                left: 8px;
+                font-size: 19px;
             }
         }
     }

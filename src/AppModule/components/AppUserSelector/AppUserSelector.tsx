@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import { Form, Row, Col } from "react-bootstrap";
 import { AppButton } from "../AppButton";
 import "./assets/scss/style.scss";
@@ -11,6 +11,8 @@ export interface AppUserSelectorProps {
     handleSelectedUsers: (users: User[]) => void;
     users: User[];
     selectedUsers: User[];
+    totalItem?: number;
+    loadMore?: (value?: string) => void;
 }
 
 interface UserBangeProps {
@@ -25,9 +27,8 @@ export const AppUserSelector: FC<AppUserSelectorProps> = ({
     users,
     handleSelectedUsers,
     selectedUsers = [],
+    loadMore,
 }): JSX.Element => {
-    const [sreach, setSearch] = useState<string>("");
-
     const addActiveId = (id: number) => {
         const item = users.find((user: User) => user.id === id);
 
@@ -108,9 +109,10 @@ export const AppUserSelector: FC<AppUserSelectorProps> = ({
                                 <div className="header--search col-12 px-0 pt-3">
                                     <div className="search-input-box left-icon">
                                         <Form.Control
-                                            onChange={(e: any) =>
-                                                setSearch(e.target.value)
-                                            }
+                                            onChange={(e: any) => {
+                                                if (loadMore)
+                                                    loadMore(e.target.value);
+                                            }}
                                             placeholder="Search ..."
                                             type={"name"}
                                         ></Form.Control>
@@ -122,50 +124,55 @@ export const AppUserSelector: FC<AppUserSelectorProps> = ({
                                 </div>
                             </div>
                         </div>
-                        <div className="content">
+                        <div
+                            className="content"
+                            onScroll={(e: any) => {
+                                const {
+                                    scrollTop,
+                                    offsetHeight,
+                                    scrollHeight,
+                                } = e.target;
+                                const height = scrollHeight - offsetHeight;
+                                if (loadMore) {
+                                    if (scrollTop === height) {
+                                        loadMore();
+                                    }
+                                }
+                            }}
+                        >
                             <Row className="m-0 content--inner">
-                                {users
-                                    .filter(
-                                        (e) =>
-                                            (e.firstName &&
-                                                e.firstName.includes(sreach)) ||
-                                            (e.lastName &&
-                                                e.lastName.includes(sreach))
-                                    )
-                                    .map((user: User) => {
-                                        return (
-                                            <div className="content--inner--item">
-                                                <Row className="m-0">
-                                                    <div className="detail  col-auto">
-                                                        <AppUserListItem
-                                                            user={user}
-                                                        />
-                                                    </div>
-                                                    <div className="add col-auto mr-0 ml-auto">
-                                                        <AppButton
-                                                            disabled={getActive(
+                                {users.map((user: User) => {
+                                    return (
+                                        <div className="content--inner--item">
+                                            <Row className="m-0">
+                                                <div className="detail  col-auto">
+                                                    <AppUserListItem
+                                                        user={user}
+                                                    />
+                                                </div>
+                                                <div className="add col-auto mr-0 ml-auto">
+                                                    <AppButton
+                                                        disabled={getActive(
+                                                            user.id
+                                                        )}
+                                                        onClick={() =>
+                                                            addActiveId(user.id)
+                                                        }
+                                                        className={`more ${
+                                                            getActive(
                                                                 user.id
-                                                            )}
-                                                            onClick={() =>
-                                                                addActiveId(
-                                                                    user.id
-                                                                )
-                                                            }
-                                                            className={`more ${
-                                                                getActive(
-                                                                    user.id
-                                                                ) && "green-btn"
-                                                            }`}
-                                                            variant="light"
-                                                        >
-                                                            <i className="fal fa-plus-circle btn-icon"></i>
-                                                        </AppButton>
-                                                    </div>
-                                                </Row>
-                                            </div>
-                                        );
-                                        return <></>;
-                                    })}
+                                                            ) && "green-btn"
+                                                        }`}
+                                                        variant="light"
+                                                    >
+                                                        <i className="fal fa-plus-circle btn-icon"></i>
+                                                    </AppButton>
+                                                </div>
+                                            </Row>
+                                        </div>
+                                    );
+                                    return <></>;
+                                })}
                             </Row>
                         </div>
                     </div>
