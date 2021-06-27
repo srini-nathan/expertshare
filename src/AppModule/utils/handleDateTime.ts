@@ -51,6 +51,18 @@ export const getDateWT = (date: string): string => {
     return format(getDateTimeWithoutTimezone(date), "yyyy-MM-dd");
 };
 
+export const getUserTimezone = (date: string, timezone: string): string => {
+    if (timezone) {
+        const newTimeZone = new Date(date)
+            .toLocaleString("en-US", { timeZone: timezone })
+            .split(",");
+        if (newTimeZone.length > 1) {
+            return newTimeZone[0];
+        }
+    }
+    return getDateTimeWithoutTimezone(date).toString();
+};
+
 export const getTomorrowDate = (date: string): string => {
     return `${getTomorrow(date)} 00:00:00`;
 };

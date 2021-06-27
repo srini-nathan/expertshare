@@ -869,6 +869,22 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     defaultChecked={data.isSessionPublic}
                                     control={control}
                                 />
+                                <AppFormSwitch
+                                    sm={12}
+                                    md={12}
+                                    lg={3}
+                                    xl={3}
+                                    name={"isReply"}
+                                    label={t("session.form:label.isReplay")}
+                                    {...validation(
+                                        "isReply",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.isReply?.message}
+                                    defaultChecked={data.isReply}
+                                    control={control}
+                                />
                             </Form.Row>
                         </AppCard>
                     </Col>

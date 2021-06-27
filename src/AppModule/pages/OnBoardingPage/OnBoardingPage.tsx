@@ -518,7 +518,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                     variant="link"
                                     className="btn-block mt-3"
                                 >
-                                    {t("onboarding.labee:skip")}
+                                    {t("onboarding.label:skip")}
                                 </AppButton>
                             </Form>
                         </Col>

@@ -212,7 +212,7 @@
                         }
 
                         &:hover {
-                            & > .popup {
+                            &>.popup {
                                 display: block;
                             }
                         }
@@ -226,15 +226,13 @@
                         }
 
                         &.get-contact {
-                            i {
-                            }
+                            i {}
                         }
 
                         &.add-user-btn {
                             width: 36px;
 
-                            i {
-                            }
+                            i {}
                         }
                     }
                 }
@@ -307,11 +305,9 @@
                             }
                         }
 
-                        &.following {
-                        }
+                        &.following {}
 
-                        &.events {
-                        }
+                        &.events {}
 
                         &.sessions {
                             i {
@@ -325,11 +321,9 @@
                             }
                         }
 
-                        &.feeds {
-                        }
+                        &.feeds {}
 
-                        &.favorite-feeds {
-                        }
+                        &.favorite-feeds {}
                     }
                 }
             }

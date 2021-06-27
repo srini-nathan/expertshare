@@ -16,6 +16,7 @@ export interface AppSessionHeaderProps {
     prev: number | null;
     conferenceId: number;
     sessionList: any[];
+    getAgenda: () => void;
 }
 
 export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
@@ -24,6 +25,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
     prev,
     conferenceId,
     sessionList,
+    getAgenda,
 }): JSX.Element => {
     const { dispatch } = React.useContext(SessionContext);
     const { container } = useGlobalData();
@@ -282,7 +284,11 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
             <Row className="session-details-header--banner m-0 p-0">
                 <Col sm={12} className="p-0">
                     {session.start && (
-                        <AppStreamManager isLive={isLive} session={session} />
+                        <AppStreamManager
+                            getAgenda={getAgenda}
+                            isLive={isLive}
+                            session={session}
+                        />
                     )}
                 </Col>
             </Row>

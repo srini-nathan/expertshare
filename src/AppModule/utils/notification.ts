@@ -19,6 +19,19 @@ export const successToast = (
     }).then();
 };
 
+export const warningToast = (
+    text: string,
+    config?: SweetAlertOptions
+): void => {
+    Swal.fire({
+        text,
+        title: "Warning",
+        icon: "warning",
+        ...defaultConfig,
+        ...config,
+    }).then();
+};
+
 export const errorToast = (text: string, config?: SweetAlertOptions): void => {
     Swal.fire({
         text,

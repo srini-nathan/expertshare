@@ -102,19 +102,41 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
         };
     }, [id]);
 
-    useEffect(() => {
-        // eslint-disable-next-line no-console
-        console.log(data, sessionList.length > 0);
-        if (data.start && (!sessionList || sessionList.length === 0)) {
-            SessionApi.getAgenda<Session>({
+    const getAgenda = (isLive = false) => {
+        let params: { [key: string]: any } = {};
+
+        if (isLive) {
+            params = {
+                "container.id": containerId,
+                "conference.id": conferenceId,
+            };
+        } else {
+            params = {
                 "container.id": containerId,
                 "conference.id": conferenceId,
                 "start[after]": `${getDateWT(data.start)} 00:00:00`,
                 "start[strictly_before]": getTomorrowDate(
                     getDateWT(data.start)
                 ),
-            }).then(({ response }) => {
-                if (response !== null) {
+            };
+        }
+
+        SessionApi.getAgenda<Session>({
+            ...params,
+        }).then(({ response }) => {
+            if (response !== null) {
+                if (isLive) {
+                    let foundLive = false;
+                    response.items.forEach((e: Session) => {
+                        if (e.isLive) {
+                            switchTonextSession(e.id);
+                            foundLive = true;
+                        }
+                    });
+                    if (!foundLive) {
+                        errorToast(t("sessionDetails:message.noLiveSession"));
+                    }
+                } else {
                     const diffCat: any[] = [];
                     let currentCat: Session[] = [];
                     response.items.forEach((e: Session, i: number) => {
@@ -154,7 +176,13 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                     sessionList = sessionItems;
                     getOtherSessions(data.id);
                 }
-            });
+            }
+        });
+    };
+
+    useEffect(() => {
+        if (data.start && (!sessionList || sessionList.length === 0)) {
+            getAgenda();
         }
     }, [loading]);
 
@@ -180,6 +208,9 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                             conferenceId={conferenceId}
                             session={data}
                             sessionList={sessionList}
+                            getAgenda={() => {
+                                getAgenda(true);
+                            }}
                         />
                         <AppSessionTags session={data} />
 

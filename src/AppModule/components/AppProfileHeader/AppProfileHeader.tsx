@@ -127,7 +127,7 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                     >
                         <Col
                             style={style}
-                            className="inner-container--profile-pic--content online"
+                            className="inner-container--profile-pic--content"
                         >
                             {userType && getUserType()}
                         </Col>
