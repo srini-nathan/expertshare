@@ -5,6 +5,8 @@ import { useGlobalData } from "../../contexts";
 import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath, useUserLocale } from "../../hooks";
 import { FileTypeInfo } from "../../models";
+import { AuthContext } from "../../../SecurityModule/contexts";
+import { AuthState } from "../../../SecurityModule/models";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -20,6 +22,8 @@ export const AppWelcomeModal: FC<AppWelcomeModalProps> = ({
     handleClose,
 }): JSX.Element => {
     const { container } = useGlobalData();
+    const { state } = React.useContext(AuthContext);
+    const { user } = state as AuthState;
     const { locale } = useUserLocale();
     const [isPlaying, setIsPlaying] = React.useState(true);
     const [enable, isEnable] = React.useState(false);
@@ -62,7 +66,11 @@ export const AppWelcomeModal: FC<AppWelcomeModalProps> = ({
             ) {
                 (container.configuration as any).translations.forEach(
                     (e: any) => {
-                        if (e.locale === locale) {
+                        const fLocale =
+                            user && user.locale && user.locale !== ""
+                                ? user.locale
+                                : locale;
+                        if (e.locale === fLocale) {
                             if (e.welcomeBannerMedia)
                                 setMedia(e.welcomeBannerMedia);
                             if (e.welcomeBannerContent)
