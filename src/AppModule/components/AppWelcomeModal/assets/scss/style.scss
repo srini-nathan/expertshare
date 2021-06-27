@@ -9,6 +9,7 @@
         overflow-y: hidden !important;
         display: flex;
         background-color: #7ebde990;
+        z-index: 99999;
     }
 
     &.fullscreen {
