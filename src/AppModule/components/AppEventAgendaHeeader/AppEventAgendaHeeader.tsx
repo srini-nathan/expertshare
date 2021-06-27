@@ -82,6 +82,13 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                                     >
                                         {t("event.agenda:button.createSession")}
                                     </Link>
+
+                                    <Link
+                                        to={`/event/create`}
+                                        className="manage-cat ml-2 btn btn-secondary mt-2 mt-sm-0"
+                                    >
+                                        {t("event.agenda:button.createEvent")}
+                                    </Link>
                                 </div>
                                 <div className="inner-container--action--exclusive p-0 mt-2 mt-sm-3">
                                     <AppButton
