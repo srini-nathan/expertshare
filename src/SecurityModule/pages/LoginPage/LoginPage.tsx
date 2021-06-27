@@ -130,6 +130,16 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                 "login.form:notRegisteredDescription"
                             )}
                         />
+                        <Col className="text-center justify-content-center d-flex p-3">
+                            <AppButton
+                                variant="primary"
+                                onClick={() => {
+                                    setEmailStatus("");
+                                }}
+                            >
+                                <b>{t("login.form:login")}</b>
+                            </AppButton>
+                        </Col>
                     </>
                 );
 

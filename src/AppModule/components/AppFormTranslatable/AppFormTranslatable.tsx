@@ -1,10 +1,12 @@
 import React, { FC, useEffect } from "react";
 import { Row, Col, Form } from "react-bootstrap";
+import { useForm } from "react-hook-form";
 import "./assets/scss/style.scss";
 import { useTranslation } from "react-i18next";
 import { Language } from "../../../AdminModule/models";
 import { AppButton } from "../AppButton";
 import { AppFormLabel } from "../AppFormLabel";
+import { AppFormRichTextArea } from "../AppFormRichTextArea";
 
 export interface TranslationsType {
     locale: string;
@@ -44,7 +46,7 @@ export const AppFormTranslatable: FC<AppFormTranslatableProps> = ({
 
         onChange(newTranslatiosn);
     };
-
+    const { control } = useForm();
     const getValue = (name: string): string => {
         const item = translations.filter((e) => e.locale === active);
 
@@ -126,17 +128,17 @@ export const AppFormTranslatable: FC<AppFormTranslatableProps> = ({
             </Form.Group>
 
             <Form.Group className="mb-0 px-3 w-100">
-                <AppFormLabel
-                    label={`${t("event.form:label.description")} (${active})`}
-                    required
-                />
-
-                <Form.Control
-                    as={"textarea"}
-                    value={getValue("description")}
+                <AppFormRichTextArea
                     name={`description_${active}`}
-                    onChange={(e: any) => {
-                        handleValueChange(e.target.value, "description");
+                    md={12}
+                    lg={12}
+                    xl={12}
+                    className="p-0"
+                    label={`${t("event.form:label.description")} (${active})`}
+                    control={control}
+                    value={getValue("description")}
+                    onChange={(e: string) => {
+                        handleValueChange(e, "description");
                     }}
                 />
                 <Form.Control.Feedback className={"d-block"} type="invalid">
