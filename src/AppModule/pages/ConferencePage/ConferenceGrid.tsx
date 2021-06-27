@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useEffect, useRef, useState } from "react";
-import { RouteComponentProps, useParams } from "@reach/router";
+import { RouteComponentProps, useParams, navigate } from "@reach/router";
 import { Canceler } from "axios";
 import { Row, Col } from "react-bootstrap";
 import {
@@ -81,6 +81,9 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                     errorToast(error);
                 }
             } else if (response !== null) {
+                if (response.items.length === 1) {
+                    navigate(`/event/${response.items[0].id}/agenda`);
+                }
                 setConferences(response.items);
                 setTotalItems(response.totalItems);
             }
