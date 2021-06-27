@@ -88,7 +88,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
             navigate(`/event/${conferenceId}/session/${nextSession}`, {
                 state: { sessionList },
             });
-        } else {
+        } else if (location) {
             navigate(`/reload`, {
                 state: {
                     url: location.pathname,
