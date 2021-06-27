@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { User } from "../../../AdminModule/models";
-
 import { FileTypeInfo } from "../../models";
 import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath } from "../../hooks";
@@ -13,15 +13,18 @@ const {
 
 export interface AppMessageInboxThreadProps {
     user: User;
+    rm?: boolean;
     onClick: () => void;
 }
 
 export const AppMessageInboxThread: FC<AppMessageInboxThreadProps> = ({
     user,
+    rm = false,
     onClick,
 }) => {
     const [newMessageCounter] = useState<number>(0);
     const [online] = useState<boolean>(false);
+    const { t } = useTranslation();
     const avatar = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         user?.imageName
@@ -30,11 +33,18 @@ export const AppMessageInboxThread: FC<AppMessageInboxThreadProps> = ({
 
     return (
         <div
-            className="app-message-inbox-thread inner-container--message--item message-1 col-12 py-3"
+            className={`app-message-inbox-thread inner-container--message--item message-1 col-12 py-3 ${
+                rm ? "rm" : ""
+            }`}
             onClick={onClick}
         >
             <a href="#">
                 <div className="inner-container--message--item--container">
+                    {rm && (
+                        <div className="relational-manager">
+                            <span>{t("messagebox:relationManager")}</span>
+                        </div>
+                    )}
                     <div className="content">
                         <div className={`avatar ${online ? "online" : ""}`}>
                             <i
@@ -51,7 +61,13 @@ export const AppMessageInboxThread: FC<AppMessageInboxThreadProps> = ({
                             </div>
                             <div className="details--comment">
                                 <p>
-                                    {user?.jobTitle} @ {user?.company}
+                                    {user?.jobTitle}
+                                    {user?.jobTitle &&
+                                        user?.jobTitle !== "" &&
+                                        user?.company &&
+                                        user?.company !== "" &&
+                                        ", "}
+                                    {user?.company}
                                 </p>
                             </div>
                         </div>

@@ -306,6 +306,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         if (isEditMode) {
+            setLoadingData(true);
             SessionApi.getSession<Session[]>({
                 id,
                 "groups[]": "SessionTranslationsGroup",

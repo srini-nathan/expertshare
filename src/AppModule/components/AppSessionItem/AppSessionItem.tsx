@@ -178,13 +178,20 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                     className="inner-container--banner--content"
                                 >
                                     <div className="inner-container--banner--content--button">
-                                        {/* <a href="#" className="live-now-btn mr-3">
-                                    <i
-                                        className="fak fa-live"
-                                        aria-hidden="true"
-                                    ></i>
-                                    Live Now
-                                </a> */}
+                                        {session.isLive && (
+                                            <a
+                                                href="#"
+                                                className="live-now-btn mr-3"
+                                            >
+                                                <i
+                                                    className="fak fa-live"
+                                                    aria-hidden="true"
+                                                ></i>
+                                                {t(
+                                                    "sessionDetails:label.liveNow"
+                                                )}
+                                            </a>
+                                        )}
                                     </div>
                                 </div>
                             </Link>

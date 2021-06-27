@@ -67,11 +67,8 @@ export const AppMessageInbox: FC = () => {
                             attendee.id !== user.id &&
                             attendee.isAllowCommunication
                     );
-                    if (rm) {
-                        setUsers([rm, ...filteredUsers]);
-                    } else {
-                        setUsers(filteredUsers);
-                    }
+
+                    setUsers(filteredUsers);
                 }
             })
             .finally(() => {
@@ -129,21 +126,39 @@ export const AppMessageInbox: FC = () => {
                         {loading || loadingRm ? (
                             <AppLoader />
                         ) : (
-                            users.map((u: User) => (
-                                <AppMessageInboxThread
-                                    key={u.id}
-                                    user={u}
-                                    onClick={() => {
-                                        if (user.id) {
-                                            startChat(
-                                                user.id,
-                                                u.id,
-                                                containerId
-                                            );
-                                        }
-                                    }}
-                                />
-                            ))
+                            <>
+                                {rm && (
+                                    <AppMessageInboxThread
+                                        key={rm.id}
+                                        user={rm}
+                                        rm
+                                        onClick={() => {
+                                            if (user.id) {
+                                                startChat(
+                                                    user.id,
+                                                    rm.id,
+                                                    containerId
+                                                );
+                                            }
+                                        }}
+                                    />
+                                )}
+                                {users.map((u: User) => (
+                                    <AppMessageInboxThread
+                                        key={u.id}
+                                        user={u}
+                                        onClick={() => {
+                                            if (user.id) {
+                                                startChat(
+                                                    user.id,
+                                                    u.id,
+                                                    containerId
+                                                );
+                                            }
+                                        }}
+                                    />
+                                ))}
+                            </>
                         )}
                     </div>
                 </div>

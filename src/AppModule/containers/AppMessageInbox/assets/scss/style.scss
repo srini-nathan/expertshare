@@ -7,6 +7,27 @@
     bottom: 0;
     z-index: 9998;
 
+    .app-message-inbox-thread {
+        position: relative;
+        width: 100%;
+
+        &.rm {
+            background: var(--primary-20);
+        }
+
+        .relational-manager {
+            display: flex;
+            width: 100%;
+
+            span {
+                margin-left: auto;
+                font-size: 14px;
+                font-weight: 700;
+                color: var(--primary)
+            }
+        }
+    }
+
     &--container {
         display: flex;
 
@@ -356,23 +377,28 @@
         margin-top: auto;
         margin-bottom: 0;
         overflow: hidden;
+
         .app-message-inbox-header {
             padding-top: 8px !important;
             padding-bottom: 10px !important;
         }
+
         .btn-collapse {
             transform: rotate(180deg);
         }
+
         @include media("mobile") {
             position: absolute;
             bottom: 60px;
             left: 16px;
             width: 145px;
             height: 40px;
+
             .app-message-inbox-header {
                 padding-top: 0 !important;
                 padding-right: 5px !important;
                 padding-left: 5px !important;
+
                 .inner-container {
                     &--details {
                         &--content {
@@ -383,6 +409,7 @@
                             }
                         }
                     }
+
                     &--action {
                         .btn-collapse {
                             i {
@@ -393,6 +420,7 @@
                         }
                     }
                 }
+
                 h2 {
                     width: 70px;
                     overflow: hidden;

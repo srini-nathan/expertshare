@@ -26,6 +26,7 @@ export interface AppFormRichTextAreaProps {
     label?: string;
     description?: string;
     errorMessage?: string;
+    className?: string;
     withCounter?: boolean;
     maxCount?: number;
     minHeight?: number;
@@ -38,6 +39,7 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
     defaultValue = "",
     minHeight = 250,
     value = "",
+    className = "",
     placeholder,
     errorMessage,
     label = "",
@@ -73,7 +75,13 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
     }
 
     return (
-        <Col md={md} sm={sm} lg={lg} xl={xl} className="form-group">
+        <Col
+            md={md}
+            sm={sm}
+            lg={lg}
+            xl={xl}
+            className={`form-group ${className}`}
+        >
             {label?.length > 0 ? (
                 <Form.Label id={controlId}>
                     {label}

@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import { Link } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { Row, Col } from "react-bootstrap";
@@ -41,12 +41,12 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
               backgroundSize: "inherit",
               backgroundPosition: "center",
           };
-    const [isReadMore, setIsReadMore] = useState(true);
-    const showMore = () => {
-        if (conference?.description.length < 800) return "";
-        if (isReadMore) return `+${t("common:showMore")}`;
-        return `-${t("common:showLess")}`;
-    };
+    // const [isReadMore, setIsReadMore] = useState(true);
+    // const showMore = () => {
+    //     if (conference?.description.length < 800) return "";
+    //     if (isReadMore) return `+${t("common:showMore")}`;
+    //     return `-${t("common:showLess")}`;
+    // };
     return (
         <Col className="event-detail-admin--det--container col-12 mb-3 px-0">
             <Col className="inner-container top px-4 pt-4 pb-3">
@@ -136,18 +136,24 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                                 <h2 className="">
                                     {t("event.agenda:label.description")}
                                 </h2>
-                                <p className="mb-0">
-                                    {isReadMore
+
+                                <p
+                                    dangerouslySetInnerHTML={{
+                                        __html: conference?.description || "",
+                                    }}
+                                    className="mb-0"
+                                >
+                                    {/* {isReadMore
                                         ? conference?.description.slice(0, 500)
-                                        : conference?.description}
-                                    <span
+                                        : conference?.description} */}
+                                    {/* <span
                                         onClick={() => {
                                             setIsReadMore(!isReadMore);
                                         }}
                                         className="read-or-hide mt-2"
                                     >
                                         {showMore()}
-                                    </span>
+                                    </span> */}
                                 </p>
                             </Col>
                         </Col>

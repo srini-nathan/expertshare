@@ -1,6 +1,7 @@
 import React, { FC, useEffect, useRef } from "react";
 import { Canceler } from "axios";
 import { Subject } from "rxjs";
+import { useTranslation } from "react-i18next";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 
 export interface AppMessageInboxFiltersProps {
@@ -14,6 +15,7 @@ export const AppMessageInboxFilters: FC<AppMessageInboxFiltersProps> = ({
 }) => {
     const search$ = useRef(new Subject<string>());
     const destroy$ = new Subject<string>();
+    const { t } = useTranslation();
 
     useEffect(() => {
         search$.current
@@ -48,7 +50,7 @@ export const AppMessageInboxFilters: FC<AppMessageInboxFiltersProps> = ({
                     <div className="inner-container--search--container">
                         <input
                             type="text"
-                            placeholder="Search..."
+                            placeholder={t("messageInbox:user:search")}
                             className="w-100"
                             onChange={handleQuickSearch}
                         />

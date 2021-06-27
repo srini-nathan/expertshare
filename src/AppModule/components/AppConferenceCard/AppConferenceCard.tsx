@@ -172,7 +172,13 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                             })}
                         </Row>
                     </Col>
-                    <Col className="description mb-2 p-0">{description}</Col>
+                    <Col className="description mb-2 p-0">
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: description || "",
+                            }}
+                        ></div>
+                    </Col>
 
                     {/* <div className="inner-container--det--participants">
                         <div className="inner-container--det--participants--icon mr-2">

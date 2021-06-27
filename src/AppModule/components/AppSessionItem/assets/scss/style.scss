@@ -1,6 +1,30 @@
 @import "../../../../assets/scss/screens-sizes";
 @import "../../../../assets/scss/variables";
 
+.live-now-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    height: 36px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    background-color: var(--live-btn-bg-clr);
+    border-radius: var(--border-radius);
+
+    &:hover {
+        text-decoration: none;
+    }
+
+    i {
+        margin-right: 5px;
+        margin-bottom: 1px;
+        font-size: 20px;
+    }
+}
+
 .event-detail-admin--workshop {
     overflow: auto;
     box-shadow: 0 2px 12px var(--secondary-20);
@@ -117,13 +141,16 @@
                             margin-left: -50px !important;
                             background-color: var(--light-clr);
                             border-radius: var(--border-radius);
+
                             @include media("ea-1") {
                                 margin: auto;
                                 margin-left: 0 !important;
                             }
+
                             @include media("ea-2") {
                                 margin: 25px 0;
                             }
+
                             &--title {
                                 a {
                                     h2 {
@@ -216,6 +243,7 @@
                             width: 100%;
                             height: 100%;
                         }
+
                         &--content {
                             position: relative;
                             width: 100%;
@@ -398,6 +426,7 @@
 
                             &--other {
                                 &--item {
+
                                     a,
                                     button {
                                         i {
