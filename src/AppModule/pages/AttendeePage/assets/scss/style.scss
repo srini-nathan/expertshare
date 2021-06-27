@@ -124,18 +124,18 @@
                         background-size: cover !important;
                         border-radius: var(--circle-border-radius);
 
-                        &::after {
-                            position: relative;
-                            top: -3px;
-                            left: 24px;
-                            display: block;
-                            width: 11px;
-                            height: 11px;
-                            content: "";
-                            background-color: var(--online-badge-bg-clr);
-                            border: 2px solid var(--border-border-radius-clr);
-                            border-radius: var(--circle-border-radius);
-                        }
+                        // &::after {
+                        //     position: relative;
+                        //     top: -3px;
+                        //     left: 24px;
+                        //     display: block;
+                        //     width: 11px;
+                        //     height: 11px;
+                        //     content: "";
+                        //     background-color: var(--online-badge-bg-clr);
+                        //     border: 2px solid var(--border-border-radius-clr);
+                        //     border-radius: var(--circle-border-radius);
+                        // }
                     }
                 }
 

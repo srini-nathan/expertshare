@@ -18,8 +18,8 @@ export const AppSessionDescription: FC<AppSessionDescriptionProps> = ({
     const [isReadMore, setIsReadMore] = useState(true);
     const showMore = () => {
         if (session.description.length < 800) return "";
-        if (isReadMore) return "+Show More";
-        return "-Show Less";
+        if (isReadMore) return `+${t("common:showMore")}`;
+        return `-${t("common:showLess")}`;
     };
     return (
         <AppCard>

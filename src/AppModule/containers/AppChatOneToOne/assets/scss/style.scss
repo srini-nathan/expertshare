@@ -2,14 +2,21 @@
 @import "../../../../assets/scss/screens-sizes";
 .app-chat-one-to-one {
     width: 384px;
-    margin-top: auto;
-    margin-right: 15px;
+    margin-top: 0;
+    margin-right: 20px;
     margin-bottom: 0;
     background-color: var(--light-clr);
     border-radius: var(--border-radius);
     box-shadow: 0 -7px 40px var(--secondary-30);
     @include media("mb-1") {
-        display: none;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        z-index: 10;
+        display: block;
+        width: 100%;
+        height: initial;
+        margin-right: 0;
     }
 
     .inner-container {
@@ -59,6 +66,7 @@
                     }
 
                     &--comment {
+                        line-height: initial;
                         p {
                             margin-bottom: 0;
                             font-size: 12px;
@@ -93,7 +101,7 @@
                         font-size: 22px;
                         color: var(--secondary);
                         border-radius: var(--border-radius);
-                        box-shadow: 0 3px 9px var(--secondary-10);
+                        box-shadow: 0 -2px 9px var(--secondary-20);
 
                         &::before {
                             content: "\e018";
@@ -115,20 +123,22 @@
                         font-size: 22px;
                         color: var(--secondary);
                         border-radius: var(--border-radius);
-                        box-shadow: 0 3px 9px var(--secondary-10);
+                        box-shadow: 0 -2px 9px var(--secondary-20);
                     }
                 }
             }
         }
 
         .chat-list {
-            height: 320px;
+            height: 335px;
             overflow: auto;
             border-top: 1px solid var(--secondary-20);
             border-bottom: 1px solid var(--secondary-20);
             scrollbar-color: var(--secondary) var(--secondary-10);
             scrollbar-width: thin;
-
+            @include media("mobile") {
+                height: 70vh;
+            }
             &::-webkit-scrollbar {
                 width: 4px;
             }
@@ -227,8 +237,6 @@
                     }
 
                     &.in {
-
-
                         .content {
                             padding-left: 12px;
 
@@ -243,7 +251,6 @@
 
                     &.out {
                         flex-direction: row-reverse;
-
 
                         .content {
                             padding-right: 12px;
@@ -347,7 +354,8 @@
 
                 input {
                     width: 85%;
-                    padding-left: 60px;
+                    padding-top: 4px;
+                    padding-left: 35px;
                     font-size: 14px;
                     font-weight: 400;
                     color: var(--secondary);
@@ -359,20 +367,24 @@
                     }
 
                     &::placeholder {
-                        color: var(--input-placeholder-fg-clr);
+                        color: var(--placeholder-fg-clr);
                     }
                 }
 
-
-                .btn-link{
-                    &.btn-send{
+                .btn-link {
+                    &.btn-send {
                         position: absolute;
-                        right: 10px;
-                        padding-right: 10px;
+                        top: 1px;
+                        right: 0;
+                        padding-right: 10px !important;
+                        padding-left: 10px !important;
                         font-size: 12px !important;
                         font-weight: 700 !important;
                         color: var(--primary) !important;
                         border-left: 1px solid var(--secondary-20);
+                        &:hover {
+                            text-decoration: none;
+                        }
                     }
                 }
 
@@ -396,8 +408,6 @@
 
                     &--smile {
                         margin-top: 5px;
-                        margin-left: 8px;
-
                         i {
                             font-size: 17px;
                             color: var(--secondary-70);

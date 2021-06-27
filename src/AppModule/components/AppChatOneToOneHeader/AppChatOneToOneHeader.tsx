@@ -60,7 +60,7 @@ export const AppChatOneToOneHeader: FC<AppChatOneToOneHeaderProps> = ({
             <div className="action col-auto p-0 mr-0 ml-auto">
                 <div className="row m-0 p-0">
                     <div
-                        className="btn-collapse col-auto p-0"
+                        className="d-none btn-collapse col-auto p-0"
                         onClick={onCollapseAction}
                     >
                         <a>

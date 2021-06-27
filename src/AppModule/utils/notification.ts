@@ -2,7 +2,7 @@ import Swal, { SweetAlertOptions, SweetAlertResult } from "sweetalert2";
 
 const defaultConfig: SweetAlertOptions = {
     toast: true,
-    timer: 2000,
+    timer: 2500,
     position: "top-end",
 };
 
