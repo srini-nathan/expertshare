@@ -63,6 +63,7 @@ export const AppChatOneToOne: FC = () => {
                 .finally(() => {
                     setLoading(false);
                     scrollToBottom();
+                    setCollapsed(false);
                 });
         }
         socket.on(EVENTS.CHAT_MESSAGE, (payload: ChatMessage) => {
@@ -84,7 +85,7 @@ export const AppChatOneToOne: FC = () => {
     }
 
     return (
-        <div className={`app-chat-one-to-one ${collapsed ? "collapsed" : ""}`}>
+        <div className={`app-chat-one-to-one`}>
             <div className="inner-container">
                 <AppChatOneToOneHeader
                     onCollapseAction={() => {
@@ -95,7 +96,7 @@ export const AppChatOneToOne: FC = () => {
                     }}
                     user={otherUser}
                 />
-                <div className="row m-0 px-0 pt-1 pb-3">
+                <div className="row m-0 px-0 pb-3">
                     <div className="chat-list col-auto p-0 w-100">
                         <div className="chat-list--container p-3 ">
                             {loading ? (

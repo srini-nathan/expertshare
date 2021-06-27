@@ -44,8 +44,8 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
     const [isReadMore, setIsReadMore] = useState(true);
     const showMore = () => {
         if (conference?.description.length < 800) return "";
-        if (isReadMore) return "+Show More";
-        return "-Show Less";
+        if (isReadMore) return `+${t("common:showMore")}`;
+        return `-${t("common:showLess")}`;
     };
     return (
         <Col className="event-detail-admin--det--container col-12 mb-3 px-0">

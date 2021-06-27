@@ -9,7 +9,7 @@ body {
     scrollbar-color: var(--secondary) var(--secondary-10);
     scrollbar-width: thin;
 
-    &.app-in-iframe{
+    &.app-in-iframe {
         background-color: var(--body-bg-with-iframe-clr) !important;
     }
 
@@ -45,9 +45,9 @@ body {
     .swal2-toast {
         display: block !important;
         width: 350px !important;
-        padding: 15px;
-        padding-left: 60px;
-        border: none;
+        padding: 15px !important;
+        padding-left: 60px !important;
+        border: none !important;
         box-shadow: 0 3px 9px var(--secondary-20);
 
         @include media("smallmob") {
@@ -61,8 +61,8 @@ body {
                 left: 15px;
                 border: unset;
 
-                >div,
-                >span {
+                > div,
+                > span {
                     display: none;
                 }
 
@@ -178,11 +178,11 @@ a {
             align-items: center;
         }
     }
-
-    .app-message-inbox {
-        bottom: 80px;
+    @include media("not-mobile") {
+        .app-message-inbox {
+            bottom: 80px;
+        }
     }
-
 }
 
 .right-container {

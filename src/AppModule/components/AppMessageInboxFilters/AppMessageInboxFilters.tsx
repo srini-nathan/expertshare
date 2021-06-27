@@ -43,7 +43,7 @@ export const AppMessageInboxFilters: FC<AppMessageInboxFiltersProps> = ({
 
     return (
         <>
-            <div className="row m-0 px-3 pt-3 pb-1">
+            <div className="row m-0 px-3 py-2 pb-1">
                 <div className="inner-container--search col-12 p-0">
                     <div className="inner-container--search--container">
                         <input

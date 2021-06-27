@@ -2,6 +2,7 @@ import React, { FC, useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import { format } from "date-fns";
 import { Link } from "@reach/router";
+import { useTranslation } from "react-i18next";
 import { Session, SessionCategory, User } from "../../../AdminModule/models";
 import "./assets/scss/style.scss";
 import placeholder from "../../assets/images/imgthumb.svg";
@@ -49,6 +50,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
           };
     const [showMore, isShowMore] = useState<boolean>(false);
     const { container } = useGlobalData();
+    const { t } = useTranslation();
 
     const getSize = (): string[] => {
         switch (session.cardSize) {
@@ -207,7 +209,9 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                         <div className="inner-container--det--content--title">
                                             <i className="fak fa-speakers"></i>
                                             <h3 className="mb-0 pl-2">
-                                                Speakers & Moderators
+                                                {t(
+                                                    "event.agenda:section.speakersandmoderators"
+                                                )}
                                             </h3>
                                         </div>
                                         <div
