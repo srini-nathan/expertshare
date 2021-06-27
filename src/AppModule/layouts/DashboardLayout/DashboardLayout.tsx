@@ -37,7 +37,9 @@ export const DashboardLayout: FC = ({ children }) => {
                 <div className="col-md-12 col-sm-12 col-xl-12 p-3 p-lg-4">
                     {children}
                 </div>
-                {isChosen() && <AppMessages disable={hideMessenger} />}
+                {isChosen() && !isA3d && (
+                    <AppMessages disable={hideMessenger} />
+                )}
             </div>
         </Container>
     );

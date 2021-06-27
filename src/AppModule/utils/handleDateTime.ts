@@ -31,7 +31,7 @@ export const getTime = (date: string): string => {
 
 export const getTime24 = (date: string): string => {
     const newDate = new Date(date);
-    const time = `${newDate.getHours()}:${newDate.getMinutes()}:00`;
+    const time = `${format(newDate, "kk:mm")}:00`;
 
     return time;
 };
