@@ -28,7 +28,6 @@ import {
     AUTH_USER_KEY,
     AUTH_SKIP_ONBOARDING,
     CONTAINER_LOCALE,
-    USER_LOCALE,
     LANGUAGES,
 } from "../../../AppModule/config/app-env";
 import { useLanguages } from "../../../AppModule/hooks";
