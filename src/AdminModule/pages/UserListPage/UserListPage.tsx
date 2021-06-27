@@ -331,19 +331,24 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
                         <AppIcon className="mr-2" name="Email" />
                         {t("common.button:invite")}
                     </AppButton>
+                    {isGranted(role, ROLE_ADMIN) && (
+                        <>
+                            <AppButton
+                                onClick={() => {
+                                    handleExport();
+                                }}
+                                className="mr-2 p-3"
+                                variant="secondary"
+                            >
+                                <AppIcon className="mr-2" name="Upload" />
+                                {t("common.button:export")}
+                            </AppButton>
+                        </>
+                    )}
+
                     {!isGranted(role, ROLE_SUPER_ADMIN) &&
                         isGranted(role, ROLE_ADMIN) && (
                             <>
-                                <AppButton
-                                    onClick={() => {
-                                        handleExport();
-                                    }}
-                                    className="mr-2 p-3"
-                                    variant="secondary"
-                                >
-                                    <AppIcon className="mr-2" name="Upload" />
-                                    {t("common.button:export")}
-                                </AppButton>
                                 <AppButton
                                     onClick={() => {
                                         handleImport();
