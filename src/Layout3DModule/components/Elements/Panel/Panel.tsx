@@ -185,9 +185,12 @@ export const Panel = ({
     const billboardClicked = () => {
         if (content) {
             const decoded = window.atob(content);
+            const encodedHtml = encodeURIComponent(decoded);
             setIframeVisible(true);
-
-            setSrcUrl({ url: "", content: decoded });
+            setSrcUrl({
+                url: `data:text/html;charset=utf-8,${encodedHtml}`,
+                content: "",
+            });
         }
     };
 
@@ -349,6 +352,12 @@ export const Panel = ({
                         onPointerDown={groupClicked}
                         onPointerMissed={() => {
                             if (isVisible && editMode) setActive(false);
+                        }}
+                        onPointerEnter={() => {
+                            document.body.style.cursor = "pointer";
+                        }}
+                        onPointerLeave={() => {
+                            document.body.style.cursor = "default";
                         }}
                     >
                         {/* LABEL HERE */}

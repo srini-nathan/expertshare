@@ -156,6 +156,12 @@ export const Remote = ({
                     // setActive(false);
                     onRemoteMissed();
                 }}
+                onPointerEnter={() => {
+                    document.body.style.cursor = "pointer";
+                }}
+                onPointerLeave={() => {
+                    document.body.style.cursor = "default";
+                }}
             >
                 {!disable && !imageUrl && (
                     <Ring args={[0.18, 0.25, 64]} name={"Remote"}>

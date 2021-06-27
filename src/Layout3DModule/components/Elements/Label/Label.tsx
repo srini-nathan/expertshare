@@ -74,6 +74,12 @@ export const Label = ({
                     textAlign={"left"}
                     anchorX="left"
                     anchorY="bottom"
+                    onPointerEnter={() => {
+                        document.body.style.cursor = "pointer";
+                    }}
+                    onPointerLeave={() => {
+                        document.body.style.cursor = "default";
+                    }}
                 >
                     {color && (
                         <meshBasicMaterial
