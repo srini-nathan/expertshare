@@ -34,12 +34,7 @@ import {
     useNavigator,
     useIsGranted,
 } from "../../hooks";
-import {
-    errorToast,
-    getDateWT,
-    getTomorrowDate,
-    successToast,
-} from "../../utils";
+import { errorToast, successToast } from "../../utils";
 import { CONSTANTS } from "../../../config";
 
 const { Role: ROLE } = CONSTANTS;
@@ -53,7 +48,13 @@ export const EventAgenda: FC<RouteComponentProps> = ({
 }): JSX.Element => {
     const { id } = useParamId();
     const [data, setData] = useState<Conference>();
-    const [activeDate, setActiveDate] = useState<string>("");
+    const [activeDate, setActiveDate] = useState<{
+        start: string;
+        end: string;
+    }>({
+        start: "",
+        end: "",
+    });
     const [loading, isLoading] = useState<boolean>(true);
     const [loadingSession, isLoadingSession] = useState<boolean>(false);
     const [sessionList, setSessionList] = useState<any[]>([]);
@@ -105,59 +106,60 @@ export const EventAgenda: FC<RouteComponentProps> = ({
         });
     }, []);
     const fetchSessions = () => {
-        SessionApi.getAgenda<Session>({
-            "container.id": containerId,
-            "conference.id": id,
-            "start[after]": `${getDateWT(activeDate)} 00:00:00`,
-            "start[strictly_before]": getTomorrowDate(getDateWT(activeDate)),
-            "sessionCategory.id": categoryFilter,
-        }).then(({ error, response }) => {
-            isLoadingSession(false);
-            if (error !== null) {
-                if (_isString(error)) {
-                    errorToast(error);
-                }
-            } else if (response !== null) {
-                const diffCat: any[] = [];
-                let currentCat: Session[] = [];
-                response.items.forEach((e: Session, i: number) => {
-                    if (response.items.length - 1 === i) {
-                        currentCat.push(e);
-                        diffCat.push(currentCat);
-                        currentCat = [];
-                    } else if (e.start === response.items[i + 1].start)
-                        currentCat.push(e);
-                    else {
-                        currentCat.push(e);
-                        diffCat.push(currentCat);
-                        currentCat = [];
+        if (activeDate)
+            SessionApi.getAgenda<Session>({
+                "container.id": containerId,
+                "conference.id": id,
+                "start[after]": activeDate?.start,
+                "start[strictly_before]": activeDate?.end,
+                "sessionCategory.id": categoryFilter,
+            }).then(({ error, response }) => {
+                isLoadingSession(false);
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
                     }
-                });
-
-                const sessionItems: any[] = [];
-                diffCat.forEach((e, i) => {
-                    e.forEach((k: any) => {
-                        const sessionState = {
-                            id: k.id,
-                            prev: null,
-                            next: null,
-                        };
-                        if (i !== 0) {
-                            if (diffCat[i - 1][0])
-                                sessionState.prev = diffCat[i - 1][0].id;
+                } else if (response !== null) {
+                    const diffCat: any[] = [];
+                    let currentCat: Session[] = [];
+                    response.items.forEach((e: Session, i: number) => {
+                        if (response.items.length - 1 === i) {
+                            currentCat.push(e);
+                            diffCat.push(currentCat);
+                            currentCat = [];
+                        } else if (e.start === response.items[i + 1].start)
+                            currentCat.push(e);
+                        else {
+                            currentCat.push(e);
+                            diffCat.push(currentCat);
+                            currentCat = [];
                         }
-                        if (i < diffCat.length - 1) {
-                            if (diffCat[i + 1][0])
-                                sessionState.next = diffCat[i + 1][0].id;
-                        }
-
-                        sessionItems.push(sessionState);
                     });
-                });
-                setSessionList(sessionItems);
-                setSessions(diffCat);
-            }
-        });
+
+                    const sessionItems: any[] = [];
+                    diffCat.forEach((e, i) => {
+                        e.forEach((k: any) => {
+                            const sessionState = {
+                                id: k.id,
+                                prev: null,
+                                next: null,
+                            };
+                            if (i !== 0) {
+                                if (diffCat[i - 1][0])
+                                    sessionState.prev = diffCat[i - 1][0].id;
+                            }
+                            if (i < diffCat.length - 1) {
+                                if (diffCat[i + 1][0])
+                                    sessionState.next = diffCat[i + 1][0].id;
+                            }
+
+                            sessionItems.push(sessionState);
+                        });
+                    });
+                    setSessionList(sessionItems);
+                    setSessions(diffCat);
+                }
+            });
     };
     async function handleClone() {
         ConferenceApi.clone<
@@ -229,7 +231,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
     }
 
     useEffect(() => {
-        if (activeDate !== "") {
+        if (activeDate.start !== "") {
             isLoadingSession(true);
             fetchSessions();
         }
