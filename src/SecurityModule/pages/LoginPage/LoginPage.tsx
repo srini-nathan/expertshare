@@ -104,7 +104,6 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                     localStorage.removeItem(AUTH_USER_KEY);
                     localStorage.removeItem(AUTH_SKIP_ONBOARDING);
                     localStorage.removeItem(CONTAINER_LOCALE);
-                    localStorage.removeItem(USER_LOCALE);
 
                     if (response.isOnboarded) {
                         isOnboarded(true);
