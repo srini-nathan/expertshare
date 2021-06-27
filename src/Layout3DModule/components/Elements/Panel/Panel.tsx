@@ -353,6 +353,12 @@ export const Panel = ({
                         onPointerMissed={() => {
                             if (isVisible && editMode) setActive(false);
                         }}
+                        onPointerEnter={() => {
+                            document.body.style.cursor = "pointer";
+                        }}
+                        onPointerLeave={() => {
+                            document.body.style.cursor = "default";
+                        }}
                     >
                         {/* LABEL HERE */}
                         {labelEnabled && (
