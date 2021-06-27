@@ -30,7 +30,7 @@ import {
     CONTAINER_LOCALE,
     LANGUAGES,
 } from "../../../AppModule/config/app-env";
-import { useLanguages } from "../../../AppModule/hooks";
+import { useLanguages, useUserLocale } from "../../../AppModule/hooks";
 
 type LoginForm = {
     email: string;
@@ -63,7 +63,11 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { container } = useGlobalData();
     const { errors } = formState;
     const { t } = useTranslation();
+    const { setLocale } = useUserLocale();
 
+    useEffect(() => {
+        setLocale(activeLanguage);
+    }, [activeLanguage]);
     useEffect(() => {
         container?.languages?.forEach((e) => {
             if (e.isDefault) setActiveLanguage(e.locale);

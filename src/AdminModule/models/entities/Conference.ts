@@ -17,7 +17,7 @@ export class Conference extends BaseEntity {
 
     container: string;
 
-    sessionDates: { [key: string]: string };
+    sessionDates: { [key: string]: { start: string; end: string } };
 
     conferenceTags: PConferenceTag[];
 

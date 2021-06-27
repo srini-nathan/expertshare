@@ -7,9 +7,9 @@ import { useGlobalData } from "../../contexts";
 import { getDateTimeWithoutTimezone } from "../../utils";
 
 export interface AppSessionDatesProps {
-    sessionDates: { [key: string]: string };
-    activeDate: string;
-    setActiveDate: (value: string) => void;
+    sessionDates: { [key: string]: { start: string; end: string } };
+    activeDate: { start: string; end: string };
+    setActiveDate: (value: any) => void;
 }
 
 export const AppSessionDates: FC<AppSessionDatesProps> = ({
@@ -31,8 +31,8 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
                             return (
                                 <SwiperSlide
                                     className={`inner-container--item  mr-4 ${
-                                        sessionDates[key] === activeDate &&
-                                        "active"
+                                        sessionDates[key].start ===
+                                            activeDate.start && "active"
                                     }`}
                                     key={key}
                                 >
@@ -47,7 +47,7 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
                                             <span>
                                                 {format(
                                                     getDateTimeWithoutTimezone(
-                                                        sessionDates[key]
+                                                        sessionDates[key].start
                                                     ),
                                                     "dd"
                                                 )}
@@ -57,7 +57,7 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
                                             <span className="date-day--dofw">
                                                 {format(
                                                     getDateTimeWithoutTimezone(
-                                                        sessionDates[key]
+                                                        sessionDates[key].start
                                                     ),
                                                     "EEEE"
                                                 )}
@@ -65,7 +65,7 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
                                             <span className="date-day--dofy">
                                                 {format(
                                                     getDateTimeWithoutTimezone(
-                                                        sessionDates[key]
+                                                        sessionDates[key].start
                                                     ),
                                                     container &&
                                                         container.configuration &&
