@@ -28,7 +28,6 @@ import {
     AUTH_USER_KEY,
     AUTH_SKIP_ONBOARDING,
     CONTAINER_LOCALE,
-    USER_LOCALE,
     LANGUAGES,
 } from "../../../AppModule/config/app-env";
 import { useLanguages } from "../../../AppModule/hooks";
@@ -104,7 +103,6 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                     localStorage.removeItem(AUTH_USER_KEY);
                     localStorage.removeItem(AUTH_SKIP_ONBOARDING);
                     localStorage.removeItem(CONTAINER_LOCALE);
-                    localStorage.removeItem(USER_LOCALE);
 
                     if (response.isOnboarded) {
                         isOnboarded(true);

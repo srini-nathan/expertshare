@@ -50,7 +50,7 @@ export const AppMessageInboxFilters: FC<AppMessageInboxFiltersProps> = ({
                     <div className="inner-container--search--container">
                         <input
                             type="text"
-                            placeholder={t("messageInbox:user:search")}
+                            placeholder={t("messageInbox:user.search")}
                             className="w-100"
                             onChange={handleQuickSearch}
                         />
