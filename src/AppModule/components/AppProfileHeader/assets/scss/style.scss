@@ -2,7 +2,21 @@
 @import "../../../../assets/scss/variables";
 
 .user-profile--det {
+
+
     &--container {
+        .back-btn {
+            i {
+                margin-right: 15px;
+                margin-bottom: 1px;
+                font-size: 15px;
+
+                &::before {
+                    content: "\e017";
+                }
+            }
+        }
+
         .inner-container {
             &--profile-pic {
                 &--content {

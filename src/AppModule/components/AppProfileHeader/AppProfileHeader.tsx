@@ -124,6 +124,18 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
     return (
         <AppCard className="user-profile--det--container mb-3 pt-4 px-0">
             <Col className="inner-container p-0">
+                {!isProfilePage && (
+                    <Row className="m-0 p-0">
+                        <Link
+                            to={`/attendee`}
+                            className="btn btn-secondary back-btn mx-3 mb-3"
+                        >
+                            <i className="fak fa-chevron-left mr-3"></i>
+                            {t("common:label.back")}
+                        </Link>
+                    </Row>
+                )}
+
                 <Row className="m-0 p-0">
                     <Col
                         md="auto"
