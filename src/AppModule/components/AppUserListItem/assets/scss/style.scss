@@ -47,18 +47,18 @@
             background-size: cover;
             border-radius: 50%;
 
-            &::after {
-                position: relative;
-                top: 0;
-                left: 24px;
-                display: block;
-                width: 10px;
-                height: 10px;
-                content: "";
-                background-color: var(--online-badge-bg-clr);
-                border: 1px solid var(--border-border-radius-clr);
-                border-radius: 50%;
-            }
+            // &::after {
+            //     position: relative;
+            //     top: 0;
+            //     left: 24px;
+            //     display: block;
+            //     width: 10px;
+            //     height: 10px;
+            //     content: "";
+            //     background-color: var(--online-badge-bg-clr);
+            //     border: 1px solid var(--border-border-radius-clr);
+            //     border-radius: 50%;
+            // }
         }
     }
 }

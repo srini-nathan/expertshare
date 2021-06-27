@@ -153,6 +153,14 @@ export const SceneCanvas = ({
         }
     }, [urlContent]);
 
+    useEffect(() => {
+        if (iframeVisible === true) {
+            setControlsActive(false);
+        } else {
+            setControlsActive(true);
+        }
+    }, [iframeVisible]);
+
     return (
         <>
             <Canvas dpr={window.devicePixelRatio} flat={true}>

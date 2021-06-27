@@ -18,6 +18,7 @@ export interface AppSessionUsersProps {
     lg: number;
     xl: number;
     showAdd?: boolean;
+    loadMore?: (value?: string) => void;
 }
 
 export const AppSessionUsers: FC<AppSessionUsersProps> = ({
@@ -29,6 +30,7 @@ export const AppSessionUsers: FC<AppSessionUsersProps> = ({
     lg,
     xl,
     showAdd = false,
+    loadMore,
     handleSelectedUsers = () => {},
     selectedUsers = [],
 }): JSX.Element => {
@@ -70,6 +72,7 @@ export const AppSessionUsers: FC<AppSessionUsersProps> = ({
                                 handleClose={isShow}
                                 handleSelectedUsers={handleSelectedUsers}
                                 selectedUsers={selectedUsers}
+                                loadMore={loadMore}
                             />
                         </>
                     )}

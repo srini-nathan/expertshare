@@ -6,7 +6,7 @@ import { AppCard } from "../AppCard";
 import { AppButton } from "../AppButton";
 import { CONSTANTS } from "../../../config";
 import "./assets/scss/style.scss";
-import { useBuildAssetPath } from "../../hooks";
+import { useAuthState, useBuildAssetPath, useInitChat } from "../../hooks";
 import placeholder from "../../assets/images/user-avatar.png";
 import { FileTypeInfo } from "../../models";
 
@@ -16,6 +16,7 @@ const {
 } = UPLOAD;
 
 export interface AppProfileHeaderProps {
+    id?: number;
     firstName?: string;
     lastName?: string;
     jobTitle?: string;
@@ -31,6 +32,7 @@ export interface AppProfileHeaderProps {
 }
 
 export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
+    id,
     firstName,
     lastName,
     jobTitle,
@@ -45,6 +47,8 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
     userFieldValues,
 }): JSX.Element => {
     const { t } = useTranslation();
+    const { startChat } = useInitChat();
+    const { user, containerId } = useAuthState();
 
     const getUserValue = (name: string): string => {
         let defaultValue = "";
@@ -120,6 +124,18 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
     return (
         <AppCard className="user-profile--det--container mb-3 pt-4 px-0">
             <Col className="inner-container p-0">
+                {!isProfilePage && (
+                    <Row className="m-0 p-0">
+                        <Link
+                            to={`/attendee`}
+                            className="btn btn-secondary back-btn mx-3 mb-3"
+                        >
+                            <i className="fak fa-chevron-left mr-3"></i>
+                            {t("common:label.back")}
+                        </Link>
+                    </Row>
+                )}
+
                 <Row className="m-0 p-0">
                     <Col
                         md="auto"
@@ -127,7 +143,7 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                     >
                         <Col
                             style={style}
-                            className="inner-container--profile-pic--content online"
+                            className="inner-container--profile-pic--content"
                         >
                             {userType && getUserType()}
                         </Col>
@@ -197,10 +213,19 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                     {!isProfilePage && (
                         <Col className="inner-container--right-btn col-auto mr-0 ml-auto pr-4 p-0">
                             <Col className="inner-container--right-btn--content p-0">
-                                {isAllowCommunication && (
+                                {isAllowCommunication && user && (
                                     <AppButton
                                         variant="secondary"
                                         className="get-contact-btn"
+                                        onClick={() => {
+                                            if (user.id && id) {
+                                                startChat(
+                                                    id,
+                                                    user.id,
+                                                    containerId
+                                                );
+                                            }
+                                        }}
                                     >
                                         <i className="fak fa-start-conversation mb-1 mr-2"></i>
                                         {t(

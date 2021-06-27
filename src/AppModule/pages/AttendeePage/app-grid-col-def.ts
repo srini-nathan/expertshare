@@ -27,7 +27,7 @@ export const appGridColDef = ({
         field: "tags",
         cellRenderer: "appTagTemplateRenderer",
         flex: 1.5,
-        minWidth: 200,
+        minWidth: 350,
     },
     {
         headerName: "attendee.list:column.category",

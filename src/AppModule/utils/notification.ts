@@ -2,7 +2,7 @@ import Swal, { SweetAlertOptions, SweetAlertResult } from "sweetalert2";
 
 const defaultConfig: SweetAlertOptions = {
     toast: true,
-    timer: 2000,
+    timer: 2500,
     position: "top-end",
 };
 
@@ -14,6 +14,19 @@ export const successToast = (
         text,
         title: "Success",
         icon: "success",
+        ...defaultConfig,
+        ...config,
+    }).then();
+};
+
+export const warningToast = (
+    text: string,
+    config?: SweetAlertOptions
+): void => {
+    Swal.fire({
+        text,
+        title: "Warning",
+        icon: "warning",
         ...defaultConfig,
         ...config,
     }).then();

@@ -21,7 +21,7 @@ export const AppWelcomeModal: FC<AppWelcomeModalProps> = ({
 }): JSX.Element => {
     const { container } = useGlobalData();
     const { locale } = useUserLocale();
-    const [isPlaying, setIsPlaying] = React.useState(false);
+    const [isPlaying, setIsPlaying] = React.useState(true);
     const [enable, isEnable] = React.useState(false);
     const [fullScreen, isFullScreen] = React.useState(false);
     const [media, setMedia] = React.useState("");
@@ -71,9 +71,6 @@ export const AppWelcomeModal: FC<AppWelcomeModalProps> = ({
                     }
                 );
             }
-
-            // eslint-disable-next-line no-console
-            console.log((container.configuration as any).translations[locale]);
         }
     }, []);
 
@@ -91,7 +88,7 @@ export const AppWelcomeModal: FC<AppWelcomeModalProps> = ({
                     <video
                         id="video-player"
                         className="video-player"
-                        loop
+                        autoPlay
                         ref={(ref) => {
                             if (ref) {
                                 videoPlayerRef.current = ref;

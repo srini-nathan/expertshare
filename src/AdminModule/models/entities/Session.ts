@@ -62,6 +62,10 @@ export class Session extends BaseEntity {
 
     isJoinRequired: boolean;
 
+    isLive: boolean;
+
+    isReply: boolean;
+
     isSessionPublic: boolean;
 
     isExternalLinkEnable: boolean;
@@ -109,6 +113,8 @@ export class Session extends BaseEntity {
         sessionTags = [],
         translations,
         isCommentEnable = false,
+        isReply = false,
+        isLive = false,
         isCommentModerated = false,
         isSharingEnable = false,
         isLikeEnable = false,
@@ -126,6 +132,8 @@ export class Session extends BaseEntity {
         super(id, createdAt, updatedAt);
         this.ord = ord;
         this.userGroups = userGroups;
+        this.isReply = isReply;
+        this.isLive = isLive;
         this.container = container;
         this.webexMeetingPassword = webexMeetingPassword;
         this.speakers = speakers;
@@ -173,6 +181,8 @@ export class Session extends BaseEntity {
             title: this.title,
             imageName: this.imageName,
             isVisible: this.isVisible,
+            isReply: this.isReply,
+            isLive: this.isLive,
             description: this.description,
             ord: this.ord,
             userGroups: this.userGroups,

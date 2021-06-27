@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { PUser } from "../../../AdminModule/models";
 import { FileTypeInfo } from "../../models";
 import { CONSTANTS } from "../../../config";
@@ -28,6 +29,7 @@ export const AppMessageInboxHeader: FC<AppMessageInboxHeaderProps> = ({
         user.imageName
     );
     const avatarUrl = user.imageName ? avatar : placeholder;
+    const { t } = useTranslation();
 
     return (
         <div className="app-message-inbox-header row m-0 px-3 pt-3 pb-2">
@@ -43,7 +45,7 @@ export const AppMessageInboxHeader: FC<AppMessageInboxHeaderProps> = ({
                             }}
                         ></i>
                         <h2 className="inner-container--details--content--title">
-                            Messages
+                            {t("messagebox:title")}
                             {newMsgCounter && newMsgCounter > 0 ? (
                                 <span className="inner-container--details--content--title--count">
                                     {newMsgCounter}

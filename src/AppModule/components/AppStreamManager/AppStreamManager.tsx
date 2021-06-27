@@ -12,6 +12,7 @@ import { useBuildAssetPath } from "../../hooks";
 import { FileTypeInfo } from "../../models";
 import { CONSTANTS } from "../../../config";
 import placeholder from "./assets/images/imgthumb.svg";
+import { AppButton } from "../AppButton";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -20,6 +21,7 @@ const {
 interface AppStreamManagerProps {
     session: Session;
     isLive: (value: boolean) => void;
+    getAgenda: () => void;
 }
 
 export const renderStreams = (
@@ -75,6 +77,7 @@ export const renderStreams = (
 export const AppStreamManager: FC<AppStreamManagerProps> = ({
     session,
     isLive,
+    getAgenda,
 }): JSX.Element => {
     const { t } = useTranslation();
     const [time, setTime] = useState<Duration>();
@@ -170,6 +173,20 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
                                         : "0"}
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        if (!session.isReply && new Date() > new Date(session.end)) {
+            return (
+                <div className="imageContainer">
+                    <i style={style}></i>
+                    <div className="overlay">
+                        <div className="overlay--content">
+                            <AppButton onClick={getAgenda} variant="secondary">
+                                {t("sessionDetails:button.goToLiveSession")}
+                            </AppButton>
                         </div>
                     </div>
                 </div>

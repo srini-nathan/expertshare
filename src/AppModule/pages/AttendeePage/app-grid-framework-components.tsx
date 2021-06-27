@@ -1,8 +1,8 @@
 import { ICellRendererParams } from "ag-grid-community";
 import React, { FC, ReactElement } from "react";
 import { Link } from "@reach/router";
+import { useTranslation } from "react-i18next";
 import { AppIcon } from "../../components";
-import { AppCellActionWithRenderWithCustom } from "./app-actions";
 import { FileTypeInfo, User } from "../../models";
 import UserAvatar from "../../assets/images/user-avatar.png";
 import { CONSTANTS } from "../../../config";
@@ -22,7 +22,6 @@ export const UserDetailsInfo: FC<UserInfo> = ({ data }): JSX.Element => {
         FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         imageName
     );
-
     const style = imageName
         ? {
               backgroundImage: `url(${imagePath})`,
@@ -52,6 +51,15 @@ export const UserDetailsInfo: FC<UserInfo> = ({ data }): JSX.Element => {
         </div>
     );
 };
+export const RenderGetInContact: FC<UserInfo> = ({ data }): JSX.Element => {
+    const { id } = data;
+    const { t } = useTranslation();
+    return (
+        <Link className="btn btn-secondary" to={`/attendee/${id}/show`}>
+            {t("attendee.form:button.viewProfile")}
+        </Link>
+    );
+};
 export const appGridFrameworkComponents = {
     appNameTemplateRenderer: (params: ICellRendererParams): ReactElement => {
         const { data } = params;
@@ -60,12 +68,12 @@ export const appGridFrameworkComponents = {
     },
     appTagTemplateRenderer: (params: ICellRendererParams): ReactElement => {
         const { data } = params;
-        const { userTags, id } = data as User;
+        const { userTags } = data as User;
         return (
             <div className="tag-container d-flex">
                 {userTags &&
                     userTags.map((tag, index: any) => {
-                        if (index < 2) {
+                        if (index < 3) {
                             return (
                                 <div
                                     className="tag-container--item pr-2"
@@ -77,11 +85,6 @@ export const appGridFrameworkComponents = {
                         }
                         return <></>;
                     })}
-                {userTags && userTags.length > 2 && (
-                    <div className="tag-container--item more pr-2">
-                        <Link to={`/attendee/${id}/show`}>+ Show More</Link>
-                    </div>
-                )}
             </div>
         );
     },
@@ -105,44 +108,8 @@ export const appGridFrameworkComponents = {
         const { data } = params;
         return <div className="email">{data.isExposeEmail && data.email} </div>;
     },
-    appGridActionRenderer: (
-        params: AppCellActionWithRenderWithCustom
-    ): ReactElement => {
+    appGridActionRenderer: (params: ICellRendererParams): ReactElement => {
         const { data } = params;
-        const { id } = data as User;
-        return (
-            <a href={`/attendee/${id}/show`} className="btn btn-secondary">
-                Get In Contact
-            </a>
-        );
-        // const {
-        //     // onPressBookSession,
-        //     onPressGetInContact,
-        //     // onPressAddNewUser,ap
-        // } = params;
-        // const props: AppGridActionProps = {
-        //     customClickActions: [
-        //         // {
-        //         //     text: "Book Session",
-        //         //     onClick: () => {
-        //         //         onPressBookSession();
-        //         //     },
-        //         // },
-        //         {
-        //             text: "Get In Contact",
-        //             onClick: () => {
-        //                 onPressGetInContact();
-        //             },
-        //         },
-        //         // {
-        //         //     icon: "AddUserPlus",
-        //         //     text: "",
-        //         //     onClick: () => {
-        //         //         onPressAddNewUser();
-        //         //     },
-        //         // },
-        //     ],
-        // };
-        // return <AppGridAction {...props} />;
+        return <RenderGetInContact data={data} />;
     },
 };
