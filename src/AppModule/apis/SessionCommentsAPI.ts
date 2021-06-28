@@ -25,8 +25,6 @@ export abstract class SessionCommentsAPI extends EntityAPI {
     public static async postComment<R, P>(
         comment: P
     ): Promise<FinalResponse<R | null>> {
-        // eslint-disable-next-line no-console
-        console.log(comment);
         return this.makePost<R, P>(
             API_POST_SESSION_COMMENTS,
             comment,
@@ -48,11 +46,14 @@ export abstract class SessionCommentsAPI extends EntityAPI {
 
     public static async getMessages(
         session: number,
-        container: number
+        container: number,
+        page = 1
     ): Promise<any> {
         return this.makeGet<any>(API_GET_SESSIONS_COMMENTS, {
+            page,
             "session.id": session,
             "container.id": container,
+            "order[id]": "desc",
         })
             .then(({ data }) => {
                 return data;

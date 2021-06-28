@@ -5,7 +5,12 @@ import { AppQAThread } from "../AppQAThread";
 import { errorToast } from "../../utils";
 import { SessionCommentsAPI } from "../../apis";
 
+import { useAuthState, useSessionSocketEvents } from "../../hooks";
+import { socket, EVENTS } from "../../socket";
+
 import "./assets/scss/style.scss";
+
+const { ON_NEW_SESSION_QA } = EVENTS;
 
 export interface QuestionAndAnswersProps {
     name?: string;
@@ -18,16 +23,96 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
     container,
     session,
 }) => {
-    const [data, setData] = useState<[]>([]);
+    const [data, setData] = useState<any[]>([]);
+    const [page, setPage] = useState<number>(1);
+    const [, setTotalItems] = useState<number>(1);
+    const {
+        emitPostNewSessionQa,
+        emitJoinSessionQa,
+        emitLeaveSessionQa,
+    } = useSessionSocketEvents();
+    const { user } = useAuthState();
 
-    const getCurrentQestionsAndAnswersThread = () => {
-        SessionCommentsAPI.getMessages(session, container).then((response) => {
-            if (response) {
-                setData(response["hydra:member"].reverse());
+    useEffect(() => {
+        if (session) emitJoinSessionQa(session);
+
+        return () => {
+            emitLeaveSessionQa(session);
+        };
+    }, [session]);
+
+    useEffect(() => {
+        socket.on(
+            ON_NEW_SESSION_QA,
+            (sessionId: number, u: any, parent: any, payload: any) => {
+                if (sessionId === session) {
+                    if (parent) {
+                        const p = data.find((e: any) => e.id === parent);
+                        const index = data.indexOf(p);
+                        if (index !== -1) {
+                            setData([
+                                ...data.splice(0, index - 1),
+                                {
+                                    ...data[index],
+                                    children: [
+                                        {
+                                            ...payload,
+                                            id: 0,
+                                            createdAt: new Date().toISOString(),
+                                            user: u,
+                                            parent,
+                                            children: [],
+                                        },
+                                        ...data[index].children,
+                                    ],
+                                },
+                                ...data.splice(index - 1),
+                            ]);
+                        }
+                    } else {
+                        setData([
+                            {
+                                ...payload,
+                                id: 0,
+                                createdAt: new Date().toISOString(),
+                                user: u,
+                                parent,
+                                children: [],
+                            },
+                            ...data,
+                        ]);
+                    }
+                }
             }
-        });
-    };
+        );
+    }, [data]);
 
+    const getCurrentQestionsAndAnswersThread = (pageNo = 1) => {
+        SessionCommentsAPI.getMessages(session, container, pageNo).then(
+            (response) => {
+                if (response) {
+                    if (pageNo === 1) {
+                        setPage(1);
+                        setData(response["hydra:member"]);
+                    } else {
+                        const newData = data;
+                        response["hydra:member"].forEach((e: any) => {
+                            const item = data.find((d: any) => d.id === e.id);
+                            if (!item) {
+                                newData.push(e);
+                            }
+                        });
+
+                        setData(newData);
+                    }
+                    setTotalItems(response["hydra:totalItems"] as number);
+                }
+            }
+        );
+    };
+    useEffect(() => {
+        getCurrentQestionsAndAnswersThread(page);
+    }, [page]);
     const newMessageSend = (message: string) => {
         const meesageObj = {
             message: `${message}`,
@@ -37,6 +122,15 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
             session: `api/sessions/${session}`,
         };
 
+        emitPostNewSessionQa(
+            session,
+            user,
+            {
+                ...meesageObj,
+                parent: null,
+            },
+            null
+        );
         const messageToPost = JSON.stringify(meesageObj);
 
         SessionCommentsAPI.postComment<any, any>(messageToPost).then(
@@ -45,7 +139,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                     errorToast(errorMessage);
                 }
                 if (response) {
-                    getCurrentQestionsAndAnswersThread();
+                    getCurrentQestionsAndAnswersThread(1);
                 }
             }
         );
@@ -60,6 +154,15 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
             container: `api/containers/${container}`,
             session: `api/sessions/${session}`,
         };
+        emitPostNewSessionQa(
+            session,
+            user,
+            {
+                ...meesageObj,
+                parent: `${aId}`,
+            },
+            aId
+        );
 
         const messageToPost = JSON.stringify(meesageObj);
 
@@ -69,7 +172,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                     errorToast(errorMessage);
                 }
                 if (response) {
-                    getCurrentQestionsAndAnswersThread();
+                    getCurrentQestionsAndAnswersThread(1);
                 }
             }
         );
@@ -92,7 +195,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                     errorToast(errorMessage);
                 }
                 if (response) {
-                    getCurrentQestionsAndAnswersThread();
+                    getCurrentQestionsAndAnswersThread(1);
                 }
             }
         );
@@ -100,7 +203,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
 
     const deleteQuestion = (qId: number) => {
         SessionCommentsAPI.deleteById(qId).then(() => {
-            getCurrentQestionsAndAnswersThread();
+            getCurrentQestionsAndAnswersThread(1);
         });
     };
 
@@ -108,15 +211,13 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
         patchMessage(message, qId);
     };
 
-    const handleScroll = () => {
-        const { scrollY } = window;
-        /* eslint-disable no-console */
-        console.log(scrollY);
+    const handleScroll = (e: any) => {
+        const { scrollTop, offsetHeight, scrollHeight } = e.target;
+        const height = scrollHeight - offsetHeight;
+        if (scrollTop === height) {
+            setPage(page + 1);
+        }
     };
-
-    useEffect(() => {
-        getCurrentQestionsAndAnswersThread();
-    }, []);
 
     return (
         <Col className="session-details-question py-3 card">

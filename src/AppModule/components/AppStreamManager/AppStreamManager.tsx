@@ -6,13 +6,14 @@ import { AppYoutubeFrame } from "../AppYoutubeFrame";
 import { AppDacastFrame } from "../AppDacastFrame";
 import { AppKnovioPlayer } from "../AppKnovioPlayer";
 import { AppSwisscomFrame } from "../AppSwisscomFrame";
-import "./assets/scss/style.scss";
 import { Session } from "../../../AdminModule/models";
 import { useBuildAssetPath } from "../../hooks";
 import { FileTypeInfo } from "../../models";
 import { CONSTANTS } from "../../../config";
 import placeholder from "./assets/images/imgthumb.svg";
 import { AppButton } from "../AppButton";
+import { getDateTimeWithoutTimezone } from "../../utils";
+import "./assets/scss/style.scss";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -82,7 +83,8 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
     const { t } = useTranslation();
     const [time, setTime] = useState<Duration>();
     const [startedSession, isSessionStarted] = useState<boolean>(
-        new Date() > new Date(session.start)
+        getDateTimeWithoutTimezone(session.currentTime) >
+            getDateTimeWithoutTimezone(session.start)
     );
 
     const conferencePosterPath = useBuildAssetPath(
@@ -107,22 +109,37 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
         let timer: any;
         if (!startedSession) {
             timer = setInterval(() => {
-                if (new Date() <= new Date(session.start)) {
+                if (
+                    getDateTimeWithoutTimezone(session.currentTime) <=
+                    getDateTimeWithoutTimezone(session.start)
+                ) {
                     if (session.start) {
                         const timeLeft = intervalToDuration({
-                            start: new Date(),
-                            end: new Date(session.start),
+                            start: getDateTimeWithoutTimezone(
+                                session.currentTime
+                            ),
+                            end: getDateTimeWithoutTimezone(session.start),
                         });
                         setTime(timeLeft);
                     }
                 } else {
                     isSessionStarted(true);
-                    if (isLive && !(new Date() > new Date(session.end))) {
+                    if (
+                        isLive &&
+                        !(
+                            getDateTimeWithoutTimezone(session.currentTime) >
+                            getDateTimeWithoutTimezone(session.end)
+                        )
+                    ) {
                         isLive(true);
                     }
                 }
             }, 1000);
-        } else if (isLive && new Date() < new Date(session.end)) {
+        } else if (
+            isLive &&
+            getDateTimeWithoutTimezone(session.currentTime) <
+                getDateTimeWithoutTimezone(session.end)
+        ) {
             isLive(true);
         }
         return () => {
@@ -178,7 +195,11 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
                 </div>
             );
         }
-        if (!session.isReply && new Date() > new Date(session.end)) {
+        if (
+            !session.isReply &&
+            getDateTimeWithoutTimezone(session.currentTime) >
+                getDateTimeWithoutTimezone(session.end)
+        ) {
             return (
                 <div className="imageContainer">
                     <i style={style}></i>
