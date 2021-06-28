@@ -52,7 +52,7 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
     const [PANEL_ASSETS_PATH] = useState<string>(panelPath);
 
     const onKeyPressed = (e: KeyboardEvent) => {
-        if (e.keyCode === 101) {
+        if (e.keyCode === 5 && e.shiftKey && e.ctrlKey) {
             setEditMode(!editMode);
         }
     };
