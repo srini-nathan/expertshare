@@ -41,6 +41,7 @@ import {
     useBuildAssetPath,
     useNavigator,
     useSkipOnboarding,
+    useUserLocale,
 } from "../../hooks";
 import {
     FileTypeInfo,
@@ -78,6 +79,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
         FILETYPEINFO_USER_PROFILE as FileTypeInfo
     );
     const { t } = useTranslation();
+    const { setLocale } = useUserLocale();
 
     const validationShape = {
         plainPassword: yup.string().min(6).required(),
@@ -133,6 +135,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
             } else if (errorMessage) {
                 errorToast(errorMessage);
             } else {
+                setLocale(formData.locale);
                 navigator("/").then(() => {
                     successToast("Updated");
                 });
