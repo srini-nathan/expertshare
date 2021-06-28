@@ -9,7 +9,10 @@ import {
 } from "three";
 import { useSpring, a } from "@react-spring/three";
 import { easeQuadInOut } from "d3-ease";
-import { ROOM_FADE_DURATION } from "../../Helpers/Utils";
+import {
+    PANEL_ANIMATION_DURATION,
+    ROOM_FADE_DURATION,
+} from "../../Helpers/Utils";
 
 interface SkyProps {
     props?: JSX.IntrinsicElements["mesh"];
@@ -51,7 +54,9 @@ SkyProps): JSX.Element => {
 
     const fadeInOut = useSpring({
         opacity: active ? 1 : 0,
-        delay: active ? ROOM_FADE_DURATION : 0,
+        delay: active
+            ? ROOM_FADE_DURATION * 2 + PANEL_ANIMATION_DURATION
+            : ROOM_FADE_DURATION, // + PANEL_ANIMATION_DURATION,
         config: {
             duration: active ? ROOM_FADE_DURATION : ROOM_FADE_DURATION,
             easing: easeQuadInOut,
@@ -64,7 +69,6 @@ SkyProps): JSX.Element => {
         },
         onStart: (v) => {
             if (v.value.opacity <= 0.5) {
-                material.current.transparent = true;
                 material.current.visible = true;
             } else {
                 material.current.transparent = true;
@@ -116,6 +120,10 @@ SkyProps): JSX.Element => {
                             ref={material}
                             attach={"material"}
                             toneMapped={true}
+                            // transparent={true}
+                            // alphaTest={0.01}
+                            // depthWrite={true}
+                            // depthTest={true}
                         />
                     )}
                 </mesh>

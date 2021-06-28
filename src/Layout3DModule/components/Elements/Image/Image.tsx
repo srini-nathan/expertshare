@@ -19,6 +19,8 @@ interface ImageProps {
     side?: Side;
     transparent?: boolean;
     alphaTest?: number;
+    depthWrite?: boolean;
+    depthTest?: boolean;
 }
 
 export const Image = ({
@@ -31,6 +33,8 @@ export const Image = ({
     side = FrontSide,
     transparent = true,
     alphaTest = 0,
+    depthTest = true,
+    depthWrite = true,
 }: ImageProps): JSX.Element => {
     const mesh = useRef<THREE.Mesh>(null!);
     const matgif = useRef<any>(null!);
@@ -97,6 +101,8 @@ export const Image = ({
                     side={side}
                     toneMapped={false}
                     alphaTest={alphaTest}
+                    depthTest={depthTest}
+                    depthWrite={depthWrite}
                 />
             </mesh>
         </>

@@ -132,7 +132,7 @@ export const SceneCanvas = ({
     ) => {
         setCurrentRoom(roomNumber);
         setIsTransitionEnabled(isTransEn);
-        console.log("from pos: ", tgtPos, " to pos: ", toPos);
+        // console.log("from pos: ", tgtPos, " to pos: ", toPos);
         setTargetPosition({
             duration,
             fromPosition: tgtPos,
@@ -168,7 +168,6 @@ export const SceneCanvas = ({
                 <Suspense fallback={null}>
                     <ambientLight args={["#ffffff"]} />
                     <pointLight position={[10, 10, 10]} />
-                    {/* <Model /> */}
                     <RoomBuilder
                         rooms={rooms}
                         editMode={editMode}
