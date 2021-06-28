@@ -1,6 +1,8 @@
 import { io } from "socket.io-client";
 import { SOCKET_HOST } from "./config/app-env";
 import { PChatMessage } from "./models/entities/ChatMessage";
+import { PUser } from "../AdminModule/models";
+import { SessionComment } from "./models/entities/SessionComment";
 
 export const socket = io(SOCKET_HOST, {
     transports: ["websocket"],
@@ -22,6 +24,10 @@ export const EVENTS = {
     ON_NEXT_SESSION: "on-next-session",
     SWITCH_NEXT_SESSION: "switch-next-session",
     NEW_MESSAGE: "new-message",
+    JOIN_SESSION_QA: "join-session-qa",
+    LEAVE_SESSION_QA: "leave-session-qa",
+    POST_NEW_SESSION_QA: "post-new-session-qa",
+    ON_NEW_SESSION_QA: "on-new-session-qa",
 };
 
 type OnPageChangePayload = {
@@ -113,5 +119,31 @@ export const leaveNextSession = (sessionId: number): void => {
 export const switchNextSession = (sessionId: number): void => {
     socket.emit(EVENTS.SWITCH_NEXT_SESSION, {
         sessionId,
+    });
+};
+
+export const joinSessionQa = (sessionId: number): void => {
+    socket.emit(EVENTS.JOIN_SESSION_QA, {
+        sessionId,
+    });
+};
+
+export const leaveSessionQa = (sessionId: number): void => {
+    socket.emit(EVENTS.LEAVE_SESSION_QA, {
+        sessionId,
+    });
+};
+
+export const postNewSessionQa = (
+    sessionId: number,
+    sender: PUser,
+    payload: SessionComment,
+    parentId: number | null = null
+): void => {
+    socket.emit(EVENTS.POST_NEW_SESSION_QA, {
+        sessionId,
+        sender,
+        payload,
+        parentId,
     });
 };
