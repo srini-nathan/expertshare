@@ -7,7 +7,7 @@ import {
     postNewSessionQa,
 } from "../socket";
 import { PUser } from "../../AdminModule/models";
-import { SessionComment } from "../models/entities/SessionComment";
+import { PSessionComment } from "../models/entities/SessionComment";
 
 type SessionSocketEventsType = {
     emitJoinNextSession: (sessionId: number) => void;
@@ -18,7 +18,7 @@ type SessionSocketEventsType = {
     emitPostNewSessionQa: (
         sessionId: number,
         user: PUser,
-        payload: SessionComment,
+        payload: PSessionComment,
         parentId: number | null
     ) => void;
 };
@@ -47,7 +47,7 @@ export function useSessionSocketEvents(): SessionSocketEventsType {
     const emitPostNewSessionQa = (
         sessionId: number,
         user: PUser,
-        payload: SessionComment,
+        payload: PSessionComment,
         parentId: number | null = null
     ): void => {
         postNewSessionQa(sessionId, user, payload, parentId);

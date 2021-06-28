@@ -41,7 +41,8 @@ export const AppQAThread: FC<QAThreadProps> = ({
                             createdAt={item.createdAt}
                         >
                             <p className="base-text pb-3">{item.message}</p>
-                            {item.children.length > 0 &&
+                            {item.children &&
+                                item.children.length > 0 &&
                                 item.children.map((answer: any, i: number) => (
                                     <AppDetailsAction
                                         key={i}

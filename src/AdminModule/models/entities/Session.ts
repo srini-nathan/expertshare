@@ -16,6 +16,8 @@ export class Session extends BaseEntity {
 
     end: string;
 
+    currentTime: string;
+
     sessionDocs: {
         fileName: string;
         name: string;
@@ -92,6 +94,7 @@ export class Session extends BaseEntity {
         cardSize = "MEDIUM",
         cardType = "COMPACT",
         imageName = "",
+        currentTime = "",
         ord = 1,
         webexMeetingPassword = "",
         webexUrl = "",
@@ -131,6 +134,8 @@ export class Session extends BaseEntity {
     }: Partial<Session> = {}) {
         super(id, createdAt, updatedAt);
         this.ord = ord;
+        this.currentTime = currentTime;
+        this.userGroups = userGroups;
         this.userGroups = userGroups;
         this.isReply = isReply;
         this.isLive = isLive;
@@ -180,6 +185,7 @@ export class Session extends BaseEntity {
             ...super.toJSON(addExtraData),
             title: this.title,
             imageName: this.imageName,
+            currentTime: this.currentTime,
             isVisible: this.isVisible,
             isReply: this.isReply,
             isLive: this.isLive,

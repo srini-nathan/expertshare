@@ -2,7 +2,7 @@ import { io } from "socket.io-client";
 import { SOCKET_HOST } from "./config/app-env";
 import { PChatMessage } from "./models/entities/ChatMessage";
 import { PUser } from "../AdminModule/models";
-import { SessionComment } from "./models/entities/SessionComment";
+import { PSessionComment } from "./models/entities/SessionComment";
 
 export const socket = io(SOCKET_HOST, {
     transports: ["websocket"],
@@ -137,7 +137,7 @@ export const leaveSessionQa = (sessionId: number): void => {
 export const postNewSessionQa = (
     sessionId: number,
     sender: PUser,
-    payload: SessionComment,
+    payload: PSessionComment,
     parentId: number | null = null
 ): void => {
     socket.emit(EVENTS.POST_NEW_SESSION_QA, {
