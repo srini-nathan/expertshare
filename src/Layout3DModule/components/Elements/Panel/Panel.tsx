@@ -20,7 +20,12 @@ import { Image } from "../Image";
 import { Label } from "../Label";
 import { VideoPanel } from "../VideoPanel";
 
-import { degToRad, ROOM_FADE_DURATION } from "../../Helpers/Utils";
+import {
+    degToRad,
+    ROOM_FADE_DURATION,
+    PANEL_ANIMATION_DURATION,
+    FOV_ANIMATION_DURATION,
+} from "../../Helpers/Utils";
 import { PanelTypes, TargetTypes } from "../../Types/SceneTypes";
 import {
     PanelInterfaceProps,
@@ -126,17 +131,34 @@ export const Panel = ({
         scale: isVisible
             ? [scaleDyn.current.x, scaleDyn.current.y, scaleDyn.current.z]
             : [0, 0, 0],
-        delay: isVisible ? ROOM_FADE_DURATION * 2 : 0,
+        delay: isVisible ? FOV_ANIMATION_DURATION + ROOM_FADE_DURATION * 3 : 0,
         config: {
-            duration: !isVisible ? 300 : 500,
+            duration: !isVisible
+                ? PANEL_ANIMATION_DURATION
+                : PANEL_ANIMATION_DURATION,
             easing: !isVisible ? easeSinIn : easeElasticOut,
         },
         onStart: () => {
-            if (isVisible && !isVisibleNow) setIsVisibleNow(isVisible);
+            setRemoteVisible(false);
+            if (isVisible) {
+                group.current.scale.set(0, 0, 0);
+            } else group.current.scale.set(1, 1, 1);
+            if (isVisible && !isVisibleNow) {
+                setIsVisibleNow(isVisible);
+            }
         },
         onResolve: () => {
+            // console.log(
+            //     panelData,
+            //     "resolved, isVisible: ",
+            //     isVisible,
+            //     isVisibleNow
+            // );
             if (!isVisible) setIsVisibleNow(isVisible);
-            else setRemoteVisible(true);
+            else {
+                setRemoteVisible(true);
+                setIsVisibleNow(true);
+            }
         },
     });
 
@@ -251,8 +273,8 @@ export const Panel = ({
 
     useEffect(() => {
         if (isVisible) setIsVisibleNow(true);
-        else setRemoteVisible(false);
-
+        // else setRemoteVisible(false);
+        setRemoteVisible(false);
         // console.log("is visible changed: ", isVisible, isVisibleNow, panelData);
     }, [isVisible]);
 
@@ -395,6 +417,10 @@ export const Panel = ({
                                 textureUrl={defaultImageUrl}
                                 padding={padding}
                                 parent={parent}
+                                transparent={true}
+                                alphaTest={0.01}
+                                depthWrite={false}
+                                depthTest={true}
                             />
                         )}
                         {/* SCREEN VIDEO */}

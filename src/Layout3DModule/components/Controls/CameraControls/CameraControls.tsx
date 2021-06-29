@@ -35,6 +35,7 @@ import {
     normalizeRotation,
     setParamsToOrbitControls,
     ROOM_FADE_DURATION,
+    FOV_ANIMATION_DURATION,
 } from "../../Helpers/Utils";
 
 import {
@@ -154,9 +155,9 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
 
     const fovSpring = useSpring({
         fov: zoomIn ? 50 : 80,
-        delay: 100 + (zoomIn ? 0 : ROOM_FADE_DURATION * 2),
+        delay: 100 + (zoomIn ? 0 : ROOM_FADE_DURATION * 6),
         config: {
-            duration: 1500,
+            duration: FOV_ANIMATION_DURATION,
             easing: easeQuadInOut,
         },
         onChange: (fov1) => {
@@ -209,10 +210,19 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                 duration: duration / 2,
                 // easing:
             },
-            delay: ROOM_FADE_DURATION * 2,
+            delay: ROOM_FADE_DURATION * 6,
             immediate: false,
+            onStart: () => {
+                applyRotationToCamera(
+                    perspectiveFirstPerson.current,
+                    to as Euler
+                );
+            },
             onChange: (rotation) => {
-                applyRotationToCamera(perspectiveFirstPerson.current, rotation);
+                applyRotationToCamera(
+                    perspectiveFirstPerson.current,
+                    rotation.value
+                );
                 // perspectiveFirstPerson.current.rotation.x = rotation.value.x;
                 // perspectiveFirstPerson.current.rotation.y = rotation.value.y;
                 // orbit.current.update();
@@ -409,7 +419,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                     onChange: (rotation) => {
                         applyRotationToCamera(
                             perspectiveFirstPerson.current,
-                            rotation
+                            rotation.value
                         );
                     },
                     onRest: () => {

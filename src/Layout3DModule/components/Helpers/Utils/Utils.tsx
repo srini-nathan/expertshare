@@ -1,8 +1,12 @@
-import { AnimationResult, SpringValue } from "@react-spring/three";
 import { Euler, Object3D, Vector3 } from "three";
 import { OrbitControls } from "three-stdlib";
 
 export const ROOM_FADE_DURATION = 500;
+
+export const PANEL_ANIMATION_DURATION = 400;
+
+export const FOV_ANIMATION_DURATION = 1500;
+
 // convert degrees to radians
 export const degToRad = (deg: number): number => {
     return (deg * Math.PI) / 180;
@@ -110,13 +114,9 @@ export const normalizeRotation = (
 // Apply rotation to camera - used in spring onChange
 export const applyRotationToCamera = (
     camera: Object3D,
-    rotation: AnimationResult<SpringValue>
+    rotation: { x: number; y: number; z: number } | Euler
 ): void => {
     if (camera) {
-        camera.rotation.set(
-            rotation.value.x,
-            rotation.value.y,
-            rotation.value.z
-        );
+        camera.rotation.set(rotation.x, rotation.y, rotation.z);
     }
 };
