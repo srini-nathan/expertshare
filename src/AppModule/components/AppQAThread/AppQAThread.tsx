@@ -43,27 +43,33 @@ export const AppQAThread: FC<QAThreadProps> = ({
                             <p className="base-text pb-3">{item.message}</p>
                             {item.children &&
                                 item.children.length > 0 &&
-                                item.children.map((answer: any, i: number) => (
-                                    <AppDetailsAction
-                                        key={i}
-                                        questionId={answer.id}
-                                        userObj={answer.user}
-                                        isChild
-                                        handleDeleteQuestion={(qId) => {
-                                            deleteQuestion(qId);
-                                        }}
-                                        updateMessage={(message, iId) => {
-                                            updateMessage(message, iId);
-                                        }}
-                                        commentMessage={answer.message}
-                                        addComment
-                                        createdAt={answer.createdAt}
-                                    >
-                                        <p className="base-text pb-3">
-                                            {answer.message}
-                                        </p>
-                                    </AppDetailsAction>
-                                ))}
+                                item.children
+                                    .reverse()
+                                    .map((answer: any, i: number) => (
+                                        <AppDetailsAction
+                                            key={i}
+                                            questionId={answer.id}
+                                            userObj={answer.user}
+                                            isChild
+                                            showShareBtn
+                                            handleAnswerMessage={(message) => {
+                                                sendAnswer(message, item.id);
+                                            }}
+                                            handleDeleteQuestion={(qId) => {
+                                                deleteQuestion(qId);
+                                            }}
+                                            updateMessage={(message, iId) => {
+                                                updateMessage(message, iId);
+                                            }}
+                                            commentMessage={answer.message}
+                                            addComment
+                                            createdAt={answer.createdAt}
+                                        >
+                                            <p className="base-text pb-3">
+                                                {answer.message}
+                                            </p>
+                                        </AppDetailsAction>
+                                    ))}
                         </AppDetailsAction>
                     </>
                 ))}
