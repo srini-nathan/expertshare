@@ -27,7 +27,11 @@ export const EVENTS = {
     JOIN_SESSION_QA: "join-session-qa",
     LEAVE_SESSION_QA: "leave-session-qa",
     POST_NEW_SESSION_QA: "post-new-session-qa",
+    EDIT_SESSION_QA: "edit-session-qa",
+    DELETE_SESSION_QA: "delete-session-qa",
     ON_NEW_SESSION_QA: "on-new-session-qa",
+    ON_EDIT_SESSION_QA: "on-edit-session-qa",
+    ON_DELETE_SESSION_QA: "on-delete-session-qa",
 };
 
 type OnPageChangePayload = {
@@ -145,5 +149,26 @@ export const postNewSessionQa = (
         sender,
         payload,
         parentId,
+    });
+};
+
+export const editSessionQa = (
+    sessionId: number,
+    sender: PUser,
+    payload: PSessionComment,
+    parentId: number | null = null
+): void => {
+    socket.emit(EVENTS.EDIT_SESSION_QA, {
+        sessionId,
+        sender,
+        payload,
+        parentId,
+    });
+};
+
+export const deleteSessionQa = (sessionId: number, id: number): void => {
+    socket.emit(EVENTS.DELETE_SESSION_QA, {
+        sessionId,
+        id,
     });
 };

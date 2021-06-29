@@ -10,7 +10,7 @@ import { socket, EVENTS } from "../../socket";
 
 import "./assets/scss/style.scss";
 
-const { ON_NEW_SESSION_QA } = EVENTS;
+const { ON_NEW_SESSION_QA, ON_DELETE_SESSION_QA, ON_EDIT_SESSION_QA } = EVENTS;
 
 export interface QuestionAndAnswersProps {
     name?: string;
@@ -30,6 +30,8 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
         emitPostNewSessionQa,
         emitJoinSessionQa,
         emitLeaveSessionQa,
+        emitDeleteSessionQa,
+        emitEditSessionQa,
     } = useSessionSocketEvents();
     const { user } = useAuthState();
 
@@ -45,7 +47,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
         socket.on(
             ON_NEW_SESSION_QA,
             (sessionId: number, u: any, parent: any, payload: any) => {
-                if (sessionId === session) {
+                if (sessionId === session && u) {
                     if (parent) {
                         const p = data.find((e: any) => e.id === parent);
                         const index = data.indexOf(p);
@@ -57,31 +59,53 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                                     children: [
                                         {
                                             ...payload,
-                                            id: 0,
-                                            createdAt: new Date().toISOString(),
-                                            user: u,
-                                            parent,
-                                            children: [],
                                         },
                                         ...data[index].children,
                                     ],
                                 },
-                                ...data.splice(index - 1),
+                                ...data.splice(index + 1),
                             ]);
                         }
                     } else {
                         setData([
                             {
                                 ...payload,
-                                id: 0,
-                                createdAt: new Date().toISOString(),
-                                user: u,
-                                parent,
-                                children: [],
                             },
                             ...data,
                         ]);
                     }
+                }
+            }
+        );
+
+        socket.on(ON_DELETE_SESSION_QA, (qaId: number) => {
+            if (qaId) {
+                const p = data.find((e: any) => e.id === qaId);
+                if (p) {
+                    const newData = data.filter((e) => e.id !== p.id);
+                    setData(newData);
+                }
+            }
+        });
+
+        socket.on(
+            ON_EDIT_SESSION_QA,
+            (sessionId: number, u: any, parent: any, payload: any) => {
+                if (sessionId === session && u) {
+                    const newData = data.map((e) => {
+                        if (e.id === payload.id) {
+                            return payload;
+                        }
+                        const checkChildren = e;
+                        checkChildren.children = e.children.map((c: any) => {
+                            if (c.id === payload.id) {
+                                return payload;
+                            }
+                            return c;
+                        });
+                        return checkChildren;
+                    });
+                    setData(newData);
                 }
             }
         );
@@ -122,15 +146,6 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
             session: `api/sessions/${session}`,
         };
 
-        emitPostNewSessionQa(
-            session,
-            user,
-            {
-                ...meesageObj,
-                parent: null,
-            },
-            null
-        );
         const messageToPost = JSON.stringify(meesageObj);
 
         SessionCommentsAPI.postComment<any, any>(messageToPost).then(
@@ -139,6 +154,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                     errorToast(errorMessage);
                 }
                 if (response) {
+                    emitPostNewSessionQa(session, user, response, null);
                     getCurrentQestionsAndAnswersThread(1);
                 }
             }
@@ -154,15 +170,6 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
             container: `api/containers/${container}`,
             session: `api/sessions/${session}`,
         };
-        emitPostNewSessionQa(
-            session,
-            user,
-            {
-                ...meesageObj,
-                parent: `${aId}`,
-            },
-            aId
-        );
 
         const messageToPost = JSON.stringify(meesageObj);
 
@@ -172,6 +179,16 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                     errorToast(errorMessage);
                 }
                 if (response) {
+                    emitPostNewSessionQa(
+                        session,
+                        user,
+                        {
+                            ...response,
+                            parent: `${aId}`,
+                        },
+                        aId
+                    );
+
                     getCurrentQestionsAndAnswersThread(1);
                 }
             }
@@ -195,6 +212,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                     errorToast(errorMessage);
                 }
                 if (response) {
+                    emitEditSessionQa(session, user, response, null);
                     getCurrentQestionsAndAnswersThread(1);
                 }
             }
@@ -203,6 +221,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
 
     const deleteQuestion = (qId: number) => {
         SessionCommentsAPI.deleteById(qId).then(() => {
+            emitDeleteSessionQa(session, qId);
             getCurrentQestionsAndAnswersThread(1);
         });
     };
