@@ -4,7 +4,6 @@ import { format } from "date-fns";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "./assets/scss/style.scss";
 import { useGlobalData } from "../../contexts";
-import { getDateTimeWithoutTimezone } from "../../utils";
 
 export interface AppSessionDatesProps {
     sessionDates: { [key: string]: { start: string; end: string } };
@@ -46,7 +45,7 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
                                         <div className="num-day">
                                             <span>
                                                 {format(
-                                                    getDateTimeWithoutTimezone(
+                                                    new Date(
                                                         sessionDates[key].start
                                                     ),
                                                     "dd"
@@ -56,7 +55,7 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
                                         <div className="date-day">
                                             <span className="date-day--dofw">
                                                 {format(
-                                                    getDateTimeWithoutTimezone(
+                                                    new Date(
                                                         sessionDates[key].start
                                                     ),
                                                     "EEEE"
@@ -64,7 +63,7 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
                                             </span>
                                             <span className="date-day--dofy">
                                                 {format(
-                                                    getDateTimeWithoutTimezone(
+                                                    new Date(
                                                         sessionDates[key].start
                                                     ),
                                                     container &&
