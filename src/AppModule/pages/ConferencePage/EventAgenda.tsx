@@ -33,6 +33,7 @@ import {
     useParamId,
     useNavigator,
     useIsGranted,
+    useEventAgendaHelper,
 } from "../../hooks";
 import { errorToast, successToast } from "../../utils";
 import { CONSTANTS } from "../../../config";
@@ -72,6 +73,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
     const [showDelete, setDeleteShow] = useState(0);
     const [showClone, setCloneShow] = useState(0);
     const [showDeleteSession, setDeleteShowSession] = useState(0);
+    const { selectActiveDate } = useEventAgendaHelper();
 
     useEffect(() => {
         ConferenceApi.findById<Conference>(id).then(
@@ -85,8 +87,10 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                     setData(response);
 
                     const dates = Object.keys(response.sessionDates);
-                    if (dates.length > 0)
-                        setActiveDate(response.sessionDates[dates[0]]);
+                    const key = selectActiveDate(dates, "yyyyMMdd");
+                    if (dates.length > 0 && key !== null) {
+                        setActiveDate(response.sessionDates[key]);
+                    }
                 }
             }
         );
