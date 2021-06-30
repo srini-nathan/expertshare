@@ -37,6 +37,7 @@ import {
     ROOM_FADE_DURATION,
     FOV_ANIMATION_DURATION,
     inverseUpsideDownCamera,
+    PANEL_ANIMATION_DURATION,
 } from "../../Helpers/Utils";
 
 import {
@@ -193,6 +194,9 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
     ) => {
         // console.log("from : ", to, " to : ", from);
         setZoomIn(false);
+        setTimeout(() => {
+            applyRotationToCamera(perspectiveFirstPerson.current, to);
+        }, ROOM_FADE_DURATION * 2 + PANEL_ANIMATION_DURATION);
         setCamSpring(() => ({
             from: {
                 x: to.x,
@@ -455,7 +459,6 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                         } else {
                             // change room without video
                             changeRoomNow(currentRoom);
-                            // orbit.current.update();
                             createAnimationBack(
                                 tRotation,
                                 targetData.toRotation.clone(),
