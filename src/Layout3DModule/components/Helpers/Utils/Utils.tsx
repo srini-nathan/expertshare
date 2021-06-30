@@ -111,6 +111,28 @@ export const normalizeRotation = (
     return inverse ? fromRotation : toRotation;
 };
 
+export const inverseUpsideDownCamera = (camRotation: Euler): Euler => {
+    const newRotation = camRotation.clone();
+
+    const xGrad = radToDeg(camRotation.x);
+    // const yGrad = radToDeg(camRotation.y);
+    const zGrad = radToDeg(camRotation.z);
+
+    if (xGrad > -180 && xGrad < -179) {
+        if (zGrad > -180 && zGrad < -179) {
+            newRotation.set(0, -Math.PI - camRotation.y, 0);
+        }
+    }
+
+    if (xGrad > 179 && xGrad < 180) {
+        if (zGrad > 179 && zGrad < 180) {
+            newRotation.set(0, -Math.PI - camRotation.y, 0);
+        }
+    }
+
+    return newRotation;
+};
+
 // Apply rotation to camera - used in spring onChange
 export const applyRotationToCamera = (
     camera: Object3D,

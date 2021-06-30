@@ -132,7 +132,7 @@ export const SceneCanvas = ({
     ) => {
         setCurrentRoom(roomNumber);
         setIsTransitionEnabled(isTransEn);
-        // console.log("from pos: ", tgtPos, " to pos: ", toPos);
+        console.log("from pos: ", tgtPos, " to pos: ", toPos);
         setTargetPosition({
             duration,
             fromPosition: tgtPos,

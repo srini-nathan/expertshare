@@ -36,6 +36,7 @@ import {
     setParamsToOrbitControls,
     ROOM_FADE_DURATION,
     FOV_ANIMATION_DURATION,
+    inverseUpsideDownCamera,
 } from "../../Helpers/Utils";
 
 import {
@@ -213,10 +214,18 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
             delay: ROOM_FADE_DURATION * 6,
             immediate: false,
             onStart: () => {
+                // console.log(
+                //     "perspecive cam rotation: ",
+                //     perspectiveFirstPerson.current.rotation
+                // );
+
                 applyRotationToCamera(
                     perspectiveFirstPerson.current,
                     to as Euler
                 );
+                // orbit.current.enabled = true;
+                // orbit.current.update();
+                // orbit.current.enabled = false;
             },
             onChange: (rotation) => {
                 applyRotationToCamera(
@@ -227,9 +236,8 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                 // perspectiveFirstPerson.current.rotation.y = rotation.value.y;
                 // orbit.current.update();
             },
-            onRest: () => {
+            onResolve: () => {
                 orbit.current.object = perspectiveFirstPerson.current as PerspectiveCameraOriginal;
-
                 callback();
             },
         }));
@@ -351,6 +359,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
 
     useEffect(() => {
         let t;
+        console.log("target data: ", targetData);
         // check for animation type and animation target
         if (perspectiveFirstPerson.current && targetData) {
             if (isTransitionEnabled) {
@@ -376,17 +385,21 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                     fakeCam.rotation.clone()
                 );
                 fakeCam.rotation.set(0, 0, 0);
-                fakeCam.lookAt(targetData.toPosition.clone()); // look towards panel in room 2 (from position), TODO: zoom out
                 fakeOrbit.update();
+                fakeCam.lookAt(targetData.toPosition.clone()); // look towards panel in room 2 (from position), TODO: zoom out
+                // fakeOrbit.update();
                 fakeOrbit.target = getNewTarget(fakeCam, 0.001);
                 fakeOrbit.update();
                 fakeCam.updateMatrix();
 
-                const tRotation = normalizeRotation(
-                    fakeCam.rotation.clone(),
+                let tRotation = normalizeRotation(
                     targetData.toRotation.clone(),
-                    true
+                    fakeCam.rotation.clone()
+
+                    // true
                 );
+                tRotation = inverseUpsideDownCamera(tRotation);
+                // const tRotation = fakeCam.rotation.clone();
 
                 afterVideoReference.current = {
                     to: tRotation,
@@ -394,10 +407,9 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                     room: currentRoom,
                     duration: targetData.duration,
                 };
-
                 // console.log("camera rotation: ", camera.rotation);
-                // console.log("to rotation: ", fRotation);
-                // console.log("from rotation: ", tRotation);
+                console.log("to rotation: ", fRotation);
+                console.log("from rotation: ", tRotation);
 
                 // TODO: normalize rotations  - 1/2 DONE
                 setCamSpring(() => ({
@@ -453,6 +465,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                                         perspectiveFirstPerson.current,
                                         0.001
                                     );
+                                    // console.log("change room now!");
                                     changeRoomNow(currentRoom);
                                     orbit.current.update();
                                     orbit.current.enabled = true;
@@ -479,7 +492,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                 }, ROOM_FADE_DURATION);
             }
         }
-    }, [isTransitionEnabled, currentRoom]);
+    }, [isTransitionEnabled, currentRoom, targetData]);
 
     useEffect(() => {
         if (orbit.current) {
