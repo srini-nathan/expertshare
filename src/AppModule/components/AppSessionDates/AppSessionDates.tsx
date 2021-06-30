@@ -1,9 +1,10 @@
 import React, { FC } from "react";
 import { Col } from "react-bootstrap";
-// import { format } from "date-fns";
+import { format } from "date-fns";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "./assets/scss/style.scss";
-// import { useGlobalData } from "../../contexts";
+import { useGlobalData } from "../../contexts";
+import { getDateOnly } from "../../utils";
 
 export interface AppSessionDatesProps {
     sessionDates: { [key: string]: { start: string; end: string } };
@@ -16,7 +17,7 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
     activeDate,
     setActiveDate,
 }): JSX.Element => {
-    // const { container } = useGlobalData();
+    const { container } = useGlobalData();
 
     return (
         <Col
@@ -44,26 +45,26 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
                                     >
                                         <div className="num-day">
                                             <span>
-                                                {/* {format(
-                                                    new Date(
+                                                {format(
+                                                    getDateOnly(
                                                         sessionDates[key].start
                                                     ),
                                                     "dd"
-                                                )} */}
+                                                )}
                                             </span>
                                         </div>
                                         <div className="date-day">
                                             <span className="date-day--dofw">
-                                                {/* {format(
-                                                    new Date(
+                                                {format(
+                                                    getDateOnly(
                                                         sessionDates[key].start
                                                     ),
                                                     "EEEE"
-                                                )} */}
+                                                )}
                                             </span>
                                             <span className="date-day--dofy">
-                                                {/* {format(
-                                                    new Date(
+                                                {format(
+                                                    getDateOnly(
                                                         sessionDates[key].start
                                                     ),
                                                     container &&
@@ -73,7 +74,7 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
                                                         ? (container.configuration as any)
                                                               .longDate
                                                         : "MMMM , yyyy"
-                                                )} */}
+                                                )}
                                             </span>
                                         </div>
                                     </a>
