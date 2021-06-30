@@ -80,7 +80,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                 if (errorMessage) {
                     errorToast(errorMessage);
                 } else if (isNotFound) {
-                    errorToast("Language not exist");
+                    errorToast("Event not exist");
                 } else if (response !== null) {
                     setData(response);
 
