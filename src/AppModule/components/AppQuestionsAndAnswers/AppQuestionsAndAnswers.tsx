@@ -18,12 +18,75 @@ export interface QuestionAndAnswersProps {
     session: number;
     container: number;
 }
+
+function createCore() {
+    let stateContainer: any[] = [];
+
+    const addNewQa = (newState: any, setter: any) => {
+        stateContainer = [newState, ...stateContainer];
+        setter(stateContainer);
+    };
+
+    const createState = (newState: any, setter: any) => {
+        stateContainer = newState;
+        setter(stateContainer);
+    };
+
+    const addNewChildQa = (newState: any, setter: any, index: number) => {
+        stateContainer = [
+            ...stateContainer.splice(0, index - 1),
+            {
+                ...stateContainer[index],
+                children: [
+                    ...stateContainer[index].children,
+                    {
+                        ...newState,
+                    },
+                ],
+            },
+            ...stateContainer.splice(index + 1),
+        ];
+        setter(stateContainer);
+    };
+
+    const deleteQa = (id: any, setter: any) => {
+        stateContainer = stateContainer.filter((e) => e.id !== id);
+        setter(stateContainer);
+    };
+
+    const editQa = (newState: any, setter: any) => {
+        stateContainer = stateContainer.map((e) => {
+            if (e.id === newState.id) {
+                return newState;
+            }
+            const checkChildren = e;
+            checkChildren.children = e.children.map((c: any) => {
+                if (c.id === newState.id) {
+                    return newState;
+                }
+                return c;
+            });
+            return checkChildren;
+        });
+        setter(stateContainer);
+    };
+
+    return {
+        getState: () => stateContainer,
+        addNewQa,
+        addNewChildQa,
+        createState,
+        deleteQa,
+        editQa,
+    };
+}
+const core = createCore();
 export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> = ({
     name,
     container,
     session,
 }) => {
-    const [data, setData] = useState<any[]>([]);
+    const [data, setData] = useState<any[]>(core.getState());
     const [page, setPage] = useState<number>(1);
     const [, setTotalItems] = useState<number>(1);
     const {
@@ -49,30 +112,16 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
             (sessionId: number, u: any, parent: any, payload: any) => {
                 if (sessionId === session && u) {
                     if (parent) {
-                        const p = data.find((e: any) => e.id === parent);
-                        const index = data.indexOf(p);
+                        const p = core
+                            .getState()
+                            .find((e: any) => e.id === parent);
+                        const index = core.getState().indexOf(p);
+
                         if (index !== -1) {
-                            setData([
-                                ...data.splice(0, index - 1),
-                                {
-                                    ...data[index],
-                                    children: [
-                                        {
-                                            ...payload,
-                                        },
-                                        ...data[index].children,
-                                    ],
-                                },
-                                ...data.splice(index + 1),
-                            ]);
+                            core.addNewChildQa(payload, setData, index);
                         }
                     } else {
-                        setData([
-                            {
-                                ...payload,
-                            },
-                            ...data,
-                        ]);
+                        core.addNewQa(payload, setData);
                     }
                 }
             }
@@ -80,10 +129,9 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
 
         socket.on(ON_DELETE_SESSION_QA, (qaId: number) => {
             if (qaId) {
-                const p = data.find((e: any) => e.id === qaId);
+                const p = core.getState().find((e: any) => e.id === qaId);
                 if (p) {
-                    const newData = data.filter((e) => e.id !== p.id);
-                    setData(newData);
+                    core.deleteQa(qaId, setData);
                 }
             }
         });
@@ -92,24 +140,11 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
             ON_EDIT_SESSION_QA,
             (sessionId: number, u: any, parent: any, payload: any) => {
                 if (sessionId === session && u) {
-                    const newData = data.map((e) => {
-                        if (e.id === payload.id) {
-                            return payload;
-                        }
-                        const checkChildren = e;
-                        checkChildren.children = e.children.map((c: any) => {
-                            if (c.id === payload.id) {
-                                return payload;
-                            }
-                            return c;
-                        });
-                        return checkChildren;
-                    });
-                    setData(newData);
+                    core.editQa(payload, setData);
                 }
             }
         );
-    }, [data]);
+    }, []);
 
     const getCurrentQestionsAndAnswersThread = (pageNo = 1) => {
         SessionCommentsAPI.getMessages(session, container, pageNo).then(
@@ -117,7 +152,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                 if (response) {
                     if (pageNo === 1) {
                         setPage(1);
-                        setData(response["hydra:member"]);
+                        core.createState(response["hydra:member"], setData);
                     } else {
                         const newData = data;
                         response["hydra:member"].forEach((e: any) => {
@@ -126,8 +161,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                                 newData.push(e);
                             }
                         });
-
-                        setData(newData);
+                        core.createState(newData, setData);
                     }
                     setTotalItems(response["hydra:totalItems"] as number);
                 }
