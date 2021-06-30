@@ -49,6 +49,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
     externalFiles,
 }): JSX.Element => {
     const [files, setFiles] = useState<AppFile[]>([]);
+    const [changed, isChanged] = useState<boolean>(false);
     const [cropperFile, setCropperFile] = useState<any>(undefined);
 
     const [showCropModal, setShowCropModal] = useState<boolean>(true);
@@ -74,6 +75,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
                     })
                 )
             );
+            isChanged(true);
 
             onFileSelect(accepted);
         },
@@ -92,9 +94,6 @@ export const AppUploader: FC<AppUploaderProps> = ({
             </ul>
         </li>
     ));
-    /* eslint-disable no-console */
-    console.log(files);
-    /* eslint-enable no-console */
     const thumbs = (externalFiles || files).map((f: any) => (
         <div className="thumb-container">
             <div className="thumb-inner">
@@ -109,7 +108,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
     });
 
     const getBackgroundStyles = () => {
-        if (imagePath && imagePath !== "")
+        if (!changed && imagePath && imagePath !== "")
             return {
                 backgroundImage: `url(${imagePath})`,
             };
@@ -144,6 +143,8 @@ export const AppUploader: FC<AppUploaderProps> = ({
         if (files.length > 0) {
             setFiles([]);
         }
+
+        isChanged(true);
     };
 
     return (
@@ -192,9 +193,13 @@ export const AppUploader: FC<AppUploaderProps> = ({
                                 setShowCropModal(false);
                                 setCropUrl(url);
                             }}
-                            handleBlob={(blob) => {
+                            handleBlob={(blob, name, type) => {
                                 setCropperFile(blob);
-                                onFileSelect([blob]);
+
+                                const file = new File([blob], name, {
+                                    type,
+                                });
+                                onFileSelect([file]);
                             }}
                             cropperOptions={cropperOptions}
                         />
