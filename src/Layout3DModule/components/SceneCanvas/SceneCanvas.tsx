@@ -95,7 +95,6 @@ export const SceneCanvas = ({
     };
 
     const onClickScene = () => {
-        // e: ThreeEvent<MouseEvent>
         if (hasOrbited) setHasOrbited(false);
         else {
             setSelectedMesh(null!);
@@ -132,7 +131,7 @@ export const SceneCanvas = ({
     ) => {
         setCurrentRoom(roomNumber);
         setIsTransitionEnabled(isTransEn);
-        console.log("from pos: ", tgtPos, " to pos: ", toPos);
+        // console.log("from pos: ", tgtPos, " to pos: ", toPos);
         setTargetPosition({
             duration,
             fromPosition: tgtPos,

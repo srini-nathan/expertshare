@@ -92,7 +92,6 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
         gl: { domElement },
         gl,
     } = useThree();
-    // const set = useThree((state) => state.set);
 
     const [orbitEnabled, setOrbitEnabled] = useState(false);
     const {
@@ -128,9 +127,6 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
         room: number;
         duration: number;
     }>(null!);
-    // const toTargetReference = useRef<Euler>(null!);
-    // const fromTargetReference = useRef<Euler>(null!);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const firstPersonCameraRotation = useRef(initialCameraRotation.clone()); // useRef(initialCameraRotation!);
     const firtPersonCameraPosition = useRef(
         new Vector3(
@@ -139,7 +135,6 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
             parseFloat(initialCameraPosition.z)
         )
     );
-    // const videoSpheres = useRef<typeof Video360[]>([]);
 
     useHelper(perspectiveHelper, CameraHelper, "black");
     const [camSpring, setCamSpring] = useSpring(() => ({
@@ -166,13 +161,11 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
             const cam = perspectiveFirstPerson.current as PerspectiveCameraOriginal;
             cam.fov = (fov1.value.fov as unknown) as number;
             cam.updateProjectionMatrix();
-            // console.log("cam fov: ", cam.fov, fov1.value);
         },
     });
 
     const getNewTarget = (cam: Object3D, distance: number): Vector3 => {
         const { position } = cam;
-        // cam.updateMatrix();
         const p = position.clone();
         const direction = new Vector3();
         cam.getWorldDirection(direction);
@@ -207,38 +200,16 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
             y: from.y,
             z: from.z,
             config: {
-                // duration: 1500,
-                // mass: 3,
-                // tension: 300,
-                // friction: 100,
                 ease: easeCubicInOut,
                 duration: duration / 2,
-                // easing:
             },
             delay: ROOM_FADE_DURATION * 6,
             immediate: false,
-            onStart: () => {
-                // console.log(
-                //     "perspecive cam rotation: ",
-                //     perspectiveFirstPerson.current.rotation
-                // );
-
-                applyRotationToCamera(
-                    perspectiveFirstPerson.current,
-                    to as Euler
-                );
-                // orbit.current.enabled = true;
-                // orbit.current.update();
-                // orbit.current.enabled = false;
-            },
             onChange: (rotation) => {
                 applyRotationToCamera(
                     perspectiveFirstPerson.current,
                     rotation.value
                 );
-                // perspectiveFirstPerson.current.rotation.x = rotation.value.x;
-                // perspectiveFirstPerson.current.rotation.y = rotation.value.y;
-                // orbit.current.update();
             },
             onResolve: () => {
                 orbit.current.object = perspectiveFirstPerson.current as PerspectiveCameraOriginal;
@@ -363,7 +334,6 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
 
     useEffect(() => {
         let t;
-        console.log("target data: ", targetData);
         // check for animation type and animation target
         if (perspectiveFirstPerson.current && targetData) {
             if (isTransitionEnabled) {
@@ -382,7 +352,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                 fakeCam.lookAt(targetData.fromPosition.clone()); // look towards panel in room 1(to position), TODO: zoom in
                 fakeOrbit.target = getNewTarget(fakeCam, 0.001);
                 fakeOrbit.update();
-                // FIX ROTATION IDEA: set rotation Z to 0 after look!
+
                 fakeCam.updateMatrix();
                 const fRotation = normalizeRotation(
                     camera.rotation.clone(),
@@ -391,7 +361,6 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                 fakeCam.rotation.set(0, 0, 0);
                 fakeOrbit.update();
                 fakeCam.lookAt(targetData.toPosition.clone()); // look towards panel in room 2 (from position), TODO: zoom out
-                // fakeOrbit.update();
                 fakeOrbit.target = getNewTarget(fakeCam, 0.001);
                 fakeOrbit.update();
                 fakeCam.updateMatrix();
@@ -399,11 +368,8 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                 let tRotation = normalizeRotation(
                     targetData.toRotation.clone(),
                     fakeCam.rotation.clone()
-
-                    // true
                 );
                 tRotation = inverseUpsideDownCamera(tRotation);
-                // const tRotation = fakeCam.rotation.clone();
 
                 afterVideoReference.current = {
                     to: tRotation,
@@ -411,11 +377,10 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                     room: currentRoom,
                     duration: targetData.duration,
                 };
-                // console.log("camera rotation: ", camera.rotation);
-                console.log("to rotation: ", fRotation);
-                console.log("from rotation: ", tRotation);
+                // console.log("to rotation: ", fRotation);
+                // console.log("from rotation: ", tRotation);
 
-                // TODO: normalize rotations  - 1/2 DONE
+                // TODO: normalize rotations  - 2/2 DONE!
                 setCamSpring(() => ({
                     // spring towards panel position
                     from: {
@@ -439,7 +404,6 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                         );
                     },
                     onRest: () => {
-                        // console.log("target position: ", targetData);
                         if (
                             targetData.video &&
                             targetData.video.assetUrl &&
@@ -530,8 +494,6 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                 orbit.current.dampingFactor = 0.2;
                 orbit.current.maxDistance = 500;
             }
-
-            // console.log("sett orbit: ", orbit.current);
         }
     }, [orbit.current]);
 
