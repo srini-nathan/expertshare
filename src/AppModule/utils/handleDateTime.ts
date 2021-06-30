@@ -46,6 +46,13 @@ export const getDateTimeWithoutTimezone = (date: string) => {
     }
     return new Date(date);
 };
+export const getDateOnly = (date: string) => {
+    const newDateTime = date.split(" ");
+    if (newDateTime.length > 1) {
+        return new Date(newDateTime[0]);
+    }
+    return new Date(date);
+};
 
 export const getDateWT = (date: string): string => {
     return format(getDateTimeWithoutTimezone(date), "yyyy-MM-dd");
