@@ -40,9 +40,26 @@ export const getFullDate = (date: string): string => {
     return `${getDate(date)} ${getTime24(date)}`;
 };
 export const getDateTimeWithoutTimezone = (date: string) => {
-    const newDateTime = date.split("+");
+    let newDateTime = date.split("+");
     if (newDateTime.length > 1) {
         return new Date(newDateTime[0]);
+    }
+    newDateTime = date.split("-");
+    if (newDateTime.length > 1) {
+        return new Date(
+            `${newDateTime[0]}-${newDateTime[1]}-${newDateTime[2]}`
+        );
+    }
+
+    return new Date(date);
+};
+export const getDateOnly = (date: string) => {
+    const newDateTime = date.split(" ");
+    if (newDateTime.length > 1) {
+        const newDate = new Date(newDateTime[0]).toLocaleString("en-US", {
+            timeZone: "UTC",
+        });
+        return new Date(newDate);
     }
     return new Date(date);
 };
