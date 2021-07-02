@@ -28,6 +28,7 @@ interface PanelBuilderParams {
             content: string;
         }>
     >;
+    onPageChange: (pageUrl: string) => void;
 }
 
 export const PanelBuilder = ({
@@ -41,6 +42,7 @@ export const PanelBuilder = ({
     // changeRoomNow,
     setIframeVisible,
     setSrcUrl,
+    onPageChange,
 }: PanelBuilderParams): JSX.Element => {
     return (
         <>
@@ -82,6 +84,7 @@ export const PanelBuilder = ({
                         // changeRoomNow={changeRoomNow}
                         setIframeVisible={setIframeVisible}
                         setSrcUrl={setSrcUrl}
+                        onPageChange={onPageChange}
                     />
                 );
             })}
