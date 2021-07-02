@@ -95,7 +95,6 @@ export const SceneCanvas = ({
     };
 
     const onClickScene = () => {
-        // e: ThreeEvent<MouseEvent>
         if (hasOrbited) setHasOrbited(false);
         else {
             setSelectedMesh(null!);

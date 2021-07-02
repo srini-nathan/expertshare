@@ -84,12 +84,6 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
             setMainRoom(0);
             setRoomsData(response);
         });
-        // fetch("https://esrapidev1.expertshare.me/api/aframe/a3d?page=1").then(
-        //     (response) => {
-        //         console.log("response: ", response, rooms);
-        //         setRooms(response as any);
-        //     }
-        // );
     }, []);
 
     useEffect(() => {
