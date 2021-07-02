@@ -9,7 +9,7 @@ import { Layout3DApi } from "../AdminModule/apis";
 import { AuthState } from "../SecurityModule/models/context/AuthState";
 import { AuthContext } from "../SecurityModule/contexts";
 import { SelectionInspector } from "./components/Inspectors/SelectionInspector";
-import { useBuildAssetPath } from "../AppModule/hooks";
+import { useBuildAssetPath, useUserSocketEvents } from "../AppModule/hooks";
 import { CONSTANTS } from "../config";
 import { mainMessageTabs } from "../AppModule/containers/AppMessageBox/tabs-configurator";
 import { PanelInterfaceProps } from "./components/Types/Interfaces";
@@ -33,6 +33,7 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
     const [roomsData, setRoomsData] = useState(null!);
     const [mainRoom, setMainRoom] = useState<number>(null!);
     const [selectedLocale] = useState<string>("");
+    const { emitPageChange } = useUserSocketEvents();
 
     const [selectedPanel, setSelectedPanel] = useState<PanelInterfaceProps>(
         null!
@@ -113,6 +114,7 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
                             ROOM_ASSETS_PATH,
                             PANEL_ASSETS_PATH,
                         }}
+                        onPageChange={emitPageChange}
                     />
                 )}
             </div>
