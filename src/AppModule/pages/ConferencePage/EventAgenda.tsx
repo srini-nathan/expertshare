@@ -75,7 +75,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
     const [showDeleteSession, setDeleteShowSession] = useState(0);
     const { selectActiveDate } = useEventAgendaHelper();
 
-    useEffect(() => {
+    const fetchEvent = () => {
         ConferenceApi.findById<Conference>(id).then(
             ({ response, isNotFound, errorMessage }) => {
                 isLoading(false);
@@ -94,6 +94,9 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                 }
             }
         );
+    };
+    useEffect(() => {
+        fetchEvent();
     }, []);
 
     useEffect(() => {
@@ -203,6 +206,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                 }
             } else {
                 successToast(t("event.agenda:update.info.message"));
+                fetchEvent();
                 fetchSessions();
             }
         });
