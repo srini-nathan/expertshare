@@ -5,6 +5,36 @@
     @include media("mobtosmall") {
         width: 100%;
     }
+    @include media("smallmob3") {
+        flex-direction: column;
+    }
+    .row {
+        @include media("mobtosmall") {
+            width: 85%;
+        }
+        @include media("smallmob3") {
+            width: 100%;
+        }
+        .form-row {
+            @include media("cg-1") {
+                .col-6:nth-child(1) {
+                    flex: 65%;
+                    max-width: 65%;
+                }
+            }
+            @include media("cg-1") {
+                .col-6:nth-child(2) {
+                    flex: 35%;
+                    max-width: 35%;
+                }
+            }
+        }
+    }
+    .switch-view {
+        @include media("smallmob3") {
+            justify-content: flex-start;
+        }
+    }
 }
 
 .conference-tags {

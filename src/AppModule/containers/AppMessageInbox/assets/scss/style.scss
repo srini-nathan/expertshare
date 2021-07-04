@@ -3,7 +3,7 @@
 
 .app-message-inbox {
     position: fixed;
-    right: 0;
+    right: 10px;
     bottom: 0;
     z-index: 9998;
 
@@ -23,7 +23,7 @@
                 margin-left: auto;
                 font-size: 14px;
                 font-weight: 700;
-                color: var(--primary)
+                color: var(--primary);
             }
         }
     }

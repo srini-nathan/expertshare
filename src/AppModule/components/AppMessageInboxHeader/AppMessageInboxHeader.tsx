@@ -34,7 +34,7 @@ export const AppMessageInboxHeader: FC<AppMessageInboxHeaderProps> = ({
     return (
         <div className="app-message-inbox-header row m-0 px-3 pt-3 pb-2">
             <div className="inner-container--details col-auto p-0">
-                <a href="#">
+                <a>
                     <div className="inner-container--details--content">
                         <i
                             className={`inner-container--details--content--profile ${
