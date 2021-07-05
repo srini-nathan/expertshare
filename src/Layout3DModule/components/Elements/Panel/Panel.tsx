@@ -32,6 +32,8 @@ import {
     Video360Props,
     ParentProps,
 } from "../../Types/Interfaces";
+import { use3DHelper } from "../../../hooks";
+import { useUserSocketEvents } from "../../../../AppModule/hooks";
 
 interface PanelProps {
     props: JSX.IntrinsicElements["mesh"];
@@ -58,6 +60,7 @@ interface PanelProps {
             content: string;
         }>
     >;
+    onPageChange: (pageUrl: string) => void;
 }
 
 export const Panel = ({
@@ -73,6 +76,7 @@ export const Panel = ({
     onClick,
     setIframeVisible,
     setSrcUrl,
+    onPageChange,
 }: PanelProps): JSX.Element => {
     let { position, rotation, scale } = props;
 
@@ -126,6 +130,7 @@ export const Panel = ({
         const ifram = document.createElement("iframe");
         return ifram;
     });
+    const { buildPageUrl } = use3DHelper();
 
     const scaleGropu = useSpring({
         scale: isVisible
@@ -217,9 +222,17 @@ export const Panel = ({
     };
 
     const panelCliked = () => {
-        const { isTransitionEnabled, video } = panelData;
+        const { isTransitionEnabled, video, id } = panelData;
         const positionPanel = group.current.position.clone();
-        switch (target.type) {
+        const targetType = target.type;
+        if (targetType === TargetTypes.PROJECTOR) {
+            if (!isVideoPlaying) {
+                onPageChange(buildPageUrl(targetType, id));
+            }
+        } else {
+            onPageChange(buildPageUrl(targetType, id));
+        }
+        switch (targetType) {
             case TargetTypes.ROOM:
                 // console.log("change door to: ", target.id);
                 changeRoom(

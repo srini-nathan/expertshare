@@ -8,7 +8,7 @@ import { useGlobalData } from "../contexts";
 type UserSocketEventsType = {
     emitLogin: () => void;
     emitLogout: () => void;
-    emitPageChange: () => void;
+    emitPageChange: (pageUrl?: string) => void;
 };
 
 export function useUserSocketEvents(): UserSocketEventsType {
@@ -29,10 +29,10 @@ export function useUserSocketEvents(): UserSocketEventsType {
         onUserLogout();
     };
 
-    const emitPageChange = (): void => {
+    const emitPageChange = (pageUrl?: string): void => {
         if (container && container.id) {
             onPageChange({
-                url: window.location.href,
+                url: pageUrl || window.location.href,
                 pageTitle: document.title,
                 user: user && user.id ? UserApi.toResourceUrl(user.id) : null,
                 container: ContainerApi.toResourceUrl(container.id),

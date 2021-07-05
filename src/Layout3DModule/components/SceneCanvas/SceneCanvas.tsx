@@ -18,6 +18,10 @@ import {
 } from "../Types/Interfaces";
 
 import { simulatedParams } from "../Helpers/Simdata";
+import { use3DHelper } from "../../hooks";
+import { CONSTANTS } from "../../../config";
+
+const { AFramePanel } = CONSTANTS;
 
 interface SceneProps {
     editMode: boolean;
@@ -25,6 +29,7 @@ interface SceneProps {
     currentMainRoom: number;
     paths: { ROOM_ASSETS_PATH: string; PANEL_ASSETS_PATH: string };
     onItemSelected: (item: any) => void;
+    onPageChange: (pageUrl: string) => void;
 }
 
 interface ToFromProps {
@@ -41,6 +46,7 @@ export const SceneCanvas = ({
     roomsData,
     currentMainRoom,
     paths,
+    onPageChange,
 }: SceneProps): JSX.Element => {
     const iframeWindow = useRef(null!);
     const [controlsActive, setControlsActive] = useState(true);
@@ -67,6 +73,7 @@ export const SceneCanvas = ({
     const [currentRoomActive, setCurrentRoomActive] = useState<number>(null!);
 
     const selected = useRef<THREE.Object3D>(null!);
+    const { buildPageUrl } = use3DHelper();
 
     // const { rooms } = simulatedParams;
     const rooms = roomsData;
@@ -95,7 +102,6 @@ export const SceneCanvas = ({
     };
 
     const onClickScene = () => {
-        // e: ThreeEvent<MouseEvent>
         if (hasOrbited) setHasOrbited(false);
         else {
             setSelectedMesh(null!);
@@ -161,6 +167,13 @@ export const SceneCanvas = ({
         }
     }, [iframeVisible]);
 
+    useEffect(() => {
+        const activeRoom = roomsData[currentMainRoom];
+        onPageChange(
+            buildPageUrl(AFramePanel.TARGETTYPE.TARGETTYPE_ROOM, activeRoom.id)
+        );
+    }, []);
+
     return (
         <>
             <Canvas dpr={window.devicePixelRatio} flat={true}>
@@ -179,6 +192,7 @@ export const SceneCanvas = ({
                         setIframeVisible={setIframeVisible}
                         setSrcUrl={setUrlContent}
                         setInitialCameraRotation={setCameraRotation}
+                        onPageChange={onPageChange}
                     />
 
                     {editMode && (

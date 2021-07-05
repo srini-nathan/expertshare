@@ -32,6 +32,7 @@ interface RoomBuilderParams {
         arg5: Video360Props
     ) => void;
     setInitialCameraRotation: (arg0: Euler) => void;
+    onPageChange: (pageUrl: string) => void;
 }
 
 export const RoomBuilder = ({
@@ -44,6 +45,7 @@ export const RoomBuilder = ({
     setIframeVisible,
     setSrcUrl,
     onChangeRoom,
+    onPageChange,
     setInitialCameraRotation,
 }: RoomBuilderParams): JSX.Element => {
     const [currentRoomId, setCurrentRoomId] = useState<number>(rooms[0].id);
@@ -144,6 +146,7 @@ export const RoomBuilder = ({
                         editMode={editMode}
                         setIframeVisible={setIframeVisible}
                         setSrcUrl={setSrcUrl}
+                        onPageChange={onPageChange}
                     />
                 );
             })}

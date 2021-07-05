@@ -35,6 +35,7 @@ interface RoomProps
             content: string;
         }>
     >;
+    onPageChange: (pageUrl: string) => void;
 }
 
 export const Room = ({
@@ -51,6 +52,7 @@ export const Room = ({
     changeRoom,
     setIframeVisible,
     setSrcUrl,
+    onPageChange,
 }: RoomProps): JSX.Element => {
     const group = useRef<JSX.IntrinsicElements["group"]>(null!);
     const [currentActive, setCurrentActive] = useState<boolean>(active);
@@ -86,6 +88,7 @@ export const Room = ({
                         // changeRoomNow={changeRoomNow}
                         setIframeVisible={setIframeVisible}
                         setSrcUrl={setSrcUrl}
+                        onPageChange={onPageChange}
                     />
                     <Sky
                         textureImage={roomImagePath}
