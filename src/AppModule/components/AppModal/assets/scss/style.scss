@@ -1,33 +1,56 @@
 @import "../../../../assets/scss/screens-sizes";
 @import "../../../../assets/scss/variables";
 
+body.modal-open #root {
+    opacity: 0.8;
+}
 .modal-backdrop.show {
-    opacity: .8 !important;
+    background-color: var(--primary) !important;
+    opacity: 0.8 !important;
 }
 
-.modal {
+.confirmation-modal-dialog {
     overflow-y: hidden !important;
 
-    &-dialog {
+    .modal-dialog {
         display: flex;
+        max-width: 450px !important;
+        height: 90% !important;
+        margin: auto !important;
+        @include media("xl") {
+            max-width: 400px !important;
+        }
+        @include media("mobile") {
+            max-width: 300px !important;
+            height: 100% !important;
+        }
     }
 
-    &-content {
+    .modal-content {
+        justify-content: center !important;
+        padding: 25px;
         margin: auto;
         border-radius: var(--border-radius) !important;
+        @include media("mobile") {
+            padding: 10px;
+        }
     }
 
-    &-header {
+    .modal-header {
+        justify-content: center !important;
         background-color: var(--light-clr);
         border-bottom: unset !important;
         border-top-left-radius: var(--border-radius) !important;
         border-top-right-radius: var(--border-radius) !important;
 
         .close {
+            position: absolute;
+            top: 7px;
+            right: 7px;
             padding: 0 !important;
             margin: auto 5px !important;
-            font-size: 50px;
-            font-weight: 400;
+            font-size: 35px;
+            font-weight: 300;
             color: var(--primary);
             opacity: 1 !important;
 
@@ -37,26 +60,58 @@
         }
     }
 
-    &-title {
+    .modal-title {
+        text-align: center;
         &.h4 {
-            padding: 10px;
-            font-size: 20px;
-            font-weight: 600;
+            padding-top: 10px;
+            font-size: 42px;
+            font-weight: 700;
+            line-height: initial;
             color: var(--secondary);
+            @include media("xl") {
+                font-size: 36px;
+            }
+            @include media("mobile") {
+                font-size: 23px;
+            }
         }
     }
 
-    &-body {
-        padding: 3rem 1rem !important;
+    .modal-body {
+        padding: 1rem !important;
         font-size: 16px;
         font-weight: 400;
-        color: var(--secondary);
+        color: var(--secondary-80);
         text-align: center;
-
+        @include media("mobile") {
+            font-size: 13px;
+        }
     }
 
-    &-footer {
+    .modal-footer {
+        justify-content: center !important;
         margin: 0 10px;
-        border-color: var(--secondary-20) !important;
+        border-top: none !important;
+        .btn {
+            position: relative;
+            min-width: 100px;
+            padding-top: 3px !important;
+            i {
+                position: absolute;
+                top: 0;
+                left: 8px;
+                display: flex;
+                align-items: center;
+                height: 100%;
+            }
+            &:first-child {
+                margin-right: 10px;
+            }
+            &.btn-secondary {
+                i {
+                    font-size: 20px;
+                }
+            }
+        }
     }
 }
