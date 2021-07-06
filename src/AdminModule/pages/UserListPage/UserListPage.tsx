@@ -310,8 +310,11 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
         <Fragment>
             {renderModal()}
             <AppPageHeader title={"Users"} customToolbar>
-                <div className="d-flex pt-2 mb-5">
-                    <AppButton className="mr-2 p-3" variant="secondary">
+                <div className="d-block d-sm-flex pt-2 mb-5 user-header-width">
+                    <AppButton
+                        className="mr-2 p-3 user-filter"
+                        variant="secondary"
+                    >
                         <AppIcon className="mr-2" name="Filter" />
                         {t("common.button:filter")}
                     </AppButton>
@@ -325,7 +328,7 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
                         onClick={() => {
                             isShow(true);
                         }}
-                        className="mx-2 p-3"
+                        className="mx-0 mx-sm-2 p-3 user-inv"
                         variant="secondary"
                     >
                         <AppIcon className="mr-2" name="Email" />
@@ -337,7 +340,7 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
                                 onClick={() => {
                                     handleExport();
                                 }}
-                                className="mr-2 p-3"
+                                className="mr-2 p-3 user-ex"
                                 variant="secondary"
                             >
                                 <AppIcon className="mr-2" name="Upload" />
@@ -353,7 +356,7 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
                                     onClick={() => {
                                         handleImport();
                                     }}
-                                    className="p-3"
+                                    className="p-3 user-imp"
                                     variant="secondary"
                                 >
                                     <AppIcon className="mr-2" name="Download" />

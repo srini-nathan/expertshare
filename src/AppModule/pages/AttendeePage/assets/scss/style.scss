@@ -4,6 +4,19 @@
     @include media("mobtosmall") {
         width: 100%;
     }
+    .row {
+        @include media("mobtosmall") {
+            width: 80%;
+        }
+        .form-row {
+            .col-6 {
+                @include media("mobtosmall") {
+                    flex: 100% !important;
+                    max-width: 100% !important;
+                }
+            }
+        }
+    }
 }
 .attendee-overview-page {
     .ag-cell {

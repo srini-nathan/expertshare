@@ -32,7 +32,7 @@ export const AppChatOneToOneHeader: FC<AppChatOneToOneHeaderProps> = ({
     return (
         <div className="row m-0 px-3 pt-3 pb-3">
             <div className="details col-auto p-0">
-                <a href="#">
+                <a>
                     <div className="details--content">
                         <div className="avatar">
                             <i

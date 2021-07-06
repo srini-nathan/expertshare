@@ -33,7 +33,7 @@ export const AppPictureInPicture = (): JSX.Element => {
                 >
                     <div className="box">
                         <span className="handle icon-btn move-btn">
-                            <i className="fas fa-arrows-alt"></i>
+                            <i className="fak fa-arrows-light"></i>
                         </span>
                         <span
                             className="close-btn icon-btn"

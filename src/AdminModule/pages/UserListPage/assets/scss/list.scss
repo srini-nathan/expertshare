@@ -1,3 +1,38 @@
+@import "../../../../../AppModule/assets/scss/screens-sizes";
+@import "../../../../../AppModule/assets/scss/variables";
+.user-header-width {
+    @include media("mobtosmall") {
+        width: 100%;
+    }
+    @include media("md") {
+        flex-flow: wrap;
+    }
+    @include media("lr-1") {
+        flex: none;
+    }
+}
+.user-filter {
+    @include media("mobtosmall") {
+        position: absolute;
+        top: -60px;
+        right: 5px;
+        width: 80px;
+    }
+}
+.user-inv {
+    @include media("mobtosmall") {
+        position: absolute;
+        left: 15px;
+        width: 75px;
+    }
+}
+.user-ex {
+    @include media("mobtosmall") {
+        position: absolute;
+        right: 5px;
+        width: 75px;
+    }
+}
 .ag-theme-alpine {
     margin-bottom: 120px;
 

@@ -29,6 +29,7 @@ $media-queries: (
     "tabtolap2": "(max-width: 1220px) and (min-width: 769px)",
     "smallmob": "only screen and (max-width: 460px)",
     "smallmob2": "only screen and (max-width: 374px)",
+    "smallmob3": "only screen and (max-width: 354px)",
     //custom for spec code
     "csc-1": "(min-width: 1200px) and (max-width: 1212px)",
     "csc-2": "(min-width: 1200px) and (max-width: 1350px)",
@@ -55,6 +56,8 @@ $media-queries: (
     //custom for event agenda
     "ea-1": "only screen and (max-width: 991.9px)",
     "ea-2": "only screen and (min-width: 992px) and (max-width: 1700px)",
+    //custom for conferencegrid
+    "cg-1": "only screen and (min-width: 410px) and (max-width: 570px)",
 );
 
 @mixin media($breakpoints) {
