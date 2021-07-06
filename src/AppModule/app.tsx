@@ -4,25 +4,27 @@ import { appRouters } from "./bootstrap";
 import { DashboardLayout } from "./layouts/DashboardLayout";
 import { AppConfiguration } from "./layouts/AppConfiguration";
 import { AuthLayout } from "./layouts/AuthLayout";
-import { ModuleRouter } from "./models";
+import { ModuleRouter, PrimitiveObject } from "./models";
 import AppProvider from "./contexts/AppContext";
 import SessionProvider from "./contexts/SessionContext";
 import { AuthContext } from "../SecurityModule/contexts/AuthContext";
 import {
     useChosenContainer,
+    useCommandCenterSocketEvents,
     useNavigator,
     useSkipOnboarding,
     useUserSocketEvents,
 } from "./hooks";
 import { AppLoader, AppPictureInPicture, AppWelcomeModal } from "./components";
 import { LandingHelper } from "./pages";
-import { socket, EVENTS } from "./socket";
+import { socket, EVENTS, CommandType } from "./socket";
 import { useGlobalData } from "./contexts";
 
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
 import { AuthState } from "../SecurityModule/models";
 import { isAppLoadedInIFrame } from "./utils";
+import { PUser } from "../AdminModule/models";
 
 const { CONNECT, DISCONNECT } = EVENTS;
 interface Props {
@@ -82,6 +84,7 @@ const App = (): JSX.Element => {
     const isOverViewPage = overViewPage !== null;
     const isAutoLoginPage = autoLoginPage !== null;
     const { emitLogin, emitLogout, emitPageChange } = useUserSocketEvents();
+    const { handler } = useCommandCenterSocketEvents();
 
     useEffect(() => {
         if (isAppLoadedInIFrame()) {
@@ -113,10 +116,24 @@ const App = (): JSX.Element => {
         });
 
         socket.on("online", () => {});
+
+        socket.on(
+            EVENTS.ON_NEW_COMMAND,
+            (
+                from: PUser,
+                to: PUser,
+                type: CommandType,
+                payload: PrimitiveObject
+            ) => {
+                handler(from, to, type, payload);
+            }
+        );
+
         return () => {
             socket.off(CONNECT);
             socket.off("online");
             socket.off(DISCONNECT);
+            socket.off(EVENTS.ON_NEW_COMMAND);
         };
     }, [container, isAuthenticated]);
 

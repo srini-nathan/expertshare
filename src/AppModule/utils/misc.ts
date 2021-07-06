@@ -15,3 +15,14 @@ export const isAppLoadedInIFrame = () => {
         return true;
     }
 };
+
+export const requestMediaPermission = async (
+    constraints?: MediaStreamConstraints
+): Promise<MediaStream | null> => {
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        return stream;
+    } catch (error) {
+        return new Promise<null>((resolve) => resolve(null));
+    }
+};
