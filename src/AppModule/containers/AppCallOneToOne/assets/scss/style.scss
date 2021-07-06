@@ -1,5 +1,201 @@
 @import "../../../../assets/scss/variables";
 @import "../../../../assets/scss/screens-sizes";
 .app-call-one-to-one {
-
+    .call-started {
+        &--box {
+            position: fixed;
+            right: 15px;
+            bottom: 85px;
+            z-index: 1000;
+            width: 50%;
+            height: 60vh;
+            background-color: var(--video-call-bg-clr);
+            @include media("lgv2") {
+                width: 70%;
+            }
+            @include media("md") {
+                width: 80%;
+            }
+            @include media("mobile") {
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                height: 100%;
+            }
+            &--container {
+                height: 100%;
+                background-image: linear-gradient(
+                                180deg,
+                                var(--video-call-bg-clr),
+                                var(--video-call-grey-bg-clr),
+                                var(--video-call-grey-bg-clr),
+                                var(--video-call-bg-clr)
+                );
+                &--header {
+                    position: absolute;
+                    top: 0;
+                    width: 100%;
+                    .spec-call {
+                        display: flex;
+                        align-items: center;
+                        &--profile {
+                            i {
+                                display: block;
+                                width: 56px;
+                                height: 56px;
+                                margin-bottom: 5px;
+                                //background-image: url(/v2/assets/images/call_box/caller-circle-1.png);
+                                background-repeat: no-repeat;
+                                background-size: contain;
+                                border-radius: var(--circle-border-radius);
+                            }
+                        }
+                        &--det {
+                            &--name {
+                                font-size: 20px;
+                                font-weight: 700;
+                                color: var(--video-call-fg-clr);
+                            }
+                            &--time {
+                                font-size: 14px;
+                                font-weight: 300;
+                                color: var(--video-call-fg-clr);
+                            }
+                        }
+                    }
+                    .option-call {
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-end;
+                        .members-btn {
+                            width: fit-content;
+                            padding: 0 10px;
+                            i {
+                                padding-bottom: 3px;
+                                padding-right: 6px;
+                                &::before {
+                                    content: "\e00a";
+                                }
+                            }
+                        }
+                    }
+                }
+                &--content {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: inherit;
+                    .center-pic-container {
+                        width: 100%;
+                        height: 100%;
+                        .inner-content {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            height: 100%;
+                            &--circle {
+                                padding: 17px;
+                                border-radius: var(--circle-border-radius);
+                                i {
+                                    display: block;
+                                    width: 175px;
+                                    height: 175px;
+                                    //background-image: url(/v2/assets/images/call_box/caller-circle-1.png);
+                                    background-repeat: no-repeat;
+                                    background-size: contain;
+                                    border-radius: var(--circle-border-radius);
+                                }
+                            }
+                        }
+                        .own-stream-thumb {
+                            position: absolute;
+                            right: 17px;
+                            bottom: 80px;
+                            width: 170px;
+                            height: 100px;
+                            @include media("mobile") {
+                                bottom: 120px;
+                            }
+                            &--container {
+                                display: grid;
+                                height: 100%;
+                                background-color: var(--video-sc-thumb-bg-clr);
+                                border: 2px solid var(--primary);
+                                .profile-pic {
+                                    display: block;
+                                    width: 45px;
+                                    height: 45px;
+                                    margin: auto;
+                                    //background-image: url(/v2/assets/images/call_box/caller-circle-2.png);
+                                    background-repeat: no-repeat;
+                                    background-size: contain;
+                                    border-radius: var(--circle-border-radius);
+                                }
+                                .profile-name {
+                                    font-size: 14px;
+                                    font-weight: 400;
+                                    color: var(--video-call-fg-clr);
+                                    text-align: center;
+                                }
+                            }
+                        }
+                    }
+                }
+                &--footer {
+                    position: absolute;
+                    bottom: 12px;
+                    width: 100%;
+                    .left-side {
+                        display: flex;
+                        align-items: center;
+                        @include media("mobile") {
+                            position: absolute;
+                            left: 0;
+                        }
+                        .btn-move {
+                            width: 36px;
+                            font-size: 21px;
+                        }
+                    }
+                    .center-side {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        .mic-btn,
+                        .video-btn {
+                            font-size: 21px;
+                        }
+                        .end-call-btn {
+                            i {
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                width: 56px;
+                                height: 56px;
+                                padding-bottom: 3px;
+                                font-size: 35px;
+                                color: var(--video-call-fg-clr);
+                                background-color: var(--end-call-btn-bg-clr);
+                                border-radius: var(--circle-border-radius);
+                            }
+                        }
+                    }
+                    .right-side {
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-end;
+                        @include media("mobile") {
+                            position: absolute;
+                            right: 0;
+                            bottom: 65px;
+                        }
+                        a {
+                            margin-left: 10px;
+                            font-size: 21px;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

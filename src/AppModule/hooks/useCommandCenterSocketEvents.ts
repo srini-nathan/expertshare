@@ -1,7 +1,8 @@
 import { PUser } from "../../AdminModule/models";
-import { CommandType, postNewCommand } from "../socket";
+import { CommandType, postNewCommand, socket } from "../socket";
 import { PrimitiveObject } from "../models";
 import { errorToast, showIncomingCall, successToast } from "../utils";
+import { useCallOneToOneHelper } from "./useCallOneToOneHelper";
 
 type CommandCenterSocketEventsType = {
     makeAudioCall: (from: PUser, to: PUser, payload?: PrimitiveObject) => void;
@@ -27,12 +28,20 @@ type CommandCenterSocketEventsType = {
 };
 
 export function useCommandCenterSocketEvents(): CommandCenterSocketEventsType {
+    const { set } = useCallOneToOneHelper();
     const makeAudioCall = (
         from: PUser,
         to: PUser,
         payload: PrimitiveObject = {}
     ): void => {
-        postNewCommand(from, to, CommandType.NEW_AUDIO_CALL, payload);
+        if (socket.connected) {
+            postNewCommand(from, to, CommandType.NEW_AUDIO_CALL, payload);
+            set({
+                from,
+                to,
+                isVideoCall: false,
+            });
+        }
     };
 
     const makeVideoCall = (
@@ -40,7 +49,14 @@ export function useCommandCenterSocketEvents(): CommandCenterSocketEventsType {
         to: PUser,
         payload: PrimitiveObject = {}
     ): void => {
-        postNewCommand(from, to, CommandType.NEW_VIDEO_CALL, payload);
+        if (socket.connected) {
+            postNewCommand(from, to, CommandType.NEW_VIDEO_CALL, payload);
+            set({
+                from,
+                to,
+                isVideoCall: true,
+            });
+        }
     };
 
     const declineCall = (
@@ -67,6 +83,11 @@ export function useCommandCenterSocketEvents(): CommandCenterSocketEventsType {
         } else {
             postNewCommand(from, to, CommandType.ACCEPT_AUDIO_CALL, payload);
         }
+        set({
+            from,
+            to,
+            isVideoCall,
+        });
     };
 
     const handler = (

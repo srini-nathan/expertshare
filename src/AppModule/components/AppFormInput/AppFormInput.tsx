@@ -60,7 +60,10 @@ export const AppFormInput: FC<AppFormInputProps> = ({
         valueController = {
             value,
         };
+
     return (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         <Form.Group {...groupProps} className={`mb-0 ${className}`}>
             <AppFormLabel counter={data?.length} {...labelProps} />
             <Controller
