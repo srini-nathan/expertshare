@@ -27,20 +27,24 @@ export const AppCallOneToOne: FC = () => {
         FILETYPEINFO_USER_PROFILE as FileTypeInfo
     );
 
+    if (!call) {
+        return null;
+    }
+
+    const { from, to } = call;
+    const isMe = user.id === from.id;
+    const otherUser = isMe ? to : from;
+
     const loginUserProfileStyle = {
         backgroundImage: user?.imageName
             ? `url(${profilePictureBasePath}/${user?.imageName})`
             : `url(${placeholder})`,
     };
     const otherUserProfileStyle = {
-        backgroundImage: user?.imageName
-            ? `url(${profilePictureBasePath}/${user?.imageName})`
+        backgroundImage: otherUser?.imageName
+            ? `url(${profilePictureBasePath}/${otherUser?.imageName})`
             : `url(${placeholder})`,
     };
-
-    if (!call) {
-        return null;
-    }
 
     return (
         <div className={`app-call-one-to-one`}>
@@ -59,7 +63,8 @@ export const AppCallOneToOne: FC = () => {
                                     </div>
                                     <div className="spec-call--det">
                                         <h2 className="spec-call--det--name mb-0">
-                                            Devon Lane
+                                            {otherUser?.firstName}{" "}
+                                            {otherUser?.lastName}
                                         </h2>
                                         <span className="spec-call--det--time">
                                             00:00:00
@@ -80,8 +85,8 @@ export const AppCallOneToOne: FC = () => {
                         <div className="call-started--box--container--content">
                             <div className="center-pic-container">
                                 <div className="inner-content">
-                                    <div className="inner-content--circle">
-                                        <i></i>
+                                    <div className="inner-content--circle inner-content--dialing">
+                                        <i style={otherUserProfileStyle}></i>
                                     </div>
                                 </div>
                                 <div className="own-stream-thumb">
