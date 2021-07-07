@@ -27,7 +27,13 @@ import {
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
-import { errorToast, successToast, isGranted } from "../../../AppModule/utils";
+import {
+    errorToast,
+    successToast,
+    isGranted,
+    showLoader,
+    hideLoader,
+} from "../../../AppModule/utils";
 import "./assets/scss/list.scss";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models/context/AuthState";
@@ -143,7 +149,9 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
         };
     }
     async function handleExport() {
+        showLoader(t("admin.users.list:exportingusers"));
         UserApi.exportUsers().then((reponse) => {
+            hideLoader();
             updateLink({
                 name: `users.csv`,
                 type: "file/csv",
@@ -153,10 +161,12 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
     }
     async function handleInvite() {
         if (inviteList.length > 0) {
+            showLoader(t("admin.users.list:invitingusers"));
             const formData = new FormData();
             formData.append("users", inviteList);
             UserApi.inviteUsers(formData).then(({ error, response }) => {
                 isShow(false);
+                hideLoader();
                 setInviteList("");
                 setValue("userlist", "");
                 if (error !== null) {
@@ -180,7 +190,7 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
     async function uploadFile(e: any) {
         const formData = new FormData();
         formData.append("file", e.target.files[0]);
-
+        showLoader(t("admin.users.list:importingusers"));
         UserApi.importUsers(formData).then(({ error, response }) => {
             if (error !== null) {
                 if (_isString(error)) {
@@ -189,6 +199,7 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
             } else if (response !== null) {
                 successToast("Imported!");
             }
+            hideLoader();
         });
     }
     async function handleDelete(id: number) {

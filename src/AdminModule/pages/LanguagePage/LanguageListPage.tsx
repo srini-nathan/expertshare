@@ -98,6 +98,7 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
         });
     }
     async function handleExport(locale: string) {
+        showLoader(t("admin.language.list:translation.exporting"));
         LanguageApi.exportLanguage(containerId, `${locale}.csv`).then(
             (reponse) => {
                 updateLink({
@@ -105,6 +106,7 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
                     type: "file/csv",
                     file: reponse,
                 });
+                hideLoader();
             }
         );
     }
