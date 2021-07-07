@@ -2,8 +2,6 @@
 @import "../../../../assets/scss/variables";
 
 .user-profile--det {
-
-
     &--container {
         .back-btn {
             i {
@@ -19,6 +17,10 @@
 
         .inner-container {
             &--profile-pic {
+                @include media("ap-1") {
+                    max-width: 250px !important;
+                    flex: 250px !important;
+                }
                 &--content {
                     position: relative;
                     display: block;
@@ -96,6 +98,18 @@
             }
 
             &--main-det {
+                @include media("ap-1") {
+                    width: 85% !important;
+                }
+                @include media("ap-2") {
+                    width: 80% !important;
+                }
+                @include media("ap-3") {
+                    width: 75% !important;
+                }
+                @include media("ap-4") {
+                    width: 65% !important;
+                }
                 &--biography {
                     p {
                         display: grid;
@@ -169,8 +183,11 @@
 
             &--right-btn {
                 position: absolute;
+                top: 0;
                 right: 0;
-
+                @include media("mobtosmall") {
+                    top: 45px;
+                }
                 &--content {
                     display: flex;
                     align-items: center;
@@ -226,7 +243,7 @@
                         }
 
                         &:hover {
-                            &>.popup {
+                            & > .popup {
                                 display: block;
                             }
                         }
@@ -240,13 +257,15 @@
                         }
 
                         &.get-contact {
-                            i {}
+                            i {
+                            }
                         }
 
                         &.add-user-btn {
                             width: 36px;
 
-                            i {}
+                            i {
+                            }
                         }
                     }
                 }
@@ -319,9 +338,11 @@
                             }
                         }
 
-                        &.following {}
+                        &.following {
+                        }
 
-                        &.events {}
+                        &.events {
+                        }
 
                         &.sessions {
                             i {
@@ -335,9 +356,11 @@
                             }
                         }
 
-                        &.feeds {}
+                        &.feeds {
+                        }
 
-                        &.favorite-feeds {}
+                        &.favorite-feeds {
+                        }
                     }
                 }
             }

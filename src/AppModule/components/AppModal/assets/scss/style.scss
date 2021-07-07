@@ -14,12 +14,9 @@ body.modal-open #root {
 
     .modal-dialog {
         display: flex;
-        max-width: 450px !important;
+        max-width: 553px !important;
         height: 90% !important;
         margin: auto !important;
-        @include media("xl") {
-            max-width: 400px !important;
-        }
         @include media("mobile") {
             max-width: 300px !important;
             height: 100% !important;
@@ -28,7 +25,7 @@ body.modal-open #root {
 
     .modal-content {
         justify-content: center !important;
-        padding: 25px;
+        padding: 35px;
         margin: auto;
         border-radius: var(--border-radius) !important;
         @include media("mobile") {
@@ -68,6 +65,7 @@ body.modal-open #root {
             font-weight: 700;
             line-height: initial;
             color: var(--secondary);
+            overflow-wrap: break-word;
             @include media("xl") {
                 font-size: 36px;
             }
@@ -83,6 +81,7 @@ body.modal-open #root {
         font-weight: 400;
         color: var(--secondary-80);
         text-align: center;
+        overflow-wrap: break-word;
         @include media("mobile") {
             font-size: 13px;
         }
@@ -91,25 +90,38 @@ body.modal-open #root {
     .modal-footer {
         justify-content: center !important;
         margin: 0 10px;
+        margin-top: 20px;
         border-top: none !important;
         .btn {
             position: relative;
-            min-width: 100px;
-            padding-top: 3px !important;
+            display: flex !important;
+            justify-content: flex-start;
+            min-width: 120px;
+            height: 40px;
+            padding: 0 8px !important;
+            padding-top: 4px !important;
+            @include media("mobile") {
+                min-width: 100px;
+            }
             i {
-                position: absolute;
-                top: 0;
-                left: 8px;
                 display: flex;
                 align-items: center;
                 height: 100%;
+                margin-right: 22px;
+                margin-bottom: 4px;
+                margin-left: 5px;
             }
             &:first-child {
-                margin-right: 10px;
+                margin-right: 15px;
             }
             &.btn-secondary {
                 i {
-                    font-size: 20px;
+                    font-size: 22px;
+                }
+            }
+            &.btn-primary {
+                i {
+                    font-size: 17px;
                 }
             }
         }

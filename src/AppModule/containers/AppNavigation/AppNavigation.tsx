@@ -224,7 +224,6 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             }
         }
     });
-
     const handleLogoutEvent = async (): Promise<void> => {
         await logoutAction(dispatch);
     };
