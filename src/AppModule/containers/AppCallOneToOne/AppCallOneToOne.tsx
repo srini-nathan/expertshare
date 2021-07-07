@@ -1,19 +1,23 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
+import Peer, { SignalData } from "simple-peer";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-// import ringtone from "./assets/audio/calling.mp3";
-
+import ringtone from "./assets/audio/calling.mp3";
 import {
     useAuthState,
     useBuildAssetPath,
     useCallOneToOneHelper,
+    useCommandCenterSocketEvents,
 } from "../../hooks";
 import placeholder from "../../assets/images/user-avatar.png";
 import { CONSTANTS } from "../../../config";
 
 import "./assets/scss/style.scss";
-import { FileTypeInfo } from "../../models";
+import { FileTypeInfo, SocketCommandPayload } from "../../models";
+import { requestMediaPermission } from "../../utils";
+import { CommandType, EVENTS, socket } from "../../socket";
+import { PUser } from "../../../AdminModule/models";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -26,14 +30,178 @@ export const AppCallOneToOne: FC = () => {
     const profilePictureBasePath = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo
     );
+    const { startCall, endCall, joinCall } = useCommandCenterSocketEvents();
+    const [stream, setStream] = useState<MediaStream>();
+    const [, setReceivingCall] = useState(call?.isIncomingCall ?? false);
+    const [callerSignal, setCallerSignal] = useState<SignalData>();
+    const [callAccepted, setCallAccepted] = useState(false);
+    const [callEnded, setCallEnded] = useState(false);
+    const [videoMuted, setVideoMuted] = useState(false);
+    const [audioMuted, setAudioMuted] = useState(false);
+    const [callInProgress, setCallInProgress] = useState(false);
+    const incomingVideo = useRef<HTMLVideoElement>(null);
+    const outgoingVideo = useRef<HTMLVideoElement>(null);
+    const connectionRef = useRef<Peer.Instance>();
+    const audio = new Audio(ringtone);
+    const isMe = call && user.id === call?.from.id;
+    const otherUser = call && isMe ? call?.to : call?.from;
+    const initCall = () => {
+        setCallInProgress(true);
+        const peer = new Peer({
+            initiator: true,
+            trickle: false,
+            stream,
+        });
+        peer.on("signal", (data) => {
+            if (otherUser) {
+                startCall(user, otherUser, { signal: data });
+            }
+        });
+        peer.on("close", () => {
+            setCallAccepted(false);
+        });
+
+        peer.on("stream", (s) => {
+            if (incomingVideo && incomingVideo.current) {
+                incomingVideo.current.srcObject = s;
+            }
+        });
+        socket.once(
+            EVENTS.ON_NEW_COMMAND,
+            (
+                from: PUser,
+                to: PUser,
+                type: CommandType,
+                payload: SocketCommandPayload
+            ) => {
+                if (type === CommandType.JOINED_CALL_STREAM) {
+                    const { signal } = payload;
+                    setCallAccepted(true);
+                    if (signal) {
+                        peer.signal(signal);
+                    }
+                }
+            }
+        );
+
+        connectionRef.current = peer;
+    };
+    const answerCall = () => {
+        setCallInProgress(true);
+        audio.pause();
+        audio.currentTime = 0;
+        setCallAccepted(true);
+        const peer = new Peer({
+            initiator: false,
+            trickle: false,
+            stream,
+        });
+        peer.on("signal", (data) => {
+            if (otherUser) {
+                joinCall(user, otherUser, { signal: data });
+            }
+        });
+
+        peer.on("stream", (s) => {
+            if (incomingVideo && incomingVideo.current)
+                incomingVideo.current.srcObject = s;
+        });
+
+        peer.on("close", () => {
+            setCallAccepted(false);
+        });
+
+        if (callerSignal) {
+            peer.signal(callerSignal);
+        }
+        connectionRef.current = peer;
+    };
+
+    useEffect(() => {
+        if (isMe) {
+            initCall();
+        } else {
+            answerCall();
+        }
+    }, []);
+
+    const leaveCall = () => {
+        if (otherUser) {
+            endCall(user, otherUser, {});
+        }
+        setCallEnded(true);
+        setCallInProgress(false);
+        if (connectionRef && connectionRef.current) {
+            connectionRef.current.destroy();
+        }
+    };
+    const updateMedia = (newStream: MediaStream) => {
+        setStream(newStream);
+        if (outgoingVideo && outgoingVideo.current) {
+            outgoingVideo.current.srcObject = newStream;
+        }
+        if (connectionRef && connectionRef.current && stream) {
+            connectionRef.current.replaceTrack(
+                stream.getVideoTracks()[0],
+                newStream.getVideoTracks()[0],
+                stream
+            );
+            connectionRef.current.replaceTrack(
+                stream.getAudioTracks()[0],
+                newStream.getAudioTracks()[0],
+                stream
+            );
+        }
+    };
+
+    const muteVideo = () => {
+        if (stream) {
+            setVideoMuted(!videoMuted);
+            stream.getVideoTracks()[0].enabled = videoMuted;
+            updateMedia(stream);
+        }
+    };
+
+    const muteAudio = () => {
+        if (stream) {
+            setAudioMuted(!audioMuted);
+            stream.getAudioTracks()[0].enabled = audioMuted;
+            updateMedia(stream);
+        }
+    };
+
+    useEffect(() => {
+        requestMediaPermission({
+            video: !videoMuted,
+            audio: !audioMuted,
+        }).then((newStream) => {
+            if (!stream && newStream !== null) {
+                setStream(newStream);
+                updateMedia(newStream);
+            }
+            if (outgoingVideo && outgoingVideo.current) {
+                outgoingVideo.current.srcObject = newStream;
+            }
+        });
+
+        socket.on("callUser", (data) => {
+            audio.play().then();
+            setReceivingCall(true);
+            setCallerSignal(data.signal);
+        });
+    }, [
+        callInProgress,
+        callAccepted,
+        callEnded,
+        audio,
+        audioMuted,
+        call,
+        stream,
+    ]);
 
     if (!call) {
         return null;
     }
-
-    const { from, to } = call;
-    const isMe = user.id === from.id;
-    const otherUser = isMe ? to : from;
 
     const loginUserProfileStyle = {
         backgroundImage: user?.imageName
@@ -87,6 +255,21 @@ export const AppCallOneToOne: FC = () => {
                                 <div className="inner-content">
                                     <div className="inner-content--circle inner-content--dialing">
                                         <i style={otherUserProfileStyle}></i>
+                                        <div className="video my-video">
+                                            {stream && (
+                                                <video
+                                                    playsInline
+                                                    muted
+                                                    ref={
+                                                        callAccepted &&
+                                                        !callEnded
+                                                            ? incomingVideo
+                                                            : outgoingVideo
+                                                    }
+                                                    autoPlay
+                                                />
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="own-stream-thumb">
@@ -95,6 +278,18 @@ export const AppCallOneToOne: FC = () => {
                                             className="profile-pic"
                                             style={loginUserProfileStyle}
                                         ></i>
+                                        <div
+                                            className="video user-video"
+                                            id="userVideo"
+                                        >
+                                            {callAccepted && !callEnded ? (
+                                                <video
+                                                    playsInline
+                                                    ref={outgoingVideo}
+                                                    autoPlay
+                                                />
+                                            ) : null}
+                                        </div>
                                         <h3 className="profile-name mb-0">
                                             {user.firstName} {user.lastName}
                                         </h3>
@@ -118,15 +313,33 @@ export const AppCallOneToOne: FC = () => {
                                 <div className="center-side col-sm-12 col-md-4 mr-0 ml-auto">
                                     <a
                                         href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            muteAudio();
+                                        }}
                                         className="btn-dark-mode mic-btn"
                                     >
                                         <i className="fak fa-voice"></i>
                                     </a>
-                                    <a href="#" className="end-call-btn mx-3">
+                                    <a
+                                        href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            leaveCall();
+                                        }}
+                                        className="end-call-btn mx-3"
+                                    >
                                         <i className="fak fa-call-dec"></i>
                                     </a>
                                     <a
                                         href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            muteVideo();
+                                        }}
                                         className="btn-dark-mode video-btn"
                                     >
                                         <i className="fak fa-video-declined"></i>

@@ -1,29 +1,40 @@
 import { PUser } from "../../AdminModule/models";
 import { CommandType, postNewCommand, socket } from "../socket";
-import { PrimitiveObject } from "../models";
+import { SocketCommandPayload } from "../models";
 import { errorToast, showIncomingCall, successToast } from "../utils";
 import { useCallOneToOneHelper } from "./useCallOneToOneHelper";
 
 type CommandCenterSocketEventsType = {
-    makeAudioCall: (from: PUser, to: PUser, payload?: PrimitiveObject) => void;
-    makeVideoCall: (from: PUser, to: PUser, payload?: PrimitiveObject) => void;
+    makeAudioCall: (
+        from: PUser,
+        to: PUser,
+        payload?: SocketCommandPayload
+    ) => void;
+    makeVideoCall: (
+        from: PUser,
+        to: PUser,
+        payload?: SocketCommandPayload
+    ) => void;
     declineCall: (
         from: PUser,
         to: PUser,
-        payload?: PrimitiveObject,
+        payload?: SocketCommandPayload,
         isVideoCall?: boolean
     ) => void;
     acceptCall: (
         from: PUser,
         to: PUser,
-        payload?: PrimitiveObject,
+        payload?: SocketCommandPayload,
         isVideoCall?: boolean
     ) => void;
+    startCall: (from: PUser, to: PUser, payload?: SocketCommandPayload) => void;
+    endCall: (from: PUser, to: PUser, payload?: SocketCommandPayload) => void;
+    joinCall: (from: PUser, to: PUser, payload?: SocketCommandPayload) => void;
     handler: (
         from: PUser,
         to: PUser,
         type: CommandType,
-        payload: PrimitiveObject
+        payload: SocketCommandPayload
     ) => void;
 };
 
@@ -32,7 +43,7 @@ export function useCommandCenterSocketEvents(): CommandCenterSocketEventsType {
     const makeAudioCall = (
         from: PUser,
         to: PUser,
-        payload: PrimitiveObject = {}
+        payload: SocketCommandPayload = {}
     ): void => {
         if (socket.connected) {
             postNewCommand(from, to, CommandType.NEW_AUDIO_CALL, payload);
@@ -40,6 +51,7 @@ export function useCommandCenterSocketEvents(): CommandCenterSocketEventsType {
                 from,
                 to,
                 isVideoCall: false,
+                isIncomingCall: false,
             });
         }
     };
@@ -47,7 +59,7 @@ export function useCommandCenterSocketEvents(): CommandCenterSocketEventsType {
     const makeVideoCall = (
         from: PUser,
         to: PUser,
-        payload: PrimitiveObject = {}
+        payload: SocketCommandPayload = {}
     ): void => {
         if (socket.connected) {
             postNewCommand(from, to, CommandType.NEW_VIDEO_CALL, payload);
@@ -55,6 +67,7 @@ export function useCommandCenterSocketEvents(): CommandCenterSocketEventsType {
                 from,
                 to,
                 isVideoCall: true,
+                isIncomingCall: false,
             });
         }
     };
@@ -62,7 +75,7 @@ export function useCommandCenterSocketEvents(): CommandCenterSocketEventsType {
     const declineCall = (
         from: PUser,
         to: PUser,
-        payload: PrimitiveObject = {},
+        payload: SocketCommandPayload = {},
         isVideoCall = false
     ): void => {
         if (isVideoCall) {
@@ -75,7 +88,7 @@ export function useCommandCenterSocketEvents(): CommandCenterSocketEventsType {
     const acceptCall = (
         from: PUser,
         to: PUser,
-        payload: PrimitiveObject = {},
+        payload: SocketCommandPayload = {},
         isVideoCall = false
     ): void => {
         if (isVideoCall) {
@@ -87,6 +100,7 @@ export function useCommandCenterSocketEvents(): CommandCenterSocketEventsType {
             from,
             to,
             isVideoCall,
+            isIncomingCall: true,
         });
     };
 
@@ -94,7 +108,7 @@ export function useCommandCenterSocketEvents(): CommandCenterSocketEventsType {
         frm: PUser,
         to: PUser,
         type: CommandType,
-        payload: PrimitiveObject = {}
+        payload: SocketCommandPayload = {}
     ): void => {
         // eslint-disable-next-line no-console
         console.log(payload);
@@ -132,8 +146,31 @@ export function useCommandCenterSocketEvents(): CommandCenterSocketEventsType {
                 errorToast("Call declined");
                 break;
             default:
-                errorToast("No default");
         }
+    };
+
+    const startCall = (
+        from: PUser,
+        to: PUser,
+        payload: SocketCommandPayload = {}
+    ): void => {
+        postNewCommand(from, to, CommandType.START_CALL_STREAM, payload);
+    };
+
+    const endCall = (
+        from: PUser,
+        to: PUser,
+        payload: SocketCommandPayload = {}
+    ): void => {
+        postNewCommand(from, to, CommandType.END_CALL_STREAM, payload);
+    };
+
+    const joinCall = (
+        from: PUser,
+        to: PUser,
+        payload: SocketCommandPayload = {}
+    ): void => {
+        postNewCommand(from, to, CommandType.JOINED_CALL_STREAM, payload);
     };
 
     return {
@@ -142,5 +179,8 @@ export function useCommandCenterSocketEvents(): CommandCenterSocketEventsType {
         handler,
         declineCall,
         acceptCall,
+        startCall,
+        endCall,
+        joinCall,
     };
 }

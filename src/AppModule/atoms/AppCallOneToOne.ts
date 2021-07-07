@@ -7,6 +7,7 @@ export interface AppCallOneToOneType {
     from: PUser;
     to: PUser;
     isVideoCall: boolean;
+    isIncomingCall: boolean;
 }
 
 export const appCallOneToOne = atom<AppCallOneToOneType | null>({

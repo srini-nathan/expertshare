@@ -3,7 +3,7 @@ import { SOCKET_HOST } from "./config/app-env";
 import { PChatMessage } from "./models/entities/ChatMessage";
 import { PUser } from "../AdminModule/models";
 import { PSessionComment } from "./models/entities/SessionComment";
-import { PrimitiveObject } from "./models";
+import { SocketCommandPayload } from "./models";
 
 export const socket = io(SOCKET_HOST, {
     transports: ["websocket"],
@@ -198,13 +198,17 @@ export enum CommandType {
     NEW_VIDEO_CALL = "new-video-call",
     DECLINED_VIDEO_CALL = "declined-video-call",
     ACCEPT_VIDEO_CALL = "accept-video-call",
+    START_CALL_STREAM = "start-call-stream",
+    JOIN_CALL_STREAM = "join-call-stream",
+    JOINED_CALL_STREAM = "joined-call-stream",
+    END_CALL_STREAM = "end-call-stream",
 }
 
 export const postNewCommand = (
     from: PUser,
     to: PUser,
     type: CommandType,
-    payload: PrimitiveObject
+    payload: SocketCommandPayload
 ): void => {
     if (socket.connected) {
         socket.emit(EVENTS.NEW_COMMAND, {
