@@ -66,6 +66,8 @@ export class Session extends BaseEntity {
 
     isLive: boolean;
 
+    isArchive: boolean;
+
     isReply: boolean;
 
     isSessionPublic: boolean;
@@ -116,6 +118,7 @@ export class Session extends BaseEntity {
         sessionTags = [],
         translations,
         isCommentEnable = false,
+        isArchive = false,
         isReply = false,
         isLive = false,
         isCommentModerated = false,
@@ -139,6 +142,7 @@ export class Session extends BaseEntity {
         this.userGroups = userGroups;
         this.isReply = isReply;
         this.isLive = isLive;
+        this.isArchive = isArchive;
         this.container = container;
         this.webexMeetingPassword = webexMeetingPassword;
         this.speakers = speakers;
@@ -189,6 +193,7 @@ export class Session extends BaseEntity {
             isVisible: this.isVisible,
             isReply: this.isReply,
             isLive: this.isLive,
+            isArchive: this.isArchive,
             description: this.description,
             ord: this.ord,
             userGroups: this.userGroups,

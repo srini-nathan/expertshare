@@ -197,6 +197,14 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                                 )}
                                             </span>
                                         )}
+                                        {session.isArchive && (
+                                            <span className="archived-btn mr-3">
+                                                <i className="far fa-archive"></i>
+                                                {t(
+                                                    "sessionDetails:label.archived"
+                                                )}
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                             </Link>

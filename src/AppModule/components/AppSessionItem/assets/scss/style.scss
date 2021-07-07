@@ -25,6 +25,30 @@
     }
 }
 
+.archived-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    height: 36px;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--btn-fg-clr);
+    background-color: var(--btn-bg-clr);
+    border-radius: var(--border-radius);
+
+    &:hover {
+        text-decoration: none;
+    }
+
+    i {
+        margin-right: 5px;
+        margin-bottom: 1px;
+        font-size: 20px;
+    }
+}
+
 .event-detail-admin--workshop {
     overflow: auto;
     box-shadow: 0 2px 12px var(--secondary-20);
@@ -303,7 +327,8 @@
 
                             &--speakers {
                                 height: 150px;
-                                scrollbar-color: var(--secondary) var(--secondary-10);
+                                scrollbar-color: var(--secondary)
+                                    var(--secondary-10);
                                 scrollbar-width: thin;
 
                                 &::-webkit-scrollbar {
@@ -425,7 +450,6 @@
 
                             &--other {
                                 &--item {
-
                                     a,
                                     button {
                                         i {
