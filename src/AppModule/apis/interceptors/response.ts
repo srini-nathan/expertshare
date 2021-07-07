@@ -9,8 +9,9 @@ export const onResponseFulfilled = (response: AxiosResponse): AxiosResponse => {
 
 export const onResponseRejected = (error: AxiosError): Promise<any> => {
     const status = error.response?.status;
-    const message = error.response?.data?.message;
-
+    const message =
+        error.response?.data?.message ||
+        error.response?.data["hydra:description"];
     // status code available
     if (status) {
         if (status === 401) {
@@ -26,7 +27,7 @@ export const onResponseRejected = (error: AxiosError): Promise<any> => {
             errorToast("You are not suppose to be here!");
         }
         if (status >= 500 && status <= 599) {
-            return Promise.reject(new ServerError());
+            return Promise.reject(new ServerError(message));
         }
     }
 

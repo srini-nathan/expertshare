@@ -1,5 +1,5 @@
 export class ServerError extends Error {
-    constructor() {
-        super("Something went wrong!");
+    constructor(error = "Something went wrong!") {
+        super(error);
     }
 }
