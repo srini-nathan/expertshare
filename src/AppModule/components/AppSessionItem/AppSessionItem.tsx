@@ -14,6 +14,7 @@ import { AppUserListItem } from "../AppUserListItem";
 import { FileTypeInfo } from "../../models";
 import { useGlobalData } from "../../contexts";
 import { getDateTimeWithoutTimezone } from "../../utils";
+import { AppShowUserListPopup } from "../AppShowUserListPopup";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -104,6 +105,13 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                 sm={12}
                 className={`event-detail-admin--workshop--container--content--item p-0`}
             >
+                <AppShowUserListPopup
+                    show={showMore}
+                    handleClose={isShowMore}
+                    users={
+                        [...session.speakers, ...session.moderators] as User[]
+                    }
+                />
                 <AppCard className={`inner-container p-0  ${getSize()[1]}`}>
                     <Row className="m-0 p-0">
                         <Col
@@ -220,32 +228,20 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                         </div>
                                         <div
                                             style={{
-                                                overflow: showMore
-                                                    ? "auto"
-                                                    : "hidden",
+                                                overflow: "hidden",
                                             }}
                                             className="inner-container--det--content--speakers mt-3"
                                         >
-                                            {session.speakers.map(
-                                                (e: any, i: number) => {
+                                            {session.speakers
+                                                .slice(0, 3)
+                                                .map((e: any, i: number) => {
                                                     return (
                                                         <AppUserListItem
                                                             key={i}
                                                             user={e as User}
                                                         />
                                                     );
-                                                }
-                                            )}
-                                            {session.moderators.map(
-                                                (e: any, i: number) => {
-                                                    return (
-                                                        <AppUserListItem
-                                                            key={i}
-                                                            user={e as User}
-                                                        />
-                                                    );
-                                                }
-                                            )}
+                                                })}
                                         </div>
                                         <div className="inner-container--det--content--more">
                                             {session.moderators.length +

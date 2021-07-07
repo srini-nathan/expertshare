@@ -1,0 +1,19 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+@import "../../../AppUserSelector/assets/scss/style.scss";
+
+.edit-users--popup {
+    &.show-users {
+        top: unset !important;
+        right: 0;
+        bottom: 0;
+        height: 500px;
+
+        .content {
+            height: 375px;
+        }
+        .content--inner--item {
+            border-bottom: 0 solid transparent !important;
+        }
+    }
+}
