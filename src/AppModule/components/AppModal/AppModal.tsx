@@ -10,6 +10,12 @@ interface AppModalProps {
     title?: string;
     bodyContent: string;
 }
+
+export interface AppModalRef {
+    title: string;
+    bodyContent: string;
+}
+
 export const AppModal: FC<AppModalProps> = ({
     show,
     handleClose,
