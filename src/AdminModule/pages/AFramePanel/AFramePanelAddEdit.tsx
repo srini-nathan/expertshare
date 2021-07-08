@@ -279,7 +279,7 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                 } else if (errorMessage) {
                     errorToast(errorMessage);
                 } else {
-                    navigator("/admin/rooms").then(() => {
+                    navigator("..").then(() => {
                         successToast(
                             isEditMode ? "Panels updated" : "Panels created"
                         );
