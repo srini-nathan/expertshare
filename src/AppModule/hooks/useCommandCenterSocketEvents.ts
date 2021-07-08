@@ -3,6 +3,11 @@ import { CommandType, postNewCommand, socket } from "../socket";
 import { SocketCommandPayload } from "../models";
 import { errorToast, showIncomingCall, successToast } from "../utils";
 import { useCallOneToOneHelper } from "./useCallOneToOneHelper";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import ringtone from "../assets/audio/calling.mp3";
+
+const audio = new Audio(ringtone);
 
 type CommandCenterSocketEventsType = {
     makeAudioCall: (
@@ -114,6 +119,7 @@ export function useCommandCenterSocketEvents(): CommandCenterSocketEventsType {
         console.log(payload);
         switch (type) {
             case CommandType.NEW_AUDIO_CALL:
+                audio.play().then();
                 showIncomingCall("Receiving audio call...").then((res) => {
                     if (res.isConfirmed) {
                         successToast("picked up call");
@@ -123,9 +129,11 @@ export function useCommandCenterSocketEvents(): CommandCenterSocketEventsType {
                         errorToast("call declined");
                         declineCall(to, frm, {}, false);
                     }
+                    audio.pause();
                 });
                 break;
             case CommandType.NEW_VIDEO_CALL:
+                audio.play().then();
                 showIncomingCall("Receiving video call...").then((res) => {
                     if (res.isConfirmed) {
                         successToast("picked up call");
@@ -135,6 +143,7 @@ export function useCommandCenterSocketEvents(): CommandCenterSocketEventsType {
                         errorToast("call declined");
                         declineCall(to, frm, {}, true);
                     }
+                    audio.pause();
                 });
                 break;
             case CommandType.ACCEPT_AUDIO_CALL:

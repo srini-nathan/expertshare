@@ -3,7 +3,7 @@ import Draggable from "react-draggable";
 import Peer, { SignalData } from "simple-peer";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import ringtone from "./assets/audio/calling.mp3";
+import ringtone from "../../assets/audio/calling.mp3";
 import {
     useAuthState,
     useBuildAssetPath,
@@ -26,7 +26,7 @@ const {
 
 export const AppCallOneToOne: FC = () => {
     const { user } = useAuthState();
-    const { call } = useCallOneToOneHelper();
+    const { call, set } = useCallOneToOneHelper();
     const profilePictureBasePath = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo
     );
@@ -99,6 +99,8 @@ export const AppCallOneToOne: FC = () => {
         peer.on("signal", (data) => {
             if (otherUser) {
                 joinCall(user, otherUser, { signal: data });
+                setReceivingCall(true);
+                setCallerSignal(data);
             }
         });
 
@@ -133,6 +135,7 @@ export const AppCallOneToOne: FC = () => {
         setCallInProgress(false);
         if (connectionRef && connectionRef.current) {
             connectionRef.current.destroy();
+            set(null);
         }
     };
     const updateMedia = (newStream: MediaStream) => {
@@ -171,30 +174,26 @@ export const AppCallOneToOne: FC = () => {
     };
 
     useEffect(() => {
-        requestMediaPermission({
-            video: !videoMuted,
-            audio: !audioMuted,
-        }).then((newStream) => {
-            if (!stream && newStream !== null) {
-                setStream(newStream);
-                updateMedia(newStream);
-            }
-            if (outgoingVideo && outgoingVideo.current) {
-                outgoingVideo.current.srcObject = newStream;
-            }
-        });
-
-        socket.on("callUser", (data) => {
-            audio.play().then();
-            setReceivingCall(true);
-            setCallerSignal(data.signal);
-        });
+        if (call) {
+            requestMediaPermission({
+                video: !videoMuted,
+                audio: !audioMuted,
+            }).then((newStream) => {
+                if (!stream && newStream !== null) {
+                    setStream(newStream);
+                    updateMedia(newStream);
+                }
+                if (outgoingVideo && outgoingVideo.current) {
+                    outgoingVideo.current.srcObject = newStream;
+                }
+            });
+        }
     }, [
         callInProgress,
         callAccepted,
         callEnded,
-        audio,
         audioMuted,
+        audio,
         call,
         stream,
     ]);
@@ -254,9 +253,13 @@ export const AppCallOneToOne: FC = () => {
                             <div className="center-pic-container">
                                 <div className="inner-content">
                                     <div className="inner-content--circle inner-content--dialing">
-                                        <i style={otherUserProfileStyle}></i>
-                                        <div className="video my-video">
-                                            {stream && (
+                                        {!stream && (
+                                            <i
+                                                style={otherUserProfileStyle}
+                                            ></i>
+                                        )}
+                                        {stream && (
+                                            <div className="video my-video">
                                                 <video
                                                     playsInline
                                                     muted
@@ -268,28 +271,30 @@ export const AppCallOneToOne: FC = () => {
                                                     }
                                                     autoPlay
                                                 />
-                                            )}
-                                        </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="own-stream-thumb">
                                     <div className="own-stream-thumb--container">
-                                        <i
-                                            className="profile-pic"
-                                            style={loginUserProfileStyle}
-                                        ></i>
-                                        <div
-                                            className="video user-video"
-                                            id="userVideo"
-                                        >
-                                            {callAccepted && !callEnded ? (
+                                        {!callAccepted && callEnded ? (
+                                            <i
+                                                className="profile-pic"
+                                                style={loginUserProfileStyle}
+                                            ></i>
+                                        ) : null}
+                                        {callAccepted && !callEnded ? (
+                                            <div
+                                                className="video user-video"
+                                                id="userVideo"
+                                            >
                                                 <video
                                                     playsInline
                                                     ref={outgoingVideo}
                                                     autoPlay
                                                 />
-                                            ) : null}
-                                        </div>
+                                            </div>
+                                        ) : null}
                                         <h3 className="profile-name mb-0">
                                             {user.firstName} {user.lastName}
                                         </h3>
