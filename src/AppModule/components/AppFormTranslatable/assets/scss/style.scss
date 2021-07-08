@@ -1,7 +1,11 @@
 @import "../../../../assets/scss/variables";
 
 .translatable-container {
-
+    .chooselang-row {
+        padding-bottom: 10px;
+        overflow: auto;
+        white-space: nowrap;
+    }
     .active {
         color: var(--primary) !important;
         background-color: var(--primary-20) !important;
@@ -53,5 +57,4 @@
             background-size: 20px;
         }
     }
-
 }

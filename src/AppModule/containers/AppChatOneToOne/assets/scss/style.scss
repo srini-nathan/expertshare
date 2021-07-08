@@ -52,11 +52,19 @@
                 .name {
                     &--sender {
                         h3 {
+                            display: -webkit-box;
+                            max-width: 255px;
+                            height: 18px;
                             margin-bottom: 0;
+                            -webkit-line-clamp: 1;
+                            -webkit-box-orient: vertical;
+                            overflow: hidden;
                             font-size: 16px;
                             font-weight: 500;
                             color: var(--secondary);
-
+                            @include media("smallmob") {
+                                max-width: 190px;
+                            }
                             .time {
                                 font-size: 12px;
                                 font-weight: 400;
@@ -75,9 +83,19 @@
                         }
 
                         span {
+                            display: -webkit-box;
+                            max-width: 255px;
+                            height: 14px;
+                            margin-top: 2px;
+                            -webkit-line-clamp: 1;
+                            -webkit-box-orient: vertical;
+                            overflow: hidden;
                             font-size: 12px;
                             font-weight: 400;
                             color: var(--secondary-70);
+                            @include media("smallmob") {
+                                max-width: 190px;
+                            }
                         }
                     }
                 }

@@ -38,7 +38,7 @@ export const AppMessageInboxThread: FC<AppMessageInboxThreadProps> = ({
             }`}
             onClick={onClick}
         >
-            <a href="#">
+            <a>
                 <div className="inner-container--message--item--container">
                     {rm && (
                         <div className="relational-manager">

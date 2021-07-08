@@ -32,7 +32,10 @@ export const AppMessageInboxHeader: FC<AppMessageInboxHeaderProps> = ({
     const { t } = useTranslation();
 
     return (
-        <div className="app-message-inbox-header row m-0 px-3 pt-3 pb-2">
+        <div
+            className="app-message-inbox-header row m-0 px-3 pt-3 pb-2"
+            onClick={onCollapseAction}
+        >
             <div className="inner-container--details col-auto p-0">
                 <a>
                     <div className="inner-container--details--content">

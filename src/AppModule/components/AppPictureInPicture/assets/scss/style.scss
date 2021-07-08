@@ -3,15 +3,15 @@
 
 .draggable-container.box {
     position: fixed;
-    bottom: 10px;
-    right: 10px;
-    background: var(--light-clr);
-    border-radius: 8px;
-    margin: 10px;
-    overflow: hidden;
+    right: 0;
+    bottom: 140px;
     z-index: 99999999999;
     width: 460px;
     height: 250px;
+    margin: 10px;
+    overflow: hidden;
+    background: var(--light-clr);
+    border-radius: 8px;
     @include media("mobile") {
         width: 350px;
         height: 200px;

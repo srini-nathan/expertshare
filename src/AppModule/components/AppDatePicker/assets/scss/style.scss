@@ -1,6 +1,5 @@
 .react-datepicker-wrapper {
-    width: 90%;
-
+    width: 100%;
     input {
         width: 100%;
         height: 36px;
@@ -26,7 +25,12 @@
 
 .react-datepicker-container {
     z-index: 6;
-
+    .input-group {
+        flex-wrap: nowrap;
+        .input-group-append {
+            cursor: pointer;
+        }
+    }
 }
 
 .custom-datepicker {
@@ -39,7 +43,6 @@
     border: unset;
     border-radius: var(--border-radius);
     box-shadow: 0 10px 20px var(--primary-20);
-
 
     select {
         background-color: var(--input-bg-clr);
@@ -73,8 +76,6 @@
 
         &:hover {
             background-color: var(--btn-hover-bg-clr);
-
-
         }
 
         &--previous {
@@ -137,14 +138,12 @@
                     font-weight: 700;
                     color: var(--primary);
                     background: var(--primary-40);
-
                 }
 
                 &.react-datepicker__day--today {
                     font-weight: 700;
                     color: var(--primary);
                     background: var(--primary-20);
-
                 }
             }
         }

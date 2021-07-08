@@ -16,6 +16,7 @@ const {
 interface UserInfo {
     data: User;
 }
+
 export const UserDetailsInfo: FC<UserInfo> = ({ data }): JSX.Element => {
     const { firstName, lastName, imageName, id } = data;
     const imagePath = useBuildAssetPath(
@@ -54,9 +55,10 @@ export const UserDetailsInfo: FC<UserInfo> = ({ data }): JSX.Element => {
 export const RenderGetInContact: FC<UserInfo> = ({ data }): JSX.Element => {
     const { id } = data;
     const { t } = useTranslation();
+
     return (
         <Link className="btn btn-secondary" to={`/attendee/${id}/show`}>
-            {t("attendee.form:button.viewProfile")}
+            {t("attendee.form:button.getInContact")}
         </Link>
     );
 };

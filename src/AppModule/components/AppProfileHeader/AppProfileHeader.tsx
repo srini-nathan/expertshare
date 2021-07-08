@@ -128,7 +128,7 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                     <Row className="m-0 p-0">
                         <Link
                             to={`/attendee`}
-                            className="btn btn-secondary back-btn mx-3 mb-3"
+                            className="btn btn-secondary back-btn mx-4 mb-3"
                         >
                             <i className="fak fa-chevron-left mr-3"></i>
                             {t("common:label.back")}
@@ -136,10 +136,10 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                     </Row>
                 )}
 
-                <Row className="m-0 p-0">
+                <Row className="m-0 p-0 detail-row mt-2">
                     <Col
                         md="auto"
-                        className="inner-container--profile-pic pl-4 mt-5 mt-md-0"
+                        className="inner-container--profile-pic pl-4 mt-5 mt-lg-0 mt-md-4 mt-sm-0"
                     >
                         <Col
                             style={style}
@@ -150,7 +150,7 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                     </Col>
                     <Col
                         md="auto"
-                        className="inner-container--main-det mt-4 mt-xl-0 text-center text-md-left"
+                        className="inner-container--main-det mt-4 mt-xl-2 text-center text-md-left"
                     >
                         <Col className="inner-container--main-det--title p-0">
                             <h2>

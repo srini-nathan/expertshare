@@ -85,7 +85,7 @@ export const AppFormTranslatable: FC<AppFormTranslatableProps> = ({
                     required
                 />
             </Col>
-            <Col md={12} className="d-flex mb-4">
+            <Col md={12} className="d-flex mb-4 chooselang-row">
                 {languages
                     // .sort((a: Language, b: Language) =>
                     //     b.isDefault > a.isDefault ? 1 : -1

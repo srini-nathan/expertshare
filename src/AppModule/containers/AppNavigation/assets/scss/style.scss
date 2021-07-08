@@ -358,6 +358,7 @@
                 display: inline-flex;
                 width: 42px;
                 height: 42px;
+                margin-bottom: 3px;
                 color: var(--sidebar-icon-clr);
                 border-radius: var(--border-radius);
 
@@ -372,6 +373,11 @@
                         height: 36px;
                         padding: 9px;
                         color: var(--primary) !important;
+                        @include media("lg") {
+                            width: 30px;
+                            height: 30px;
+                            padding: 6px;
+                        }
                     }
                 }
             }
@@ -429,7 +435,12 @@
                     font-size: 17px;
                     font-weight: 700;
                     line-height: 40px;
-
+                    @include media("xl") {
+                        font-size: 16px;
+                    }
+                    @include media("lg") {
+                        font-size: 14px !important;
+                    }
                     @include media("mobile") {
                         padding-left: 0 !important;
                     }
@@ -456,9 +467,11 @@
                         text-overflow: ellipsis;
                         white-space: nowrap;
                         max-lines: 1;
-
+                        @include media("lg") {
+                            max-width: 60%;
+                        }
                         @include media("xl") {
-                            margin: auto 0 auto 15px;
+                            margin: auto 0 auto 8px;
                         }
                     }
                 }
@@ -553,6 +566,9 @@
                 right: 25px;
                 height: 12px;
                 color: var(--sidebar-icon-clr);
+                @include media("xl") {
+                    right: 20px;
+                }
             }
         }
 

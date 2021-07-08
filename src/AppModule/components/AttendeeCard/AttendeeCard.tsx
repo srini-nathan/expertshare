@@ -185,7 +185,7 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                                                 }
                                             }}
                                         >
-                                            <a href="#">
+                                            <a>
                                                 <i className="fak fa-start-conversation"></i>
                                                 {t(
                                                     "attendee.form:button.startConversation"

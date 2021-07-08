@@ -58,6 +58,11 @@ $media-queries: (
     "ea-2": "only screen and (min-width: 992px) and (max-width: 1700px)",
     //custom for conferencegrid
     "cg-1": "only screen and (min-width: 410px) and (max-width: 570px)",
+    //custom for attendee profile
+    "ap-1": "only screen and (min-width: 1720px)",
+    "ap-2": "only screen and (min-width: 1370px) and (max-width: 1720px)",
+    "ap-3": "only screen and (min-width: 1024px) and (max-width: 1369px)",
+    "ap-4": "only screen and (min-width: 769px) and (max-width: 1024px)",
 );
 
 @mixin media($breakpoints) {

@@ -1,6 +1,6 @@
 @import "../../../../../AppModule/assets/scss/screens-sizes";
 @import "../../../../../AppModule/assets/scss/variables";
-.user-header-width {
+.bottom-nav .user-header-width {
     @include media("mobtosmall") {
         width: 100%;
     }
@@ -9,6 +9,31 @@
     }
     @include media("lr-1") {
         flex: none;
+    }
+}
+.right-container {
+    .user-header-width {
+        @include media("tabtomob") {
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        .user-filter {
+            @include media("tabtomob") {
+                margin-bottom: 10px;
+            }
+        }
+        .user-ex {
+            @include media("tabtomob") {
+                margin-right: 0 !important;
+            }
+        }
+        .form-row {
+            .col-sm-auto {
+                @include media("container-b-lw") {
+                    width: 50%;
+                }
+            }
+        }
     }
 }
 .user-filter {
@@ -23,14 +48,14 @@
     @include media("mobtosmall") {
         position: absolute;
         left: 15px;
-        width: 75px;
+        min-width: 80px;
     }
 }
 .user-ex {
     @include media("mobtosmall") {
         position: absolute;
         right: 5px;
-        width: 75px;
+        min-width: 80px;
     }
 }
 .ag-theme-alpine {
