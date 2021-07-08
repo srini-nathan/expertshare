@@ -194,6 +194,39 @@ export const AppCallOneToOne: FC = () => {
         }
     }, [callInProgress, callAccepted, callEnded, audioMuted, call, stream]);
 
+    const shareScreen = () => {
+        navigator.mediaDevices
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            .getDisplayMedia({ cursor: true })
+            .then((screenStream: MediaStream) => {
+                if (connectionRef && connectionRef.current && stream) {
+                    connectionRef.current.replaceTrack(
+                        stream.getVideoTracks()[0],
+                        screenStream.getVideoTracks()[0],
+                        stream
+                    );
+                }
+                if (outgoingVideo && outgoingVideo.current) {
+                    outgoingVideo.current.srcObject = screenStream;
+                }
+                screenStream.getTracks()[0].onended = () => {
+                    if (stream) {
+                        if (connectionRef && connectionRef.current) {
+                            connectionRef.current.replaceTrack(
+                                screenStream.getVideoTracks()[0],
+                                stream.getVideoTracks()[0],
+                                stream
+                            );
+                        }
+                        if (outgoingVideo && outgoingVideo.current) {
+                            outgoingVideo.current.srcObject = stream;
+                        }
+                    }
+                };
+            });
+    };
+
     if (!call) {
         return null;
     }
@@ -355,6 +388,11 @@ export const AppCallOneToOne: FC = () => {
                                     </a>
                                     <a
                                         href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            shareScreen();
+                                        }}
                                         className="btn-dark-mode clipboard-btn"
                                     >
                                         <i className="fak fa-clone-light"></i>
