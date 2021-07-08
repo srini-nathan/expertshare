@@ -9,6 +9,7 @@ import imageTemp from "./assets/images/imgthumb.svg";
 
 import "./assets/scss/style.scss";
 import { AppButton } from "../AppButton";
+import { AppModal, AppModalRef } from "../AppModal";
 
 type Options = Cropper.Options;
 
@@ -30,9 +31,10 @@ export interface AppUploaderProps {
     onFileSelect: (files: File[]) => void;
     onFinish?: (error: null | string, upload?: Upload) => void;
     cropperOptions?: Options;
-    onDelete?: () => void;
+    onDelete?: () => void | boolean;
     fileInfo: FileTypeInfo;
     externalFiles?: any[];
+    confirmation?: AppModalRef;
 }
 
 export const AppUploader: FC<AppUploaderProps> = ({
@@ -47,13 +49,14 @@ export const AppUploader: FC<AppUploaderProps> = ({
     onDelete,
     fileInfo,
     externalFiles,
+    confirmation,
 }): JSX.Element => {
     const [files, setFiles] = useState<AppFile[]>([]);
     const [changed, isChanged] = useState<boolean>(false);
     const [cropperFile, setCropperFile] = useState<any>(undefined);
-
     const [showCropModal, setShowCropModal] = useState<boolean>(true);
     const [cropUrl, setCropUrl] = useState<string>("");
+    const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
     const {
         getRootProps,
@@ -132,10 +135,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
         [files]
     );
 
-    const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.stopPropagation();
-        e.preventDefault();
-
+    const handleDelete = () => {
         if (onDelete) {
             onDelete();
         }
@@ -152,13 +152,21 @@ export const AppUploader: FC<AppUploaderProps> = ({
             <div {...getRootProps({ className: "dropzone" })}>
                 <input {...getInputProps()} />
                 <div className="image-container" style={getBackgroundStyles()}>
-                    <AppButton
-                        variant="secondary"
-                        disabled={!(thumb.length > 0 || imagePath)}
-                        onClick={handleDelete}
-                    >
-                        <i className="fak fa-trash-light"></i>
-                    </AppButton>
+                    {thumb.length > 0 || imagePath ? (
+                        <AppButton
+                            variant="secondary"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                if (confirmation) {
+                                    setShowConfirmModal(true);
+                                } else {
+                                    handleDelete();
+                                }
+                            }}
+                        >
+                            <i className="fak fa-trash-light"></i>
+                        </AppButton>
+                    ) : null}
                 </div>
             </div>
 
@@ -206,6 +214,20 @@ export const AppUploader: FC<AppUploaderProps> = ({
                     )}
                 </div>
             )}
+            {confirmation ? (
+                <AppModal
+                    show={showConfirmModal}
+                    title={confirmation.title}
+                    handleClose={() => {
+                        setShowConfirmModal(false);
+                    }}
+                    handleDelete={() => {
+                        handleDelete();
+                        setShowConfirmModal(false);
+                    }}
+                    bodyContent={confirmation.bodyContent}
+                />
+            ) : null}
         </section>
     );
 };

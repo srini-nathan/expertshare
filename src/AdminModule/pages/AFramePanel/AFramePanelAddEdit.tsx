@@ -559,6 +559,12 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                                                     files
                                                 )
                                             }
+                                            confirmation={{
+                                                title:
+                                                    "admin.aframepanel.form:image.deleteconfirm.title",
+                                                bodyContent:
+                                                    "admin.aframepanel.form:image.deleteconfirm.content",
+                                            }}
                                             onDelete={() => {
                                                 setValue("image", "");
                                                 setFilesToUpload({
@@ -841,6 +847,12 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                                             onFileSelect={onFileSelect(
                                                 "remoteImage"
                                             )}
+                                            confirmation={{
+                                                title:
+                                                    "admin.aframepanel.form:remoteImage.deleteconfirm.title",
+                                                bodyContent:
+                                                    "admin.aframepanel.form:remoteImage.deleteconfirm.content",
+                                            }}
                                             onDelete={() => {
                                                 setValue("remoteImage", "");
                                                 setFilesToUpload({
