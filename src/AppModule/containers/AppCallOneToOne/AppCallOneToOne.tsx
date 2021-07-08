@@ -1,9 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from "react";
 import Draggable from "react-draggable";
 import Peer, { SignalData } from "simple-peer";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import ringtone from "../../assets/audio/calling.mp3";
 import {
     useAuthState,
     useBuildAssetPath,
@@ -32,17 +29,16 @@ export const AppCallOneToOne: FC = () => {
     );
     const { startCall, endCall, joinCall } = useCommandCenterSocketEvents();
     const [stream, setStream] = useState<MediaStream>();
-    const [, setReceivingCall] = useState(call?.isIncomingCall ?? false);
     const [callerSignal, setCallerSignal] = useState<SignalData>();
     const [callAccepted, setCallAccepted] = useState(false);
     const [callEnded, setCallEnded] = useState(false);
     const [videoMuted, setVideoMuted] = useState(false);
     const [audioMuted, setAudioMuted] = useState(false);
+    const [fullScreen, setFullscreen] = useState(false);
     const [callInProgress, setCallInProgress] = useState(false);
     const incomingVideo = useRef<HTMLVideoElement>(null);
     const outgoingVideo = useRef<HTMLVideoElement>(null);
     const connectionRef = useRef<Peer.Instance>();
-    const audio = new Audio(ringtone);
     const isMe = call && user.id === call?.from.id;
     const otherUser = call && isMe ? call?.to : call?.from;
     const initCall = () => {
@@ -88,8 +84,6 @@ export const AppCallOneToOne: FC = () => {
     };
     const answerCall = () => {
         setCallInProgress(true);
-        audio.pause();
-        audio.currentTime = 0;
         setCallAccepted(true);
         const peer = new Peer({
             initiator: false,
@@ -99,7 +93,6 @@ export const AppCallOneToOne: FC = () => {
         peer.on("signal", (data) => {
             if (otherUser) {
                 joinCall(user, otherUser, { signal: data });
-                setReceivingCall(true);
                 setCallerSignal(data);
             }
         });
@@ -174,6 +167,17 @@ export const AppCallOneToOne: FC = () => {
     };
 
     useEffect(() => {
+        const elem: any = document.getElementById("main-video-content");
+        if (elem) {
+            if (fullScreen && document) {
+                document.exitFullscreen().catch(() => {});
+            } else if (elem.requestFullscreen) {
+                elem.requestFullscreen().catch(() => {});
+            }
+        }
+    }, [fullScreen]);
+
+    useEffect(() => {
         if (call) {
             requestMediaPermission({
                 video: !videoMuted,
@@ -188,15 +192,7 @@ export const AppCallOneToOne: FC = () => {
                 }
             });
         }
-    }, [
-        callInProgress,
-        callAccepted,
-        callEnded,
-        audioMuted,
-        audio,
-        call,
-        stream,
-    ]);
+    }, [callInProgress, callAccepted, callEnded, audioMuted, call, stream]);
 
     if (!call) {
         return null;
@@ -220,7 +216,7 @@ export const AppCallOneToOne: FC = () => {
                 handle=".btn-move"
                 defaultClassName="draggable-container"
             >
-                <div className="call-started--box">
+                <div className="call-started--box" id="main-video-content">
                     <div className="call-started--box--container">
                         <div className="call-started--box--container--header pt-4 px-2">
                             <div className="row m-0 p-0">
@@ -371,6 +367,11 @@ export const AppCallOneToOne: FC = () => {
                                     </a>
                                     <a
                                         href="#"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            setFullscreen(!fullScreen);
+                                        }}
                                         className="btn-dark-mode full-sc-btn"
                                     >
                                         <i className="fak fa-maximize"></i>
