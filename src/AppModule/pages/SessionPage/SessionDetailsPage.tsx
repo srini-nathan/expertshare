@@ -211,8 +211,8 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                         <AppSessionHeader
                             next={next}
                             prev={prev}
-                            conferenceId={conferenceId}
                             session={data}
+                            conferenceId={conferenceId}
                             sessionList={sessionList}
                             getAgenda={() => {
                                 getAgenda(true);
@@ -221,38 +221,53 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                         <AppSessionTags session={data} />
 
                         <Row className="my-5 mx-0 px-2">
-                            <Col
-                                md={12}
-                                lg={8}
-                                className="create-session--speakers divider-right"
-                            >
-                                <AppSessionUsers
-                                    xl={6}
-                                    lg={6}
+                            {data.speakers.length > 0 ? (
+                                <Col
+                                    lg={data.moderators.length > 0 ? 8 : 12}
                                     md={12}
-                                    sm={12}
-                                    selectedUsers={data.speakers as User[]}
-                                    title={t("sessionDetails:label.speakers")}
-                                    icon="speakers"
-                                />
-                            </Col>
-                            <Col
-                                md={12}
-                                lg={4}
-                                className="create-session--speakers"
-                            >
-                                <AppSessionUsers
-                                    xl={12}
-                                    lg={12}
+                                    className={`create-session--speakers ${
+                                        data.moderators.length > 0
+                                            ? "divider-right"
+                                            : ""
+                                    } `}
+                                >
+                                    <AppSessionUsers
+                                        xl={6}
+                                        lg={6}
+                                        md={12}
+                                        sm={12}
+                                        selectedUsers={data.speakers as User[]}
+                                        title={t(
+                                            "sessionDetails:label.speakers"
+                                        )}
+                                        icon="speakers"
+                                    />
+                                </Col>
+                            ) : null}
+                            {data.moderators.length > 0 ? (
+                                <Col
                                     md={12}
-                                    sm={12}
-                                    selectedUsers={data.moderators as User[]}
-                                    title={t("sessionDetails:label.moderators")}
-                                    icon="moderators"
-                                />
-                            </Col>
+                                    lg={data.speakers.length > 0 ? 4 : 12}
+                                    className="create-session--speakers"
+                                >
+                                    <AppSessionUsers
+                                        xl={12}
+                                        md={12}
+                                        lg={12}
+                                        sm={12}
+                                        selectedUsers={
+                                            data.moderators as User[]
+                                        }
+                                        title={t(
+                                            "sessionDetails:label.moderators"
+                                        )}
+                                        icon="moderators"
+                                    />
+                                </Col>
+                            ) : null}
                         </Row>
                     </AppCard>
+
                     {isGrantedControl && (
                         <AppCard
                             title={t("sessionDetails:section.operatorActions")}
