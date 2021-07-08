@@ -9,3 +9,4 @@ export * from "./AcceptableResponse";
 export * from "./Partial";
 export * from "./PrimitiveObject";
 export * from "./FileTypeInfo";
+export * from "./SocketCommandPayload";

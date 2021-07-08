@@ -6,6 +6,14 @@ const defaultConfig: SweetAlertOptions = {
     position: "top-end",
 };
 
+const callerIdConfig: SweetAlertOptions = {
+    toast: true,
+    timer: 30000,
+    position: "top-end",
+    showDenyButton: true,
+    showConfirmButton: true,
+};
+
 export const successToast = (
     text: string,
     config?: SweetAlertOptions
@@ -63,4 +71,31 @@ export const showLoader = (
 
 export const hideLoader = (): void => {
     Swal.close();
+};
+
+export const showIncomingCall = (
+    text: string,
+    config?: SweetAlertOptions
+): Promise<SweetAlertResult<boolean>> => {
+    return Swal.fire({
+        ...callerIdConfig,
+        ...config,
+        text,
+        title: "Success",
+        icon: "success",
+    });
+};
+
+export const showOutgoingCall = (
+    text: string,
+    config?: SweetAlertOptions
+): Promise<SweetAlertResult<boolean>> => {
+    return Swal.fire({
+        ...callerIdConfig,
+        ...config,
+        text,
+        title: "Success",
+        icon: "success",
+        showConfirmButton: false,
+    });
 };

@@ -9,6 +9,7 @@ import {
 } from "../../atoms";
 import { AppMessages } from "../../containers/AppMessages";
 import { useChosenContainer } from "../../hooks";
+import { AppCallOneToOne } from "../../containers/AppCallOneToOne";
 
 export const DashboardLayout: FC = ({ children }) => {
     const {
@@ -40,6 +41,7 @@ export const DashboardLayout: FC = ({ children }) => {
                 {isChosen() && !isA3d && (
                     <AppMessages disable={hideMessenger} />
                 )}
+                <AppCallOneToOne />
             </div>
         </Container>
     );

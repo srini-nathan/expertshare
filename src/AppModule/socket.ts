@@ -3,6 +3,7 @@ import { SOCKET_HOST } from "./config/app-env";
 import { PChatMessage } from "./models/entities/ChatMessage";
 import { PUser } from "../AdminModule/models";
 import { PSessionComment } from "./models/entities/SessionComment";
+import { SocketCommandPayload } from "./models";
 
 export const socket = io(SOCKET_HOST, {
     transports: ["websocket"],
@@ -32,6 +33,10 @@ export const EVENTS = {
     ON_NEW_SESSION_QA: "on-new-session-qa",
     ON_EDIT_SESSION_QA: "on-edit-session-qa",
     ON_DELETE_SESSION_QA: "on-delete-session-qa",
+    JOIN_COMMAND_CENTER: "join-command-center",
+    NEW_COMMAND: "new-command",
+    ON_NEW_COMMAND: "on-new-command",
+    LEAVE_COMMAND_CENTER: "leave-command-center",
 };
 
 type OnPageChangePayload = {
@@ -171,4 +176,46 @@ export const deleteSessionQa = (sessionId: number, id: number): void => {
         sessionId,
         id,
     });
+};
+
+export const joinCommandCenter = (userId: number): void => {
+    socket.emit(EVENTS.JOIN_COMMAND_CENTER, {
+        userId,
+    });
+};
+
+export const leaveCommandCenter = (userId: number): void => {
+    socket.emit(EVENTS.LEAVE_COMMAND_CENTER, {
+        userId,
+    });
+};
+
+// @TODO: move this as a new model file under the models dir
+export enum CommandType {
+    NEW_AUDIO_CALL = "new-audio-call",
+    DECLINED_AUDIO_CALL = "declined-audio-call",
+    ACCEPT_AUDIO_CALL = "accept-audio-call",
+    NEW_VIDEO_CALL = "new-video-call",
+    DECLINED_VIDEO_CALL = "declined-video-call",
+    ACCEPT_VIDEO_CALL = "accept-video-call",
+    START_CALL_STREAM = "start-call-stream",
+    JOIN_CALL_STREAM = "join-call-stream",
+    JOINED_CALL_STREAM = "joined-call-stream",
+    END_CALL_STREAM = "end-call-stream",
+}
+
+export const postNewCommand = (
+    from: PUser,
+    to: PUser,
+    type: CommandType,
+    payload: SocketCommandPayload
+): void => {
+    if (socket.connected) {
+        socket.emit(EVENTS.NEW_COMMAND, {
+            from,
+            to,
+            type,
+            payload,
+        });
+    }
 };
