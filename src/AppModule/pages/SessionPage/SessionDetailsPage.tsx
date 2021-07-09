@@ -268,7 +268,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                         </Row>
                     </AppCard>
 
-                    {isGrantedControl && (
+                    {isGrantedControl && next && (
                         <AppCard
                             title={t("sessionDetails:section.operatorActions")}
                         >
