@@ -2,6 +2,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import { navigate } from "@reach/router";
 import { ServerError } from "../../models";
 import { errorToast } from "../../utils";
+import { clearAuthStorage } from "../../../SecurityModule/utils";
 
 export const onResponseFulfilled = (response: AxiosResponse): AxiosResponse => {
     return response;
@@ -16,11 +17,13 @@ export const onResponseRejected = (error: AxiosError): Promise<any> => {
     if (status) {
         if (status === 401) {
             navigate("/auth/login", { state: {} }).then(() => {
-                if (message) {
-                    errorToast(message);
-                } else {
-                    errorToast("You need to login!");
-                }
+                clearAuthStorage().then(() => {
+                    if (message) {
+                        errorToast(message);
+                    } else {
+                        errorToast("You need to login!");
+                    }
+                });
             });
         }
         if (status === 403) {
