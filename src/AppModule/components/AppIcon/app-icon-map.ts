@@ -38,6 +38,7 @@ import {
     faDesktop,
     faGlobe,
     faProjector,
+    faUnlink,
 } from "@fortawesome/pro-regular-svg-icons";
 import { AppIconMap } from "../../models";
 
@@ -87,4 +88,5 @@ export const appIconMap: AppIconMap = {
     Desktop: faDesktop,
     Globe: faGlobe,
     Projector: faProjector,
+    faUnlink,
 };
