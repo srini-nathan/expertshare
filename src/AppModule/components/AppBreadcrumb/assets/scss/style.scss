@@ -2,7 +2,10 @@
 
 .es-breadcrumb {
     margin-bottom: 29px;
-    font-family: var(--font-family-sans-serif);
+    //font-family: var(--font-family-sans-serif);
+    //@TODO Credit Suisse Customization -- start
+    font-family: var(--font-family-body);
+    //@TODO Credit Suisse Customization --end
     font-size: 16px;
     font-weight: 700;
     color: var(--primary) !important;
@@ -13,7 +16,6 @@
         &:hover {
             color: var(--primary);
         }
-
     }
 
     svg {

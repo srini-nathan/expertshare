@@ -112,7 +112,10 @@
                     a {
                         font-size: 14px;
                         font-weight: 500;
-                        font-family: var(--font-family-sans-serif);
+                        //font-family: var(--font-family-sans-serif);
+                        //@TODO Credit Suisse Customization -- start
+                        font-family: var(--font-family-body);
+                        //@TODO Credit Suisse Customization --end
                         padding: 6px 12px !important;
                         height: 36px !important;
                         margin-right: 4px !important;

@@ -38,7 +38,10 @@
     border-radius: var(--border-radius);
     box-shadow: 0 3px 9px var(--box-shadow-box-clr);
     border: unset;
-    font-family: var(--font-family-sans-serif);
+    //font-family: var(--font-family-sans-serif);
+    //@TODO Credit Suisse Customization -- start
+    font-family: var(--font-family-body);
+    //@TODO Credit Suisse Customization --end
     background-color: var(--light-clr);
     border: unset;
     border-radius: var(--border-radius);

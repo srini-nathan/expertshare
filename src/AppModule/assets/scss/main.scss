@@ -5,8 +5,11 @@
 
 body {
     overflow: overlay;
+    //font-family: var(--font-family-sans-serif);
+    //@TODO Credit Suisse Customization -- start
+    font-family: var(--font-family-body);
+    //@TODO Credit Suisse Customization --end
     background-color: var(--body-bg-clr);
-    font-family: var(--font-family-sans-serif);
     scrollbar-color: var(--sidebar-bg-clr) var(--secondary-10);
     scrollbar-width: thin;
 
