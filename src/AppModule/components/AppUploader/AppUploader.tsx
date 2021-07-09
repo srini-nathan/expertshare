@@ -33,7 +33,6 @@ export interface AppUploaderProps {
     cropperOptions?: Options;
     onDelete?: () => void | boolean;
     fileInfo: FileTypeInfo;
-    externalFiles?: any[];
     confirmation?: AppModalRef;
 }
 
@@ -48,7 +47,6 @@ export const AppUploader: FC<AppUploaderProps> = ({
     cropperOptions,
     onDelete,
     fileInfo,
-    externalFiles,
     confirmation,
 }): JSX.Element => {
     const [files, setFiles] = useState<AppFile[]>([]);
@@ -97,7 +95,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
             </ul>
         </li>
     ));
-    const thumbs = (externalFiles || files).map((f: any) => (
+    const thumbs = files.map((f: any) => (
         <div className="thumb-container">
             <div className="thumb-inner">
                 <img src={cropUrl || f.preview} />
@@ -105,7 +103,7 @@ export const AppUploader: FC<AppUploaderProps> = ({
         </div>
     ));
 
-    const thumb = (externalFiles || files).map((f: any) => {
+    const thumb = files.map((f: any) => {
         if (withCropper) return cropUrl;
         return f.preview;
     });

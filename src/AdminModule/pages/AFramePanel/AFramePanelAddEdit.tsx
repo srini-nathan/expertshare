@@ -479,6 +479,13 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
 
     const { errors } = formState;
 
+    const decoratePanelImageUploader = () => {
+        const val = getValue("image");
+        return {
+            imagePath: val ? `${aframepanelImagePath}/${val}` : "",
+        };
+    };
+
     if (loading || loadingForRooms || loadingLanguages) {
         return <AppLoader />;
     }
@@ -537,22 +544,7 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                                         </Form.Label>
                                         <AppUploader
                                             accept="image/*"
-                                            {...(typeof getValue("image") ===
-                                            "string"
-                                                ? {
-                                                      imagePath: `${aframepanelImagePath}/${getValue(
-                                                          "image"
-                                                      )}`,
-                                                  }
-                                                : {})}
-                                            {...(typeof getValue("image") !==
-                                            "string"
-                                                ? {
-                                                      externalFiles: getValue(
-                                                          "image"
-                                                      ),
-                                                  }
-                                                : {})}
+                                            {...decoratePanelImageUploader()}
                                             onFileSelect={(files: File[]) =>
                                                 onTranslatedFieldChange(
                                                     "image",
