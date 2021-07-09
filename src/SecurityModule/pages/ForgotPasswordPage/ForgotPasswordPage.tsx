@@ -61,7 +61,7 @@ export const ForgotPasswordPage: FC<RouteComponentProps> = ({
             <div className="auth-container--box">
                 <Row className="p-0 m-auto">
                     <AppAuthHeader
-                        errorMessage={t(errorMessage)}
+                        errorMessage={errorMessage}
                         title={t("forgotPassword.form:title")}
                         description={t("forgotPassword.form:description")}
                     />
