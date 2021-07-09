@@ -51,7 +51,6 @@ export const ForgotPasswordPage: FC<RouteComponentProps> = ({
         ).then((error) => {
             if (error instanceof UnprocessableEntityErrorResponse) {
                 setViolations<ForgotPasswordForm>(error, setError);
-                errorToast(error.title);
                 setErrorMessage(error.description);
             } else if (navigate) {
                 navigate("/auth/forgot-password-email-confirmation");
@@ -63,7 +62,7 @@ export const ForgotPasswordPage: FC<RouteComponentProps> = ({
             <div className="auth-container--box">
                 <Row className="p-0 m-auto">
                     <AppAuthHeader
-                        errorMessage={errorMessage}
+                        errorMessage={t(errorMessage)}
                         title={t("forgotPassword.form:title")}
                         description={t("forgotPassword.form:description")}
                     />
