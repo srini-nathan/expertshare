@@ -10,10 +10,7 @@ import { AppAuthHeader, AppAuthFooter } from "../../components";
 import "./assets/scss/styles.scss";
 import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { AuthApi } from "../../apis";
-import {
-    validation,
-    setViolations,
-} from "../../../AppModule/utils";
+import { validation, setViolations } from "../../../AppModule/utils";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
 
 type ForgotPassword = {
