@@ -3,6 +3,7 @@ export interface ROLE {
 }
 
 export const ROLES: ROLE = {
+    ROLE_READER: [],
     ROLE_USER: ["ROLE_READER"],
     ROLE_STAFF: ["ROLE_USER", "ROLE_READER"],
     ROLE_RELATION_MANAGER: ["ROLE_USER", "ROLE_READER"],
