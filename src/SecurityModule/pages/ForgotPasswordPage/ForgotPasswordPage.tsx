@@ -12,7 +12,6 @@ import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { AuthApi } from "../../apis";
 import {
     validation,
-    errorToast,
     setViolations,
 } from "../../../AppModule/utils";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
@@ -62,7 +61,7 @@ export const ForgotPasswordPage: FC<RouteComponentProps> = ({
             <div className="auth-container--box">
                 <Row className="p-0 m-auto">
                     <AppAuthHeader
-                        errorMessage={t(errorMessage)}
+                        errorMessage={errorMessage}
                         title={t("forgotPassword.form:title")}
                         description={t("forgotPassword.form:description")}
                     />
