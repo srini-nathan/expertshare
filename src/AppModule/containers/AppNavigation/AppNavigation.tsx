@@ -50,7 +50,7 @@ const {
 } = UPLOAD;
 
 const {
-    ROLE: { ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_OPERATOR },
+    ROLE: { ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_OPERATOR, ROLE_SUPPORT },
 } = Role;
 
 interface AppNavigationProps {
@@ -113,7 +113,8 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
-            isVisible: isGranted(role, ROLE_ADMIN),
+            isVisible:
+                isGranted(role, ROLE_ADMIN) || isGranted(role, ROLE_SUPPORT),
         },
         {
             label: "navigation:administration.userGroups",
@@ -548,46 +549,47 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                     <ListGroupItem
                                         className={`seperator  p-0 mx-4`}
                                     ></ListGroupItem>
-                                    {isGrantedControl && (
-                                        <>
-                                            <ListGroupItem
-                                                className={`nav-item py-2 px-lg-4`}
-                                            >
-                                                <div
-                                                    onClick={() => {
-                                                        isSubMenuItems(
-                                                            !showSubMenuItems
-                                                        );
-                                                    }}
-                                                    className="nav-link"
+                                    {isGrantedControl ||
+                                        (role === ROLE_SUPPORT && (
+                                            <>
+                                                <ListGroupItem
+                                                    className={`nav-item py-2 px-lg-4`}
                                                 >
-                                                    <div className="nav-icon">
-                                                        <AppIcon
-                                                            name={
-                                                                showSubMenuItems
-                                                                    ? "ChevronLeft"
-                                                                    : "Settings"
-                                                            }
-                                                            className={
-                                                                showSubMenuItems
-                                                                    ? "btn-secondary back-to-menu"
-                                                                    : ""
-                                                            }
-                                                        />
+                                                    <div
+                                                        onClick={() => {
+                                                            isSubMenuItems(
+                                                                !showSubMenuItems
+                                                            );
+                                                        }}
+                                                        className="nav-link"
+                                                    >
+                                                        <div className="nav-icon">
+                                                            <AppIcon
+                                                                name={
+                                                                    showSubMenuItems
+                                                                        ? "ChevronLeft"
+                                                                        : "Settings"
+                                                                }
+                                                                className={
+                                                                    showSubMenuItems
+                                                                        ? "btn-secondary back-to-menu"
+                                                                        : ""
+                                                                }
+                                                            />
+                                                        </div>
+                                                        <span>
+                                                            {showSubMenuItems
+                                                                ? t(
+                                                                      "navigation:backToApp"
+                                                                  )
+                                                                : t(
+                                                                      "navigation:administration"
+                                                                  )}
+                                                        </span>
                                                     </div>
-                                                    <span>
-                                                        {showSubMenuItems
-                                                            ? t(
-                                                                  "navigation:backToApp"
-                                                              )
-                                                            : t(
-                                                                  "navigation:administration"
-                                                              )}
-                                                    </span>
-                                                </div>
-                                            </ListGroupItem>
-                                        </>
-                                    )}
+                                                </ListGroupItem>
+                                            </>
+                                        ))}
 
                                     <ListGroupItem
                                         className={`seperator  p-0 mx-4`}

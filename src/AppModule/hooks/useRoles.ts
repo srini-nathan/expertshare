@@ -18,11 +18,15 @@ export function filterRoles(role: string) {
 
     if (role === "ROLE_SUPER_ADMIN") {
         FilterRoute = roles.filter((e: any) => {
-            return e.role === "ROLE_ADMIN" || e.role === "ROLE_SUPER_ADMIN";
+            return (
+                e.role === "ROLE_ADMIN" ||
+                e.role === "ROLE_SUPER_ADMIN" ||
+                e.role === "ROLE_OPERATOR"
+            );
         });
     } else {
         FilterRoute = roles.filter((e: any) => {
-            return e.role !== "ROLE_SUPER_ADMIN" && e.role !== "ROLE_ADMIN";
+            return e.role !== "ROLE_SUPER_ADMIN";
         });
     }
 
