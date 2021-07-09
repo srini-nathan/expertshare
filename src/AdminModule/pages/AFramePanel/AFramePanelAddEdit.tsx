@@ -567,6 +567,10 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                                             }}
                                             onDelete={() => {
                                                 setValue("image", "");
+                                                onTranslatedFieldChange(
+                                                    "image",
+                                                    null
+                                                );
                                                 setFilesToUpload({
                                                     ...filesToUpload,
                                                     image: null,
