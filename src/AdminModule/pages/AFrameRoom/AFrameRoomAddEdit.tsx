@@ -220,6 +220,12 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
                                                 : ""
                                         }
                                         onFileSelect={onFileSelect}
+                                        confirmation={{
+                                            title:
+                                                "admin.aframeroom.form:image.deleteconfirm.title",
+                                            bodyContent:
+                                                "admin.aframeroom.form:image.deleteconfirm.content",
+                                        }}
                                         onDelete={() => {
                                             setValue("image", "");
                                             setData({
