@@ -9,6 +9,7 @@ import {
     AUTH_SKIP_ONBOARDING,
 } from "../../AppModule/config/app-env";
 import { AuthState } from "../models/context/AuthState";
+import { clearAuthStorage } from "../utils";
 
 interface IAuthAction {
     type: AuthActionTypes;
@@ -35,13 +36,6 @@ enum AuthActionTypes {
     LOGOUT,
 }
 export const AuthContext = createContext<AuthState | any>(initialState);
-
-const clearAuthStorage = async () => {
-    localStorage.removeItem(AUTH_TOKEN_KEY);
-    localStorage.removeItem(AUTH_USER_KEY);
-    localStorage.removeItem(AUTH_CHOSEN_CONTAINER);
-    localStorage.removeItem(AUTH_SKIP_ONBOARDING);
-};
 
 function reducer(state: AuthState, action: IAuthAction): AuthState {
     switch (action.type) {
