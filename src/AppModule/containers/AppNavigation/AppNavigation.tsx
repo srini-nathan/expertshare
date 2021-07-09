@@ -36,8 +36,8 @@ import {
 import { CONSTANTS } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
 import { errorToast, isGranted } from "../../utils";
-import { LanguageApi } from "../../../AdminModule/apis";
-import { Language } from "../../../AdminModule/models";
+import { LanguageApi, UserApi } from "../../../AdminModule/apis";
+import { Language, PUser } from "../../../AdminModule/models";
 import { FileTypeInfo } from "../../models";
 import {
     AppDashboardLayoutOptions,
@@ -476,6 +476,11 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             </>
         );
     };
+
+    const updateProfile = async (formData: PUser) => {
+        return UserApi.updateProfile<PUser, PUser>(user.id, formData);
+    };
+
     return (
         <aside
             className={`${menuLocation}-sidebar left-container d-block navbar-expand-md sidebar`}
@@ -613,17 +618,26 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                         onClick: () =>
                                                             isNavOpen(!navOpen),
                                                         action: () => {
-                                                            setUserLocale(e);
-                                                            setLocale(e.locale);
-                                                            navigate(
-                                                                "/reloading",
-                                                                {
-                                                                    state: {
-                                                                        url:
-                                                                            location.pathname,
-                                                                    },
-                                                                }
-                                                            );
+                                                            updateProfile({
+                                                                locale:
+                                                                    e.locale,
+                                                            }).then(() => {
+                                                                setUserLocale(
+                                                                    e
+                                                                );
+                                                                setLocale(
+                                                                    e.locale
+                                                                );
+                                                                navigate(
+                                                                    "/reloading",
+                                                                    {
+                                                                        state: {
+                                                                            url:
+                                                                                location.pathname,
+                                                                        },
+                                                                    }
+                                                                ).then();
+                                                            });
                                                         },
                                                     };
                                                 })}

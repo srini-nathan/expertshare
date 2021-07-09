@@ -5,10 +5,11 @@ import { useTranslation } from "react-i18next";
 import { Link, navigate, useLocation } from "@reach/router";
 import "./assets/scss/style.scss";
 import { AppStreamManager } from "../AppStreamManager";
-import { Session } from "../../../AdminModule/models";
+import { PUser, Session } from "../../../AdminModule/models";
 import { SessionContext, SessionType, useGlobalData } from "../../contexts";
 import { getDateTimeWithoutTimezone } from "../../utils";
-import { useLanguages, useUserLocale } from "../../hooks";
+import { useAuthState, useLanguages, useUserLocale } from "../../hooks";
+import { UserApi } from "../../../AdminModule/apis";
 
 export interface AppSessionHeaderProps {
     session: Session;
@@ -34,6 +35,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
     const [live, isLive] = useState<boolean>(false);
     const { Languages } = useLanguages();
     const location = useLocation();
+    const { userId } = useAuthState();
 
     useEffect(() => {
         return () => {
@@ -52,6 +54,10 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
             }
         };
     }, [live]);
+
+    const updateProfile = async (formData: PUser) => {
+        return UserApi.updateProfile<PUser, PUser>(userId, formData);
+    };
 
     return (
         <Col sm={12} className="session-details-header mb-4 p-0">
@@ -104,11 +110,16 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                                     return (
                                         <span
                                             onClick={() => {
-                                                setLocale(e.locale);
-                                                navigate("/reloading", {
-                                                    state: {
-                                                        url: location.pathname,
-                                                    },
+                                                updateProfile({
+                                                    locale: e.locale,
+                                                }).then(() => {
+                                                    setLocale(e.locale);
+                                                    navigate("/reloading", {
+                                                        state: {
+                                                            url:
+                                                                location.pathname,
+                                                        },
+                                                    }).then();
                                                 });
                                             }}
                                             className="dropdown-item"
