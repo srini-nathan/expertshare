@@ -5,7 +5,11 @@ import { AppQAThread } from "../AppQAThread";
 import { errorToast } from "../../utils";
 import { SessionCommentsAPI } from "../../apis";
 
-import { useAuthState, useSessionSocketEvents } from "../../hooks";
+import {
+    useAuthState,
+    useIsGranted,
+    useSessionSocketEvents,
+} from "../../hooks";
 import { socket, EVENTS } from "../../socket";
 
 import "./assets/scss/style.scss";
@@ -97,6 +101,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
         emitEditSessionQa,
     } = useSessionSocketEvents();
     const { user } = useAuthState();
+    const isGranted = useIsGranted("ROLE_USER");
 
     useEffect(() => {
         if (session) emitJoinSessionQa(session);
@@ -279,17 +284,19 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                     <i className="fak fa-faq"></i>
                     {name}
                 </h2>
-                <div className="tabs-messages m-0 pt-1 pb-2">
-                    <AppСhoseMethodMessage
-                        activeTab="Text"
-                        className="ptop-messages"
-                        rows={2}
-                        enterToPost
-                        handleMessageSend={(message) => {
-                            newMessageSend(message);
-                        }}
-                    />
-                </div>
+                {isGranted ? (
+                    <div className="tabs-messages m-0 pt-1 pb-2">
+                        <AppСhoseMethodMessage
+                            activeTab="Text"
+                            className="ptop-messages"
+                            rows={2}
+                            enterToPost
+                            handleMessageSend={(message) => {
+                                newMessageSend(message);
+                            }}
+                        />
+                    </div>
+                ) : null}
                 <div
                     className="session-details-question--container"
                     onScroll={handleScroll}
