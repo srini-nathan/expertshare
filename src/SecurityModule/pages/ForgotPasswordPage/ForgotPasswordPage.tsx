@@ -12,7 +12,6 @@ import { AppFormInput } from "../../../AppModule/components/AppFormInput";
 import { AuthApi } from "../../apis";
 import {
     validation,
-    errorToast,
     setViolations,
 } from "../../../AppModule/utils";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
