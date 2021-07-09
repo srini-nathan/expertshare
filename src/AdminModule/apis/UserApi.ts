@@ -27,6 +27,7 @@ const {
     api_users_export_collection: API_EXPORT,
     api_users_get_limited_collection: GET_LIMITED_USERS,
     api_users_email_exist_collection: EMAIL_EXIST,
+    api_users_unsubscribe_item: UNSUBSCRIBE,
 } = ROUTES;
 
 export abstract class UserApi extends EntityAPI {
@@ -186,5 +187,21 @@ export abstract class UserApi extends EntityAPI {
                 const { message } = error;
                 return Promise.resolve(new FinalResponse(null, message));
             });
+    }
+
+    public static async unsubscribe<R>(
+        id: number
+    ): Promise<FinalResponse<R | null>> {
+        const config: AxiosRequestConfig = this.getPatchRequestConfig();
+        return this.makePatch<R, R>(
+            route(UNSUBSCRIBE, { id }),
+            JSON.stringify({}),
+            {},
+            config
+        )
+            .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
+            .catch((error: AxiosError | ServerError) =>
+                this.handleErrorDuringCreatingOrUpdating(error)
+            );
     }
 }

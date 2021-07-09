@@ -1,11 +1,12 @@
 import React, { ReactElement, FC } from "react";
 import { ICellRendererParams } from "ag-grid-community";
+import { filter } from "lodash";
 import {
     AppSwitch,
     AppGridAction,
     AppGridActionProps,
 } from "../../../AppModule/components";
-import { User } from "../../models";
+import { PUser, User, UserGroup } from "../../models";
 import {
     useAuthState,
     useBuildAssetPath,
@@ -161,14 +162,15 @@ export const appGridFrameworkComponents = {
     appGridActionRenderer: (
         params: AppCellActionWithRenderParamsUserList
     ): ReactElement => {
-        const { data, onPressDelete } = params;
-        const { id } = data as User;
+        const { data, onPressDelete, api } = params;
+        const { id, userGroups } = data as User;
+        const generatedGroups = filter(
+            userGroups,
+            (grp: UserGroup) => grp.isGenerated
+        );
 
         const props: AppGridActionProps = {
             editAction: {
-                url: `/admin/users/${id}`,
-            },
-            viewAction: {
                 url: `/admin/users/${id}`,
             },
             deleteAction: {
@@ -179,6 +181,26 @@ export const appGridFrameworkComponents = {
             },
         };
 
-        return <AppGridAction {...props} />;
+        const props2 =
+            generatedGroups.length > 1
+                ? {
+                      customClickActions: [
+                          {
+                              confirmation: "Do you want to unsubscribe ?",
+                              confirmationTitle: "Unsubscribe",
+                              icon: "faUnlink",
+                              onClick: () => {
+                                  UserApi.unsubscribe<PUser>(id).then(() => {
+                                      api.refreshServerSideStore({
+                                          purge: true,
+                                      });
+                                  });
+                              },
+                          },
+                      ],
+                  }
+                : {};
+
+        return <AppGridAction {...props} {...props2} />;
     },
 };

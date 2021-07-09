@@ -50,7 +50,7 @@ const {
 } = UPLOAD;
 
 const {
-    ROLE: { ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_OPERATOR },
+    ROLE: { ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_OPERATOR, ROLE_SUPPORT },
 } = Role;
 
 interface AppNavigationProps {
@@ -113,7 +113,8 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             icon: {
                 name: "",
             },
-            isVisible: isGranted(role, ROLE_ADMIN),
+            isVisible:
+                isGranted(role, ROLE_ADMIN) || isGranted(role, ROLE_SUPPORT),
         },
         {
             label: "navigation:administration.userGroups",
@@ -548,7 +549,8 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                     <ListGroupItem
                                         className={`seperator  p-0 mx-4`}
                                     ></ListGroupItem>
-                                    {isGrantedControl && (
+                                    {(isGrantedControl ||
+                                        role === ROLE_SUPPORT) && (
                                         <>
                                             <ListGroupItem
                                                 className={`nav-item py-2 px-lg-4`}
