@@ -1,4 +1,5 @@
 import React from "react";
+import { sortBy } from "lodash";
 import { ContainerApi } from "../../AdminModule/apis/ContainerApi";
 import { GenerateApi } from "../../AdminModule/apis/GenerateApi";
 import { I18nMap, Language, MyContainer } from "../../AdminModule/models";
@@ -63,7 +64,7 @@ export const GlobalProvider: React.FC = (props) => {
                 setState({
                     status: "LOADED",
                     container: response,
-                    languages,
+                    languages: sortBy(languages, [(l) => !l.isDefault]),
                     activeLanguages: languages?.filter((l) => l.isActive),
                     defaultLanguage: languages?.find((l) => l.isDefault),
                 });

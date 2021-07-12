@@ -16,7 +16,7 @@ export interface TranslationsType {
 }
 
 export interface AppFormTranslatableProps {
-    languages: Language[];
+    languages?: Language[];
     onChange: (value: TranslationsType[]) => void;
     setActiveLanguage?: (value: string) => void;
     translations: TranslationsType[];
@@ -24,7 +24,7 @@ export interface AppFormTranslatableProps {
 }
 
 export const AppFormTranslatable: FC<AppFormTranslatableProps> = ({
-    languages,
+    languages = [],
     translations,
     onChange,
     setActiveLanguage,

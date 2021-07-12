@@ -35,7 +35,6 @@ import {
 import {
     Session,
     SessionCategory,
-    Language,
     SessionTag,
     UserGroup,
     User,
@@ -46,7 +45,6 @@ import {
     SessionTagApi,
     SessionCategoryApi,
     SessionApi,
-    LanguageApi,
     ContainerApi,
     UserGroupApi,
     UserApi,
@@ -70,25 +68,14 @@ import { CONSTANTS } from "../../../config";
 import { UploadAPI } from "../../apis";
 import { schema } from "./schemaSession";
 import "./assets/scss/style.scss";
+import { useGlobalData } from "../../contexts";
+import { cardSizeOptions, cardTypeOptions } from "./session-helper";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
     FILETYPE: { FILETYPE_SESSION_POSTER, FILETYPE_SESSION_DOC },
     FILETYPEINFO: { FILETYPEINFO_SESSION_POSTER },
 } = UPLOAD;
-const { Session: SESSION } = CONSTANTS;
-const { CARDSIZE } = SESSION;
-const { CARDTYPE } = SESSION;
-
-const cardSizeOptions = Object.entries(CARDSIZE).map(([, value]) => ({
-    value,
-    label: value,
-}));
-
-const cardTypeOptions = Object.entries(CARDTYPE).map(([, value]) => ({
-    value,
-    label: value,
-}));
 
 export const SessionAddEdit: FC<RouteComponentProps> = ({
     navigate,
@@ -97,8 +84,8 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
     const { conferenceId } = useParams();
     const navigator = useNavigator(navigate);
     const { containerResourceId, containerId, clientId } = useAuthState();
+    const { languages } = useGlobalData();
     const [data, setData] = useState<Session>(new Session(containerResourceId));
-    const [languages, setLanguages] = useState<Language[]>([]);
     const [moderatores, setModeratores] = useState<User[]>([]);
     const [speakers, setSpeakers] = useState<User[]>([]);
     const [totalSpeakers, setTotalSpeakers] = useState<number>(0);
@@ -117,7 +104,6 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
     const [SessionCategories, setSessionCategories] = React.useState<
         SimpleObject<string>[]
     >([]);
-    const [loading, setLoading] = useState<boolean>(true);
     const [loadingData, setLoadingData] = useState<boolean>(true);
     const [loadingCat, setLoadingCat] = useState<boolean>(true);
     const [showExtraLinks, isExtraLink] = useState<boolean>(
@@ -378,32 +364,34 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
     }, [id, isEditMode, trigger]);
 
     useEffect(() => {
-        languages.forEach((e) => {
-            if (e.isDefault) {
-                setDefaultLanguage(e.locale);
-            }
-        });
-        if (languages.length !== translations.length) {
-            const items: TranslationsType[] = languages.map((e) => {
-                let item = {
-                    locale: e.locale,
-                    title: "",
-                    description: "",
-                    streamUrl: "",
-                };
-                translations.forEach((k) => {
-                    if (k.locale === e.locale) {
-                        item = {
-                            locale: k.locale,
-                            title: k.title,
-                            description: k.description,
-                            streamUrl: k.streamUrl as string,
-                        };
-                    }
-                });
-                return item;
+        if (languages) {
+            languages.forEach((e) => {
+                if (e.isDefault) {
+                    setDefaultLanguage(e.locale);
+                }
             });
-            setTranslations(items);
+            if (languages.length !== translations.length) {
+                const items: TranslationsType[] = languages.map((e) => {
+                    let item = {
+                        locale: e.locale,
+                        title: "",
+                        description: "",
+                        streamUrl: "",
+                    };
+                    translations.forEach((k) => {
+                        if (k.locale === e.locale) {
+                            item = {
+                                locale: k.locale,
+                                title: k.title,
+                                description: k.description,
+                                streamUrl: k.streamUrl as string,
+                            };
+                        }
+                    });
+                    return item;
+                });
+                setTranslations(items);
+            }
         }
     }, [languages, translations]);
 
@@ -490,21 +478,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
             }
         );
         getModerators();
-
         getSpeakers();
-        LanguageApi.find<Language>(1, {
-            "container.id": containerId,
-            "order[isDefault]": "desc",
-        }).then(({ error, response }) => {
-            if (error !== null) {
-                if (_isString(error)) {
-                    errorToast(error);
-                }
-            } else if (response !== null) {
-                setLanguages(response.items);
-            }
-            setLoading(false);
-        });
         SessionTagApi.find<SessionTag>(1, {
             "container.id": containerId,
         }).then(({ error, response }) => {
@@ -552,7 +526,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
 
     const { errors } = formState;
 
-    if (loading || loadingCat || loadingData) {
+    if (loadingCat || loadingData) {
         return <AppLoader />;
     }
 
@@ -713,7 +687,6 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                             data.streamType &&
                                             data.streamType.toUpperCase()
                                         }
-                                        languages={languages}
                                         control={control}
                                         formState={formState}
                                         isEditMode={isEditMode}
