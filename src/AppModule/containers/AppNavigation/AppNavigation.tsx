@@ -300,6 +300,13 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         );
     }, []);
 
+    useEffect(() => {
+        if (locale && languages) {
+            const ul = languages.find((e) => e.locale === locale);
+            setUserLocale(ul);
+        }
+    }, [locale, languages]);
+
     const renderMoreMenu = () => {
         return (
             overflowItems.length > 0 && (

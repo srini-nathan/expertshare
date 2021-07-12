@@ -1,5 +1,7 @@
+import { useRecoilState } from "recoil";
 import { USER_LOCALE, CONTAINER_LOCALE } from "../config/app-env";
 import i18n from "../config/i18n";
+import { appUserLocale } from "../atoms";
 
 type UserLocaleType = {
     setLocale: (locale: string) => void;
@@ -9,9 +11,11 @@ type UserLocaleType = {
 };
 
 export function useUserLocale(): UserLocaleType {
+    const [, setValue] = useRecoilState<string>(appUserLocale);
     const setLocale = (locale: string): void => {
         i18n.changeLanguage(locale);
         localStorage.setItem(USER_LOCALE, locale);
+        setValue(locale);
     };
 
     const setContainerLocale = (locale: string): void => {
@@ -19,6 +23,7 @@ export function useUserLocale(): UserLocaleType {
     };
 
     const locale = localStorage.getItem(USER_LOCALE) || "";
+    setValue(locale);
     const containerLocale = localStorage.getItem(CONTAINER_LOCALE) || "en";
 
     return { setLocale, locale, setContainerLocale, containerLocale };
