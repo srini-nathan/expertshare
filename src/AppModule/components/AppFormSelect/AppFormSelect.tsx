@@ -9,7 +9,7 @@ import "./assets/scss/style.scss";
 export interface AppFormSelectProps {
     id: string;
     name: string;
-    defaultValue: PrimitiveObject | string | number;
+    defaultValue?: PrimitiveObject | string | number;
     placeholder?: string;
     label?: string;
     size?: "lg" | "sm";
@@ -50,6 +50,8 @@ export const AppFormSelect: FC<AppFormSelectProps> = ({
 }): JSX.Element => {
     const controlId = id || name;
     return (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         <Form.Group
             as={Col}
             md={md}
