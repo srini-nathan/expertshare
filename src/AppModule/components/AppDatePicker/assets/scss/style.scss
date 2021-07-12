@@ -1,3 +1,11 @@
+@import "../../../../assets/scss/screens-sizes";
+
+.react-datepicker-popper {
+    @include media("not-mobile") {
+        right: 0;
+        left: auto !important;
+    }
+}
 .react-datepicker-wrapper {
     width: 100%;
     input {
@@ -46,7 +54,12 @@
     border: unset;
     border-radius: var(--border-radius);
     box-shadow: 0 10px 20px var(--primary-20);
-
+    .react-datepicker__triangle {
+        @include media("not-mobile") {
+            right: 60px;
+            left: auto !important;
+        }
+    }
     select {
         background-color: var(--input-bg-clr);
         color: var(--input-fg-clr);

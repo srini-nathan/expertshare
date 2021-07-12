@@ -244,13 +244,13 @@
                                 z-index: 4;
                                 display: none;
                                 width: fit-content;
-                                padding: 10px;
                                 margin: auto;
-                                background-color: var(--light-clr);
-                                border-radius: var(--border-radius);
-                                box-shadow: 0 12px 38px var(--secondary-20);
-
                                 &--inner {
+                                    padding: 7px 10px;
+                                    margin-top: 15px;
+                                    background-color: var(--light-clr);
+                                    border-radius: var(--border-radius);
+                                    box-shadow: 2px 12px 38px var(--secondary-30);
                                     &--item {
                                         padding: 2px 5px;
                                         text-align: left;
@@ -264,7 +264,7 @@
                                             color: var(--secondary);
 
                                             i {
-                                                font-size: 15px;
+                                                font-size: 18px;
                                             }
 
                                             svg {

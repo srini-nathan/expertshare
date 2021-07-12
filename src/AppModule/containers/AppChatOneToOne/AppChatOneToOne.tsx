@@ -121,15 +121,15 @@ export const AppChatOneToOne: FC = () => {
                     </div>
                 </div>
                 <div className="row m-0 px-3 py-0">
-                    <div className="tab col-auto p-0 w-100">
+                    <div className="tab col-auto p-0 mb-2 w-100">
                         <div className="row m-0 p-0">
-                            <div className="tab--item active text col-4 pl-0 pr-1">
+                            <div className="tab--item active text col-4 pl-0 pr-2">
                                 <a href="#" className="px-3">
                                     <i className="fak fa-text"></i>
                                     Text
                                 </a>
                             </div>
-                            <div className="tab--item audio col-4 pl-0 pr-1">
+                            <div className="tab--item audio col-4 pl-0 pr-2">
                                 <a
                                     href="#"
                                     className="px-3"

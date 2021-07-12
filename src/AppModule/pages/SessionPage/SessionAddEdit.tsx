@@ -786,9 +786,10 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                         <AppCard>
                             <Form.Row>
                                 <AppFormSwitch
+                                    xs={12}
                                     sm={12}
-                                    md={12}
-                                    lg={3}
+                                    md={6}
+                                    lg={4}
                                     xl={3}
                                     name={"isVisible"}
                                     label={t("session.form:label.isVisible")}
@@ -800,11 +801,13 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     errorMessage={errors.isVisible?.message}
                                     defaultChecked={data.isVisible}
                                     control={control}
+                                    className={"mb-4 form-switch-label-wrap"}
                                 />
                                 <AppFormSwitch
+                                    xs={12}
                                     sm={12}
-                                    md={12}
-                                    lg={3}
+                                    md={6}
+                                    lg={4}
                                     xl={3}
                                     name={"isCommentEnable"}
                                     label={t(
@@ -820,12 +823,14 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     }
                                     defaultChecked={data.isCommentEnable}
                                     control={control}
+                                    className={"mb-4 form-switch-label-wrap"}
                                 />
 
                                 <AppFormSwitch
+                                    xs={12}
                                     sm={12}
-                                    md={12}
-                                    lg={3}
+                                    md={6}
+                                    lg={4}
                                     xl={3}
                                     name={"isCommentModerated"}
                                     label={t(
@@ -841,11 +846,13 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     }
                                     defaultChecked={data.isCommentModerated}
                                     control={control}
+                                    className={"mb-4 form-switch-label-wrap"}
                                 />
                                 <AppFormSwitch
+                                    xs={12}
                                     sm={12}
-                                    md={12}
-                                    lg={3}
+                                    md={6}
+                                    lg={4}
                                     xl={3}
                                     name={"isSharingEnable"}
                                     label={t("session.form:label.isSharing")}
@@ -859,11 +866,13 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     }
                                     defaultChecked={data.isSharingEnable}
                                     control={control}
+                                    className={"mb-4 form-switch-label-wrap"}
                                 />
                                 <AppFormSwitch
+                                    xs={12}
                                     sm={12}
-                                    md={12}
-                                    lg={3}
+                                    md={6}
+                                    lg={4}
                                     xl={3}
                                     name={"isLikeEnable"}
                                     label={t("session.form:label.isLikeEnable")}
@@ -875,11 +884,13 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     errorMessage={errors.isLikeEnable?.message}
                                     defaultChecked={data.isLikeEnable}
                                     control={control}
+                                    className={"mb-4 form-switch-label-wrap"}
                                 />
                                 <AppFormSwitch
+                                    xs={12}
                                     sm={12}
-                                    md={12}
-                                    lg={3}
+                                    md={6}
+                                    lg={4}
                                     xl={3}
                                     name={"isJoinRequired"}
                                     label={t(
@@ -893,11 +904,13 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     errorMessage={errors.isLikeEnable?.message}
                                     defaultChecked={data.isLikeEnable}
                                     control={control}
+                                    className={"mb-4 form-switch-label-wrap"}
                                 />
                                 <AppFormSwitch
+                                    xs={12}
                                     sm={12}
-                                    md={12}
-                                    lg={3}
+                                    md={6}
+                                    lg={4}
                                     xl={3}
                                     name={"isSessionPublic"}
                                     label={t(
@@ -913,11 +926,12 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     }
                                     defaultChecked={data.isSessionPublic}
                                     control={control}
+                                    className={"mb-4 form-switch-label-wrap"}
                                 />
                                 <AppFormSwitch
-                                    sm={12}
-                                    md={12}
-                                    lg={3}
+                                    xs={12}
+                                    md={6}
+                                    lg={4}
                                     xl={3}
                                     name={"isReply"}
                                     label={t("session.form:label.isReplay")}
@@ -929,6 +943,7 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                                     errorMessage={errors.isReply?.message}
                                     defaultChecked={data.isReply}
                                     control={control}
+                                    className={"mb-4 form-switch-label-wrap"}
                                 />
                             </Form.Row>
                         </AppCard>
@@ -1002,9 +1017,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                             <AppFormSwitch
                                 sm={12}
                                 md={12}
-                                lg={3}
-                                xl={3}
-                                className="p-0"
+                                lg={12}
+                                xl={12}
+                                className="p-0 mb-4 form-switch-label-wrap"
                                 name={"isExternalLinkEnable"}
                                 label={t(
                                     "session.form:label.isExtraLinkEnable"
@@ -1071,9 +1086,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                             <AppFormSwitch
                                 sm={12}
                                 md={12}
-                                lg={3}
-                                xl={3}
-                                className="p-0"
+                                lg={12}
+                                xl={12}
+                                className="p-0 mb-4 form-switch-label-wrap"
                                 name={"isSessionAutoSwitch"}
                                 label={t(
                                     "session.form:label.isAutoSwitchSession"
@@ -1092,9 +1107,9 @@ export const SessionAddEdit: FC<RouteComponentProps> = ({
                             <AppFormSwitch
                                 sm={12}
                                 md={12}
-                                lg={3}
-                                xl={3}
-                                className="p-0"
+                                lg={12}
+                                xl={12}
+                                className="p-0 mb-4 form-switch-label-wrap"
                                 name={"isShowInVideoLibrary"}
                                 label={t(
                                     "session.form:label.isShowInVideoLibrary"

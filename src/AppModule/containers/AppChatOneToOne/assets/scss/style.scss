@@ -148,7 +148,7 @@
         }
 
         .chat-list {
-            height: 335px;
+            height: 325px;
             overflow: auto;
             border-top: 1px solid var(--secondary-20);
             border-bottom: 1px solid var(--secondary-20);
@@ -312,7 +312,7 @@
                     background-color: var(--btn-secondary-bg-clr);
                     border: var(--btn-secondary-border-clr);
                     border-radius: var(--border-radius);
-                    box-shadow: 0 3px 9px var(--secondary-10);
+                    box-shadow: 2px 3px 9px var(--secondary-20);
 
                     i {
                         padding-right: 8px;

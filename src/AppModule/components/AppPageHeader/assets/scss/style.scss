@@ -14,7 +14,7 @@
         font-weight: 900;
         line-height: 50.4px;
         color: var(--secondary);
-
+        word-break: break-word;
         @include media("lg") {
             font-size: 2rem;
         }

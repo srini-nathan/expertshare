@@ -24,6 +24,7 @@
     font-size: 12px;
     font-weight: 700;
     color: var(--secondary);
+    word-break: break-word;
 }
 
 .required {
@@ -31,7 +32,7 @@
     font-size: 14px;
     font-weight: 700;
     line-height: 14px;
-    color: #C31F27;
+    color: #c31f27;
 }
 
 .counter {

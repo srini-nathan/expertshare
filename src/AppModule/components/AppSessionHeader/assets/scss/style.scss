@@ -226,6 +226,11 @@
                                 background-position: center;
                                 background-size: contain;
                             }
+                            &.chi {
+                                background: url(../../../AppFormTranslatable/assets/images/chi_flag.png) no-repeat;
+                                background-position: center;
+                                background-size: contain;
+                            }
                         }
                     }
 
@@ -281,6 +286,11 @@
 
                                 &.fr {
                                     background: url(../../../AppFormTranslatable/assets/images/fr_flag.png) no-repeat;
+                                    background-position: center;
+                                    background-size: 24px;
+                                }
+                                &.chi {
+                                    background: url(../../../AppFormTranslatable/assets/images/chi_flag.png) no-repeat;
                                     background-position: center;
                                     background-size: 24px;
                                 }
