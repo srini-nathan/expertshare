@@ -52,6 +52,9 @@
         @include media("lapto4k") {
             margin: 80px auto;
         }
+        .tryagain-forgot-btn {
+            width: fit-content;
+        }
     }
 }
 
@@ -211,7 +214,7 @@
                     cursor: pointer;
                     opacity: 0;
 
-                    &:checked~.custom-checkbox {
+                    &:checked ~ .custom-checkbox {
                         background-color: var(--primary);
 
                         &::after {
