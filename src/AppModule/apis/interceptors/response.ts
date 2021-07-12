@@ -18,11 +18,7 @@ export const onResponseRejected = (error: AxiosError): Promise<any> => {
         if (status === 401) {
             navigate("/auth/login", { state: {} }).then(() => {
                 clearAuthStorage().then(() => {
-                    if (message) {
-                        errorToast(message);
-                    } else {
-                        errorToast("You need to login!");
-                    }
+                    // we don't need to show any message here, just kickout
                 });
             });
         }
