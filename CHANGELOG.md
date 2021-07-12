@@ -16,7 +16,6 @@ ___
 - [x] feat#ER-641 : Hardcode login and on-boarding background image for csgsc.virtual.credit-suisse.com
 - [x] feat#ER-647 : Whenever we change the language either from session, or from navigation menu, it should also set into our profile
 - [x] fix#ER-648  : Handle JWT invalid/expired token error handling
-- [x] fix#ER-648  : Handle JWT invalid/expired token error handling
 - [x] fix#ER-557  : In session detail page, if there are no data in sections, we should not show them completely.
 - [x] fix#ER-443  : Deleting image from 3d panel should ask for confirmation
 - [x] fix#ER-552  : Currently delete door image is not deleting image, either it should work or we should not show the button.
