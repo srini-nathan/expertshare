@@ -3,11 +3,10 @@ ___
 
 ### 05-07-2021 - 09-07-2021
 
- 
 - [x] fix#ER-648  : Handle JWT Token Error on every page and redirect the user to login/registration page as per the flow in settings.
 - [x] feat#CGSC-9 : Credit Suisse fonts apply
 - [x] fix#ER-650  : Missing translation on error message in forgot password page
-- [x] feat#ER-656 : 
+- [x] feat#ER-656 :
     - Make visible operator role while login as super admin on User listing page
     - Make visible Administrator menu to support user and can access only user listing page
     - Unlink feature: If a user belonging to multiple auto-generated groups, can be removed from current container
