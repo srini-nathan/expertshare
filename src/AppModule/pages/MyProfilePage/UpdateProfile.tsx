@@ -3,7 +3,6 @@ import { RouteComponentProps } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
 import { find as _find, isString as _isString } from "lodash";
 import { useTranslation } from "react-i18next";
-
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
@@ -25,19 +24,13 @@ import {
     successToast,
     setViolations,
 } from "../../utils";
-import { useAuthState, useBuildAssetPath } from "../../hooks";
-import {
-    UserApi,
-    UserTagApi,
-    UserFieldApi,
-    LanguageApi,
-} from "../../../AdminModule/apis";
+import { useAuthState, useBuildAssetPath, useUserLocale } from "../../hooks";
+import { UserApi, UserTagApi, UserFieldApi } from "../../../AdminModule/apis";
 import {
     UserTag,
     UserField,
     User as UserModel,
     PUser,
-    Language,
 } from "../../../AdminModule/models";
 import {
     UnprocessableEntityErrorResponse,
@@ -75,28 +68,38 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     const { state, dispatch } = React.useContext(AuthContext);
     const { clientId, user } = state as AuthState;
     const [loading, isLoading] = React.useState<boolean>(false);
-    const [languageLoading, isLanguageLoading] = React.useState<boolean>(true);
     const [dataLoading, isDataLoading] = React.useState<boolean>(true);
     const [fieldLoading, isFieldLoading] = React.useState<boolean>(true);
     const [userTags, setUserTags] = useState<SimpleObject<string>[]>([]);
     const [selectedUserTags, setSelectedUserTag] = useState<
         SimpleObject<string>[]
     >([]);
-    const { containerResourceId, containerId } = useAuthState();
-    const [languages, setLanguages] = useState<SimpleObject<string>[]>([]);
+    const { containerResourceId } = useAuthState();
+    const { locale, setLocale } = useUserLocale();
+    const { container, activeLanguages } = useGlobalData();
+    const [languages] = useState<SimpleObject<string>[]>(
+        activeLanguages
+            ? activeLanguages.map((l) => {
+                  return {
+                      id: `${l.id}`,
+                      value: l.locale,
+                      label: l.name,
+                  };
+              })
+            : []
+    );
+    const [userLocale, setUserLocale] = useState<SimpleObject<string>>();
     const [data, setData] = useState<PUser>(new UserModel(containerResourceId));
     const [userFields, setUserFields] = useState<UserField[]>([]);
     const [files, setFiles] = useState<File[]>([]);
     const profilePicturePath = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo
     );
-    const { container } = useGlobalData();
     const { t } = useTranslation();
     let validationShape = {
         firstName: Yup.string().min(2).required(),
         lastName: Yup.string().min(2).required(),
         company: Yup.string().min(2).required(),
-        jobTitle: Yup.string().min(2).required(),
         timezone: Yup.string().min(2).required(),
         locale: Yup.string().min(2).required(),
     };
@@ -163,7 +166,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                 if (errorMessage) {
                     errorToast(errorMessage);
                 } else if (isNotFound) {
-                    errorToast("Language not exist");
+                    errorToast("User not exist");
                 } else if (response !== null) {
                     setData(response);
                     const selectedTags: SimpleObject<string>[] = [];
@@ -175,10 +178,15 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                         });
                     });
                     setSelectedUserTag(selectedTags);
+                    const uLocale = languages.find(
+                        (l) => l.value === response.locale
+                    );
+                    setUserLocale(uLocale);
                 }
             }
         );
-    }, []);
+    }, [locale]);
+
     const fetchUserFields = () => {
         isFieldLoading(true);
         UserFieldApi.find<UserField>(1, { "client.id": clientId }).then(
@@ -297,7 +305,6 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                     errorToast(error.title);
                 } else if (response !== null) {
                     const isArr = response.userTags instanceof Array;
-
                     if (!isArr) {
                         const userTagsToArray: SimpleObject<string>[] = [];
                         Object.keys(response.userTags).forEach(function (key) {
@@ -305,7 +312,11 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                         });
                         response.userTags = userTagsToArray;
                     }
+                    // @TODO: translation missing
                     successToast("Profile has been updated successfully.");
+                    if (response) {
+                        setLocale(response.locale);
+                    }
                     dispatch({
                         type: 0,
                         payload: {
@@ -315,31 +326,6 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                     });
                 }
             });
-    };
-    useEffect(() => {
-        LanguageApi.find<Language>(1, { "container.id": containerId }).then(
-            ({ error, response }) => {
-                isLanguageLoading(false);
-                if (error !== null) {
-                    if (_isString(error)) {
-                        errorToast(error);
-                    }
-                } else if (response !== null) {
-                    const langs: SimpleObject<string>[] = [];
-                    response.items.forEach((e) => {
-                        langs.push({
-                            id: `${e.id}`,
-                            value: e.locale,
-                            label: e.name,
-                        });
-                    });
-                    setLanguages(langs);
-                }
-            }
-        );
-    }, []);
-    const getLocale = () => {
-        return languages.find((e) => e.value === user?.locale) || "";
     };
     const onSubmit = async (formData: UserModel) => {
         if (files.length > 0) {
@@ -366,7 +352,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
         return submitForm(formData);
     };
 
-    if (languageLoading || dataLoading || fieldLoading) return <AppLoader />;
+    if (dataLoading || fieldLoading) return <AppLoader />;
 
     return (
         <>
@@ -460,14 +446,14 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                             formState,
                                             true
                                         )}
-                                        defaultValue={getLocale()}
+                                        defaultValue={userLocale}
                                         placeholder={"Locale"}
                                         errorMessage={errors.locale?.message}
                                         options={languages}
                                         control={control}
                                         transform={{
-                                            output: (locale: PrimitiveObject) =>
-                                                locale?.value,
+                                            output: (l: PrimitiveObject) =>
+                                                l?.value,
                                             input: (value: string) => {
                                                 return _find([], {
                                                     value,

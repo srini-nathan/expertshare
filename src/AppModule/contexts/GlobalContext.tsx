@@ -1,13 +1,16 @@
 import React from "react";
 import { ContainerApi } from "../../AdminModule/apis/ContainerApi";
 import { GenerateApi } from "../../AdminModule/apis/GenerateApi";
-import { I18nMap, MyContainer } from "../../AdminModule/models";
+import { I18nMap, Language, MyContainer } from "../../AdminModule/models";
 import i18n from "../config/i18n";
 import { CONTAINER_LOCALE } from "../config/app-env";
 
 interface GlobalState {
     status: "LOADED" | "LOADING" | "ERROR";
     container?: MyContainer;
+    languages?: Language[];
+    activeLanguages?: Language[];
+    defaultLanguage?: Language;
 }
 
 const Global = React.createContext<GlobalState | null>(null);
@@ -53,14 +56,16 @@ export const GlobalProvider: React.FC = (props) => {
                             }
                         })
                     ).catch((e) => {
-                        // @TODO: error happing
                         // eslint-disable-next-line no-console
-                        console.log(e, "error");
+                        console.error(e);
                     });
                 }
                 setState({
                     status: "LOADED",
                     container: response,
+                    languages,
+                    activeLanguages: languages?.filter((l) => l.isActive),
+                    defaultLanguage: languages?.find((l) => l.isDefault),
                 });
             } else {
                 setState({ status: "ERROR" });
