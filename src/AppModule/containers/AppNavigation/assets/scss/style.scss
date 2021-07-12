@@ -769,7 +769,10 @@
 
                                     i {
                                         margin: 0;
-                                        margin-bottom: 8px;
+                                        //margin-bottom: 8px;
+                                        //@TODO Credit Suisse Customization -- start
+                                        margin-bottom: 0;
+                                        //@TODO Credit Suisse Customization -- end
                                         font-size: 22px;
                                         font-weight: 400;
                                     }

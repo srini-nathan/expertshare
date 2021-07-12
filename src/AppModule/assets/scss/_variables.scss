@@ -139,15 +139,20 @@
 :root {
     //font
     --font-family-sans-serif: "grotesque";
-    --divider-clr: #E6E8E8;
+    //@TODO Credit Suisse Specially Variables
+    --font-family-title: "creditsuisse-title";
+    --font-family-body: "creditsuisse-body";
+    --font-family-button: "creditsuisse-button";
 
     //main colors
-    --body-bg-clr: #EDEDED;
-    --body-bg-with-iframe-clr: #EDEDEDCB;
-    --light-clr: #FFF;
+    --body-bg-clr: #ededed;
+    --body-bg-with-iframe-clr: #edededcb;
+    --light-clr: #fff;
+    --divider-clr: #e6e8e8;
+
     //Grid Colors
     --row-odd-bg-clr: #00000010;
-    --box-shadow-box-clr: rgba(181, 181, 181, .52);
+    --box-shadow-box-clr: rgba(181, 181, 181, 0.52);
 
     //primary color range
     --primary: #000;
@@ -174,14 +179,14 @@
     --secondary-80: #44444480;
     --secondary-90: #44444490;
     //input colors
-    --input-bg-clr: #FCFCFC;
+    --input-bg-clr: #fcfcfc;
     --input-fg-clr: #051515;
-    --input-border-clr: #A7A7A7;
+    --input-border-clr: #a7a7a7;
     --border-radius: 5px;
 
     //widget colors
-    --widget-bg-color: #36999C15;
-    --widget-bg-clr: #A0B2C020;
+    --widget-bg-color: #36999c15;
+    --widget-bg-clr: #a0b2c020;
     --widget-border-clr: #000;
 
     //button colors
@@ -189,91 +194,91 @@
     --btn-border-clr: #000;
     --btn-bg-clr-20: #00000020;
     --btn-hover-bg-clr: #000;
-    --btn-hover-fg-clr: #FFF;
+    --btn-hover-fg-clr: #fff;
     --btn-hover-border-clr: #000;
-    --btn-fg-clr: #FFF;
-    --btn-fg-clr-60: #FFFFFF60;
+    --btn-fg-clr: #fff;
+    --btn-fg-clr-60: #ffffff60;
     --btn-hover-border-clr: transparent;
     --btn-secondary-fg-clr: #444;
-    --btn-secondary-bg-clr: #FFF;
-    --btn-secondary-border-clr: #FFF;
+    --btn-secondary-bg-clr: #fff;
+    --btn-secondary-border-clr: #fff;
     --btn-hover-secondary-fg-clr: #444;
-    --btn-hover-secondary-bg-clr: #FFF;
-    --btn-hover-secondary-border-clr: #FFF;
-    --speaker-btn-bg-clr: #7EBDE9;
-    --live-badge-bg-clr: #2CDA9D;
+    --btn-hover-secondary-bg-clr: #fff;
+    --btn-hover-secondary-border-clr: #fff;
+    --speaker-btn-bg-clr: #7ebde9;
+    --live-badge-bg-clr: #2cda9d;
 
     //check box color
     --checkbox-checked-bg: #000;
-    --checkbox-not-checked-bg: #D7EAEB;
-    --checkbox-toggler-not-checked-clr: #98CBCC;
-    --checkbox-toggler-checked-clr: #FCFCFC;
-    --checkbox-block-bg-clr: #F7FBFB;
+    --checkbox-not-checked-bg: #d7eaeb;
+    --checkbox-toggler-not-checked-clr: #98cbcc;
+    --checkbox-toggler-checked-clr: #fcfcfc;
+    --checkbox-block-bg-clr: #f7fbfb;
     --checkbox-block-border-radius: var(--border-radius);
 
     // sidebar colors
     --sidebar-bg-clr: #000;
-    --sidebar-item-hover-bg-clr: #FFFFFF10;
-    --sidebar-hover-bg-clr: #FFFFFF10;
-    --sidebar-fg-clr: #FFF;
-    --sidebar-hover-fg-clr: #FFF;
-    --sidebar-icon-clr: #FFFFFF90;
-    --sidebar-hover-icon-clr: #FFF;
-    --sidebar-menu-extra-bg-clr: #D4EBEA;
-    --sidebar-sub-menu-bg-clr: #D4E7E8;
+    --sidebar-item-hover-bg-clr: #ffffff10;
+    --sidebar-hover-bg-clr: #ffffff10;
+    --sidebar-fg-clr: #fff;
+    --sidebar-hover-fg-clr: #fff;
+    --sidebar-icon-clr: #ffffff90;
+    --sidebar-hover-icon-clr: #fff;
+    --sidebar-menu-extra-bg-clr: #d4ebea;
+    --sidebar-sub-menu-bg-clr: #d4e7e8;
 
     //Login Page
-    --agree-bg-clr: #FFF;
-    --agree-scrollbar-track-bg-clr: #A0B2C0;
-    --placeholder-fg-clr: #939AA7;
-    --placeholder-auth-fg-clr: #A0B2C0;
-    --border-text-box: #A0B2C0;
-    --border-inner-box: #A0B2C030;
-    --border-separate-box: #A0B2C050;
+    --agree-bg-clr: #fff;
+    --agree-scrollbar-track-bg-clr: #a0b2c0;
+    --placeholder-fg-clr: #939aa7;
+    --placeholder-auth-fg-clr: #a0b2c0;
+    --border-text-box: #a0b2c0;
+    --border-inner-box: #a0b2c030;
+    --border-separate-box: #a0b2c050;
     --checkbox-border-radius: 1px;
-    --checkbox-label-fg-clr: #939AA7;
-    --checkbox-not-checked-bg: #EAF8F6;
-    --container-box-bg-clr: #FFF;
-    --sub-text-fg-clr: #A0B2C0;
-    --p-sub-fg-clr: #5B6275;
-    --i-fg-clr: #FFF;
-    --i-bg-clr: #FFF;
-    --docx-i-bg-clr: #3B6CC7;
-    --pdf-i-bg-clr: #C72424;
-    --pptx-i-bg-clr: #F88703;
-    --xls-i-bg-clr: #11824C;
-    --file-icon-bg-clr: #FFF;
-    --live-btn-bg-clr: #EB5353;
+    --checkbox-label-fg-clr: #939aa7;
+    --checkbox-not-checked-bg: #eaf8f6;
+    --container-box-bg-clr: #fff;
+    --sub-text-fg-clr: #a0b2c0;
+    --p-sub-fg-clr: #5b6275;
+    --i-fg-clr: #fff;
+    --i-bg-clr: #fff;
+    --docx-i-bg-clr: #3b6cc7;
+    --pdf-i-bg-clr: #c72424;
+    --pptx-i-bg-clr: #f88703;
+    --xls-i-bg-clr: #11824c;
+    --file-icon-bg-clr: #fff;
+    --live-btn-bg-clr: #eb5353;
     --spc-btn-border-radius: 17px;
     --circle-border-radius: 50%;
-    --online-badge-bg-clr: #2CDA9D;
-    --count-bg-clr: #F43F3F;
-    --count-fg-clr: #FFF;
-    --countdown-timer-session-fg-clr: #FFF;
+    --online-badge-bg-clr: #2cda9d;
+    --count-bg-clr: #f43f3f;
+    --count-fg-clr: #fff;
+    --countdown-timer-session-fg-clr: #fff;
     //Toast Colors
-    --toast-fg-clr: #FFF;
-    --success-toast-clr: #27AE60;
-    --error-toast-clr: #EB5757;
+    --toast-fg-clr: #fff;
+    --success-toast-clr: #27ae60;
+    --error-toast-clr: #eb5757;
     //Message box colors
-    --message-in-box-fg-clr: #7EBDE920;
+    --message-in-box-fg-clr: #7ebde920;
 
     //video call colors
     --video-call-bg-clr: #000;
     --video-call-grey-bg-clr: #444;
     --video-call-grey-bg-clr-opacity: #44444410;
     --video-call-transparent-bg-clr: transparent;
-    --video-call-fg-clr: #FFF;
-    --dark-btn-bg-clr: #FFFFFF10;
-    --dark-btn-fg-clr: #FFF;
-    --dark-btn-active-bg-clr: #FFF;
+    --video-call-fg-clr: #fff;
+    --dark-btn-bg-clr: #ffffff10;
+    --dark-btn-fg-clr: #fff;
+    --dark-btn-active-bg-clr: #fff;
     --dark-btn-active-fg-clr: #232323;
-    --video-sc-thumb-bg-clr: #A0B2C0;
-    --end-call-btn-bg-clr: #EB5757;
-    --start-call-btn-bg-clr: #2CDA9D;
-    --members-box-bg-clr: #FFF;
-    --light-bg-clr-scrollbar: #FFF;
-    --sit-btn-bg-clr: #EB5757;
-    --sit-btn-fg-clr: #FFF;
+    --video-sc-thumb-bg-clr: #a0b2c0;
+    --end-call-btn-bg-clr: #eb5757;
+    --start-call-btn-bg-clr: #2cda9d;
+    --members-box-bg-clr: #fff;
+    --light-bg-clr-scrollbar: #fff;
+    --sit-btn-bg-clr: #eb5757;
+    --sit-btn-fg-clr: #fff;
     --non-video-bg-clr: #444;
     --overlay-option-bg-clr: #00000090;
 }

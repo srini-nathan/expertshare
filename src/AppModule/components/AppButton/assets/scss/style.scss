@@ -1,6 +1,9 @@
 @import "../../../../assets/scss/variables";
 
 .btn {
+    //@TODO Credit Suisse Customization -- start
+    font-family: var(--font-family-button);
+    //@TODO Credit Suisse Customization -- end
     padding: 0 20px !important;
     font-size: 14px !important;
     line-height: 36px !important;
@@ -69,6 +72,5 @@
         color: var(--btn-hover-bg-clr) !important;
         box-shadow: unset !important;
         outline: unset !important;
-
     }
 }

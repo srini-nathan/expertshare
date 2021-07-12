@@ -7,8 +7,11 @@
 
     h1 {
         margin-bottom: 0;
+        //@TODO Credit Suisse Customization -- start
+        font-family: var(--font-family-title);
+        //@TODO Credit Suisse Customization -- end
         font-size: 42px;
-        font-weight: 700;
+        font-weight: 900;
         line-height: 50.4px;
         color: var(--secondary);
 
