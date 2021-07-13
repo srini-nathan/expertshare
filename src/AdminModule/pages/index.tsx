@@ -14,3 +14,4 @@ export * from "./UserListPage";
 export * from "./SessionCategoryPage";
 export * from "./AFrameRoom";
 export * from "./AFramePanel";
+export * from "./InfoPage";
