@@ -195,7 +195,6 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                     errorToast("Language not exist");
                 } else if (response !== null) {
                     setData(response);
-                    trigger();
                     const selected = [] as SimpleObject<string>[];
                     response.conferenceTags?.forEach(({ id: ugId, name }) => {
                         selected.push({
@@ -217,6 +216,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                     setTranslations(items);
                 }
                 setLoading(false);
+                trigger();
             });
         }
     }, [id, isEditMode, trigger]);
