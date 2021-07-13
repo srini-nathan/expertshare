@@ -3,7 +3,7 @@ import { Row, Col, Tab } from "react-bootstrap";
 import { UseFormSetValue } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import "./assets/scss/style.scss";
-import { Language, Session } from "../../../AdminModule/models";
+import { Session } from "../../../AdminModule/models";
 import { AppCustomTab } from "../AppCustomTab";
 import { AppFormInput } from "../AppFormInput";
 import { AppFormLabel } from "../AppFormLabel";
@@ -12,7 +12,6 @@ import { AppReactHookFormProps } from "../../models";
 import { validation } from "../../utils";
 
 export interface AppSelectStreamProps extends AppReactHookFormProps {
-    languages: Language[];
     onChange: (value: TranslationsType[]) => void;
     setActiveLanguage?: (name: string) => void;
     changeValue?: UseFormSetValue<Session>;

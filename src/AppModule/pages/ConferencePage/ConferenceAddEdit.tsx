@@ -44,11 +44,11 @@ import {
     useNavigator,
     useAuthState,
     useBuildAssetPath,
-    useLanguages,
 } from "../../hooks";
 import { schema } from "./schema";
 import { CONSTANTS } from "../../../config";
 import { UploadAPI } from "../../apis";
+import { useGlobalData } from "../../contexts";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -65,7 +65,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
     const [data, setData] = useState<PConference>(
         new Conference(containerResourceId)
     );
-    const { Languages } = useLanguages();
+    const { languages } = useGlobalData();
     const [conferenceTags, setConferenceTags] = React.useState<
         SimpleObject<string>[]
     >([]);
@@ -195,7 +195,6 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                     errorToast("Language not exist");
                 } else if (response !== null) {
                     setData(response);
-                    trigger();
                     const selected = [] as SimpleObject<string>[];
                     response.conferenceTags?.forEach(({ id: ugId, name }) => {
                         selected.push({
@@ -217,18 +216,19 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                     setTranslations(items);
                 }
                 setLoading(false);
+                trigger();
             });
         }
     }, [id, isEditMode, trigger]);
 
     useEffect(() => {
-        Languages().forEach((e) => {
+        languages?.forEach((e) => {
             if (e.isDefault) {
                 setDefaultLanguage(e.locale);
             }
         });
-        if (Languages().length !== translations.length) {
-            const items: TranslationsType[] = Languages().map((e) => {
+        if (languages && languages.length !== translations.length) {
+            const items: TranslationsType[] = languages.map((e) => {
                 let item = {
                     locale: e.locale,
                     title: "",
@@ -248,7 +248,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
             setTranslations(items);
         }
         setLoading(false);
-    }, [Languages()]);
+    }, [languages]);
     useEffect(() => {
         ConferenceTagApi.find<ConferenceTag>(1, {
             "container.id": containerId,
@@ -295,7 +295,7 @@ export const ConferenceAddEdit: FC<RouteComponentProps> = ({
                     <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                         <AppCard>
                             <AppFormTranslatable
-                                languages={Languages()}
+                                languages={languages}
                                 defaultLanguage={defaultLanguage}
                                 translations={translations}
                                 onChange={setTranslations}
