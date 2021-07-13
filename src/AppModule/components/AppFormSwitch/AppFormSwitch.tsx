@@ -8,6 +8,7 @@ import "./assets/scss/style.scss";
 export interface AppFormSwitchProps {
     id?: string;
     name: string;
+    xs?: string | number;
     sm?: string | number;
     md?: string | number;
     lg?: string | number;
@@ -55,7 +56,7 @@ export const AppFormSwitch: FC<AppFormSwitchProps> = ({
 
     return (
         <Form.Group
-            className={`col form-group ${colClasses} ${className}`}
+            className={`form-group ${colClasses} ${className}`}
             controlId={controlId}
         >
             <Form.Label>

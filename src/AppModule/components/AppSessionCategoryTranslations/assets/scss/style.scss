@@ -1,7 +1,6 @@
 @import "../../../../assets/scss/variables";
 
 .translatable-container {
-
     .active {
         color: var(--primary) !important;
         background-color: var(--primary-20) !important;
@@ -53,5 +52,10 @@
             background-size: 20px;
         }
     }
-
+    .chi {
+        i {
+            background: url(../images/chi_flag.png);
+            background-size: 20px;
+        }
+    }
 }

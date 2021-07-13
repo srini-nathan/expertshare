@@ -148,7 +148,7 @@
         }
 
         .chat-list {
-            height: 335px;
+            height: 325px;
             overflow: auto;
             border-top: 1px solid var(--secondary-20);
             border-bottom: 1px solid var(--secondary-20);
@@ -250,6 +250,7 @@
                                 font-weight: 400;
                                 line-height: 150%;
                                 color: var(--secondary);
+                                word-break: break-word;
                             }
                         }
                     }
@@ -311,7 +312,7 @@
                     background-color: var(--btn-secondary-bg-clr);
                     border: var(--btn-secondary-border-clr);
                     border-radius: var(--border-radius);
-                    box-shadow: 0 3px 9px var(--secondary-10);
+                    box-shadow: 2px 3px 9px var(--secondary-20);
 
                     i {
                         padding-right: 8px;
@@ -366,20 +367,39 @@
             &--container {
                 display: flex;
                 align-items: center;
-                height: 36px;
+                min-height: 36px;
                 border: 1px solid var(--secondary-70);
                 border-radius: var(--border-radius);
 
-                input {
+                textarea {
                     width: 85%;
-                    padding-top: 4px;
+                    height: 36px;
+                    padding-top: 9px;
                     padding-left: 35px;
                     font-size: 14px;
                     font-weight: 400;
                     color: var(--secondary);
+                    resize: none;
                     background-color: unset;
                     border: none;
+                    scrollbar-color: var(--secondary) var(--secondary-10);
+                    scrollbar-width: thin;
+                    scroll-behavior: auto;
+                    &::-webkit-scrollbar {
+                        width: 3px;
+                    }
 
+                    &::-webkit-scrollbar-track {
+                        background: var(--secondary-10);
+                    }
+
+                    &::-webkit-scrollbar-thumb {
+                        background: var(--secondary);
+                    }
+
+                    &::-webkit-scrollbar-thumb:hover {
+                        opacity: 50%;
+                    }
                     &:focus {
                         outline: none;
                     }
@@ -392,7 +412,7 @@
                 .btn-link {
                     &.btn-send {
                         position: absolute;
-                        top: 1px;
+                        top: 3px;
                         right: 0;
                         padding-right: 10px !important;
                         padding-left: 10px !important;

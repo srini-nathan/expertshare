@@ -21,12 +21,14 @@ export const ForgotPasswordConfirmationPage: FC<RouteComponentProps> = (): JSX.E
                     <span className="text-center w-100 p-3">
                         {t("forgotPasswordConfirmation:message")}
                         <br />
-                        <Link to="/auth/forgot-password">
+                        <Link
+                            to="/auth/forgot-password"
+                            className="btn btn-secondary tryagain-forgot-btn mt-3 mx-auto"
+                        >
                             <b>
                                 {t("forgotPasswordConfirmation:label.tryAgain")}
                             </b>
                         </Link>
-                        .
                     </span>
                 </Row>
             </div>

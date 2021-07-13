@@ -33,11 +33,11 @@ export const AppChatOneToOneComposer: FC<AppChatOneToOneComposerProps> = ({
                             </span>
                         </div>
                     </div>
-                    <input
+                    <textarea
                         name="msg-composer"
+                        rows={1}
                         placeholder="Write your message ..."
                         value={data}
-                        type="text"
                         onChange={(e) => {
                             setData(e.currentTarget.value);
                             onTypingAction(e.currentTarget.value);
