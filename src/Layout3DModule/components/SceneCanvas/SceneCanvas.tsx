@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-console */
 import { Canvas } from "@react-three/fiber";
 import React, { Suspense, useEffect, useRef, useState } from "react";
 // import { createPortal } from "react-dom";
@@ -20,6 +19,7 @@ import {
 import { simulatedParams } from "../Helpers/Simdata";
 import { use3DHelper } from "../../hooks";
 import { CONSTANTS } from "../../../config";
+import { degToRad } from "../Helpers/Utils";
 
 const { AFramePanel } = CONSTANTS;
 
@@ -61,9 +61,9 @@ export const SceneCanvas = ({
     );
     const [initialCameraRotation, setInitialCameraRotation] = useState<Euler>(
         new Euler(
-            roomsData[currentMainRoom].camera.rotation.x,
-            roomsData[currentMainRoom].camera.rotation.y,
-            roomsData[currentMainRoom].camera.rotation.z
+            degToRad(roomsData[currentMainRoom].camera.rotation.x),
+            degToRad(roomsData[currentMainRoom].camera.rotation.y),
+            degToRad(roomsData[currentMainRoom].camera.rotation.z)
         )
     );
     const [targetPosition, setTargetPosition] = useState<ToFromProps>(null!);

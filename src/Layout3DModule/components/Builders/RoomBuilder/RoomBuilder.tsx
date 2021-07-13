@@ -93,7 +93,7 @@ export const RoomBuilder = ({
             degToRad(camRotation.y),
             degToRad(camRotation.z)
         );
-        setInitialCameraRotation(initialEuler);
+        if (isTransitionEnabled) setInitialCameraRotation(initialEuler);
 
         // videoS;
         onChangeRoom(

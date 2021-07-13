@@ -117,7 +117,14 @@ export const inverseUpsideDownCamera = (camRotation: Euler): Euler => {
     const xGrad = radToDeg(camRotation.x);
     // const yGrad = radToDeg(camRotation.y);
     const zGrad = radToDeg(camRotation.z);
-
+    // console.log(
+    //     "camRotation: ",
+    //     camRotation,
+    //     "\n xGrad: ",
+    //     xGrad,
+    //     "\n zGrad: ",
+    //     zGrad
+    // );
     if (xGrad > -180 && xGrad < -179) {
         if (zGrad > -180 && zGrad < -179) {
             newRotation.set(0, -Math.PI - camRotation.y, 0);
@@ -130,6 +137,16 @@ export const inverseUpsideDownCamera = (camRotation: Euler): Euler => {
         }
     }
 
+    if (xGrad > 180 && xGrad < 181) {
+        if (zGrad > -180 && zGrad < -179) {
+            newRotation.set(
+                0, // camRotation.x - Math.PI,
+                -Math.PI - camRotation.y,
+                0 // camRotation.z + Math.PI
+            );
+        }
+    }
+    // console.log("newRotation: ", newRotation);
     return newRotation;
 };
 
