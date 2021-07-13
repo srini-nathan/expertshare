@@ -123,7 +123,7 @@ export const AppFormTranslatable: FC<AppFormTranslatableProps> = ({
                 />
 
                 <Form.Control.Feedback className={"d-block"} type="invalid">
-                    {!getTitleError() && "This feild is required"}
+                    {!getTitleError() && "This field is required"}
                 </Form.Control.Feedback>
             </Form.Group>
 
@@ -142,7 +142,7 @@ export const AppFormTranslatable: FC<AppFormTranslatableProps> = ({
                     }}
                 />
                 <Form.Control.Feedback className={"d-block"} type="invalid">
-                    {!getDescriptionError() && "This feild is required"}
+                    {!getDescriptionError() && "This field is required"}
                 </Form.Control.Feedback>
             </Form.Group>
         </Row>

@@ -21,3 +21,5 @@ export * from "./SessionDoc";
 export * from "./AFrameRoom";
 export * from "./AFramePanel";
 export * from "./MyContainer";
+export * from "./InfoPage";
+export * from "./InfoPageTranslations";

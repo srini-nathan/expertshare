@@ -20,3 +20,4 @@ export * from "./SessionCategoryApi";
 export * from "./SessionDocumentApi";
 export * from "./AFrameRoomApi";
 export * from "./AFramePanelApi";
+export * from "./InfoPageApi";
