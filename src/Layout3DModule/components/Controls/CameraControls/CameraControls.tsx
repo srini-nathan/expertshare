@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-console */
 import {
     extend,
     ReactThreeFiber,
@@ -180,9 +179,10 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
     };
 
     const createAnimationBack = (
-        to: Euler,
         from: Euler,
+        to: Euler,
         duration: number,
+        callbackChange: () => void,
         callback: any
     ) => {
         // console.log("from : ", to, " to : ", from);
@@ -210,6 +210,8 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                     perspectiveFirstPerson.current,
                     rotation.value
                 );
+                callbackChange();
+                // orbit.current.update();
             },
             onResolve: () => {
                 orbit.current.object = perspectiveFirstPerson.current as PerspectiveCameraOriginal;
@@ -230,9 +232,17 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
             afterVideoReference.current.from.z
         );
         createAnimationBack(
-            afterVideoReference.current.to,
             afterVideoReference.current.from,
+            afterVideoReference.current.to,
             afterVideoReference.current.duration,
+            // for animation on change
+            () => {
+                orbit.current.target = getNewTarget(
+                    perspectiveFirstPerson.current,
+                    0.001
+                );
+                orbit.current.update();
+            },
             () => {
                 orbit.current.target = getNewTarget(
                     perspectiveFirstPerson.current,
@@ -369,6 +379,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                     targetData.toRotation.clone(),
                     fakeCam.rotation.clone()
                 );
+                // tRotation = fakeCam.rotation.clone();
                 tRotation = inverseUpsideDownCamera(tRotation);
 
                 afterVideoReference.current = {
@@ -424,9 +435,18 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                             // change room without video
                             changeRoomNow(currentRoom);
                             createAnimationBack(
-                                tRotation,
                                 targetData.toRotation.clone(),
+                                tRotation,
                                 targetData.duration,
+                                // for animation on change
+                                () => {
+                                    orbit.current.target = getNewTarget(
+                                        perspectiveFirstPerson.current,
+                                        0.001
+                                    );
+                                    orbit.current.update();
+                                },
+                                // callback for aniation complete
                                 () => {
                                     orbit.current.target = getNewTarget(
                                         perspectiveFirstPerson.current,
@@ -444,19 +464,34 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
             } else {
                 // transition not enabled
                 changeRoomNow(currentRoom);
-
+                orbit.current.enabled = false;
                 t = setTimeout(() => {
+                    // changeRoomNow(currentRoom);
+                    orbit.current.enabled = false;
+                    // changeRoomNow(currentRoom);
+                    // console.log(
+                    //     "setting to camera rotation: ",
+                    //     targetData.toRotation
+                    // );
                     camera.rotation.set(
                         targetData.toRotation.x,
                         targetData.toRotation.y,
-                        targetData.toRotation.y
+                        targetData.toRotation.z
                     );
+                    camera.updateMatrix();
+                    // applyRotationToCamera(
+                    //     perspectiveFirstPerson.current,
+                    //     targetData.toRotation
+                    // );
+                    // orbit.current.update();
                     orbit.current.target = getNewTarget(
                         perspectiveFirstPerson.current,
                         0.001
                     );
                     orbit.current.update();
-                }, ROOM_FADE_DURATION);
+                    orbit.current.enabled = true;
+                    // orbit.current.update();
+                }, ROOM_FADE_DURATION + PANEL_ANIMATION_DURATION);
             }
         }
     }, [isTransitionEnabled, currentRoom, targetData]);
