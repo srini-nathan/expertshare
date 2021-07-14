@@ -43,6 +43,7 @@ export const InfoPageListPage: FC<RouteComponentProps> = (): JSX.Element => {
                         order: buildSortParams(request),
                         ...buildFilterParams(request),
                         "container.id": containerId,
+                        "groups[]": "translations",
                     },
                     (c) => {
                         cancelTokenSourcesRef.current.push(c);
@@ -85,9 +86,6 @@ export const InfoPageListPage: FC<RouteComponentProps> = (): JSX.Element => {
 
     async function handleFilter(search: string) {
         appGridApi.current?.setFilterModel({
-            slugKey: {
-                filter: search,
-            },
             "translations.title": {
                 filter: search,
             },

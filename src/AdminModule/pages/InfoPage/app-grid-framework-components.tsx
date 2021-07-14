@@ -1,13 +1,30 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "react-i18next";
+import { findIndex } from "lodash";
 import {
     AppGridAction,
     AppGridActionProps,
 } from "../../../AppModule/components";
-import { InfoPage } from "../../models";
+import { InfoPage, InfoPageTranslations } from "../../models";
 import { AppCellActionWithRenderWithCustom } from "./app-actions";
+import { useGlobalData } from "../../../AppModule/contexts";
 
 export const appGridFrameworkComponents = {
+    AppTitleRender: (
+        params: AppCellActionWithRenderWithCustom
+    ): ReactElement => {
+        const { defaultLanguage } = useGlobalData();
+        const { data } = params;
+        const { translations } = data as InfoPage;
+        let title = "";
+        if (defaultLanguage && translations) {
+            const trans = Object.values(translations) as InfoPageTranslations[];
+            const { locale } = defaultLanguage;
+            const index = findIndex(trans, (t) => t.locale === locale);
+            title = trans[index].title;
+        }
+        return <>{title}</>;
+    },
     AppGridActionRenderer: (
         params: AppCellActionWithRenderWithCustom
     ): ReactElement => {
