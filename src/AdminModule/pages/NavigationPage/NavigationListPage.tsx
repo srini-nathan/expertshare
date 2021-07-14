@@ -11,14 +11,13 @@ import { Canceler } from "axios";
 import { useRecoilState } from "recoil";
 import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
-import { AppLoader, AppPageHeader } from "../../../AppModule/components";
+import { AppPageHeader } from "../../../AppModule/components";
 import { AppGrid } from "../../../AppModule/containers/AppGrid";
 import { Navigation } from "../../models";
 import { appContainerNavigation } from "../../../AppModule/atoms";
 
 export const NavigationListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
-    const [loading, setLoading] = useState<boolean>(false);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const { t } = useTranslation();
@@ -58,11 +57,6 @@ export const NavigationListPage: FC<RouteComponentProps> = (): JSX.Element => {
                 filter: search,
             },
         });
-    }
-
-
-    if (loading) {
-        return <AppLoader />;
     }
 
     return (

@@ -24,12 +24,7 @@ import {
 } from "../../../AppModule/utils";
 import { useNavigator } from "../../../AppModule/hooks";
 import { useGlobalData } from "../../../AppModule/contexts";
-import {
-    Container,
-    Navigation,
-    NavigationTranslations,
-    NavigationType,
-} from "../../models";
+import { Container, Navigation, NavigationTranslations } from "../../models";
 import { ContainerApi } from "../../apis";
 import {
     AppFormTitleTranslatable,
@@ -38,6 +33,7 @@ import {
 import { schema } from "./schema";
 import { PrimitiveObject } from "../../../AppModule/models";
 import { appContainerNavigation } from "../../../AppModule/atoms";
+import { getTypeOptions } from "./navigation-helper";
 
 export const NavigationAddEditPage: FC<RouteComponentProps> = ({
     navigate,
@@ -83,20 +79,7 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
         return collection as NavigationTranslations[];
     };
 
-    const options = [
-        {
-            value: NavigationType.INTERNAL,
-            label: t("admin.navigation.form:label.type.internal"),
-        },
-        {
-            value: NavigationType.INFO_PAGE,
-            label: t("admin.navigation.form:label.type.infopage"),
-        },
-        {
-            value: NavigationType.EXTERNAL,
-            label: t("admin.navigation.form:label.type.external"),
-        },
-    ];
+    const options = getTypeOptions(t);
 
     const checkTranslation = () => {
         let noErrorTitle = false;
@@ -275,7 +258,7 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
                                         output: (template: PrimitiveObject) =>
                                             template?.value,
                                         input: (value: string) => {
-                                            return _find([], {
+                                            return _find(options, {
                                                 value,
                                             });
                                         },
