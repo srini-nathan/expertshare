@@ -62,12 +62,12 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
             }
         });
     };
+
     useEffect(() => {
-        fetchData();
+        if (view !== "list") {
+            fetchData();
+        }
     }, [active, pageSize]);
-    React.useEffect(() => {
-        fetchData();
-    }, []);
 
     async function handleFilter(search: string) {
         if (view === "list")
@@ -86,7 +86,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 const pageNo = endRow / appGridConfig.pageSize;
                 api?.hideOverlay();
                 UserApi.getAttendeeList<User>(pageNo, {
-                    isDisplayAsGuest: true,
+                    isDisplayAsGuest: false,
                     order: buildSortParams(request),
                     ...buildFilterParams(request),
                 }).then(({ response, error }) => {
