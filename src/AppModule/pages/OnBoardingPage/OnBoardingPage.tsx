@@ -53,6 +53,10 @@ import {
 import { UploadAPI } from "../../apis";
 import { CONSTANTS } from "../../../config";
 
+const {
+    Role: { ROLE },
+} = CONSTANTS;
+
 type UpdateProfileForm<T> = {
     [key: string]: T;
 };
@@ -80,6 +84,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
     );
     const { t } = useTranslation();
     const { setLocale } = useUserLocale();
+    const { role } = useAuthState();
 
     const validationShape = {
         plainPassword: yup.string().min(6).required(),
@@ -243,7 +248,6 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
         return "";
     };
     if (dataLoading) return <AppLoader />;
-
     return (
         <Container fluid className="active-account auth-container">
             <div className="auth-container--box">
@@ -439,27 +443,30 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                             {t("onboarding.section:privacy")}
                                         </span>
                                     </Col>
-                                    <AppFormSwitch
-                                        id={"isDisplayAsGuest"}
-                                        name={"isDisplayAsGuest"}
-                                        label={t(
-                                            "profile.update:label.isDisplayAsGuest"
-                                        )}
-                                        md={12}
-                                        lg={4}
-                                        xl={4}
-                                        required={false}
-                                        {...validation(
-                                            "isDisplayAsGuest",
-                                            formState,
-                                            true
-                                        )}
-                                        defaultChecked={true}
-                                        errorMessage={
-                                            errors.isDisplayAsGuest?.message
-                                        }
-                                        control={control}
-                                    />
+                                    {role === ROLE.ROLE_SPEAKER ||
+                                    role === ROLE.ROLE_MODERATOR ? null : (
+                                        <AppFormSwitch
+                                            id={"isDisplayAsGuest"}
+                                            name={"isDisplayAsGuest"}
+                                            label={t(
+                                                "profile.update:label.isDisplayAsGuest"
+                                            )}
+                                            md={12}
+                                            lg={4}
+                                            xl={4}
+                                            required={false}
+                                            {...validation(
+                                                "isDisplayAsGuest",
+                                                formState,
+                                                true
+                                            )}
+                                            defaultChecked={true}
+                                            errorMessage={
+                                                errors.isDisplayAsGuest?.message
+                                            }
+                                            control={control}
+                                        />
+                                    )}
                                     <AppFormSwitch
                                         id={"isExposeEmail"}
                                         name={"isExposeEmail"}

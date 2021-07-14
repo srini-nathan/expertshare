@@ -16,6 +16,12 @@ import {
 } from "../../utils";
 import { UserApi } from "../../../AdminModule/apis";
 import { UnprocessableEntityErrorResponse, SimpleObject } from "../../models";
+import { useAuthState } from "../../hooks";
+import { CONSTANTS } from "../../../config";
+
+const {
+    Role: { ROLE },
+} = CONSTANTS;
 
 type UpdateProfileReq = {
     [key: string]: any;
@@ -28,6 +34,7 @@ type UpdateProfileForm<T> = {
 export const UpdatePrivacy: FC<RouteComponentProps> = (): JSX.Element => {
     const { state, dispatch } = React.useContext(AuthContext);
     const { user } = state as AuthState;
+    const { role } = useAuthState();
     const [loading, isLoading] = React.useState<boolean>(false);
 
     const { t } = useTranslation();
@@ -84,27 +91,30 @@ export const UpdatePrivacy: FC<RouteComponentProps> = (): JSX.Element => {
                             )}
                         >
                             <Row className="m-0">
-                                <AppFormSwitch
-                                    id={"isDisplayAsGuest"}
-                                    name={"isDisplayAsGuest"}
-                                    label={t(
-                                        "profile.update:label.isDisplayAsGuest"
-                                    )}
-                                    md={12}
-                                    lg={4}
-                                    xl={4}
-                                    required={true}
-                                    {...validation(
-                                        "isDisplayAsGuest",
-                                        formState,
-                                        true
-                                    )}
-                                    defaultChecked={user?.isDisplayAsGuest}
-                                    errorMessage={
-                                        errors.isDisplayAsGuest?.message
-                                    }
-                                    control={control}
-                                />
+                                {role === ROLE.ROLE_SPEAKER ||
+                                role === ROLE.ROLE_MODERATOR ? null : (
+                                    <AppFormSwitch
+                                        id={"isDisplayAsGuest"}
+                                        name={"isDisplayAsGuest"}
+                                        label={t(
+                                            "profile.update:label.isDisplayAsGuest"
+                                        )}
+                                        md={12}
+                                        lg={4}
+                                        xl={4}
+                                        required={true}
+                                        {...validation(
+                                            "isDisplayAsGuest",
+                                            formState,
+                                            true
+                                        )}
+                                        defaultChecked={user?.isDisplayAsGuest}
+                                        errorMessage={
+                                            errors.isDisplayAsGuest?.message
+                                        }
+                                        control={control}
+                                    />
+                                )}
                                 <AppFormSwitch
                                     id={"isExposeEmail"}
                                     name={"isExposeEmail"}
