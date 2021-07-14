@@ -468,7 +468,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 </ListGroupItem>
                 {location.pathname.includes("a3d") ? (
                     <AppNavigationItem
-                        label={"2D View"}
+                        label={"navigation:2dview"}
                         path={"/event"}
                         icon={{
                             name: "fak fa-3d-cs",
@@ -478,7 +478,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                     />
                 ) : (
                     <AppNavigationItem
-                        label={"3D View"}
+                        label={"navigation:3dview"}
                         path={"/a3d"}
                         icon={{
                             name: "fak fa-3d-cs",
