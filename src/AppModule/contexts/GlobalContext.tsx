@@ -1,10 +1,17 @@
 import React from "react";
 import { sortBy } from "lodash";
-import { ContainerApi } from "../../AdminModule/apis/ContainerApi";
+import { useSetRecoilState } from "recoil";
 import { GenerateApi } from "../../AdminModule/apis/GenerateApi";
-import { I18nMap, Language, MyContainer } from "../../AdminModule/models";
+import { ContainerApi } from "../../AdminModule/apis/ContainerApi";
+import {
+    I18nMap,
+    Language,
+    MyContainer,
+    Navigation,
+} from "../../AdminModule/models";
 import i18n from "../config/i18n";
 import { CONTAINER_LOCALE } from "../config/app-env";
+import { appContainerNavigation } from "../atoms";
 
 interface GlobalState {
     status: "LOADED" | "LOADING" | "ERROR";
@@ -12,6 +19,8 @@ interface GlobalState {
     languages?: Language[];
     activeLanguages?: Language[];
     defaultLanguage?: Language;
+    navigation?: Navigation[];
+    activeNavigation?: Navigation[];
 }
 
 const Global = React.createContext<GlobalState | null>(null);
@@ -29,6 +38,7 @@ export const GlobalProvider: React.FC = (props) => {
     const [state, setState] = React.useState<GlobalState>({
         status: "LOADING",
     });
+    const setNavigation = useSetRecoilState(appContainerNavigation);
 
     React.useEffect(() => {
         setState({
@@ -40,7 +50,7 @@ export const GlobalProvider: React.FC = (props) => {
                 response,
             } = await ContainerApi.myContainer<MyContainer>();
             if (error === null && response) {
-                const { languages, id } = response;
+                const { languages, id, navigation } = response;
                 const i18nData: I18nMap = {};
                 if (languages) {
                     await Promise.all(
@@ -61,12 +71,19 @@ export const GlobalProvider: React.FC = (props) => {
                         console.error(e);
                     });
                 }
+                setNavigation(sortBy(navigation, [(n) => n.ord]));
+
                 setState({
                     status: "LOADED",
                     container: response,
                     languages: sortBy(languages, [(l) => !l.isDefault]),
-                    activeLanguages: languages?.filter((l) => l.isActive),
                     defaultLanguage: languages?.find((l) => l.isDefault),
+                    activeLanguages: languages?.filter((l) => l.isActive),
+                    navigation: sortBy(navigation, [(n) => n.ord]),
+                    activeNavigation: sortBy(
+                        navigation?.filter((n) => n.isActive),
+                        [(n) => n.ord]
+                    ),
                 });
             } else {
                 setState({ status: "ERROR" });
