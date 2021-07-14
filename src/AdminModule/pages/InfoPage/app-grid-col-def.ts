@@ -6,7 +6,7 @@ export const appGridColDef = ({
 }: AppCellActionWithCustom): ColDef[] => [
     {
         headerName: "admin.infopage.list:column.title",
-        field: "title",
+        field: "translations.title",
         filter: "text",
         flex: 1,
     },
