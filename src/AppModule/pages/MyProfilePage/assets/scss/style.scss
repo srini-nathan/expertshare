@@ -5,7 +5,39 @@
     .local-container {
         z-index: 8;
     }
-
+    @include media("mobtoinf") {
+        .user-profile-uploader {
+            .app-uploader {
+                width: 380px;
+                .image-container {
+                    width: 350px;
+                    height: 360px;
+                }
+            }
+        }
+    }
+    @include media("mobtosmall") {
+        .user-profile-uploader {
+            .app-uploader {
+                width: 200px;
+                .image-container {
+                    width: 170px;
+                    height: 160px;
+                }
+            }
+        }
+    }
+    @include media("smallmob3") {
+        .user-profile-uploader {
+            .app-uploader {
+                width: 100%;
+                .image-container {
+                    width: 100%;
+                    height: 160px;
+                }
+            }
+        }
+    }
 }
 
 .agreement-box {
