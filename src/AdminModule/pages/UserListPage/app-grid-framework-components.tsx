@@ -1,10 +1,11 @@
 import React, { ReactElement, FC } from "react";
 import { ICellRendererParams } from "ag-grid-community";
+import { useTranslation } from "react-i18next";
 import { filter } from "lodash";
 import {
     AppSwitch,
-    AppGridAction,
     AppGridActionProps,
+    AppGridAction,
 } from "../../../AppModule/components";
 import { PUser, User, UserGroup } from "../../models";
 import {
@@ -16,7 +17,17 @@ import { AppCellActionParamsUserList } from "./AppCellActionParamsUserList";
 import { UserApi } from "../../apis";
 import UserAvatar from "../../../AppModule/assets/images/user-avatar.png";
 import { CONSTANTS } from "../../../config";
-import { FileTypeInfo } from "../../../AppModule/models";
+import {
+    FileTypeInfo,
+    UnprocessableEntityErrorResponse,
+} from "../../../AppModule/models";
+import { AuthApi } from "../../../SecurityModule/apis";
+import {
+    errorToast,
+    hideLoader,
+    showLoader,
+    successToast,
+} from "../../../AppModule/utils";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -159,11 +170,12 @@ export const appGridFrameworkComponents = {
             </label>
         );
     },
-    appGridActionRenderer: (
+    AppGridActionRenderer: (
         params: AppCellActionWithRenderParamsUserList
     ): ReactElement => {
+        const { t } = useTranslation();
         const { data, onPressDelete, api } = params;
-        const { id, userGroups } = data as User;
+        const { id, userGroups, email } = data as User;
         const generatedGroups = filter(
             userGroups,
             (grp: UserGroup) => grp.isGenerated
@@ -179,28 +191,43 @@ export const appGridFrameworkComponents = {
                     onPressDelete(id);
                 },
             },
+            customClickActions: [],
         };
 
-        const props2 =
-            generatedGroups.length > 1
-                ? {
-                      customClickActions: [
-                          {
-                              confirmation: "Do you want to unsubscribe ?",
-                              confirmationTitle: "Unsubscribe",
-                              icon: "faUnlink",
-                              onClick: () => {
-                                  UserApi.unsubscribe<PUser>(id).then(() => {
-                                      api.refreshServerSideStore({
-                                          purge: true,
-                                      });
-                                  });
-                              },
-                          },
-                      ],
-                  }
-                : {};
+        if (generatedGroups.length > 1) {
+            props.customClickActions?.push({
+                confirmationTitle: "Unsubscribe",
+                confirmation: "Do you want to unsubscribe ?",
+                icon: "faUnlink",
+                onClick: () => {
+                    UserApi.unsubscribe<PUser>(id).then(() => {
+                        api.refreshServerSideStore({
+                            purge: true,
+                        });
+                    });
+                },
+            });
+        }
 
-        return <AppGridAction {...props} {...props2} />;
+        props.customClickActions?.push({
+            confirmationTitle: "Reset email",
+            confirmation: "Do you want to send reset password email ?",
+            icon: "Email",
+            onClick: () => {
+                showLoader("Sending email...").then();
+                AuthApi.resetPasswordRequest({
+                    email,
+                }).then((error) => {
+                    hideLoader();
+                    if (error instanceof UnprocessableEntityErrorResponse) {
+                        errorToast(t(error.description));
+                    } else {
+                        successToast("Email send");
+                    }
+                });
+            },
+        });
+
+        return <AppGridAction {...props} />;
     },
 };
