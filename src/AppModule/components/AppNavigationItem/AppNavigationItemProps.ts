@@ -1,5 +1,6 @@
 import { AppIconProps } from "../AppIcon";
 import { AppSubNavigationItemProps } from "./AppSubNavigationItemProps";
+import { Navigation } from "../../../AdminModule/models";
 
 export interface AppNavigationItemProps {
     label: string;
@@ -9,4 +10,5 @@ export interface AppNavigationItemProps {
     isActive?: boolean;
     subNavigations?: AppSubNavigationItemProps[];
     onClick?: (value: boolean) => void;
+    containerNavigation?: Navigation;
 }

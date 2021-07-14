@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { FC, useEffect, useState, useRef } from "react";
-import { isString as _isString } from "lodash";
+import { findIndex, isString as _isString } from "lodash";
 import { useTranslation } from "react-i18next";
 import {
     ListGroup,
@@ -37,9 +37,10 @@ import { CONSTANTS } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
 import { errorToast, isGranted } from "../../utils";
 import { LanguageApi, UserApi } from "../../../AdminModule/apis";
-import { Language, PUser } from "../../../AdminModule/models";
+import { Language, Navigation, PUser } from "../../../AdminModule/models";
 import { FileTypeInfo } from "../../models";
 import {
+    appContainerNavigation,
     AppDashboardLayoutOptions,
     appDashboardLayoutOptions,
 } from "../../atoms";
@@ -60,6 +61,8 @@ interface AppNavigationProps {
 const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const { dispatch, state } = React.useContext(AuthContext);
     const { role, containerId } = useAuthState();
+    const containerNavs = useRecoilValue<Navigation[]>(appContainerNavigation);
+    const { defaultLanguage } = useGlobalData();
     const { user } = state;
 
     const { locale, setLocale, containerLocale } = useUserLocale();
@@ -432,6 +435,33 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         }
         return (
             <>
+                {containerNavs
+                    .slice()
+                    .sort((a, b) => a.ord - b.ord)
+                    .map((cn) => {
+                        let title = "";
+                        if (defaultLanguage && cn.translations) {
+                            const { locale: defaultLocale } = defaultLanguage;
+                            const index = findIndex(
+                                cn.translations,
+                                (tra) => tra.locale === defaultLocale
+                            );
+                            title = cn.translations[index].title;
+                        }
+                        return (
+                            <AppNavigationItem
+                                label={title}
+                                path={cn.url}
+                                icon={{
+                                    name: cn.icon,
+                                }}
+                                key={cn.key}
+                                className="main-menu"
+                                onClick={() => isNavOpen(!navOpen)}
+                                containerNavigation={cn}
+                            />
+                        );
+                    })}
                 {items
                     .filter((e) => !overflowItems.includes(e))
                     .map(({ label, path, icon }) => {
