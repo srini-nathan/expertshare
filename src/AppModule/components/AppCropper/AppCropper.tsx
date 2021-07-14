@@ -91,6 +91,7 @@ export const AppCropper: FC<AppCropperProps> = ({
             </Modal.Body>
             <Modal.Footer>
                 <AppButton
+                    className="rotate rotate-left"
                     variant="secondary"
                     onClick={() => {
                         cropper?.rotate(-90);
@@ -99,6 +100,7 @@ export const AppCropper: FC<AppCropperProps> = ({
                     <i className="fa fa-rotate-left"></i>
                 </AppButton>
                 <AppButton
+                    className="rotate rotate-right"
                     variant="secondary"
                     onClick={() => {
                         cropper?.rotate(+90);
@@ -106,60 +108,66 @@ export const AppCropper: FC<AppCropperProps> = ({
                 >
                     <i className="fa fa-rotate-right"></i>
                 </AppButton>
-
-                <AppButton
-                    variant="secondary"
-                    disabled={zoomValue === 0}
-                    className="btn-minus"
-                    onClick={() => {
-                        setZoomValue(
-                            zoomValue > 0 ? zoomValue - 0.1 : maxZoomLevel
-                        );
-                        cropper?.zoom(zoomValue > 0 ? -0.1 : maxZoomLevel);
-                    }}
-                >
-                    <i className="fas fa-minus"></i>
-                </AppButton>
-                <InputRange
-                    maxValue={5}
-                    minValue={0}
-                    step={0.1}
-                    value={zoomValue}
-                    onChange={(value: any) => {
-                        setZoomValue(Number(value.toFixed(1)));
-                        cropper?.zoomTo(value.toFixed(1));
-                    }}
-                />
-                <AppButton
-                    variant="secondary"
-                    className="btn-plus"
-                    disabled={zoomValue === maxZoomLevel}
-                    onClick={() => {
-                        setZoomValue(
-                            zoomValue < maxZoomLevel
-                                ? zoomValue + 0.1
-                                : maxZoomLevel
-                        );
-                        cropper?.zoom(
-                            zoomValue < maxZoomLevel ? +0.1 : maxZoomLevel
-                        );
-                    }}
-                >
-                    {/* @TODO: Ask Yauheni to use AppIcon everywhere, where we're using icons */}
-                    <i className="fas fa-plus"></i>
-                </AppButton>
+                <div className="range-group">
+                    <AppButton
+                        variant="secondary"
+                        disabled={zoomValue === 0}
+                        className="btn-minus"
+                        onClick={() => {
+                            setZoomValue(
+                                zoomValue > 0 ? zoomValue - 0.1 : maxZoomLevel
+                            );
+                            cropper?.zoom(zoomValue > 0 ? -0.1 : maxZoomLevel);
+                        }}
+                    >
+                        <i className="fas fa-minus"></i>
+                    </AppButton>
+                    <InputRange
+                        maxValue={5}
+                        minValue={0}
+                        step={0.1}
+                        value={zoomValue}
+                        onChange={(value: any) => {
+                            setZoomValue(Number(value.toFixed(1)));
+                            cropper?.zoomTo(value.toFixed(1));
+                        }}
+                    />
+                    <AppButton
+                        variant="secondary"
+                        className="btn-plus"
+                        disabled={zoomValue === maxZoomLevel}
+                        onClick={() => {
+                            setZoomValue(
+                                zoomValue < maxZoomLevel
+                                    ? zoomValue + 0.1
+                                    : maxZoomLevel
+                            );
+                            cropper?.zoom(
+                                zoomValue < maxZoomLevel ? +0.1 : maxZoomLevel
+                            );
+                        }}
+                    >
+                        {/* @TODO: Ask Yauheni to use AppIcon everywhere, where we're using icons */}
+                        <i className="fas fa-plus"></i>
+                    </AppButton>
+                </div>
                 <AppButton
                     variant="secondary"
                     onClick={() => {
                         cropper?.reset();
                         setZoomValue(0);
                     }}
+                    className="reset-btn"
                 >
                     <i className="fa fa-rotate-right"></i>
                     <span className="text-reset">Reset</span>
                 </AppButton>
-                <AppButton variant="secondary" onClick={handleClose}>
-                    <i className="fas fa-times"></i>
+                <AppButton
+                    variant="secondary"
+                    onClick={handleClose}
+                    className="ml-2 cancel-btn"
+                >
+                    <i className="fak fa-times-light"></i>
                     <span className="text-cancel">Cancel</span>
                 </AppButton>
                 <AppButton
@@ -167,8 +175,9 @@ export const AppCropper: FC<AppCropperProps> = ({
                     onClick={() => {
                         if (image.length > 0) onCrop(image[0]);
                     }}
+                    className="ml-2 confirm-btn"
                 >
-                    <i className="fas fa-check white"></i>
+                    <i className="fak fa-check-light"></i>
                     <span className="text-cancel">Done</span>
                 </AppButton>
             </Modal.Footer>

@@ -5,20 +5,95 @@
     .modal-dialog {
         max-width: 850px !important;
         .modal-header {
-            background: none;
             padding-bottom: 0;
+            background: none;
+            border-bottom: unset;
         }
         .modal-title.h4 {
-            color: black;
+            font-size: 30px;
+            font-weight: 900;
+            color: var(--secondary);
         }
         .close {
-            color: black;
-            font-size: 35px;
+            position: absolute;
+            top: 0;
+            right: 8px;
+            font-size: 30px;
+            color: var(--secondary);
+            span {
+                font-weight: 400;
+            }
         }
         .modal-body {
             padding-top: 1em !important;
             .cropper-bg {
                 background-image: none;
+            }
+            .cropper-view-box {
+                outline: 1px solid;
+                outline-color: white;
+            }
+        }
+        .modal-footer {
+            border-top: unset;
+            box-shadow: 0 -7px 40px var(--secondary-30);
+            .rotate {
+                width: 36px;
+                @include media("not-mobile") {
+                    position: absolute;
+                    &.rotate-left {
+                        left: 10px;
+                    }
+                    &.rotate-right {
+                        left: 60px;
+                    }
+                }
+            }
+            .range-group {
+                display: flex;
+                align-items: center;
+            }
+            .btn-minus,
+            .btn-plus {
+                width: 36px;
+            }
+            .btn-minus {
+                margin-right: 1em;
+                margin-left: 2em;
+                i {
+                    font-weight: 400;
+                }
+            }
+            .btn-plus {
+                margin-right: 1em;
+                margin-left: 1em;
+                i {
+                    font-weight: 400;
+                }
+            }
+            .cancel-btn {
+                display: flex;
+                justify-content: flex-start;
+                min-width: 100px;
+                padding: 0 10px !important;
+                i {
+                    font-size: 20px;
+                }
+            }
+            .confirm-btn {
+                display: flex;
+                justify-content: flex-start;
+                min-width: 100px;
+                padding: 0 10px !important;
+                i {
+                    font-size: 16px;
+                }
+            }
+            .reset-btn {
+                display: flex;
+                justify-content: flex-start;
+                min-width: 100px;
+                padding: 0 10px !important;
             }
         }
     }
@@ -40,20 +115,16 @@
     }
 
     .input-range__slider {
-        background: #7ebde9;
-        border: 1px solid #7ebde9;
+        width: 0.8rem;
+        height: 0.8rem;
+        margin-top: -0.45rem;
+        background: var(--primary);
+        border: 1px solid var(--primary);
     }
-
+    .input-range__track {
+        height: 0.1rem;
+    }
     .input-range__track--active {
-        background: #7ebde9;
-    }
-
-    .btn-minus {
-        margin-right: 1em;
-        margin-left: 2em;
-    }
-
-    .btn-plus {
-        margin-left: 1em;
+        background: var(--primary);
     }
 }

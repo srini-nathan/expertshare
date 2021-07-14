@@ -609,7 +609,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                     />
                                 </Col>
 
-                                <Form.Group className="mb-3 px-3 col-md-12 col-lg-6">
+                                <Form.Group className="mb-3 px-3 col-md-12 col-lg-6 user-profile-uploader">
                                     <Form.Label>
                                         {t(
                                             "admin.users.form:label.profilePicture"

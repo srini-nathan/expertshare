@@ -517,7 +517,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                     />
                                 </Col>
 
-                                <Form.Group className="px-3 col-sm-12 col-lg-6 ">
+                                <Form.Group className="px-3 col-sm-12 col-lg-6 user-profile-uploader">
                                     <Form.Label>
                                         {t("profile.update:label.image")}
                                     </Form.Label>
