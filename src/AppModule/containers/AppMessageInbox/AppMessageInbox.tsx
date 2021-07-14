@@ -55,6 +55,8 @@ export const AppMessageInbox: FC = () => {
             {
                 "container.id": containerId,
                 ...searchParams,
+                isDisplayAsGuest: false,
+                isAllowCommunication: true,
             },
             (c) => {
                 cancelTokenSourcesRef.current.push(c);
@@ -63,9 +65,7 @@ export const AppMessageInbox: FC = () => {
             .then(({ response }) => {
                 if (response && response.items) {
                     const filteredUsers = response.items.filter(
-                        (attendee) =>
-                            attendee.id !== user.id &&
-                            attendee.isAllowCommunication
+                        (attendee) => attendee.id !== user.id
                     );
 
                     setUsers(filteredUsers);

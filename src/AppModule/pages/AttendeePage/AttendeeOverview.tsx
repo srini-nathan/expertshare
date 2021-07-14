@@ -48,6 +48,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
         isLoading(true);
         UserApi.getAttendeeList<User>(active, {
             ...params,
+            isDisplayAsGuest: false,
         }).then(({ response, error }) => {
             isLoading(false);
 
@@ -85,6 +86,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 const pageNo = endRow / appGridConfig.pageSize;
                 api?.hideOverlay();
                 UserApi.getAttendeeList<User>(pageNo, {
+                    isDisplayAsGuest: true,
                     order: buildSortParams(request),
                     ...buildFilterParams(request),
                 }).then(({ response, error }) => {
