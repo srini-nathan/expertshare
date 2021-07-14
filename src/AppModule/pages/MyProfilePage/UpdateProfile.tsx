@@ -15,8 +15,12 @@ import {
     AppFormSelect,
     AppFormFieldGenerator,
     AppUploader,
+    AppModal,
 } from "../../components";
-import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
+import {
+    AuthContext,
+    logoutAction,
+} from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models";
 import {
     validation,
@@ -70,6 +74,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     const [loading, isLoading] = React.useState<boolean>(false);
     const [dataLoading, isDataLoading] = React.useState<boolean>(true);
     const [fieldLoading, isFieldLoading] = React.useState<boolean>(true);
+    const [showDelete, setShowDelete] = React.useState<boolean>(false);
     const [userTags, setUserTags] = useState<SimpleObject<string>[]>([]);
     const [selectedUserTags, setSelectedUserTag] = useState<
         SimpleObject<string>[]
@@ -352,6 +357,24 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
         return submitForm(formData);
     };
 
+    const handleDelete = () => {
+        if (user && user.id) {
+            UserApi.deleteById(user.id)
+                .then(({ error, errorMessage }) => {
+                    setShowDelete(false);
+                    if (!error) {
+                        successToast(t("profile.update:deleteProfile.success"));
+                        logoutAction(dispatch).finally();
+                    } else {
+                        errorToast(t(errorMessage));
+                    }
+                })
+                .catch(() => {
+                    setShowDelete(false);
+                });
+        }
+    };
+
     if (dataLoading || fieldLoading) return <AppLoader />;
 
     return (
@@ -570,6 +593,35 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                             </div>
                                         </Form.Group>
                                     )}
+                            </Row>
+                            <Row className="m-0">
+                                <Col className={"d-flex justify-content-end"}>
+                                    <AppButton
+                                        variant={"danger"}
+                                        onClick={() => {
+                                            setShowDelete(true);
+                                        }}
+                                    >
+                                        {t(
+                                            "profile.update:deleteProfile.label"
+                                        )}
+                                    </AppButton>
+                                    <AppModal
+                                        show={showDelete}
+                                        title={t(
+                                            "profile.update:deleteProfile.confirmTitle"
+                                        )}
+                                        handleClose={() => {
+                                            setShowDelete(false);
+                                        }}
+                                        handleDelete={() => {
+                                            handleDelete();
+                                        }}
+                                        bodyContent={t(
+                                            "profile.update:deleteProfile.confirmContent"
+                                        )}
+                                    />
+                                </Col>
                             </Row>
                         </AppCard>
                     </Col>
