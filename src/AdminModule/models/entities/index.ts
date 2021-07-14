@@ -23,3 +23,5 @@ export * from "./AFramePanel";
 export * from "./MyContainer";
 export * from "./InfoPage";
 export * from "./InfoPageTranslations";
+export * from "./Navigation";
+export * from "./NavigationTranslations";
