@@ -38,6 +38,8 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
         imageName = "",
         conferenceTags = [],
         description,
+        isLive,
+        isArchive,
     } = conference;
 
     const { container } = useGlobalData();
@@ -61,12 +63,20 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
             <Col className="inner-container p-0">
                 <Link to={`/event/${id}/agenda`}>
                     <div className="inner-container--banner p-0" style={style}>
-                        {/* <div className="inner-container--banner--button">
-                        <a href="#" className="live-now-btn mr-3">
-                            <i className="fak fa-live"></i>
-                            Live Now
-                        </a>
-                    </div> */}
+                        <div className="inner-container--banner--button">
+                            {isLive ? (
+                                <span className="live-now-btn mr-3">
+                                    <i className="fak fa-live"></i>
+                                    {t("event.list:badge.livenow")}
+                                </span>
+                            ) : null}
+                            {isArchive ? (
+                                <span className="live-now-btn mr-3">
+                                    <i className="fak fa-archive-regular"></i>
+                                    {t("event.list:badge.archived")}
+                                </span>
+                            ) : null}
+                        </div>
 
                         <div className="inner-container--banner--icons ">
                             {isGrantedControl && (
