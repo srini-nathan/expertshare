@@ -4,7 +4,7 @@ import { NavigationType } from "../../models";
 export const getInternalLinksOptions = (t: any): SimpleObject<string>[] => {
     const options: SimpleObject<string>[] = [
         {
-            value: "/events",
+            value: "/event",
             label: t("Events"),
         },
         {

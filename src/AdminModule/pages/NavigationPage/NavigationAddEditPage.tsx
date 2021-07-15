@@ -24,7 +24,12 @@ import {
 } from "../../../AppModule/utils";
 import { useNavigator } from "../../../AppModule/hooks";
 import { useGlobalData } from "../../../AppModule/contexts";
-import { Container, Navigation, NavigationTranslations } from "../../models";
+import {
+    Container,
+    Navigation,
+    NavigationTranslations,
+    NavigationType,
+} from "../../models";
 import { ContainerApi } from "../../apis";
 import {
     AppFormTitleTranslatable,
@@ -33,7 +38,7 @@ import {
 import { schema } from "./schema";
 import { PrimitiveObject } from "../../../AppModule/models";
 import { appContainerNavigation } from "../../../AppModule/atoms";
-import { getTypeOptions } from "./navigation-helper";
+import { getInternalLinksOptions, getTypeOptions } from "./navigation-helper";
 
 export const NavigationAddEditPage: FC<RouteComponentProps> = ({
     navigate,
@@ -44,6 +49,7 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
     const { languages, container } = useGlobalData();
     const [data, setData] = useState<Navigation>(new Navigation());
     const [loading, setLoading] = useState<boolean>(true);
+    const [type, setType] = useState<string>(NavigationType.INTERNAL);
     const [translations, setTranslations] = useState<
         AppFormTitleTranslatableType[]
     >([]);
@@ -53,7 +59,13 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
         appContainerNavigation
     );
 
-    const { handleSubmit, trigger, formState, control } = useForm<Navigation>({
+    const {
+        handleSubmit,
+        trigger,
+        formState,
+        control,
+        setValue,
+    } = useForm<Navigation>({
         resolver: yupResolver(schema),
         mode: "all",
     });
@@ -161,6 +173,7 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
                     });
                 });
                 setTranslations(items);
+                setType(nav.type);
             } else {
                 // @TODO: missing translations
                 errorToast("Navigation not exist");
@@ -255,8 +268,15 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
                                     options={options}
                                     control={control}
                                     transform={{
-                                        output: (template: PrimitiveObject) =>
-                                            template?.value,
+                                        output: (template: PrimitiveObject) => {
+                                            if (template && template.value) {
+                                                setType(
+                                                    template.value as string
+                                                );
+                                                setValue("url", "");
+                                            }
+                                            return template?.value;
+                                        },
                                         input: (value: string) => {
                                             return _find(options, {
                                                 value,
@@ -264,22 +284,60 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
                                         },
                                     }}
                                 />
-                                <AppFormInput
-                                    sm={12}
-                                    md={6}
-                                    lg={6}
-                                    xl={6}
-                                    name={"url"}
-                                    label={t("admin.navigation.form:label.url")}
-                                    {...validation(
-                                        "url",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    errorMessage={errors.url?.message}
-                                    defaultValue={data.url}
-                                    control={control}
-                                />
+                                {type === NavigationType.EXTERNAL ? (
+                                    <AppFormInput
+                                        sm={12}
+                                        md={6}
+                                        lg={6}
+                                        xl={6}
+                                        name={"url"}
+                                        label={t(
+                                            "admin.navigation.form:label.url"
+                                        )}
+                                        {...validation(
+                                            "url",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={errors.url?.message}
+                                        defaultValue={data.url}
+                                        control={control}
+                                    />
+                                ) : null}
+                                {type === NavigationType.INTERNAL ? (
+                                    <AppFormSelect
+                                        id={"url"}
+                                        name={"url"}
+                                        label={t(
+                                            "admin.navigation.form:label.url"
+                                        )}
+                                        sm={12}
+                                        md={6}
+                                        lg={6}
+                                        xl={6}
+                                        className="rm-container"
+                                        required={true}
+                                        {...validation("url", formState, true)}
+                                        placeholder={"url"}
+                                        defaultValue={data.url}
+                                        errorMessage={errors.url?.message}
+                                        options={getInternalLinksOptions(t)}
+                                        control={control}
+                                        transform={{
+                                            output: (
+                                                template: PrimitiveObject
+                                            ) => template?.value,
+                                            input: (value: string) => {
+                                                return _find(
+                                                    getInternalLinksOptions(t),
+                                                    {
+                                                        value,
+                                                    }
+                                                );
+                                            },
+                                        }}
+                                    />
+                                ) : null}
                             </Form.Row>
                             <Form.Row>
                                 <AppFormSwitch
