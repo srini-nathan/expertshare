@@ -334,7 +334,7 @@
         font-size: 14px;
         font-weight: 500;
         color: #fff;
-        background-color: var(--live-btn-bg-clr);
+        background-color: var(--archive-btn-bg-clr);
         border-radius: var(--border-radius);
 
         &:hover {
@@ -358,7 +358,7 @@
         font-size: 14px;
         font-weight: 500;
         color: var(--btn-fg-clr);
-        background-color: var(--btn-bg-clr);
+        background-color: var(--secondary);
         border-radius: var(--border-radius);
 
         &:hover {
