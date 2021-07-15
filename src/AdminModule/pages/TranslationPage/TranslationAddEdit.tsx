@@ -21,6 +21,7 @@ import {
 } from "../../../AppModule/containers/AppGrid/app-grid-helpers";
 import { AppTranslationToolbar } from "./AppTranslationToolbar";
 import "./assets/scss/style.scss";
+import { SimpleObject } from "../../../AppModule/models";
 
 export interface TranslationCombineList {
     translationGroup?: TranslationGroup | undefined;
@@ -65,35 +66,57 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     }, [translataionCombines]);
 
     const fetchData = (search = "") => {
+        const extraParams: SimpleObject<string> = {};
+        if (search !== "") {
+            extraParams[activeFilter] = search;
+        }
         isLoading(true);
-        TranslationApi.find<TranslationCombine>(active, {
-            [activeFilter]: search,
-        }).then(({ error, response }) => {
-            isLoading(false);
-            if (error !== null) {
-                if (_isString(error)) {
-                    errorToast(error);
-                }
-            } else if (response !== null) {
-                let groups: TranslationCombineList[] = [];
+        TranslationApi.find<TranslationCombine>(active, extraParams).then(
+            ({ error, response }) => {
+                isLoading(false);
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    }
+                } else if (response !== null) {
+                    let groups: TranslationCombineList[] = [];
 
-                response.items.forEach((e) => {
-                    const index = groups.findIndex(
-                        (item) =>
-                            item.translationGroup &&
-                            item.translationGroup.tgKey ===
-                                e.translationGroup.tgKey
-                    );
+                    response.items.forEach((e) => {
+                        const index = groups.findIndex(
+                            (item) =>
+                                item.translationGroup &&
+                                item.translationGroup.tgKey ===
+                                    e.translationGroup.tgKey
+                        );
 
-                    if (index !== -1) {
-                        let items: any = [];
-                        if (groups[index]) items = groups[index].items;
-                        groups = [
-                            ...groups.slice(0, index),
-                            {
-                                ...groups[index],
+                        if (index !== -1) {
+                            let items: any = [];
+                            if (groups[index]) items = groups[index].items;
+                            groups = [
+                                ...groups.slice(0, index),
+                                {
+                                    ...groups[index],
+                                    items: [
+                                        ...items,
+                                        {
+                                            itemKey: randomInteger(),
+                                            tKey: e.tKey,
+                                            defaultValue: e.defaultValue,
+                                            id: e.id,
+                                            translationGroup:
+                                                e.translationGroup,
+                                            translationValues:
+                                                e.translationValues,
+                                        },
+                                    ],
+                                },
+                                ...groups.slice(index + 1),
+                            ];
+                        } else {
+                            groups.push({
+                                translationGroup: e.translationGroup,
+                                itemKey: randomInteger(),
                                 items: [
-                                    ...items,
                                     {
                                         itemKey: randomInteger(),
                                         tKey: e.tKey,
@@ -103,30 +126,14 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         translationValues: e.translationValues,
                                     },
                                 ],
-                            },
-                            ...groups.slice(index + 1),
-                        ];
-                    } else {
-                        groups.push({
-                            translationGroup: e.translationGroup,
-                            itemKey: randomInteger(),
-                            items: [
-                                {
-                                    itemKey: randomInteger(),
-                                    tKey: e.tKey,
-                                    defaultValue: e.defaultValue,
-                                    id: e.id,
-                                    translationGroup: e.translationGroup,
-                                    translationValues: e.translationValues,
-                                },
-                            ],
-                        });
-                    }
-                });
-                setTranslationCombines(groups);
-                setTotalItems(response.totalItems);
+                            });
+                        }
+                    });
+                    setTranslationCombines(groups);
+                    setTotalItems(response.totalItems);
+                }
             }
-        });
+        );
     };
     useEffect(() => {
         fetchData();
