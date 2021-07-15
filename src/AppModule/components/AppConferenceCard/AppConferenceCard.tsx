@@ -71,7 +71,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                                 </span>
                             ) : null}
                             {isArchive ? (
-                                <span className="live-now-btn mr-3">
+                                <span className="archived-btn mr-3">
                                     <i className="fak fa-archive-regular"></i>
                                     {t("event.list:badge.archived")}
                                 </span>
