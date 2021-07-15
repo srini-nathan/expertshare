@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { intervalToDuration } from "date-fns";
+import { intervalToDuration, addSeconds } from "date-fns";
 import { useTranslation } from "react-i18next";
 import { AppVimeoFrame } from "../AppVimeoFrame";
 import { AppYoutubeFrame } from "../AppYoutubeFrame";
@@ -81,6 +81,9 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
     getAgenda,
 }): JSX.Element => {
     const { t } = useTranslation();
+    const [currentTime, setCurrentTime] = useState<Date>(
+        getDateTimeWithoutTimezone(session.currentTime)
+    );
     const [time, setTime] = useState<Duration>();
     const [startedSession, isSessionStarted] = useState<boolean>(
         getDateTimeWithoutTimezone(session.currentTime) >
@@ -109,15 +112,10 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
         let timer: any;
         if (!startedSession) {
             timer = setInterval(() => {
-                if (
-                    getDateTimeWithoutTimezone(session.currentTime) <=
-                    getDateTimeWithoutTimezone(session.start)
-                ) {
+                if (currentTime <= getDateTimeWithoutTimezone(session.start)) {
                     if (session.start) {
                         const timeLeft = intervalToDuration({
-                            start: getDateTimeWithoutTimezone(
-                                session.currentTime
-                            ),
+                            start: currentTime,
                             end: getDateTimeWithoutTimezone(session.start),
                         });
                         setTime(timeLeft);
@@ -126,14 +124,12 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
                     isSessionStarted(true);
                     if (
                         isLive &&
-                        !(
-                            getDateTimeWithoutTimezone(session.currentTime) >
-                            getDateTimeWithoutTimezone(session.end)
-                        )
+                        !(currentTime > getDateTimeWithoutTimezone(session.end))
                     ) {
                         isLive(true);
                     }
                 }
+                setCurrentTime(addSeconds(currentTime, 1));
             }, 1000);
         } else if (
             isLive &&
