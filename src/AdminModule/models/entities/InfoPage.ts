@@ -12,10 +12,16 @@ export class InfoPage extends BaseEntity {
 
     container: string | Container;
 
+    title?: string;
+
+    description?: string;
+
     constructor(
         container: string,
         {
             slugKey = "",
+            title = "",
+            description = "",
             isActive = true,
             translations = [],
             id,
@@ -28,6 +34,8 @@ export class InfoPage extends BaseEntity {
         this.slugKey = slugKey;
         this.isActive = isActive;
         this.translations = translations;
+        this.title = title;
+        this.description = description;
     }
 
     toString(): string {

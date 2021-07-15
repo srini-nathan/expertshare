@@ -26,11 +26,13 @@ import { useNavigator } from "../../../AppModule/hooks";
 import { useGlobalData } from "../../../AppModule/contexts";
 import {
     Container,
+    InfoPage,
+    Language,
     Navigation,
     NavigationTranslations,
     NavigationType,
 } from "../../models";
-import { ContainerApi } from "../../apis";
+import { ContainerApi, InfoPageApi } from "../../apis";
 import {
     AppFormTitleTranslatable,
     AppFormTitleTranslatableType,
@@ -38,7 +40,11 @@ import {
 import { schema } from "./schema";
 import { PrimitiveObject } from "../../../AppModule/models";
 import { appContainerNavigation } from "../../../AppModule/atoms";
-import { getInternalLinksOptions, getTypeOptions } from "./navigation-helper";
+import {
+    getInfoPagesLinksOptions,
+    getInternalLinksOptions,
+    getTypeOptions,
+} from "./navigation-helper";
 
 export const NavigationAddEditPage: FC<RouteComponentProps> = ({
     navigate,
@@ -46,18 +52,19 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
     const { key = null } = useParams();
     const isEditMode: boolean = key !== null;
     const navigator = useNavigator(navigate);
-    const { languages, container } = useGlobalData();
+    const { languages, container, defaultLanguage } = useGlobalData();
     const [data, setData] = useState<Navigation>(new Navigation());
     const [loading, setLoading] = useState<boolean>(true);
     const [type, setType] = useState<string>(NavigationType.INTERNAL);
     const [translations, setTranslations] = useState<
         AppFormTitleTranslatableType[]
     >([]);
-    const [defaultLanguage, setDefaultLanguage] = useState<string>("");
     const { t } = useTranslation();
     const [navigation, setNavigation] = useRecoilState<Navigation[]>(
         appContainerNavigation
     );
+    const [infoPages, setInfoPages] = useState<InfoPage[]>([]);
+    const [ipLoading, setIpLoading] = useState<boolean>(true);
 
     const {
         handleSubmit,
@@ -72,11 +79,11 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
 
     const getTranslation = (): NavigationTranslations[] => {
         let defaultValues: AppFormTitleTranslatableType = {
-            locale: defaultLanguage,
+            locale: (defaultLanguage as Language).locale,
             title: "",
         };
         translations.forEach((e) => {
-            if (e.locale === defaultLanguage) {
+            if (e.locale === (defaultLanguage as Language).locale) {
                 defaultValues = e;
             }
         });
@@ -132,11 +139,6 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
     };
 
     useEffect(() => {
-        languages?.forEach((e) => {
-            if (e.isDefault) {
-                setDefaultLanguage(e.locale);
-            }
-        });
         if (languages && languages.length !== translations.length) {
             const items: AppFormTitleTranslatableType[] = languages.map((e) => {
                 let item = {
@@ -183,7 +185,15 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
         }
     }, [isEditMode, trigger, navigation]);
 
-    if (loading) {
+    useEffect(() => {
+        InfoPageApi.find<InfoPage>().then(({ response }) => {
+            if (response?.items) {
+                setInfoPages(response.items);
+            }
+            setIpLoading(false);
+        });
+    }, []);
+    if (loading || ipLoading) {
         return <AppLoader />;
     }
 
@@ -208,7 +218,9 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
                         <AppCard>
                             <AppFormTitleTranslatable
                                 languages={languages}
-                                defaultLanguage={defaultLanguage}
+                                defaultLanguage={
+                                    (defaultLanguage as Language).locale
+                                }
                                 translations={translations}
                                 onChange={setTranslations}
                             />
@@ -291,6 +303,9 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
                                         lg={6}
                                         xl={6}
                                         name={"url"}
+                                        placeholder={t(
+                                            "admin.navigation.form:select.placeholder.enterurl"
+                                        )}
                                         label={t(
                                             "admin.navigation.form:label.url"
                                         )}
@@ -309,7 +324,7 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
                                         id={"url"}
                                         name={"url"}
                                         label={t(
-                                            "admin.navigation.form:label.url"
+                                            "admin.navigation.form:label.internalpage"
                                         )}
                                         sm={12}
                                         md={6}
@@ -318,7 +333,9 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
                                         className="rm-container"
                                         required={true}
                                         {...validation("url", formState, true)}
-                                        placeholder={"url"}
+                                        placeholder={t(
+                                            "admin.navigation.form:select.placeholder.internalpage"
+                                        )}
                                         defaultValue={data.url}
                                         errorMessage={errors.url?.message}
                                         options={getInternalLinksOptions(t)}
@@ -330,6 +347,46 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
                                             input: (value: string) => {
                                                 return _find(
                                                     getInternalLinksOptions(t),
+                                                    {
+                                                        value,
+                                                    }
+                                                );
+                                            },
+                                        }}
+                                    />
+                                ) : null}
+                                {type === NavigationType.INFO_PAGE ? (
+                                    <AppFormSelect
+                                        id={"url"}
+                                        name={"url"}
+                                        label={t(
+                                            "admin.navigation.form:label.infopage"
+                                        )}
+                                        sm={12}
+                                        md={6}
+                                        lg={6}
+                                        xl={6}
+                                        className="rm-container"
+                                        required={true}
+                                        {...validation("url", formState, true)}
+                                        placeholder={t(
+                                            "admin.navigation.form:select.placeholder.infopage"
+                                        )}
+                                        defaultValue={data.url}
+                                        errorMessage={errors.url?.message}
+                                        options={getInfoPagesLinksOptions(
+                                            infoPages
+                                        )}
+                                        control={control}
+                                        transform={{
+                                            output: (
+                                                template: PrimitiveObject
+                                            ) => template?.value,
+                                            input: (value: string) => {
+                                                return _find(
+                                                    getInfoPagesLinksOptions(
+                                                        infoPages
+                                                    ),
                                                     {
                                                         value,
                                                     }
