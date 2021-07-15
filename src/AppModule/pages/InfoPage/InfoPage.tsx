@@ -1,34 +1,41 @@
-import React, { FC, Fragment } from "react";
-import { RouteComponentProps } from "@reach/router";
-import { AppPageHeader, AppCard } from "../../components";
-import { useGlobalData } from "../../contexts";
-import { useUserLocale } from "../../hooks";
+import React, { FC, Fragment, useEffect, useState } from "react";
+import { RouteComponentProps, useParams } from "@reach/router";
+import { useTranslation } from "react-i18next";
+import { AppPageHeader, AppCard, AppLoader } from "../../components";
+import { InfoPage as IP } from "../../../AdminModule/models";
+import { InfoPageApi } from "../../../AdminModule/apis";
+import { errorToast } from "../../utils";
 
 export const InfoPage: FC<RouteComponentProps> = (): JSX.Element => {
-    const { container } = useGlobalData();
-    const { locale } = useUserLocale();
+    const { id } = useParams();
+    const [loading, setLoading] = useState<boolean>(true);
+    const [data, setData] = useState<IP>();
+    const { t } = useTranslation();
 
-    const getValues = () => {
-        let title = "info Page";
-        let content = "info Page";
-        if (container && container.configuration)
-            (container.configuration as any).translations.forEach((e: any) => {
-                if (e.locale === locale && e.infoPageNavigationTitle)
-                    title = e.infoPageNavigationTitle;
-                if (e.locale === locale && e.infoPage) content = e.infoPage;
-            });
-        return {
-            title,
-            content,
-        };
-    };
+    useEffect(() => {
+        InfoPageApi.findById<IP>(id).then(({ isNotFound, response }) => {
+            if (response) {
+                setData(response);
+            }
+            if (isNotFound) {
+                errorToast(t("infopage:notexit"));
+            }
+            setLoading(false);
+        });
+    }, []);
+
+    if (loading) {
+        return <AppLoader />;
+    }
 
     return (
         <Fragment>
-            <AppPageHeader title={getValues().title} />
+            <AppPageHeader title={data?.title || ""} />
             <AppCard>
                 <div
-                    dangerouslySetInnerHTML={{ __html: getValues().content }}
+                    dangerouslySetInnerHTML={{
+                        __html: data?.description || "",
+                    }}
                 ></div>
             </AppCard>
         </Fragment>

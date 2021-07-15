@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { FC, useEffect, useState, useRef } from "react";
-import { isString as _isString } from "lodash";
+import { findIndex, isString as _isString } from "lodash";
 import { useTranslation } from "react-i18next";
 import {
     ListGroup,
@@ -37,9 +37,10 @@ import { CONSTANTS } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
 import { errorToast, isGranted } from "../../utils";
 import { LanguageApi, UserApi } from "../../../AdminModule/apis";
-import { Language, PUser } from "../../../AdminModule/models";
+import { Language, Navigation, PUser } from "../../../AdminModule/models";
 import { FileTypeInfo } from "../../models";
 import {
+    appContainerNavigation,
     AppDashboardLayoutOptions,
     appDashboardLayoutOptions,
 } from "../../atoms";
@@ -60,6 +61,8 @@ interface AppNavigationProps {
 const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const { dispatch, state } = React.useContext(AuthContext);
     const { role, containerId } = useAuthState();
+    const containerNavs = useRecoilValue<Navigation[]>(appContainerNavigation);
+    const { defaultLanguage } = useGlobalData();
     const { user } = state;
 
     const { locale, setLocale, containerLocale } = useUserLocale();
@@ -76,7 +79,6 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         navPosition: menuLocation,
     } = useRecoilValue<AppDashboardLayoutOptions>(appDashboardLayoutOptions);
     const [navOpen, isNavOpen] = useState<boolean>(false);
-    const { container } = useGlobalData();
 
     const style = user.imageName
         ? {
@@ -201,6 +203,14 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         {
             label: "navigation:administration.infopage",
             path: "/admin/info-pages",
+            icon: {
+                name: "",
+            },
+            isVisible: isGranted(role, ROLE_OPERATOR),
+        },
+        {
+            label: "navigation:administration.navigation",
+            path: "/admin/navigations",
             icon: {
                 name: "",
             },
@@ -400,30 +410,39 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         );
     };
 
-    const getTitle = () => {
-        let title = "Info Page";
-        if (
-            container &&
-            container.configuration &&
-            (container.configuration as any).translations
-        ) {
-            title =
-                ((container.configuration as any).translations.find(
-                    (e: any) => e.locale === locale
-                ) &&
-                    (container.configuration as any).translations.find(
-                        (e: any) => e.locale === locale
-                    ).infoPageNavigationTitle) ||
-                "Info Page";
-        }
-        return title;
-    };
     const renderMenu = () => {
         if (showSubMenuItems && (menuLocation === "left" || width < 768)) {
             return renderSubMenu();
         }
         return (
             <>
+                {containerNavs
+                    .slice()
+                    .sort((a, b) => a.ord - b.ord)
+                    .map((cn) => {
+                        let title = "";
+                        if (defaultLanguage && cn.translations) {
+                            const { locale: defaultLocale } = defaultLanguage;
+                            const index = findIndex(
+                                cn.translations,
+                                (tra) => tra.locale === defaultLocale
+                            );
+                            title = cn.translations[index].title;
+                        }
+                        return (
+                            <AppNavigationItem
+                                label={title}
+                                path={cn.url}
+                                icon={{
+                                    name: cn.icon,
+                                }}
+                                key={cn.key}
+                                className="main-menu"
+                                onClick={() => isNavOpen(!navOpen)}
+                                containerNavigation={cn}
+                            />
+                        );
+                    })}
                 {items
                     .filter((e) => !overflowItems.includes(e))
                     .map(({ label, path, icon }) => {
@@ -438,34 +457,6 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                             />
                         );
                     })}
-                {container &&
-                    container.configuration &&
-                    (container.configuration as any).isInfoPageEnable && (
-                        <AppNavigationItem
-                            label={getTitle()}
-                            path={"/info-page"}
-                            onClick={() => isNavOpen(!navOpen)}
-                            icon={{
-                                name: "fak fa-publicationsv2-cs",
-                            }}
-                            className="main-menu"
-                        />
-                    )}
-                <ListGroupItem
-                    className={`nav-item py-2 collapseable px-lg-4`}
-                    onClick={() => isNavOpen(!navOpen)}
-                >
-                    <a
-                        target="_blank"
-                        href={`https://www.credit-suisse.com/microsites/cssw-event-support/${locale}.html`}
-                        className="nav-link"
-                    >
-                        <div className="nav-icon">
-                            <i className="fak fa-userguide-cs" />
-                        </div>
-                        <span>{t("navigation:userGuide")}</span>
-                    </a>
-                </ListGroupItem>
                 {location.pathname.includes("a3d") ? (
                     <AppNavigationItem
                         label={"navigation:2dview"}

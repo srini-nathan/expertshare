@@ -15,3 +15,4 @@ export * from "./SessionCategoryPage";
 export * from "./AFrameRoom";
 export * from "./AFramePanel";
 export * from "./InfoPage";
+export * from "./NavigationPage";

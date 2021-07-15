@@ -24,6 +24,8 @@ import {
     AFramePanelAddEdit,
     InfoPageListPage,
     InfoPageAddEditPage,
+    NavigationListPage,
+    NavigationAddEditPage,
 } from "./pages";
 import { Layout3D } from "../Layout3DModule";
 import { ModuleRouter } from "../AppModule/models";
@@ -89,6 +91,9 @@ export const routers: ModuleRouter[] = [
                     <InfoPageListPage path={"info-pages"} />
                     <InfoPageAddEditPage path={"info-pages/new"} />
                     <InfoPageAddEditPage path={"info-pages/:id"} />
+                    <NavigationListPage path={"navigations"} />
+                    <NavigationAddEditPage path={"navigations/new"} />
+                    <NavigationAddEditPage path={"navigations/:key"} />
                 </Router>
             );
         },

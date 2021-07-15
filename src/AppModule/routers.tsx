@@ -26,7 +26,7 @@ export const routers: ModuleRouter[] = [
         RouterPlug: (): JSX.Element => {
             return (
                 <Router>
-                    <InfoPage path={"info-page"} />
+                    <InfoPage path={"page/:id/:slugKey"} />
                     <KitchenSink path={"kitchen-sink"} />
                     <MyProfilePage path={"my-profile"} />
                     <ContainerOverview path={"container"} />
