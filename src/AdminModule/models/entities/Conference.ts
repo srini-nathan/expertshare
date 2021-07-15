@@ -21,6 +21,10 @@ export class Conference extends BaseEntity {
 
     conferenceTags: PConferenceTag[];
 
+    isLive: boolean;
+
+    isArchive: boolean;
+
     constructor({
         title = "",
         sessionDates = {},
@@ -30,6 +34,8 @@ export class Conference extends BaseEntity {
         conferenceTags = [],
         translations,
         isVisible = true,
+        isLive = true,
+        isArchive = true,
         description = "",
         id,
         createdAt,
@@ -44,6 +50,8 @@ export class Conference extends BaseEntity {
         this.translations = translations;
         this.imageName = imageName;
         this.isVisible = isVisible;
+        this.isArchive = isArchive;
+        this.isLive = isLive;
         this.description = description;
     }
 
