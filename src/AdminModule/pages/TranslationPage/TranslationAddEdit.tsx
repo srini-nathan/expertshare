@@ -22,6 +22,7 @@ import {
 import { AppTranslationToolbar } from "./AppTranslationToolbar";
 import "./assets/scss/style.scss";
 import { SimpleObject } from "../../../AppModule/models";
+import { useAuthState } from "../../../AppModule/hooks";
 
 export interface TranslationCombineList {
     translationGroup?: TranslationGroup | undefined;
@@ -43,6 +44,7 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const [loading, isLoading] = useState<boolean>(false);
     const { state } = React.useContext(AuthContext);
     const { containerId } = state as AuthState;
+    const { containerResourceId } = useAuthState();
 
     useEffect(() => {
         isLoading(true);
@@ -105,8 +107,11 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                             id: e.id,
                                             translationGroup:
                                                 e.translationGroup,
-                                            translationValues:
-                                                e.translationValues,
+                                            translationValues: e.translationValues.filter(
+                                                (tv) =>
+                                                    tv.container ===
+                                                    containerResourceId
+                                            ),
                                         },
                                     ],
                                 },
@@ -123,7 +128,11 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                         defaultValue: e.defaultValue,
                                         id: e.id,
                                         translationGroup: e.translationGroup,
-                                        translationValues: e.translationValues,
+                                        translationValues: e.translationValues.filter(
+                                            (tv) =>
+                                                tv.container ===
+                                                containerResourceId
+                                        ),
                                     },
                                 ],
                             });
