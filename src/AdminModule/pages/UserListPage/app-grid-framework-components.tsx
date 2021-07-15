@@ -186,7 +186,10 @@ export const appGridFrameworkComponents = {
                 url: `/admin/users/${id}`,
             },
             deleteAction: {
-                confirmation: "Are you sure want to delete ?",
+                confirmationTitle: t(
+                    "admin.users.list:delete.modal.confirmationTitle"
+                ),
+                confirmation: t("admin.users.list:delete.modal.confirmation"),
                 onClick: () => {
                     onPressDelete(id);
                 },
@@ -196,8 +199,10 @@ export const appGridFrameworkComponents = {
 
         if (generatedGroups.length > 1) {
             props.customClickActions?.push({
-                confirmationTitle: "Unsubscribe",
-                confirmation: "Do you want to unsubscribe ?",
+                confirmationTitle: t(
+                    "admin.users.list:unlink.modal.confirmationTitle"
+                ),
+                confirmation: t("admin.users.list:unlink.modal.confirmation"),
                 icon: "faUnlink",
                 onClick: () => {
                     UserApi.unsubscribe<PUser>(id).then(() => {
@@ -210,11 +215,17 @@ export const appGridFrameworkComponents = {
         }
 
         props.customClickActions?.push({
-            confirmationTitle: "Reset email",
-            confirmation: "Do you want to send reset password email ?",
+            confirmationTitle: t(
+                "admin.users.list:resetpassword.modal.confirmationTitle"
+            ),
+            confirmation: t(
+                "admin.users.list:resetpassword.modal.confirmation"
+            ),
             icon: "Email",
             onClick: () => {
-                showLoader("Sending email...").then();
+                showLoader(
+                    t("admin.users.list:resetpassword.loader.sendingemail")
+                ).then();
                 AuthApi.resetPasswordRequest({
                     email,
                 }).then((error) => {
@@ -222,7 +233,9 @@ export const appGridFrameworkComponents = {
                     if (error instanceof UnprocessableEntityErrorResponse) {
                         errorToast(t(error.description));
                     } else {
-                        successToast("Email send");
+                        successToast(
+                            t("admin.users.list:resetpassword.success.message")
+                        );
                     }
                 });
             },
