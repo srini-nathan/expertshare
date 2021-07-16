@@ -9,6 +9,7 @@ import "./assets/scss/style.scss";
 import { useAuthState, useBuildAssetPath, useInitChat } from "../../hooks";
 import placeholder from "../../assets/images/user-avatar.png";
 import { FileTypeInfo } from "../../models";
+import { useCheckFeature } from "../../hooks/useCheckFeature";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -49,7 +50,7 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
     const { t } = useTranslation();
     const { startChat } = useInitChat();
     const { user, containerId } = useAuthState();
-
+    const { isChatEnable } = useCheckFeature();
     const getUserValue = (name: string): string => {
         let defaultValue = "";
         userFieldValues?.forEach((item: any) => {
@@ -213,26 +214,28 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                     {!isProfilePage && (
                         <Col className="inner-container--right-btn col-auto mr-0 ml-auto pr-4 p-0">
                             <Col className="inner-container--right-btn--content p-0">
-                                {isAllowCommunication && user && (
-                                    <AppButton
-                                        variant="secondary"
-                                        className="get-contact-btn"
-                                        onClick={() => {
-                                            if (user.id && id) {
-                                                startChat(
-                                                    id,
-                                                    user.id,
-                                                    containerId
-                                                );
-                                            }
-                                        }}
-                                    >
-                                        <i className="fak fa-start-conversation mb-1 mr-2"></i>
-                                        {t(
-                                            "attendee.form:button.startConversation"
-                                        )}
-                                    </AppButton>
-                                )}
+                                {isChatEnable() &&
+                                    isAllowCommunication &&
+                                    user && (
+                                        <AppButton
+                                            variant="secondary"
+                                            className="get-contact-btn"
+                                            onClick={() => {
+                                                if (user.id && id) {
+                                                    startChat(
+                                                        id,
+                                                        user.id,
+                                                        containerId
+                                                    );
+                                                }
+                                            }}
+                                        >
+                                            <i className="fak fa-start-conversation mb-1 mr-2"></i>
+                                            {t(
+                                                "attendee.form:button.startConversation"
+                                            )}
+                                        </AppButton>
+                                    )}
 
                                 {/* <AppButton
                                 variant="secondary"
