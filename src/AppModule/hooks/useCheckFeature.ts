@@ -21,7 +21,7 @@ export function useCheckFeature() {
                 return false;
             }
             if (!user.isAllowCommunication) {
-                return true;
+                return false;
             }
             return true;
         }
