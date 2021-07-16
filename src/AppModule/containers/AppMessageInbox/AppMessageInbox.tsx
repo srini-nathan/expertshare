@@ -17,6 +17,7 @@ import { UserApi } from "../../../AdminModule/apis";
 import "./assets/scss/style.scss";
 import { PrimitiveObject } from "../../models";
 import { socket, EVENTS } from "../../socket";
+import { useCheckFeature } from "../../hooks/useCheckFeature";
 
 export const AppMessageInbox: FC = () => {
     const [collapsed, setCollapsed] = useState(true);
@@ -30,6 +31,7 @@ export const AppMessageInbox: FC = () => {
     const [page] = useState<number>(1);
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const { openThread } = useOpenChatOneToOne();
+    const { isChatEnable } = useCheckFeature();
 
     useEffect(() => {
         if (relationManagerId !== null) {
@@ -88,7 +90,7 @@ export const AppMessageInbox: FC = () => {
 
     useEffect(() => {
         socket.on(EVENTS.NEW_MESSAGE, (payload, threadId, sender) => {
-            if (user && user.id) {
+            if (isChatEnable() && user && user.id) {
                 if (!openThread) {
                     startChat(user.id, sender, containerId);
                 } else if (openThread && openThread.id) {

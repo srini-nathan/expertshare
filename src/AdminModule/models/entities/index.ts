@@ -25,3 +25,4 @@ export * from "./InfoPage";
 export * from "./InfoPageTranslations";
 export * from "./Navigation";
 export * from "./NavigationTranslations";
+export * from "./Configuration";

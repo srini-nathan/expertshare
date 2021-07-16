@@ -6,6 +6,7 @@ import { useAuthState, useBuildAssetPath, useInitChat } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 import { FileTypeInfo, User } from "../../models";
 import placeholder from "../../assets/images/user-avatar.png";
+import { useCheckFeature } from "../../hooks/useCheckFeature";
 import { useGlobalData } from "../../contexts";
 
 const { Upload: UPLOAD } = CONSTANTS;
@@ -43,6 +44,7 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
     const { container } = useGlobalData();
     const { startChat } = useInitChat();
     const { user } = useAuthState();
+    const { isChatEnable } = useCheckFeature();
 
     const style = imageName
         ? {
@@ -172,27 +174,30 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                                             Start Video Chat
                                         </a>
                                     </div> */}
-                                    {isAllowCommunication && container && user && (
-                                        <div
-                                            className="popup--inner--item conversation"
-                                            onClick={() => {
-                                                if (user.id) {
-                                                    startChat(
-                                                        user.id,
-                                                        id,
-                                                        container.id
-                                                    );
-                                                }
-                                            }}
-                                        >
-                                            <a>
-                                                <i className="fak fa-start-conversation"></i>
-                                                {t(
-                                                    "attendee.form:button.startConversation"
-                                                )}
-                                            </a>
-                                        </div>
-                                    )}
+                                    {isChatEnable() &&
+                                        isAllowCommunication &&
+                                        container &&
+                                        user && (
+                                            <div
+                                                className="popup--inner--item conversation"
+                                                onClick={() => {
+                                                    if (user.id) {
+                                                        startChat(
+                                                            user.id,
+                                                            id,
+                                                            container.id
+                                                        );
+                                                    }
+                                                }}
+                                            >
+                                                <a>
+                                                    <i className="fak fa-start-conversation"></i>
+                                                    {t(
+                                                        "attendee.form:button.startConversation"
+                                                    )}
+                                                </a>
+                                            </div>
+                                        )}
                                     <div className="popup--inner--item view-profile">
                                         <Link
                                             to={`/attendee/${attendee.id}/show`}
