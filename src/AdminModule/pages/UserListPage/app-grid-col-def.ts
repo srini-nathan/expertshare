@@ -62,8 +62,8 @@ export const appGridColDef = ({
         headerName: "admin.users.list:column.role",
         field: "role",
         cellRenderer: "appSelect",
-        flex: 1,
-        minWidth: 160,
+        flex: 1.1,
+        minWidth: 180,
         sortable: true,
         cellRendererParams: {
             onSelectChange,
