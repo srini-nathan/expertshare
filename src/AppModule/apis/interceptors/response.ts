@@ -16,11 +16,15 @@ export const onResponseRejected = (error: AxiosError): Promise<any> => {
     // status code available
     if (status) {
         if (status === 401) {
-            navigate("/auth/login", { state: {} }).then(() => {
-                clearAuthStorage().then(() => {
-                    // we don't need to show any message here, just kickout
+            if (message === "Invalid JWT Token") {
+                navigate("/auth/login", { state: {} }).then(() => {
+                    clearAuthStorage().then(() => {
+                        // we don't need to show any message here, just kickout
+                    });
                 });
-            });
+            } else {
+                errorToast(message);
+            }
         }
         if (status === 403) {
             errorToast("You are not suppose to be here!");
