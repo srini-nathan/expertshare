@@ -478,7 +478,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                             output: (l: PrimitiveObject) =>
                                                 l?.value,
                                             input: (value: string) => {
-                                                return _find([], {
+                                                return _find(languages, {
                                                     value,
                                                 });
                                             },
