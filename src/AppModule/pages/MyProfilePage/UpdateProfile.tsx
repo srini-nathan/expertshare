@@ -597,16 +597,6 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                             </Row>
                             <Row className="m-0">
                                 <Col className={"d-flex justify-content-end"}>
-                                    <AppButton
-                                        variant={"danger"}
-                                        onClick={() => {
-                                            setShowDelete(true);
-                                        }}
-                                    >
-                                        {t(
-                                            "profile.update:deleteProfile.label"
-                                        )}
-                                    </AppButton>
                                     <AppModal
                                         show={showDelete}
                                         title={t(
@@ -630,9 +620,20 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                         {loading ? (
                             <AppLoader containerClassName="custom-btn-loader" />
                         ) : (
-                            <AppButton variant="primary" type="submit">
-                                {t("common.button:save")}
-                            </AppButton>
+                            <div>
+                                <AppButton
+                                    variant={"danger"}
+                                    onClick={() => {
+                                        setShowDelete(true);
+                                    }}
+                                    className={"mr-3"}
+                                >
+                                    {t("profile.update:deleteProfile.label")}
+                                </AppButton>
+                                <AppButton variant="primary" type="submit">
+                                    {t("common.button:save")}
+                                </AppButton>
+                            </div>
                         )}
                     </Col>
                 </Row>

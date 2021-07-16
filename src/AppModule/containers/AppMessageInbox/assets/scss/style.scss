@@ -283,7 +283,9 @@
                 @include media("mobile") {
                     height: 80vh;
                 }
-
+                .loaderContainer {
+                    position: relative;
+                }
                 &--item {
                     border-top: 1px solid var(--secondary-20);
                     a {
