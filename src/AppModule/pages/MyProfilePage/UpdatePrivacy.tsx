@@ -90,7 +90,7 @@ export const UpdatePrivacy: FC<RouteComponentProps> = (): JSX.Element => {
                                 "profile.update:label.sectionPrivacyAndCommunication"
                             )}
                         >
-                            <Row className="m-0">
+                            <Row className="m-0 mt-3">
                                 {role === ROLE.ROLE_SPEAKER ||
                                 role === ROLE.ROLE_MODERATOR ? null : (
                                     <AppFormSwitch
@@ -113,6 +113,9 @@ export const UpdatePrivacy: FC<RouteComponentProps> = (): JSX.Element => {
                                             errors.isDisplayAsGuest?.message
                                         }
                                         control={control}
+                                        className={
+                                            "pl-0 form-switch-label-wrap"
+                                        }
                                     />
                                 )}
                                 <AppFormSwitch
@@ -133,6 +136,7 @@ export const UpdatePrivacy: FC<RouteComponentProps> = (): JSX.Element => {
                                     defaultChecked={user?.isExposeEmail}
                                     errorMessage={errors.isExposeEmail?.message}
                                     control={control}
+                                    className={"pl-0 form-switch-label-wrap"}
                                 />
                                 <AppFormSwitch
                                     id={"isAllowCommunication"}
@@ -154,6 +158,7 @@ export const UpdatePrivacy: FC<RouteComponentProps> = (): JSX.Element => {
                                         errors.isAllowCommunication?.message
                                     }
                                     control={control}
+                                    className={"pl-0 form-switch-label-wrap"}
                                 />
                             </Row>
                         </AppCard>

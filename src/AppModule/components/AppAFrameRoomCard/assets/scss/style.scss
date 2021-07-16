@@ -12,7 +12,6 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
-
         }
 
         .conference-tags-container {
@@ -54,12 +53,17 @@
                 }
 
                 &--icons {
+                    display: flex;
+                    flex-direction: inherit;
+                    flex-wrap: wrap;
+                    justify-content: flex-end;
+                    height: fit-content;
                     margin-top: 8px;
                     margin-right: 8px;
                     margin-left: auto;
-
                     span,
                     a {
+                        margin-bottom: 6px;
                         margin-left: 6px;
                         cursor: pointer;
 
@@ -191,7 +195,6 @@
                                                 background-color: var(--primary);
                                                 border: 1px solid var(--border-border-radius-clr);
                                                 border-radius: 50%;
-
                                             }
                                         }
                                     }
@@ -214,7 +217,6 @@
                                         }
                                     }
                                 }
-
                             }
                         }
 
@@ -275,14 +277,10 @@
                                 }
                             }
                         }
-
-
                     }
                 }
             }
         }
-
-
     }
 
     &--more {
