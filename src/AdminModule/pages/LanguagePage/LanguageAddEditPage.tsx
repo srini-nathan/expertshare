@@ -157,7 +157,7 @@ export const LanguageAddEditPage: FC<RouteComponentProps> = ({
                                         isEditMode
                                     )}
                                     errorMessage={errors.isActive?.message}
-                                    value={data.isActive}
+                                    defaultChecked={data.isActive}
                                     control={control}
                                 />
                             </Form.Row>
