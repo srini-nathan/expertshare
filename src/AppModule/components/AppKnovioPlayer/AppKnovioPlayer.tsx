@@ -3,8 +3,8 @@ import { Helmet } from "react-helmet";
 
 export interface AppKnovioPlayerProps {
     linkUrl: string;
-    height: number;
-    width: number;
+    height: number | string;
+    width: number | string;
 }
 
 export const AppKnovioPlayer: FC<AppKnovioPlayerProps> = ({
