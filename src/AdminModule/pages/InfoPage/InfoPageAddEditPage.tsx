@@ -42,7 +42,8 @@ export const InfoPageAddEditPage: FC<RouteComponentProps> = ({
         new InfoPage(containerResourceId)
     );
     const { languages } = useGlobalData();
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(isEditMode);
+    const [loadingLang, setLoadingLang] = useState<boolean>(true);
     const [translations, setTranslations] = useState<TranslationsType[]>([]);
     const [defaultLanguage, setDefaultLanguage] = useState<string>("");
 
@@ -54,7 +55,6 @@ export const InfoPageAddEditPage: FC<RouteComponentProps> = ({
         trigger,
         formState,
         control,
-        setValue,
     } = useForm<InfoPage>({
         resolver: yupResolver(schema),
         mode: "all",
@@ -127,9 +127,9 @@ export const InfoPageAddEditPage: FC<RouteComponentProps> = ({
                 "groups[]": "translations",
             }).then(({ response, isNotFound, errorMessage }) => {
                 if (errorMessage) {
-                    errorToast(errorMessage);
+                    errorToast(t(errorMessage));
                 } else if (isNotFound) {
-                    errorToast("Info page not exist");
+                    errorToast(t("admin.infopage.form:notfound.error.message"));
                 } else if (response !== null) {
                     setData(response);
                     const items: InfoPageTranslations[] = [];
@@ -142,12 +142,10 @@ export const InfoPageAddEditPage: FC<RouteComponentProps> = ({
                             });
                         }
                     );
-                    setValue("isActive", response.isActive);
-                    setValue("slugKey", response.slugKey);
                     setTranslations(items);
+                    trigger();
                 }
                 setLoading(false);
-                trigger();
             });
         }
     }, [id, isEditMode, trigger]);
@@ -178,12 +176,12 @@ export const InfoPageAddEditPage: FC<RouteComponentProps> = ({
             });
             setTranslations(items);
         }
-        setLoading(false);
+        setLoadingLang(false);
     }, [languages]);
 
     const { errors } = formState;
 
-    if (loading) {
+    if (loading || loadingLang) {
         return <AppLoader />;
     }
 
@@ -227,10 +225,6 @@ export const InfoPageAddEditPage: FC<RouteComponentProps> = ({
                                     control={control}
                                 />
                                 <AppFormSwitch
-                                    sm={12}
-                                    md={12}
-                                    lg={12}
-                                    xl={12}
                                     name={"isActive"}
                                     label={t(
                                         "admin.infopage.form:label.isActive"
