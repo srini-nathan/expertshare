@@ -186,7 +186,9 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
     }, [isEditMode, trigger, navigation]);
 
     useEffect(() => {
-        InfoPageApi.find<InfoPage>().then(({ response }) => {
+        InfoPageApi.find<InfoPage>(1, {
+            "container.id": container?.id,
+        }).then(({ response }) => {
             if (response?.items) {
                 setInfoPages(response.items);
             }
