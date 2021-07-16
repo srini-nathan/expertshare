@@ -417,7 +417,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         return (
             <>
                 {containerNavs
-                    .slice()
+                    .filter((cn) => cn.isActive)
                     .sort((a, b) => a.ord - b.ord)
                     .map((cn) => {
                         let title = "";
