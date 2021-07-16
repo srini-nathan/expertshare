@@ -53,8 +53,8 @@ export const renderStreams = (
         case "KNOVIO":
             return (
                 <AppKnovioPlayer
-                    width={1522}
-                    height={910}
+                    width={"auto"}
+                    height={"100%"}
                     linkUrl={streamUrl}
                 />
             );
