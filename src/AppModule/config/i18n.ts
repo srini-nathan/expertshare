@@ -7,7 +7,7 @@ export const init = (resources: Resource) => {
         fallbackLng: "en",
         keySeparator: false,
         nsSeparator: "::",
-        debug: true,
+        debug: false,
         interpolation: {
             escapeValue: false,
         },
