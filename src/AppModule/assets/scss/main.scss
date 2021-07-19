@@ -261,3 +261,12 @@ a {
 .auth-container {
     // background-color: #eee !important;
 }
+.ag-theme-alpine {
+    .ag-react-container {
+        .alert-danger {
+            color: var(--secondary);
+            background-color: var(--secondary-10);
+            border-color: var(--secondary);
+        }
+    }
+}
