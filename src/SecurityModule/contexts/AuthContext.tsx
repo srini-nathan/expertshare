@@ -7,6 +7,7 @@ import {
     AUTH_TOKEN_KEY,
     AUTH_USER_KEY,
     AUTH_SKIP_ONBOARDING,
+    USER_LOCALE,
 } from "../../AppModule/config/app-env";
 import { AuthState } from "../models/context/AuthState";
 import { clearAuthStorage } from "../utils";
@@ -128,6 +129,7 @@ export const socialLogin = async (
             await localStorage.setItem(AUTH_TOKEN_KEY, token);
             const user = await AuthApi.me();
             await localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+            await localStorage.setItem(USER_LOCALE, user.locale);
             dispatch({
                 type: AuthActionTypes.LOGIN_SUCCESS,
                 payload: {
@@ -195,6 +197,7 @@ export const loginAction = async (
             await localStorage.setItem(AUTH_TOKEN_KEY, token);
             const user = await AuthApi.me();
             await localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
+            await localStorage.setItem(USER_LOCALE, user.locale);
             dispatch({
                 type: AuthActionTypes.LOGIN_SUCCESS,
                 payload: {
@@ -245,6 +248,7 @@ export default function AuthProvider({ children }: Props): JSX.Element {
                 try {
                     const user = await AuthApi.me();
                     const { ip, roles, cid, cntid }: JWT = jwtDecode(token);
+                    await localStorage.setItem(USER_LOCALE, user.locale);
                     dispatch({
                         type: AuthActionTypes.LOGIN_SUCCESS,
                         payload: {
