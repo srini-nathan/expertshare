@@ -70,25 +70,24 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     const [loading, isLoading] = React.useState<boolean>(false);
     const [dataLoading, isDataLoading] = React.useState<boolean>(true);
     const [fieldLoading, isFieldLoading] = React.useState<boolean>(true);
+    const [tagsLoading, setTagsLoading] = React.useState<boolean>(true);
     const [userTags, setUserTags] = useState<SimpleObject<string>[]>([]);
     const [selectedUserTags, setSelectedUserTag] = useState<
         SimpleObject<string>[]
     >([]);
     const { containerResourceId } = useAuthState();
-    const { locale, setLocale } = useUserLocale();
+    const { setLocale } = useUserLocale();
     const { container, activeLanguages } = useGlobalData();
     const [languages] = useState<SimpleObject<string>[]>(
         activeLanguages
             ? activeLanguages.map((l) => {
                   return {
-                      id: `${l.id}`,
                       value: l.locale,
                       label: l.name,
                   };
               })
             : []
     );
-    const [userLocale, setUserLocale] = useState<SimpleObject<string>>();
     const [data, setData] = useState<PUser>(new UserModel(containerResourceId));
     const [userFields, setUserFields] = useState<UserField[]>([]);
     const [files, setFiles] = useState<File[]>([]);
@@ -141,9 +140,35 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                     });
                     setUserTags(tags);
                 }
+                setTagsLoading(false);
             }
         );
     };
+
+    useEffect(() => {
+        isDataLoading(true);
+        UserApi.findById<UserModel>(user?.id as number).then(
+            ({ response, isNotFound, errorMessage }) => {
+                if (errorMessage) {
+                    errorToast(errorMessage);
+                } else if (isNotFound) {
+                    errorToast("User not exist");
+                } else if (response !== null) {
+                    setData(response);
+                    const selectedTags: SimpleObject<string>[] = [];
+                    response?.userTags?.forEach((e: any) => {
+                        selectedTags.push({
+                            value: `${e.name}`,
+                            id: `${e.id}`,
+                            label: `${e.name}`,
+                        });
+                    });
+                    setSelectedUserTag(selectedTags);
+                }
+                isDataLoading(false);
+            }
+        );
+    }, []);
 
     useEffect(() => {
         fetchUserTags();
@@ -158,34 +183,6 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
             });
         setSelectedUserTag(selectedTags);
     }, []);
-    useEffect(() => {
-        isDataLoading(true);
-        UserApi.findById<UserModel>(user?.id as number).then(
-            ({ response, isNotFound, errorMessage }) => {
-                isDataLoading(false);
-                if (errorMessage) {
-                    errorToast(errorMessage);
-                } else if (isNotFound) {
-                    errorToast("User not exist");
-                } else if (response !== null) {
-                    setData(response);
-                    const selectedTags: SimpleObject<string>[] = [];
-                    response?.userTags?.forEach((e: any) => {
-                        selectedTags.push({
-                            id: `${e.id}`,
-                            value: `${e.name}`,
-                            label: `${e.name}`,
-                        });
-                    });
-                    setSelectedUserTag(selectedTags);
-                    const uLocale = languages.find(
-                        (l) => l.value === response.locale
-                    );
-                    setUserLocale(uLocale);
-                }
-            }
-        );
-    }, [locale]);
 
     const fetchUserFields = () => {
         isFieldLoading(true);
@@ -352,7 +349,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
         return submitForm(formData);
     };
 
-    if (dataLoading || fieldLoading) return <AppLoader />;
+    if (dataLoading || fieldLoading || tagsLoading) return <AppLoader />;
 
     return (
         <>
@@ -446,7 +443,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                             formState,
                                             true
                                         )}
-                                        defaultValue={userLocale}
+                                        defaultValue={data?.locale}
                                         placeholder={"Locale"}
                                         errorMessage={errors.locale?.message}
                                         options={languages}
@@ -455,9 +452,13 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                             output: (l: PrimitiveObject) =>
                                                 l?.value,
                                             input: (value: string) => {
-                                                return _find(languages, {
-                                                    value,
-                                                });
+                                                const active = _find(
+                                                    languages,
+                                                    {
+                                                        value,
+                                                    }
+                                                );
+                                                return active;
                                             },
                                         }}
                                     />
