@@ -43,6 +43,27 @@ body {
         background-size: cover;
         background-attachment: fixed;
     }
+    .with-tgl {
+        .active-account-box--logo-box {
+            a {
+                i {
+                    height: 90px;
+                    background: url("../images/tgl-logo-login.png") no-repeat;
+                    background-position: center;
+                    background-size: contain;
+                }
+            }
+        }
+    }
+    //@TODO TGL Specially Customization Logo In Navigation
+    .sidebar {
+        &.tgl {
+            .main-logo {
+                height: 90%;
+                background-image: url("../images/tgl-log.png");
+            }
+        }
+    }
 }
 .swal2-container {
     .swal2-actions {

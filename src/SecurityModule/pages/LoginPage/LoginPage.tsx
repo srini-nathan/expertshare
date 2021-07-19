@@ -376,6 +376,12 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                 container?.domain === "csgsc.virtual.credit-suisse.com"
                     ? "with-csgsc-bg"
                     : "with-bg"
+            }${
+                container?.domain === "tgl.expertshare.live" ? " with-tgl" : ""
+            }${
+                container?.domain === "test2.localhost:3000"
+                    ? " with-test2"
+                    : ""
             }`}
         >
             <div className="auth-container--box">
