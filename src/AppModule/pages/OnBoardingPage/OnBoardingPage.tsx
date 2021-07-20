@@ -224,11 +224,13 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                 } else if (response !== null) {
                     const langs: SimpleObject<string>[] = [];
                     response.items.forEach((e) => {
-                        langs.push({
-                            id: `${e.id}`,
-                            value: e.locale,
-                            label: e.name,
-                        });
+                        if (e.isActive) {
+                            langs.push({
+                                id: `${e.id}`,
+                                value: e.locale,
+                                label: e.name,
+                            });
+                        }
                     });
                     setLanguages(langs);
                 }
@@ -240,13 +242,6 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
         setFiles(selectedFiles);
     };
 
-    const getLocale = () => {
-        const item = languages.find((e) => e.value === user?.locale);
-
-        if (item) return item;
-
-        return "";
-    };
     if (dataLoading) return <AppLoader />;
     return (
         <Container fluid className="active-account auth-container">
@@ -371,7 +366,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
 
                                     <AppFormSelect
                                         id={"locale"}
-                                        defaultValue={getLocale()}
+                                        defaultValue={user?.locale}
                                         name={"locale"}
                                         label={t("profile.update:label.locale")}
                                         md={12}
@@ -391,7 +386,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                             output: (locale: PrimitiveObject) =>
                                                 locale?.value,
                                             input: (value: string) => {
-                                                return _find([], {
+                                                return _find(languages, {
                                                     value,
                                                 });
                                             },
