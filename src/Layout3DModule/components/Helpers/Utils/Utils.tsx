@@ -140,9 +140,9 @@ export const inverseUpsideDownCamera = (camRotation: Euler): Euler => {
     if (xGrad > 180 && xGrad < 181) {
         if (zGrad > -180 && zGrad < -179) {
             newRotation.set(
-                0, // camRotation.x - Math.PI,
+                camRotation.x - Math.PI,
                 -Math.PI - camRotation.y,
-                0 // camRotation.z + Math.PI
+                camRotation.z + Math.PI
             );
         }
     }

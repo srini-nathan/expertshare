@@ -8,7 +8,6 @@ import * as THREE from "three";
 import { Euler, Vector3 } from "three";
 import { CameraControls } from "../Controls/CameraControls";
 import { Transform } from "../Controls/Transform";
-// import { Model } from "../Elements/Model";
 import { RoomBuilder } from "../Builders/RoomBuilder";
 import {
     PanelInterfaceProps,
@@ -16,7 +15,6 @@ import {
     Video360Props,
 } from "../Types/Interfaces";
 
-import { simulatedParams } from "../Helpers/Simdata";
 import { use3DHelper } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 import { degToRad } from "../Helpers/Utils";
