@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
     extend,
@@ -259,15 +260,22 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
     }, [props.controlsEnabled]); // Only re-run the effect if count changes
 
     useEffect(() => {
-        if (perspectiveOrbit.current)
+        if (perspectiveOrbit.current) {
             perspectiveOrbit.current.position.set(12, 6, 8);
+        }
 
         if (orbit.current) orbit.current.update();
     }, [perspectiveOrbit.current]);
 
     useEffect(() => {
         if (perspectiveFirstPerson.current) {
-            perspectiveFirstPerson.current.rotation.set(
+            // perspectiveFirstPerson.current.rotation.set(
+            //     initialCameraRotation.x,
+            //     initialCameraRotation.y,
+            //     initialCameraRotation.z
+            // );
+            camera.rotation.order = "YXZ";
+            camera.rotation.set(
                 initialCameraRotation.x,
                 initialCameraRotation.y,
                 initialCameraRotation.z
@@ -363,7 +371,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                 fakeOrbit.target = getNewTarget(fakeCam, 0.001);
                 fakeOrbit.update();
 
-                fakeCam.updateMatrix();
+                // fakeCam.updateMatrix();
                 const fRotation = normalizeRotation(
                     camera.rotation.clone(),
                     fakeCam.rotation.clone()
@@ -373,7 +381,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                 fakeCam.lookAt(targetData.toPosition.clone()); // look towards panel in room 2 (from position), TODO: zoom out
                 fakeOrbit.target = getNewTarget(fakeCam, 0.001);
                 fakeOrbit.update();
-                fakeCam.updateMatrix();
+                // fakeCam.updateMatrix();
 
                 let tRotation = normalizeRotation(
                     targetData.toRotation.clone(),
@@ -470,15 +478,16 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                     orbit.current.enabled = false;
                     // changeRoomNow(currentRoom);
                     // console.log(
-                    //     "setting to camera rotation: ",
+                    //     "setting to camera rotation, no animation: ",
                     //     targetData.toRotation
                     // );
+                    camera.rotation.order = "YXZ";
                     camera.rotation.set(
                         targetData.toRotation.x,
                         targetData.toRotation.y,
                         targetData.toRotation.z
                     );
-                    camera.updateMatrix();
+                    // camera.updateMatrix();
                     // applyRotationToCamera(
                     //     perspectiveFirstPerson.current,
                     //     targetData.toRotation
@@ -607,11 +616,14 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                         args={[80, 1, 1, 10000]}
                         onClick={camOnClick}
                         ref={perspectiveFirstPerson}
-                        rotation={[
-                            firstPersonCameraRotation.current.x,
-                            firstPersonCameraRotation.current.y,
-                            firstPersonCameraRotation.current.z,
-                        ]}
+                        // rotation={[
+                        //     initialCameraRotation.x,
+                        //     initialCameraRotation.y,
+                        //     initialCameraRotation.z,
+                        //     // firstPersonCameraRotation.current.x,
+                        //     // firstPersonCameraRotation.current.y,
+                        //     // firstPersonCameraRotation.current.z,
+                        // ]}
                         position={firtPersonCameraPosition.current}
                         makeDefault={!editMode}
                     >
