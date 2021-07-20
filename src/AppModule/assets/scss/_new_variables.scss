@@ -1,0 +1,59 @@
+:root {
+    --font-family-title: "creditsuisse-title";
+    --font-family-body: "creditsuisse-body";
+    --font-family-button: "creditsuisse-button";
+    // global colors
+    --primary: #000;
+    --secondary: #444;
+    --danger: #E00; // for invalid messages,
+    --success: #0F0; // for success messages,
+    // widget/card variables
+    --widget-background-color: #FFF;
+    --widget-text-color: #000;
+    --widget-border-radius: 5px;
+    // tabs
+    --tab-border-radius: 5px;
+    --tab-background-color: #FFF;
+    --tab-text-color: #444;
+    --tab-box-shadow-color: #B5B5B585;
+    --tab-background-color--active: #FFF3; // --tab-background-color + opacity
+    --tab-text-color--active: #444;
+    --tab-box-shadow-color--active: #B5B5B585;
+    // inputs
+    --input-background-color: #FCFCFC;
+    --input-border-color: #A7A7A7;
+    --input-border-width: 1px;
+    --input-border-radius: 5px;
+    --input-text-color: #444; //  inherit secondary
+    --input-placeholder-text-color: #A0B2C0;
+    --input-background-color--focus: #FCFCFC;
+    --input-border-color--focus: #A7A7A7;
+    --input-border-width--focus: 2px;
+    --input-background-color--disable: #FCFCFC;
+    --input-border-color--disable: #A7A7A7;
+    // buttons
+    --primary-button-background-color: #444; // inherit primary color
+    --primary-button-text-color: #FFF;
+    --primary-button-border-color: #FFF;
+    --primary-button-border-width: 1px;
+    --primary-button-border-radius: 5px;
+    --primary-button-background-color--disable: #444;
+    --primary-button-text-color--disable: #FFF;
+    --primary-button-border-color--disable: #FFF;
+    --secondary-button-background-color: #444; // inherit primary color
+    --secondary-button-text-color: #FFF;
+    --secondary-button-border-color: #FFF;
+    --secondary-button-border-width: 1px;
+    --secondary-button-border-radius: 5px;
+    --secondary-button-background-color--disable: #444;
+    --secondary-button-text-color--disable: #FFF;
+    --secondary-button-border-color--disable: #FFF;
+    --danger-button-background-color: #444;
+    --danger-button-text-color: #FFF;
+    --danger-button-border-color: #FFF;
+    --danger-button-border-width: 1px;
+    --danger-button-border-radius: 5px;
+    --danger-button-background-color--disable: #444;
+    --danger-button-text-color--disable: #FFF;
+    --danger-button-border-color--disable: #FFF;
+}
