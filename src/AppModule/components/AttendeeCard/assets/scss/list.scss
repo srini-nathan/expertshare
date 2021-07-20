@@ -139,13 +139,12 @@
 
                     &--bio {
                         display: -webkit-box;
-                        height: 40px;
+                        height: 60px;
                         overflow: hidden;
                         font-size: 14px;
                         font-weight: 400;
                         color: var(--secondary-70);
                         -webkit-box-orient: vertical;
-                        -webkit-line-clamp: 2;
                     }
 
                     &--mail {
@@ -299,6 +298,14 @@
                         font-size: 12px !important;
                         box-shadow: 0 3px 7px var(--secondary-20);
                     }
+                }
+
+                .job-title {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
                 }
             }
         }
