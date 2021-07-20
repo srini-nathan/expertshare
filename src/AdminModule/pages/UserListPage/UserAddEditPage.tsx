@@ -367,11 +367,13 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                 } else if (response !== null) {
                     const langs: SimpleObject<string>[] = [];
                     response.items.forEach((e) => {
-                        langs.push({
-                            id: `${e.id}`,
-                            value: e.locale,
-                            label: e.name,
-                        });
+                        if (e.isActive) {
+                            langs.push({
+                                id: `${e.id}`,
+                                value: e.locale,
+                                label: e.name,
+                            });
+                        }
                     });
                     setLanguages(langs);
                 }
@@ -389,13 +391,6 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         return "";
     };
 
-    const getLocale = () => {
-        const item = languages.find((e) => e.value === data.locale);
-
-        if (item) return item;
-
-        return "";
-    };
     useEffect(() => {
         if (isEditMode) {
             UserApi.findById<User>(id).then(
@@ -717,7 +712,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                         formState,
                                         isEditMode
                                     )}
-                                    defaultValue={getLocale()}
+                                    defaultValue={data?.locale}
                                     placeholder={"Locale"}
                                     errorMessage={errors.locale?.message}
                                     options={languages}
@@ -726,7 +721,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                         output: (locale: PrimitiveObject) =>
                                             locale?.value,
                                         input: (value: string) => {
-                                            return _find([], {
+                                            return _find(languages, {
                                                 value,
                                             });
                                         },
