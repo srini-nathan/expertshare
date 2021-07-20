@@ -62,7 +62,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const { dispatch, state } = React.useContext(AuthContext);
     const { role, containerId } = useAuthState();
     const containerNavs = useRecoilValue<Navigation[]>(appContainerNavigation);
-    const { defaultLanguage, container } = useGlobalData();
+    const { container } = useGlobalData();
     const { user } = state;
 
     const { locale, setLocale, containerLocale } = useUserLocale();
@@ -421,11 +421,10 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                     .sort((a, b) => a.ord - b.ord)
                     .map((cn) => {
                         let title = "";
-                        if (defaultLanguage && cn.translations) {
-                            const { locale: defaultLocale } = defaultLanguage;
+                        if (cn.translations) {
                             const index = findIndex(
                                 cn.translations,
-                                (tra) => tra.locale === defaultLocale
+                                (tra) => tra.locale === locale
                             );
                             title = cn.translations[index].title;
                         }
