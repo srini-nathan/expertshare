@@ -426,8 +426,6 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                 cn.translations,
                                 (tra) => tra.locale === locale
                             );
-                            // eslint-disable-next-line no-console
-                            console.log(locale, index, cn, "containerNavs");
                             if (cn.translations[index]) {
                                 title = cn.translations[index].title;
                             }
