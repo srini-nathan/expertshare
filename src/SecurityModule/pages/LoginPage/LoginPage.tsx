@@ -30,7 +30,7 @@ import {
     CONTAINER_LOCALE,
     LANGUAGES,
 } from "../../../AppModule/config/app-env";
-import { useLanguages, useUserLocale } from "../../../AppModule/hooks";
+import { useUserLocale } from "../../../AppModule/hooks";
 
 type LoginForm = {
     email: string;
@@ -46,7 +46,6 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [emailStatus, setEmailStatus] = useState<string>("");
     const [agree, isAgree] = useState<boolean>(false);
     const [onboarded, isOnboarded] = useState<boolean>(false);
-    const { Languages } = useLanguages();
     const [activeLanguage, setActiveLanguage] = useState<string>("");
     const [userEmail, setUserEmail] = useState<string>("");
     const {
@@ -60,7 +59,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
         mode: "all",
     });
     const desclaimer = useRef<HTMLDivElement>(null);
-    const { container } = useGlobalData();
+    const { container, activeLanguages } = useGlobalData();
     const { errors } = formState;
     const { t } = useTranslation();
     const { setLocale } = useUserLocale();
@@ -383,8 +382,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                     <div className="tabs-translation-auth mb-3 justify-content-center">
                         <Row className="m-0 p-0 justify-content-center">
                             {container &&
-                                Languages() &&
-                                Languages().map((e, i) => {
+                                activeLanguages?.map((e, i) => {
                                     return (
                                         <AppButton
                                             variant="secondary"
