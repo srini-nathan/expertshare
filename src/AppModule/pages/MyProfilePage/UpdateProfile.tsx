@@ -206,7 +206,7 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
     };
     useEffect(() => {
         fetchUserFields();
-    }, [data]);
+    }, []);
     const getValue = (name: string) => {
         let val = "";
         if (
@@ -563,6 +563,12 @@ export const UpdateProfile: FC<RouteComponentProps> = (): JSX.Element => {
                                                 ...data,
                                                 imageName: "",
                                             });
+                                        }}
+                                        confirmation={{
+                                            title:
+                                                "profile.update:image.deleteconfirm.title",
+                                            bodyContent:
+                                                "profile.update:image.deleteconfirm.content",
                                         }}
                                     />
                                 </Form.Group>
