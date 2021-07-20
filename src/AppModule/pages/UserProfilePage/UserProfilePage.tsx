@@ -28,7 +28,7 @@ export const UserProfilePage: FC<RouteComponentProps> = (): JSX.Element => {
                 setUser(response);
             }
         });
-    }, []);
+    }, [id]);
 
     if (loading) return <AppLoader />;
 
