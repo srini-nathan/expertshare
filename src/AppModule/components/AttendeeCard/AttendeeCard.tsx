@@ -116,15 +116,10 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                         {firstName} {lastName}
                     </h2>
                 </Link>
-                <p className="card--title--bio mb-1 mx-2">
-                    {jobTitle && jobTitle}
-                    {attendee.jobTitle &&
-                        attendee.jobTitle !== "" &&
-                        attendee.company &&
-                        attendee.company !== "" &&
-                        ", "}
-                    {company && company}
-                </p>
+                <div className="card--title--bio mb-1 mx-2">
+                    <p className={"job-title mb-0"}>{jobTitle || ""}</p>
+                    <p>{company || ""}</p>
+                </div>
                 <a className="card--title--mail mb-3 d-block">
                     {isExposeEmail && email}
                 </a>

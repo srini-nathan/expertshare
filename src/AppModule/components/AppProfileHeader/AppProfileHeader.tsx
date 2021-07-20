@@ -161,16 +161,8 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                             </h2>
                         </Col>
                         <Col className="inner-container--main-det--major p-0">
-                            <p>
-                                {jobTitle && jobTitle}
-
-                                {jobTitle &&
-                                    jobTitle !== "" &&
-                                    company &&
-                                    company !== "" &&
-                                    ", "}
-                                {company && company}
-                            </p>
+                            <p className={"mb-0 job-title"}>{jobTitle || ""}</p>
+                            <p>{company || ""}</p>
                         </Col>
                         <Col className="inner-container--main-det--mail p-0">
                             <span>{isExposeEmail && email}</span>
@@ -196,7 +188,7 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
                         className="inner-container--main-det--biography mt-4 px-4"
                     >
                         <Col className="row m-0 p-0">
-                            <p>
+                            <p className={"user-biography"}>
                                 {isReadMore
                                     ? getUserValue("biography").slice(0, 500)
                                     : getUserValue("biography")}
