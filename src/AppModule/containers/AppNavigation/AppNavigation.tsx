@@ -62,7 +62,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const { dispatch, state } = React.useContext(AuthContext);
     const { role, containerId } = useAuthState();
     const containerNavs = useRecoilValue<Navigation[]>(appContainerNavigation);
-    const { defaultLanguage } = useGlobalData();
+    const { defaultLanguage, container } = useGlobalData();
     const { user } = state;
 
     const { locale, setLocale, containerLocale } = useUserLocale();
@@ -490,7 +490,9 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
 
     return (
         <aside
-            className={`${menuLocation}-sidebar left-container d-block navbar-expand-md sidebar`}
+            className={`${menuLocation}-sidebar left-container d-block navbar-expand-md sidebar ${
+                container?.domain === "test2.localhost:3000" ? "test2" : ""
+            }${container?.domain === "tgl.expertshare.live" ? "tgl" : ""}`}
         >
             <Navbar
                 className="row m-0 p-0 mb-md-4 d-block"

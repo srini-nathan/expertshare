@@ -32,6 +32,12 @@ export const DashboardLayout: FC = ({ children }) => {
                 container?.domain === "csgsc.virtual.credit-suisse.com"
                     ? " with-csgsc-bg"
                     : " with-bg";
+            classes +=
+                container?.domain === "tgl.expertshare.live" ? " with-tgl" : "";
+            classes +=
+                container?.domain === "test2.localhost:3000"
+                    ? " with-test2"
+                    : "";
         } else {
             classes = "mb-5";
         }
