@@ -15,15 +15,6 @@ export const AppPictureInPicture = (): JSX.Element => {
     useEffect(() => {
         if (value !== null) {
             setShowDraggable(value.isLive);
-            if (value.isLive && value.streamType === "KNOVIO") {
-                setTimeout(() => {
-                    // @TODO: dirty trick to forcefully restart knovio player
-                    if ((window as any).knowledgevisionLoader) {
-                        (window as any).knowledgevisionLoader.embeds[0].loaded = false;
-                        (window as any).knowledgevisionLoader.checkEmbeds();
-                    }
-                }, 1000);
-            }
         }
     }, [value]);
 
