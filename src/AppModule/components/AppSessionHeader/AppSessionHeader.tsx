@@ -46,6 +46,8 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                     streamType: session.streamType,
                     streamUrl: session.streamUrl,
                 });
+            } else {
+                setPipPlayerData(null);
             }
         };
     }, [live]);
