@@ -81,8 +81,11 @@ const App = (): JSX.Element => {
     const overViewPage = useMatch("/container");
     const onBoardingPage = useMatch("/onboarding");
     const autoLoginPage = useMatch("/auth/auto-login/:token");
+    const sessionDetailPage = useMatch("/event/:conferenceId/session/:id");
+    const reloadingPage = useMatch("/reloading");
     const isOverViewPage = overViewPage !== null;
     const isAutoLoginPage = autoLoginPage !== null;
+    const showPipPlayer = sessionDetailPage === null && reloadingPage === null;
     const { emitLogin, emitLogout, emitPageChange } = useUserSocketEvents();
     const { handler } = useCommandCenterSocketEvents();
 
@@ -178,7 +181,7 @@ const App = (): JSX.Element => {
                                 }}
                             />
                         )}
-                        <AppPictureInPicture />
+                        {showPipPlayer ? <AppPictureInPicture /> : null}
                     </AppConfiguration>
                 </SessionProvider>
             </AppProvider>

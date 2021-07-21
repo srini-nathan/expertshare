@@ -4,12 +4,14 @@ import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 import { Link, navigate, useLocation } from "@reach/router";
 import "./assets/scss/style.scss";
+import { useSetRecoilState } from "recoil";
 import { AppStreamManager } from "../AppStreamManager";
 import { PUser, Session } from "../../../AdminModule/models";
-import { SessionContext, SessionType, useGlobalData } from "../../contexts";
+import { useGlobalData } from "../../contexts";
 import { getDateTimeWithoutTimezone } from "../../utils";
 import { useAuthState, useUserLocale } from "../../hooks";
 import { UserApi } from "../../../AdminModule/apis";
+import { appPipPlayer } from "../../atoms";
 
 export interface AppSessionHeaderProps {
     session: Session;
@@ -28,27 +30,21 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
     sessionList,
     getAgenda,
 }): JSX.Element => {
-    const { dispatch } = React.useContext(SessionContext);
     const { container, activeLanguages } = useGlobalData();
     const { t } = useTranslation();
     const { locale, setLocale } = useUserLocale();
     const [live, isLive] = useState<boolean>(false);
     const location = useLocation();
     const { userId } = useAuthState();
+    const setPipPlayerData = useSetRecoilState(appPipPlayer);
 
     useEffect(() => {
         return () => {
-            dispatch({
-                type: SessionType.REMOVE,
-            });
             if (live) {
-                dispatch({
-                    type: SessionType.LOAD,
-                    payload: {
-                        isLive: live,
-                        streamType: session.streamType,
-                        streamUrl: session.streamUrl,
-                    },
+                setPipPlayerData({
+                    isLive: live,
+                    streamType: session.streamType,
+                    streamUrl: session.streamUrl,
                 });
             }
         };
