@@ -13,7 +13,6 @@
     --card-text-color: #000;
     --card-border-radius: 5px;
     --card-box-shadow-color: #FFF0;
-    --card-secondary-button-box-shadow-color: #FFF0;
     --card-divider-color: #0005;
     // tabs
     --tab-border-radius: 5px;
@@ -51,14 +50,19 @@
     --primary-button-border-color: #FFF;
     --primary-button-border-width: 1px;
     --primary-button-border-radius: 5px;
+    --primary-button-box-shadow-color: #FFF0;
     --primary-button-background-color--disable: #444;
     --primary-button-text-color--disable: #FFF;
     --primary-button-border-color--disable: #FFF;
+    --primary-button-background-color--active: #444;
+    --primary-button-text-color--active: #FFF;
+    --primary-button-border-color--active: #FFF;
     --secondary-button-background-color: #444; // inherit primary color
     --secondary-button-text-color: #FFF;
     --secondary-button-border-color: #FFF;
     --secondary-button-border-width: 1px;
     --secondary-button-border-radius: 5px;
+    --secondary-button-box-shadow-color: #FFF0;
     --secondary-button-background-color--disable: #444;
     --secondary-button-text-color--disable: #FFF;
     --secondary-button-border-color--disable: #FFF;
@@ -70,9 +74,13 @@
     --danger-button-border-color: #FFF;
     --danger-button-border-width: 1px;
     --danger-button-border-radius: 5px;
+    --danger-button-box-shadow-color: #FFF0;
     --danger-button-background-color--disable: #444;
     --danger-button-text-color--disable: #FFF;
     --danger-button-border-color--disable: #FFF;
+    --danger-button-background-color--active: #444;
+    --danger-button-text-color--active: #FFF;
+    --danger-button-border-color--active: #FFF;
     // navigation
     --navigation-background-color: #000;
     --navigation-item-text-color: #FFF;
@@ -80,6 +88,8 @@
     --navigation-item-divider-color: #FFF5;
     --navigation-item-text-color--active: #FFFA;
     --navigation-item-icon-color--active: #000A;
+    --navigation-item-text-color--hover: #FFFA;
+    --navigation-item-icon-color--hover: #000A;
     // modal
     --modal-background-color: #000;
     --modal-backdrop-background-color: #0002;
@@ -89,7 +99,6 @@
     --table-row-odd-background-color: #000;
     --table-row-even-background-color: #0005;
     --table-row-text-color: #0005;
-    --table-action-secondry-button-box-shadow-color: #0005;
     // toast
     --toast-background-color: #FFF;
     --toast-border-radius: 5px;
