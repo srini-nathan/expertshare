@@ -1,32 +1,31 @@
 import React, { useEffect } from "react";
 import Draggable from "react-draggable";
-import { SessionType } from "../../contexts";
-import { SessionContext } from "../../contexts/SessionContext";
+import { useRecoilState } from "recoil";
 import { renderStreams } from "../AppStreamManager";
 import "./assets/scss/style.scss";
+import { appPipPlayer, AppPipPlayerType } from "../../atoms";
 
 export const AppPictureInPicture = (): JSX.Element => {
-    const { state, dispatch } = React.useContext(SessionContext);
+    const [value, setValue] = useRecoilState<AppPipPlayerType | null>(
+        appPipPlayer
+    );
 
-    const { isLive, streamType, streamUrl } = state;
-
-    const [showDraggable, setShowDraggable] = React.useState(isLive);
+    const [showDraggable, setShowDraggable] = React.useState(value !== null);
 
     useEffect(() => {
-        setShowDraggable(isLive);
-        setTimeout(() => {
-            // @TODO: dirty trick to forcefully restart knovio player
-            if ((window as any).knowledgevisionLoader) {
-                (window as any).knowledgevisionLoader.embeds[0].loaded = false;
-                (window as any).knowledgevisionLoader.checkEmbeds();
-            }
-        }, 1000);
-    }, [isLive]);
+        if (value !== null) {
+            setShowDraggable(value.isLive);
+        }
+    }, [value]);
+
+    if (value === null) {
+        return <></>;
+    }
+
+    const { streamType, streamUrl } = value;
 
     const closeDraggable = () => {
-        dispatch({
-            type: SessionType.REMOVE,
-        });
+        setValue(null);
     };
 
     return (
