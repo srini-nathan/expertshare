@@ -104,11 +104,16 @@
     // toast
     --toast-background-color: #FFF;
     --toast-border-radius: 5px;
-    // expanded multi-select
-    --multi-select-exapanded-box-shadow-color: #0001; // user group selection on add/edit session
     // default images
     --default-container-card-background: "";
     --default-event-card-background: "";
     --default-session-card-background: "";
     --default-avatar: "";
+    // tags
+    --tag-border-radius: 10px;
+    // PIP Player
+    --pip-player-border-radius: 10px;
+    // Image Drop Area
+    --image-drop-area-border-style: "solid";
+    --image-drop-area-border-width: 1px;
 }
