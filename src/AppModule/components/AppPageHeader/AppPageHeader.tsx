@@ -24,9 +24,15 @@ export const AppPageHeader: FC<AppPageHeaderProps> = ({
     cancelTokenSources,
     children,
 }): JSX.Element => {
+    let mdSize = 6;
+    if (customToolbar) {
+        mdSize = 3;
+    } else if (showToolbar === false) {
+        mdSize = 12;
+    }
     return (
         <Row className="pt-sm-3">
-            <Col md={customToolbar ? 3 : 6} xs={12} className="page-title">
+            <Col md={mdSize} xs={12} className="page-title">
                 <h1>{title}</h1>
             </Col>
             {showToolbar && (
