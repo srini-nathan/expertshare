@@ -1,0 +1,37 @@
+@import "../../../../assets/scss/variables";
+
+.app-language-switcher {
+    .flag {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        margin-left: -10px;
+        background-size: 20px;
+        border-radius: 50%;
+        &-en {
+            background-image: url("../images/en_flag.png");
+        }
+        &-pt {
+            background-image: url("../images/pt_flag.png");
+        }
+        &-it {
+            background-image: url("../images/it_flag.jpg");
+        }
+        &-fr {
+            background-image: url("../images/fr_flag.png");
+        }
+        &-de {
+            background-image: url("../images/de_flag.png");
+        }
+        &-zh {
+            background-image: url("../images/zh_flag.png");
+        }
+    }
+    .btn-secondary {
+        &.active {
+            color: var(--primary) !important;
+            background-color: var(--primary-20) !important;
+            border-color: transparent !important;
+        }
+    }
+}
