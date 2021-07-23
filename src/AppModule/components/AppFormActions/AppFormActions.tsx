@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, PropsWithChildren } from "react";
 import { NavigateFn } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { AppButton } from "../AppButton";
@@ -10,15 +10,17 @@ interface AppFormActionsProps {
     navigation: NavigateFn;
     isLoading?: boolean;
 }
-export const AppFormActions: FC<AppFormActionsProps> = ({
+export const AppFormActions: FC<PropsWithChildren<AppFormActionsProps>> = ({
     isEditMode,
     backLink,
     navigation,
     isLoading,
+    children = "",
 }): JSX.Element => {
     const { t } = useTranslation();
     return (
         <div className="d-flex justify-content-end footer-action w-100 p-3">
+            {children}
             <AppButton
                 type="button"
                 variant={"secondary"}
