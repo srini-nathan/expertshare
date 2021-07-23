@@ -101,14 +101,14 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
             },
             isVisible: isGranted(role, ROLE_OPERATOR),
         },
-        // {
-        //     label: "navigation:administration.design",
-        //     path: "/admin/design",
-        //     icon: {
-        //         name: "",
-        //     },
-        //     isVisible: isGranted(role, ROLE_OPERATOR),
-        // },
+        {
+            label: "navigation:administration.design",
+            path: "/admin/design",
+            icon: {
+                name: "",
+            },
+            isVisible: isGranted(role, ROLE_OPERATOR),
+        },
         {
             label: "navigation:administration.users",
             path: "/admin/users",
