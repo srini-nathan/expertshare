@@ -5,7 +5,7 @@ body.modal-open #root {
     opacity: 0.8;
 }
 .modal-backdrop.show {
-    background-color: var(--primary) !important;
+    background-color: var(--modal-backdrop-background-color) !important;
     opacity: 0.8 !important;
 }
 
@@ -27,6 +27,7 @@ body.modal-open #root {
         justify-content: center !important;
         padding: 35px;
         margin: auto;
+        background-color: var(--modal-background-color);
         border-radius: var(--border-radius) !important;
         @include media("mobile") {
             padding: 10px;
@@ -64,7 +65,7 @@ body.modal-open #root {
             font-size: 42px;
             font-weight: 700;
             line-height: initial;
-            color: var(--secondary);
+            color: var(--modal-text-color);
             overflow-wrap: break-word;
             @include media("xl") {
                 font-size: 36px;
@@ -79,7 +80,7 @@ body.modal-open #root {
         padding: 1rem !important;
         font-size: 16px;
         font-weight: 400;
-        color: var(--secondary-80);
+        color: var(--card-second-text-color);
         text-align: center;
         overflow-wrap: break-word;
         @include media("mobile") {

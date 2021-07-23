@@ -41,7 +41,7 @@
 
                 &--item {
                     position: relative;
-                    color: var(--countdown-timer-session-fg-clr);
+                    color: var(--countdown-timer-text-color);
 
                     &--title {
                         font-size: 16px;
@@ -55,7 +55,7 @@
                     }
 
                     &--time {
-                        font-size: 124px;
+                        font-size: 115px;
                         font-weight: 700;
                         user-select: none;
 

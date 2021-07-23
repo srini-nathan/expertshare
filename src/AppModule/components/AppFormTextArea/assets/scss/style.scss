@@ -5,20 +5,20 @@ textarea.form-control {
     min-height: 111px;
     font-size: 14px;
     font-weight: 400;
-    color: var(--input-fg-clr);
-    background-color: var(--input-bg-clr);
-    border: 1px solid var(--input-border-clr) !important;
-    border-radius: var(--border-radius);
+    color: var(--input-text-color);
+    background-color: var(--input-background-color);
+    border: var(--input-border-width) solid var(--input-border-color) !important;
+    border-radius: var(--input-border-radius);
 
     &:focus,
     &:active {
-        color: var(--input-fg-clr);
-        background-color: var(--input-bg-clr);
-        border-color: var(--input-border-clr) !important;
+        color: var(--input-text-color);
+        background-color: var(--input-background-color--focus);
+        border-color: var(--input-border-color--focus) !important;
+        border-width: var(--input-border-width--focus);
         box-shadow: unset;
     }
 }
-
 
 .form-label {
     position: relative;
@@ -54,7 +54,7 @@ textarea.form-control {
         position: relative;
         cursor: pointer;
 
-        &:hover>&-content {
+        &:hover > &-content {
             display: block;
         }
 

@@ -49,10 +49,10 @@
                     width: 36px;
                     height: 36px;
                     padding: 8px;
-                    color: var(--btn-secondary-fg-clr);
-                    background-color: var(--light-clr);
-                    border-radius: var(--border-radius);
-                    box-shadow: 0 3px 9px var(--box-shadow-box-clr);
+                    color: var(--secondary-button-text-color);
+                    background-color: var(--secondary-button-background-color);
+                    border-radius: var(--secondary-button-border-radius);
+                    box-shadow: 0 3px 9px var(--secondary-button-box-shadow-color);
                 }
             }
         }
@@ -73,9 +73,9 @@
 
     .ag-theme-alpine {
         padding: 5px 15px;
-        background-color: var(--light-clr);
-        border-radius: var(--border-radius);
-        box-shadow: 0 3px 9px var(--box-shadow-box-clr);
+        background-color: var(--card-background-color);
+        border-radius: var(--card-border-radius);
+        box-shadow: 0 3px 9px var(--card-box-shadow-color);
 
         .ag-sort-ascending-icon,
         .ag-sort-descending-icon {
@@ -151,6 +151,7 @@
                 .ag-cell {
                     font-size: 14px;
                     line-height: 60px;
+                    color: var(--table-row-text-color);
                     border: unset !important;
                     &:focus {
                         border: unset !important;
@@ -170,12 +171,18 @@
                     font-weight: 500;
                 }
             }
-
-            .ag-row-odd {
-                background-color: var(--row-odd-bg-clr);
+            .ag-row-even {
+                background-color: var(--table-row-even-background-color);
 
                 &:hover {
-                    background-color: var(--row-odd-bg-clr);
+                    background-color: var(--table-row-even-background-color);
+                }
+            }
+            .ag-row-odd {
+                background-color: var(--table-row-odd-background-color);
+
+                &:hover {
+                    background-color: var(--table-row-odd-background-color);
                 }
             }
         }
@@ -218,7 +225,7 @@
     position: fixed;
     bottom: 0;
     width: 100%;
-    background-color: var(--body-bg-clr);
+    background-color: var(--body-background-color);
 
     .pagination-container {
         width: 130px;

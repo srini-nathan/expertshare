@@ -8,15 +8,15 @@
 }
 
 .form-control {
-    color: var(--input-fg-clr);
-    background-color: var(--input-bg-clr);
-    border: 1px solid var(--input-border-clr);
+    color: var(--input-text-color);
+    background-color: var(--input-background-color);
+    border: 1px solid var(--input-border-color);
     border-radius: var(--border-radius);
 
     &:focus {
-        color: var(--input-fg-clr);
-        background-color: var(--input-bg-clr);
-        border-color: var(--input-border-clr);
+        color: var(--input-text-color);
+        background-color: var(--input-background-color);
+        border-color: var(--input-border-color);
         box-shadow: unset;
     }
 }
@@ -37,7 +37,7 @@
     font-size: 14px;
     font-weight: 700;
     line-height: 14px;
-    color: #C31F27;
+    color: #c31f27;
 }
 
 .counter {
@@ -50,7 +50,7 @@
         position: relative;
         cursor: pointer;
 
-        &:hover>&-content {
+        &:hover > &-content {
             display: block;
         }
 
@@ -58,8 +58,8 @@
             padding: 0 5px;
             margin-left: 2px;
             font-size: 10px;
-            color: #FFF;
-            background-color: #CAD0DC;
+            color: #fff;
+            background-color: #cad0dc;
             border: unset;
             border-radius: 50%;
         }
@@ -72,15 +72,15 @@
             display: none;
             min-width: 200px;
             max-width: 276px;
-            padding: .5rem .75rem;
-            font-size: .875rem;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
             font-weight: 400;
             line-height: 1.5;
             color: var(--secondary-90);
             text-align: left;
             text-align: start;
-            background-color: #FFF;
-            border: 1px solid rgba(0, 0, 0, .2);
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.2);
             border-radius: var(--border-radius);
         }
     }

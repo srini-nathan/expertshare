@@ -16,7 +16,7 @@
                     margin-bottom: 0;
                     font-size: 20px;
                     font-weight: 700;
-                    color: var(--secondary);
+                    color: var(--card-text-color);
 
                     i {
                         padding-right: 10px;
@@ -107,14 +107,14 @@
                                 margin-bottom: 0;
                                 font-size: 14px;
                                 font-weight: 500;
-                                color: var(--secondary);
+                                color: var(--card-text-color);
                             }
 
                             p {
                                 margin-bottom: 0;
                                 font-size: 12px;
                                 font-weight: 500;
-                                color: var(--secondary-70);
+                                color: var(--card-second-text-color);
                             }
                         }
 

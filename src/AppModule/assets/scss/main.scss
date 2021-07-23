@@ -9,12 +9,12 @@ body {
     //@TODO Credit Suisse Customization -- start
     font-family: var(--font-family-body);
     //@TODO Credit Suisse Customization --end
-    background-color: var(--body-bg-clr);
-    scrollbar-color: var(--sidebar-bg-clr) var(--secondary-10);
+    background-color: var(--body-background-color);
+    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-background);
     scrollbar-width: thin;
 
     &.app-in-iframe {
-        background-color: var(--body-bg-with-iframe-clr) !important;
+        background-color: var(--iframe-body-background-color) !important;
     }
 
     &::-webkit-scrollbar {
@@ -22,11 +22,11 @@ body {
     }
 
     &::-webkit-scrollbar-track {
-        background: var(--secondary-10);
+        background: var(--scrollbar-background);
     }
 
     &::-webkit-scrollbar-thumb {
-        background: var(--sidebar-bg-clr);
+        background: var(--scrollbar-thumb);
     }
 
     &::-webkit-scrollbar-thumb:hover {
@@ -77,8 +77,10 @@ body {
         width: 350px !important;
         padding: 15px !important;
         padding-left: 60px !important;
+        background-color: var(--toast-background-color);
         border: none !important;
-        box-shadow: 0 3px 9px var(--secondary-20);
+        border-radius: var(--toast-border-radius);
+        box-shadow: 0 3px 9px var(--card-box-shadow-color);
 
         @include media("smallmob") {
             width: 270px !important;
@@ -105,8 +107,8 @@ body {
                     height: 36px;
                     font-family: "Font Awesome Kit";
                     font-size: 21px;
-                    color: var(--toast-fg-clr);
-                    background-color: var(--success-toast-clr);
+                    color: var(--light-clr);
+                    background-color: var(--success);
                     border-radius: var(--circle-border-radius);
                 }
             }
@@ -115,7 +117,7 @@ body {
                 margin: 0 !important;
                 font-size: 20px;
                 font-weight: 700;
-                color: var(--success-toast-clr);
+                color: var(--success);
             }
         }
 
@@ -127,7 +129,7 @@ body {
                 padding-top: 2px;
                 font-size: 14px;
                 font-weight: 400;
-                color: var(--secondary-70);
+                color: var(--card-second-text-color);
             }
         }
 
@@ -159,12 +161,12 @@ body {
             .swal2-icon {
                 &::after {
                     content: "\e059";
-                    background-color: var(--success-toast-clr);
+                    background-color: var(--success);
                 }
             }
 
             .swal2-title {
-                color: var(--success-toast-clr);
+                color: var(--success);
             }
         }
 
@@ -172,12 +174,12 @@ body {
             .swal2-icon {
                 &::after {
                     content: "\e028";
-                    background-color: var(--error-toast-clr);
+                    background-color: var(--danger);
                 }
             }
 
             .swal2-title {
-                color: var(--error-toast-clr);
+                color: var(--danger);
             }
         }
     }
@@ -254,7 +256,7 @@ a {
 .was-validated .form-control:valid,
 .form-control.is-valid {
     background-image: none;
-    border-color: inherit;
+    border-color: var(--input-border-color);
 }
 
 .was-validated .form-control:valid:focus,

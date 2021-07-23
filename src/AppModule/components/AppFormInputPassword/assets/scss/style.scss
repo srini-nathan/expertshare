@@ -8,12 +8,12 @@
         display: flex;
         width: 36px;
         height: 36px;
-        color: var(--input-fg-clr);
+        color: var(--input-text-color);
         cursor: pointer;
 
         svg {
             margin: auto;
-            color: var(--input-fg-clr);
+            color: var(--input-text-color);
         }
     }
 

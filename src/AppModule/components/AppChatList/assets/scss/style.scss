@@ -94,7 +94,7 @@
                 &--comment {
                     p {
                         background-color: var(--secondary-10);
-                        border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius);
+                        border-radius: 0 var(--card-border-radius) var(--card-border-radius) var(--card-border-radius);
                     }
                 }
             }
@@ -128,7 +128,7 @@
                 &--comment {
                     p {
                         background-color: var(--message-in-box-fg-clr);
-                        border-radius: var(--border-radius) 0 var(--border-radius) var(--border-radius);
+                        border-radius: var(--card-border-radius) 0 var(--card-border-radius) var(--card-border-radius);
                     }
                 }
             }

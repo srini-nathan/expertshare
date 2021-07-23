@@ -21,14 +21,14 @@
             font-size: 14px;
             font-weight: 500;
             color: var(--secondary);
-            background-color: var(--i-bg-clr);
+            background-color: var(--light-clr);
             border: unset;
             border-radius: var(--border-radius);
-            box-shadow: 0 3px 9px var(--box-shadow-box-clr);
+            box-shadow: 0 3px 9px var(--select-box-shadow-color);
 
             &:hover {
                 color: var(--primary);
-                background-color: var(--i-bg-clr);
+                background-color: var(--light-clr);
             }
 
             &:focus {

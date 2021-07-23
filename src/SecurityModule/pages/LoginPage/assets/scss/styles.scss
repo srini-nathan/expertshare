@@ -21,7 +21,6 @@
 .auth-container {
     display: grid;
     min-height: 100vh;
-    // background-color: var(--body-bg-clr);
 
     .normal-label {
         span {
@@ -37,8 +36,8 @@
         padding: 30px;
         margin: 40px auto;
         user-select: none;
-        background-color: var(--container-box-bg-clr);
-        border-radius: var(--border-radius);
+        background-color: var(--card-background-color);
+        border-radius: var(--card-border-radius);
         -webkit-touch-callout: none;
 
         @include media("mobile") {
@@ -61,8 +60,8 @@
     width: 100%;
 
     .active {
-        color: var(--primary) !important;
-        background-color: var(--primary-20) !important;
+        color: var(--tab-text-color--active) !important;
+        background-color: var(--tab-background-color--active) !important;
         border-color: transparent !important;
     }
 
@@ -129,11 +128,11 @@
                 font-size: 14px;
                 font-weight: 400;
                 color: var(--secondary);
-                border: 1px solid var(--border-text-box);
-                border-radius: var(--border-radius);
+                border: 1px solid var(--input-border-color);
+                border-radius: var(--input-border-radius);
 
                 &::placeholder {
-                    color: var(--placeholder-auth-fg-clr);
+                    color: var(--input-placeholder-text-color);
                 }
 
                 &:focus {
@@ -164,15 +163,14 @@
             }
 
             .agreement-box {
-                background-color: var(--agree-bg-clr);
-                border: 1px solid var(--border-text-box);
-                border-radius: var(--border-radius);
+                border: 1px solid var(--input-border-color);
+                border-radius: var(--card-border-radius);
 
                 &--inner {
                     height: 149px;
                     min-height: 100px;
                     overflow: auto;
-                    scrollbar-color: var(--secondary) var(--agree-scrollbar-track-bg-clr);
+                    scrollbar-color: var(--secondary) var(--scrollbar-background);
                     scrollbar-width: thin;
 
                     &::-webkit-scrollbar {
@@ -180,7 +178,7 @@
                     }
 
                     &::-webkit-scrollbar-track {
-                        background: var(--agree-scrollbar-track-bg-clr);
+                        background: var(--scrollbar-background);
                     }
 
                     &::-webkit-scrollbar-thumb {
@@ -207,7 +205,7 @@
                 margin: 5px 0;
                 font-size: 14px;
                 font-weight: 400;
-                color: var(--checkbox-label-fg-clr);
+                color: var(--card-text-color);
                 text-align: left;
                 cursor: pointer;
 
@@ -244,7 +242,7 @@
                         width: 5px;
                         height: 7px;
                         content: "";
-                        border: solid var(--i-fg-clr);
+                        border: solid var(--light-clr);
                         border-width: 0 2px 2px 0;
                         transform: rotate(45deg);
                         transform: rotate(45deg);

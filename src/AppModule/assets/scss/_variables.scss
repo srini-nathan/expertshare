@@ -1,128 +1,3 @@
-// // Variables
-// //
-// // Variables should follow the `$component-state-property-size` formula for
-// // consistent naming. Ex: $nav-link-disabled-color and $modal-content-box-shadow-xs.
-
-// // Use abbreviations as follow
-// //  background => bg
-// //  foreground => fg
-// //  button => btn
-// //  color => clr
-
-// //custom colors
-
-// :root {
-//     //font
-//     --font-family-sans-serif: "grotesque";
-//     --divider-clr: #E6E8E8;
-
-//     //main colors
-//     --body-bg-clr: #F3F9FD;
-//     --light-clr: #FFF;
-//     //Grid Colors
-//     --row-odd-bg-clr: #7EBDE910;
-//     --box-shadow-box-clr: rgba(155, 167, 186, .25);
-
-//     //primary color range
-//     --primary: #30B7A7;
-//     --primary-10: #30B7A710;
-//     --primary-15: #30B7A715;
-//     --primary-20: #30B7A720;
-//     --primary-30: #30B7A730;
-//     --primary-40: #30B7A740;
-//     --primary-50: #30B7A750;
-//     --primary-60: #30B7A760;
-//     --primary-70: #30B7A770;
-//     --primary-80: #30B7A780;
-//     --primary-90: #30B7A790;
-//     //secondary color range
-//     --secondary: #444;
-//     --secondary-10: #44444410;
-//     --secondary-15: #44444415;
-//     --secondary-20: #44444420;
-//     --secondary-30: #44444430;
-//     --secondary-40: #44444440;
-//     --secondary-50: #44444450;
-//     --secondary-60: #44444460;
-//     --secondary-70: #44444470;
-//     --secondary-80: #44444480;
-//     --secondary-90: #44444490;
-//     //input colors
-//     --input-bg-clr: #FCFCFC;
-//     --input-fg-clr: #051515;
-//     --input-border-clr: #A7A7A7;
-//     --border-radius: 5px;
-
-//     //widget colors
-//     --widget-bg-color: #36999C15;
-//     --widget-bg-clr: #A0B2C020;
-//     --widget-border-clr: #36999C;
-
-//     //button colors
-//     --btn-bg-clr: #30B7A7;
-//     --btn-border-clr: #30B7A7;
-//     --btn-bg-clr-20: #30B7A720;
-//     --btn-hover-bg-clr: #29A092;
-//     --btn-hover-fg-clr: #FFF;
-//     --btn-hover-border-clr: #30B7A7;
-//     --btn-fg-clr: #FFF;
-//     --btn-fg-clr-60: #FFFFFF60;
-//     --btn-hover-border-clr: transparent;
-//     --btn-secondary-fg-clr: #444;
-//     --btn-secondary-bg-clr: #FFF;
-//     --btn-secondary-border-clr: #FFF;
-//     --btn-hover-secondary-fg-clr: #444;
-//     --btn-hover-secondary-bg-clr: #FFF;
-//     --btn-hover-secondary-border-clr: #FFF;
-//     --speaker-btn-bg-clr: #7EBDE9;
-
-//     //check box color
-//     --checkbox-checked-bg: #36989C;
-//     --checkbox-not-checked-bg: #D7EAEB;
-//     --checkbox-toggler-not-checked-clr: #98CBCC;
-//     --checkbox-toggler-checked-clr: #FCFCFC;
-//     --checkbox-block-bg-clr: #F7FBFB;
-//     --checkbox-block-border-radius: var(--border-radius);
-
-//     // sidebar colors
-//     --sidebar-bg-clr: #FFF;
-//     --sidebar-item-hover-bg-clr: #30B7A710;
-//     --sidebar-hover-bg-clr: #30B7A710;
-//     --sidebar-fg-clr: #444;
-//     --sidebar-hover-fg-clr: #30B7A7;
-//     --sidebar-icon-clr: #444;
-//     --sidebar-hover-icon-clr: #30B7A7;
-//     --sidebar-menu-extra-bg-clr: #D4EBEA;
-//     --sidebar-sub-menu-bg-clr: #D4E7E8;
-
-//     //Login Page
-//     --agree-bg-clr: #A0B2C033;
-//     --agree-scrollbar-track-bg-clr: #A0B2C0;
-//     --body-bg-clr: #F3F9FD;
-//     --body-bg-clr: #F3F9FD;
-//     --placeholder-fg-clr: #939AA7;
-//     --placeholder-auth-fg-clr: #A0B2C0;
-//     --border-text-box: #A0B2C0;
-//     --border-inner-box: #A0B2C030;
-//     --border-separate-box: #A0B2C050;
-//     --checkbox-border-radius: 1px;
-//     --checkbox-label-fg-clr: #939AA7;
-//     --checkbox-not-checked-bg: #EAF8F6;
-//     --container-box-bg-clr: #FFF;
-//     --sub-text-fg-clr: #A0B2C0;
-//     --p-sub-fg-clr: #5B6275;
-//     --i-fg-clr: #FFF;
-//     --i-bg-clr: #FFF;
-//     --docx-i-bg-clr: #3B6CC7;
-//     --pdf-i-bg-clr: #C72424;
-//     --pptx-i-bg-clr: #F88703;
-//     --xls-i-bg-clr: #11824C;
-//     --file-icon-bg-clr: #FFF;
-//     --live-btn-bg-clr: #EB5353;
-//     --spc-btn-border-radius: 17px;
-//     --circle-border-radius: 50%;
-// }
-
 // Variables
 //
 // Variables should follow the `$component-state-property-size` formula for
@@ -138,35 +13,22 @@
 
 :root {
     //font
-    --font-family-sans-serif: "grotesque";
-    //@TODO Credit Suisse Specially Variables
     --font-family-title: "creditsuisse-title";
     --font-family-body: "creditsuisse-body";
     --font-family-button: "creditsuisse-button";
 
-    //main colors
-    --body-bg-clr: #ededed;
-    --body-bg-with-iframe-clr: #edededcb;
-    --light-clr: #fff;
-    --divider-clr: #e6e8e8;
-
-    //Grid Colors
-    --row-odd-bg-clr: #00000010;
-    --box-shadow-box-clr: rgba(181, 181, 181, 0.52);
-
-    //primary color range
-    --primary: #000;
-    --primary-10: #00000010;
-    --primary-15: #00000015;
-    --primary-20: #00000020;
-    --primary-30: #00000030;
-    --primary-40: #00000040;
-    --primary-50: #00000050;
-    --primary-60: #00000060;
-    --primary-70: #00000070;
-    --primary-80: #00000080;
-    --primary-90: #00000090;
-    //secondary color range
+    // global colors
+    --primary: #0052cc;
+    --primary-10: #0052cc10;
+    --primary-15: #0052cc15;
+    --primary-20: #0052cc20;
+    --primary-30: #0052cc30;
+    --primary-40: #0052cc40;
+    --primary-50: #0052cc50;
+    --primary-60: #0052cc60;
+    --primary-70: #0052cc70;
+    --primary-80: #0052cc80;
+    --primary-90: #0052cc90;
     --secondary: #444;
     --secondary-10: #44444410;
     --secondary-15: #44444415;
@@ -178,92 +40,157 @@
     --secondary-70: #44444470;
     --secondary-80: #44444480;
     --secondary-90: #44444490;
-    //input colors
-    --input-bg-clr: #fcfcfc;
-    --input-fg-clr: #051515;
-    --input-border-clr: #a7a7a7;
-    --border-radius: 5px;
+    --danger: #ff4365; // invalid messages and toast,
+    --success: #2cda9d; // success toast,
+    --info: #7ebde9; // attendee card, if user is speaker (button/badge with skyblue)
+    --body-background-color: #ededed;
+    --iframe-body-background-color: #edededcb;
 
-    //widget colors
-    --widget-bg-color: #36999c15;
-    --widget-bg-clr: #a0b2c020;
-    --widget-border-clr: #000;
+    // widget/card variables
+    --card-background-color: #fff;
+    --card-text-color: #444;
+    --card-second-text-color: #44444470;
+    --card-border-radius: 5px;
+    --card-box-shadow-color: #44444430;
+    --card-divider-color: #44444420;
 
-    //button colors
-    --btn-bg-clr: #000;
-    --btn-border-clr: #000;
-    --btn-bg-clr-20: #00000020;
-    --btn-hover-bg-clr: #000;
-    --btn-hover-fg-clr: #fff;
-    --btn-hover-border-clr: #000;
-    --btn-fg-clr: #fff;
-    --btn-fg-clr-60: #ffffff60;
-    --btn-hover-border-clr: transparent;
-    --btn-secondary-fg-clr: #444;
-    --btn-secondary-bg-clr: #fff;
-    --btn-secondary-border-clr: #fff;
-    --btn-hover-secondary-fg-clr: #444;
-    --btn-hover-secondary-bg-clr: #fff;
-    --btn-hover-secondary-border-clr: #fff;
-    --speaker-btn-bg-clr: #7ebde9;
-    --live-badge-bg-clr: #2cda9d;
+    // tabs
+    --tab-border-radius: 5px;
+    --tab-background-color: #fff;
+    --tab-text-color: #444;
+    --tab-box-shadow-color: #44444430;
+    --tab-background-color--active: #0052cc10;
+    --tab-text-color--active: #0052cc;
+    --tab-box-shadow-color--active: #44444430;
 
-    //check box color
-    --checkbox-checked-bg: #000;
-    --checkbox-not-checked-bg: #d7eaeb;
-    --checkbox-toggler-not-checked-clr: #98cbcc;
-    --checkbox-toggler-checked-clr: #fcfcfc;
-    --checkbox-block-bg-clr: #f7fbfb;
-    --checkbox-block-border-radius: var(--border-radius);
+    // inputs
+    --input-background-color: #fff;
+    --input-border-color: #44444470;
+    --input-border-width: 1px;
+    --input-border-radius: 5px;
+    --input-text-color: #444; //  inherit secondary
+    --input-placeholder-text-color: #a0b2c0;
+    --input-background-color--focus: #fcfcfc;
+    --input-border-color--focus: #a7a7a7;
+    --input-border-width--focus: 2px;
+    --input-background-color--disable: #fcfcfc;
+    --input-border-color--disable: #a7a7a7;
 
-    // sidebar colors
-    --sidebar-bg-clr: #000;
-    --sidebar-item-hover-bg-clr: #ffffff10;
-    --sidebar-hover-bg-clr: #ffffff10;
-    --sidebar-fg-clr: #fff;
-    --sidebar-hover-fg-clr: #fff;
-    --sidebar-icon-clr: #ffffff90;
-    --sidebar-hover-icon-clr: #fff;
-    --sidebar-menu-extra-bg-clr: #d4ebea;
-    --sidebar-sub-menu-bg-clr: #d4e7e8;
+    // select / dropdown
+    --select-background-color: #fff;
+    --select-text-color: #444;
+    --select-border-color: #44444420;
+    --select-box-shadow-color: #44444430;
+    --select-border-width: 1px;
+    --select-border-radius: 5px;
+    --select-option-background-color: #fff;
+    --select-option-text-color: #444;
+    --select-option-background-color--hover: #0052cc10;
+    --select-option-text-color--hover: #0052cc;
 
-    //Login Page
-    --agree-bg-clr: #fff;
-    --agree-scrollbar-track-bg-clr: #a0b2c0;
-    --placeholder-fg-clr: #939aa7;
-    --placeholder-auth-fg-clr: #a0b2c0;
-    --border-text-box: #a0b2c0;
-    --border-inner-box: #a0b2c030;
-    --border-separate-box: #a0b2c050;
+    // buttons
+    --primary-button-background-color: #0052cc; // inherit primary color
+    --primary-button-text-color: #fff;
+    --primary-button-border-color: #fff;
+    --primary-button-border-width: 1px;
+    --primary-button-border-radius: 5px;
+    --primary-button-box-shadow-color: #44444430;
+    --primary-button-background-color--disable: #444;
+    --primary-button-text-color--disable: #fff;
+    --primary-button-border-color--disable: #fff;
+    --primary-button-background-color--active: #0052cc;
+    --primary-button-text-color--active: #fff;
+    --primary-button-border-color--active: #fff;
+    --secondary-button-background-color: #fff; // inherit primary color
+    --secondary-button-text-color: #444;
+    --secondary-button-border-color: #fff;
+    --secondary-button-border-width: 1px;
+    --secondary-button-border-radius: 5px;
+    --secondary-button-box-shadow-color: #44444430;
+    --secondary-button-background-color--disable: #444;
+    --secondary-button-text-color--disable: #fff;
+    --secondary-button-border-color--disable: #fff;
+    --secondary-button-background-color--active: #444; // for pagination
+    --secondary-button-text-color--active: #fff; // for pagination
+    --secondary-button-border-color--active: #fff; // for pagination
+    --danger-button-background-color: #ff4365;
+    --danger-button-text-color: #fff;
+    --danger-button-border-color: #ff4365;
+    --danger-button-border-width: 1px;
+    --danger-button-border-radius: 5px;
+    --danger-button-box-shadow-color: #fff0;
+    --danger-button-background-color--disable: #444;
+    --danger-button-text-color--disable: #fff;
+    --danger-button-border-color--disable: #fff;
+    --danger-button-background-color--active: #ff4365;
+    --danger-button-text-color--active: #fff;
+    --danger-button-border-color--active: #ff4365;
+
+    // navigation
+    --navigation-background-color: #000;
+    --navigation-item-background-color: #000;
+    --navigation-item-text-color: #fff;
+    --navigation-item-icon-color: #ffffff50;
+    --navigation-item-divider-color: #fff5;
+    --navigation-item-background-color--active: #ffffff20;
+    --navigation-item-text-color--active: #fff;
+    --navigation-item-icon-color--active: #fff;
+    --navigation-item-background-color--hover: #ffffff10;
+    --navigation-item-text-color--hover: #fff;
+    --navigation-item-icon-color--hover: #fff;
+
+    // modal
+    --modal-background-color: #fff;
+    --modal-backdrop-background-color: #000;
+    --modal-text-color: #444;
+    --modal-border-radius: 5px;
+
+    // ag-grid / table
+    --table-row-odd-background-color: #00000010;
+    --table-row-even-background-color: #fff;
+    --table-row-text-color: #444;
+
+    // toast
+    --toast-background-color: #fff;
+    --toast-border-radius: 5px;
+
+    // default images
+    --default-container-card-background: #44444410;
+    --default-event-card-background: #44444410;
+    --default-session-card-background: #44444410;
+    --default-avatar: ""; // ?
+
+    // tags
+    --tag-border-radius: 17px;
+
+    // PIP Player
+    --pip-player-border-radius: 10px;
+
+    // Image Drop Area
+    --image-drop-area-border-style: "solid"; // ?
+    --image-drop-area-border-width: 1px; // ?
+
+    //need checking
+    --border-radius: 5px; // checking
+
+    //static variable
+    --light-clr: #fff;
+    --circle-border-radius: 50%;
     --checkbox-border-radius: 1px;
-    --checkbox-label-fg-clr: #939aa7;
-    --checkbox-not-checked-bg: #eaf8f6;
-    --container-box-bg-clr: #fff;
-    --sub-text-fg-clr: #a0b2c0;
-    --p-sub-fg-clr: #5b6275;
-    --i-fg-clr: #fff;
-    --i-bg-clr: #fff;
+    --scrollbar-background: #44444410;
+    --message-in-box-fg-clr: #7ebde920;
+
+    //future all
     --docx-i-bg-clr: #3b6cc7;
     --pdf-i-bg-clr: #c72424;
     --pptx-i-bg-clr: #f88703;
     --xls-i-bg-clr: #11824c;
     --file-icon-bg-clr: #fff;
-    --live-btn-bg-clr: #eb5353;
-    --archive-btn-bg-clr: #444;
-    --spc-btn-border-radius: 17px;
-    --circle-border-radius: 50%;
+    --live-badge-bg-clr: #2cda9d;
+    --scrollbar-thumb: #000;
+    --countdown-timer-text-color: #fff;
     --online-badge-bg-clr: #2cda9d;
-    --count-bg-clr: #f43f3f;
-    --count-fg-clr: #fff;
-    --countdown-timer-session-fg-clr: #fff;
-    //Toast Colors
-    --toast-fg-clr: #fff;
-    --success-toast-clr: #27ae60;
-    --error-toast-clr: #eb5757;
-    //Message box colors
-    --message-in-box-fg-clr: #7ebde920;
-
-    //video call colors
+    //future // video call colors
     --video-call-bg-clr: #000;
     --video-call-grey-bg-clr: #444;
     --video-call-grey-bg-clr-opacity: #44444410;

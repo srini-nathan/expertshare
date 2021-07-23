@@ -7,20 +7,21 @@
 
     a {
         &.nav-item {
-            border-radius: var(--border-radius);
-            background-color: var(--light-clr);
             margin: 3px;
             font-size: 14px;
             font-weight: 500;
-            color: var(--secondary);
-            box-shadow: 0 3px 9px var(--box-shadow-box-clr);
+            color: var(--tab-text-color);
+            background-color: var(--tab-background-color);
+            border-radius: var(--tab-border-radius);
+            box-shadow: 0 3px 9px var(--tab-box-shadow-color);
 
             &:hover,
             &.active {
-                color: var(--primary);
-                background-color: var(--primary-20);
+                color: var(--tab-text-color--active);
+                background-color: var(--tab-background-color--active);
                 border-color: transparent;
-                border-radius: var(--border-radius);
+                border-radius: var(--tab-border-radius);
+                box-shadow: 0 3px 9px var(--tab-box-shadow-color--active);
             }
         }
     }
