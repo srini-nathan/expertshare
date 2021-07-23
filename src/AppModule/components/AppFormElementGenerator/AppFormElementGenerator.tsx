@@ -345,6 +345,7 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                 <Form.Label>{items.label}</Form.Label>
                 <AppUploader
                     accept="image/*"
+                    withCropper
                     fileInfo={FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo}
                     onFileSelect={(files: File[]) => {
                         if (onFileSelect)
