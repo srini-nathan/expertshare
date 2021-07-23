@@ -26,6 +26,7 @@ import { CONSTANTS } from "../../../config";
 import { useGlobalData } from "../../../AppModule/contexts";
 import { UploadAPI } from "../../../AppModule/apis";
 import { Upload } from "../../../AppModule/models";
+import { GenerateApi } from "../../apis/GenerateApi";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -91,6 +92,18 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
     const buildContainer = (data: ContainerFormType): ContainerRequestData => {
         return { designConfiguration: data };
     };
+
+    const afterSubmit = async () => {
+        if (containerId) {
+            await GenerateApi.getStyle(containerId).then(({ data }) => {
+                const styleTag = document.createElement("style");
+                styleTag.id = "dynamic-css";
+                styleTag.appendChild(document.createTextNode(data));
+                document.head.appendChild(styleTag);
+            });
+        }
+    };
+
     const onSubmit = async (formData: ContainerFormType) => {
         let container = 0;
         if (containerId) container = containerId;
@@ -113,6 +126,7 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
                 successToast("Configuration updated successfully");
             }
             isLoadingData(false);
+            afterSubmit();
         });
     };
 

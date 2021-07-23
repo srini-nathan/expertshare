@@ -1,8 +1,8 @@
 import { AxiosResponse } from "axios";
 import { I18nData } from "../models/I18nData";
 import { API } from "../../AppModule/apis/API";
-import { route } from "../../config";
-import { APP_ENV } from "../../AppModule/config/app-env";
+import { route, ROUTES } from "../../config";
+import { API_HOST, APP_ENV } from "../../AppModule/config/app-env";
 
 import * as translations from "../../translations/index";
 
@@ -38,6 +38,20 @@ export abstract class GenerateApi extends API {
             {},
             {
                 baseURL: "/",
+            }
+        );
+    }
+
+    public static async getStyle(
+        containerId: number
+    ): Promise<AxiosResponse<any>> {
+        return this.makeGet<I18nData>(
+            route(ROUTES.api_generate_styles, {
+                id: containerId,
+            }),
+            {},
+            {
+                baseURL: API_HOST,
             }
         );
     }
