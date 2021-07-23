@@ -145,13 +145,16 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
                     if (errorMessage) {
                         errorToast(errorMessage);
                     } else if (response && response.fileName) {
-                        // eslint-disable-next-line no-console
-                        console.log("createResource", response, title);
                         if (!translatable) {
                             setFiles({
                                 ...files,
                                 [title]: response.fileName,
                             });
+                            successToast(
+                                t(
+                                    "admin.designConfiguration:success.imageUpload"
+                                )
+                            );
                         }
                     }
                 }

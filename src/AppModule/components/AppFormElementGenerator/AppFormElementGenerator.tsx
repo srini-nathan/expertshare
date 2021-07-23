@@ -14,6 +14,7 @@ import { AppFormInputColorPicker } from "../AppFormInputColorPicker";
 import { AppFormCodeEditor } from "../AppFormCodeEditor";
 import { AppUploader } from "../AppUploader";
 import { CONSTANTS } from "../../../config";
+import { useBuildAssetPath } from "../../hooks";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -50,6 +51,9 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
 }) => {
     const { items } = properties;
     const { t } = useTranslation();
+    const designConfigBasePath = useBuildAssetPath(
+        FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo
+    );
 
     items.label = items.label ? t(items.label) : "";
 
@@ -346,6 +350,11 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                         if (onFileSelect)
                             onFileSelect(files, properties.title, false);
                     }}
+                    imagePath={
+                        defaultValue
+                            ? `${designConfigBasePath}/${defaultValue}`
+                            : ""
+                    }
                     {...prps}
                 />
             </Col>
