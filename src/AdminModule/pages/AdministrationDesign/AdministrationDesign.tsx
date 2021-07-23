@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useEffect } from "react";
+import React, { FC, Fragment, useEffect, useState } from "react";
 import { RouteComponentProps, useNavigate } from "@reach/router";
 import { Row, Col, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
@@ -14,10 +14,16 @@ import {
     AppTab,
     AppButton,
     AppTabs,
+    AppModal,
 } from "../../../AppModule/components";
 import { AppContext } from "../../../AppModule/contexts/AppContext";
 import { ContainerApi } from "../../apis";
-import { successToast, errorToast } from "../../../AppModule/utils";
+import {
+    successToast,
+    errorToast,
+    showLoader,
+    hideLoader,
+} from "../../../AppModule/utils";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models";
 import { ContainerTypes } from "../../../AppModule/contexts/types/container-types";
@@ -79,11 +85,11 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
     const [files, setFiles] = React.useState<ContainerFormType>(
         {} as ContainerFormType
     );
-    const { languages } = useGlobalData();
+    const { languages, container: myContainer } = useGlobalData();
     const { t } = useTranslation();
     const hookNav = useNavigate();
     const nav = navigate ?? hookNav;
-
+    const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
     const { control, handleSubmit, setValue } = useForm({
         resolver: yupResolver(validationSchema),
         mode: "all",
@@ -104,6 +110,27 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
         }
     };
 
+    const generateStyleSubmit = () => {
+        showLoader(
+            t("admin.designConfig.form:generateStyle.generatingLoader.message")
+        ).then();
+        if (myContainer) {
+            ContainerApi.generateStyleRequest(myContainer.id)
+                .then(() => {
+                    hideLoader();
+                    successToast(
+                        t("admin.designConfig.form:generateStyle.toast.success")
+                    );
+                })
+                .catch(() => {
+                    hideLoader();
+                    errorToast(
+                        t("admin.designConfig.form:generateStyle.toast.error")
+                    );
+                });
+        }
+    };
+
     const onSubmit = async (formData: ContainerFormType) => {
         let container = 0;
         if (containerId) container = containerId;
@@ -119,11 +146,13 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
             if (errorMessage) {
                 errorToast(errorMessage);
             } else if (isNotFound) {
-                errorToast("Container not exist");
+                errorToast(
+                    t("admin.designConfig.form:toast.containerNotFound")
+                );
             } else if (response !== null) {
                 setContainerConfiguration(response.designConfiguration);
                 setConfiguration(parseData(response.designConfigurationTypes));
-                successToast("Configuration updated successfully");
+                successToast(t("admin.designConfig.form:toast.update.success"));
             }
             isLoadingData(false);
             afterSubmit();
@@ -167,7 +196,9 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
                     if (errorMessage) {
                         errorToast(errorMessage);
                     } else if (isNotFound) {
-                        errorToast("Container not exist");
+                        errorToast(
+                            t("admin.designConfig.form:toast.containerNotFound")
+                        );
                     } else if (response !== null) {
                         setContainerConfiguration(response.designConfiguration);
                         setConfiguration(
@@ -279,11 +310,38 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
                         <AppTabs onSelect={setActiveTab} activeKey={activeTab}>
                             {renderTabs()}
                         </AppTabs>
+                        <AppModal
+                            show={showConfirmModal}
+                            title={t(
+                                "admin.designConfig.form:generateStyle.confirmation.title"
+                            )}
+                            handleClose={() => {
+                                setShowConfirmModal(false);
+                            }}
+                            handleDelete={() => {
+                                generateStyleSubmit();
+                                setShowConfirmModal(false);
+                            }}
+                            bodyContent={t(
+                                "admin.designConfig.form:generateStyle.confirmation.content"
+                            )}
+                        />
                         <Row>
-                            <AppFormActions
-                                isEditMode={true}
-                                navigation={nav}
-                            />
+                            <AppFormActions isEditMode={true} navigation={nav}>
+                                <AppButton
+                                    type="button"
+                                    variant={"secondary"}
+                                    className="mr-4"
+                                    disabled={loadingData}
+                                    onClick={() => {
+                                        setShowConfirmModal(true);
+                                    }}
+                                >
+                                    {t(
+                                        "admin.designConfig.form:generateStyle.button"
+                                    )}
+                                </AppButton>
+                            </AppFormActions>
                         </Row>
                     </Form>
                 </Row>
