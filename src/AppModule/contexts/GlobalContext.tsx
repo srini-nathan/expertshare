@@ -71,6 +71,12 @@ export const GlobalProvider: React.FC = (props) => {
                         console.error(e);
                     });
                 }
+                await GenerateApi.getStyle(response.id).then(({ data }) => {
+                    const styleTag = document.createElement("style");
+                    styleTag.id = "dynamic-css";
+                    styleTag.appendChild(document.createTextNode(data));
+                    document.head.appendChild(styleTag);
+                });
                 setNavigation(sortBy(navigation, [(n) => n.ord]));
 
                 setState({
