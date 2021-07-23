@@ -86,6 +86,7 @@
         "fix:styles": "stylelint --fix src/**/*.{css,scss}",
         "fix:config": "prettier --write src/config/*.json",
         "fix:translations": "prettier --write src/translations/**/*.json",
+        "fix:css": "stylelint --fix src/config/css/*.css",
         "lint": "yarn lint:ts && yarn lint:code && yarn lint:styles",
         "lint:ts": "tsc --noEmit && eslint src/**/*.ts{,x}",
         "lint:code": "eslint src/**/*.{js,jsx,ts,tsx}",
