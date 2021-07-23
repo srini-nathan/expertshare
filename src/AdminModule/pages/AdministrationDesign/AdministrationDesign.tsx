@@ -150,11 +150,6 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
                                 ...files,
                                 [title]: response.fileName,
                             });
-                            successToast(
-                                t(
-                                    "admin.designConfiguration:success.imageUpload"
-                                )
-                            );
                         }
                     }
                 }
