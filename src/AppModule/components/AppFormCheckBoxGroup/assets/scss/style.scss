@@ -9,16 +9,15 @@
         display: none;
         margin-left: 0 !important;
 
-
-        &:disabled~.form-check-label {
+        &:disabled ~ .form-check-label {
             color: var(--secondary-70);
         }
 
-        &:checked~.form-check-label::before {
+        &:checked ~ .form-check-label::before {
             background-color: var(--primary);
         }
 
-        &:checked~.form-check-label::after {
+        &:checked ~ .form-check-label::after {
             position: absolute;
             background-image: unset;
             top: 1.5px;
@@ -33,16 +32,16 @@
             transform: rotate(45deg);
         }
 
-        &:focus~.form-check-label::before {
+        &:focus ~ .form-check-label::before {
             box-shadow: unset;
         }
 
-        &~.form-check-label {
+        & ~ .form-check-label {
             position: relative;
             padding: 0 20px;
             margin-bottom: 12px !important;
             font-size: 14px;
-            color: var(--secondary);
+            color: var(--card-text-color);
             cursor: pointer;
 
             &::before {
@@ -57,9 +56,6 @@
                 border: 2px solid var(--primary);
                 border-radius: 0;
             }
-
         }
     }
-
-
 }

@@ -2,19 +2,18 @@
 @import "../../../../assets/scss/variables";
 
 .button-group {
-
     &-buttons {
         flex-wrap: nowrap !important;
-        border: 1px solid var(--input-border-clr);
+        border: 1px solid var(--input-border-color);
         border-radius: var(--border-radius);
     }
 
     .btn-group {
         height: 36px;
         color: var(--input-fg-color);
-        background-color: var(--input-bg-clr);
-        border-radius: var(--border-radius);
-        box-shadow: 0 3px 9px var(--box-shadow-box-clr);
+        background-color: var(--input-background-color);
+        border-radius: var(--input-border-radius);
+        box-shadow: 0 3px 9px var(--select-box-shadow-color);
     }
 
     .form-check {
@@ -22,7 +21,6 @@
             label {
                 border-top-right-radius: var(--border-radius);
                 border-bottom-right-radius: var(--border-radius);
-
             }
         }
 
@@ -30,7 +28,6 @@
             label {
                 border-top-left-radius: var(--border-radius);
                 border-bottom-left-radius: var(--border-radius);
-
             }
         }
 
@@ -46,7 +43,7 @@
         input {
             display: none;
 
-            &:checked~label {
+            &:checked ~ label {
                 color: var(--primary);
                 background-color: var(--primary-20);
             }

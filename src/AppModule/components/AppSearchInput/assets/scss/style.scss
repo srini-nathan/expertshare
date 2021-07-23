@@ -14,7 +14,7 @@
     &-required {
         font-size: 14px;
         font-weight: 700;
-        color: #C31F27;
+        color: #c31f27;
     }
 
     &-description {
@@ -29,8 +29,8 @@
             padding: 0 5px;
             margin-left: 2px;
             font-size: 10px;
-            color: #FFF;
-            background-color: #CAD0DC;
+            color: #fff;
+            background-color: #cad0dc;
             border: unset;
             border-radius: 50%;
         }
@@ -42,33 +42,31 @@
             z-index: 1060;
             display: none;
             max-width: 276px;
-            font-size: .875rem;
+            font-size: 0.875rem;
             font-weight: 400;
             line-height: 1.5;
             text-align: left;
             text-align: start;
-            background-color: #FFF;
-            border: 1px solid rgba(0, 0, 0, .2);
+            background-color: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.2);
             border-radius: var(--border-radius);
 
             h3 {
-                padding: .5rem .75rem;
+                padding: 0.5rem 0.75rem;
                 margin-bottom: 0;
                 font-size: 1rem;
                 color: var(--primary);
-                background-color: #F7F7F7;
-                border-bottom: 1px solid #EBEBEB;
-                border-top-left-radius: calc(.3rem - 1px);
-                border-top-right-radius: calc(.3rem - 1px);
+                background-color: #f7f7f7;
+                border-bottom: 1px solid #ebebeb;
+                border-top-left-radius: calc(0.3rem - 1px);
+                border-top-right-radius: calc(0.3rem - 1px);
             }
 
             div {
                 min-width: 200px;
-                padding: .5rem .75rem;
+                padding: 0.5rem 0.75rem;
                 color: var(--secondary-90);
             }
-
-
         }
     }
 
@@ -80,7 +78,7 @@
             position: relative;
             display: flex;
             align-items: center;
-            border-bottom: 2px solid var(--divider-clr);
+            border-bottom: 2px solid var(--card-divider-color);
 
             &-input {
                 padding-top: 12px !important;
@@ -155,7 +153,7 @@
             padding: 0 6px 12px;
             margin: 0;
             background-color: var(--input-bg);
-            border-top: 2px solid var(--divider-clr);
+            border-top: 2px solid var(--card-divider-color);
             border-radius: 0 0 var(--border-radius) var(--border-radius);
 
             .list-item {
@@ -177,8 +175,6 @@
                     color: var(--primary);
                     cursor: pointer;
                 }
-
-
             }
         }
     }
@@ -216,7 +212,7 @@
         left: 0;
         width: 18px;
         height: 18px;
-        background-color: var(--checkbox-not-checked-bg);
+        background-color: var(--light-clr);
         border-radius: var(--border-radius);
 
         &::after {
@@ -227,7 +223,7 @@
             width: 6px;
             height: 11px;
             content: "";
-            border: solid var(--btn-fg-clr);
+            border: solid var(--secondary-button-text-color);
             border-width: 0 2px 2px 0;
             transform: rotate(45deg);
         }

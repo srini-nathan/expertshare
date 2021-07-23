@@ -52,7 +52,7 @@ export const AppAFrameRoomCard: FC<AppAFrameRoomCardProps> = ({
 
     return (
         <Col md={12} lg={4} xl={4} className="events-grid--container--item">
-            <Col className="inner-container p-0">
+            <Col className="inner-container p-0 card">
                 <Col className="inner-container--banner p-0" style={style}>
                     <div className="inner-container--banner--icons ">
                         {isGrantedControl && (

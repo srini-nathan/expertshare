@@ -21,10 +21,10 @@
     }
     &-container {
         z-index: 3;
-        color: var(--input-fg-clr);
-        background: var(--input-bg-clr) !important;
-        border: 1px solid var(--input-border-clr);
-        border-radius: var(--border-radius) !important;
+        color: var(--select-text-color);
+        background: var(--select-background-color) !important;
+        border: var(--select-border-width) solid var(--select-border-color);
+        border-radius: var(--select-border-radius) !important;
     }
 
     &__control {
@@ -68,7 +68,7 @@
 
     &__indicator {
         svg {
-            color: var(--secondary);
+            color: var(--select-text-color);
         }
     }
 
@@ -82,7 +82,7 @@
     }
 
     &__single-value {
-        color: var(--input-fg-color) !important;
+        color: var(--select-text-color) !important;
     }
 
     &__selected {
@@ -90,24 +90,25 @@
     }
 
     &__option {
-        color: var(--input-fg-color) !important;
+        color: var(--select-option-text-color) !important;
+        background-color: var(--select-option-background-color) !important;
         border: unset;
 
         &--is-selected {
-            color: var(--primary) !important;
-            background-color: var(--primary-20) !important;
+            color: var(--select-option-text-color--hover) !important;
+            background-color: var(--select-option-background-color--hover) !important;
         }
 
         &--is-focused {
-            color: var(--primary) !important;
-            background-color: var(--primary-20) !important;
+            color: var(--select-option-text-color--hover) !important;
+            background-color: var(--select-option-background-color--hover) !important;
         }
 
         &:hover,
         &:active,
         &:focus {
-            color: var(--primary) !important;
-            background-color: var(--primary-20) !important;
+            color: var(--select-option-text-color--hover) !important;
+            background-color: var(--select-option-background-color--hover) !important;
         }
     }
 }
@@ -115,5 +116,5 @@
 .custom-select-container.form-control {
     height: auto;
     padding: 0;
-    border: 1px solid var(--input-border-clr);
+    border: var(--select-border-width) solid var(--select-text-color);
 }

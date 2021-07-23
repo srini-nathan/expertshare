@@ -2,24 +2,22 @@
 @import "../../../../assets/scss/variables";
 
 .card {
-    background-color: var(--container-box-bg-clr) !important;
+    color: var(--card-text-color);
+    background-color: var(--card-background-color) !important;
     border: unset !important;
-    border-radius: var(--border-radius) !important;
-    box-shadow: 0 3px 9px var(--box-shadow-box-clr);
+    border-radius: var(--card-border-radius) !important;
+    box-shadow: 0 3px 9px var(--card-box-shadow-color);
 
     &.card-height {
         height: 95%;
-
     }
 
     &.card-height2 {
         height: 93%;
-
     }
 
     &.card-height3 {
         height: 90%;
-
     }
 
     &-title {
@@ -29,8 +27,10 @@
             margin-bottom: 0;
             font-size: 20px;
             font-weight: 700;
-            color: var(--secondary);
+            color: var(--card-text-color);
         }
-
+    }
+    p {
+        color: var(--card-text-color);
     }
 }

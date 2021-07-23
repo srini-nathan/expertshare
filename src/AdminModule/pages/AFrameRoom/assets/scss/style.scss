@@ -1,7 +1,6 @@
 @import "../../../../../AppModule/assets/scss/screens-sizes";
 @import "../../../../../AppModule/assets/scss/variables";
 
-
 .conference-tags {
     display: inline-grid;
     align-content: center;
@@ -13,5 +12,5 @@
     color: var(--primary);
     background-color: var(--primary-10);
     border: 1px solid var(--primary);
-    border-radius: 25px;
+    border-radius: var(--tag-border-radius);
 }

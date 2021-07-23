@@ -4,7 +4,6 @@
 .auth-container {
     display: grid;
     min-height: 100vh;
-    // background-color: var(--body-bg-clr);
 
     &--box {
         box-sizing: border-box;
@@ -14,8 +13,8 @@
         padding: 30px;
         margin: 40px auto;
         user-select: none;
-        background-color: var(--container-box-bg-clr);
-        border-radius: var(--border-radius);
+        background-color: var(--card-background-color);
+        border-radius: var(--card-border-radius);
         -webkit-touch-callout: none;
 
         @include media("mobile") {
@@ -39,12 +38,12 @@
                 height: 36px;
                 font-size: 14px;
                 font-weight: 400;
-                color: var(--secondary);
-                border: 1px solid var(--border-text-box);
-                border-radius: var(--border-radius);
+                color: var(--input-text-color);
+                border: 1px solid var(--input-border-color);
+                border-radius: var(--input-border-radius);
 
                 &::placeholder {
-                    color: var(--placeholder-auth-fg-clr);
+                    color: var(--input-placeholder-text-color);
                 }
 
                 &:focus {

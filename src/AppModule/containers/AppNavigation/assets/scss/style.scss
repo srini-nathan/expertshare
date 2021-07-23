@@ -3,7 +3,7 @@
 
 .sidebar {
     z-index: 10;
-    background-color: var(--sidebar-bg-clr);
+    background-color: var(--navigation-background-color);
     @include media("mobile") {
         position: relative;
     }
@@ -64,7 +64,7 @@
                         float: right;
                         font-family: "Font Awesome 5 pro";
                         font-weight: 500;
-                        color: var(--secondary);
+                        color: var(--navigation-item-text-color);
                         content: "\f078";
                     }
                 }
@@ -78,7 +78,7 @@
                         font-family: "Font Awesome 5 pro";
                         font-size: 12px;
                         font-weight: 500;
-                        color: var(--secondary);
+                        color: var(--navigation-item-text-color);
                         content: "\f077";
                     }
                 }
@@ -99,7 +99,7 @@
             display: block;
         }
 
-        background-color: var(--sidebar-hover-bg-clr) !important;
+        background-color: var(--navigation-item-background-color--hover) !important;
     }
 
     .navbar {
@@ -128,7 +128,7 @@
                 padding-bottom: 4px;
                 margin-top: 1px;
                 margin-left: 7px;
-                fill: var(--sidebar-fg-clr);
+                fill: var(--navigation-item-text-color);
             }
         }
     }
@@ -206,7 +206,7 @@
             position: absolute;
             bottom: 0;
             width: 100%;
-            background-color: var(--sidebar-bg-clr);
+            background-color: var(--navigation-background-color);
 
             @include media("lr-0") {
                 position: relative;
@@ -219,7 +219,7 @@
                     background: unset;
 
                     span {
-                        color: var(--sidebar-hover-fg-clr) !important;
+                        color: var(--navigation-item-text-color) !important;
                     }
                 }
 
@@ -231,14 +231,14 @@
 
                     &.active,
                     &:hover {
-                        background-color: var(--sidebar-item-hover-bg-clr) !important;
+                        background-color: var(--navigation-item-background-color--hover) !important;
 
                         .nav-icon {
-                            color: var(--sidebar-hover-icon-clr) !important;
+                            color: var(--navigation-item-icon-color--hover) !important;
                         }
 
                         span {
-                            color: var(--sidebar-hover-fg-clr) !important;
+                            color: var(--navigation-item-text-color--hover) !important;
                         }
                     }
                 }
@@ -258,20 +258,20 @@
 
                         &.active,
                         &:hover {
-                            background-color: var(--sidebar-item-hover-bg-clr) !important;
+                            background-color: var(--navigation-item-background-color--hover) !important;
 
                             .nav-icon {
-                                color: var(--sidebar-hover-icon-clr) !important;
+                                color: var(--navigation-item-icon-color--hover) !important;
                             }
 
                             span {
-                                color: var(--sidebar-hover-fg-clr) !important;
+                                color: var(--navigation-item-text-color--hover) !important;
                             }
                         }
 
                         .nav-icon {
                             height: 25px;
-                            color: var(--sidebar-fg-clr) !important;
+                            color: var(--navigation-item-text-color) !important;
                         }
 
                         span {
@@ -291,11 +291,11 @@
                         //     rgba(0, 0, 0, 0) calc(50% + 0.78px)
                         // );
                         /* @toDo credit suisse */
-                        background-color: var(--sidebar-fg-clr);
+                        background-color: var(--navigation-item-text-color);
                     }
 
                     &::-webkit-scrollbar-thumb {
-                        background: var(--sidebar-bg-clr);
+                        background: var(--navigation-background-color);
                     }
 
                     &::-webkit-scrollbar-thumb:hover {
@@ -346,7 +346,7 @@
 
         .list-group-item {
             cursor: pointer;
-            background-color: unset;
+            background-color: var(--navigation-item-background-color);
             border: unset;
 
             .dropdown-toggle::after {
@@ -355,7 +355,7 @@
 
             a,
             span {
-                color: var(--sidebar-fg-clr);
+                color: var(--navigation-item-text-color);
             }
 
             .nav-icon {
@@ -363,8 +363,8 @@
                 width: 42px;
                 height: 42px;
                 margin-bottom: 3px;
-                color: var(--sidebar-icon-clr);
-                border-radius: var(--border-radius);
+                color: var(--navigation-item-icon-color);
+                border-radius: var(--secondary-button-border-radius);
 
                 svg,
                 i {
@@ -398,24 +398,31 @@
 
             .seperator {
                 height: 1px;
-                background: var(--sidebar-fg-clr);
-                opacity: 0.2;
+                background: var(--navigation-item-divider-color);
+                opacity: 1;
             }
 
             &.nav-item {
                 position: relative;
                 max-height: 58px;
-
-                &.active,
+                &.active {
+                    background-color: var(--navigation-item-background-color--active);
+                    span {
+                        color: var(--navigation-item-text-color--active);
+                    }
+                    .nav-icon {
+                        color: var(--navigation-item-icon-color--active);
+                    }
+                }
                 &:hover {
-                    background-color: var(--sidebar-item-hover-bg-clr);
+                    background-color: var(--navigation-item-background-color--hover);
 
                     .nav-icon {
-                        color: var(--sidebar-hover-icon-clr);
+                        color: var(--navigation-item-icon-color--hover);
                     }
 
                     span {
-                        color: var(--sidebar-hover-fg-clr);
+                        color: var(--navigation-item-text-color--hover);
                     }
                 }
 
@@ -510,7 +517,7 @@
             font-variant: normal;
             text-rendering: auto;
             line-height: 1;
-            color: var(--sidebar-fg-clr);
+            color: var(--navigation-item-text-color);
             background-image: unset;
             transform: rotate(180deg);
 
@@ -569,7 +576,7 @@
                 top: 22px;
                 right: 25px;
                 height: 12px;
-                color: var(--sidebar-icon-clr);
+                color: var(--navigation-item-icon-color);
                 @include media("xl") {
                     right: 20px;
                 }
@@ -580,14 +587,14 @@
             .dropdown-item {
                 &.active,
                 &:hover {
-                    background-color: var(--sidebar-item-hover-bg-clr);
+                    background-color: var(--navigation-item-background-color--hover);
 
                     .nav-icon {
-                        color: var(--sidebar-hover-icon-clr);
+                        color: var(--navigation-item-icon-color--hover);
                     }
 
                     span {
-                        color: var(--sidebar-hover-fg-clr);
+                        color: var(--navigation-item-text-color--hover);
                     }
                 }
             }
@@ -841,12 +848,12 @@
                 cursor: pointer;
 
                 &:hover {
-                    background-color: var(--sidebar-item-hover-bg-clr);
+                    background-color: var(--navigation-item-background-color);
                 }
 
                 i {
                     font-size: 28px;
-                    color: var(--sidebar-fg-clr);
+                    color: var(--navigation-item-text-color);
                     transform: rotate(180deg);
 
                     &::before {

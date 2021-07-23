@@ -107,9 +107,9 @@
                         margin-top: -30px;
                         font-size: 14px;
                         font-weight: 400;
-                        color: var(--btn-fg-clr);
-                        background-color: var(--speaker-btn-bg-clr);
-                        border-radius: var(--border-radius);
+                        color: var(--light-clr);
+                        background-color: var(--info);
+                        border-radius: var(--secondary-button-border-radius);
 
                         i {
                             margin-right: 5px;
@@ -131,7 +131,7 @@
                             //@TODO Credit Suisse Customization --end
                             font-size: 20px;
                             font-weight: 700;
-                            color: var(--secondary);
+                            color: var(--card-text-color);
                             -webkit-box-orient: vertical;
                             -webkit-line-clamp: 1;
                         }
@@ -143,8 +143,11 @@
                         overflow: hidden;
                         font-size: 14px;
                         font-weight: 400;
-                        color: var(--secondary-70);
+                        color: var(--card-second-text-color);
                         -webkit-box-orient: vertical;
+                        p {
+                            color: var(--card-second-text-color);
+                        }
                     }
 
                     &--mail {
@@ -182,12 +185,12 @@
                             user-select: none;
                             background-color: var(--primary-10);
                             border: 1px solid var(--primary);
-                            border-radius: var(--spc-btn-border-radius);
+                            border-radius: var(--tag-border-radius);
                         }
 
                         &.show-more {
                             a {
-                                background-color: var(--btn-secondary-bg-clr);
+                                background-color: var(--secondary-button-background-color);
                                 border: none;
                             }
                         }
@@ -245,22 +248,25 @@
                                 width: fit-content;
                                 margin: auto;
                                 &--inner {
-                                    padding: 7px 10px;
                                     margin-top: 15px;
-                                    background-color: var(--light-clr);
-                                    border-radius: var(--border-radius);
-                                    box-shadow: 2px 12px 38px var(--secondary-30);
+                                    overflow: hidden;
+                                    background-color: var(--select-background-color);
+                                    border: var(--select-border-width) solid var(--select-border-color);
+                                    border-radius: var(--select-border-radius);
+                                    box-shadow: 2px 12px 38px var(--select-box-shadow-color);
                                     &--item {
-                                        padding: 2px 5px;
                                         text-align: left;
 
                                         a {
                                             display: flex;
                                             align-items: center;
+                                            padding: 7px 10px;
+                                            padding-bottom: 3px;
                                             font-size: 12px;
                                             font-weight: 700;
                                             line-height: 30px;
-                                            color: var(--secondary);
+                                            color: var(--select-option-text-color);
+                                            background-color: var(--select-option-background-color);
 
                                             i {
                                                 font-size: 18px;
@@ -270,6 +276,10 @@
                                                 width: 1.2em;
                                                 margin-right: 5px;
                                                 text-align: left;
+                                            }
+                                            &:hover {
+                                                color: var(--select-option-text-color--hover);
+                                                background-color: var(--select-option-background-color--hover);
                                             }
                                         }
 

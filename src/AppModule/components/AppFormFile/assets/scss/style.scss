@@ -2,15 +2,15 @@
 @import "../../../../assets/scss/variables";
 
 .form-control {
-    color: var(--input-fg-clr);
-    background-color: var(--input-bg-clr);
-    border: 1px solid var(--input-border-clr);
+    color: var(--input-text-color);
+    background-color: var(--input-background-color);
+    border: 1px solid var(--input-border-color);
     border-radius: var(--border-radius);
 
     &:focus {
-        color: var(--input-fg-clr);
-        background-color: var(--input-bg-clr);
-        border-color: var(--input-border-clr);
+        color: var(--input-text-color);
+        background-color: var(--input-background-color);
+        border-color: var(--input-border-color);
         box-shadow: unset;
     }
 }
@@ -51,15 +51,15 @@
     }
 
     &-label {
-        color: var(--input-fg-clr);
-        background-color: var(--input-bg-clr);
-        border: 1px solid var(--input-border-clr);
+        color: var(--input-text-color);
+        background-color: var(--input-background-color);
+        border: 1px solid var(--input-border-color);
         border-radius: var(--border-radius);
 
         &:focus {
-            color: var(--input-fg-clr);
-            background-color: var(--input-bg-clr);
-            border-color: var(--input-border-clr);
+            color: var(--input-text-color);
+            background-color: var(--input-background-color);
+            border-color: var(--input-border-color);
             box-shadow: unset;
             outline: unset;
         }

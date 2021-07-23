@@ -4,12 +4,17 @@
 .nav-pills {
     .nav-item {
         .nav-link {
+            display: flex;
+            align-items: center;
             justify-content: flex-start;
             width: fit-content;
             height: 76px;
             padding-right: 30px !important;
             font-size: 18px !important;
             font-weight: 500 !important;
+            color: var(--tab-text-color);
+            background-color: var(--tab-background-color);
+            border-radius: var(--tab-border-radius);
             border: none;
 
             @include media("container-b-l") {
@@ -31,7 +36,7 @@
                 padding-bottom: 4px;
                 margin-right: 15px;
                 font-weight: 500;
-                border-right: 1px solid var(--secondary-20);
+                border-right: 1px solid var(--card-divider-color);
 
                 @include media("mobtosmall") {
                     display: none;
@@ -39,34 +44,34 @@
             }
 
             &.active {
-                color: var(--primary) !important;
-                background-color: var(--primary-10);
+                color: var(--tab-text-color--active) !important;
+                background-color: var(--tab-background-color--active);
                 border: none;
 
                 &:focus {
-                    color: var(--primary);
-                    background-color: var(--primary-10);
+                    color: var(--tab-text-color--active);
+                    background-color: var(--tab-background-color--active);
                     border: unset;
                     outline: none;
-                    box-shadow: 0 2px 9px var(--secondary-20);
+                    box-shadow: 0 2px 9px var(--tab-box-shadow-color--active);
                 }
 
                 &:active {
-                    color: var(--primary);
-                    background-color: var(--primary-10);
+                    color: var(--tab-text-color--active);
+                    background-color: var(--tab-background-color--active);
                     border: unset;
                     outline: none;
-                    box-shadow: 0 2px 9px var(--secondary-20);
+                    box-shadow: 0 2px 9px var(--tab-box-shadow-color--active);
                 }
 
                 &:visited {
-                    color: var(--primary);
-                    background-color: var(--primary-10);
+                    color: var(--tab-text-color--active);
+                    background-color: var(--tab-background-color--active);
                     border: none;
                 }
 
                 &:not(:disabled):not(.disabled) {
-                    background-color: var(--primary-10) !important;
+                    background-color: var(--tab-background-color--active) !important;
                 }
             }
 
@@ -75,48 +80,50 @@
             }
         }
     }
-
 }
 
 .child-tab {
     .nav-link {
+        display: flex;
+        align-items: center;
         justify-content: center;
         width: 150px;
         height: 36px;
         padding: 0 10px;
         font-size: 14px;
         font-weight: 400;
+        color: var(--tab-text-color);
         border: none;
 
         &.active {
-            color: var(--primary) !important;
-            background-color: var(--primary-10);
+            color: var(--tab-text-color--active) !important;
+            background-color: var(--tab-background-color--active);
             border: none;
 
             &:focus {
-                color: var(--primary);
-                background-color: var(--primary-10);
+                color: var(--tab-text-color--active);
+                background-color: var(--tab-background-color--active);
                 border: unset;
                 outline: none;
-                box-shadow: 0 2px 9px var(--secondary-20);
+                box-shadow: 0 2px 9px var(--tab-box-shadow-color--active);
             }
 
             &:active {
-                color: var(--primary);
-                background-color: var(--primary-10);
+                color: var(--tab-text-color--active);
+                background-color: var(--tab-background-color--active);
                 border: unset;
                 outline: none;
-                box-shadow: 0 2px 9px var(--secondary-20);
+                box-shadow: 0 2px 9px var(--tab-box-shadow-color--active);
             }
 
             &:visited {
-                color: var(--primary);
-                background-color: var(--primary-10);
+                color: var(--tab-text-color--active);
+                background-color: var(--tab-background-color--active);
                 border: none;
             }
 
             &:not(:disabled):not(.disabled) {
-                background-color: var(--primary-10) !important;
+                background-color: var(--tab-background-color--active) !important;
             }
         }
 

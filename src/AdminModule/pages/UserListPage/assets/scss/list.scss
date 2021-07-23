@@ -120,11 +120,11 @@
 .list-deopdown {
     min-width: 130px;
     height: 36px;
-    margin: auto 0;
-    background-color: var(--light-clr);
-    border: none;
-    box-shadow: 0 3px 9px var(--box-shadow-box-clr);
     padding: 5px;
+    margin: auto 0;
+    background-color: var(--select-background-color);
+    border: none;
+    box-shadow: 0 3px 9px var(--select-box-shadow-color);
 
     &:focus {
         outline: none;
@@ -133,17 +133,17 @@
 }
 
 .list-checkbox {
-    margin: auto;
-    padding-left: 0;
     height: 20px;
+    padding-left: 0;
+    margin: auto;
 }
 
 .bulk-menu {
     position: fixed;
     bottom: 80px;
     width: content;
-    background-color: var(--light-clr);
-    box-shadow: 0 3px 9px var(--box-shadow-box-clr);
+    background-color: var(--card-background-color);
+    box-shadow: 0 3px 9px var(--card-box-shadow-color);
 }
 .card-body {
     @include media("mobtoinf") {

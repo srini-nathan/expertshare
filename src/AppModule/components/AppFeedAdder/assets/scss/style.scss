@@ -11,21 +11,21 @@
 .app-feed-adder {
     background-color: white;
     padding: 0 !important;
-    border: 1px solid var(--input-border-clr);
+    border: 1px solid var(--input-border-color);
     border-radius: var(--border-radius);
     textarea.form-control {
         position: relative;
         min-height: 111px;
         font-size: 14px;
         font-weight: 400;
-        color: var(--input-fg-clr);
-        background-color: var(--input-bg-clr);
+        color: var(--input-text-color);
+        background-color: var(--input-background-color);
         border: none !important;
         resize: none;
         &:focus {
-            color: var(--input-fg-clr);
-            background-color: var(--input-bg-clr);
-            border-color: var(--input-border-clr);
+            color: var(--input-text-color);
+            background-color: var(--input-background-color);
+            border-color: var(--input-border-color);
             box-shadow: unset;
         }
     }
@@ -84,7 +84,7 @@
 
 .app-feed-settings {
     &--info {
-        color: var(--agree-scrollbar-track-bg-clr);
+        color: var(--scrollbar-background);
         i {
             padding-right: 10px;
         }
