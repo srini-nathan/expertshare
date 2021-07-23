@@ -29,7 +29,7 @@ import { Upload } from "../../../AppModule/models";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
-    FILETYPE: { FILETYPE_CONFIGURATION },
+    FILETYPE: { FILETYPE_DESIGN_CONFIGURATION },
 } = UPLOAD;
 
 const parseData = (data: any) => {
@@ -94,10 +94,14 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
     const onSubmit = async (formData: ContainerFormType) => {
         let container = 0;
         if (containerId) container = containerId;
+        const newFormData: ContainerFormType = {
+            ...formData,
+            ...files,
+        };
         isLoadingData(true);
         await ContainerApi.update<Container, ContainerRequestData>(
             container,
-            buildContainer(formData)
+            buildContainer(newFormData)
         ).then(({ response, isNotFound, errorMessage }) => {
             if (errorMessage) {
                 errorToast(errorMessage);
@@ -120,28 +124,21 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
         if (selectedFiles) {
             const fd = new FormData();
             fd.set("file", selectedFiles[0], selectedFiles[0].name);
-            fd.set("fileType", FILETYPE_CONFIGURATION);
+            fd.set("fileType", FILETYPE_DESIGN_CONFIGURATION);
 
             UploadAPI.createResource<Upload, FormData>(fd).then(
                 ({ response, errorMessage }) => {
                     if (errorMessage) {
                         errorToast(errorMessage);
                     } else if (response && response.fileName) {
-                        if (translatable) {
-                            const newTranslatiosn = translations.map((e) => {
-                                if ((e.locale as string) === active)
-                                    return {
-                                        ...e,
-                                        [title]: response.fileName,
-                                    };
-                                return e;
-                            });
-                            setTranslations(newTranslatiosn);
-                        } else
+                        // eslint-disable-next-line no-console
+                        console.log("createResource", response, title);
+                        if (!translatable) {
                             setFiles({
                                 ...files,
                                 [title]: response.fileName,
                             });
+                        }
                     }
                 }
             );

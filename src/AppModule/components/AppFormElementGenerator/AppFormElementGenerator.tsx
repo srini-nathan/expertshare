@@ -8,10 +8,17 @@ import { AppFormTextArea } from "../AppFormTextArea";
 import { AppFormRichTextArea } from "../AppFormRichTextArea";
 import { AppFormDropdown } from "../AppFormDropdown";
 import { AppFormFile } from "../AppFormFile";
-import { PrimitiveObject } from "../../models";
+import { FileTypeInfo, PrimitiveObject } from "../../models";
 import "./assets/scss/style.scss";
 import { AppFormInputColorPicker } from "../AppFormInputColorPicker";
 import { AppFormCodeEditor } from "../AppFormCodeEditor";
+import { AppUploader } from "../AppUploader";
+import { CONSTANTS } from "../../../config";
+
+const { Upload: UPLOAD } = CONSTANTS;
+const {
+    FILETYPEINFO: { FILETYPEINFO_DESIGN_CONFIGURATION },
+} = UPLOAD;
 
 export interface AppFormElementGeneratorProps {
     properties: any;
@@ -315,6 +322,35 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             />
         );
     };
+    const renderImage = () => {
+        let prps: AppDataProps = {
+            type: items.attr ? items.attr.type : "text",
+            label: items.label ? items.label : "",
+            defaultValue,
+            placeholder: "",
+        };
+        if (items.translation && translations)
+            prps = {
+                ...prps,
+                label: items.label ? `${items.label} (${activeLanguage})` : "",
+                value: getTranslationValue(properties.title),
+                onChange: handleTranslationValue,
+            };
+        return (
+            <Col className="form-group" {...getLayoutProms()}>
+                <Form.Label>{items.label}</Form.Label>
+                <AppUploader
+                    accept="image/*"
+                    fileInfo={FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo}
+                    onFileSelect={(files: File[]) => {
+                        if (onFileSelect)
+                            onFileSelect(files, properties.title, false);
+                    }}
+                    {...prps}
+                />
+            </Col>
+        );
+    };
     const renderForm = () => {
         switch (properties.items.type) {
             case "TEXT":
@@ -339,6 +375,8 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                 return renderColor();
             case "CODE_EDITOR":
                 return renderCodeEditor();
+            case "IMAGE":
+                return renderImage();
             default:
                 return <></>;
         }
