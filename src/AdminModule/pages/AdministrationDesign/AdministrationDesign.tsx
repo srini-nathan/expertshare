@@ -33,6 +33,7 @@ import { useGlobalData } from "../../../AppModule/contexts";
 import { UploadAPI } from "../../../AppModule/apis";
 import { Upload } from "../../../AppModule/models";
 import { GenerateApi } from "../../apis/GenerateApi";
+import { useDomHelper } from "../../../AppModule/hooks";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -98,14 +99,12 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
     const buildContainer = (data: ContainerFormType): ContainerRequestData => {
         return { designConfiguration: data };
     };
+    const { setStyle } = useDomHelper();
 
     const afterSubmit = async () => {
         if (containerId) {
             await GenerateApi.getStyle(containerId).then(({ data }) => {
-                const styleTag = document.createElement("style");
-                styleTag.id = "dynamic-css";
-                styleTag.appendChild(document.createTextNode(data));
-                document.head.appendChild(styleTag);
+                setStyle(data);
             });
         }
     };
@@ -222,7 +221,11 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
             configuration &&
             configuration.map((e: any) => {
                 return (
-                    <AppTab eventKey={`${e.title}_key`} title={t(e.title)}>
+                    <AppTab
+                        eventKey={`${e.title}_key`}
+                        title={t(e.title)}
+                        key={`${e.title}_key`}
+                    >
                         <Col md={12} className="p-0 mt-4">
                             <AppCard>
                                 <Row>
@@ -260,7 +263,7 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
                                     )}
 
                                     {e.fields &&
-                                        e.fields.map((j: any) => {
+                                        e.fields.map((j: any, i: number) => {
                                             let defaultValue = "";
                                             if (
                                                 containerConfiguration &&
@@ -275,6 +278,7 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
 
                                             return (
                                                 <AppFormElementGenerator
+                                                    key={j?.title || `${i}`}
                                                     translations={translations}
                                                     onChange={setTranslations}
                                                     onFileSelect={onDocsSelect}
