@@ -5,10 +5,10 @@
     .custom-dropdown-toggle {
         height: 36px;
         padding: 5px 10px;
-        color: var(--input-fg-clr);
+        color: var(--input-text-color);
         cursor: pointer;
-        background-color: var(--input-bg-clr);
-        border: 1px solid var(--input-border-clr);
+        background-color: var(--input-background-color);
+        border: 1px solid var(--input-border-color);
         border-radius: var(--border-radius);
 
         span {
@@ -24,7 +24,6 @@
             right: 10px;
         }
     }
-
 
     .custom-drop-down-menu {
         width: 280%;

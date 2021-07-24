@@ -21,7 +21,7 @@
             overflow: hidden;
             font-size: 16px;
             font-weight: 500;
-            color: var(--secondary);
+            color: var(--card-text-color);
         }
 
         span {
@@ -31,7 +31,7 @@
             overflow: hidden;
             font-size: 12px;
             font-weight: 500;
-            color: var(--secondary-70);
+            color: var(--card-second-text-color);
         }
     }
 

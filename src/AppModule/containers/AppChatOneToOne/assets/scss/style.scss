@@ -5,9 +5,9 @@
     margin-top: 0;
     margin-right: 20px;
     margin-bottom: 0;
-    background-color: var(--light-clr);
-    border-radius: var(--border-radius);
-    box-shadow: 0 -7px 40px var(--secondary-30);
+    background-color: var(--card-background-color);
+    border-radius: var(--card-border-radius);
+    box-shadow: 0 -7px 40px var(--card-box-shadow-color);
     @include media("mb-1") {
         position: absolute;
         right: 0;
@@ -118,8 +118,8 @@
                         height: 36px;
                         font-size: 22px;
                         color: var(--secondary);
-                        border-radius: var(--border-radius);
-                        box-shadow: 0 -2px 9px var(--secondary-20);
+                        border-radius: var(--secondary-button-border-radius);
+                        box-shadow: 0 -2px 9px var(--secondary-button-box-shadow-color);
 
                         &::before {
                             content: "\e018";
@@ -139,9 +139,11 @@
                         width: 36px;
                         height: 36px;
                         font-size: 22px;
-                        color: var(--secondary);
-                        border-radius: var(--border-radius);
-                        box-shadow: 0 -2px 9px var(--secondary-20);
+                        color: var(--secondary-button-text-color);
+                        background-color: var(--secondary-button-background-color);
+                        border: var(--primary-button-border-width) solid var(--primary-button-border-color);
+                        border-radius: var(--secondary-button-border-radius);
+                        box-shadow: 0 -1px 9px var(--secondary-button-box-shadow-color);
                     }
                 }
             }
@@ -150,8 +152,8 @@
         .chat-list {
             height: 325px;
             overflow: auto;
-            border-top: 1px solid var(--secondary-20);
-            border-bottom: 1px solid var(--secondary-20);
+            border-top: 1px solid var(--card-divider-color);
+            border-bottom: 1px solid var(--card-divider-color);
             scrollbar-color: var(--secondary) var(--secondary-10);
             scrollbar-width: thin;
             @include media("mobile") {
@@ -262,7 +264,8 @@
                             &--comment {
                                 p {
                                     background-color: var(--secondary-10);
-                                    border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius);
+                                    border-radius: 0 var(--card-border-radius) var(--card-border-radius)
+                                        var(--card-border-radius);
                                 }
                             }
                         }
@@ -290,7 +293,8 @@
                             &--comment {
                                 p {
                                     background-color: var(--message-in-box-fg-clr);
-                                    border-radius: var(--border-radius) 0 var(--border-radius) var(--border-radius);
+                                    border-radius: var(--card-border-radius) 0 var(--card-border-radius)
+                                        var(--card-border-radius);
                                 }
                             }
                         }
@@ -308,16 +312,16 @@
                     height: 36px;
                     font-size: 14px;
                     font-weight: 500;
-                    color: var(--btn-secondary-fg-clr);
-                    background-color: var(--btn-secondary-bg-clr);
-                    border: var(--btn-secondary-border-clr);
-                    border-radius: var(--border-radius);
-                    box-shadow: 2px 3px 9px var(--secondary-20);
+                    color: var(--secondary-button-text-color);
+                    background-color: var(--secondary-button-background-color);
+                    border: var(--secondary-button-border-color);
+                    border-radius: var(--secondary-button-border-radius);
+                    box-shadow: 2px 3px 9px var(--secondary-button-box-shadow-color);
 
                     i {
                         padding-right: 8px;
                         font-size: 22px;
-                        color: var(--secondary);
+                        color: var(--secondary-button-text-color);
                     }
                 }
 
@@ -368,9 +372,9 @@
                 display: flex;
                 align-items: center;
                 min-height: 36px;
-                border: 1px solid var(--secondary-70);
-                border-radius: var(--border-radius);
-
+                border: var(--input-border-width) solid var(--input-border-color);
+                border-radius: var(--input-border-radius);
+                overflow: hidden;
                 textarea {
                     width: 85%;
                     height: 36px;
@@ -378,9 +382,9 @@
                     padding-left: 35px;
                     font-size: 14px;
                     font-weight: 400;
-                    color: var(--secondary);
+                    color: var(--input-text-color);
                     resize: none;
-                    background-color: unset;
+                    background-color: var(--input-background-color);
                     border: none;
                     scrollbar-color: var(--secondary) var(--secondary-10);
                     scrollbar-width: thin;
@@ -405,7 +409,7 @@
                     }
 
                     &::placeholder {
-                        color: var(--placeholder-fg-clr);
+                        color: var(--input-placeholder-text-color);
                     }
                 }
 

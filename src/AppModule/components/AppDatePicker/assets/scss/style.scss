@@ -14,17 +14,17 @@
         padding: 0 10px;
         font-size: 14px;
         font-weight: 400;
-        color: var(--input-fg-clr);
-        background-color: var(--input-bg-clr);
-        border: 1px solid var(--input-border-clr) !important;
-        border-radius: var(--border-radius) 0 0 var(--border-radius);
+        color: var(--input-text-color);
+        background-color: var(--input-background-color);
+        border: 1px solid var(--input-border-color) !important;
+        border-radius: var(--input-border-radius) 0 0 var(--input-border-radius);
         border-right-color: transparent;
 
         &:focus,
         &:active {
-            color: var(--input-fg-clr);
-            background-color: var(--input-bg-clr);
-            border-color: var(--input-border-clr) !important;
+            color: var(--input-text-color);
+            background-color: var(--input-background-color);
+            border-color: var(--input-border-color) !important;
             box-shadow: unset;
             outline: unset;
         }
@@ -43,17 +43,14 @@
 
 .custom-datepicker {
     padding: 10px;
-    border-radius: var(--border-radius);
-    box-shadow: 0 3px 9px var(--box-shadow-box-clr);
-    border: unset;
     //font-family: var(--font-family-sans-serif);
     //@TODO Credit Suisse Customization -- start
     font-family: var(--font-family-body);
     //@TODO Credit Suisse Customization --end
-    background-color: var(--light-clr);
+    background-color: var(--card-background-color);
     border: unset;
-    border-radius: var(--border-radius);
-    box-shadow: 0 10px 20px var(--primary-20);
+    border-radius: var(--card-border-radius);
+    box-shadow: 0 3px 9px var(--card-box-shadow-color);
     .react-datepicker__triangle {
         @include media("not-mobile") {
             right: 60px;
@@ -61,10 +58,10 @@
         }
     }
     select {
-        background-color: var(--input-bg-clr);
-        color: var(--input-fg-clr);
-        border: 1px solid var(--input-border-clr);
-        border-radius: var(--border-radius);
+        background-color: var(--input-background-color);
+        color: var(--input-text-color);
+        border: 1px solid var(--input-border-color);
+        border-radius: var(--input-border-radius);
         padding: 5px;
         margin: 10px 5px;
 
@@ -87,11 +84,11 @@
         top: 38px;
         width: 20px;
         height: 30px;
-        background-color: var(--btn-bg-clr);
+        background-color: var(--primary-button-background-color);
         border: unset;
 
         &:hover {
-            background-color: var(--btn-hover-bg-clr);
+            background-color: var(--primary-button-background-color--active);
         }
 
         &--previous {

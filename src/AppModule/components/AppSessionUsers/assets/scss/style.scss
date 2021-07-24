@@ -3,7 +3,7 @@
 
 .fa-speakers {
     &::before {
-        content: '\e000' !important;
+        content: "\e000" !important;
     }
 }
 
@@ -34,7 +34,6 @@
     &::-webkit-scrollbar-thumb:hover {
         opacity: 50%;
     }
-
 }
 
 .create-session--speakers--header--name {
@@ -44,7 +43,7 @@
         margin-bottom: 0;
         font-size: 20px;
         font-weight: 700;
-        color: var(--secondary);
+        color: var(--card-text-color);
 
         i {
             padding-right: 10px;
@@ -52,6 +51,5 @@
             font-size: 22px;
             font-weight: 500;
         }
-
     }
 }

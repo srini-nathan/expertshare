@@ -10,11 +10,9 @@
 .event-detail-admin--det {
     &--container {
         overflow: hidden;
-        border-radius: 5px;
-        box-shadow: 0 2px 12px var(--secondary-20);
         .inner-container {
             &.top {
-                background-color: var(--light-clr);
+                background-color: var(--card-background-color);
             }
 
             &.bottom {
@@ -28,7 +26,7 @@
                         font-size: 42px;
                         font-weight: 700;
                         line-height: 50px;
-                        color: var(--secondary);
+                        color: var(--card-text-color);
 
                         @include media("tabtolap2") {
                             font-size: 36px;
@@ -105,7 +103,7 @@
                     // background-image: url(/v2/assets/images/events_banner/events-banner-1.png);
                     background-repeat: no-repeat;
                     background-size: cover;
-                    border-radius: var(--border-radius);
+                    border-radius: var(--card-border-radius);
                     @include media("container-b-l") {
                         position: inherit;
                     }
@@ -115,7 +113,7 @@
             &--det {
                 z-index: 1;
                 margin-top: -35px;
-                border-radius: var(--border-radius);
+                border-radius: var(--card-border-radius);
 
                 &--desc {
                     display: flex;
@@ -131,14 +129,14 @@
                         h2 {
                             font-size: 16px;
                             font-weight: 700;
-                            color: var(--secondary);
+                            color: var(--card-text-color);
                         }
 
                         p {
                             display: grid;
                             font-size: 16px;
                             font-weight: 500;
-                            color: var(--secondary-80);
+                            color: var(--card-second-text-color);
                             .read-or-hide {
                                 font-size: 12px;
                                 font-weight: 700;
@@ -157,7 +155,7 @@
                         h2 {
                             font-size: 16px;
                             font-weight: 700;
-                            color: var(--secondary);
+                            color: var(--card-text-color);
 
                             i {
                                 position: relative;

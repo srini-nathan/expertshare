@@ -7,22 +7,20 @@
 
     .input-group {
         .form-control {
-            border-right: 1px solid var(--input-border-clr) !important;
+            border-right: 1px solid var(--input-border-color) !important;
             border-left: 0 !important;
-
         }
 
         .input-group-text {
             padding: 9px;
-            color: var(--input-fg-clr) !important;
-            background-color: var(--input-bg-clr) !important;
+            color: var(--input-text-color) !important;
+            background-color: var(--input-background-color) !important;
             border-right: 0 !important;
-            border-left: 1px solid var(--input-border-clr) !important;
-            border-top-left-radius: var(--border-radius) !important;
+            border-left: 1px solid var(--input-border-color) !important;
+            border-top-left-radius: var(--input-border-radius) !important;
             border-top-right-radius: 0 !important;
             border-bottom-right-radius: 0 !important;
-            border-bottom-left-radius: var(--border-radius) !important;
-
+            border-bottom-left-radius: var(--input-border-radius) !important;
         }
     }
 }

@@ -5,8 +5,6 @@
     position: -webkit-sticky !important;
     position: sticky !important;
     top: 0;
-    background-color: var(--light-clr);
-    box-shadow: 0 3px 9px var(--box-shadow-box-clr);
     height: 100vh;
 
     &--text-box {
@@ -19,7 +17,7 @@
             margin-bottom: 0;
             font-size: 20px;
             font-weight: 700;
-            color: var(--secondary);
+            color: var(--card-text-color);
 
             i {
                 padding-right: 10px;
@@ -39,8 +37,8 @@
                     padding: 2px;
                     font-size: 14px;
                     font-weight: 500;
-                    color: var(--btn-secondary-fg-clr);
-                    background-color: var(--btn-secondary-bg-clr);
+                    color: var(--secondary-button-text-color);
+                    background-color: var(--secondary-button-background-color);
                     border-radius: var(--border-radius);
                     box-shadow: 0 3px 9px var(--secondary-10);
 
@@ -85,16 +83,16 @@
         .text-box-container {
             position: relative;
             height: 104px;
-            border: 1px solid var(--secondary-70);
-            border-radius: var(--border-radius);
+            border: var(--input-border-width) solid var(--input-border-color);
+            border-radius: var(--input-border-radius);
 
             textarea {
                 height: 75px;
                 min-height: 75px;
                 padding: 8px;
-                color: var(--secondary);
+                color: var(--input-text-color);
                 resize: none;
-                background-color: unset;
+                background-color: var(--input-background-color);
                 border: none !important;
 
                 &:focus {
@@ -102,7 +100,7 @@
                 }
 
                 &::placeholder {
-                    color: var(--input-placeholder-fg-clr);
+                    color: var(--input-placeholder-text-color);
                 }
 
                 &::-webkit-scrollbar {
@@ -120,7 +118,6 @@
                 &::-webkit-scrollbar-thumb:hover {
                     opacity: 50%;
                 }
-
             }
 
             &--options {
@@ -143,7 +140,7 @@
                                 font-family: auto;
                                 font-size: 19px;
                                 font-style: normal;
-                                color: var(--secondary-70);
+                                color: var(--card-second-text-color);
                             }
                         }
 
@@ -153,7 +150,7 @@
 
                             i {
                                 font-size: 17px;
-                                color: var(--secondary-70);
+                                color: var(--card-second-text-color);
                             }
 
                             &:focus,
@@ -173,7 +170,7 @@
 
                     label {
                         font-size: 13px;
-                        color: var(--secondary-60);
+                        color: var(--card-second-text-color);
                     }
 
                     .btn-send {
@@ -185,7 +182,7 @@
                         font-size: 12px !important;
                         font-weight: 700;
                         color: var(--primary);
-                        border-left: 1px solid var(--secondary-20);
+                        border-left: 1px solid var(--card-divider-color0);
 
                         &:focus {
                             background: none !important;
@@ -194,12 +191,9 @@
                             box-shadow: unset !important;
                         }
                     }
-
                 }
             }
         }
-
-
     }
 
     &--container {
@@ -218,7 +212,7 @@
             margin-top: -15px;
             padding-top: 0;
             content: "";
-            border-color: var(--secondary-20);
+            border-color: var(--card-divider-color);
             border-bottom-style: solid;
             border-bottom-width: 1px;
         }
@@ -259,13 +253,13 @@
                         &--name {
                             font-size: 16px;
                             font-weight: 500;
-                            color: var(--secondary);
+                            color: var(---card-text-color);
                         }
 
                         &--time {
                             font-size: 12px;
                             font-weight: 500;
-                            color: var(--secondary-70);
+                            color: var(--card-second-text-color);
                         }
                     }
                 }
@@ -292,7 +286,7 @@
                     font-size: 14px;
                     font-weight: 500;
                     color: var(--secondary);
-                    background-color: var(--btn-secondary-bg-clr);
+                    background-color: var(--secondary-button-background-color);
                     border-radius: var(--border-radius);
                     box-shadow: 0 3px 9px var(--secondary-10);
 
@@ -313,8 +307,6 @@
                     padding: 2px !important;
                     font-size: 14px !important;
                     font-weight: 500 !important;
-
-
 
                     &.active {
                         color: var(--primary);
@@ -354,11 +346,10 @@
                 &--container {
                     padding-left: 26px;
                     margin-left: 18px;
-                    border-left: 1px solid var(--secondary-70);
+                    border-left: 1px solid var(--card-divider-color);
 
                     &.is-child {
-                        border-left: 0 solid var(--secondary-70);
-
+                        border-left: 0 solid var(--card-divider-color);
                     }
 
                     p {
@@ -369,7 +360,8 @@
                         color: var(--secondary);
                     }
 
-                    .base-text {}
+                    .base-text {
+                    }
                 }
 
                 &.answer {

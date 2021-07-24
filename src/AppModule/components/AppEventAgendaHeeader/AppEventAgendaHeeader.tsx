@@ -48,7 +48,7 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
     //     return `-${t("common:showLess")}`;
     // };
     return (
-        <Col className="event-detail-admin--det--container col-12 mb-3 px-0">
+        <Col className="event-detail-admin--det--container card col-12 mb-3 px-0">
             <Col className="inner-container top px-4 pt-4 pb-3">
                 <Row className="m-0 p-0">
                     <Col
