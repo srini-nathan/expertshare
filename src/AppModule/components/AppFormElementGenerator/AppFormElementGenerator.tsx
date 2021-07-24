@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { Control } from "react-hook-form";
+import { Control, SetFieldValue } from "react-hook-form";
 import { Col, Form } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { AppFormInput } from "../AppFormInput";
@@ -8,17 +8,28 @@ import { AppFormTextArea } from "../AppFormTextArea";
 import { AppFormRichTextArea } from "../AppFormRichTextArea";
 import { AppFormDropdown } from "../AppFormDropdown";
 import { AppFormFile } from "../AppFormFile";
-import { PrimitiveObject } from "../../models";
+import { FileTypeInfo, PrimitiveObject } from "../../models";
 import "./assets/scss/style.scss";
+import { AppFormInputColorPicker } from "../AppFormInputColorPicker";
+import { AppFormCodeEditor } from "../AppFormCodeEditor";
+import { AppUploader } from "../AppUploader";
+import { CONSTANTS } from "../../../config";
+import { useBuildAssetPath } from "../../hooks";
+
+const { Upload: UPLOAD } = CONSTANTS;
+const {
+    FILETYPEINFO: { FILETYPEINFO_DESIGN_CONFIGURATION },
+} = UPLOAD;
 
 export interface AppFormElementGeneratorProps {
     properties: any;
     activeLanguage?: string;
     defaultValue: any;
+    control: Control<any>;
+    onFileSelect?: (files: File[], title: string, translation: boolean) => void;
     translations?: any[];
     onChange?: (value: any[]) => void;
-    onFileSelect?: (files: File[], title: string, translation: boolean) => void;
-    control: Control<any>;
+    setValue?: SetFieldValue<any>;
 }
 export interface AppDataProps {
     type: string;
@@ -36,9 +47,13 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
     translations,
     activeLanguage = "",
     onFileSelect,
+    setValue,
 }) => {
     const { items } = properties;
     const { t } = useTranslation();
+    const designConfigBasePath = useBuildAssetPath(
+        FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo
+    );
 
     items.label = items.label ? t(items.label) : "";
 
@@ -112,6 +127,31 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                 {...getLayoutProms()}
                 {...prps}
                 control={control}
+            />
+        );
+    };
+
+    const renderColor = () => {
+        let prps: AppDataProps = {
+            type: items.attr ? items.attr.type : "text",
+            label: items.label ? items.label : "",
+            defaultValue,
+            placeholder: "",
+        };
+        if (items.translation && translations)
+            prps = {
+                ...prps,
+                label: items.label ? `${items.label} (${activeLanguage})` : "",
+                value: getTranslationValue(properties.title),
+                onChange: handleTranslationValue,
+            };
+        return (
+            <AppFormInputColorPicker
+                name={properties.title}
+                {...getLayoutProms()}
+                {...prps}
+                control={control}
+                setValue={setValue}
             />
         );
     };
@@ -228,6 +268,33 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             />
         );
     };
+    const renderCodeEditor = () => {
+        let prps: AppDataProps = {
+            type: items.attr ? items.attr.type : "text",
+            label: items.label ? items.label : "",
+            defaultValue,
+            placeholder: "",
+        };
+        if (items.translation && translations) {
+            delete prps.defaultValue;
+            prps = {
+                ...prps,
+                label: items.label ? `${items.label} (${activeLanguage})` : "",
+                value: getTranslationValue(properties.title),
+                onChange: (e: any) => {
+                    handleTranslationValue(e.target.value);
+                },
+            };
+        }
+        return (
+            <AppFormCodeEditor
+                name={properties.title}
+                {...getLayoutProms()}
+                {...prps}
+                control={control}
+            />
+        );
+    };
     const renderFile = () => {
         let prps: AppDataProps = {
             type: items.attr ? items.attr.type : "text",
@@ -259,6 +326,41 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             />
         );
     };
+    const renderImage = () => {
+        let prps: AppDataProps = {
+            type: items.attr ? items.attr.type : "text",
+            label: items.label ? items.label : "",
+            defaultValue,
+            placeholder: "",
+        };
+        if (items.translation && translations)
+            prps = {
+                ...prps,
+                label: items.label ? `${items.label} (${activeLanguage})` : "",
+                value: getTranslationValue(properties.title),
+                onChange: handleTranslationValue,
+            };
+        return (
+            <Col className="form-group" {...getLayoutProms()}>
+                <Form.Label>{items.label}</Form.Label>
+                <AppUploader
+                    accept="image/*"
+                    withCropper
+                    fileInfo={FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo}
+                    onFileSelect={(files: File[]) => {
+                        if (onFileSelect)
+                            onFileSelect(files, properties.title, false);
+                    }}
+                    imagePath={
+                        defaultValue
+                            ? `${designConfigBasePath}/${defaultValue}`
+                            : ""
+                    }
+                    {...prps}
+                />
+            </Col>
+        );
+    };
     const renderForm = () => {
         switch (properties.items.type) {
             case "TEXT":
@@ -279,6 +381,12 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                 return renderRichTextarea();
             case "FILE":
                 return renderFile();
+            case "COLOR_PICKER":
+                return renderColor();
+            case "CODE_EDITOR":
+                return renderCodeEditor();
+            case "IMAGE":
+                return renderImage();
             default:
                 return <></>;
         }

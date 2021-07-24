@@ -44,7 +44,7 @@ export const InfoPage: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <Fragment>
-            <AppPageHeader title={data?.title || ""} />
+            <AppPageHeader title={data?.title || ""} showToolbar={false} />
             <AppCard>
                 <div
                     dangerouslySetInnerHTML={{
