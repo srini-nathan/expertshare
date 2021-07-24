@@ -7,4 +7,4 @@ yarn run fix:translations
 bash "./bin/generate-styles.sh"
 yarn run fix:css
 cp -r ./src/translations/ ./build/static
-cp -r ./src/config/css ./build/static/css
+cp ./src/config/css/* ./build/static/css
