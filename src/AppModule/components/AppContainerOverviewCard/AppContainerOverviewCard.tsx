@@ -49,7 +49,7 @@ export const AppContainerOverviewCard: FC<AppContainerOverviewCardProps> = ({
                         {/* </a> */}
                     </div>
                 </div>
-                <div className="inner-container--det p-3 mx-2">
+                <div className="inner-container--det card p-3 mx-2">
                     <div className="inner-container--det--title">
                         <a href="#">
                             <h2>{name}</h2>

@@ -79,8 +79,8 @@
                             margin: auto;
                             font-size: 14px;
                             font-weight: 400;
-                            color: var(--btn-fg-clr);
-                            background-color: var(--speaker-btn-bg-clr);
+                            color: var(--light-clr);
+                            background-color: var(--info);
                             border-radius: var(--border-radius);
 
                             span {
@@ -130,7 +130,7 @@
                     h2 {
                         font-size: 42px;
                         font-weight: 700;
-                        color: var(--secondary);
+                        color: var(--card-text-color);
 
                         @include media("xl") {
                             font-size: 30px;
@@ -142,7 +142,7 @@
                     p {
                         font-size: 20px;
                         font-weight: 500;
-                        color: var(--secondary-70);
+                        color: var(--card-second-text-color);
                     }
                 }
 
@@ -171,7 +171,7 @@
                             padding-top: 2px;
                             font-size: 12px;
                             font-weight: 700;
-                            color: var(--primary);
+                            color: var(--primary) !important;
                             user-select: none;
                             background-color: var(--primary-10);
                             border: 1px solid var(--primary);
@@ -272,7 +272,7 @@
             }
 
             &--portfolio {
-                border-top: 1px solid var(--secondary-10);
+                border-top: 1px solid var(--card-divider-color);
 
                 @include media("xl") {
                     overflow: auto;
@@ -297,7 +297,7 @@
                             width: 190px;
                         }
 
-                        border-right: 1px solid var(--secondary-20);
+                        border-right: 1px solid var(--card-divider-color);
 
                         &:last-child {
                             border-right: none;
@@ -310,7 +310,7 @@
                             i {
                                 font-size: 20px;
                                 font-weight: 500;
-                                color: var(--secondary);
+                                color: var(--card-text-color);
                             }
 
                             .det {
@@ -319,13 +319,13 @@
                                 h3 {
                                     font-size: 20px;
                                     font-weight: 700;
-                                    color: var(--secondary);
+                                    color: var(--card-text-color);
                                 }
 
                                 span {
                                     font-size: 14px;
                                     font-weight: 400;
-                                    color: var(--secondary-70);
+                                    color: var(--card-second-text-color);
                                 }
                             }
                         }

@@ -4,16 +4,14 @@
 
         .inner-container {
             cursor: pointer;
-            background-color: var(--light-clr);
-            box-shadow: 0 3px 9px var(--secondary-10);
 
             &--banner {
                 display: flex;
                 height: 270px;
-                background-color: var(--secondary-10);
+                background-color: var(--default-container-card-background);
                 background-repeat: no-repeat;
                 background-size: cover;
-                border-radius: var(--border-radius) var(--border-radius) 0 0;
+                border-radius: var(--card-border-radius) var(--card-border-radius) 0 0;
 
                 &--button {
                     margin-top: 8px;
@@ -38,11 +36,11 @@
                             padding-bottom: 2px;
                             font-size: 17px;
                             font-weight: 600;
-                            color: var(--btn-secondary-fg-clr);
-                            background-color: var(--btn-secondary-bg-clr);
-                            border: 1px solid var(--btn-secondary-border-clr);
-                            border-radius: var(--border-radius);
-                            box-shadow: 0 3px 9px var(--secondary-10);
+                            color: var(--secondary-button-text-color);
+                            background-color: var(--secondary-button-background-color);
+                            border: 1px solid var(--secondary-button-border-color);
+                            border-radius: var(--card-border-radius);
+                            box-shadow: 0 3px 9px var(--secondary-button-box-shadow-color);
                         }
 
                         &.add-favorite {
@@ -59,7 +57,7 @@
             &--det {
                 margin-top: -40px;
                 background-color: var(--light-clr);
-                border-radius: var(--border-radius) var(--border-radius) 0 0;
+                border-radius: var(--card-border-radius) var(--card-border-radius) 0 0;
 
                 &--title {
                     h2 {
@@ -69,7 +67,7 @@
                         font-size: 20px;
                         font-weight: 700;
                         line-height: 28px;
-                        color: var(--secondary);
+                        color: var(--card-text-color);
                         -webkit-line-clamp: 2;
                     }
                 }
@@ -82,7 +80,7 @@
                         font-size: 14px;
                         font-weight: 400;
                         line-height: 21px;
-                        color: var(--secondary-70);
+                        color: var(--card-second-text-color);
                         -webkit-line-clamp: 4;
                     }
                 }

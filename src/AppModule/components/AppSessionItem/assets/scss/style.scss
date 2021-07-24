@@ -11,7 +11,7 @@
     font-size: 14px;
     font-weight: 500;
     color: #fff;
-    background-color: var(--live-btn-bg-clr);
+    background-color: var(--danger);
     border-radius: var(--border-radius);
 
     &:hover {
@@ -34,9 +34,9 @@
     padding: 10px;
     font-size: 14px;
     font-weight: 500;
-    color: var(--btn-fg-clr);
-    background-color: var(--btn-bg-clr);
-    border-radius: var(--border-radius);
+    color: var(--light-clr);
+    background-color: var(--secondary);
+    border-radius: var(--secondary-button-border-radius);
 
     &:hover {
         text-decoration: none;
@@ -51,15 +51,15 @@
 
 .event-detail-admin--workshop {
     overflow: auto;
-    box-shadow: 0 2px 12px var(--secondary-20);
+    box-shadow: 0 2px 12px var(--card-box-shadow-color);
 
     &::-webkit-scrollbar {
         display: none;
     }
 
     &--container {
-        background-color: var(--light-clr);
-        border-radius: var(--border-radius);
+        background-color: var(--card-background-color);
+        border-radius: var(--card-border-radius);
 
         &--content {
             &--item {
@@ -68,7 +68,7 @@
 
                     &.small-size {
                         .inner-container--header {
-                            background-color: var(--morning-workshops-bg-clr);
+                            background-color: var(--card-background-color);
 
                             &--seats {
                                 justify-content: flex-end;
@@ -78,8 +78,8 @@
                         .inner-container--det {
                             z-index: 1;
                             margin-top: -35px;
-                            background-color: var(--light-clr);
-                            border-radius: var(--border-radius);
+                            background-color: var(--card-background-color);
+                            border-radius: var(--card-border-radius);
 
                             .inner-container--title {
                                 a {
@@ -94,7 +94,7 @@
 
                     &.medium-size {
                         .inner-container--header {
-                            background-color: var(--morning-bg-clr);
+                            background-color: var(--card-background-color);
                         }
 
                         .inner-container--banner {
@@ -106,8 +106,8 @@
                         .inner-container--det {
                             z-index: 1;
                             margin-top: -35px;
-                            background-color: var(--light-clr);
-                            border-radius: var(--border-radius);
+                            background-color: var(--card-background-color);
+                            border-radius: var(--card-border-radius);
 
                             &--title {
                                 a {
@@ -122,7 +122,7 @@
 
                     &.large-size {
                         .inner-container--header {
-                            background-color: var(--main-stage-purple-bg-clr);
+                            background-color: var(--card-background-color);
                         }
 
                         .inner-container--banner {
@@ -134,8 +134,8 @@
                         .inner-container--det {
                             z-index: 1;
                             margin-top: -35px;
-                            background-color: var(--light-clr);
-                            border-radius: var(--border-radius);
+                            background-color: var(--card-background-color);
+                            border-radius: var(--card-border-radius);
 
                             &--title {
                                 a {
@@ -150,7 +150,7 @@
 
                     &.xlarge-size {
                         .inner-container--header {
-                            background-color: var(--main-stage-orange-bg-clr);
+                            background-color: var(--card-background-color);
                         }
 
                         .inner-container--banner {
@@ -163,8 +163,8 @@
                             z-index: 1;
                             margin: auto;
                             margin-left: -50px !important;
-                            background-color: var(--light-clr);
-                            border-radius: var(--border-radius);
+                            background-color: var(--card-background-color);
+                            border-radius: var(--card-border-radius);
 
                             @include media("ea-1") {
                                 margin: auto;
@@ -194,8 +194,8 @@
                     }
 
                     &--header {
-                        border-top-left-radius: var(--border-radius);
-                        border-top-right-radius: var(--border-radius);
+                        border-top-left-radius: var(--card-border-radius);
+                        border-top-right-radius: var(--card-border-radius);
 
                         &--time {
                             display: flex;
@@ -203,7 +203,7 @@
                             i {
                                 font-size: 20px;
                                 font-weight: 500;
-                                color: var(--header-desc-fg-clr);
+                                color: var(--light-clr);
                             }
 
                             &--content {
@@ -235,7 +235,7 @@
                             i {
                                 font-size: 20px;
                                 font-weight: 500;
-                                color: var(--header-desc-fg-clr);
+                                color: var(--card-text-color);
                             }
 
                             &--content {
@@ -244,19 +244,19 @@
                                 h2 {
                                     font-size: 16px;
                                     font-weight: 700;
-                                    color: var(--header-desc-fg-clr);
+                                    color: var(--card-text-color);
 
                                     span {
                                         font-size: 16px;
                                         font-weight: 700;
-                                        color: var(--header-sub-desc-fg-clr);
+                                        color: var(--card-text-color);
                                     }
                                 }
 
                                 span {
                                     font-size: 12px;
                                     font-weight: 500;
-                                    color: var(--header-sub-desc-fg-clr);
+                                    color: var(--card-text-color);
                                 }
                             }
                         }
@@ -274,6 +274,7 @@
                             height: 100%;
                             padding-bottom: 56.5%;
                             cursor: pointer;
+                            background-color: var(--default-session-card-background);
                             background-repeat: no-repeat;
                             background-position: center;
                             background-size: cover;
@@ -298,7 +299,7 @@
                                     font-size: 20px;
                                     font-weight: 700;
                                     line-height: 28px;
-                                    color: var(--secondary);
+                                    color: var(--card-text-color);
                                 }
                             }
                         }
@@ -321,14 +322,13 @@
                                 h3 {
                                     font-size: 16px;
                                     font-weight: 700;
-                                    color: var(--secondary);
+                                    color: var(--card-text-color);
                                 }
                             }
 
                             &--speakers {
                                 height: 150px;
-                                scrollbar-color: var(--secondary)
-                                    var(--secondary-10);
+                                scrollbar-color: var(--secondary) var(--secondary-10);
                                 scrollbar-width: thin;
 
                                 &::-webkit-scrollbar {
@@ -389,7 +389,7 @@
                                             overflow: hidden;
                                             font-size: 16px;
                                             font-weight: 500;
-                                            color: var(--secondary);
+                                            color: var(--card-text-color);
                                         }
 
                                         span {
@@ -399,7 +399,7 @@
                                             overflow: hidden;
                                             font-size: 12px;
                                             font-weight: 500;
-                                            color: var(--secondary-70);
+                                            color: var(--card-second-text-color);
                                         }
                                     }
 

@@ -64,7 +64,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                     <Link
                         to={`/event/${conferenceId}/agenda`}
                         state={{ sessionList }}
-                        className="btn btn-secondary back-btn  mr-3"
+                        className="btn btn-secondary back-btn mb-2 mr-3"
                     >
                         <i className="fak fa-chevron-left"></i>
                         {t("sessionDetails:label.back")}
@@ -101,35 +101,37 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                                 className="dropdown-menu"
                                 aria-labelledby="dropdownMenuButton"
                             >
-                                {activeLanguages?.map((e) => {
-                                    return (
-                                        <span
-                                            onClick={() => {
-                                                updateProfile({
-                                                    locale: e.locale,
-                                                }).then(() => {
-                                                    setLocale(e.locale);
-                                                    navigate("/reloading", {
-                                                        state: {
-                                                            url:
-                                                                location.pathname,
-                                                        },
-                                                    }).then();
-                                                });
-                                            }}
-                                            className="dropdown-item"
-                                        >
-                                            <i
-                                                className={`languages ${e.locale}`}
-                                            ></i>
-                                            {e.name}
-                                        </span>
-                                    );
-                                })}
+                                <div className="dropdown-content">
+                                    {activeLanguages?.map((e) => {
+                                        return (
+                                            <span
+                                                onClick={() => {
+                                                    updateProfile({
+                                                        locale: e.locale,
+                                                    }).then(() => {
+                                                        setLocale(e.locale);
+                                                        navigate("/reloading", {
+                                                            state: {
+                                                                url:
+                                                                    location.pathname,
+                                                            },
+                                                        }).then();
+                                                    });
+                                                }}
+                                                className="dropdown-item"
+                                            >
+                                                <i
+                                                    className={`languages ${e.locale}`}
+                                                ></i>
+                                                {e.name}
+                                            </span>
+                                        );
+                                    })}
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <Col sm={"auto"} className="button-action-session pr-0">
+                    <Col sm={"auto"} className="button-action-session px-0">
                         {prev && (
                             <Link
                                 to={`/event/${conferenceId}/session/${prev}`}

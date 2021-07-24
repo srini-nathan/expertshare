@@ -17,7 +17,7 @@ export const AppTabWithIcon: FunctionComponent<AppTabWithIconProps> = ({
     return (
         <Nav variant="pills" className={`flex-column ${className}`}>
             <Nav.Item>
-                <Nav.Link eventKey={eventKey} className="btn btn-secondary">
+                <Nav.Link eventKey={eventKey}>
                     <i className={icon} aria-hidden="true"></i>
                     {title}
                 </Nav.Link>

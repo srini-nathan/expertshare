@@ -46,7 +46,7 @@
                         user-select: none;
                         background-color: var(--primary-10);
                         border: 1px solid var(--primary);
-                        border-radius: var(--spc-btn-border-radius);
+                        border-radius: var(--tag-border-radius);
                     }
 
                     &.more {
@@ -71,10 +71,10 @@
                     padding: 0 12px;
                     font-size: 14px;
                     font-weight: 400;
-                    color: var(--btn-fg-clr);
-                    background-color: var(--speaker-btn-bg-clr);
+                    color: var(--secondary-button-text-color);
+                    background-color: var(--info);
                     border: 1px solid var(--primary);
-                    border-radius: var(--border-radius);
+                    border-radius: var(--secondary-button-border-radius);
 
                     svg {
                         margin-top: 4px;
@@ -190,9 +190,9 @@
                     width: fit-content;
                     padding: 10px;
                     margin: auto;
-                    background-color: var(--light-clr);
-                    border-radius: var(--border-radius);
-                    box-shadow: 0 12px 38px var(--secondary-20);
+                    background-color: var(--secondary-button-background-color);
+                    border-radius: var(--secondary-button-border-radius);
+                    box-shadow: 0 12px 38px var(--secondary-button-box-shadow-color);
 
                     &--inner {
                         &--item {
@@ -205,7 +205,7 @@
                                 font-size: 12px;
                                 font-weight: 700;
                                 line-height: 30px;
-                                color: var(--secondary);
+                                color: var(--secondary-button-text-color);
 
                                 i {
                                     font-size: 15px;

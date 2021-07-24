@@ -4,6 +4,9 @@
 .cropper-modal-dialog {
     .modal-dialog {
         max-width: 850px !important;
+        .modal-content {
+            background-color: var(--modal-background-color);
+        }
         .modal-header {
             padding-bottom: 0;
             background: none;
@@ -12,14 +15,14 @@
         .modal-title.h4 {
             font-size: 30px;
             font-weight: 900;
-            color: var(--secondary);
+            color: var(--modal-text-color);
         }
         .close {
             position: absolute;
             top: 0;
             right: 8px;
             font-size: 30px;
-            color: var(--secondary);
+            color: var(--modal-text-color);
             span {
                 font-weight: 400;
             }

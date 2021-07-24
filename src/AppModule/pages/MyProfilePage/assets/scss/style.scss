@@ -41,14 +41,14 @@
 }
 
 .agreement-box {
-    border: 1px solid var(--border-text-box);
-    border-radius: var(--border-radius);
+    border: 1px solid var(--input-border-color);
+    border-radius: var(--card-border-radius);
 
     &--inner {
         height: 149px;
         min-height: 100px;
         overflow: auto;
-        scrollbar-color: var(--secondary) var(--agree-scrollbar-track-bg-clr);
+        scrollbar-color: var(--secondary) var(--scrollbar-background);
         scrollbar-width: thin;
 
         &::-webkit-scrollbar {
@@ -56,7 +56,7 @@
         }
 
         &::-webkit-scrollbar-track {
-            background: var(--agree-scrollbar-track-bg-clr);
+            background: var(--scrollbar-background);
         }
 
         &::-webkit-scrollbar-thumb {

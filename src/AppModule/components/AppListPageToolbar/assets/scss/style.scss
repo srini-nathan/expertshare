@@ -4,17 +4,15 @@
 .input-group {
     .form-control {
         border-right: 0 !important;
-
     }
 
     .input-group-text {
         padding: 9px;
-        color: var(--input-fg-clr) !important;
-        background-color: var(--input-bg-clr) !important;
-        border: 1px solid var(--input-border-clr) !important;
+        color: var(--input-text-color) !important;
+        background-color: var(--input-background-color) !important;
+        border: var(--input-border-width) solid var(--input-border-color) !important;
         border-left: 0 !important;
         border-top-right-radius: var(--border-radius) !important;
         border-bottom-right-radius: var(--border-radius) !important;
-
     }
 }
