@@ -185,6 +185,13 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
         }
     };
 
+    const onDocsDelete = (title: string) => {
+        setFiles({
+            ...files,
+            [title]: "",
+        });
+    };
+
     useEffect(() => {
         if (containerId) {
             dispatch({
@@ -282,6 +289,7 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
                                                     translations={translations}
                                                     onChange={setTranslations}
                                                     onFileSelect={onDocsSelect}
+                                                    onFileRemove={onDocsDelete}
                                                     activeLanguage={active}
                                                     properties={j}
                                                     defaultValue={defaultValue}

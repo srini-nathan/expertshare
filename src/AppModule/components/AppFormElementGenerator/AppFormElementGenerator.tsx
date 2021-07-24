@@ -30,6 +30,7 @@ export interface AppFormElementGeneratorProps {
     translations?: any[];
     onChange?: (value: any[]) => void;
     setValue?: SetFieldValue<any>;
+    onFileRemove?: (title: string) => void;
 }
 export interface AppDataProps {
     type: string;
@@ -48,6 +49,7 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
     activeLanguage = "",
     onFileSelect,
     setValue,
+    onFileRemove,
 }) => {
     const { items } = properties;
     const { t } = useTranslation();
@@ -350,6 +352,11 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                     onFileSelect={(files: File[]) => {
                         if (onFileSelect)
                             onFileSelect(files, properties.title, false);
+                    }}
+                    onDelete={() => {
+                        if (onFileRemove) {
+                            onFileRemove(properties.title);
+                        }
                     }}
                     imagePath={
                         defaultValue
