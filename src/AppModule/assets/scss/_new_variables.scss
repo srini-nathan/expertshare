@@ -5,6 +5,7 @@
     // global colors
     --primary: #000;
     --secondary: #444;
+<<<<<<< HEAD
     --danger: #e00; // for invalid messages and toast,
     --success: #0f0; // for success toast,
     --info: #b6b6fb; // for attendee card, if user is speaker (button/badge with skyblue)
@@ -100,6 +101,99 @@
     --modal-background-color: #000;
     --modal-backdrop-background-color: #0002;
     --modal-text-color: #fff;
+=======
+    --danger: #E00; // for invalid messages and toast,
+    --success: #0F0; // for success toast,
+    --info: #B6B6FB; // for attendee card, if user is speaker (button/badge with skyblue)
+    --body-background-color: #FFF;
+    --ifram-body-background-color: #FFF0;
+    // widget/card variables
+    --card-background-color: #FFF;
+    --card-text-color: #000;
+    --card-border-radius: 5px;
+    --card-box-shadow-color: #FFF0;
+    --card-divider-color: #0005;
+    // tabs
+    --tab-border-radius: 5px;
+    --tab-background-color: #FFF;
+    --tab-text-color: #444;
+    --tab-box-shadow-color: #B5B5B585;
+    --tab-background-color--active: #FFF3; // --tab-background-color + opacity
+    --tab-text-color--active: #444;
+    --tab-box-shadow-color--active: #B5B5B585;
+    // inputs
+    --input-background-color: #FCFCFC;
+    --input-border-color: #A7A7A7;
+    --input-border-width: 1px;
+    --input-border-radius: 5px;
+    --input-text-color: #444; //  inherit secondary
+    --input-placeholder-text-color: #A0B2C0;
+    --input-background-color--focus: #FCFCFC;
+    --input-border-color--focus: #A7A7A7;
+    --input-border-width--focus: 2px;
+    --input-background-color--disable: #FCFCFC;
+    --input-border-color--disable: #A7A7A7;
+    // select / dropdown
+    --select-background-color: #FFF;
+    --select-text-color: #FFF;
+    --select-border-color: #0002;
+    --select-border-width: 1px;
+    --select-border-radius: 5px;
+    --select-option-background-color: #FFF;
+    --select-option-text-color: #000;
+    --select-option-background-color--hover: #0001;
+    --select-option-text-color--hover: #FFFA;
+    // buttons
+    --primary-button-background-color: #444; // inherit primary color
+    --primary-button-text-color: #FFF;
+    --primary-button-border-color: #FFF;
+    --primary-button-border-width: 1px;
+    --primary-button-border-radius: 5px;
+    --primary-button-box-shadow-color: #FFF0;
+    --primary-button-background-color--disable: #444;
+    --primary-button-text-color--disable: #FFF;
+    --primary-button-border-color--disable: #FFF;
+    --primary-button-background-color--active: #444;
+    --primary-button-text-color--active: #FFF;
+    --primary-button-border-color--active: #FFF;
+    --secondary-button-background-color: #444; // inherit primary color
+    --secondary-button-text-color: #FFF;
+    --secondary-button-border-color: #FFF;
+    --secondary-button-border-width: 1px;
+    --secondary-button-border-radius: 5px;
+    --secondary-button-box-shadow-color: #FFF0;
+    --secondary-button-background-color--disable: #444;
+    --secondary-button-text-color--disable: #FFF;
+    --secondary-button-border-color--disable: #FFF;
+    --secondary-button-background-color--active: #444; // for pagination
+    --secondary-button-text-color--active: #FFF; // for pagination
+    --secondary-button-border-color--active: #FFF; // for pagination
+    --danger-button-background-color: #444;
+    --danger-button-text-color: #FFF;
+    --danger-button-border-color: #FFF;
+    --danger-button-border-width: 1px;
+    --danger-button-border-radius: 5px;
+    --danger-button-box-shadow-color: #FFF0;
+    --danger-button-background-color--disable: #444;
+    --danger-button-text-color--disable: #FFF;
+    --danger-button-border-color--disable: #FFF;
+    --danger-button-background-color--active: #444;
+    --danger-button-text-color--active: #FFF;
+    --danger-button-border-color--active: #FFF;
+    // navigation
+    --navigation-background-color: #000;
+    --navigation-item-text-color: #FFF;
+    --navigation-item-icon-color: #FFF;
+    --navigation-item-divider-color: #FFF5;
+    --navigation-item-text-color--active: #FFFA;
+    --navigation-item-icon-color--active: #000A;
+    --navigation-item-text-color--hover: #FFFA;
+    --navigation-item-icon-color--hover: #000A;
+    // modal
+    --modal-background-color: #000;
+    --modal-backdrop-background-color: #0002;
+    --modal-text-color: #FFF;
+>>>>>>> origin/dev-kuldipem/SOW5-51-daynamic-design-frontend-integra
     --modal-border-radius: 5px;
     // ag-grid / table
     --table-row-odd-background-color: #000;
