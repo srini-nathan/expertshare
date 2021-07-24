@@ -43,11 +43,7 @@ import {
     PUser,
 } from "../../../AdminModule/models";
 import { FileTypeInfo } from "../../models";
-import {
-    appContainerNavigation,
-    AppDashboardLayoutOptions,
-    appDashboardLayoutOptions,
-} from "../../atoms";
+import { appContainerNavigation } from "../../atoms";
 
 const { Upload: UPLOAD, Role } = CONSTANTS;
 const {
@@ -82,9 +78,6 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         user.imageName
     );
     const isGrantedControl = useIsGranted(ROLE_OPERATOR);
-    const {
-        navPosition: menuLocation,
-    } = useRecoilValue<AppDashboardLayoutOptions>(appDashboardLayoutOptions);
     const [navOpen, isNavOpen] = useState<boolean>(false);
     const baseDesignConfig = useBuildAssetPath(
         FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo
@@ -92,6 +85,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const {
         genImageNavigationLogo,
         genImageExpertshareLogo,
+        navPosition: menuLocation,
     } = (container?.designConfiguration as unknown) as DesignConfiguration;
 
     const style = user.imageName
@@ -360,7 +354,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                 ) => {
                                     if (e)
                                         return showSubMenuItems &&
-                                            menuLocation !== "bottom" ? (
+                                            menuLocation !== "BOTTOM" ? (
                                             <AppNavigationSubMenuItem
                                                 label={e.label}
                                                 path={e.path}
@@ -431,7 +425,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     };
 
     const renderMenu = () => {
-        if (showSubMenuItems && (menuLocation === "left" || width < 768)) {
+        if (showSubMenuItems && (menuLocation === "LEFT" || width < 768)) {
             return renderSubMenu();
         }
         return (
@@ -511,7 +505,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
 
     return (
         <aside
-            className={`${menuLocation}-sidebar left-container d-block navbar-expand-md sidebar ${
+            className={`${menuLocation.toLowerCase()}-sidebar left-container d-block navbar-expand-md sidebar ${
                 container?.domain === "test2.localhost:3000" ? "test2" : ""
             }${container?.domain === "tgl.expertshare.live" ? "tgl" : ""}`}
         >
@@ -543,7 +537,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                             <div
                                 className="main-menu-container"
                                 style={
-                                    menuLocation !== "bottom"
+                                    menuLocation !== "BOTTOM"
                                         ? getMenuHeightStyle()
                                         : {}
                                 }
@@ -556,7 +550,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                 }`}
                             >
                                 <ListGroup ref={bottomMenu}>
-                                    {menuLocation === "bottom" && width > 768 && (
+                                    {menuLocation === "BOTTOM" && width > 768 && (
                                         <ListGroupItem className={`px-0 py-1`}>
                                             <a
                                                 href="https://expertshare.live"
@@ -734,7 +728,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                         />
                                     </ListGroupItem>
 
-                                    {(menuLocation === "left" ||
+                                    {(menuLocation === "LEFT" ||
                                         width < 768) && (
                                         <>
                                             <ListGroupItem
@@ -780,7 +774,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                             </ListGroupItem>
                                         </>
                                     )}
-                                    {menuLocation === "bottom" &&
+                                    {menuLocation === "BOTTOM" &&
                                         width > 768 &&
                                         showSubMenuItems && (
                                             <ListGroupItem
@@ -790,7 +784,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                 </ListGroup>
                                 <ListGroup>
                                     {showSubMenuItems &&
-                                        menuLocation === "bottom" &&
+                                        menuLocation === "BOTTOM" &&
                                         width > 768 && (
                                             <div
                                                 className="main-menu-container"

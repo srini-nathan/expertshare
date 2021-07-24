@@ -47,4 +47,5 @@ export interface DesignConfiguration {
     widTabTextColor: string;
     widTabTextColorActive: string;
     widTagBorderRadius: string;
+    navPosition: string;
 }

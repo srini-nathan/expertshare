@@ -11,18 +11,21 @@ import { AppMessages } from "../../containers/AppMessages";
 import { useChosenContainer } from "../../hooks";
 import { AppCallOneToOne } from "../../containers/AppCallOneToOne";
 import { useGlobalData } from "../../contexts";
+import { DesignConfiguration } from "../../../AdminModule/models";
 
 export const DashboardLayout: FC = ({ children }) => {
     const {
         hideNav,
         hideMessenger,
-        navPosition,
     } = useRecoilValue<AppDashboardLayoutOptions>(appDashboardLayoutOptions);
 
     const isA3d = window.location !== window.parent.location;
     const onBoarding = window.location.pathname;
     const { isChosen } = useChosenContainer();
     const { container } = useGlobalData();
+    const {
+        navPosition,
+    } = (container?.designConfiguration as unknown) as DesignConfiguration;
 
     const renderClass = () => {
         let classes = "";
@@ -44,7 +47,7 @@ export const DashboardLayout: FC = ({ children }) => {
         if (hideNav || isA3d) {
             return classes;
         }
-        if (navPosition === "bottom") {
+        if (navPosition === "BOTTOM") {
             classes += " bottom-nav";
             return classes;
         }
