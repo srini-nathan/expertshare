@@ -505,7 +505,9 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
 
     return (
         <aside
-            className={`${menuLocation.toLowerCase()}-sidebar left-container d-block navbar-expand-md sidebar ${
+            className={`${
+                menuLocation ? menuLocation.toLowerCase() : "left"
+            }-sidebar left-container d-block navbar-expand-md sidebar ${
                 container?.domain === "test2.localhost:3000" ? "test2" : ""
             }${container?.domain === "tgl.expertshare.live" ? "tgl" : ""}`}
         >
