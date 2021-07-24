@@ -1,6 +1,17 @@
 import React, { FC } from "react";
 import { Col } from "react-bootstrap";
 import "./assets/scss/styles.scss";
+import { DesignConfiguration } from "../../../AdminModule/models";
+import { useGlobalData } from "../../../AppModule/contexts";
+import { useBuildAssetPath } from "../../../AppModule/hooks";
+import { FileTypeInfo } from "../../../AppModule/models";
+import { CONSTANTS } from "../../../config";
+
+const {
+    Upload: {
+        FILETYPEINFO: { FILETYPEINFO_DESIGN_CONFIGURATION },
+    },
+} = CONSTANTS;
 
 export interface AppAuthHeaderProps {
     title: string;
@@ -13,6 +24,19 @@ export const AppAuthHeader: FC<AppAuthHeaderProps> = ({
     description = "",
     errorMessage = "",
 }) => {
+    const { container } = useGlobalData();
+    const baseDesignConfig = useBuildAssetPath(
+        FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo
+    );
+    const {
+        genImageMainLogo,
+    } = (container?.designConfiguration as unknown) as DesignConfiguration;
+    const logoStyle =
+        genImageMainLogo !== ""
+            ? {
+                  backgroundImage: `url(${baseDesignConfig}/${genImageMainLogo})`,
+              }
+            : {};
     return (
         <>
             <Col
@@ -20,7 +44,7 @@ export const AppAuthHeader: FC<AppAuthHeaderProps> = ({
                 className="active-account-box--logo-box text-center my-3"
             >
                 <a href="/">
-                    <i></i>
+                    <i style={logoStyle}></i>
                 </a>
             </Col>
             <div className="col-md-12 active-account-box--text-box">

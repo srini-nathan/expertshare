@@ -2,11 +2,11 @@ import React, { FunctionComponent } from "react";
 import { Control, SetFieldValue } from "react-hook-form";
 import { Col, Form } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { find as _find } from "lodash";
 import { AppFormInput } from "../AppFormInput";
 import { AppFormSwitch } from "../AppFormSwitch";
 import { AppFormTextArea } from "../AppFormTextArea";
 import { AppFormRichTextArea } from "../AppFormRichTextArea";
-import { AppFormDropdown } from "../AppFormDropdown";
 import { AppFormFile } from "../AppFormFile";
 import { FileTypeInfo, PrimitiveObject } from "../../models";
 import "./assets/scss/style.scss";
@@ -15,6 +15,7 @@ import { AppFormCodeEditor } from "../AppFormCodeEditor";
 import { AppUploader } from "../AppUploader";
 import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath } from "../../hooks";
+import { AppFormSelect } from "../AppFormSelect";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -30,6 +31,7 @@ export interface AppFormElementGeneratorProps {
     translations?: any[];
     onChange?: (value: any[]) => void;
     setValue?: SetFieldValue<any>;
+    onFileRemove?: (title: string) => void;
 }
 export interface AppDataProps {
     type: string;
@@ -48,6 +50,7 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
     activeLanguage = "",
     onFileSelect,
     setValue,
+    onFileRemove,
 }) => {
     const { items } = properties;
     const { t } = useTranslation();
@@ -191,7 +194,7 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
     };
     const renderDropDown = () => {
         const dropDownOptions: PrimitiveObject[] = [];
-        let dropDownDefaultValue = {};
+        let dropDownDefaultValue = "";
 
         Object.keys(items.options.choices).forEach((key) => {
             dropDownOptions.push({
@@ -199,21 +202,33 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                 name: properties.title,
                 value: key,
             });
-            if (items.options.defaultValue.toUpperCase() === key.toUpperCase())
-                dropDownDefaultValue = {
-                    label: items.options.choices[key],
-                    value: key,
-                };
+            if (
+                items.options.defaultValue.toUpperCase() === key.toUpperCase()
+            ) {
+                dropDownDefaultValue = key;
+            }
         });
-        const prps = {
-            options: dropDownOptions,
-            defaultValue: dropDownDefaultValue,
-        };
+
         return (
-            <Col className="form-group" {...getLayoutProms()}>
-                <Form.Label>{items.label}</Form.Label>
-                <AppFormDropdown id={properties.title} {...prps} />
-            </Col>
+            <AppFormSelect
+                name={properties.title}
+                id={properties.title}
+                label={items.label}
+                {...getLayoutProms()}
+                required={false}
+                defaultValue={dropDownDefaultValue}
+                placeholder={items.label}
+                options={dropDownOptions}
+                control={control}
+                transform={{
+                    output: (template: PrimitiveObject) => template?.value,
+                    input: (value: string) => {
+                        return _find(dropDownOptions, {
+                            value,
+                        });
+                    },
+                }}
+            />
         );
     };
     const renderTextarea = () => {
@@ -350,6 +365,11 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                     onFileSelect={(files: File[]) => {
                         if (onFileSelect)
                             onFileSelect(files, properties.title, false);
+                    }}
+                    onDelete={() => {
+                        if (onFileRemove) {
+                            onFileRemove(properties.title);
+                        }
                     }}
                     imagePath={
                         defaultValue

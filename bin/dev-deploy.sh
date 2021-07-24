@@ -6,4 +6,4 @@ bash ./bin/generate-translations.sh
 bash ./bin/generate-styles.sh
 yarn build
 cp -r ./src/translations/ ./build/static
-cp -r ./src/config/css ./build/static/css
+cp ./src/config/css/* ./build/static/css

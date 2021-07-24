@@ -4,6 +4,7 @@ import { useSetRecoilState } from "recoil";
 import { GenerateApi } from "../../AdminModule/apis/GenerateApi";
 import { ContainerApi } from "../../AdminModule/apis/ContainerApi";
 import {
+    DesignConfiguration,
     I18nMap,
     Language,
     MyContainer,
@@ -11,7 +12,11 @@ import {
 } from "../../AdminModule/models";
 import i18n from "../config/i18n";
 import { CONTAINER_LOCALE } from "../config/app-env";
-import { appContainerNavigation } from "../atoms";
+import { appContainerNavigation, appMyContainer } from "../atoms";
+import { useAssetHelper } from "../hooks/useAssetHelper";
+import { useDomHelper } from "../hooks/useDomHelper";
+import { CONSTANTS } from "../../config";
+import { FileTypeInfo } from "../models";
 
 interface GlobalState {
     status: "LOADED" | "LOADING" | "ERROR";
@@ -22,7 +27,11 @@ interface GlobalState {
     navigation?: Navigation[];
     activeNavigation?: Navigation[];
 }
-
+const {
+    Upload: {
+        FILETYPEINFO: { FILETYPEINFO_DESIGN_CONFIGURATION },
+    },
+} = CONSTANTS;
 const Global = React.createContext<GlobalState | null>(null);
 
 export const useGlobalData = (): GlobalState => {
@@ -39,6 +48,9 @@ export const GlobalProvider: React.FC = (props) => {
         status: "LOADING",
     });
     const setNavigation = useSetRecoilState(appContainerNavigation);
+    const setMyContainer = useSetRecoilState(appMyContainer);
+    const { buildPath } = useAssetHelper();
+    const { setFavicon, setStyle } = useDomHelper();
 
     React.useEffect(() => {
         setState({
@@ -72,13 +84,21 @@ export const GlobalProvider: React.FC = (props) => {
                     });
                 }
                 await GenerateApi.getStyle(response.id).then(({ data }) => {
-                    const styleTag = document.createElement("style");
-                    styleTag.id = "dynamic-css";
-                    styleTag.appendChild(document.createTextNode(data));
-                    document.head.appendChild(styleTag);
+                    setStyle(data);
                 });
-                setNavigation(sortBy(navigation, [(n) => n.ord]));
 
+                setNavigation(sortBy(navigation, [(n) => n.ord]));
+                setMyContainer(response);
+                const { designConfiguration } = response;
+                const {
+                    genImageFavicon,
+                } = (designConfiguration as unknown) as DesignConfiguration;
+                const favicon = buildPath(
+                    response,
+                    FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo,
+                    genImageFavicon
+                );
+                setFavicon(favicon);
                 setState({
                     status: "LOADED",
                     container: response,

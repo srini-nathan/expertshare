@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useEffect } from "react";
+import React, { FC, useEffect } from "react";
 import { Helmet } from "react-helmet";
 import ReactGA from "react-ga";
 import { useSetRecoilState } from "recoil";

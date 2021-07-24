@@ -26,3 +26,4 @@ export * from "./InfoPageTranslations";
 export * from "./Navigation";
 export * from "./NavigationTranslations";
 export * from "./Configuration";
+export * from "./DesignConfiguration";
