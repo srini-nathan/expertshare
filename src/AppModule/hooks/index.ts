@@ -24,3 +24,5 @@ export * from "./useSessionSocketEvents";
 export * from "./useEventAgendaHelper";
 export * from "./useCallOneToOneHelper";
 export * from "./useCommandCenterSocketEvents";
+export * from "./useDomHelper";
+export * from "./useAssetHelper";
