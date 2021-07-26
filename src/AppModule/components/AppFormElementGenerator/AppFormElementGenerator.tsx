@@ -361,6 +361,10 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                 <AppUploader
                     accept="image/*"
                     withCropper
+                    cropperOptions={{
+                        cropBoxResizable: true,
+                        aspectRatio: NaN,
+                    }}
                     fileInfo={FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo}
                     onFileSelect={(files: File[]) => {
                         if (onFileSelect)
