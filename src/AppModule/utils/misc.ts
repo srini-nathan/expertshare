@@ -1,4 +1,5 @@
 import { DesignConfiguration } from "../../AdminModule/models/entities/DesignConfiguration";
+import { PrimitiveObject } from "../models";
 
 export const parseIdFromResourceUrl = (resourceUrl: string): number | null => {
     const parts = resourceUrl.split("/");
@@ -36,4 +37,16 @@ export const parseDesign = (container: any): DesignConfiguration => {
     }
 
     return design;
+};
+
+export const getBGStyle = (
+    basePath: string,
+    image: string
+): PrimitiveObject => {
+    if (image !== "") {
+        return {
+            backgroundImage: `url(${basePath}/${image})`,
+        };
+    }
+    return {};
 };

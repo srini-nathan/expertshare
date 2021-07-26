@@ -12,6 +12,7 @@ export interface DesignConfiguration {
     genImageFavicon: string;
     genImageMainLogo: string;
     genImageNavigationLogo: string;
+    genImageBackgroundLogin: string;
     isEnable3dLayout: string;
     loginLogo: string;
     menuOption: string;
@@ -29,6 +30,7 @@ export interface DesignConfiguration {
     widAgRowEvenBgColor: string;
     widAgRowOddBgColor: string;
     widAgRowTextColor: string;
+    widAgHeaderBgColor: string;
     widCardBgColor: string;
     widCardBorderRadius: string;
     widCardBoxShadowColor: string;
@@ -77,6 +79,8 @@ export class DesignConfiguration {
 
     genImageNavigationLogo = "";
 
+    genImageBackgroundLogin = "";
+
     isEnable3dLayout = "";
 
     loginLogo = "";
@@ -110,6 +114,8 @@ export class DesignConfiguration {
     widAgRowOddBgColor = "";
 
     widAgRowTextColor = "";
+
+    widAgHeaderBgColor = "";
 
     widCardBgColor = "";
 

@@ -15,12 +15,17 @@ import {
 } from "../../../AppModule/components";
 import {
     errorToast,
+    getBGStyle,
+    parseDesign,
     setViolations,
     validation,
 } from "../../../AppModule/utils";
 import "./assets/scss/styles.scss";
 import { UserApi } from "../../../AdminModule/apis";
-import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
+import {
+    FileTypeInfo,
+    UnprocessableEntityErrorResponse,
+} from "../../../AppModule/models";
 import {
     API_HOST,
     AUTH_CHOSEN_CONTAINER,
@@ -30,7 +35,14 @@ import {
     CONTAINER_LOCALE,
     LANGUAGES,
 } from "../../../AppModule/config/app-env";
-import { useUserLocale } from "../../../AppModule/hooks";
+import { useBuildAssetPath, useUserLocale } from "../../../AppModule/hooks";
+import { CONSTANTS } from "../../../config";
+
+const {
+    Upload: {
+        FILETYPEINFO: { FILETYPEINFO_DESIGN_CONFIGURATION },
+    },
+} = CONSTANTS;
 
 type LoginForm = {
     email: string;
@@ -63,6 +75,12 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { errors } = formState;
     const { t } = useTranslation();
     const { setLocale } = useUserLocale();
+    const design = parseDesign(container);
+    const baseDesignConfig = useBuildAssetPath(
+        FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo
+    );
+    const { genImageBackgroundLogin } = design;
+    const bgStyle = getBGStyle(baseDesignConfig, genImageBackgroundLogin);
 
     useEffect(() => {
         setLocale(activeLanguage);
@@ -371,17 +389,8 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Container
             fluid
-            className={`active-account auth-container ${
-                container?.domain === "csgsc.virtual.credit-suisse.com"
-                    ? "with-csgsc-bg"
-                    : "with-bg"
-            }${
-                container?.domain === "tgl.expertshare.live" ? " with-tgl" : ""
-            }${
-                container?.domain === "test2.localhost:3000"
-                    ? " with-test2"
-                    : ""
-            }`}
+            className="active-account auth-container with-bg"
+            style={bgStyle}
         >
             <div className="auth-container--box">
                 <Row className="p-0 m-auto">
