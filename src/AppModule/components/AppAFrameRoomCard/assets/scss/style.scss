@@ -36,6 +36,8 @@
         .inner-container {
             &--banner {
                 display: flex;
+                flex-wrap: wrap;
+                place-content: flex-start;
                 height: 270px;
                 background-color: var(--default-event-card-background);
                 background-repeat: no-repeat;
@@ -93,7 +95,7 @@
             &--det {
                 margin-top: -40px;
                 background-color: var(--card-background-color);
-                border-radius: var(--card-border-radius) var(--card-border-radius) 0 0;
+                border-radius: var(--card-border-radius);
 
                 &--title {
                     h2 {

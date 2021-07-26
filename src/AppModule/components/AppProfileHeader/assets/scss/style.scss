@@ -272,7 +272,7 @@
             }
 
             &--portfolio {
-                border-top: 1px solid var(--card-divider-color);
+                //border-top: 1px solid var(--card-divider-color);
 
                 @include media("xl") {
                     overflow: auto;

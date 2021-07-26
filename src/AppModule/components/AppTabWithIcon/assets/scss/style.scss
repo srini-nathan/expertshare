@@ -47,6 +47,7 @@
                 color: var(--tab-text-color--active) !important;
                 background-color: var(--tab-background-color--active);
                 border: none;
+                box-shadow: 0 2px 9px var(--tab-box-shadow-color--active);
 
                 &:focus {
                     color: var(--tab-text-color--active);
