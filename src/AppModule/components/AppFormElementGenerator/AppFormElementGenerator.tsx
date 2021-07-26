@@ -220,8 +220,6 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                         const s = _find(dropDownOptions, {
                             value,
                         });
-                        // eslint-disable-next-line no-console
-                        console.log(s, defaultValue, "s");
                         return s;
                     },
                 }}
