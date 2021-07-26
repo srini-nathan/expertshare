@@ -59,7 +59,7 @@ export const AppListPageToolbar: FC<AppListPageToolbarProps> = ({
                 <Form className={"w-100"}>
                     <Form.Row className={"justify-content-end"}>
                         <Col xs="6" sm="auto" className="mb-2">
-                            <InputGroup>
+                            <InputGroup className="header-search">
                                 <Form.Control
                                     onChange={handleQuickSearch}
                                     placeholder={t("common.button:search")}

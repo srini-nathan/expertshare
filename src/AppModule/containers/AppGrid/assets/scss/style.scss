@@ -2,7 +2,7 @@
 @import "./../../../../assets/scss/variables";
 
 .app-grid {
-    padding: 5px 15px;
+    padding: 15px;
     background-color: var(--card-background-color);
     border-radius: var(--card-border-radius);
     box-shadow: 0 3px 9px var(--card-box-shadow-color);
@@ -18,7 +18,15 @@
             overflow: auto;
         }
     }
-
+    .ag-row-loading {
+        justify-content: center;
+        background-color: var(--card-background-color) !important;
+        border-bottom: none !important;
+        .ag-loading {
+            padding-left: 0 !important;
+            color: var(--card-text-color);
+        }
+    }
     .ag-body-horizontal-scroll {
         background-color: var(--light-clr);
         .ag-body-horizontal-scroll-viewport {
@@ -154,6 +162,7 @@
 
         .ag-root-wrapper {
             border: 0 !important;
+            border-radius: var(--card-border-radius);
         }
 
         .ag-react-container {
@@ -161,16 +170,14 @@
         }
 
         .ag-center-cols-container {
-            background-color: var(--card-background-color);
+            background-color: var(--card-background-color) !important;
             .ag-row {
                 &:hover {
                     background-color: var(--light-clr);
                 }
-
                 &:last-child {
                     border-width: 0;
                 }
-
                 //height: 60px !important;
                 .ag-cell {
                     font-size: 14px;
@@ -218,7 +225,6 @@
         }
 
         .ag-header {
-            margin-top: 10px;
             background-color: var(--table-header-background-color);
             border-bottom: unset;
 
