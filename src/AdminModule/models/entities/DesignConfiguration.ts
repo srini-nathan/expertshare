@@ -49,3 +49,103 @@ export interface DesignConfiguration {
     widTagBorderRadius: string;
     navPosition: string;
 }
+
+export class DesignConfiguration {
+    borderRadius = "";
+
+    cssOverrideCode = "";
+
+    genColorBodyBgColor = "";
+
+    genColorBodyBgIframe = "";
+
+    genColorDanger = "";
+
+    genColorInfo = "";
+
+    genColorPrimary = "";
+
+    genColorSecondary = "";
+
+    genColorSuccess = "";
+
+    genImageExpertshareLogo = "";
+
+    genImageFavicon = "";
+
+    genImageMainLogo = "";
+
+    genImageNavigationLogo = "";
+
+    isEnable3dLayout = "";
+
+    loginLogo = "";
+
+    menuOption = "";
+
+    navBgColor = "";
+
+    navItemBgColor = "";
+
+    navItemBgColorActive = "";
+
+    navItemBgColorHover = "";
+
+    navItemIconColor = "";
+
+    navItemIconColorActive = "";
+
+    navItemIconColorHover = "";
+
+    navItemTextColor = "";
+
+    navItemTextColorActive = "";
+
+    navItemTextColorHover = "";
+
+    primaryColor = "";
+
+    widAgRowEvenBgColor = "";
+
+    widAgRowOddBgColor = "";
+
+    widAgRowTextColor = "";
+
+    widCardBgColor = "";
+
+    widCardBorderRadius = "";
+
+    widCardBoxShadowColor = "";
+
+    widCardDividerColor = "";
+
+    widCardTextColor = "";
+
+    widModalBackdropBgColor = "";
+
+    widModalBgColor = "";
+
+    widModalBorderRadius = "";
+
+    widModalTextColor = "";
+
+    widPipBorderRadius = "";
+
+    widTabBgColor = "";
+
+    widTabBgColorActive = "";
+
+    widTabBorderRadius = "";
+
+    widTabBoxShadowColor = "";
+
+    widTabBoxShadowColorActive = "";
+
+    widTabTextColor = "";
+
+    widTabTextColorActive = "";
+
+    widTagBorderRadius = "";
+
+    navPosition = "";
+}

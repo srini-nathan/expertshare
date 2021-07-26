@@ -194,7 +194,6 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
     };
     const renderDropDown = () => {
         const dropDownOptions: PrimitiveObject[] = [];
-        let dropDownDefaultValue = "";
 
         Object.keys(items.options.choices).forEach((key) => {
             dropDownOptions.push({
@@ -202,11 +201,6 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                 name: properties.title,
                 value: key,
             });
-            if (
-                items.options.defaultValue.toUpperCase() === key.toUpperCase()
-            ) {
-                dropDownDefaultValue = key;
-            }
         });
 
         return (
@@ -216,16 +210,17 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                 label={items.label}
                 {...getLayoutProms()}
                 required={false}
-                defaultValue={dropDownDefaultValue}
+                defaultValue={defaultValue}
                 placeholder={items.label}
                 options={dropDownOptions}
                 control={control}
                 transform={{
                     output: (template: PrimitiveObject) => template?.value,
                     input: (value: string) => {
-                        return _find(dropDownOptions, {
+                        const s = _find(dropDownOptions, {
                             value,
                         });
+                        return s;
                     },
                 }}
             />
@@ -361,6 +356,10 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                 <AppUploader
                     accept="image/*"
                     withCropper
+                    cropperOptions={{
+                        cropBoxResizable: true,
+                        aspectRatio: NaN,
+                    }}
                     fileInfo={FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo}
                     onFileSelect={(files: File[]) => {
                         if (onFileSelect)

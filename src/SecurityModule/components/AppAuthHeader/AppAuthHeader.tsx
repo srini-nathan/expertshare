@@ -1,11 +1,11 @@
 import React, { FC } from "react";
 import { Col } from "react-bootstrap";
 import "./assets/scss/styles.scss";
-import { DesignConfiguration } from "../../../AdminModule/models";
 import { useGlobalData } from "../../../AppModule/contexts";
 import { useBuildAssetPath } from "../../../AppModule/hooks";
 import { FileTypeInfo } from "../../../AppModule/models";
 import { CONSTANTS } from "../../../config";
+import { parseDesign } from "../../../AppModule/utils";
 
 const {
     Upload: {
@@ -28,9 +28,8 @@ export const AppAuthHeader: FC<AppAuthHeaderProps> = ({
     const baseDesignConfig = useBuildAssetPath(
         FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo
     );
-    const {
-        genImageMainLogo,
-    } = (container?.designConfiguration as unknown) as DesignConfiguration;
+    const design = parseDesign(container);
+    const { genImageMainLogo } = design;
     const logoStyle =
         genImageMainLogo !== ""
             ? {
