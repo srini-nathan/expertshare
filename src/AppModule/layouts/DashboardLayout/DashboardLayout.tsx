@@ -8,10 +8,18 @@ import {
     appDashboardLayoutOptions,
 } from "../../atoms";
 import { AppMessages } from "../../containers/AppMessages";
-import { useChosenContainer } from "../../hooks";
+import { useBuildAssetPath, useChosenContainer } from "../../hooks";
 import { AppCallOneToOne } from "../../containers/AppCallOneToOne";
 import { useGlobalData } from "../../contexts";
-import { parseDesign } from "../../utils";
+import { getBGStyle, parseDesign } from "../../utils";
+import { CONSTANTS } from "../../../config";
+import { FileTypeInfo } from "../../models";
+
+const {
+    Upload: {
+        FILETYPEINFO: { FILETYPEINFO_DESIGN_CONFIGURATION },
+    },
+} = CONSTANTS;
 
 export const DashboardLayout: FC = ({ children }) => {
     const {
@@ -24,22 +32,19 @@ export const DashboardLayout: FC = ({ children }) => {
     const { isChosen } = useChosenContainer();
     const { container } = useGlobalData();
     const design = parseDesign(container);
-    const { navPosition } = design;
+    const baseDesignConfig = useBuildAssetPath(
+        FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo
+    );
+    const { navPosition, genImageBackgroundLogin } = design;
+    const backgroundImageStyle = getBGStyle(
+        baseDesignConfig,
+        genImageBackgroundLogin
+    );
 
     const renderClass = () => {
         let classes = "";
         if (onBoarding === "/onboarding") {
-            classes = "mb-0";
-            classes +=
-                container?.domain === "csgsc.virtual.credit-suisse.com"
-                    ? " with-csgsc-bg"
-                    : " with-bg";
-            classes +=
-                container?.domain === "tgl.expertshare.live" ? " with-tgl" : "";
-            classes +=
-                container?.domain === "test2.localhost:3000"
-                    ? " with-test2"
-                    : "";
+            classes = "mb-0 with-bg";
         } else {
             classes = "mb-5";
         }
@@ -58,9 +63,8 @@ export const DashboardLayout: FC = ({ children }) => {
         <Container className={"p-0 unfixed"} fluid={true}>
             {hideNav || isA3d ? null : <AppNavigation items={appNavigations} />}
             <div
-                className={`app-container ${renderClass()} mr-0 ml-auto ${
-                    onBoarding === "/onboarding" ? `with-bg mb-0` : " mb-5"
-                }`}
+                className={`app-container ${renderClass()} mr-0 ml-auto`}
+                style={onBoarding === "/onboarding" ? backgroundImageStyle : {}}
             >
                 <div className="col-md-12 col-sm-12 col-xl-12 p-3 p-lg-4">
                     {children}
