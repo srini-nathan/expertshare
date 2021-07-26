@@ -48,6 +48,8 @@ export const AppFormInputColorPicker: FC<AppFormInputColorPickerProps> = ({
     const [visible, setVisible] = useState<boolean>(false);
     const spanRef = useRef<HTMLSpanElement>();
     return (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         <Form.Group
             {...groupProps}
             className={` app-form-input-color-picker ${className}`}
@@ -92,6 +94,7 @@ export const AppFormInputColorPicker: FC<AppFormInputColorPickerProps> = ({
                                 }
                                 setValue(name, hex);
                             }}
+                            color={defaultValue}
                         />
                     </div>
                 ) : null}

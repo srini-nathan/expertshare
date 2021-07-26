@@ -5,7 +5,7 @@ import { useGlobalData } from "../../../AppModule/contexts";
 import { useBuildAssetPath } from "../../../AppModule/hooks";
 import { FileTypeInfo } from "../../../AppModule/models";
 import { CONSTANTS } from "../../../config";
-import { parseDesign } from "../../../AppModule/utils";
+import { getBGStyle, parseDesign } from "../../../AppModule/utils";
 
 const {
     Upload: {
@@ -30,12 +30,7 @@ export const AppAuthHeader: FC<AppAuthHeaderProps> = ({
     );
     const design = parseDesign(container);
     const { genImageMainLogo } = design;
-    const logoStyle =
-        genImageMainLogo !== ""
-            ? {
-                  backgroundImage: `url(${baseDesignConfig}/${genImageMainLogo})`,
-              }
-            : {};
+    const logoStyle = getBGStyle(baseDesignConfig, genImageMainLogo);
     return (
         <>
             <Col
