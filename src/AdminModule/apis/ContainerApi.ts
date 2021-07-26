@@ -4,8 +4,8 @@ import { route, ROUTES } from "../../config";
 import {
     EntityNotFoundErrorResponse,
     FinalResponse,
-    ListResponse,
     ServerError,
+    ListResponse,
 } from "../../AppModule/models";
 import {
     onFindAllResponseHydra,
@@ -24,6 +24,7 @@ const {
     api_containers_my_container_collection: API_GET_MY_CONTAINER_COLLECTION,
     api_containers_get_secure_item: GET_SECURE_ITEM,
     api_containers_gen_style_request_collection: API_POST_REQUEST_STYLE_COLLECTION,
+    api_containers_gen_translation_request_collection: API_POST_REQUEST_TRANSLATION_COLLECTION,
 } = ROUTES;
 
 export abstract class ContainerApi extends EntityAPI {
@@ -133,6 +134,18 @@ export abstract class ContainerApi extends EntityAPI {
         id: number
     ): Promise<FinalResponse<R | null>> {
         return this.makePost<R, P>(API_POST_REQUEST_STYLE_COLLECTION, {
+            cloneId: id,
+        })
+            .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
+            .catch((error: AxiosError | ServerError) =>
+                this.handleErrorDuringCreatingOrUpdating(error)
+            );
+    }
+
+    public static async generateTranslationRequest<R, P = null>(
+        id: number
+    ): Promise<FinalResponse<R | null>> {
+        return this.makePost<R, P>(API_POST_REQUEST_TRANSLATION_COLLECTION, {
             cloneId: id,
         })
             .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
