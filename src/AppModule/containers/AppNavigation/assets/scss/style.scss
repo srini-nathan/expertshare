@@ -47,7 +47,7 @@
     }
     .navbar-collapse {
         &.show {
-            position: inherit;
+            position: initial;
             z-index: 10000;
         }
     }

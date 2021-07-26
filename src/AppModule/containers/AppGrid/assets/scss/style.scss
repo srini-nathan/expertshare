@@ -2,6 +2,10 @@
 @import "./../../../../assets/scss/variables";
 
 .app-grid {
+    padding: 5px 15px;
+    background-color: var(--card-background-color);
+    border-radius: var(--card-border-radius);
+    box-shadow: 0 3px 9px var(--card-box-shadow-color);
     &.table-responsive {
         min-height: 65vh;
     }
@@ -17,6 +21,30 @@
 
     .ag-body-horizontal-scroll {
         background-color: var(--light-clr);
+        .ag-body-horizontal-scroll-viewport {
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-background);
+            scrollbar-width: thin;
+
+            &.app-in-iframe {
+                background-color: var(--iframe-body-background-color) !important;
+            }
+
+            &::-webkit-scrollbar {
+                height: 7px;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: var(--scrollbar-background);
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: var(--scrollbar-thumb);
+            }
+
+            &::-webkit-scrollbar-thumb:hover {
+                opacity: 100%;
+            }
+        }
     }
 
     .ag-cell {
@@ -72,11 +100,6 @@
     }
 
     .ag-theme-alpine {
-        padding: 5px 15px;
-        background-color: var(--card-background-color);
-        border-radius: var(--card-border-radius);
-        box-shadow: 0 3px 9px var(--card-box-shadow-color);
-
         .ag-sort-ascending-icon,
         .ag-sort-descending-icon {
             position: relative;
@@ -138,6 +161,7 @@
         }
 
         .ag-center-cols-container {
+            background-color: var(--card-background-color);
             .ag-row {
                 &:hover {
                     background-color: var(--light-clr);
@@ -194,7 +218,8 @@
         }
 
         .ag-header {
-            background-color: var(--light-clr);
+            margin-top: 10px;
+            background-color: var(--table-header-background-color);
             border-bottom: unset;
 
             .ag-header-cell {

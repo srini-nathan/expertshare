@@ -293,3 +293,12 @@ a {
         }
     }
 }
+.fr-box {
+    .fr-wrapper {
+        background-color: var(--input-background-color) !important;
+        border-bottom: none !important;
+    }
+    .fr-second-toolbar {
+        background-color: var(--input-background-color) !important;
+    }
+}

@@ -28,7 +28,7 @@ body.modal-open #root {
         padding: 35px;
         margin: auto;
         background-color: var(--modal-background-color);
-        border-radius: var(--border-radius) !important;
+        border-radius: var(--modal-border-radius) !important;
         @include media("mobile") {
             padding: 10px;
         }
@@ -36,10 +36,10 @@ body.modal-open #root {
 
     .modal-header {
         justify-content: center !important;
-        background-color: var(--light-clr);
+        background-color: var(--modal-background-color);
         border-bottom: unset !important;
-        border-top-left-radius: var(--border-radius) !important;
-        border-top-right-radius: var(--border-radius) !important;
+        border-top-left-radius: var(--modal-border-radius) !important;
+        border-top-right-radius: var(--modal-border-radius) !important;
 
         .close {
             position: absolute;
