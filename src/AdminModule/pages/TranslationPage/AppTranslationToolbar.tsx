@@ -131,7 +131,9 @@ export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
                     variant={"secondary"}
                     className="justify-content-center"
                     block
-                    onClick={onCreateNew}
+                    onClick={() => {
+                        setShowConfirmModal(true);
+                    }}
                 >
                     {t("admin.translation:includedLanguages")}
                 </AppButton>
