@@ -96,7 +96,9 @@ export const GlobalProvider: React.FC = (props) => {
                     FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo,
                     genImageFavicon
                 );
-                setFavicon(favicon);
+                if (genImageFavicon !== "") {
+                    setFavicon(favicon);
+                }
                 setState({
                     status: "LOADED",
                     container: response,
