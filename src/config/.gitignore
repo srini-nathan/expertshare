@@ -1,3 +1,4 @@
 routes.json
 constants.json
-css
+css/*.css
+!css/.gitkeep
