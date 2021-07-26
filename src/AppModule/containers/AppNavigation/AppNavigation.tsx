@@ -34,14 +34,9 @@ import {
 } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
-import { errorToast, isGranted } from "../../utils";
+import { errorToast, isGranted, parseDesign } from "../../utils";
 import { LanguageApi, UserApi } from "../../../AdminModule/apis";
-import {
-    DesignConfiguration,
-    Language,
-    Navigation,
-    PUser,
-} from "../../../AdminModule/models";
+import { Language, Navigation, PUser } from "../../../AdminModule/models";
 import { FileTypeInfo } from "../../models";
 import { appContainerNavigation } from "../../atoms";
 
@@ -82,11 +77,12 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const baseDesignConfig = useBuildAssetPath(
         FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo
     );
+    const design = parseDesign(container);
     const {
         genImageNavigationLogo,
         genImageExpertshareLogo,
         navPosition: menuLocation,
-    } = (container?.designConfiguration as unknown) as DesignConfiguration;
+    } = design;
 
     const style = user.imageName
         ? {

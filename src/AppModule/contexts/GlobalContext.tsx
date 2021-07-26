@@ -4,7 +4,6 @@ import { useSetRecoilState } from "recoil";
 import { GenerateApi } from "../../AdminModule/apis/GenerateApi";
 import { ContainerApi } from "../../AdminModule/apis/ContainerApi";
 import {
-    DesignConfiguration,
     I18nMap,
     Language,
     MyContainer,
@@ -17,6 +16,7 @@ import { useAssetHelper } from "../hooks/useAssetHelper";
 import { useDomHelper } from "../hooks/useDomHelper";
 import { CONSTANTS } from "../../config";
 import { FileTypeInfo } from "../models";
+import { parseDesign } from "../utils";
 
 interface GlobalState {
     status: "LOADED" | "LOADING" | "ERROR";
@@ -89,10 +89,8 @@ export const GlobalProvider: React.FC = (props) => {
 
                 setNavigation(sortBy(navigation, [(n) => n.ord]));
                 setMyContainer(response);
-                const { designConfiguration } = response;
-                const {
-                    genImageFavicon,
-                } = (designConfiguration as unknown) as DesignConfiguration;
+                const designConfiguration = parseDesign(response);
+                const { genImageFavicon } = designConfiguration;
                 const favicon = buildPath(
                     response,
                     FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo,

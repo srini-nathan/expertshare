@@ -1,3 +1,5 @@
+import { DesignConfiguration } from "../../AdminModule/models/entities/DesignConfiguration";
+
 export const parseIdFromResourceUrl = (resourceUrl: string): number | null => {
     const parts = resourceUrl.split("/");
     if (parts.length > 0) {
@@ -25,4 +27,13 @@ export const requestMediaPermission = async (
     } catch (error) {
         return new Promise<null>((resolve) => resolve(null));
     }
+};
+
+export const parseDesign = (container: any): DesignConfiguration => {
+    let design: DesignConfiguration = new DesignConfiguration();
+    if (container.designConfiguration) {
+        design = { ...design, ...container.designConfiguration };
+    }
+
+    return design;
 };

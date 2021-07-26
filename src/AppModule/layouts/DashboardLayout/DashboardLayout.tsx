@@ -11,7 +11,7 @@ import { AppMessages } from "../../containers/AppMessages";
 import { useChosenContainer } from "../../hooks";
 import { AppCallOneToOne } from "../../containers/AppCallOneToOne";
 import { useGlobalData } from "../../contexts";
-import { DesignConfiguration } from "../../../AdminModule/models";
+import { parseDesign } from "../../utils";
 
 export const DashboardLayout: FC = ({ children }) => {
     const {
@@ -23,9 +23,8 @@ export const DashboardLayout: FC = ({ children }) => {
     const onBoarding = window.location.pathname;
     const { isChosen } = useChosenContainer();
     const { container } = useGlobalData();
-    const {
-        navPosition,
-    } = (container?.designConfiguration as unknown) as DesignConfiguration;
+    const design = parseDesign(container);
+    const { navPosition } = design;
 
     const renderClass = () => {
         let classes = "";
