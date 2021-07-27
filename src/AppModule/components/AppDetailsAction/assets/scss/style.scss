@@ -117,9 +117,9 @@
                 width: 36px;
                 height: 36px;
                 font-size: 22px;
-                color: var(--secondary);
-                border-radius: var(--border-radius);
-                box-shadow: 0 3px 9px var(--secondary-10);
+                color: var(--secondary-button-text-color);
+                border-radius: var(--secondary-button-border-radius);
+                box-shadow: 0 3px 9px var(--secondary-button-box-shadow-color);
             }
 
             .rotate {
@@ -154,9 +154,8 @@
                 justify-content: center;
                 width: 36px;
                 height: 36px;
-                color: var(--secondary);
-                border-radius: var(--border-radius);
-
+                color: var(--secondary-button-text-color);
+                border-radius: var(--secondary-button-border-radius);
             }
         }
     }

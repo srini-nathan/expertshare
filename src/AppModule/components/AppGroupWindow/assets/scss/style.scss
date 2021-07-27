@@ -28,9 +28,9 @@
     &--group {
         width: 384px;
         margin-right: 15px;
-        background-color: var(--light-clr);
-        border-radius: var(--border-radius);
-        box-shadow: 0 -7px 40px var(--secondary-30);
+        background-color: var(--card-background-color);
+        border-radius: var(--card-border-radius);
+        box-shadow: 0 -7px 40px var(--card-box-shadow-color);
 
         @include media("mobile") {
             width: 100%;
@@ -42,22 +42,22 @@
         }
 
         .create-group {
-            border-top: 1px solid var(--secondary-70);
             padding: 1em;
+            border-top: 1px solid var(--card-divider-color);
 
             .group--container {
                 height: 36px;
                 border: 1px solid var(--input-border-color);
-                border-radius: var(--border-radius);
+                border-radius: var(--input-border-radius);
 
                 input {
                     height: inherit;
+                    padding-bottom: 7px;
                     font-size: 14px;
                     font-weight: 300;
                     color: var(--secondary);
                     background-color: unset;
                     border: none;
-                    padding-bottom: 7px;
                 }
             }
 
@@ -76,7 +76,7 @@
 
                     .count {
                         font-weight: 500;
-                        color: #7ebde9;
+                        color: var(--info);
                     }
                 }
             }
@@ -100,32 +100,32 @@
         }
 
         .group-buttons {
-            border-top: 1px solid #ccc;
-            padding: 1em;
             display: flex;
             justify-content: space-between;
+            padding: 1em;
+            border-top: 1px solid var(--card-divider-color);
 
             span {
                 font-size: 16px;
             }
 
             i {
-                font-size: 18px;
                 padding-right: 1em;
+                font-size: 18px;
             }
 
             .btn-group-cancel {
-                box-shadow: 0 3px 9px var(--secondary-10);
+                box-shadow: 0 3px 9px var(--secondary-button-box-shadow-color);
                 height: 36px;
                 width: 158px;
-                background-color: white !important;
+                background-color: var(--secondary-button-text-color) !important;
             }
 
             .btn-group-create {
-                box-shadow: 0 3px 9px var(--secondary-10);
-                height: 36px;
                 width: 158px;
-                background-color: white !important;
+                height: 36px;
+                background-color: var(--secondary-button-text-color) !important;
+                box-shadow: 0 3px 9px var(--secondary-button-box-shadow-color);
             }
         }
     }

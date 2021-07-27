@@ -11,7 +11,7 @@
     color: var(--input-text-color);
     background-color: var(--input-background-color);
     border: 1px solid var(--input-border-color);
-    border-radius: var(--border-radius);
+    border-radius: var(--input-border-radius);
 
     &:focus {
         color: var(--input-text-color);
@@ -58,7 +58,7 @@
             padding: 0 5px;
             margin-left: 2px;
             font-size: 10px;
-            color: #fff;
+            color: var(--light-clr);
             background-color: #cad0dc;
             border: unset;
             border-radius: 50%;
@@ -79,9 +79,9 @@
             color: var(--secondary-90);
             text-align: left;
             text-align: start;
-            background-color: #fff;
-            border: 1px solid rgba(0, 0, 0, 0.2);
-            border-radius: var(--border-radius);
+            background-color: var(--light-clr);
+            border: var(--input-border-width) solid var(--input-border-color);
+            border-radius: var(--input-border-radius);
         }
     }
 }
