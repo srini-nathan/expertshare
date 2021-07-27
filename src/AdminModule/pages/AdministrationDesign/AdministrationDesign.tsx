@@ -342,7 +342,7 @@ export const AdministrationDesign: FC<RouteComponentProps> = ({
                             <AppFormActions isEditMode={true} navigation={nav}>
                                 <AppButton
                                     type="button"
-                                    variant={"secondary"}
+                                    variant={"danger"}
                                     className="mr-4"
                                     disabled={loadingData}
                                     onClick={() => {
