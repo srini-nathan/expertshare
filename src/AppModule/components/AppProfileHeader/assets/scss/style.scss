@@ -98,24 +98,12 @@
             }
 
             &--main-det {
-                @include media("ap-1") {
-                    width: 85% !important;
-                }
-                @include media("ap-2") {
-                    width: 80% !important;
-                }
-                @include media("ap-3") {
-                    width: 75% !important;
-                }
-                @include media("ap-4") {
-                    width: 65% !important;
-                }
                 &--biography {
                     p {
                         display: grid;
                         font-size: 16px;
                         font-weight: 500;
-                        color: var(--secondary-80);
+                        color: var(--card-second-text-color);
 
                         .read-or-hide {
                             font-size: 12px;
@@ -375,6 +363,38 @@
         }
         .user-biography {
             //white-space: pre-wrap;
+        }
+    }
+}
+.right-container {
+    .inner-container--main-det {
+        @include media("ap-1") {
+            width: 80% !important;
+        }
+        @include media("ap-2") {
+            width: 75% !important;
+        }
+        @include media("ap-3") {
+            width: 70% !important;
+        }
+        @include media("ap-4") {
+            width: 65% !important;
+        }
+    }
+}
+.bottom-nav {
+    .inner-container--main-det {
+        @include media("ap-1") {
+            width: 85% !important;
+        }
+        @include media("ap-2") {
+            width: 80% !important;
+        }
+        @include media("ap-3") {
+            width: 75% !important;
+        }
+        @include media("ap-4") {
+            width: 65% !important;
         }
     }
 }
