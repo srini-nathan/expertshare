@@ -45,8 +45,8 @@
     label {
         margin: auto 0;
         cursor: pointer;
-        border-radius: var(--border-radius);
-        box-shadow: 0 2px 9px var(--secondary-20);
+        border-radius: var(--select-border-radius);
+        box-shadow: 0 2px 9px var(--select-box-shadow-color);
         transition: all 0.2s;
     }
 
@@ -56,7 +56,7 @@
         content: "";
         top: 3px;
         border: none;
-        border-radius: var(--border-radius);
+        border-radius: var(--input-border-radius);
         transition: all 0.2s;
         appearance: none;
     }

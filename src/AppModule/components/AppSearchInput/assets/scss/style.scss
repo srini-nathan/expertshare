@@ -47,16 +47,16 @@
             line-height: 1.5;
             text-align: left;
             text-align: start;
-            background-color: #fff;
+            background-color: var(--light-clr);
             border: 1px solid rgba(0, 0, 0, 0.2);
-            border-radius: var(--border-radius);
+            border-radius: var(--card-border-radius);
 
             h3 {
                 padding: 0.5rem 0.75rem;
                 margin-bottom: 0;
                 font-size: 1rem;
                 color: var(--primary);
-                background-color: #f7f7f7;
+                background-color: var(--light-clr);
                 border-bottom: 1px solid #ebebeb;
                 border-top-left-radius: calc(0.3rem - 1px);
                 border-top-right-radius: calc(0.3rem - 1px);
@@ -72,7 +72,7 @@
 
     &-container {
         height: auto !important;
-        border-radius: var(--border-radius);
+        border-radius: var(--card-border-radius);
 
         &-search {
             position: relative;
@@ -152,9 +152,9 @@
             min-height: 62px;
             padding: 0 6px 12px;
             margin: 0;
-            background-color: var(--input-bg);
+            background-color: var(--input-background-color);
             border-top: 2px solid var(--card-divider-color);
-            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            border-radius: 0 0 var(--input-border-radius) var(--input-border-radius);
 
             .list-item {
                 display: table;
@@ -162,7 +162,7 @@
                 margin: 12px 6px;
                 margin-bottom: 0;
                 border: 1px solid var(--primary);
-                border-radius: var(--border-radius);
+                border-radius: var(--select-border-radius);
 
                 span {
                     font-size: 12px;
@@ -213,7 +213,7 @@
         width: 18px;
         height: 18px;
         background-color: var(--light-clr);
-        border-radius: var(--border-radius);
+        border-radius: var(--secondary-button-border-radius);
 
         &::after {
             position: absolute;

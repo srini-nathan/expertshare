@@ -39,8 +39,8 @@
                     font-weight: 500;
                     color: var(--secondary-button-text-color);
                     background-color: var(--secondary-button-background-color);
-                    border-radius: var(--border-radius);
-                    box-shadow: 0 3px 9px var(--secondary-10);
+                    border-radius: var(--secondary-button-border-radius);
+                    box-shadow: 0 3px 9px var(--secondary-button-box-shadow-color);
 
                     @include media("csc-1") {
                         width: 89px;
@@ -53,8 +53,8 @@
                     }
 
                     &.active {
-                        color: var(--primary);
-                        background-color: var(--primary-10);
+                        color: var(--secondary-button-text-color--active);
+                        background-color: var(--secondary-button-background-color--active);
                     }
                 }
 
@@ -288,8 +288,8 @@
                     font-weight: 500;
                     color: var(--secondary);
                     background-color: var(--secondary-button-background-color);
-                    border-radius: var(--border-radius);
-                    box-shadow: 0 3px 9px var(--secondary-10);
+                    border-radius: var(--secondary-button-border-radius);
+                    box-shadow: 0 3px 9px var(--secondary-button-box-shadow-color);
 
                     i {
                         padding-right: 10px;
@@ -337,7 +337,7 @@
                 img {
                     width: 100%;
                     height: auto;
-                    border-radius: var(--border-radius) var(--border-radius) 0 0;
+                    border-radius: var(--card-border-radius) var(--card-border-radius) 0 0;
                 }
             }
 

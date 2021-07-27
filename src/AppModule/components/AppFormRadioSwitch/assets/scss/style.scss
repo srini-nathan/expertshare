@@ -5,7 +5,7 @@
     &-buttons {
         flex-wrap: nowrap !important;
         border: 1px solid var(--input-border-color);
-        border-radius: var(--border-radius);
+        border-radius: var(--input-border-radius);
     }
 
     .btn-group {
@@ -19,15 +19,15 @@
     .form-check {
         &:last-child {
             label {
-                border-top-right-radius: var(--border-radius);
-                border-bottom-right-radius: var(--border-radius);
+                border-top-right-radius: var(--input-border-radius);
+                border-bottom-right-radius: var(--input-border-radius);
             }
         }
 
         &:first-child {
             label {
-                border-top-left-radius: var(--border-radius);
-                border-bottom-left-radius: var(--border-radius);
+                border-top-left-radius: var(--input-border-radius);
+                border-bottom-left-radius: var(--input-border-radius);
             }
         }
 
@@ -38,7 +38,7 @@
         width: 100%;
         padding: 0;
         text-align: center;
-        background-color: var(--input-bg-color);
+        background-color: var(--input-background-color);
 
         input {
             display: none;
