@@ -2,19 +2,28 @@ import React, { FC, useEffect, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { isString as _isString } from "lodash";
 import { useTranslation } from "react-i18next";
+import { Col, Row } from "react-bootstrap";
 import {
     AppPageHeader,
     AppLoader,
     AppGridPagination,
     AppFormDropdown,
+    AppModal,
+    AppButton,
 } from "../../../AppModule/components";
 import { AppTranslation } from "../../../AppModule/containers/AppTranslation";
-import { LanguageApi, TranslationApi } from "../../apis";
+import { ContainerApi, LanguageApi, TranslationApi } from "../../apis";
 import { Language, TranslationGroup } from "../../models";
 import { TranslationCombine } from "../../models/entities/TranslationCombine";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models/context/AuthState";
-import { errorToast, randomInteger } from "../../../AppModule/utils";
+import {
+    errorToast,
+    hideLoader,
+    randomInteger,
+    showLoader,
+    successToast,
+} from "../../../AppModule/utils";
 import {
     defaultPageSize,
     pageSizeOptions,
@@ -23,6 +32,7 @@ import { AppTranslationToolbar } from "./AppTranslationToolbar";
 import "./assets/scss/style.scss";
 import { SimpleObject } from "../../../AppModule/models";
 import { useAuthState } from "../../../AppModule/hooks";
+import { useGlobalData } from "../../../AppModule/contexts";
 
 export interface TranslationCombineList {
     translationGroup?: TranslationGroup | undefined;
@@ -45,6 +55,8 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const { state } = React.useContext(AuthContext);
     const { containerId } = state as AuthState;
     const { containerResourceId } = useAuthState();
+    const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
+    const { container } = useGlobalData();
 
     useEffect(() => {
         isLoading(true);
@@ -148,6 +160,27 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         fetchData();
     }, [languages, active, pageSize]);
 
+    const generateTranslationSubmit = () => {
+        showLoader(
+            t("admin.translation:generateStyle.generatingLoader.message")
+        ).then();
+        if (container) {
+            ContainerApi.generateTranslationRequest(container.id)
+                .then(() => {
+                    hideLoader();
+                    successToast(
+                        t("admin.translation:generateStyle.toast.success")
+                    );
+                })
+                .catch(() => {
+                    hideLoader();
+                    errorToast(
+                        t("admin.translation:generateStyle.toast.error")
+                    );
+                });
+        }
+    };
+
     const renderTranslations = () => {
         if (loading) {
             return <AppLoader />;
@@ -169,6 +202,36 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <>
+            <Row className={"d-flex justify-content-end"}>
+                <Col md={2} sm={6} className="my-2 my-md-0">
+                    <AppModal
+                        show={showConfirmModal}
+                        title={t(
+                            "admin.translation:generateStyle.confirmation.title"
+                        )}
+                        handleClose={() => {
+                            setShowConfirmModal(false);
+                        }}
+                        handleDelete={() => {
+                            generateTranslationSubmit();
+                            setShowConfirmModal(false);
+                        }}
+                        bodyContent={t(
+                            "admin.translation:generateStyle.confirmation.content"
+                        )}
+                    />
+                    <AppButton
+                        variant={"danger"}
+                        className="justify-content-center"
+                        block
+                        onClick={() => {
+                            setShowConfirmModal(true);
+                        }}
+                    >
+                        {t("admin.translation:includedLanguages")}
+                    </AppButton>
+                </Col>
+            </Row>
             <AppPageHeader
                 customToolbar
                 title={t("admin.translation:header.title")}
