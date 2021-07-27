@@ -132,7 +132,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                             >
                                 <Row className="m-0 p-0">
                                     <Col
-                                        sm={8}
+                                        sm={9}
                                         className="inner-container--header--time px-0"
                                     >
                                         <i className="fak fa-clock-light"></i>

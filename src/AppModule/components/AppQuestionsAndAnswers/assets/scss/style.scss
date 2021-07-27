@@ -83,6 +83,7 @@
         .text-box-container {
             position: relative;
             height: 104px;
+            background-color: var(--input-background-color);
             border: var(--input-border-width) solid var(--input-border-color);
             border-radius: var(--input-border-radius);
 
@@ -112,7 +113,7 @@
                 }
 
                 &::-webkit-scrollbar-thumb {
-                    background: var(--secondary);
+                    background: var(--scrollbar-thumb);
                 }
 
                 &::-webkit-scrollbar-thumb:hover {
@@ -226,7 +227,7 @@
         }
 
         &::-webkit-scrollbar-thumb {
-            background: var(--secondary);
+            background: var(--scrollbar-thumb);
         }
 
         &::-webkit-scrollbar-thumb:hover {

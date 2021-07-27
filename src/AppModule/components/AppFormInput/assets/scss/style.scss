@@ -92,3 +92,37 @@ input.form-control {
         }
     }
 }
+.input-group {
+    display: flex;
+    align-items: center !important;
+    height: 36px;
+    color: var(--input-text-color);
+    background-color: var(--input-background-color);
+    border: var(--input-border-width) solid var(--input-border-color) !important;
+    border-width: var(--input-border-width);
+    border-radius: var(--input-border-radius);
+    input {
+        &[type="text"],
+        &[type="password"],
+        &[name="confirmPassword"],
+        &[name="Password"],
+        &[name="password"] {
+            height: 100% !important;
+            border: none !important;
+            outline: none !important;
+            &:focus,
+            &:active {
+                border: none;
+                box-shadow: unset;
+            }
+        }
+    }
+    .input-group-append {
+        height: fit-content;
+        .input-group-text {
+            background-color: var(--input-background-color);
+            border: none;
+            border-radius: var(--input-border-radius);
+        }
+    }
+}

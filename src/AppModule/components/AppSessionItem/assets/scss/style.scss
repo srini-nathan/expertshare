@@ -51,6 +51,7 @@
 
 .event-detail-admin--workshop {
     overflow: auto;
+    border-radius: var(--card-border-radius);
     box-shadow: 0 2px 12px var(--card-box-shadow-color);
 
     &::-webkit-scrollbar {
@@ -59,7 +60,6 @@
 
     &--container {
         background-color: var(--card-background-color);
-        border-radius: var(--card-border-radius);
 
         &--content {
             &--item {
@@ -340,7 +340,7 @@
                                 }
 
                                 &::-webkit-scrollbar-thumb {
-                                    background: var(--secondary);
+                                    background: var(--scrollbar-thumb);
                                 }
 
                                 &::-webkit-scrollbar-thumb:hover {

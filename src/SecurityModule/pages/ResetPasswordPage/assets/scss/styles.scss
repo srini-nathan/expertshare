@@ -65,6 +65,7 @@
             }
 
             .agreement-box {
+                overflow: hidden;
                 background-color: var(--input-background-color);
                 border: 1px solid var(--input-border-color);
                 border-radius: var(--input-border-radius);
@@ -85,7 +86,7 @@
                     }
 
                     &::-webkit-scrollbar-thumb {
-                        background: var(--secondary);
+                        background: var(--scrollbar-thumb);
                     }
 
                     &::-webkit-scrollbar-thumb:hover {

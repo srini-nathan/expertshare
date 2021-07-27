@@ -23,7 +23,7 @@
         z-index: 3;
         color: var(--select-text-color);
         background: var(--select-background-color) !important;
-        border: var(--select-border-width) solid var(--select-border-color);
+        border: var(--select-border-width) solid var(--select-border-color) !important;
         border-radius: var(--select-border-radius) !important;
     }
 

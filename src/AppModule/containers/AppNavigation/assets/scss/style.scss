@@ -371,6 +371,9 @@
                     width: 20px;
                     height: 20px;
                     margin: auto;
+                    &::before {
+                        font-size: 20px;
+                    }
 
                     &.back-to-menu {
                         width: 36px;
@@ -733,7 +736,7 @@
         }
 
         &::-webkit-scrollbar-thumb {
-            background: var(--secondary);
+            background: var(--scrollbar-thumb);
         }
 
         &::-webkit-scrollbar-thumb:hover {
