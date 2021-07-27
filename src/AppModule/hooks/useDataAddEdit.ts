@@ -1,10 +1,19 @@
 import { useParams } from "@reach/router";
 import { useState } from "react";
 
-export function useDataAddEdit<T>(initData: T | null = null) {
+type DataAddEditReturnType<T> = {
+    id: null | number;
+    isEditMode: boolean;
+    isLoading: boolean;
+    data: T;
+    setIsLoading: (status: boolean) => void;
+    setData: (data: T) => void;
+};
+
+export function useDataAddEdit<T>(initData: T): DataAddEditReturnType<T> {
     const { id = null } = useParams();
     const isEditMode: boolean = id !== null;
-    const [data, setData] = useState<T | null>(initData);
+    const [data, setData] = useState<T>(initData);
     const [isLoading, setIsLoading] = useState<boolean>(isEditMode);
 
     return {

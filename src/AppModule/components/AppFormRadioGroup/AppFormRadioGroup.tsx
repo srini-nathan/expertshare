@@ -7,8 +7,8 @@ import "./assets/scss/style.scss";
 
 export interface AppFormRadioGroupProps {
     name: string;
-    defaultValue?: any;
     options?: any[];
+    defaultValue?: any;
     onChange?: ChangeEventHandler<HTMLInputElement>;
     register?<TFieldElement extends FieldElement<TFieldElement>>(
         ref?: (TFieldElement & Ref) | null,
@@ -38,7 +38,7 @@ export const AppFormRadioGroup: FC<AppFormRadioGroupProps> = ({
                     <Form.Check
                         key={e.value}
                         id={`radio_${e.value}`}
-                        name={`radio_${e.name}`}
+                        name={name}
                         className={"circle-radio-button"}
                         onChange={(element) => {
                             setValue(name, element.target.value, {});
@@ -47,6 +47,7 @@ export const AppFormRadioGroup: FC<AppFormRadioGroupProps> = ({
                         defaultValue={e.value}
                         label={e.label}
                         defaultChecked={e.defaultCheck}
+                        inline
                     />
                 );
             })}

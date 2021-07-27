@@ -21,3 +21,4 @@ export * from "./SessionDocumentApi";
 export * from "./AFrameRoomApi";
 export * from "./AFramePanelApi";
 export * from "./InfoPageApi";
+export * from "./LiveVoteQuestionApi";
