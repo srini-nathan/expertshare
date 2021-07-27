@@ -202,6 +202,7 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                 value: key,
             });
         });
+        const { defaultValue: backendValue } = items.options;
 
         return (
             <AppFormSelect
@@ -210,7 +211,7 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
                 label={items.label}
                 {...getLayoutProms()}
                 required={false}
-                defaultValue={defaultValue}
+                defaultValue={defaultValue || backendValue}
                 placeholder={items.label}
                 options={dropDownOptions}
                 control={control}
