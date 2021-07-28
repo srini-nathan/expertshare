@@ -1,7 +1,7 @@
 import React, { FC, Fragment } from "react";
 import { RouteComponentProps, useParams } from "@reach/router";
 import { useTranslation } from "react-i18next";
-import { Row, Form } from "react-bootstrap";
+import { Row, Form, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
@@ -11,12 +11,14 @@ import {
 } from "../../../AppModule/hooks";
 import {
     AppBreadcrumb,
+    AppButton,
     AppCard,
     AppFormActions,
     AppFormInput,
     AppFormRadioGroup,
     AppLoader,
     AppPageHeader,
+    AppUploader,
 } from "../../../AppModule/components";
 import { AppLanguageSwitcher } from "../../../AppModule/containers";
 import { getTypeOptions, getChartOptions } from "./live-voting-helper";
@@ -28,7 +30,10 @@ import {
 } from "../../../AppModule/utils";
 import { LiveVoteQuestion } from "../../models/entities/LiveVoteQuestion";
 import { LiveVoteQuestionApi } from "../../apis";
-import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
+import {
+    FileTypeInfo,
+    UnprocessableEntityErrorResponse,
+} from "../../../AppModule/models";
 import { schema } from "./schema";
 
 export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
@@ -133,6 +138,28 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                             errorMessage={errors.chartType?.message}
                         />
                     </Form.Row>
+                </AppCard>
+                <Row>
+                    <Col className="d-flex justify-content-between">
+                        <h2>{t("admin.liveVote.form:header.option")}</h2>
+                        <AppButton
+                            href={"/admin/live-vote"}
+                            variant={"secondary"}
+                        >
+                            + {t("admin.liveVote.form:button.addOption")}
+                        </AppButton>
+                    </Col>
+                </Row>
+                <AppCard>
+                    <Row>
+                        <Col></Col>
+                        <Col>
+                            <AppUploader
+                                fileInfo={{} as FileTypeInfo}
+                                onFileSelect={() => {}}
+                            />
+                        </Col>
+                    </Row>
                 </AppCard>
                 <Row>
                     <AppFormActions
