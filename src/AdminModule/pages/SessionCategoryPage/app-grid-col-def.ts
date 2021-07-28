@@ -12,7 +12,7 @@ export const appGridColDef = ({
         flex: 0.35,
     },
     {
-        headerName: "admin.sessionCategory.list:column.Color",
+        headerName: "admin.sessionCategory.list:column.color",
         field: "color",
         cellRenderer: "AppColorPickerRender",
         minWidth: 40,
