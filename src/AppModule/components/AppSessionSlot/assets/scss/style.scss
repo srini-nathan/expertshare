@@ -9,9 +9,6 @@
     }
 
     &--container {
-        background-color: var(--light-clr);
-        border-radius: var(--border-radius);
-
         &--header {
             @include media("mobile") {
                 position: relative;
@@ -58,8 +55,8 @@
                     width: 125px;
                     height: 36px;
                     background-color: var(--secondary-button-background-color);
-                    border-radius: var(--border-radius);
-                    box-shadow: 0 6px 30px var(--secondary-20);
+                    border-radius: var(--secondary-button-border-radius);
+                    box-shadow: 0 6px 30px var(--secondary-button-box-shadow-color);
                     @include media("mobile") {
                         position: absolute;
                         left: 10px;

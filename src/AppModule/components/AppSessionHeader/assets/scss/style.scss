@@ -339,11 +339,11 @@
                     justify-content: center;
                     width: 36px;
                     height: 36px;
-                    color: var(--secondary);
+                    color: var(--secondary-button-text-color);
                     background-color: unset;
                     border: unset;
-                    border-radius: var(--border-radius);
-                    box-shadow: 0 3px 9px var(--secondary-10);
+                    border-radius: var(--secondary-button-border-radius);
+                    box-shadow: 0 3px 9px var(--secondary-button-box-shadow-color);
 
                     i {
                         font-size: 15px;
@@ -451,11 +451,11 @@
                     justify-content: center;
                     width: 36px;
                     height: 36px;
-                    color: var(--secondary);
+                    color: var(--secondary-button-text-color);
                     background-color: unset;
                     border: unset;
-                    border-radius: var(--border-radius);
-                    box-shadow: 0 3px 9px var(--secondary-10);
+                    border-radius: var(--secondary-button-border-radius);
+                    box-shadow: 0 3px 9px var(--secondary-button-box-shadow-color);
 
                     i {
                         font-size: 15px;

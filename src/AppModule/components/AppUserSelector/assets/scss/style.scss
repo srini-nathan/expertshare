@@ -14,9 +14,9 @@
     z-index: 1000;
     align-items: center;
     width: 390px;
-    background-color: var(--light-clr);
-    border-radius: var(--border-radius);
-    box-shadow: 0 12px 38px var(--secondary-30);
+    background-color: var(--select-background-color);
+    border-radius: var(--select-border-radius);
+    box-shadow: 0 12px 38px var(--select-box-shadow-color);
 
     .select-box--header {
         .title {
@@ -29,8 +29,8 @@
     }
 
     .select-box--content {
-        margin: 10px 0;
         height: 150px;
+        margin: 10px 0;
         overflow: auto;
 
         .badge-green {

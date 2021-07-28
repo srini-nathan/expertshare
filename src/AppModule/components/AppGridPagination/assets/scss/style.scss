@@ -20,15 +20,15 @@
             height: 36px;
             font-size: 14px;
             font-weight: 500;
-            color: var(--secondary);
-            background-color: var(--light-clr);
+            color: var(--secondary-button-text-color);
+            background-color: var(--secondary-button-background-color);
             border: unset;
-            border-radius: var(--border-radius);
+            border-radius: var(--secondary-button-border-radius);
             box-shadow: 0 3px 9px var(--select-box-shadow-color);
 
             &:hover {
-                color: var(--primary);
-                background-color: var(--light-clr);
+                color: var(--secondary-button-text-color);
+                background-color: var(--secondary-button-background-color);
             }
 
             &:focus {

@@ -179,7 +179,7 @@
                             width: 150px;
                             padding: 15px;
                             margin-right: 15px;
-                            border-radius: var(--border-radius);
+                            border-radius: var(--card-border-radius);
 
                             @include media("xl") {
                                 width: 115px;
