@@ -22,7 +22,10 @@ export function useUserLocale(): UserLocaleType {
         localStorage.setItem(CONTAINER_LOCALE, locale);
     };
 
-    const locale = localStorage.getItem(USER_LOCALE) || "";
+    const locale =
+        localStorage.getItem(USER_LOCALE) ||
+        localStorage.getItem(CONTAINER_LOCALE) ||
+        "en";
     setValue(locale);
     const containerLocale = localStorage.getItem(CONTAINER_LOCALE) || "en";
 
