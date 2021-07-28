@@ -19,11 +19,11 @@ export const getTypeOptions = (t: any): SimpleObject<string>[] => {
     return [
         {
             value: NavigationType.INTERNAL,
-            label: t("admin.navigation.form:label.type.internal"),
+            label: t("admin.navigation.form:label.internalPage"),
         },
         {
             value: NavigationType.INFO_PAGE,
-            label: t("admin.navigation.form:label.type.infopage"),
+            label: t("admin.navigation.form:label.type.infoPage"),
         },
         {
             value: NavigationType.EXTERNAL,

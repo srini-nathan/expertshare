@@ -162,20 +162,20 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
 
     const generateTranslationSubmit = () => {
         showLoader(
-            t("admin.translation:generateStyle.generatingLoader.message")
+            t("admin.translation:generateTranslation.generatingLoader.message")
         ).then();
         if (container) {
             ContainerApi.generateTranslationRequest(container.id)
                 .then(() => {
                     hideLoader();
                     successToast(
-                        t("admin.translation:generateStyle.toast.success")
+                        t("admin.translation:generateTranslation.toast.success")
                     );
                 })
                 .catch(() => {
                     hideLoader();
                     errorToast(
-                        t("admin.translation:generateStyle.toast.error")
+                        t("admin.translation:generateTranslation.toast.error")
                     );
                 });
         }
@@ -207,7 +207,7 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                     <AppModal
                         show={showConfirmModal}
                         title={t(
-                            "admin.translation:generateStyle.confirmation.title"
+                            "admin.translation:generateTranslation.confirmation.title"
                         )}
                         handleClose={() => {
                             setShowConfirmModal(false);
@@ -217,7 +217,7 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                             setShowConfirmModal(false);
                         }}
                         bodyContent={t(
-                            "admin.translation:generateStyle.confirmation.content"
+                            "admin.translation:generateTranslation.confirmation.content"
                         )}
                     />
                     <AppButton

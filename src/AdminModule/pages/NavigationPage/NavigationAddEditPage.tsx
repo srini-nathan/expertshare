@@ -234,7 +234,9 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
                                     lg={6}
                                     xl={6}
                                     name={"ord"}
-                                    label={t("admin.navigation.form:label.ord")}
+                                    label={t(
+                                        "admin.navigation.form:label.order"
+                                    )}
                                     {...validation(
                                         "ord",
                                         formState,
@@ -307,7 +309,7 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
                                         xl={6}
                                         name={"url"}
                                         placeholder={t(
-                                            "admin.navigation.form:select.placeholder.enterurl"
+                                            "admin.navigation.form:select.placeholder.enterUrl"
                                         )}
                                         label={t(
                                             "admin.navigation.form:label.url"
@@ -337,7 +339,7 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
                                         required={true}
                                         {...validation("url", formState, true)}
                                         placeholder={t(
-                                            "admin.navigation.form:select.placeholder.internalpage"
+                                            "admin.navigation.form:select.placeholder.internalPage"
                                         )}
                                         defaultValue={data.url}
                                         errorMessage={errors.url?.message}
@@ -363,7 +365,7 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
                                         id={"url"}
                                         name={"url"}
                                         label={t(
-                                            "admin.navigation.form:label.infopage"
+                                            "admin.navigation.form:label.infoPage"
                                         )}
                                         sm={12}
                                         md={6}
@@ -373,7 +375,7 @@ export const NavigationAddEditPage: FC<RouteComponentProps> = ({
                                         required={true}
                                         {...validation("url", formState, true)}
                                         placeholder={t(
-                                            "admin.navigation.form:select.placeholder.infopage"
+                                            "admin.navigation.form:select.placeholder.infoPage"
                                         )}
                                         defaultValue={data.url}
                                         errorMessage={errors.url?.message}
