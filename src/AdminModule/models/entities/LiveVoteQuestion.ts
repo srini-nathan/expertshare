@@ -24,8 +24,8 @@ export class LiveVoteQuestion extends BaseEntity {
         session: string,
         {
             name = "",
-            type = "",
-            chartType = "",
+            type = "RADIO",
+            chartType = "BAR",
             voteOptions = [],
             translations = [],
             id,
