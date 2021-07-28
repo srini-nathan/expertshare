@@ -252,7 +252,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 setLocale(containerLocale);
             }
         }
-    });
+    }, []);
     const handleLogoutEvent = async (): Promise<void> => {
         await logoutAction(dispatch);
     };
