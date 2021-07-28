@@ -55,6 +55,10 @@ export const DashboardLayout: FC = ({ children }) => {
             classes += " bottom-nav";
             return classes;
         }
+        if (navPosition === "TOP") {
+            classes += " bottom-nav";
+            return classes;
+        }
         classes += " right-container";
 
         return classes;
