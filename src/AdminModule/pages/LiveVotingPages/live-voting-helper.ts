@@ -1,4 +1,5 @@
 import { SimpleObject } from "../../../AppModule/models";
+import { VOTE_QUESTION_CHART_TYPE, VOTE_QUESTION_TYPE } from "../../../config";
 
 export const getTypeOptions = (
     t: (key: string) => string
@@ -6,15 +7,15 @@ export const getTypeOptions = (
     return [
         {
             label: t("admin.liveVote.form:option.type.radio"),
-            value: "RADIO",
+            value: VOTE_QUESTION_TYPE.VOTEQUESTIONTYPE_RADIO,
         },
         {
             label: t("admin.liveVote.form:option.type.checkbox"),
-            value: "CHECKBOX",
+            value: VOTE_QUESTION_TYPE.VOTEQUESTIONTYPE_CHECKBOX,
         },
         {
             label: t("admin.liveVote.form:option.type.text"),
-            value: "TEXT",
+            value: VOTE_QUESTION_TYPE.VOTEQUESTIONTYPE_TEXT,
         },
     ];
 };
@@ -25,11 +26,11 @@ export const getChartOptions = (
     return [
         {
             label: t("admin.liveVote.form:option.chartType.bar"),
-            value: "BAR",
+            value: VOTE_QUESTION_CHART_TYPE.VOTEQUESTIONCHARTTYPE_BAR,
         },
         {
             label: t("admin.liveVote.form:option.chartType.pie"),
-            value: "PIE",
+            value: VOTE_QUESTION_CHART_TYPE.VOTEQUESTIONCHARTTYPE_PIE,
         },
     ];
 };

@@ -8,25 +8,20 @@ import { AppButton, AppFormLabel } from "../../components";
 import "./assets/scss/style.scss";
 
 export interface AppLanguageSwitcherType {
+    activeLocale: string;
     activeOnly?: boolean;
     onChange?: (locale: string) => void;
 }
 
 export const AppLanguageSwitcher: FC<AppLanguageSwitcherType> = ({
+    activeLocale,
     activeOnly = false,
     onChange = () => {},
 }): JSX.Element => {
-    const {
-        languages: allLanguages,
-        activeLanguages,
-        defaultLanguage,
-    } = useGlobalData();
+    const { languages: allLanguages, activeLanguages } = useGlobalData();
     const { t } = useTranslation();
     const [languages] = useState<Language[]>(
         activeOnly ? activeLanguages || [] : allLanguages || []
-    );
-    const [active, setActive] = useState<string>(
-        defaultLanguage?.locale || "en"
     );
 
     return (
@@ -42,11 +37,12 @@ export const AppLanguageSwitcher: FC<AppLanguageSwitcherType> = ({
                     return (
                         <AppButton
                             key={locale}
-                            className={`mr-2 ${active === locale && "active"}`}
+                            className={`mr-2 ${
+                                activeLocale === locale && "active"
+                            }`}
                             variant="secondary"
                             onClick={() => {
                                 onChange(locale);
-                                setActive(locale);
                             }}
                         >
                             <i className={`flag flag-${locale}`}></i>

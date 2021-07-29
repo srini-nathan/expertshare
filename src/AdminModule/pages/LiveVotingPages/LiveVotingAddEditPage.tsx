@@ -1,9 +1,11 @@
-import React, { FC, Fragment } from "react";
+import React, { FC, Fragment, useEffect, useState } from "react";
 import { RouteComponentProps, useParams } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { Row, Form, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { DevTool } from "@hookform/devtools";
 import {
     useAuthState,
     useDataAddEdit,
@@ -16,6 +18,7 @@ import {
     AppFormActions,
     AppFormInput,
     AppFormRadioGroup,
+    AppFormTextArea,
     AppLoader,
     AppPageHeader,
     AppUploader,
@@ -29,43 +32,55 @@ import {
     validation,
 } from "../../../AppModule/utils";
 import { LiveVoteQuestion } from "../../models/entities/LiveVoteQuestion";
-import { LiveVoteQuestionApi } from "../../apis";
+import { LiveVoteQuestionApi, SessionApi } from "../../apis";
 import {
     FileTypeInfo,
     UnprocessableEntityErrorResponse,
 } from "../../../AppModule/models";
 import { schema } from "./schema";
+import { useGlobalData } from "../../../AppModule/contexts";
+import { LiveVoteOption } from "../../models/entities/LiveVoteOption";
 
 export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
     const { t } = useTranslation();
     const navigator = useNavigator(navigate);
+    const { defaultLanguage, languages } = useGlobalData();
     const { containerResourceId } = useAuthState();
     const { sessionId } = useParams();
+    const sessionResourceId = SessionApi.toResourceUrl(sessionId);
+    const [activeLocale, setActiveLocale] = useState<string>(
+        defaultLanguage?.locale || "en"
+    );
     const {
         isLoading,
+        setIsLoading,
         isEditMode,
         data,
+        setData,
         id,
     } = useDataAddEdit<LiveVoteQuestion>(
-        new LiveVoteQuestion(containerResourceId, sessionId)
+        new LiveVoteQuestion(containerResourceId, sessionResourceId)
     );
     const {
         control,
         formState,
         handleSubmit,
         setError,
+        trigger,
+        register,
     } = useForm<LiveVoteQuestion>({
         resolver: yupResolver(schema),
         mode: "all",
     });
 
     const onSubmit = async (formData: LiveVoteQuestion) => {
-        return LiveVoteQuestionApi.createOrUpdate<LiveVoteQuestion>(
-            id,
-            formData
-        ).then(({ error, errorMessage }) => {
+        return LiveVoteQuestionApi.createOrUpdate<LiveVoteQuestion>(id, {
+            ...formData,
+            container: containerResourceId,
+            session: sessionResourceId,
+        } as LiveVoteQuestion).then(({ error, errorMessage }) => {
             if (error instanceof UnprocessableEntityErrorResponse) {
                 setViolations<LiveVoteQuestion>(error, setError);
             } else if (errorMessage) {
@@ -80,6 +95,34 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                 });
             }
         });
+    };
+
+    useEffect(() => {
+        if (isEditMode && id !== null) {
+            setIsLoading(true);
+            LiveVoteQuestionApi.findById<LiveVoteQuestion>(id).then(
+                ({ response, isNotFound, errorMessage }) => {
+                    if (errorMessage) {
+                        errorToast(errorMessage);
+                    } else if (isNotFound) {
+                        errorToast(
+                            t("admin.language.form:toast.error.notfound")
+                        );
+                    } else if (response !== null) {
+                        setData(response);
+                        trigger();
+                    }
+                    setIsLoading(false);
+                }
+            );
+        }
+    }, [id]);
+
+    const addNewOption = () => {
+        setData({
+            ...data,
+            voteOptions: [...data.voteOptions, LiveVoteOption.createFrom()],
+        } as LiveVoteQuestion);
     };
 
     if (isLoading) {
@@ -103,7 +146,10 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
             />
             <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                 <AppCard>
-                    <AppLanguageSwitcher />
+                    <AppLanguageSwitcher
+                        activeLocale={activeLocale}
+                        onChange={(locale) => setActiveLocale(locale)}
+                    />
                     <Form.Row>
                         <AppFormRadioGroup
                             name={"type"}
@@ -124,8 +170,46 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                             errorMessage={errors.name?.message}
                             defaultValue={data.name}
                             control={control}
+                            md={6}
+                            lg={6}
+                            xl={6}
                         />
                     </Form.Row>
+                    <>
+                        {languages?.map(({ locale }, index) => {
+                            if (locale !== activeLocale) {
+                                return <></>;
+                            }
+                            return (
+                                <Form.Row key={locale}>
+                                    <input
+                                        type="hidden"
+                                        {...register(
+                                            `translations.${index}.locale`
+                                        )}
+                                    />
+                                    <AppFormInput
+                                        name={`translations[${index}].title`}
+                                        label={`${t(
+                                            "admin.liveVote.form:label.title"
+                                        )}(${activeLocale})`}
+                                        {...validation(
+                                            `translations[${index}].title`,
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        defaultValue={
+                                            data.translations[index]?.title
+                                        }
+                                        control={control}
+                                        md={6}
+                                        lg={6}
+                                        xl={6}
+                                    />
+                                </Form.Row>
+                            );
+                        })}
+                    </>
                     <Form.Row>
                         <AppFormRadioGroup
                             name={"chartType"}
@@ -143,24 +227,88 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                     <Col className="d-flex justify-content-between">
                         <h2>{t("admin.liveVote.form:header.option")}</h2>
                         <AppButton
-                            href={"/admin/live-vote"}
                             variant={"secondary"}
+                            onClick={() => {
+                                addNewOption();
+                            }}
                         >
                             + {t("admin.liveVote.form:button.addOption")}
                         </AppButton>
                     </Col>
                 </Row>
-                <AppCard>
-                    <Row>
-                        <Col></Col>
-                        <Col>
-                            <AppUploader
-                                fileInfo={{} as FileTypeInfo}
-                                onFileSelect={() => {}}
-                            />
-                        </Col>
-                    </Row>
-                </AppCard>
+                {data.voteOptions.map((option, oIndex) => {
+                    const { id: oId } = option;
+                    return (
+                        <AppCard key={oId}>
+                            <Row>
+                                {languages?.map(({ locale }, lIndex) => {
+                                    if (locale !== activeLocale) {
+                                        return <></>;
+                                    }
+                                    return (
+                                        <Col
+                                            className={"p-0"}
+                                            key={`${oId}${locale}`}
+                                        >
+                                            <input
+                                                type="hidden"
+                                                {...register(
+                                                    `voteOptions.${oIndex}.translations.${lIndex}.locale`
+                                                )}
+                                            />
+                                            <AppFormInput
+                                                name={`voteOptions[${oIndex}].translations[${lIndex}].title`}
+                                                label={`${t(
+                                                    "admin.liveVote.form:label.optionTitle"
+                                                )}(${activeLocale})`}
+                                                {...validation(
+                                                    `voteOptions[${oIndex}].translations[${lIndex}].title`,
+                                                    formState,
+                                                    isEditMode
+                                                )}
+                                                defaultValue={
+                                                    data.voteOptions[oIndex]
+                                                        ?.translations[lIndex]
+                                                        ?.title
+                                                }
+                                                control={control}
+                                                md={12}
+                                                lg={12}
+                                                xl={12}
+                                            />
+                                            <AppFormTextArea
+                                                name={`voteOptions[${oIndex}].translations[${lIndex}].description`}
+                                                label={`${t(
+                                                    "admin.liveVote.form:label.optionDescription"
+                                                )}(${activeLocale})`}
+                                                {...validation(
+                                                    `voteOptions[${oIndex}].translations[${lIndex}].description`,
+                                                    formState,
+                                                    isEditMode
+                                                )}
+                                                control={control}
+                                                defaultValue={
+                                                    data.voteOptions[oIndex]
+                                                        ?.translations[lIndex]
+                                                        ?.description
+                                                }
+                                                md={12}
+                                                lg={12}
+                                                xl={12}
+                                            />
+                                        </Col>
+                                    );
+                                })}
+                                <Col className={"p-0"}>
+                                    <AppUploader
+                                        fileInfo={{} as FileTypeInfo}
+                                        onFileSelect={() => {}}
+                                    />
+                                </Col>
+                            </Row>
+                        </AppCard>
+                    );
+                })}
                 <Row>
                     <AppFormActions
                         navigation={navigator}
@@ -169,6 +317,7 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                     />
                 </Row>
             </Form>
+            <DevTool control={control} />
         </Fragment>
     );
 };

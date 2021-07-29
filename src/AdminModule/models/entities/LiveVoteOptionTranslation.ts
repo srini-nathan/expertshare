@@ -1,13 +1,13 @@
 export class LiveVoteOptionTranslation {
     locale: string;
 
-    name: string;
+    title: string;
 
     description: string;
 
     constructor(locale: string, name = "", description = "") {
         this.locale = locale;
-        this.name = name;
+        this.title = name;
         this.description = description;
     }
 }

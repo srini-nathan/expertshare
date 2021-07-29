@@ -3,6 +3,7 @@ import { LiveVoteOption } from "./LiveVoteOption";
 import { Session } from "./Session";
 import { BaseEntity } from "../../../AppModule/models/entities/BaseEntity";
 import { Container } from "./Container";
+import { VOTE_QUESTION_TYPE, VOTE_QUESTION_CHART_TYPE } from "../../../config";
 
 export class LiveVoteQuestion extends BaseEntity {
     name: string;
@@ -19,15 +20,21 @@ export class LiveVoteQuestion extends BaseEntity {
 
     translations: LiveVoteQuestionTranslation[];
 
+    maxOptionSelect: number;
+
+    minOptionSelect: number;
+
     constructor(
         container: string,
         session: string,
         {
             name = "",
-            type = "RADIO",
-            chartType = "BAR",
-            voteOptions = [],
+            type = VOTE_QUESTION_TYPE.VOTEQUESTIONTYPE_RADIO,
+            chartType = VOTE_QUESTION_CHART_TYPE.VOTEQUESTIONCHARTTYPE_BAR,
+            voteOptions = [LiveVoteOption.createFrom()],
             translations = [],
+            maxOptionSelect = 0,
+            minOptionSelect = 0,
             id,
             createdAt,
             updatedAt,
@@ -41,5 +48,7 @@ export class LiveVoteQuestion extends BaseEntity {
         this.chartType = chartType;
         this.voteOptions = voteOptions;
         this.translations = translations;
+        this.minOptionSelect = minOptionSelect;
+        this.maxOptionSelect = maxOptionSelect;
     }
 }

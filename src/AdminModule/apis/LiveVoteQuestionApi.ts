@@ -2,12 +2,12 @@ import { EntityAPI } from "../../AppModule/apis/EntityAPI";
 import { ROUTES } from "../../config";
 
 const {
-    api_languages_delete_item: API_DELETE_ITEM,
-    api_languages_get_item: API_GET_ITEM,
-    api_languages_get_collection: API_GET_COLLECTION,
-    api_languages_put_item: API_PUT_ITEM,
-    api_languages_patch_item: API_PATCH_ITEM,
-    api_languages_post_collection: API_POST_COLLECTION,
+    api_vote_questions_delete_item: API_DELETE_ITEM,
+    api_vote_questions_get_item: API_GET_ITEM,
+    api_vote_questions_get_collection: API_GET_COLLECTION,
+    api_vote_questions_put_item: API_PUT_ITEM,
+    api_vote_questions_patch_item: API_PATCH_ITEM,
+    api_vote_questions_post_collection: API_POST_COLLECTION,
 } = ROUTES;
 
 export abstract class LiveVoteQuestionApi extends EntityAPI {
