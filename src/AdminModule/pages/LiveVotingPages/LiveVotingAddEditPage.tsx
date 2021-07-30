@@ -8,6 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { DevTool } from "@hookform/devtools";
 import {
     useAuthState,
+    useBuildAssetPath,
     useDataAddEdit,
     useNavigator,
 } from "../../../AppModule/hooks";
@@ -37,8 +38,9 @@ import {
 } from "../../models/entities/LiveVoteQuestion";
 import { LiveVoteQuestionApi, SessionApi } from "../../apis";
 import {
-    FileTypeInfo,
+    SimpleObject,
     UnprocessableEntityErrorResponse,
+    Upload,
 } from "../../../AppModule/models";
 import { schema } from "./schema";
 import { useGlobalData } from "../../../AppModule/contexts";
@@ -48,6 +50,8 @@ import {
 } from "../../models/entities/LiveVoteOption";
 import { LiveVoteOptionTranslation } from "../../models/entities/LiveVoteOptionTranslation";
 import { LiveVoteQuestionTranslation } from "../../models/entities/LiveVoteQuestionTranslation";
+import { UploadAPI } from "../../../AppModule/apis";
+import { VoteOptionFileInfo, VOTE_OPTION_MEDIA_TYPE } from "../../../config";
 
 export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
     navigate,
@@ -82,8 +86,9 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
         resolver: yupResolver(schema),
         mode: "all",
     });
+    const voteOptionMediaPath = useBuildAssetPath(VoteOptionFileInfo);
 
-    const onSubmit = async (formData: LiveVoteQuestion) => {
+    const submitForm = async (formData: LiveVoteQuestion) => {
         return LiveVoteQuestionApi.createOrUpdate<LiveVoteQuestion>(id, {
             ...formData,
             container: containerResourceId,
@@ -103,6 +108,38 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                 });
             }
         });
+    };
+    let files: SimpleObject<File> = {};
+
+    const onSubmit = async (formData: LiveVoteQuestion) => {
+        const ids = Object.keys(files);
+        // eslint-disable-next-line no-console
+        console.log(files, "files");
+        if (ids.length > 0) {
+            await Promise.all(
+                ids.map(async (optionId) => {
+                    const file: File = files[optionId];
+                    const voteOption = formData.voteOptions.find(
+                        (option) => option.id === parseInt(optionId, 10)
+                    );
+                    const fd = new FormData();
+                    fd.set("file", file, file.name);
+                    fd.set("container", containerResourceId);
+                    fd.set("fileType", VOTE_OPTION_MEDIA_TYPE);
+                    await UploadAPI.createResource<Upload, FormData>(fd).then(
+                        ({ errorMessage, response }) => {
+                            if (errorMessage) {
+                                errorToast(errorMessage);
+                            }
+                            if (voteOption && response && response.fileName) {
+                                voteOption.imageName = response.fileName;
+                            }
+                        }
+                    );
+                })
+            );
+        }
+        await submitForm(formData);
     };
 
     useEffect(() => {
@@ -168,6 +205,7 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                             errorMessage={errors.type?.message}
                         />
                     </Form.Row>
+                    <>{}</>
                     <Form.Row>
                         <AppFormInput
                             name={"name"}
@@ -183,17 +221,24 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                     </Form.Row>
                     <>
                         {languages?.map(({ locale }, index) => {
-                            setValue(
-                                `translations[${index}].locale` as keyof LiveVoteQuestion,
-                                locale
-                            );
-                            if (locale !== activeLocale) {
-                                return <></>;
-                            }
                             const trans = data.translations as SLiveVoteQuestionTranslation;
                             const transData =
                                 trans?.[locale] ??
                                 LiveVoteQuestionTranslation.createFrom(locale);
+
+                            setValue(
+                                `translations[${index}].locale` as keyof LiveVoteQuestion,
+                                locale
+                            );
+
+                            if (locale !== activeLocale) {
+                                setValue(
+                                    `translations[${index}].title` as keyof LiveVoteQuestion,
+                                    transData.title
+                                );
+                                return <></>;
+                            }
+
                             return (
                                 <Form.Row key={locale}>
                                     <AppFormInput
@@ -243,18 +288,11 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                     </Col>
                 </Row>
                 {data.voteOptions.map((option, oIndex) => {
-                    const { id: oId } = option;
+                    const { id: oId, imageName } = option;
                     return (
                         <AppCard key={oId}>
                             <Row>
                                 {languages?.map(({ locale }, lIndex) => {
-                                    setValue(
-                                        `voteOptions[${oIndex}].translations[${lIndex}].locale` as keyof LiveVoteQuestion,
-                                        locale
-                                    );
-                                    if (locale !== activeLocale) {
-                                        return <></>;
-                                    }
                                     const trans = data.voteOptions?.[oIndex]
                                         ?.translations as SLiveVoteOptionTranslation;
                                     const transData =
@@ -262,6 +300,22 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                                         LiveVoteOptionTranslation.createFrom(
                                             locale
                                         );
+                                    setValue(
+                                        `voteOptions[${oIndex}].translations[${lIndex}].locale` as keyof LiveVoteQuestion,
+                                        locale
+                                    );
+
+                                    if (locale !== activeLocale) {
+                                        setValue(
+                                            `voteOptions[${oIndex}].translations[${lIndex}].title` as keyof LiveVoteQuestion,
+                                            transData.title
+                                        );
+                                        setValue(
+                                            `voteOptions[${oIndex}].translations[${lIndex}].description` as keyof LiveVoteQuestion,
+                                            transData.description
+                                        );
+                                        return <></>;
+                                    }
 
                                     return (
                                         <Col
@@ -307,8 +361,25 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                                 })}
                                 <Col className={"p-0"}>
                                     <AppUploader
-                                        fileInfo={{} as FileTypeInfo}
-                                        onFileSelect={() => {}}
+                                        withCropper
+                                        fileInfo={VoteOptionFileInfo}
+                                        imagePath={
+                                            imageName
+                                                ? `${voteOptionMediaPath}/${imageName}`
+                                                : ""
+                                        }
+                                        accept="image/*"
+                                        onFileSelect={(selectedFiles) => {
+                                            if (selectedFiles.length > 0) {
+                                                files = {
+                                                    ...files,
+                                                    [oId]: selectedFiles[0],
+                                                };
+                                            }
+                                        }}
+                                        onDelete={() => {
+                                            option.imageName = "";
+                                        }}
                                     />
                                 </Col>
                             </Row>
@@ -317,8 +388,8 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                 })}
                 <Row>
                     <AppFormActions
-                        navigation={navigator}
                         isEditMode={isEditMode}
+                        navigation={navigator}
                         isLoading={formState.isSubmitting}
                     />
                 </Row>

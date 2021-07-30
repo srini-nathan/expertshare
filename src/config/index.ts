@@ -1,5 +1,6 @@
 import ROUTES from "./routes.json";
 import CONSTANTS from "./constants.json";
+import { FileTypeInfo, SimpleObject } from "../AppModule/models";
 
 export * from "./helper";
 
@@ -17,6 +18,10 @@ const {
   FILETYPEINFO: FILE_TYPE_INFO
 } = Upload;
 
+const { FILETYPEINFO_VOTEOPTION_MEDIA } = FILE_TYPE_INFO;
+const { FILETYPE_VOTEOPTION_MEDIA } = FILE_TYPE;
+const VoteOptionFileInfo = FILETYPEINFO_VOTEOPTION_MEDIA as FileTypeInfo;
+const VOTE_OPTION_MEDIA_TYPE = FILETYPE_VOTEOPTION_MEDIA;
 
 export {
   R,
@@ -26,5 +31,7 @@ export {
   FILE_TYPE,
   FILE_TYPE_INFO,
   VOTE_QUESTION_TYPE,
-  VOTE_QUESTION_CHART_TYPE
+  VOTE_QUESTION_CHART_TYPE,
+  VOTE_OPTION_MEDIA_TYPE,
+  VoteOptionFileInfo,
 };
