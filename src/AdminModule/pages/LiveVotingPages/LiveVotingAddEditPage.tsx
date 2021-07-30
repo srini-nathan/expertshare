@@ -4,8 +4,6 @@ import { useTranslation } from "react-i18next";
 import { Row, Form, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { DevTool } from "@hookform/devtools";
 import {
     useAuthState,
     useBuildAssetPath,
@@ -394,7 +392,6 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                     />
                 </Row>
             </Form>
-            <DevTool control={control} />
         </Fragment>
     );
 };
