@@ -1,9 +1,12 @@
-import { LiveVoteQuestionTranslation } from "./LiveVoteQuestionTranslation copy";
+import { LiveVoteQuestionTranslation } from "./LiveVoteQuestionTranslation";
 import { LiveVoteOption } from "./LiveVoteOption";
 import { Session } from "./Session";
 import { BaseEntity } from "../../../AppModule/models/entities/BaseEntity";
 import { Container } from "./Container";
 import { VOTE_QUESTION_TYPE, VOTE_QUESTION_CHART_TYPE } from "../../../config";
+import { SimpleObject } from "../../../AppModule/models";
+
+export type SLiveVoteQuestionTranslation = SimpleObject<LiveVoteQuestionTranslation>;
 
 export class LiveVoteQuestion extends BaseEntity {
     name: string;
@@ -18,11 +21,11 @@ export class LiveVoteQuestion extends BaseEntity {
 
     voteOptions: LiveVoteOption[];
 
-    translations: LiveVoteQuestionTranslation[];
-
-    maxOptionSelect: number;
+    translations: LiveVoteQuestionTranslation[] | SLiveVoteQuestionTranslation;
 
     minOptionSelect: number;
+
+    maxOptionSelect: number;
 
     constructor(
         container: string,

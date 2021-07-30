@@ -5,7 +5,6 @@ const schema = Yup.object().shape({
     translations: Yup.array().of(
         Yup.object().shape({
             title: Yup.string().required(),
-            locale: Yup.string().required(),
         })
     ),
     type: Yup.string().required(),
@@ -16,7 +15,6 @@ const schema = Yup.object().shape({
                 Yup.object().shape({
                     title: Yup.string().required(),
                     description: Yup.string().required(),
-                    locale: Yup.string().required(),
                 })
             ),
         })

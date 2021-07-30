@@ -10,4 +10,8 @@ export class LiveVoteOptionTranslation {
         this.title = name;
         this.description = description;
     }
+
+    static createFrom(locale: string): LiveVoteOptionTranslation {
+        return new LiveVoteOptionTranslation(locale);
+    }
 }

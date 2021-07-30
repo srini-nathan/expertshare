@@ -31,7 +31,10 @@ import {
     successToast,
     validation,
 } from "../../../AppModule/utils";
-import { LiveVoteQuestion } from "../../models/entities/LiveVoteQuestion";
+import {
+    LiveVoteQuestion,
+    SLiveVoteQuestionTranslation,
+} from "../../models/entities/LiveVoteQuestion";
 import { LiveVoteQuestionApi, SessionApi } from "../../apis";
 import {
     FileTypeInfo,
@@ -39,7 +42,12 @@ import {
 } from "../../../AppModule/models";
 import { schema } from "./schema";
 import { useGlobalData } from "../../../AppModule/contexts";
-import { LiveVoteOption } from "../../models/entities/LiveVoteOption";
+import {
+    LiveVoteOption,
+    SLiveVoteOptionTranslation,
+} from "../../models/entities/LiveVoteOption";
+import { LiveVoteOptionTranslation } from "../../models/entities/LiveVoteOptionTranslation";
+import { LiveVoteQuestionTranslation } from "../../models/entities/LiveVoteQuestionTranslation";
 
 export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
     navigate,
@@ -69,7 +77,7 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
         handleSubmit,
         setError,
         trigger,
-        register,
+        setValue,
     } = useForm<LiveVoteQuestion>({
         resolver: yupResolver(schema),
         mode: "all",
@@ -100,21 +108,19 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
     useEffect(() => {
         if (isEditMode && id !== null) {
             setIsLoading(true);
-            LiveVoteQuestionApi.findById<LiveVoteQuestion>(id).then(
-                ({ response, isNotFound, errorMessage }) => {
-                    if (errorMessage) {
-                        errorToast(errorMessage);
-                    } else if (isNotFound) {
-                        errorToast(
-                            t("admin.language.form:toast.error.notfound")
-                        );
-                    } else if (response !== null) {
-                        setData(response);
-                        trigger();
-                    }
-                    setIsLoading(false);
+            LiveVoteQuestionApi.findById<LiveVoteQuestion>(id, {
+                "groups[]": "translations",
+            }).then(({ response, isNotFound, errorMessage }) => {
+                if (errorMessage) {
+                    errorToast(errorMessage);
+                } else if (isNotFound) {
+                    errorToast(t("admin.language.form:toast.error.notfound"));
+                } else if (response !== null) {
+                    setData(response);
+                    trigger();
                 }
-            );
+                setIsLoading(false);
+            });
         }
     }, [id]);
 
@@ -177,17 +183,19 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                     </Form.Row>
                     <>
                         {languages?.map(({ locale }, index) => {
+                            setValue(
+                                `translations[${index}].locale` as keyof LiveVoteQuestion,
+                                locale
+                            );
                             if (locale !== activeLocale) {
                                 return <></>;
                             }
+                            const trans = data.translations as SLiveVoteQuestionTranslation;
+                            const transData =
+                                trans?.[locale] ??
+                                LiveVoteQuestionTranslation.createFrom(locale);
                             return (
                                 <Form.Row key={locale}>
-                                    <input
-                                        type="hidden"
-                                        {...register(
-                                            `translations.${index}.locale`
-                                        )}
-                                    />
                                     <AppFormInput
                                         name={`translations[${index}].title`}
                                         label={`${t(
@@ -198,12 +206,10 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                                             formState,
                                             isEditMode
                                         )}
-                                        defaultValue={
-                                            data.translations[index]?.title
-                                        }
+                                        defaultValue={transData?.title}
                                         control={control}
-                                        md={6}
                                         lg={6}
+                                        md={6}
                                         xl={6}
                                     />
                                 </Form.Row>
@@ -242,20 +248,26 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                         <AppCard key={oId}>
                             <Row>
                                 {languages?.map(({ locale }, lIndex) => {
+                                    setValue(
+                                        `voteOptions[${oIndex}].translations[${lIndex}].locale` as keyof LiveVoteQuestion,
+                                        locale
+                                    );
                                     if (locale !== activeLocale) {
                                         return <></>;
                                     }
+                                    const trans = data.voteOptions?.[oIndex]
+                                        ?.translations as SLiveVoteOptionTranslation;
+                                    const transData =
+                                        trans?.[locale] ??
+                                        LiveVoteOptionTranslation.createFrom(
+                                            locale
+                                        );
+
                                     return (
                                         <Col
                                             className={"p-0"}
                                             key={`${oId}${locale}`}
                                         >
-                                            <input
-                                                type="hidden"
-                                                {...register(
-                                                    `voteOptions.${oIndex}.translations.${lIndex}.locale`
-                                                )}
-                                            />
                                             <AppFormInput
                                                 name={`voteOptions[${oIndex}].translations[${lIndex}].title`}
                                                 label={`${t(
@@ -266,14 +278,10 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                                                     formState,
                                                     isEditMode
                                                 )}
-                                                defaultValue={
-                                                    data.voteOptions[oIndex]
-                                                        ?.translations[lIndex]
-                                                        ?.title
-                                                }
+                                                defaultValue={transData?.title}
                                                 control={control}
-                                                md={12}
                                                 lg={12}
+                                                md={12}
                                                 xl={12}
                                             />
                                             <AppFormTextArea
@@ -288,9 +296,7 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                                                 )}
                                                 control={control}
                                                 defaultValue={
-                                                    data.voteOptions[oIndex]
-                                                        ?.translations[lIndex]
-                                                        ?.description
+                                                    transData?.description
                                                 }
                                                 md={12}
                                                 lg={12}

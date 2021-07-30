@@ -7,4 +7,8 @@ export class LiveVoteQuestionTranslation {
         this.locale = locale;
         this.title = title;
     }
+
+    static createFrom(locale: string): LiveVoteQuestionTranslation {
+        return new LiveVoteQuestionTranslation(locale);
+    }
 }
