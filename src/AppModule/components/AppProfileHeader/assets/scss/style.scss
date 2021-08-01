@@ -382,7 +382,8 @@
         }
     }
 }
-.bottom-nav {
+.bottom-nav,
+.top-nav {
     .inner-container--main-det {
         @include media("ap-1") {
             width: 85% !important;
