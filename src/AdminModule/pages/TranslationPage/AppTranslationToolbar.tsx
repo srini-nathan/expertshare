@@ -6,7 +6,6 @@ import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { Subject } from "rxjs";
 import {
     AppFormDropdown,
-    AppButton,
     AppIcon,
     AppTagSelectDropDown,
 } from "../../../AppModule/components";
@@ -16,7 +15,6 @@ import { PrimitiveObject, SimpleObject } from "../../../AppModule/models";
 import "./assets/scss/style.scss";
 
 export interface AppTranslationToolbarProps {
-    onCreateNew: () => void;
     label?: string;
     description?: string;
     options: Language[];
@@ -30,7 +28,6 @@ export interface AppTranslationToolbarProps {
 }
 
 export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
-    onCreateNew,
     options,
     label,
     selectedItems,
@@ -78,8 +75,8 @@ export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
 
     return (
         <>
-            <Row className={"translation-page d-flex justify-content-end mt-2"}>
-                <Col md={3} sm={6} className="px-1">
+            <Row className={"translation-page d-flex justify-content-end"}>
+                <Col md={3} sm={6} className="px-1 mt-2 mt-md-0">
                     <AppTagSelectDropDown
                         options={values}
                         selectedItems={selectedValues}
@@ -87,7 +84,7 @@ export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
                         onChange={onChangeSelect}
                     />
                 </Col>
-                <Col md={3} sm={6} className="px-1">
+                <Col md={3} sm={6} className="px-1 mt-2 mt-md-0">
                     <AppFormDropdown
                         id="where-filter"
                         defaultValue={{
@@ -117,8 +114,8 @@ export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
                         ]}
                     />
                 </Col>
-                <Col md={2} sm={6} className="px-1 mt-sm-2 mt-md-0">
-                    <InputGroup>
+                <Col lg={5} md={3} sm={6} className="px-1 mt-2 mt-md-0">
+                    <InputGroup className="header-search">
                         <InputGroup.Prepend>
                             <InputGroup.Text id="basic-addon1">
                                 <AppIcon name="Search" />
@@ -130,16 +127,6 @@ export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
                             type={"search"}
                         ></Form.Control>
                     </InputGroup>
-                </Col>
-                <Col md={3} sm={6} className="my-2 my-md-0">
-                    <AppButton
-                        variant={"secondary"}
-                        className="justify-content-center"
-                        block
-                        onClick={onCreateNew}
-                    >
-                        + Create
-                    </AppButton>
                 </Col>
             </Row>
         </>
