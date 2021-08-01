@@ -40,6 +40,7 @@ body {
     }
 }
 .swal2-container {
+    z-index: 10000;
     .swal2-actions {
         .swal2-loader {
             border-color: var(--primary) transparent var(--primary) transparent;
@@ -191,7 +192,26 @@ a {
         }
     }
 }
+.top-nav {
+    @include media("not-mobile") {
+        margin-top: 70px !important;
+    }
 
+    .app-grid-action,
+    .footer-action {
+        @include media("not-mobile") {
+            bottom: 0;
+            left: 0;
+            align-items: center;
+            padding-left: 20px;
+        }
+    }
+    @include media("not-mobile") {
+        .app-message-inbox {
+            bottom: 0;
+        }
+    }
+}
 .right-container {
     @include media("mobile") {
         width: 100%;
@@ -243,7 +263,7 @@ a {
 
 .sidebar {
     .navbar {
-        box-shadow: 0 3px 9px rgba(181, 181, 181, .52);
+        box-shadow: 0 3px 9px rgba(181, 181, 181, 0.52);
     }
 }
 

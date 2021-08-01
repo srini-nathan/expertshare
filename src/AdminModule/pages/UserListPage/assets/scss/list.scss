@@ -1,6 +1,7 @@
 @import "../../../../../AppModule/assets/scss/screens-sizes";
 @import "../../../../../AppModule/assets/scss/variables";
-.bottom-nav .user-header-width {
+.bottom-nav .user-header-width,
+.top-nav .user-header-width {
     @include media("mobtosmall") {
         width: 100%;
     }
