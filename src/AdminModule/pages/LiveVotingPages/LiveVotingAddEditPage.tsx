@@ -1,9 +1,10 @@
-import React, { FC, Fragment, useEffect, useState } from "react";
-import { RouteComponentProps, useParams } from "@reach/router";
+import React, { FC, useEffect, useState } from "react";
+import { Link, RouteComponentProps, useParams } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { Row, Form, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { isString as _isString } from "lodash";
 import {
     useAuthState,
     useBuildAssetPath,
@@ -19,6 +20,7 @@ import {
     AppFormRadioGroup,
     AppFormTextArea,
     AppLoader,
+    AppModal,
     AppPageHeader,
     AppUploader,
 } from "../../../AppModule/components";
@@ -34,7 +36,7 @@ import {
     LiveVoteQuestion,
     SLiveVoteQuestionTranslation,
 } from "../../models/entities/LiveVoteQuestion";
-import { LiveVoteQuestionApi, SessionApi } from "../../apis";
+import { LiveVoteOptionApi, LiveVoteQuestionApi, SessionApi } from "../../apis";
 import {
     SimpleObject,
     UnprocessableEntityErrorResponse,
@@ -50,6 +52,7 @@ import { LiveVoteOptionTranslation } from "../../models/entities/LiveVoteOptionT
 import { LiveVoteQuestionTranslation } from "../../models/entities/LiveVoteQuestionTranslation";
 import { UploadAPI } from "../../../AppModule/apis";
 import { VoteOptionFileInfo, VOTE_OPTION_MEDIA_TYPE } from "../../../config";
+import "./assets/scss/style.scss";
 
 export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
     navigate,
@@ -60,6 +63,7 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
     const { containerResourceId } = useAuthState();
     const { sessionId } = useParams();
     const sessionResourceId = SessionApi.toResourceUrl(sessionId);
+    const [showDelete, setShowDelete] = useState<number>(0);
     const [activeLocale, setActiveLocale] = useState<string>(
         defaultLanguage?.locale || "en"
     );
@@ -111,8 +115,6 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
 
     const onSubmit = async (formData: LiveVoteQuestion) => {
         const ids = Object.keys(files);
-        // eslint-disable-next-line no-console
-        console.log(files, "files");
         if (ids.length > 0) {
             await Promise.all(
                 ids.map(async (optionId) => {
@@ -149,7 +151,7 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                 if (errorMessage) {
                     errorToast(errorMessage);
                 } else if (isNotFound) {
-                    errorToast(t("admin.language.form:toast.error.notfound"));
+                    errorToast(t("admin.liveVote.form:toast.error.notfound"));
                 } else if (response !== null) {
                     setData(response);
                     trigger();
@@ -166,6 +168,18 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
         } as LiveVoteQuestion);
     };
 
+    const handleDelete = (optionId: number) => {
+        LiveVoteOptionApi.deleteById(optionId).then(({ error }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(t(error));
+                }
+            } else {
+                successToast(t("admin.liveVote.form:delete.toast.success"));
+            }
+        });
+    };
+
     if (isLoading) {
         return <AppLoader />;
     }
@@ -173,7 +187,7 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
     const { errors } = formState;
 
     return (
-        <Fragment>
+        <div className={"live-vote-add-edit-page"}>
             <AppBreadcrumb
                 linkText={t("admin.liveVotes.list:header.backToSession")}
                 linkUrl={".."}
@@ -203,7 +217,6 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                             errorMessage={errors.type?.message}
                         />
                     </Form.Row>
-                    <>{}</>
                     <Form.Row>
                         <AppFormInput
                             name={"name"}
@@ -288,7 +301,23 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                 {data.voteOptions.map((option, oIndex) => {
                     const { id: oId, imageName } = option;
                     return (
-                        <AppCard key={oId}>
+                        <AppCard
+                            key={oId}
+                            className={"mt-2 p-4 vote-option-card"}
+                        >
+                            <Row>
+                                <Col className="pb-4">
+                                    <Link
+                                        to={"#"}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setShowDelete(oId);
+                                        }}
+                                    >
+                                        <i className="action fak fa-trash-light" />
+                                    </Link>
+                                </Col>
+                            </Row>
                             <Row>
                                 {languages?.map(({ locale }, lIndex) => {
                                     const trans = data.voteOptions?.[oIndex]
@@ -384,6 +413,19 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                         </AppCard>
                     );
                 })}
+                <AppModal
+                    show={showDelete > 0}
+                    handleClose={() => {
+                        setShowDelete(0);
+                    }}
+                    handleDelete={() => {
+                        handleDelete(showDelete);
+                    }}
+                    bodyContent={t(
+                        "admin.liveVote.form:delete.confirm.message"
+                    )}
+                    title={t("admin.liveVote.form:delete.confirm.title")}
+                />
                 <Row>
                     <AppFormActions
                         isEditMode={isEditMode}
@@ -392,6 +434,6 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                     />
                 </Row>
             </Form>
-        </Fragment>
+        </div>
     );
 };
