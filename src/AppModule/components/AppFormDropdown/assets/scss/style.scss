@@ -45,7 +45,7 @@
         }
     }
     &__multi-value {
-        margin-top: -1px !important;
+        margin-top: 2px !important;
         background-color: var(--primary-20) !important;
 
         &__label {
@@ -74,8 +74,10 @@
 
     &__menu {
         padding: 0 !important;
-        margin: 0 !important;
-        border: 1px solid transparent !important;
+        //margin: 0 !important;
+        border: var(--select-border-width) solid var(--select-border-color) !important;
+        border-radius: var(--select-border-radius) !important;
+        box-shadow: 2px 12px 38px var(--select-box-shadow-color) !important;
         &-list {
             padding: 0 !important;
         }
