@@ -84,6 +84,7 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
         setError,
         trigger,
         setValue,
+        getValues,
     } = useForm<LiveVoteQuestion>({
         resolver: yupResolver(schema),
         mode: "all",
@@ -225,8 +226,8 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                             errorMessage={errors.name?.message}
                             defaultValue={data.name}
                             control={control}
-                            md={6}
                             lg={6}
+                            md={6}
                             xl={6}
                         />
                     </Form.Row>
@@ -243,9 +244,10 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                             );
 
                             if (locale !== activeLocale) {
+                                const titleKey = `translations[${index}].title` as keyof LiveVoteQuestion;
                                 setValue(
-                                    `translations[${index}].title` as keyof LiveVoteQuestion,
-                                    transData.title
+                                    titleKey,
+                                    getValues(titleKey) || transData.title
                                 );
                                 return <></>;
                             }
@@ -333,13 +335,17 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                                     );
 
                                     if (locale !== activeLocale) {
+                                        const titleKey = `voteOptions[${oIndex}].translations[${lIndex}].title` as keyof LiveVoteQuestion;
+                                        const desc = `voteOptions[${oIndex}].translations[${lIndex}].description` as keyof LiveVoteQuestion;
                                         setValue(
-                                            `voteOptions[${oIndex}].translations[${lIndex}].title` as keyof LiveVoteQuestion,
-                                            transData.title
+                                            titleKey,
+                                            getValues(titleKey) ||
+                                                transData.title
                                         );
                                         setValue(
-                                            `voteOptions[${oIndex}].translations[${lIndex}].description` as keyof LiveVoteQuestion,
-                                            transData.description
+                                            desc,
+                                            getValues(desc) ||
+                                                transData.description
                                         );
                                         return <></>;
                                     }

@@ -85,7 +85,10 @@ export const AppFormRadioGroup: FC<AppFormRadioGroupProps> = ({
                                 id={`${controlId}_${value}`}
                                 required={required}
                                 label={radioLabel}
+                                defaultChecked={defaultValue === value}
                                 {...field}
+                                value={value}
+                                name={name}
                             />
                         )}
                     ></Controller>

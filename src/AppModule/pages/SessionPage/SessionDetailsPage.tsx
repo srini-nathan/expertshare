@@ -24,6 +24,7 @@ import {
 import "./assets/scss/style.scss";
 import { socket, EVENTS } from "../../socket";
 import { CONSTANTS } from "../../../config";
+import { AppLiveVote } from "../../containers";
 
 const { ON_NEXT_SESSION } = EVENTS;
 const { Role } = CONSTANTS;
@@ -58,6 +59,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
         }
     };
     const isGrantedControl = useIsGranted(ROLE_OPERATOR);
+    const [widgetBar] = useState<boolean>(true);
 
     useEffect(() => {
         isLoading(true);
@@ -200,12 +202,10 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
         <Fragment>
             <Row className="m-0">
                 <Col
-                    className={
-                        data.isCommentEnable ? "pl-0 comment-enable" : "px-0"
-                    }
+                    className={widgetBar ? "pl-0 comment-enable" : "px-0"}
                     md={12}
                     sm={12}
-                    lg={data.isCommentEnable ? 8 : 12}
+                    lg={widgetBar ? 8 : 12}
                 >
                     <AppCard className="p-0">
                         <AppSessionHeader
@@ -297,16 +297,19 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                     {/* <AppSessionDetails session={data} /> */}
                     <AppSessionDescription session={data} />
                 </Col>
-                {data.isCommentEnable && (
+                {widgetBar && (
                     <Col md={12} sm={12} lg={4} className="pr-0">
-                        <AppQuestionsAndAnswers
-                            name={t(
-                                "sessionDetails:section.questionAndAnswers"
-                            )}
-                            conferenceNumber={conferenceId}
-                            session={id}
-                            container={containerId}
-                        />
+                        <AppLiveVote loading={false} />
+                        {data.isCommentEnable ? (
+                            <AppQuestionsAndAnswers
+                                name={t(
+                                    "sessionDetails:section.questionAndAnswers"
+                                )}
+                                conferenceNumber={conferenceId}
+                                session={id}
+                                container={containerId}
+                            />
+                        ) : null}
                     </Col>
                 )}
             </Row>
