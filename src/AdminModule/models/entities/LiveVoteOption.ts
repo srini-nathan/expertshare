@@ -12,8 +12,14 @@ export class LiveVoteOption extends BaseEntity {
 
     translations: LiveVoteOptionTranslation[] | SLiveVoteOptionTranslation;
 
+    val: string;
+
+    color: string;
+
     constructor({
         imageName = "",
+        val = "",
+        color = "#00F",
         ord = 1,
         translations = [],
         id,
@@ -22,6 +28,8 @@ export class LiveVoteOption extends BaseEntity {
     }: Partial<LiveVoteOption> = {}) {
         super(id, createdAt, updatedAt);
         this.imageName = imageName;
+        this.val = val;
+        this.color = color;
         this.ord = ord;
         this.translations = translations;
     }
@@ -31,7 +39,9 @@ export class LiveVoteOption extends BaseEntity {
             id: getRandomId(),
             createdAt: getUTCDate(),
             ord: 1,
+            val: "",
             imageName: "",
+            color: "#00F",
         });
     }
 }

@@ -17,6 +17,7 @@ const schema = Yup.object().shape({
                     description: Yup.string().required(),
                 })
             ),
+            val: Yup.string().required(),
         })
     ),
 });

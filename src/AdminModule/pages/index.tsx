@@ -16,4 +16,4 @@ export * from "./AFrameRoom";
 export * from "./AFramePanel";
 export * from "./InfoPage";
 export * from "./NavigationPage";
-export * from "./LiveVotingPages";
+export * from "./LiveVotePages";

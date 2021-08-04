@@ -17,6 +17,7 @@ import {
     AppCard,
     AppFormActions,
     AppFormInput,
+    AppFormInputColorPicker,
     AppFormRadioGroup,
     AppFormTextArea,
     AppLoader,
@@ -25,7 +26,7 @@ import {
     AppUploader,
 } from "../../../AppModule/components";
 import { AppLanguageSwitcher } from "../../../AppModule/containers";
-import { getTypeOptions, getChartOptions } from "./live-voting-helper";
+import { getTypeOptions, getChartOptions } from "./live-vote-helper";
 import {
     errorToast,
     setViolations,
@@ -54,7 +55,7 @@ import { UploadAPI } from "../../../AppModule/apis";
 import { VoteOptionFileInfo, VOTE_OPTION_POSTER_TYPE } from "../../../config";
 import "./assets/scss/style.scss";
 
-export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
+export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
     const { t } = useTranslation();
@@ -85,6 +86,7 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
         trigger,
         setValue,
         getValues,
+        register,
     } = useForm<LiveVoteQuestion>({
         resolver: yupResolver(schema),
         mode: "all",
@@ -185,8 +187,6 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
         return <AppLoader />;
     }
 
-    const { errors } = formState;
-
     return (
         <div className={"live-vote-add-edit-page"}>
             <AppBreadcrumb
@@ -214,16 +214,14 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                             control={control}
                             required={true}
                             options={getTypeOptions(t)}
-                            {...validation("type", formState, isEditMode)}
-                            errorMessage={errors.type?.message}
+                            {...validation("type", formState, isEditMode, true)}
                         />
                     </Form.Row>
                     <Form.Row>
                         <AppFormInput
                             name={"name"}
                             label={t("admin.liveVote.form:label.name")}
-                            {...validation("name", formState, isEditMode)}
-                            errorMessage={errors.name?.message}
+                            {...validation("name", formState, isEditMode, true)}
                             defaultValue={data.name}
                             control={control}
                             lg={6}
@@ -249,7 +247,7 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                                     titleKey,
                                     getValues(titleKey) || transData.title
                                 );
-                                return <></>;
+                                return null;
                             }
 
                             return (
@@ -262,10 +260,11 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                                         {...validation(
                                             `translations[${index}].title`,
                                             formState,
-                                            isEditMode
+                                            isEditMode,
+                                            true
                                         )}
-                                        defaultValue={transData?.title}
                                         control={control}
+                                        defaultValue={transData?.title}
                                         lg={6}
                                         md={6}
                                         xl={6}
@@ -282,8 +281,12 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                             control={control}
                             required={true}
                             options={getChartOptions(t)}
-                            {...validation("chartType", formState, isEditMode)}
-                            errorMessage={errors.chartType?.message}
+                            {...validation(
+                                "chartType",
+                                formState,
+                                isEditMode,
+                                true
+                            )}
                         />
                     </Form.Row>
                 </AppCard>
@@ -301,7 +304,7 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                     </Col>
                 </Row>
                 {data.voteOptions.map((option, oIndex) => {
-                    const { id: oId, imageName } = option;
+                    const { id: oId, imageName, val, color } = option;
                     return (
                         <AppCard
                             key={oId}
@@ -321,77 +324,123 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                                 </Col>
                             </Row>
                             <Row>
-                                {languages?.map(({ locale }, lIndex) => {
-                                    const trans = data.voteOptions?.[oIndex]
-                                        ?.translations as SLiveVoteOptionTranslation;
-                                    const transData =
-                                        trans?.[locale] ??
-                                        LiveVoteOptionTranslation.createFrom(
-                                            locale
-                                        );
-                                    setValue(
-                                        `voteOptions[${oIndex}].translations[${lIndex}].locale` as keyof LiveVoteQuestion,
-                                        locale
-                                    );
+                                <Col className={"p-0"}>
+                                    <>
+                                        {languages?.map(
+                                            ({ locale }, lIndex) => {
+                                                const trans = data
+                                                    .voteOptions?.[oIndex]
+                                                    ?.translations as SLiveVoteOptionTranslation;
+                                                const transData =
+                                                    trans?.[locale] ??
+                                                    LiveVoteOptionTranslation.createFrom(
+                                                        locale
+                                                    );
+                                                setValue(
+                                                    `voteOptions[${oIndex}].translations[${lIndex}].locale` as keyof LiveVoteQuestion,
+                                                    locale
+                                                );
 
-                                    if (locale !== activeLocale) {
-                                        const titleKey = `voteOptions[${oIndex}].translations[${lIndex}].title` as keyof LiveVoteQuestion;
-                                        const desc = `voteOptions[${oIndex}].translations[${lIndex}].description` as keyof LiveVoteQuestion;
-                                        setValue(
-                                            titleKey,
-                                            getValues(titleKey) ||
-                                                transData.title
-                                        );
-                                        setValue(
-                                            desc,
-                                            getValues(desc) ||
-                                                transData.description
-                                        );
-                                        return <></>;
-                                    }
-
-                                    return (
-                                        <Col
-                                            className={"p-0"}
-                                            key={`${oId}${locale}`}
-                                        >
-                                            <AppFormInput
-                                                name={`voteOptions[${oIndex}].translations[${lIndex}].title`}
-                                                label={`${t(
-                                                    "admin.liveVote.form:label.optionTitle"
-                                                )}(${activeLocale})`}
-                                                {...validation(
-                                                    `voteOptions[${oIndex}].translations[${lIndex}].title`,
-                                                    formState,
-                                                    isEditMode
-                                                )}
-                                                defaultValue={transData?.title}
-                                                control={control}
-                                                lg={12}
-                                                md={12}
-                                                xl={12}
-                                            />
-                                            <AppFormTextArea
-                                                name={`voteOptions[${oIndex}].translations[${lIndex}].description`}
-                                                label={`${t(
-                                                    "admin.liveVote.form:label.optionDescription"
-                                                )}(${activeLocale})`}
-                                                {...validation(
-                                                    `voteOptions[${oIndex}].translations[${lIndex}].description`,
-                                                    formState,
-                                                    isEditMode
-                                                )}
-                                                control={control}
-                                                defaultValue={
-                                                    transData?.description
+                                                if (locale !== activeLocale) {
+                                                    const titleKey = `voteOptions[${oIndex}].translations[${lIndex}].title` as keyof LiveVoteQuestion;
+                                                    const desc = `voteOptions[${oIndex}].translations[${lIndex}].description` as keyof LiveVoteQuestion;
+                                                    setValue(
+                                                        titleKey,
+                                                        getValues(titleKey) ||
+                                                            transData.title
+                                                    );
+                                                    setValue(
+                                                        desc,
+                                                        getValues(desc) ||
+                                                            transData.description
+                                                    );
+                                                    return null;
                                                 }
-                                                md={12}
-                                                lg={12}
-                                                xl={12}
-                                            />
-                                        </Col>
-                                    );
-                                })}
+
+                                                return (
+                                                    <div
+                                                        key={`${oId}${locale}`}
+                                                    >
+                                                        <AppFormInput
+                                                            name={`voteOptions[${oIndex}].translations[${lIndex}].title`}
+                                                            label={`${t(
+                                                                "admin.liveVote.form:label.optionTitle"
+                                                            )}(${activeLocale})`}
+                                                            {...validation(
+                                                                `voteOptions[${oIndex}].translations[${lIndex}].title`,
+                                                                formState,
+                                                                isEditMode,
+                                                                true
+                                                            )}
+                                                            defaultValue={
+                                                                transData?.title
+                                                            }
+                                                            control={control}
+                                                            lg={12}
+                                                            md={12}
+                                                            xl={12}
+                                                        />
+                                                        <AppFormTextArea
+                                                            name={`voteOptions[${oIndex}].translations[${lIndex}].description`}
+                                                            label={`${t(
+                                                                "admin.liveVote.form:label.optionDescription"
+                                                            )}(${activeLocale})`}
+                                                            {...validation(
+                                                                `voteOptions[${oIndex}].translations[${lIndex}].description`,
+                                                                formState,
+                                                                isEditMode,
+                                                                true
+                                                            )}
+                                                            control={control}
+                                                            defaultValue={
+                                                                transData?.description
+                                                            }
+                                                            md={12}
+                                                            lg={12}
+                                                            xl={12}
+                                                        />
+                                                    </div>
+                                                );
+                                            }
+                                        )}
+                                    </>
+                                    <AppFormInput
+                                        name={`voteOptions[${oIndex}].val`}
+                                        label={t(
+                                            "admin.liveVote.form:label.optionValue"
+                                        )}
+                                        {...validation(
+                                            `voteOptions[${oIndex}].val`,
+                                            formState,
+                                            isEditMode,
+                                            true
+                                        )}
+                                        defaultValue={val}
+                                        control={control}
+                                        lg={12}
+                                        md={12}
+                                        xl={12}
+                                    />
+                                    <AppFormInputColorPicker
+                                        label={t(
+                                            "admin.liveVote.form:label.optionColor"
+                                        )}
+                                        {...register(
+                                            `voteOptions[${oIndex}].color` as keyof LiveVoteQuestion
+                                        )}
+                                        xl={12}
+                                        lg={12}
+                                        {...validation(
+                                            `voteOptions[${oIndex}].color`,
+                                            formState,
+                                            isEditMode,
+                                            true
+                                        )}
+                                        defaultValue={color || "#FFF"}
+                                        control={control}
+                                        setValue={setValue}
+                                    />
+                                </Col>
                                 <Col className={"p-0"}>
                                     <AppUploader
                                         withCropper
