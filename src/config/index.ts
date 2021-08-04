@@ -9,30 +9,19 @@ const C = CONSTANTS;
 const { Upload, VoteQuestion } = CONSTANTS;
 
 const {
-  VOTEQUESTIONTYPE: VOTE_QUESTION_TYPE,
-  VOTEQUESTIONCHARTTYPE: VOTE_QUESTION_CHART_TYPE
-} = VoteQuestion;
-
-const {
   FILETYPE: FILE_TYPE,
   FILETYPEINFO: FILE_TYPE_INFO
 } = Upload;
 
-// @TODO: Remove hard-coded
-const FILETYPEINFO_VOTEOPTION_MEDIA = {
-  "key": "VOTEOPTION_MEDIA",
-  "width": null,
-  "height": null,
-  "ratio": null,
-  "maxSize": 32,
-  "allowType": [],
-  "isSecure": false,
-  "path": "voteoption_media"
-};
-// @TODO: Remove hard-coded
-const FILETYPE_VOTEOPTION_MEDIA  = "VOTEOPTION_MEDIA";
-const VoteOptionFileInfo = FILETYPEINFO_VOTEOPTION_MEDIA as FileTypeInfo;
-const VOTE_OPTION_MEDIA_TYPE = FILETYPE_VOTEOPTION_MEDIA;
+const {
+  VOTEQUESTIONTYPE: VOTE_QUESTION_TYPE,
+  VOTEQUESTIONCHARTTYPE: VOTE_QUESTION_CHART_TYPE
+} = VoteQuestion;
+
+const { FILETYPEINFO_VOTEOPTION_POSTER } = FILE_TYPE_INFO;
+const { FILETYPE_VOTEOPTION_POSTER } = FILE_TYPE;
+const VoteOptionFileInfo = FILETYPEINFO_VOTEOPTION_POSTER as FileTypeInfo;
+const VOTE_OPTION_POSTER_TYPE = FILETYPE_VOTEOPTION_POSTER;
 
 export {
   R,
@@ -43,6 +32,6 @@ export {
   FILE_TYPE_INFO,
   VOTE_QUESTION_TYPE,
   VOTE_QUESTION_CHART_TYPE,
-  VOTE_OPTION_MEDIA_TYPE,
+  VOTE_OPTION_POSTER_TYPE,
   VoteOptionFileInfo,
 };

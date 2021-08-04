@@ -51,7 +51,7 @@ import {
 import { LiveVoteOptionTranslation } from "../../models/entities/LiveVoteOptionTranslation";
 import { LiveVoteQuestionTranslation } from "../../models/entities/LiveVoteQuestionTranslation";
 import { UploadAPI } from "../../../AppModule/apis";
-import { VoteOptionFileInfo, VOTE_OPTION_MEDIA_TYPE } from "../../../config";
+import { VoteOptionFileInfo, VOTE_OPTION_POSTER_TYPE } from "../../../config";
 import "./assets/scss/style.scss";
 
 export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
@@ -126,7 +126,7 @@ export const LiveVotingAddEditPage: FC<RouteComponentProps> = ({
                     const fd = new FormData();
                     fd.set("file", file, file.name);
                     fd.set("container", containerResourceId);
-                    fd.set("fileType", VOTE_OPTION_MEDIA_TYPE);
+                    fd.set("fileType", VOTE_OPTION_POSTER_TYPE);
                     await UploadAPI.createResource<Upload, FormData>(fd).then(
                         ({ errorMessage, response }) => {
                             if (errorMessage) {
