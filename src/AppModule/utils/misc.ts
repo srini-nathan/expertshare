@@ -1,5 +1,6 @@
 import { DesignConfiguration } from "../../AdminModule/models/entities/DesignConfiguration";
 import { PrimitiveObject } from "../models";
+import { Configuration } from "../../AdminModule/models/entities/Configuration";
 
 export const parseIdFromResourceUrl = (resourceUrl: string): number | null => {
     const parts = resourceUrl.split("/");
@@ -49,4 +50,13 @@ export const getBGStyle = (
         };
     }
     return {};
+};
+
+export const parseConfiguration = (container: any): Configuration => {
+    let configuration: Configuration = new Configuration();
+    if (container.configuration) {
+        configuration = { ...configuration, ...container.configuration };
+    }
+
+    return configuration;
 };

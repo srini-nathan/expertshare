@@ -34,7 +34,12 @@ import {
 } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
-import { errorToast, isGranted, parseDesign } from "../../utils";
+import {
+    errorToast,
+    isGranted,
+    parseConfiguration,
+    parseDesign,
+} from "../../utils";
 import { LanguageApi, UserApi } from "../../../AdminModule/apis";
 import { Language, Navigation, PUser } from "../../../AdminModule/models";
 import { FileTypeInfo } from "../../models";
@@ -78,6 +83,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo
     );
     const design = parseDesign(container);
+    const configuration = parseConfiguration(container);
     const {
         genImageNavigationLogo,
         genImageExpertshareLogo,
@@ -420,6 +426,37 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         );
     };
 
+    const render3dMenu = () => {
+        if (!configuration.isA3dEnable) {
+            return null;
+        }
+
+        if (location.pathname.includes("a3d")) {
+            return (
+                <AppNavigationItem
+                    label={"navigation:2dview"}
+                    path={"/event"}
+                    icon={{
+                        name: "fak fa-3d-cs",
+                    }}
+                    className="main-menu"
+                    onClick={() => isNavOpen(!navOpen)}
+                />
+            );
+        }
+        return (
+            <AppNavigationItem
+                label={"navigation:3dview"}
+                path={"/a3d"}
+                icon={{
+                    name: "fak fa-3d-cs",
+                }}
+                className="main-menu"
+                onClick={() => isNavOpen(!navOpen)}
+            />
+        );
+    };
+
     const renderMenu = () => {
         if (showSubMenuItems && (menuLocation === "LEFT" || width < 768)) {
             return renderSubMenu();
@@ -468,28 +505,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                             />
                         );
                     })}
-                {location.pathname.includes("a3d") ? (
-                    <AppNavigationItem
-                        label={"navigation:2dview"}
-                        path={"/event"}
-                        icon={{
-                            name: "fak fa-3d-cs",
-                        }}
-                        className="main-menu"
-                        onClick={() => isNavOpen(!navOpen)}
-                    />
-                ) : (
-                    <AppNavigationItem
-                        label={"navigation:3dview"}
-                        path={"/a3d"}
-                        icon={{
-                            name: "fak fa-3d-cs",
-                        }}
-                        className="main-menu"
-                        onClick={() => isNavOpen(!navOpen)}
-                    />
-                )}
-
+                {render3dMenu()}
                 {renderMoreMenu()}
             </>
         );
