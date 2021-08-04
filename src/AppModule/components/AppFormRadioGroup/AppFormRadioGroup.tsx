@@ -1,99 +1,68 @@
 import React, { FC } from "react";
-import { Controller, Control } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { Col, Form } from "react-bootstrap";
 import "./assets/scss/style.scss";
-import { SimpleObject } from "../../models";
+import {
+    AppFormElementProps,
+    AppFormLayoutProps,
+    AppReactHookFormProps,
+    SimpleObject,
+} from "../../models";
+import { AppFormLabel } from "../AppFormLabel";
 
-export interface AppFormRadioGroupProps {
-    id?: string;
-    name: string;
-    // @TODO: make interface to handle common props
-    sm?: string | number;
-    md?: string | number;
-    lg?: string | number;
-    xl?: string | number;
-    required?: boolean;
-    label?: string;
+export interface AppFormRadioGroupProps
+    extends AppFormElementProps,
+        AppFormLayoutProps,
+        AppReactHookFormProps {
     options: SimpleObject<string | number>[];
-    defaultValue?: string | number;
-    description?: string;
-    errorMessage?: string;
-    className?: string;
-    isInvalid?: boolean;
-    isValid?: boolean;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    control?: Control<any>;
 }
 
 export const AppFormRadioGroup: FC<AppFormRadioGroupProps> = ({
     id,
     name,
-    defaultValue = "",
     errorMessage,
     label = "",
-    className = "",
     description,
-    sm = 12,
-    md = 6,
-    lg = 4,
-    xl = 4,
     isInvalid,
     isValid,
     required = false,
     options,
     control,
+    defaultValue,
+    ...props
 }): JSX.Element => {
     const controlId = id || name;
+    const labelProps = { label, required, description };
+    const { sm = 12, md = 6, lg = 4, xl = 4, className = "" } = props;
+    const groupProps = { sm, md, lg, xl, controlId, as: Col };
     return (
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
-        <Form.Group
-            className={`${className}`}
-            as={Col}
-            md={md}
-            sm={sm}
-            lg={lg}
-            xl={xl}
-            controlId={controlId}
-        >
-            {label?.length > 0 ? (
-                <Form.Label>
-                    {label}
-                    {required && <span className="required">*</span>}
-                    {description && (
-                        <div className="custom-input-description">
-                            <span>i</span>
-                            <div className="custom-input-description-content">
-                                {description}
-                            </div>
-                        </div>
-                    )}
-                </Form.Label>
-            ) : null}
-            <div className={"form-check-inline"}>
-                {options.map(({ value, label: radioLabel }) => (
-                    <Controller
-                        key={value}
-                        name={name}
-                        control={control}
-                        defaultValue={defaultValue}
-                        render={({ field }) => (
+        <Form.Group {...groupProps} className={`mb-0 ${className}`}>
+            <AppFormLabel {...labelProps} />
+            <Controller
+                name={name}
+                control={control}
+                defaultValue={defaultValue}
+                render={({ field }) => (
+                    <div className={"form-check-inline"}>
+                        {options.map(({ value, label: radioLabel }) => (
                             <Form.Check
+                                key={value}
                                 inline
                                 type="radio"
                                 className={"radio-button-text"}
                                 id={`${controlId}_${value}`}
                                 required={required}
                                 label={radioLabel}
-                                defaultChecked={defaultValue === value}
                                 {...field}
                                 value={value}
-                                name={name}
+                                defaultChecked={defaultValue === value}
                             />
-                        )}
-                    ></Controller>
-                ))}
-            </div>
+                        ))}
+                    </div>
+                )}
+            ></Controller>
             <Form.Control.Feedback
                 type="invalid"
                 className={isInvalid && !isValid ? "d-inline" : ""}
