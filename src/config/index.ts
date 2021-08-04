@@ -30,7 +30,7 @@ const FILETYPEINFO_VOTEOPTION_MEDIA = {
   "path": "voteoption_media"
 };
 // @TODO: Remove hard-coded
-const FILETYPE_VOTEOPTION_MEDIA  = "voteoption_media";
+const FILETYPE_VOTEOPTION_MEDIA  = "VOTEOPTION_MEDIA";
 const VoteOptionFileInfo = FILETYPEINFO_VOTEOPTION_MEDIA as FileTypeInfo;
 const VOTE_OPTION_MEDIA_TYPE = FILETYPE_VOTEOPTION_MEDIA;
 
