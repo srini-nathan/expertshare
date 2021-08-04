@@ -6,22 +6,49 @@ import { AppLiveVoteQuestion } from "./AppLiveVoteQuestion";
 import { AppLiveVoteHeader } from "./AppLiveVoteHeader";
 import "./assets/scss/style.scss";
 import { AppLiveVoteOptionMultiple } from "./AppLiveVoteOptionMultiple";
+import { VOTE_QUESTION_TYPE } from "../../../config";
+import { AppLiveVoteOptionTextBox } from "./AppLiveVoteOptionTextbox";
 
 export interface AppLiveVoteProps {
-    data?: LiveVoteQuestion;
-    loading: boolean;
+    enable: boolean;
 }
 
-export const AppLiveVote: FC<AppLiveVoteProps> = ({ loading }) => {
-    const [open, setOpen] = useState<boolean>(false);
+export const AppLiveVote: FC<AppLiveVoteProps> = ({ enable }) => {
+    const [open, setOpen] = useState<boolean>(true);
+    const [loading] = useState<boolean>(false);
+    const [data] = useState<LiveVoteQuestion>();
 
-    if (loading) {
-        return (
-            <AppCard>
-                <AppLoader />
-            </AppCard>
-        );
+    if (!enable) {
+        return <></>;
     }
+
+    const renderQuestion = () => {
+        return (
+            <>
+                <AppLiveVoteQuestion
+                    description={
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc mi sit fringilla adipiscing arcu augue. Mattis aliquam sagittis scelerisque mattis friskilia?"
+                    }
+                    title={"What's the best solution for reducing the crime ?"}
+                />
+                <Collapse in={open}>
+                    <div className={`inner collapse mt-3 pt-3`}>
+                        <div className="inner--container">
+                            {data?.type ===
+                            VOTE_QUESTION_TYPE.VOTEQUESTIONTYPE_TEXT ? (
+                                <AppLiveVoteOptionTextBox />
+                            ) : (
+                                <AppLiveVoteOptionMultiple
+                                    optionType={"RADIO"}
+                                    options={[]}
+                                />
+                            )}
+                        </div>
+                    </div>
+                </Collapse>
+            </>
+        );
+    };
 
     return (
         <AppCard className={"session-details-voting card p-3 mb-4"}>
@@ -33,22 +60,7 @@ export const AppLiveVote: FC<AppLiveVoteProps> = ({ loading }) => {
                         setOpen(!open);
                     }}
                 />
-                <AppLiveVoteQuestion
-                    description={
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc mi sit fringilla adipiscing arcu augue. Mattis aliquam sagittis scelerisque mattis friskilia?"
-                    }
-                    title={"What's the best solution for reducing the crime ?"}
-                />
-                <Collapse in={open}>
-                    <div className={`inner collapse mt-3 pt-3`}>
-                        <div className="inner--container">
-                            <AppLiveVoteOptionMultiple
-                                options={[]}
-                                optionType={"CHECKBOX"}
-                            />
-                        </div>
-                    </div>
-                </Collapse>
+                {loading ? <AppLoader /> : renderQuestion()}
             </div>
         </AppCard>
     );
