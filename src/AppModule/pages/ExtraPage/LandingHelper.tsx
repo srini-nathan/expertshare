@@ -1,7 +1,11 @@
 import React, { FC, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { useSetRecoilState } from "recoil";
-import { useChosenContainer, useNavigator } from "../../hooks";
+import {
+    useChosenContainer,
+    useNavigator,
+    useResolveEntryPage,
+} from "../../hooks";
 import {
     appDashboardLayoutOptions,
     AppDashboardLayoutOptions,
@@ -18,6 +22,7 @@ export const LandingHelper: FC<RouteComponentProps> = ({
     const setLayoutOptions = useSetRecoilState<AppDashboardLayoutOptions>(
         appDashboardLayoutOptions
     );
+    const { getPath } = useResolveEntryPage();
 
     useEffect(() => {
         setLayoutOptions((currVal) => {
@@ -40,7 +45,7 @@ export const LandingHelper: FC<RouteComponentProps> = ({
         if (!isChosen()) {
             nav("/container").then();
         } else {
-            nav("/a3d").then();
+            nav(getPath()).then();
         }
     });
     return <AppLoader />;
