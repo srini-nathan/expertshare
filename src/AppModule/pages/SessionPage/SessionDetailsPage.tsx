@@ -12,6 +12,7 @@ import {
     AppQuestionsAndAnswers,
     AppSessionTags,
     AppButton,
+    AppSessionExtraLink,
 } from "../../components";
 import { Session, User, PSession } from "../../../AdminModule/models";
 import { SessionApi } from "../../../AdminModule/apis";
@@ -219,7 +220,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                             }}
                         />
                         <AppSessionTags session={data} />
-
+                        <AppSessionExtraLink session={data} />
                         <Row className="my-5 mx-0 px-2">
                             {data.speakers.length > 0 ? (
                                 <Col
