@@ -75,7 +75,7 @@ export const appGridColDef = ({
         field: "isBlocked",
         cellRenderer: "appSwitch",
         flex: 1,
-        minWidth: 50,
+        minWidth: 80,
         sortable: true,
     },
     {
@@ -83,7 +83,7 @@ export const appGridColDef = ({
         field: "id",
         sortable: false,
         flex: 1.8,
-        minWidth: 180,
+        minWidth: 200,
         maxWidth: 380,
         cellClass: "text-right justify-content-end",
         headerClass: "action-header",
