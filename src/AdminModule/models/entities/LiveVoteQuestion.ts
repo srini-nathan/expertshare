@@ -27,6 +27,10 @@ export class LiveVoteQuestion extends BaseEntity {
 
     maxOptionSelect: number;
 
+    isSelected: boolean;
+
+    isResultPublished: boolean;
+
     constructor(
         container: string,
         session: string,
@@ -38,6 +42,8 @@ export class LiveVoteQuestion extends BaseEntity {
             translations = [],
             maxOptionSelect = 0,
             minOptionSelect = 0,
+            isSelected = false,
+            isResultPublished = false,
             id,
             createdAt,
             updatedAt,
@@ -53,5 +59,7 @@ export class LiveVoteQuestion extends BaseEntity {
         this.translations = translations;
         this.minOptionSelect = minOptionSelect;
         this.maxOptionSelect = maxOptionSelect;
+        this.isResultPublished = isResultPublished;
+        this.isSelected = isSelected;
     }
 }
