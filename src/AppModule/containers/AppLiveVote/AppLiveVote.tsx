@@ -7,7 +7,11 @@ import { LiveVoteQuestion } from "../../../AdminModule/models/entities/LiveVoteQ
 import { AppLiveVoteQuestion } from "./AppLiveVoteQuestion";
 import { AppLiveVoteHeader } from "./AppLiveVoteHeader";
 import "./assets/scss/style.scss";
-import { AppLiveVoteOptionMultiple } from "./AppLiveVoteOptionMultiple";
+import {
+    AppLiveVoteOptionMultiple,
+    QUESTION_TYPE_CHECKBOX,
+    QUESTION_TYPE_RADIO,
+} from "./AppLiveVoteOptionMultiple";
 import { VOTE_QUESTION_TYPE } from "../../../config";
 import { AppLiveVoteOptionTextBox } from "./AppLiveVoteOptionTextbox";
 import { LiveVoteResultApi } from "../../../AdminModule/apis";
@@ -24,6 +28,7 @@ export const AppLiveVote: FC<AppLiveVoteProps> = ({ enable, data }) => {
     const [loading, setLoading] = useState<boolean>(false);
     const [alreadyVoted, setAlreadyVoted] = useState<boolean>(false);
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
+    let result = "";
 
     useEffect(() => {
         if (enable && data) {
@@ -52,10 +57,32 @@ export const AppLiveVote: FC<AppLiveVoteProps> = ({ enable, data }) => {
         }
 
         if (data?.type === VOTE_QUESTION_TYPE.VOTEQUESTIONTYPE_TEXT) {
-            return <AppLiveVoteOptionTextBox />;
+            return (
+                <AppLiveVoteOptionTextBox
+                    onDataChange={(res) => {
+                        result = res;
+                    }}
+                />
+            );
         }
 
-        return <AppLiveVoteOptionMultiple optionType={"RADIO"} options={[]} />;
+        const type =
+            data?.type === QUESTION_TYPE_CHECKBOX
+                ? QUESTION_TYPE_CHECKBOX
+                : QUESTION_TYPE_RADIO;
+
+        return (
+            <AppLiveVoteOptionMultiple
+                optionType={type}
+                options={data.voteOptions}
+                minOption={data.minOptionSelect || 1}
+                maxOption={data.maxOptionSelect || 2}
+                onDataChange={(res) => {
+                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                    result = res;
+                }}
+            />
+        );
     };
 
     const renderThankYou = () => {

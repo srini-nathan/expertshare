@@ -1,5 +1,19 @@
 import React, { FC } from "react";
-import { LiveVoteOption } from "../../../AdminModule/models/entities/LiveVoteOption";
+import { useTranslation } from "react-i18next";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { DevTool } from "@hookform/devtools";
+import * as yup from "yup";
+import { Form } from "react-bootstrap";
+import {
+    LiveVoteOption,
+    SLiveVoteOptionTranslation,
+} from "../../../AdminModule/models/entities/LiveVoteOption";
+import { AppButton } from "../../components";
+import { useUserLocale } from "../../hooks";
+import { LiveVoteOptionTranslation } from "../../../AdminModule/models/entities/LiveVoteOptionTranslation";
+import { getFirstValue } from "../../utils";
 
 export const QUESTION_TYPE_RADIO = "RADIO";
 export const QUESTION_TYPE_CHECKBOX = "CHECKBOX";
@@ -9,74 +23,109 @@ export type QuestionTypeType = "RADIO" | "CHECKBOX";
 export interface AppLiveVoteOptionMultipleType {
     options: LiveVoteOption[];
     optionType?: QuestionTypeType;
+    onDataChange: (result: string) => void;
+    maxOption: number;
+    minOption: number;
 }
 
 export const AppLiveVoteOptionMultiple: FC<AppLiveVoteOptionMultipleType> = ({
+    options,
     optionType = QUESTION_TYPE_RADIO,
+    minOption,
+    maxOption,
 }) => {
+    const { t } = useTranslation();
+    const { register, handleSubmit, formState, control } = useForm({
+        resolver: yupResolver(
+            optionType === QUESTION_TYPE_RADIO
+                ? yup.object().shape({
+                      voteChoice: yup.string().required(),
+                  })
+                : yup.object().shape({
+                      voteChoice: yup
+                          .array()
+                          .compact((v) => v === false)
+                          .of(yup.string())
+                          // eslint-disable-next-line no-template-curly-in-string
+                          .min(minOption, "Choose minimum ${min} option")
+                          // eslint-disable-next-line no-template-curly-in-string
+                          .max(maxOption, "Choose maximum ${max} option")
+                          .required(),
+                  })
+        ),
+        mode: "all",
+    });
+    const { locale } = useUserLocale();
+
+    // eslint-disable-next-line no-console
+    const onSubmit = (data: any) => console.log(data);
     return (
-        <form>
-            <div className="radio-item mb-3">
-                <input
-                    type={optionType}
-                    id="die"
-                    name="radiobx"
-                    value="radiobx"
-                    checked={true}
-                />
-                <label htmlFor="die">
-                    <span>
-                        Die hausfrauenpanzer schild­krö­te
-                        <p className="mb-0">
-                            Velit officia consequat duis enim velit mollit.
-                            Exercitation veniam consequat sunt nostrud amet.
-                        </p>
-                    </span>
-                </label>
-            </div>
-            <div className="radio-item mb-3">
-                <input
-                    type={optionType}
-                    name="radiobx"
-                    id="zwer"
-                    value="radiobx"
-                />
-                <label htmlFor="zwer">
-                    <span>Zwergenadapter faltenbügler</span>
-                </label>
-            </div>
-            <div className="radio-item mb-3">
-                <input
-                    type={optionType}
-                    id="der"
-                    name="radiobx"
-                    value="radiobx"
-                />
-                <label htmlFor="der">
-                    <span>
-                        Der Kummerspeck Drahtesel
-                        <p className="mb-0">
-                            Velit officia consequat duis enim velit mollit.
-                            Exercitation veniam consequat sunt nostrud amet.
-                        </p>
-                    </span>
-                </label>
-            </div>
-            <div className="radio-item mb-3">
-                <input
-                    type={optionType}
-                    id="sie"
-                    name="radiobx"
-                    value="radiobx"
-                />
-                <label htmlFor="sie">
-                    <span>Sie spielt die beleidigte Leberwurst</span>
-                </label>
-            </div>
-            <button className="btn btn-primary submit-btn w-100 mt-3">
-                <i className="fak fa-check-regular-bold"></i>
-                Submit Vote
-            </button>
-        </form>
+        <>
+            <DevTool control={control} />
+            <Form onSubmit={handleSubmit(onSubmit)}>
+                {options.map((option, index) => {
+                    const trans = option.translations as SLiveVoteOptionTranslation;
+                    // @FIXME: if newly added language's translation not exist for this option, then we need default translation which is any from defined
+                    const firstTrans = getFirstValue(option.translations);
+                    const translation: LiveVoteOptionTranslation =
+                        trans[locale] ?? firstTrans;
+                    return (
+                        <div className="radio-item mb-3" key={option.id}>
+                            {optionType === QUESTION_TYPE_CHECKBOX ? (
+                                <input
+                                    {...register(`voteChoice[${index}]`, {
+                                        required: true,
+                                    })}
+                                    type={optionType}
+                                    value={option.val}
+                                    id={`voteChoice[${index}]`}
+                                />
+                            ) : (
+                                <input
+                                    {...register("voteChoice", {
+                                        required: true,
+                                    })}
+                                    type={optionType}
+                                    value={option.val}
+                                    id={"voteChoice"}
+                                />
+                            )}
+                            <label
+                                htmlFor={
+                                    optionType === QUESTION_TYPE_CHECKBOX
+                                        ? `voteChoice[${index}]`
+                                        : "voteChoice"
+                                }
+                            >
+                                <span>
+                                    {translation.title}
+                                    {translation.description ? (
+                                        <p className="mb-0">
+                                            {translation.description}
+                                        </p>
+                                    ) : null}
+                                </span>
+                            </label>
+                        </div>
+                    );
+                })}
+                <Form.Control.Feedback
+                    className={"d-block mb-2"}
+                    type="invalid"
+                >
+                    {formState.errors?.voteChoice?.message}
+                </Form.Control.Feedback>
+                <AppButton
+                    block={true}
+                    type="submit"
+                    isLoading={formState.isSubmitting}
+                    disabled={!formState.isValid || formState.isSubmitting}
+                    loadingTxt={t("liveVote.form:button.submittingVote")}
+                >
+                    <i className="fak fa-check-regular-bold mr-1"></i>
+                    {t("liveVote.form:button.submitVote")}
+                </AppButton>
+            </Form>
+        </>
     );
 };
