@@ -37,6 +37,12 @@ export const EVENTS = {
     NEW_COMMAND: "new-command",
     ON_NEW_COMMAND: "on-new-command",
     LEAVE_COMMAND_CENTER: "leave-command-center",
+    JOIN_SESSION: "join-session",
+    SUBMITTED_VOTE_RESULT: "submitted-vote-result",
+    ON_SUBMITTED_VOTE_RESULT: "on-submitted-vote-result",
+    REFRESH_LIVE_VOTE: "refresh-live-vote",
+    ON_LIVE_VOTE_REFRESH: "on-live-vote-refresh",
+    LEAVE_SESSION: "leave-session",
 };
 
 type OnPageChangePayload = {
@@ -218,4 +224,22 @@ export const postNewCommand = (
             payload,
         });
     }
+};
+
+export const joinSession = (sessionId: number): void => {
+    socket.emit(EVENTS.JOIN_SESSION, {
+        sessionId,
+    });
+};
+
+export const leaveSession = (sessionId: number): void => {
+    socket.emit(EVENTS.LEAVE_SESSION, {
+        sessionId,
+    });
+};
+
+export const submittedVote = (sessionId: number): void => {
+    socket.emit(EVENTS.SUBMITTED_VOTE_RESULT, {
+        sessionId,
+    });
 };

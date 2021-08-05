@@ -51,6 +51,8 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
         emitSwitchSessionNext,
         emitJoinNextSession,
         emitLeaveNextSession,
+        emitLeaveSession,
+        emitJoinSession,
     } = useSessionSocketEvents();
     const getOtherSessions = (sessionId: number) => {
         const currentSess = sessionList.find((e: any) => e.id === sessionId);
@@ -132,6 +134,13 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
         if (id) emitJoinNextSession(id);
         return () => {
             emitLeaveNextSession(id);
+        };
+    }, [id]);
+
+    useEffect(() => {
+        if (id) emitJoinSession(id);
+        return () => {
+            emitLeaveSession(id);
         };
     }, [id]);
 
@@ -324,7 +333,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                 </Col>
                 {widgetBar && (
                     <Col md={12} sm={12} lg={4} className="pr-0">
-                        <AppLiveVote enable={true} data={vote} />
+                        <AppLiveVote enable={true} data={vote} sessionId={id} />
                         {data.isCommentEnable ? (
                             <AppQuestionsAndAnswers
                                 name={t(

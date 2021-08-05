@@ -19,19 +19,26 @@ import {
     LiveVoteResultApi,
 } from "../../../AdminModule/apis";
 import { LiveVoteResult, PLiveVoteResult } from "../../../AdminModule/models";
+import { useSessionSocketEvents } from "../../hooks";
 
 export interface AppLiveVoteProps {
     enable: boolean;
     data?: LiveVoteQuestion;
+    sessionId: number;
 }
 
-export const AppLiveVote: FC<AppLiveVoteProps> = ({ enable, data }) => {
+export const AppLiveVote: FC<AppLiveVoteProps> = ({
+    enable,
+    data,
+    sessionId,
+}) => {
     const { t } = useTranslation();
     const [open, setOpen] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [alreadyVoted, setAlreadyVoted] = useState<boolean>(false);
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
+    const { emitSubmittedVote } = useSessionSocketEvents();
 
     useEffect(() => {
         if (enable && data) {
@@ -61,6 +68,7 @@ export const AppLiveVote: FC<AppLiveVoteProps> = ({ enable, data }) => {
         })
             .then(() => {
                 setAlreadyVoted(true);
+                emitSubmittedVote(sessionId);
             })
             .finally(() => {
                 setIsSubmitting(false);
