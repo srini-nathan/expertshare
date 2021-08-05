@@ -6,6 +6,7 @@ import { appUserLocale } from "../atoms";
 type UserLocaleType = {
     setLocale: (locale: string) => void;
     setContainerLocale: (locale: string) => void;
+    getLocale: () => string;
     locale: string;
     containerLocale: string;
 };
@@ -26,5 +27,15 @@ export function useUserLocale(): UserLocaleType {
     setValue(locale);
     const containerLocale = localStorage.getItem(CONTAINER_LOCALE) || "en";
 
-    return { setLocale, locale, setContainerLocale, containerLocale };
+    const getLocale = (): string => {
+        return localStorage.getItem(USER_LOCALE) || "";
+    };
+
+    return {
+        setLocale,
+        locale,
+        setContainerLocale,
+        containerLocale,
+        getLocale,
+    };
 }
