@@ -14,7 +14,7 @@ import {
     AppButton,
 } from "../../components";
 import { Session, User, PSession } from "../../../AdminModule/models";
-import { SessionApi } from "../../../AdminModule/apis";
+import { LiveVoteQuestionApi, SessionApi } from "../../../AdminModule/apis";
 import { errorToast, getDateWT, getTomorrowDate } from "../../utils";
 import {
     useAuthState,
@@ -25,6 +25,7 @@ import "./assets/scss/style.scss";
 import { socket, EVENTS } from "../../socket";
 import { CONSTANTS } from "../../../config";
 import { AppLiveVote } from "../../containers";
+import { LiveVoteQuestion } from "../../../AdminModule/models/entities/LiveVoteQuestion";
 
 const { ON_NEXT_SESSION } = EVENTS;
 const { Role } = CONSTANTS;
@@ -59,7 +60,9 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
         }
     };
     const isGrantedControl = useIsGranted(ROLE_OPERATOR);
-    const [widgetBar] = useState<boolean>(true);
+    const [widgetBar, setWidgetBar] = useState<boolean>(false);
+    const [checkingLiveVote, setCheckingLiveVote] = useState<boolean>(true);
+    const [vote, setVote] = useState<LiveVoteQuestion>();
 
     useEffect(() => {
         isLoading(true);
@@ -79,10 +82,31 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                     }
 
                     setData(res);
+                    setWidgetBar(res.isCommentEnable);
                 }
             }
             isLoading(false);
         });
+    }, [id]);
+
+    useEffect(() => {
+        setCheckingLiveVote(true);
+        LiveVoteQuestionApi.find<LiveVoteQuestion>(1, {
+            "session.id": id,
+            isSelected: true,
+        })
+            .then(({ response }) => {
+                if (response !== null) {
+                    if (response.items && response.items[0]) {
+                        setVote(response.items[0]);
+                        setWidgetBar(true);
+                    }
+                }
+                setCheckingLiveVote(false);
+            })
+            .catch(() => {
+                setCheckingLiveVote(false);
+            });
     }, [id]);
 
     const switchTonextSession = (nextSession: number) => {
@@ -194,7 +218,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
         }
     }, [loading]);
 
-    if (loading) {
+    if (loading || checkingLiveVote) {
         return <AppLoader />;
     }
 
@@ -299,7 +323,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                 </Col>
                 {widgetBar && (
                     <Col md={12} sm={12} lg={4} className="pr-0">
-                        <AppLiveVote enable={true} />
+                        <AppLiveVote enable={true} data={vote} />
                         {data.isCommentEnable ? (
                             <AppQuestionsAndAnswers
                                 name={t(

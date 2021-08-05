@@ -11,14 +11,14 @@ import { AppLiveVoteOptionTextBox } from "./AppLiveVoteOptionTextbox";
 
 export interface AppLiveVoteProps {
     enable: boolean;
+    data?: LiveVoteQuestion;
 }
 
-export const AppLiveVote: FC<AppLiveVoteProps> = ({ enable }) => {
+export const AppLiveVote: FC<AppLiveVoteProps> = ({ enable, data }) => {
     const [open, setOpen] = useState<boolean>(true);
     const [loading] = useState<boolean>(false);
-    const [data] = useState<LiveVoteQuestion>();
 
-    if (!enable) {
+    if (!enable || !data) {
         return <></>;
     }
 
