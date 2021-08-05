@@ -14,8 +14,11 @@ import {
 } from "./AppLiveVoteOptionMultiple";
 import { VOTE_QUESTION_TYPE } from "../../../config";
 import { AppLiveVoteOptionTextBox } from "./AppLiveVoteOptionTextbox";
-import { LiveVoteResultApi } from "../../../AdminModule/apis";
-import { LiveVoteResult } from "../../../AdminModule/models";
+import {
+    LiveVoteQuestionApi,
+    LiveVoteResultApi,
+} from "../../../AdminModule/apis";
+import { LiveVoteResult, PLiveVoteResult } from "../../../AdminModule/models";
 
 export interface AppLiveVoteProps {
     enable: boolean;
@@ -26,9 +29,9 @@ export const AppLiveVote: FC<AppLiveVoteProps> = ({ enable, data }) => {
     const { t } = useTranslation();
     const [open, setOpen] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     const [alreadyVoted, setAlreadyVoted] = useState<boolean>(false);
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
-    let result = "";
 
     useEffect(() => {
         if (enable && data) {
@@ -50,17 +53,31 @@ export const AppLiveVote: FC<AppLiveVoteProps> = ({ enable, data }) => {
     if (!enable || !data) {
         return <></>;
     }
+    const submitVote = (result: string) => {
+        setIsSubmitting(true);
+        LiveVoteResultApi.create<LiveVoteResult, PLiveVoteResult>({
+            result,
+            voteQuestion: LiveVoteQuestionApi.toResourceUrl(data.id),
+        })
+            .then(() => {
+                setAlreadyVoted(true);
+            })
+            .finally(() => {
+                setIsSubmitting(false);
+            });
+    };
 
     const renderQuestion = () => {
-        if (loading) {
+        if (loading || data.isResultPublished || alreadyVoted) {
             return null;
         }
 
         if (data?.type === VOTE_QUESTION_TYPE.VOTEQUESTIONTYPE_TEXT) {
             return (
                 <AppLiveVoteOptionTextBox
+                    isSubmitting={isSubmitting}
                     onDataChange={(res) => {
-                        result = res;
+                        submitVote(res);
                     }}
                 />
             );
@@ -73,13 +90,13 @@ export const AppLiveVote: FC<AppLiveVoteProps> = ({ enable, data }) => {
 
         return (
             <AppLiveVoteOptionMultiple
+                isSubmitting={isSubmitting}
                 optionType={type}
                 options={data.voteOptions}
-                minOption={data.minOptionSelect || 1}
                 maxOption={data.maxOptionSelect || 2}
+                minOption={data.minOptionSelect || 1}
                 onDataChange={(res) => {
-                    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                    result = res;
+                    submitVote(res);
                 }}
             />
         );

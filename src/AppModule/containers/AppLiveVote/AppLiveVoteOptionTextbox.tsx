@@ -9,10 +9,12 @@ import { validation } from "../../utils";
 
 interface AppLiveVoteOptionTextBoxType {
     onDataChange: (result: string) => void;
+    isSubmitting: boolean;
 }
 
 export const AppLiveVoteOptionTextBox: FC<AppLiveVoteOptionTextBoxType> = ({
     onDataChange,
+    isSubmitting,
 }) => {
     const { t } = useTranslation();
     const { handleSubmit, formState, control } = useForm({
@@ -23,7 +25,7 @@ export const AppLiveVoteOptionTextBox: FC<AppLiveVoteOptionTextBoxType> = ({
         ),
         mode: "all",
     });
-    const onSubmit = (data: any) => onDataChange(data);
+    const onSubmit = (data: any) => onDataChange(data?.feedback);
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -40,9 +42,9 @@ export const AppLiveVoteOptionTextBox: FC<AppLiveVoteOptionTextBoxType> = ({
             />
             <AppButton
                 block={true}
-                isLoading={formState.isSubmitting}
+                isLoading={isSubmitting}
                 type="submit"
-                disabled={!formState.isValid || formState.isSubmitting}
+                disabled={!formState.isValid || isSubmitting}
                 loadingTxt={t("liveVote.form:button.submittingVote")}
             >
                 <i className="fak fa-check-regular-bold mr-1"></i>

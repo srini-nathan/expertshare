@@ -21,3 +21,5 @@ export class LiveVoteResult extends BaseEntity {
         this.result = result;
     }
 }
+
+export type PLiveVoteResult = Partial<LiveVoteResult>;

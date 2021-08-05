@@ -24,6 +24,7 @@ export interface AppLiveVoteOptionMultipleType {
     onDataChange: (result: string) => void;
     maxOption: number;
     minOption: number;
+    isSubmitting: boolean;
 }
 
 export const AppLiveVoteOptionMultiple: FC<AppLiveVoteOptionMultipleType> = ({
@@ -32,6 +33,7 @@ export const AppLiveVoteOptionMultiple: FC<AppLiveVoteOptionMultipleType> = ({
     minOption,
     maxOption,
     onDataChange,
+    isSubmitting,
 }) => {
     const { t } = useTranslation();
     const { register, handleSubmit, formState } = useForm({
@@ -55,7 +57,13 @@ export const AppLiveVoteOptionMultiple: FC<AppLiveVoteOptionMultipleType> = ({
         mode: "all",
     });
     const { locale } = useUserLocale();
-    const onSubmit = (data: any) => onDataChange(data);
+    const onSubmit = (data: any) => {
+        if (optionType === QUESTION_TYPE_RADIO) {
+            onDataChange(data?.voteChoice);
+        } else {
+            onDataChange(data?.voteChoice?.join(","));
+        }
+    };
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
             {options.map((option, index) => {
@@ -110,8 +118,8 @@ export const AppLiveVoteOptionMultiple: FC<AppLiveVoteOptionMultipleType> = ({
             <AppButton
                 block={true}
                 type="submit"
-                isLoading={formState.isSubmitting}
-                disabled={!formState.isValid || formState.isSubmitting}
+                isLoading={isSubmitting}
+                disabled={!formState.isValid || isSubmitting}
                 loadingTxt={t("liveVote.form:button.submittingVote")}
             >
                 <i className="fak fa-check-regular-bold mr-1"></i>
