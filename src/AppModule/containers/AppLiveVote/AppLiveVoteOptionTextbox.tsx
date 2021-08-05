@@ -1,6 +1,11 @@
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { AppButton } from "../../components";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { Form } from "react-bootstrap";
+import { AppButton, AppFormInput } from "../../components";
+import { validation } from "../../utils";
 
 interface AppLiveVoteOptionTextBoxType {
     onDataChange: (result: string) => void;
@@ -10,21 +15,39 @@ export const AppLiveVoteOptionTextBox: FC<AppLiveVoteOptionTextBoxType> = ({
     onDataChange,
 }) => {
     const { t } = useTranslation();
+    const { handleSubmit, formState, control } = useForm({
+        resolver: yupResolver(
+            yup.object().shape({
+                feedback: yup.string().required(),
+            })
+        ),
+        mode: "all",
+    });
+    const onSubmit = (data: any) => onDataChange(data);
 
     return (
-        <div>
-            <input
-                onChange={(e) => onDataChange(e.currentTarget.value)}
-                type={"text"}
+        <Form onSubmit={handleSubmit(onSubmit)}>
+            <AppFormInput
+                className="p-1 mb-2"
+                name={"feedback"}
+                placeholder={t("liveVote.form:placeholder.feedback")}
+                control={control}
+                sm={12}
+                md={12}
+                lg={12}
+                xl={12}
+                {...validation("feedback", formState, false, true)}
             />
             <AppButton
-                type="submit"
                 block={true}
+                isLoading={formState.isSubmitting}
+                type="submit"
+                disabled={!formState.isValid || formState.isSubmitting}
                 loadingTxt={t("liveVote.form:button.submittingVote")}
             >
                 <i className="fak fa-check-regular-bold mr-1"></i>
                 {t("liveVote.form:button.submitVote")}
             </AppButton>
-        </div>
+        </Form>
     );
 };
