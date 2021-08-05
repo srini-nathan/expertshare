@@ -1,5 +1,7 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useEffect, useRef } from "react";
 import { Collapse } from "react-bootstrap";
+import { Canceler } from "axios";
+import { useTranslation } from "react-i18next";
 import { AppCard, AppLoader } from "../../components";
 import { LiveVoteQuestion } from "../../../AdminModule/models/entities/LiveVoteQuestion";
 import { AppLiveVoteQuestion } from "./AppLiveVoteQuestion";
@@ -8,6 +10,8 @@ import "./assets/scss/style.scss";
 import { AppLiveVoteOptionMultiple } from "./AppLiveVoteOptionMultiple";
 import { VOTE_QUESTION_TYPE } from "../../../config";
 import { AppLiveVoteOptionTextBox } from "./AppLiveVoteOptionTextbox";
+import { LiveVoteResultApi } from "../../../AdminModule/apis";
+import { LiveVoteResult } from "../../../AdminModule/models";
 
 export interface AppLiveVoteProps {
     enable: boolean;
@@ -15,39 +19,75 @@ export interface AppLiveVoteProps {
 }
 
 export const AppLiveVote: FC<AppLiveVoteProps> = ({ enable, data }) => {
+    const { t } = useTranslation();
     const [open, setOpen] = useState<boolean>(true);
-    const [loading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [alreadyVoted, setAlreadyVoted] = useState<boolean>(false);
+    const cancelTokenSourcesRef = useRef<Canceler[]>([]);
+
+    useEffect(() => {
+        if (enable && data) {
+            setLoading(true);
+            LiveVoteResultApi.getMyResult<LiveVoteResult>(data.id, {}, (c) => {
+                cancelTokenSourcesRef.current.push(c);
+            })
+                .then(({ response }) => {
+                    if (response && response.items && response.items[0]) {
+                        setAlreadyVoted(true);
+                    }
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
+        }
+    }, [data, enable]);
 
     if (!enable || !data) {
         return <></>;
     }
 
     const renderQuestion = () => {
+        if (loading) {
+            return null;
+        }
+
+        if (data?.type === VOTE_QUESTION_TYPE.VOTEQUESTIONTYPE_TEXT) {
+            return <AppLiveVoteOptionTextBox />;
+        }
+
+        return <AppLiveVoteOptionMultiple optionType={"RADIO"} options={[]} />;
+    };
+
+    const renderThankYou = () => {
+        if (loading || data.isResultPublished || !alreadyVoted) {
+            return null;
+        }
+
         return (
-            <>
-                <AppLiveVoteQuestion
-                    description={
-                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc mi sit fringilla adipiscing arcu augue. Mattis aliquam sagittis scelerisque mattis friskilia?"
-                    }
-                    title={"What's the best solution for reducing the crime ?"}
-                />
-                <Collapse in={open}>
-                    <div className={`inner collapse mt-3 pt-3`}>
-                        <div className="inner--container">
-                            {data?.type ===
-                            VOTE_QUESTION_TYPE.VOTEQUESTIONTYPE_TEXT ? (
-                                <AppLiveVoteOptionTextBox />
-                            ) : (
-                                <AppLiveVoteOptionMultiple
-                                    optionType={"RADIO"}
-                                    options={[]}
-                                />
-                            )}
-                        </div>
-                    </div>
-                </Collapse>
-            </>
+            <p className="thanks-message mb-0 text-center">
+                {t("liveVote:message.thankYouFotVoting")}
+            </p>
         );
+    };
+
+    const renderResult = () => {
+        if (loading || !data.isResultPublished) {
+            return null;
+        }
+
+        return (
+            <p className="thanks-message mb-0 text-center">
+                Render Result here
+            </p>
+        );
+    };
+
+    const renderLoader = () => {
+        if (!loading) {
+            return null;
+        }
+
+        return <AppLoader />;
     };
 
     return (
@@ -60,7 +100,20 @@ export const AppLiveVote: FC<AppLiveVoteProps> = ({ enable, data }) => {
                         setOpen(!open);
                     }}
                 />
-                {loading ? <AppLoader /> : renderQuestion()}
+                <AppLiveVoteQuestion
+                    title={data?.title}
+                    description={data?.description}
+                />
+                <Collapse in={open}>
+                    <div className={`inner collapse mt-3 pt-3`}>
+                        <div className="inner--container">
+                            {renderLoader()}
+                            {renderQuestion()}
+                            {renderThankYou()}
+                            {renderResult()}
+                        </div>
+                    </div>
+                </Collapse>
             </div>
         </AppCard>
     );

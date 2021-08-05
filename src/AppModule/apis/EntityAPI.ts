@@ -171,7 +171,7 @@ export abstract class EntityAPI extends API {
             );
     }
 
-    private static handleServerError(
+    protected static handleServerError(
         error: AxiosError | ServerError
     ): Promise<FinalResponse<null>> {
         const { message } = error;
@@ -181,7 +181,7 @@ export abstract class EntityAPI extends API {
         return Promise.reject(error);
     }
 
-    private static handleUnknownError(
+    protected static handleUnknownError(
         error: AxiosError | ServerError
     ): Promise<FinalResponse<null>> {
         const { message } = error;

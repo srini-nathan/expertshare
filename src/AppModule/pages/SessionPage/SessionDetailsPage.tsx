@@ -80,9 +80,10 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                     if (sessionList) {
                         getOtherSessions(res.id);
                     }
-
                     setData(res);
-                    setWidgetBar(res.isCommentEnable);
+                    if (res.isCommentEnable) {
+                        setWidgetBar(true);
+                    }
                 }
             }
             isLoading(false);

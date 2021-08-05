@@ -31,11 +31,17 @@ export class LiveVoteQuestion extends BaseEntity {
 
     isResultPublished: boolean;
 
+    title: string;
+
+    description: string;
+
     constructor(
         container: string,
         session: string,
         {
             name = "",
+            title = "",
+            description = "",
             type = VOTE_QUESTION_TYPE.VOTEQUESTIONTYPE_RADIO,
             chartType = VOTE_QUESTION_CHART_TYPE.VOTEQUESTIONCHARTTYPE_BAR,
             voteOptions = [LiveVoteOption.createFrom()],
@@ -53,6 +59,8 @@ export class LiveVoteQuestion extends BaseEntity {
         this.container = container;
         this.session = session;
         this.name = name;
+        this.title = title;
+        this.description = description;
         this.type = type;
         this.chartType = chartType;
         this.voteOptions = voteOptions;
