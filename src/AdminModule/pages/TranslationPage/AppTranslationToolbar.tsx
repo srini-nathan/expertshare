@@ -75,8 +75,10 @@ export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
 
     return (
         <>
-            <Row className={"translation-page d-flex justify-content-end"}>
-                <Col md={3} sm={6} className="px-1 mt-2 mt-md-0">
+            <Row
+                className={"translation-page d-flex justify-content-end w-100"}
+            >
+                <Col lg={2} md={3} sm={6} className="px-1 mt-2 mt-md-0">
                     <AppTagSelectDropDown
                         options={values}
                         selectedItems={selectedValues}
@@ -84,7 +86,7 @@ export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
                         onChange={onChangeSelect}
                     />
                 </Col>
-                <Col md={4} sm={6} className="px-1 mt-2 mt-md-0">
+                <Col xl={2} lg={3} md={4} sm={6} className="px-1 mt-2 mt-md-0">
                     <AppFormDropdown
                         id="where-filter"
                         defaultValue={{
@@ -114,7 +116,7 @@ export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
                         ]}
                     />
                 </Col>
-                <Col lg={5} md={3} sm={6} className="px-1 mt-2 mt-md-0">
+                <Col lg={3} md={3} sm={6} className="px-1 mt-2 mt-md-0">
                     <InputGroup className="header-search">
                         <InputGroup.Prepend>
                             <InputGroup.Text id="basic-addon1">
