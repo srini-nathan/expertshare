@@ -84,7 +84,7 @@ export const AppTranslationToolbar: FC<AppTranslationToolbarProps> = ({
                         onChange={onChangeSelect}
                     />
                 </Col>
-                <Col md={3} sm={6} className="px-1 mt-2 mt-md-0">
+                <Col md={4} sm={6} className="px-1 mt-2 mt-md-0">
                     <AppFormDropdown
                         id="where-filter"
                         defaultValue={{

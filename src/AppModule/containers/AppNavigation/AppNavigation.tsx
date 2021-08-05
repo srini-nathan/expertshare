@@ -89,9 +89,6 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         genImageExpertshareLogo,
         navPosition: menuLocation,
     } = design;
-    if (menuLocation === "TOP") {
-        document.querySelector(".swal2-container")?.classList.add("top-swal");
-    }
     const style = user.imageName
         ? {
               backgroundImage: `url(${profilePicturePath})`,
