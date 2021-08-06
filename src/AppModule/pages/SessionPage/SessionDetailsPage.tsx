@@ -27,7 +27,7 @@ import { CONSTANTS } from "../../../config";
 import { AppLiveVote } from "../../containers";
 import { LiveVoteQuestion } from "../../../AdminModule/models/entities/LiveVoteQuestion";
 
-const { ON_NEXT_SESSION } = EVENTS;
+const { ON_NEXT_SESSION, ON_LIVE_VOTE_REFRESH } = EVENTS;
 const { Role } = CONSTANTS;
 
 const {
@@ -90,26 +90,6 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
             }
             isLoading(false);
         });
-    }, [id]);
-
-    useEffect(() => {
-        setCheckingLiveVote(true);
-        LiveVoteQuestionApi.find<LiveVoteQuestion>(1, {
-            "session.id": id,
-            isSelected: true,
-        })
-            .then(({ response }) => {
-                if (response !== null) {
-                    if (response.items && response.items[0]) {
-                        setVote(response.items[0]);
-                        setWidgetBar(true);
-                    }
-                }
-                setCheckingLiveVote(false);
-            })
-            .catch(() => {
-                setCheckingLiveVote(false);
-            });
     }, [id]);
 
     const switchTonextSession = (nextSession: number) => {
@@ -227,6 +207,47 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
             getAgenda();
         }
     }, [loading]);
+
+    const fetchLiveVote = (setLoading = false) => {
+        LiveVoteQuestionApi.find<LiveVoteQuestion>(1, {
+            "session.id": id,
+            isSelected: true,
+        })
+            .then(({ response }) => {
+                if (response !== null) {
+                    if (response.items && response.items[0]) {
+                        setVote(response.items[0]);
+                        setWidgetBar(true);
+                    } else {
+                        setVote(undefined);
+                        if (!data.isCommentEnable) {
+                            setWidgetBar(false);
+                        }
+                    }
+                }
+            })
+            .finally(() => {
+                if (setLoading) {
+                    setCheckingLiveVote(false);
+                }
+            });
+    };
+
+    useEffect(() => {
+        if (id) {
+            setCheckingLiveVote(true);
+            fetchLiveVote(true);
+        }
+    }, [id]);
+
+    useEffect(() => {
+        socket.on(ON_LIVE_VOTE_REFRESH, () => {
+            fetchLiveVote(false);
+        });
+        return () => {
+            socket.off(ON_LIVE_VOTE_REFRESH);
+        };
+    }, []);
 
     if (loading || checkingLiveVote) {
         return <AppLoader />;
