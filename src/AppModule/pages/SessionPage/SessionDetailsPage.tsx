@@ -11,28 +11,17 @@ import {
     AppSessionUsers,
     AppQuestionsAndAnswers,
     AppSessionTags,
-    AppButton,
 } from "../../components";
 import { Session, User, PSession } from "../../../AdminModule/models";
 import { LiveVoteQuestionApi, SessionApi } from "../../../AdminModule/apis";
 import { errorToast, getDateWT, getTomorrowDate } from "../../utils";
-import {
-    useAuthState,
-    useIsGranted,
-    useSessionSocketEvents,
-} from "../../hooks";
+import { useAuthState, useSessionSocketEvents } from "../../hooks";
 import "./assets/scss/style.scss";
 import { socket, EVENTS } from "../../socket";
-import { CONSTANTS } from "../../../config";
-import { AppLiveVote } from "../../containers";
+import { AppLiveVote, AppSessionDetailOperatorPanel } from "../../containers";
 import { LiveVoteQuestion } from "../../../AdminModule/models/entities/LiveVoteQuestion";
 
 const { ON_NEXT_SESSION, ON_LIVE_VOTE_REFRESH } = EVENTS;
-const { Role } = CONSTANTS;
-
-const {
-    ROLE: { ROLE_OPERATOR },
-} = Role;
 
 export const SessionDetailsPage: FC<RouteComponentProps> = ({
     location,
@@ -61,7 +50,6 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
             setPrev(currentSess.prev);
         }
     };
-    const isGrantedControl = useIsGranted(ROLE_OPERATOR);
     const [widgetBar, setWidgetBar] = useState<boolean>(false);
     const [checkingLiveVote, setCheckingLiveVote] = useState<boolean>(true);
     const [vote, setVote] = useState<LiveVoteQuestion>();
@@ -323,31 +311,14 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                         </Row>
                     </AppCard>
 
-                    {isGrantedControl && next && (
-                        <AppCard
-                            title={t("sessionDetails:section.operatorActions")}
-                        >
-                            <Row className="my-5 mx-0 px-2">
-                                <Col className="p-0" sm={12} md={6} lg={3}>
-                                    {next && (
-                                        <AppButton
-                                            onClick={() => {
-                                                emitSwitchSessionNext(id);
-                                                switchTonextSession(
-                                                    next as number
-                                                );
-                                            }}
-                                            variant="secondary"
-                                        >
-                                            {t(
-                                                "sessionDetails:label.switchToNextSession"
-                                            )}
-                                        </AppButton>
-                                    )}
-                                </Col>
-                            </Row>
-                        </AppCard>
-                    )}
+                    <AppSessionDetailOperatorPanel
+                        currentSessionId={id}
+                        nextSessionId={next}
+                        onClickSwitchNextSession={() => {
+                            emitSwitchSessionNext(id);
+                            switchTonextSession(next as number);
+                        }}
+                    />
 
                     {/* <AppSessionDetails session={data} /> */}
                     <AppSessionDescription session={data} />

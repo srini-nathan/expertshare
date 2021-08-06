@@ -6,7 +6,7 @@ export * from "./helper";
 
 const R = ROUTES;
 const C = CONSTANTS;
-const { Upload, VoteQuestion } = CONSTANTS;
+const { Upload, VoteQuestion, Role } = CONSTANTS;
 
 const {
   FILETYPE: FILE_TYPE,
@@ -22,6 +22,7 @@ const { FILETYPEINFO_VOTEOPTION_POSTER } = FILE_TYPE_INFO;
 const { FILETYPE_VOTEOPTION_POSTER } = FILE_TYPE;
 const VoteOptionFileInfo = FILETYPEINFO_VOTEOPTION_POSTER as FileTypeInfo;
 const VOTE_OPTION_POSTER_TYPE = FILETYPE_VOTEOPTION_POSTER;
+const ROLES = Role.ROLE;
 
 export {
   R,
@@ -34,4 +35,5 @@ export {
   VOTE_QUESTION_CHART_TYPE,
   VOTE_OPTION_POSTER_TYPE,
   VoteOptionFileInfo,
+  ROLES,
 };

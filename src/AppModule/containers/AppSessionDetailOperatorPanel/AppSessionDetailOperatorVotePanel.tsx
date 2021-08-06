@@ -1,0 +1,217 @@
+import React, { FC, useRef, useEffect, useState } from "react";
+import { Col, Row, Form } from "react-bootstrap";
+import { Canceler } from "axios";
+import { useTranslation } from "react-i18next";
+import { find as _find, isString as _isString } from "lodash";
+import {
+    GridApi,
+    IServerSideDatasource,
+    IServerSideGetRowsParams,
+} from "ag-grid-community";
+import { navigate } from "@reach/router";
+import { useForm } from "react-hook-form";
+import { AppButton, AppFormSelect, AppLoader } from "../../components";
+import { ContainerApi, LiveVoteQuestionApi } from "../../../AdminModule/apis";
+import { useGlobalData } from "../../contexts";
+import { LiveVoteQuestion } from "../../../AdminModule/models";
+import { appGridFrameworkComponents } from "./app-grid-framework-components";
+import { appGridColDef } from "./app-grid-col-def";
+import { AppGrid, buildFilterParams, buildSortParams } from "../AppGrid";
+import { errorToast, successToast } from "../../utils";
+import { appGridConfig } from "../../config";
+import { PrimitiveObject } from "../../models";
+
+interface AppSessionDetailOperatorVotePanelType {
+    currentSessionId: number;
+}
+
+export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVotePanelType> = ({
+    currentSessionId,
+}): JSX.Element => {
+    const { t } = useTranslation();
+    const { container } = useGlobalData();
+    const [totalItems, setTotalItems] = useState<number>(0);
+    const appGridApi = useRef<GridApi>();
+    const [votes, setVotes] = useState<LiveVoteQuestion[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
+    const cancelTokenSourcesRef = useRef<Canceler[]>([]);
+    const { control } = useForm();
+
+    function getDataSource(): IServerSideDatasource {
+        return {
+            getRows(params: IServerSideGetRowsParams) {
+                const { request, api } = params;
+                const { endRow } = request;
+                const pageNo = endRow / appGridConfig.pageSize;
+                api?.hideOverlay();
+                if (container) {
+                    setLoading(true);
+                    LiveVoteQuestionApi.find<LiveVoteQuestion>(
+                        pageNo,
+                        {
+                            order: buildSortParams(request),
+                            ...buildFilterParams(request),
+                            "session.id": currentSessionId,
+                            "container.id": ContainerApi.toResourceUrl(
+                                container.id
+                            ),
+                        },
+                        (c) => {
+                            cancelTokenSourcesRef.current.push(c);
+                        }
+                    )
+                        .then(({ response }) => {
+                            if (response !== null) {
+                                if (response.items.length === 0) {
+                                    api?.showNoRowsOverlay();
+                                }
+                                setTotalItems(response.totalItems);
+                                setVotes(response.items);
+                                params.successCallback(
+                                    response.items,
+                                    response.totalItems
+                                );
+                            }
+                        })
+                        .finally(() => {
+                            setLoading(true);
+                        });
+                }
+            },
+        };
+    }
+
+    function handleDelete(id: number) {
+        LiveVoteQuestionApi.deleteById(id).then(({ error }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(t(error));
+                }
+            } else {
+                successToast(
+                    t(
+                        "sessionDetails:section.operatorActions.liveVote.delete.toast.success"
+                    )
+                );
+                appGridApi.current?.refreshServerSideStore({
+                    purge: false,
+                    route: [],
+                });
+            }
+        });
+    }
+
+    useEffect(() => {
+        return () => {
+            cancelTokenSourcesRef.current.forEach((c) => {
+                c();
+            });
+        };
+    }, []);
+
+    const renderDropDown = () => {
+        if (loading) {
+            return (
+                <Col>
+                    <AppLoader containerClassName={"inline-loader"} />
+                </Col>
+            );
+        }
+        const active = votes.find((v) => v.isSelected);
+        const options = votes.map((v) => {
+            return {
+                label: v.name,
+                value: v.id,
+            };
+        });
+
+        return (
+            <AppFormSelect
+                id={"activeVote"}
+                name={"activeVote"}
+                label={t(
+                    "sessionDetails:section.operatorActions.liveVote.label.activateVoteDropdown"
+                )}
+                md={6}
+                lg={6}
+                xl={6}
+                control={control}
+                defaultValue={active?.id}
+                options={[
+                    {
+                        value: 0,
+                        label: "--",
+                    },
+                    ...options,
+                ]}
+                transform={{
+                    output: (l: PrimitiveObject) => l?.value,
+                    input: (value: string) => {
+                        return _find(options, {
+                            value,
+                        });
+                    },
+                }}
+            />
+        );
+    };
+
+    return (
+        <div className={"mt-4"}>
+            <h5>
+                {t("sessionDetails:section.operatorActions.liveVote.header")}
+            </h5>
+            <hr />
+            <Row>
+                <Col md={8}>
+                    <Form>
+                        <Row>
+                            {renderDropDown()}
+                            <Col md={6}>
+                                <AppButton
+                                    className={"text-capitalize"}
+                                    variant={"secondary"}
+                                    onClick={() => {}}
+                                >
+                                    {t(
+                                        "sessionDetails:section.operatorActions.liveVote.button.applyVote"
+                                    )}
+                                </AppButton>
+                            </Col>
+                        </Row>
+                    </Form>
+                </Col>
+                <Col md={4}>
+                    <AppButton
+                        className={"text-capitalize"}
+                        variant={"secondary"}
+                        onClick={() => {
+                            navigate(
+                                `/admin/live-votes/${currentSessionId}/new`
+                            );
+                        }}
+                    >
+                        + {t("common.button:create")}
+                    </AppButton>
+                </Col>
+            </Row>
+            <Row className="mt-3 px-0">
+                <Col>
+                    <AppGrid
+                        frameworkComponents={appGridFrameworkComponents}
+                        columnDef={appGridColDef({
+                            onPressDelete: handleDelete,
+                            parentId: currentSessionId,
+                        })}
+                        dataSource={getDataSource()}
+                        totalItems={totalItems}
+                        onReady={(event) => {
+                            appGridApi.current = event.api;
+                        }}
+                        paginationContainerClass={"d-none"}
+                    />
+                </Col>
+            </Row>
+        </div>
+    );
+};
