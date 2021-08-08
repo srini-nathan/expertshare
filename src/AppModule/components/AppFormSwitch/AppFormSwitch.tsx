@@ -26,6 +26,7 @@ export interface AppFormSwitchProps {
     defaultChecked?: boolean;
     className?: string;
     onChange?: ChangeEventHandler<HTMLInputElement>;
+    disabled?: boolean;
 }
 
 export const AppFormSwitch: FC<AppFormSwitchProps> = ({
@@ -45,6 +46,7 @@ export const AppFormSwitch: FC<AppFormSwitchProps> = ({
     isInvalid,
     defaultChecked = false,
     onChange = () => {},
+    disabled = false,
 }): JSX.Element => {
     const controlId = id || name;
     const { getColumnClasses } = useGridHelper();
@@ -85,6 +87,7 @@ export const AppFormSwitch: FC<AppFormSwitchProps> = ({
                             onChange(e);
                             return field.onChange(e);
                         }}
+                        disabled={disabled}
                     />
                 )}
             />

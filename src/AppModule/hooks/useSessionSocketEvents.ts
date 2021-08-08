@@ -10,6 +10,7 @@ import {
     joinSession,
     leaveSession,
     submittedVote,
+    refreshVote,
 } from "../socket";
 import { PUser } from "../../AdminModule/models";
 import { PSessionComment } from "../models/entities/SessionComment";
@@ -36,6 +37,7 @@ type SessionSocketEventsType = {
     emitJoinSession: (sessionId: number) => void;
     emitLeaveSession: (sessionId: number) => void;
     emitSubmittedVote: (sessionId: number) => void;
+    emitRefreshVote: (sessionId: number) => void;
 };
 
 export function useSessionSocketEvents(): SessionSocketEventsType {
@@ -93,6 +95,10 @@ export function useSessionSocketEvents(): SessionSocketEventsType {
         submittedVote(sessionId);
     };
 
+    const emitRefreshVote = (sessionId: number): void => {
+        refreshVote(sessionId);
+    };
+
     return {
         emitJoinNextSession,
         emitLeaveNextSession,
@@ -105,5 +111,6 @@ export function useSessionSocketEvents(): SessionSocketEventsType {
         emitJoinSession,
         emitLeaveSession,
         emitSubmittedVote,
+        emitRefreshVote,
     };
 }

@@ -243,3 +243,9 @@ export const submittedVote = (sessionId: number): void => {
         sessionId,
     });
 };
+
+export const refreshVote = (sessionId: number): void => {
+    socket.emit(EVENTS.REFRESH_LIVE_VOTE, {
+        sessionId,
+    });
+};

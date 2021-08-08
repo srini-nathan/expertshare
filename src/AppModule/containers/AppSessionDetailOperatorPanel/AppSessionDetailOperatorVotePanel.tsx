@@ -10,19 +10,38 @@ import {
 } from "ag-grid-community";
 import { navigate } from "@reach/router";
 import { useForm } from "react-hook-form";
-import { AppButton, AppFormSelect, AppLoader } from "../../components";
-import { ContainerApi, LiveVoteQuestionApi } from "../../../AdminModule/apis";
+import {
+    AppButton,
+    AppFormSelect,
+    AppFormSwitch,
+    AppLoader,
+} from "../../components";
+import {
+    ContainerApi,
+    LiveVoteQuestionApi,
+    SessionApi,
+} from "../../../AdminModule/apis";
 import { useGlobalData } from "../../contexts";
-import { LiveVoteQuestion } from "../../../AdminModule/models";
+import {
+    LiveVoteQuestion,
+    PLiveVoteQuestion,
+} from "../../../AdminModule/models";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { appGridColDef } from "./app-grid-col-def";
 import { AppGrid, buildFilterParams, buildSortParams } from "../AppGrid";
 import { errorToast, successToast } from "../../utils";
 import { appGridConfig } from "../../config";
 import { PrimitiveObject } from "../../models";
+import { useSessionSocketEvents } from "../../hooks";
 
 interface AppSessionDetailOperatorVotePanelType {
     currentSessionId: number;
+}
+
+interface LiveVotePublishResultPayload {
+    session: string;
+    isResultPublished: boolean;
+    entityId: number;
 }
 
 export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVotePanelType> = ({
@@ -35,7 +54,9 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
     const [votes, setVotes] = useState<LiveVoteQuestion[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
-    const { control } = useForm();
+    const { control, getValues } = useForm();
+    const [activating, setActivating] = useState<boolean>(false);
+    const { emitRefreshVote } = useSessionSocketEvents();
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -74,7 +95,7 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
                             }
                         })
                         .finally(() => {
-                            setLoading(true);
+                            setLoading(false);
                         });
                 }
             },
@@ -101,6 +122,36 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
         });
     }
 
+    const handleApplyVote = async () => {
+        setActivating(true);
+        const selectedVote = getValues("activeVote");
+        const anyVote = votes[0]?.id;
+        await LiveVoteQuestionApi.publishResult<
+            LiveVotePublishResultPayload,
+            LiveVotePublishResultPayload
+        >({
+            session: SessionApi.toResourceUrl(currentSessionId),
+            isResultPublished: false,
+            entityId: anyVote,
+        });
+        LiveVoteQuestionApi.makeSelection<PLiveVoteQuestion, PLiveVoteQuestion>(
+            selectedVote === 0 ? anyVote : selectedVote,
+            {
+                isSelected: selectedVote !== 0,
+            }
+        )
+            .then(() => {
+                appGridApi.current?.refreshServerSideStore({
+                    purge: false,
+                    route: [],
+                });
+                emitRefreshVote(currentSessionId);
+            })
+            .finally(() => {
+                setActivating(false);
+            });
+    };
+
     useEffect(() => {
         return () => {
             cancelTokenSourcesRef.current.forEach((c) => {
@@ -118,41 +169,56 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
             );
         }
         const active = votes.find((v) => v.isSelected);
-        const options = votes.map((v) => {
-            return {
-                label: v.name,
-                value: v.id,
-            };
-        });
+        const options = [
+            {
+                value: 0,
+                label: "--",
+            },
+            ...votes.map((v) => {
+                return {
+                    label: v.name,
+                    value: v.id,
+                };
+            }),
+        ];
 
         return (
-            <AppFormSelect
-                id={"activeVote"}
-                name={"activeVote"}
-                label={t(
-                    "sessionDetails:section.operatorActions.liveVote.label.activateVoteDropdown"
-                )}
-                md={6}
-                lg={6}
-                xl={6}
-                control={control}
-                defaultValue={active?.id}
-                options={[
-                    {
-                        value: 0,
-                        label: "--",
-                    },
-                    ...options,
-                ]}
-                transform={{
-                    output: (l: PrimitiveObject) => l?.value,
-                    input: (value: string) => {
-                        return _find(options, {
-                            value,
-                        });
-                    },
-                }}
-            />
+            <>
+                <AppFormSelect
+                    id={"activeVote"}
+                    name={"activeVote"}
+                    label={t(
+                        "sessionDetails:section.operatorActions.liveVote.label.activateVoteDropdown"
+                    )}
+                    md={6}
+                    lg={6}
+                    xl={6}
+                    control={control}
+                    defaultValue={active?.id ?? 0}
+                    options={options}
+                    transform={{
+                        output: (l: PrimitiveObject) => l?.value,
+                        input: (value: string) => {
+                            return _find(options, {
+                                value,
+                            });
+                        },
+                    }}
+                />
+                <AppFormSwitch
+                    name={"isResultPublished"}
+                    label={t(
+                        "sessionDetails:section.operatorActions.liveVote.label.activateVoteResultPublished"
+                    )}
+                    defaultChecked={active?.isResultPublished}
+                    control={control}
+                    onChange={() => {
+                        if (active?.id) {
+                            emitRefreshVote(currentSessionId);
+                        }
+                    }}
+                />
+            </>
         );
     };
 
@@ -164,14 +230,21 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
             <hr />
             <Row>
                 <Col md={8}>
-                    <Form>
+                    <Form
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                        }}
+                    >
                         <Row>
                             {renderDropDown()}
                             <Col md={6}>
                                 <AppButton
                                     className={"text-capitalize"}
                                     variant={"secondary"}
-                                    onClick={() => {}}
+                                    type={"button"}
+                                    onClick={handleApplyVote}
+                                    isLoading={activating}
+                                    disabled={activating}
                                 >
                                     {t(
                                         "sessionDetails:section.operatorActions.liveVote.button.applyVote"
@@ -188,7 +261,7 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
                         onClick={() => {
                             navigate(
                                 `/admin/live-votes/${currentSessionId}/new`
-                            );
+                            ).then();
                         }}
                     >
                         + {t("common.button:create")}

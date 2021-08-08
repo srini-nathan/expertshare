@@ -71,3 +71,5 @@ export class LiveVoteQuestion extends BaseEntity {
         this.isSelected = isSelected;
     }
 }
+
+export type PLiveVoteQuestion = Partial<LiveVoteQuestion>;
