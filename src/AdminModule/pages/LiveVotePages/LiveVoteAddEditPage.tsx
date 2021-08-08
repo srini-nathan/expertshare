@@ -164,23 +164,41 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
         }
     }, [id]);
 
+    const newlyAddedIds: number[] = [];
     const addNewOption = () => {
+        const newOption = LiveVoteOption.createFrom();
+        newlyAddedIds.push(newOption.id);
         setData({
             ...data,
-            voteOptions: [...data.voteOptions, LiveVoteOption.createFrom()],
+            voteOptions: [...data.voteOptions, newOption],
         } as LiveVoteQuestion);
     };
 
     const handleDelete = (optionId: number) => {
-        LiveVoteOptionApi.deleteById(optionId).then(({ error }) => {
-            if (error !== null) {
-                if (_isString(error)) {
-                    errorToast(t(error));
-                }
-            } else {
-                successToast(t("admin.liveVote.form:delete.toast.success"));
-            }
-        });
+        if (newlyAddedIds.indexOf(optionId) === -1) {
+            LiveVoteOptionApi.deleteById(optionId)
+                .then(({ error }) => {
+                    if (error !== null) {
+                        if (_isString(error)) {
+                            errorToast(t(error));
+                        }
+                    } else {
+                        successToast(
+                            t("admin.liveVote.form:delete.toast.success")
+                        );
+                    }
+                })
+                .finally(() => {
+                    setShowDelete(0);
+                });
+        } else {
+            setShowDelete(0);
+            successToast(t("admin.liveVote.form:delete.toast.success"));
+        }
+        setData({
+            ...data,
+            voteOptions: data.voteOptions.filter((opt) => opt.id !== optionId),
+        } as LiveVoteQuestion);
     };
 
     if (isLoading) {
