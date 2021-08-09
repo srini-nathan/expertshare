@@ -115,6 +115,33 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
             <AppPageHeader
                 title={t("admin.liveVoteResult.overview:header.title")}
             />
+            <Row>
+                <Col>
+                    <div className="live-voting-result--tabs mt-4 mb-2">
+                        <nav>
+                            <div
+                                className="nav nav-tabs"
+                                id="nav-tab"
+                                role="tablist"
+                            >
+                                <Link
+                                    className="nav-link"
+                                    id="myGrid2-tab"
+                                    to={`/admin/live-votes-result/${questionId}`}
+                                >
+                                    Results
+                                </Link>
+                                <span
+                                    className="nav-link active"
+                                    id="myGrid-tab"
+                                >
+                                    Details
+                                </span>
+                            </div>
+                        </nav>
+                    </div>
+                </Col>
+            </Row>
             <Row className={"live-voting-result--chart-action-bar"}>
                 <Col className={"d-flex justify-content-end"}>
                     <div className={"switch-view p-0 mx-0 ml-sm-2"}>

@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useState, useRef } from "react";
-import { RouteComponentProps, useParams } from "@reach/router";
+import { RouteComponentProps, useParams, Link } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { isString as _isString } from "lodash";
@@ -100,6 +100,33 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
                 cancelTokenSources={cancelTokenSourcesRef.current}
                 showToolbar
             />
+            <Row>
+                <Col>
+                    <div className="live-voting-result--tabs mt-4 mb-2">
+                        <nav>
+                            <div
+                                className="nav nav-tabs"
+                                id="nav-tab"
+                                role="tablist"
+                            >
+                                <span
+                                    className="nav-link active"
+                                    id="myGrid-tab"
+                                >
+                                    Details
+                                </span>
+                                <Link
+                                    className="nav-link"
+                                    id="myGrid2-tab"
+                                    to={`/admin/live-votes-result/${questionId}/overview`}
+                                >
+                                    Results
+                                </Link>
+                            </div>
+                        </nav>
+                    </div>
+                </Col>
+            </Row>
             <Row>
                 <Col>
                     <AppGrid
