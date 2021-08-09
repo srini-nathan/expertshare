@@ -52,7 +52,7 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const [votes, setVotes] = useState<LiveVoteQuestion[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const { control, getValues } = useForm();
     const [activating, setActivating] = useState<boolean>(false);
@@ -152,6 +152,18 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
             });
     };
 
+    const handlePublishResult = async (status: boolean) => {
+        const selectedVote = getValues("activeVote");
+        await LiveVoteQuestionApi.publishResult<
+            LiveVotePublishResultPayload,
+            LiveVotePublishResultPayload
+        >({
+            session: SessionApi.toResourceUrl(currentSessionId),
+            isResultPublished: status,
+            entityId: selectedVote,
+        });
+    };
+
     useEffect(() => {
         return () => {
             cancelTokenSourcesRef.current.forEach((c) => {
@@ -181,7 +193,6 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
                 };
             }),
         ];
-
         return (
             <>
                 <AppFormSelect
@@ -226,7 +237,10 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
                     control={control}
                     onChange={() => {
                         if (active?.id) {
-                            emitRefreshVote(currentSessionId);
+                            const toggle = !active?.isResultPublished;
+                            handlePublishResult(toggle).then(() => {
+                                emitRefreshVote(currentSessionId);
+                            });
                         }
                     }}
                 />
