@@ -105,6 +105,11 @@ export const routers: ModuleRouter[] = [
                     <LiveVoteOverviewResultPage
                         path={"live-votes-result/:questionId/overview"}
                     />
+                    <LiveVoteOverviewResultPage
+                        path={
+                            "live-votes-result/:questionId/overview/:viewMode"
+                        }
+                    />
                 </Router>
             );
         },

@@ -1,9 +1,11 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
-import { RouteComponentProps, useParams } from "@reach/router";
+import { RouteComponentProps, useParams, Link } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { Chart } from "react-google-charts";
+import { useSetRecoilState } from "recoil";
 import {
+    AppButton,
     AppCard,
     AppLoader,
     AppPageHeader,
@@ -12,10 +14,16 @@ import { LiveVoteResultApi } from "../../apis";
 import { LiveVoteResultOverview } from "../../models";
 import { useSessionSocketEvents } from "../../../AppModule/hooks";
 import { socket, EVENTS } from "../../../AppModule/socket";
+import {
+    appDashboardLayoutOptions,
+    AppDashboardLayoutOptions,
+    normalLayout,
+    overViewLayout,
+} from "../../../AppModule/atoms";
 
 export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
-    const { questionId } = useParams();
+    const { questionId, viewMode = "normal" } = useParams();
     const [loading, setLoading] = useState<boolean>(false);
     const [data, setData] = useState<LiveVoteResultOverview[]>([]);
     const [chartData, setChartData] = useState<any[]>([]);
@@ -23,6 +31,30 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
         emitJoinLiveVoteResult,
         emitLeaveLiveVoteResult,
     } = useSessionSocketEvents();
+    const setLayoutOptions = useSetRecoilState<AppDashboardLayoutOptions>(
+        appDashboardLayoutOptions
+    );
+
+    useEffect(() => {
+        if (viewMode === "fullscreen") {
+            setLayoutOptions((currVal) => {
+                return {
+                    ...currVal,
+                    ...overViewLayout,
+                };
+            });
+        }
+        return () => {
+            if (viewMode === "fullscreen") {
+                setLayoutOptions((currVal) => {
+                    return {
+                        ...currVal,
+                        ...normalLayout,
+                    };
+                });
+            }
+        };
+    });
 
     const fetchResult = (applyLoading = false) => {
         LiveVoteResultApi.getOverview<LiveVoteResultOverview>(questionId)
@@ -79,6 +111,22 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
             <AppPageHeader
                 title={t("admin.liveVoteResult.overview:header.title")}
             />
+            {viewMode !== "fullscreen" ? (
+                <Row className={"live-voting-result--chart-action-bar"}>
+                    <Col className={"d-flex justify-content-end"}>
+                        <Link
+                            to={`/admin/live-votes-result/${questionId}/overview/fullscreen`}
+                        >
+                            <AppButton
+                                variant={"secondary"}
+                                className={"show-full"}
+                            >
+                                <i className={"fak fa-maximize"}></i>
+                            </AppButton>
+                        </Link>
+                    </Col>
+                </Row>
+            ) : null}
             <AppCard>
                 <Row>
                     <Col>
