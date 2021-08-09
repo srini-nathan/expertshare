@@ -6,3 +6,4 @@ export * from "./array";
 export * from "./authorization";
 export * from "./handleDateTime";
 export * from "./misc";
+export * from "./object";

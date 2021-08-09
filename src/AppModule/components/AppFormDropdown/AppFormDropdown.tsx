@@ -30,7 +30,6 @@ export const AppFormDropdown: FC<AppFormDropdownProps> = ({
     menuPlacement = "auto",
 }): JSX.Element => {
     return (
-        // Todo: fixing the colro issues
         <Select
             options={options}
             defaultValue={defaultValue}

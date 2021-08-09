@@ -48,6 +48,9 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
         isLoading(true);
         UserApi.getAttendeeList<User>(active, {
             ...params,
+            order: {
+                firstName: "asc",
+            },
             isDisplayAsGuest: false,
         }).then(({ response, error }) => {
             isLoading(false);

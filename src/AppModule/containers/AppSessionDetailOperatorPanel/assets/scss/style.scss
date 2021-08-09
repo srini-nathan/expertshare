@@ -1,0 +1,9 @@
+@import "./../../../../assets/scss/variables";
+@import "./../../../../assets/scss/screens-sizes";
+
+.app-session-detail-operator-panel {
+    .inline-loader {
+        position: absolute;
+        height: auto;
+    }
+}

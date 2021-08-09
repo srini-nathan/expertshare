@@ -10,3 +10,4 @@ export * from "./Partial";
 export * from "./PrimitiveObject";
 export * from "./FileTypeInfo";
 export * from "./SocketCommandPayload";
+export * from "./Option";

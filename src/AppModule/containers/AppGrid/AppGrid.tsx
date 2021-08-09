@@ -30,6 +30,7 @@ export interface AppGridProps {
     totalItems: number;
     frameworkComponents?: any;
     onReady?: (event: GridReadyEvent) => void;
+    paginationContainerClass?: string;
 }
 
 export const AppGrid: FC<AppGridProps> = ({
@@ -38,6 +39,7 @@ export const AppGrid: FC<AppGridProps> = ({
     totalItems,
     frameworkComponents,
     onReady,
+    paginationContainerClass = "d-flex flex-row app-grid-action py-3",
 }) => {
     const { t } = useTranslation();
     const [gridApi, setGridApi] = useState<GridApi>();
@@ -113,7 +115,7 @@ export const AppGrid: FC<AppGridProps> = ({
                     />
                 </div>
                 <br />
-                <div className="d-flex flex-row app-grid-action py-3">
+                <div className={paginationContainerClass}>
                     <AppGridPagination
                         className="mr-3"
                         itemsPerPage={pageSize}

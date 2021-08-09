@@ -1,55 +1,74 @@
-import React, { ChangeEventHandler, FC } from "react";
-import { FieldElement, Ref } from "react-hook-form/dist/types/fields";
-import { RegisterOptions } from "react-hook-form/dist/types/validator";
-import { Controller, Control } from "react-hook-form";
-import { Form } from "react-bootstrap";
+import React, { FC } from "react";
+import { Controller } from "react-hook-form";
+import { Col, Form } from "react-bootstrap";
 import "./assets/scss/style.scss";
+import {
+    AppFormElementProps,
+    AppFormLayoutProps,
+    AppReactHookFormProps,
+    SimpleObject,
+} from "../../models";
+import { AppFormLabel } from "../AppFormLabel";
 
-export interface AppFormRadioGroupProps {
-    name: string;
-    defaultValue?: any;
-    options?: any[];
-    onChange?: ChangeEventHandler<HTMLInputElement>;
-    register?<TFieldElement extends FieldElement<TFieldElement>>(
-        ref?: (TFieldElement & Ref) | null,
-        rules?: RegisterOptions
-    ): void;
-    control: Control<any>;
-    setValue: any;
+export interface AppFormRadioGroupProps
+    extends AppFormElementProps,
+        AppFormLayoutProps,
+        AppReactHookFormProps {
+    options: SimpleObject<string | number>[];
 }
 
 export const AppFormRadioGroup: FC<AppFormRadioGroupProps> = ({
+    id,
     name,
-    control,
+    errorMessage,
+    label = "",
+    description,
+    isInvalid,
+    isValid,
+    required = false,
     options,
+    control,
     defaultValue,
-    setValue,
+    ...props
 }): JSX.Element => {
+    const controlId = id || name;
+    const labelProps = { label, required, description };
+    const { sm = 12, md = 6, lg = 4, xl = 4, className = "" } = props;
+    const groupProps = { sm, md, lg, xl, controlId, as: Col };
     return (
-        <>
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        <Form.Group {...groupProps} className={`mb-0 ${className}`}>
+            <AppFormLabel {...labelProps} />
             <Controller
                 name={name}
                 control={control}
-                defaultValue={defaultValue ? defaultValue.value : ""}
-                render={() => <input type="hidden" name={name} />}
-            />
-            {options?.map((e) => {
-                return (
-                    <Form.Check
-                        key={e.value}
-                        id={`radio_${e.value}`}
-                        name={`radio_${e.name}`}
-                        className={"circle-radio-button"}
-                        onChange={(element) => {
-                            setValue(name, element.target.value, {});
-                        }}
-                        type={"radio"}
-                        defaultValue={e.value}
-                        label={e.label}
-                        defaultChecked={e.defaultCheck}
-                    />
-                );
-            })}
-        </>
+                defaultValue={defaultValue}
+                render={({ field }) => (
+                    <div className={"form-check-inline"}>
+                        {options.map(({ value, label: radioLabel }) => (
+                            <Form.Check
+                                key={value}
+                                inline
+                                type="radio"
+                                className={"radio-button-text"}
+                                id={`${controlId}_${value}`}
+                                required={required}
+                                label={radioLabel}
+                                {...field}
+                                value={value}
+                                defaultChecked={defaultValue === value}
+                            />
+                        ))}
+                    </div>
+                )}
+            ></Controller>
+            <Form.Control.Feedback
+                type="invalid"
+                className={isInvalid && !isValid ? "d-inline" : ""}
+            >
+                {errorMessage}
+            </Form.Control.Feedback>
+        </Form.Group>
     );
 };
