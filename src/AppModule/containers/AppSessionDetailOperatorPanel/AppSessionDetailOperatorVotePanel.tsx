@@ -255,7 +255,9 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
             <h5>
                 {t("sessionDetails:section.operatorActions.liveVote.header")}
                 <AppButton
-                    className={"text-capitalize create-btn"}
+                    className={
+                        "text-capitalize create-btn float-right d-inline-block"
+                    }
                     variant={"secondary"}
                     onClick={() => {
                         navigate(

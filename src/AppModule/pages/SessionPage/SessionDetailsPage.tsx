@@ -51,7 +51,6 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
             setPrev(currentSess.prev);
         }
     };
-    const [widgetBar, setWidgetBar] = useState<boolean>(false);
     const [checkingLiveVote, setCheckingLiveVote] = useState<boolean>(false);
     const [vote, setVote] = useState<LiveVoteQuestion>();
 
@@ -72,9 +71,6 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                         getOtherSessions(res.id);
                     }
                     setData(res);
-                    if (res.isCommentEnable) {
-                        setWidgetBar(true);
-                    }
                 }
             }
             isLoading(false);
@@ -209,12 +205,8 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                 if (response !== null) {
                     if (response.items && response.items[0]) {
                         setVote(response.items[0]);
-                        setWidgetBar(true);
                     } else {
                         setVote(undefined);
-                        if (!data.isCommentEnable) {
-                            setWidgetBar(false);
-                        }
                     }
                 }
             })
@@ -230,7 +222,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
             setCheckingLiveVote(true);
             fetchLiveVote(true);
         }
-    }, [id]);
+    }, [id, data]);
 
     useEffect(() => {
         socket.on(ON_LIVE_VOTE_REFRESH, () => {
@@ -249,10 +241,14 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
         <Fragment>
             <Row className="m-0">
                 <Col
-                    className={widgetBar ? "pl-0 comment-enable" : "px-0"}
+                    className={
+                        data.isCommentEnable || vote
+                            ? "pl-0 comment-enable"
+                            : "px-0"
+                    }
                     md={12}
                     sm={12}
-                    lg={widgetBar ? 8 : 12}
+                    lg={data.isCommentEnable || vote ? 8 : 12}
                 >
                     <AppCard className="p-0">
                         <AppSessionHeader
@@ -327,7 +323,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                     {/* <AppSessionDetails session={data} /> */}
                     <AppSessionDescription session={data} />
                 </Col>
-                {widgetBar && (
+                {(data.isCommentEnable || vote) && (
                     <Col
                         md={12}
                         sm={12}
