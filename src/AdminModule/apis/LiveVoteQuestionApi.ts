@@ -1,7 +1,15 @@
-import { AxiosError, AxiosRequestConfig } from "axios";
+import { AxiosError, AxiosRequestConfig, Canceler } from "axios";
 import { EntityAPI } from "../../AppModule/apis/EntityAPI";
 import { route, ROUTES } from "../../config";
-import { FinalResponse, ServerError } from "../../AppModule/models";
+import {
+    FinalResponse,
+    ListResponse,
+    ServerError,
+} from "../../AppModule/models";
+import {
+    onFindAllResponseHydra,
+    onFindAllResponseJson,
+} from "../../AppModule/apis";
 
 const {
     api_vote_questions_delete_item: API_DELETE_ITEM,
@@ -12,6 +20,7 @@ const {
     api_vote_questions_post_collection: API_POST_COLLECTION,
     api_vote_questions_select_collection: API_SELECT_PATCH_ITEM,
     api_vote_questions_result_publish_collection: API_RESULT_PUBLISH_COLLECTION,
+    api_vote_questions_get_active_collection: API_GET_ACTIVE_COLLECTION,
 } = ROUTES;
 
 export abstract class LiveVoteQuestionApi extends EntityAPI {
@@ -53,5 +62,40 @@ export abstract class LiveVoteQuestionApi extends EntityAPI {
             .catch((error: AxiosError | ServerError) =>
                 this.handleErrorDuringCreatingOrUpdating(error)
             );
+    }
+
+    public static async getActiveQuestions<E>(
+        page = 1,
+        extraParams = {},
+        cancelToken?: (c: Canceler) => void
+    ): Promise<FinalResponse<ListResponse<E> | null>> {
+        const source = this.createCancelTokenSource();
+
+        if (cancelToken) {
+            cancelToken(source.cancel);
+        }
+
+        return this.makeGet<E>(
+            API_GET_ACTIVE_COLLECTION,
+            {
+                ...extraParams,
+                page,
+            },
+            {
+                cancelToken: source.token,
+            }
+        )
+            .then(({ data }) => {
+                const list = this.acceptHydra
+                    ? onFindAllResponseHydra<E>(data)
+                    : onFindAllResponseJson<E>(data);
+                return Promise.resolve(
+                    new FinalResponse<ListResponse<E>>(list)
+                );
+            })
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
     }
 }
