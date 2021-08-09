@@ -73,42 +73,68 @@ export const AppLiveVoteOptionMultiple: FC<AppLiveVoteOptionMultipleType> = ({
                 const translation: LiveVoteOptionTranslation =
                     trans[locale] ?? firstTrans;
                 return (
-                    <div className="radio-item mb-3" key={option.id}>
+                    <div
+                        className={`mb-3 form-check ${
+                            optionType === "RADIO" ? "circle-radio-button" : ""
+                        }${
+                            optionType === "CHECKBOX"
+                                ? "checkbox-list-item"
+                                : ""
+                        }`}
+                        key={option.id}
+                    >
+                        {optionType === QUESTION_TYPE_RADIO ? (
+                            <div>
+                                <input
+                                    {...register("voteChoice", {
+                                        required: true,
+                                    })}
+                                    type={optionType}
+                                    value={option.val}
+                                    id={`voteChoice[${index}]`}
+                                    className={"form-check-input"}
+                                />
+                                <label
+                                    htmlFor={`voteChoice[${index}]`}
+                                    className={"form-check-label"}
+                                >
+                                    <div className="det">
+                                        <h4 className="mb-0">
+                                            {translation.title}
+                                        </h4>
+                                        {translation.description ? (
+                                            <p className="mb-0">
+                                                {translation.description}
+                                            </p>
+                                        ) : null}
+                                    </div>
+                                </label>
+                            </div>
+                        ) : null}
                         {optionType === QUESTION_TYPE_CHECKBOX ? (
-                            <input
-                                {...register(`voteChoice[${index}]`, {
-                                    required: true,
-                                })}
-                                type={optionType}
-                                value={option.val}
-                                id={`voteChoice[${index}]`}
-                            />
-                        ) : (
-                            <input
-                                {...register("voteChoice", {
-                                    required: true,
-                                })}
-                                type={optionType}
-                                value={option.val}
-                                id={"voteChoice"}
-                            />
-                        )}
-                        <label
-                            htmlFor={
-                                optionType === QUESTION_TYPE_CHECKBOX
-                                    ? `voteChoice[${index}]`
-                                    : "voteChoice"
-                            }
-                        >
-                            <span>
-                                {translation.title}
-                                {translation.description ? (
-                                    <p className="mb-0">
-                                        {translation.description}
-                                    </p>
-                                ) : null}
-                            </span>
-                        </label>
+                            <label className="checkbox-label-container">
+                                <input
+                                    {...register(`voteChoice[${index}]`, {
+                                        required: true,
+                                    })}
+                                    type={optionType}
+                                    value={option.val}
+                                    id={`voteChoice[${index}]`}
+                                    className={"form-check-input"}
+                                />
+                                <span className="custom-checkbox"></span>
+                                <div className="det">
+                                    <h4 className="mb-0">
+                                        {translation.title}
+                                    </h4>
+                                    {translation.description ? (
+                                        <p className="mb-0">
+                                            {translation.description}
+                                        </p>
+                                    ) : null}
+                                </div>
+                            </label>
+                        ) : null}
                     </div>
                 );
             })}
@@ -121,6 +147,7 @@ export const AppLiveVoteOptionMultiple: FC<AppLiveVoteOptionMultipleType> = ({
                 isLoading={isSubmitting}
                 disabled={!formState.isValid || isSubmitting}
                 loadingTxt={t("liveVote.form:button.submittingVote")}
+                className={"submit-btn"}
             >
                 <i className="fak fa-check-regular-bold mr-1"></i>
                 {t("liveVote.form:button.submitVote")}

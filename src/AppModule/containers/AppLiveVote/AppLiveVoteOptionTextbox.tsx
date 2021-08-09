@@ -46,6 +46,7 @@ export const AppLiveVoteOptionTextBox: FC<AppLiveVoteOptionTextBoxType> = ({
                 type="submit"
                 disabled={!formState.isValid || isSubmitting}
                 loadingTxt={t("liveVote.form:button.submittingVote")}
+                className={"submit-btn"}
             >
                 <i className="fak fa-check-regular-bold mr-1"></i>
                 {t("liveVote.form:button.submitVote")}

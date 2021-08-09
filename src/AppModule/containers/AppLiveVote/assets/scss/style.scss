@@ -16,7 +16,6 @@
                     color: var(--card-text-color);
                     i {
                         padding-right: 10px;
-                        padding-bottom: 4px;
                         font-size: 23px;
                         font-weight: 500;
                     }
@@ -26,6 +25,7 @@
                 display: flex;
                 align-items: center;
                 button {
+                    width: 36px;
                     i {
                         font-size: 18px;
                         font-weight: 700;
@@ -71,24 +71,98 @@
                     opacity: 50%;
                 }
                 form {
-                    .radio-item {
+                    .circle-radio-button {
                         label {
-                            align-items: end;
+                            align-items: flex-start;
                             &::before {
-                                min-width: 16px;
+                                margin-top: 2px;
+                                margin-bottom: 0;
                             }
                             &::after {
-                                top: .25rem;
+                                top: 0.25rem;
+                                margin-top: 2px;
                             }
-                            span {
-                                padding-top: 0;
-                                margin-top: -1px;
+                        }
+                        .det {
+                            width: 94%;
+                            margin-left: 5px;
+                            user-select: none;
+                            h4 {
                                 font-size: 14px;
                                 font-weight: 500;
                                 color: var(--card-text-color);
-                                p {
-                                    font-size: 12px;
+                            }
+                            p {
+                                margin-top: 4px;
+                                font-size: 12px;
+                                font-weight: 400;
+                                color: var(--card-text-color);
+                            }
+                        }
+                    }
+                    .checkbox-label-container {
+                        position: relative;
+                        display: block;
+                        padding-left: 0;
+                        margin: 0;
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: var(--secondary-90);
+                        text-align: left;
+                        cursor: pointer;
+
+                        input {
+                            position: absolute;
+                            width: 0;
+                            height: 0;
+                            cursor: pointer;
+                            opacity: 0;
+
+                            &:checked ~ .custom-checkbox {
+                                background-color: var(--primary-button-background-color);
+                                opacity: 1;
+
+                                &::after {
+                                    display: block;
                                 }
+                            }
+                        }
+
+                        span {
+                            position: absolute;
+                            top: 3px;
+                            left: 0;
+                            width: 14px;
+                            height: 14px;
+                            background-color: var(--primary-20);
+                            border: 1px solid var(--primary-button-background-color);
+
+                            &::after {
+                                position: absolute;
+                                top: 1px;
+                                left: 4px;
+                                display: none;
+                                width: 4px;
+                                height: 8px;
+                                content: "";
+                                border: solid var(--light-clr);
+                                border-width: 0 1px 1px 0;
+                                transform: rotate(45deg);
+                            }
+                        }
+                        .det {
+                            margin-left: 25px;
+                            user-select: none;
+                            h4 {
+                                font-size: 14px;
+                                font-weight: 500;
+                                color: var(--card-text-color);
+                            }
+                            p {
+                                margin-top: 4px;
+                                font-size: 12px;
+                                font-weight: 400;
+                                color: var(--card-text-color);
                             }
                         }
                     }
@@ -96,6 +170,7 @@
                         position: relative;
                         i {
                             position: absolute;
+                            bottom: 11px;
                             left: 10px;
                         }
                     }
@@ -141,30 +216,31 @@
                     }
                     &.green {
                         .badge {
-                            background-color: #30B7A7;
+                            background-color: #30b7a7;
                         }
                     }
                     &.dark-blue {
                         .badge {
-                            background-color: #0072C6;
+                            background-color: #0072c6;
                         }
                     }
                     &.light-blue {
                         .badge {
-                            background-color: #1AB7EA;
+                            background-color: #1ab7ea;
                         }
                     }
                     &.yellow {
                         .badge {
-                            background-color: #FBBD00;
+                            background-color: #fbbd00;
                         }
                     }
                     &.red {
                         .badge {
-                            background-color: #C31F27;
+                            background-color: #c31f27;
                         }
                     }
                 }
+
                 button {
                     padding: 2px;
                     background-color: unset;

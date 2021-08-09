@@ -325,7 +325,12 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                     <AppSessionDescription session={data} />
                 </Col>
                 {widgetBar && (
-                    <Col md={12} sm={12} lg={4} className="pr-0">
+                    <Col
+                        md={12}
+                        sm={12}
+                        lg={4}
+                        className="pr-3 pl-0 pl-lg-3 pr-lg-0"
+                    >
                         <AppLiveVote enable={true} data={vote} sessionId={id} />
                         {data.isCommentEnable ? (
                             <AppQuestionsAndAnswers
