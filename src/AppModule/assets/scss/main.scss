@@ -195,7 +195,14 @@ a {
     @include media("not-mobile") {
         margin-top: 70px !important;
     }
-
+    .canvas-3d {
+        top: -70px;
+        margin-top: 0;
+        @include media("mobile") {
+            top: 25px !important;
+            margin-top: -24px !important;
+        }
+    }
     .app-grid-action,
     .footer-action {
         @include media("not-mobile") {
