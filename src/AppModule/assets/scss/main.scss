@@ -285,6 +285,7 @@ a {
     // background-color: #eee !important;
 }
 .ag-theme-alpine {
+    font-family: var(--font-family-body);
     .ag-react-container {
         .alert-danger {
             color: var(--secondary);
