@@ -152,14 +152,15 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
             });
     };
 
-    const handlePublishResult = async (status: boolean) => {
+    const handlePublishResult = async () => {
         const selectedVote = getValues("activeVote");
+        const status = getValues("isResultPublished");
         await LiveVoteQuestionApi.publishResult<
             LiveVotePublishResultPayload,
             LiveVotePublishResultPayload
         >({
             session: SessionApi.toResourceUrl(currentSessionId),
-            isResultPublished: status,
+            isResultPublished: !status,
             entityId: selectedVote,
         });
     };
@@ -184,7 +185,9 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
         const options = [
             {
                 value: 0,
-                label: "--",
+                label: t(
+                    "sessionDetails:section.operatorActions.liveVote.label.deActiveDropDownOption"
+                ),
             },
             ...votes.map((v) => {
                 return {
@@ -237,8 +240,7 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
                     control={control}
                     onChange={() => {
                         if (active?.id) {
-                            const toggle = !active?.isResultPublished;
-                            handlePublishResult(toggle).then(() => {
+                            handlePublishResult().then(() => {
                                 emitRefreshVote(currentSessionId);
                             });
                         }
@@ -252,10 +254,21 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
         <div className={"mt-4"}>
             <h5>
                 {t("sessionDetails:section.operatorActions.liveVote.header")}
+                <AppButton
+                    className={"text-capitalize create-btn"}
+                    variant={"secondary"}
+                    onClick={() => {
+                        navigate(
+                            `/admin/live-votes/${currentSessionId}/new`
+                        ).then();
+                    }}
+                >
+                    + {t("common.button:create")}
+                </AppButton>
             </h5>
             <hr />
             <Row>
-                <Col md={10}>
+                <Col md={12}>
                     <Form
                         onSubmit={(e) => {
                             e.preventDefault();
@@ -263,19 +276,6 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
                     >
                         <Row>{renderDropDown()}</Row>
                     </Form>
-                </Col>
-                <Col md={2}>
-                    <AppButton
-                        className={"text-capitalize mt-4"}
-                        variant={"secondary"}
-                        onClick={() => {
-                            navigate(
-                                `/admin/live-votes/${currentSessionId}/new`
-                            ).then();
-                        }}
-                    >
-                        + {t("common.button:create")}
-                    </AppButton>
                 </Col>
             </Row>
             <Row className="mt-3 px-0">
