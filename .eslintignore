@@ -5,3 +5,4 @@ scripts/
 src/stories
 src/types
 src/translations
+src/AppModule/pages/ConferencePage
