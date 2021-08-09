@@ -13,9 +13,9 @@
 
 :root {
     //font
-    --font-family-title: "creditsuisse-title";
-    --font-family-body: "creditsuisse-body";
-    --font-family-button: "creditsuisse-button";
+    --font-family-title: "grotesque";
+    --font-family-body: "grotesque";
+    --font-family-button: "grotesque";
 
     // global colors
     --primary: #0052cc;
@@ -59,7 +59,7 @@
     --tab-background-color: #fff;
     --tab-text-color: #444;
     --tab-box-shadow-color: #44444430;
-    --tab-background-color--active: #0052cc10;
+    --tab-background-color--active: #e6eefa;
     --tab-text-color--active: #0052cc;
     --tab-box-shadow-color--active: #44444430;
 
@@ -110,8 +110,8 @@
     --secondary-button-background-color--disable: #444;
     --secondary-button-text-color--disable: #fff;
     --secondary-button-border-color--disable: #fff;
-    --secondary-button-background-color--active: #444; // for pagination
-    --secondary-button-text-color--active: #fff; // for pagination
+    --secondary-button-background-color--active: #fff; // for pagination
+    --secondary-button-text-color--active: #444; // for pagination
     --secondary-button-border-color--active: #fff; // for pagination
     --danger-button-background-color: #ff4365;
     --danger-button-text-color: #fff;
@@ -127,27 +127,27 @@
     --danger-button-border-color--active: #ff4365;
 
     // navigation
-    --navigation-background-color: #000;
-    --navigation-item-background-color: #000;
-    --navigation-item-text-color: #fff;
-    --navigation-item-icon-color: #ffffff50;
-    --navigation-item-divider-color: #fff5;
-    --navigation-item-background-color--active: #ffffff20;
-    --navigation-item-text-color--active: #fff;
-    --navigation-item-icon-color--active: #fff;
-    --navigation-item-background-color--hover: #ffffff10;
-    --navigation-item-text-color--hover: #fff;
-    --navigation-item-icon-color--hover: #fff;
+    --navigation-background-color: #fff;
+    --navigation-item-background-color: #fff;
+    --navigation-item-text-color: #444;
+    --navigation-item-icon-color: #444;
+    --navigation-item-divider-color: #44444420;
+    --navigation-item-background-color--active: #0052cc10;
+    --navigation-item-text-color--active: #0052cc;
+    --navigation-item-icon-color--active: #0052cc;
+    --navigation-item-background-color--hover: #0052cc10;
+    --navigation-item-text-color--hover: #0052cc;
+    --navigation-item-icon-color--hover: #0052cc;
 
     // modal
     --modal-background-color: #fff;
-    --modal-backdrop-background-color: #000;
+    --modal-backdrop-background-color: #0052cc90;
     --modal-text-color: #444;
     --modal-border-radius: 5px;
 
     // ag-grid / table
     --table-header-background-color: #fff;
-    --table-row-odd-background-color: #00000010;
+    --table-row-odd-background-color: #fff;
     --table-row-even-background-color: #fff;
     --table-row-text-color: #444;
 
