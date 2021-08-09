@@ -116,8 +116,8 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
                 title={t("admin.liveVoteResult.overview:header.title")}
             />
             <Row>
-                <Col>
-                    <div className="live-voting-result--tabs mt-4 mb-2">
+                <Col className={"d-flex justify-content-between mb-5"}>
+                    <div className="d-inline-block live-voting-result--tabs">
                         <nav>
                             <div
                                 className="nav nav-tabs"
@@ -129,13 +129,17 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
                                     id="myGrid2-tab"
                                     to={`/admin/live-votes-result/${questionId}`}
                                 >
-                                    Results
+                                    {t(
+                                        "admin.liveVoteResult:tabSwitch.details"
+                                    )}
                                 </Link>
                                 <span
                                     className="nav-link active"
                                     id="myGrid-tab"
                                 >
-                                    Details
+                                    {t(
+                                        "admin.liveVoteResult:tabSwitch.results"
+                                    )}
                                 </span>
                             </div>
                         </nav>

@@ -21,6 +21,7 @@ const {
     api_vote_questions_select_collection: API_SELECT_PATCH_ITEM,
     api_vote_questions_result_publish_collection: API_RESULT_PUBLISH_COLLECTION,
     api_vote_questions_get_active_collection: API_GET_ACTIVE_COLLECTION,
+    api_vote_questions_download: API_GET_DOWNLOAD,
 } = ROUTES;
 
 export abstract class LiveVoteQuestionApi extends EntityAPI {
@@ -92,6 +93,17 @@ export abstract class LiveVoteQuestionApi extends EntityAPI {
                 return Promise.resolve(
                     new FinalResponse<ListResponse<E>>(list)
                 );
+            })
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
+    }
+
+    public static async downloadResult(id: number): Promise<any> {
+        return this.makeGet<any>(route(API_GET_DOWNLOAD, { id }))
+            .then(({ data }) => {
+                return data;
             })
             .catch((error: AxiosError | ServerError) => {
                 const { message } = error;
