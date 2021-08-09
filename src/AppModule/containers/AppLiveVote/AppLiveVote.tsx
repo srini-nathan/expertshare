@@ -50,6 +50,8 @@ export const AppLiveVote: FC<AppLiveVoteProps> = ({
                 .then(({ response }) => {
                     if (response && response.items && response.items[0]) {
                         setAlreadyVoted(true);
+                    } else {
+                        setAlreadyVoted(false);
                     }
                 })
                 .finally(() => {
