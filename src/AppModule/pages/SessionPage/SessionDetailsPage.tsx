@@ -210,9 +210,8 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
     }, [loading]);
 
     const fetchLiveVote = (setLoading = false) => {
-        LiveVoteQuestionApi.find<LiveVoteQuestion>(1, {
+        LiveVoteQuestionApi.getActiveQuestions<LiveVoteQuestion>(1, {
             "session.id": id,
-            isSelected: true,
         })
             .then(({ response }) => {
                 if (response !== null) {
