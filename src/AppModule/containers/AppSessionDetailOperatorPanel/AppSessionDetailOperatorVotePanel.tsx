@@ -52,7 +52,7 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const [votes, setVotes] = useState<LiveVoteQuestion[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const { control, getValues } = useForm();
     const [activating, setActivating] = useState<boolean>(false);
@@ -152,6 +152,18 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
             });
     };
 
+    const handlePublishResult = async (status: boolean) => {
+        const selectedVote = getValues("activeVote");
+        await LiveVoteQuestionApi.publishResult<
+            LiveVotePublishResultPayload,
+            LiveVotePublishResultPayload
+        >({
+            session: SessionApi.toResourceUrl(currentSessionId),
+            isResultPublished: status,
+            entityId: selectedVote,
+        });
+    };
+
     useEffect(() => {
         return () => {
             cancelTokenSourcesRef.current.forEach((c) => {
@@ -181,7 +193,6 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
                 };
             }),
         ];
-
         return (
             <>
                 <AppFormSelect
@@ -205,6 +216,18 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
                         },
                     }}
                 />
+                <AppButton
+                    className={"text-capitalize mt-4"}
+                    variant={"secondary"}
+                    type={"button"}
+                    onClick={handleApplyVote}
+                    isLoading={activating}
+                    disabled={activating}
+                >
+                    {t(
+                        "sessionDetails:section.operatorActions.liveVote.button.applyVote"
+                    )}
+                </AppButton>
                 <AppFormSwitch
                     name={"isResultPublished"}
                     label={t(
@@ -214,7 +237,10 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
                     control={control}
                     onChange={() => {
                         if (active?.id) {
-                            emitRefreshVote(currentSessionId);
+                            const toggle = !active?.isResultPublished;
+                            handlePublishResult(toggle).then(() => {
+                                emitRefreshVote(currentSessionId);
+                            });
                         }
                     }}
                 />
@@ -229,34 +255,18 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
             </h5>
             <hr />
             <Row>
-                <Col md={8}>
+                <Col md={10}>
                     <Form
                         onSubmit={(e) => {
                             e.preventDefault();
                         }}
                     >
-                        <Row>
-                            {renderDropDown()}
-                            <Col md={6}>
-                                <AppButton
-                                    className={"text-capitalize"}
-                                    variant={"secondary"}
-                                    type={"button"}
-                                    onClick={handleApplyVote}
-                                    isLoading={activating}
-                                    disabled={activating}
-                                >
-                                    {t(
-                                        "sessionDetails:section.operatorActions.liveVote.button.applyVote"
-                                    )}
-                                </AppButton>
-                            </Col>
-                        </Row>
+                        <Row>{renderDropDown()}</Row>
                     </Form>
                 </Col>
-                <Col md={4}>
+                <Col md={2}>
                     <AppButton
-                        className={"text-capitalize"}
+                        className={"text-capitalize mt-4"}
                         variant={"secondary"}
                         onClick={() => {
                             navigate(
