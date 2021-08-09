@@ -3,9 +3,15 @@ import { RouteComponentProps, useParams } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { Chart } from "react-google-charts";
-import { AppLoader, AppPageHeader } from "../../../AppModule/components";
+import {
+    AppCard,
+    AppLoader,
+    AppPageHeader,
+} from "../../../AppModule/components";
 import { LiveVoteResultApi } from "../../apis";
 import { LiveVoteResultOverview } from "../../models";
+import { useSessionSocketEvents } from "../../../AppModule/hooks";
+import { socket, EVENTS } from "../../../AppModule/socket";
 
 export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
@@ -13,6 +19,10 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
     const [loading, setLoading] = useState<boolean>(false);
     const [data, setData] = useState<LiveVoteResultOverview[]>([]);
     const [chartData, setChartData] = useState<any[]>([]);
+    const {
+        emitJoinLiveVoteResult,
+        emitLeaveLiveVoteResult,
+    } = useSessionSocketEvents();
 
     const fetchResult = (applyLoading = false) => {
         LiveVoteResultApi.getOverview<LiveVoteResultOverview>(questionId)
@@ -41,6 +51,17 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
     };
 
     useEffect(() => {
+        emitJoinLiveVoteResult(questionId);
+        socket.on(EVENTS.ON_REFRESH_LIVE_VOTE_RESULT, () => {
+            fetchResult(false);
+        });
+        return () => {
+            socket.off(EVENTS.ON_REFRESH_LIVE_VOTE_RESULT);
+            emitLeaveLiveVoteResult(questionId);
+        };
+    }, []);
+
+    useEffect(() => {
         setLoading(true);
         fetchResult(true);
     }, []);
@@ -58,68 +79,71 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
             <AppPageHeader
                 title={t("admin.liveVoteResult.overview:header.title")}
             />
-            <Row>
-                <Col>
-                    <Chart
-                        width={"100%"}
-                        height={"100%"}
-                        chartType="BarChart"
-                        loader={<AppLoader />}
-                        data={[
-                            [
-                                "Vote Option",
-                                "Number Of Votes",
-                                { role: "style" },
-                                {
-                                    sourceColumn: 0,
-                                    role: "annotation",
-                                    type: "string",
-                                    calc: "stringify",
-                                },
-                            ],
-                            ...chartData,
-                        ]}
-                        options={{
-                            legend: { position: "none" },
-                        }}
-                    />
-                </Col>
-            </Row>
-            <br />
-            <br />
-            <Row>
-                <Col>
-                    <ul
-                        style={{
-                            listStyle: "none",
-                        }}
-                    >
-                        {data.map(({ title, color }, index) => {
-                            return (
-                                <li
-                                    key={index}
-                                    className={"mr-4"}
-                                    style={{
-                                        display: "inline-block",
-                                    }}
-                                >
-                                    <span
-                                        className={"mr-1"}
+            <AppCard>
+                <Row>
+                    <Col>
+                        <Chart
+                            width={"100%"}
+                            height={"100%"}
+                            chartType="BarChart"
+                            loader={<AppLoader />}
+                            data={[
+                                [
+                                    "Vote Option",
+                                    "Number Of Votes",
+                                    { role: "style" },
+                                    {
+                                        sourceColumn: 0,
+                                        role: "annotation",
+                                        type: "string",
+                                        calc: "stringify",
+                                    },
+                                ],
+                                ...chartData,
+                            ]}
+                            options={{
+                                legend: { position: "none" },
+                            }}
+                        />
+                    </Col>
+                </Row>
+                <br />
+                <br />
+                <Row>
+                    <Col>
+                        <ul
+                            style={{
+                                listStyle: "none",
+                            }}
+                        >
+                            {data.map(({ title, color }, index) => {
+                                return (
+                                    <li
+                                        key={index}
+                                        className={"mr-4"}
                                         style={{
                                             display: "inline-block",
-                                            backgroundColor: color || "#F0F",
-                                            height: "10px",
-                                            width: "10px",
-                                            borderRadius: "100%",
                                         }}
-                                    ></span>
-                                    {title}
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </Col>
-            </Row>
+                                    >
+                                        <span
+                                            className={"mr-1"}
+                                            style={{
+                                                display: "inline-block",
+                                                backgroundColor:
+                                                    color || "#F0F",
+                                                height: "10px",
+                                                width: "10px",
+                                                borderRadius: "100%",
+                                            }}
+                                        ></span>
+                                        {title}
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </Col>
+                </Row>
+            </AppCard>
         </Fragment>
     );
 };

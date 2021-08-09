@@ -69,7 +69,7 @@ export const AppLiveVote: FC<AppLiveVoteProps> = ({
         })
             .then(() => {
                 setAlreadyVoted(true);
-                emitSubmittedVote(sessionId);
+                emitSubmittedVote(sessionId, data.id);
             })
             .finally(() => {
                 setIsSubmitting(false);
