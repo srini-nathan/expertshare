@@ -205,6 +205,18 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
                         },
                     }}
                 />
+                <AppButton
+                    className={"text-capitalize mt-4"}
+                    variant={"secondary"}
+                    type={"button"}
+                    onClick={handleApplyVote}
+                    isLoading={activating}
+                    disabled={activating}
+                >
+                    {t(
+                        "sessionDetails:section.operatorActions.liveVote.button.applyVote"
+                    )}
+                </AppButton>
                 <AppFormSwitch
                     name={"isResultPublished"}
                     label={t(
@@ -229,34 +241,18 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
             </h5>
             <hr />
             <Row>
-                <Col md={8}>
+                <Col md={10}>
                     <Form
                         onSubmit={(e) => {
                             e.preventDefault();
                         }}
                     >
-                        <Row>
-                            {renderDropDown()}
-                            <Col md={6}>
-                                <AppButton
-                                    className={"text-capitalize"}
-                                    variant={"secondary"}
-                                    type={"button"}
-                                    onClick={handleApplyVote}
-                                    isLoading={activating}
-                                    disabled={activating}
-                                >
-                                    {t(
-                                        "sessionDetails:section.operatorActions.liveVote.button.applyVote"
-                                    )}
-                                </AppButton>
-                            </Col>
-                        </Row>
+                        <Row>{renderDropDown()}</Row>
                     </Form>
                 </Col>
-                <Col md={4}>
+                <Col md={2}>
                     <AppButton
-                        className={"text-capitalize"}
+                        className={"text-capitalize mt-4"}
                         variant={"secondary"}
                         onClick={() => {
                             navigate(
