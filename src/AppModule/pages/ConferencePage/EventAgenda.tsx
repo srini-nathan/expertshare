@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useEffect, useState } from "react";
+import React, { FC, Fragment, useEffect, useState, Suspense } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { isString as _isString } from "lodash";
 import { useTranslation } from "react-i18next";
@@ -64,6 +64,9 @@ export const EventAgenda: FC<RouteComponentProps> = ({
         SessionCategory[]
     >([]);
     const [sessions, setSessions] = React.useState<any[]>([]);
+    const [sessionsCount, setSessionsCount] = React.useState(0);
+    const [sessionsPage, setSessionsPage] = React.useState(1);
+    const [isFetching, setIsFetching] = useState(false);
     const { containerId } = useAuthState();
     SwiperCore.use([Navigation]);
     const navigator = useNavigator(navigate);
@@ -95,8 +98,19 @@ export const EventAgenda: FC<RouteComponentProps> = ({
             }
         );
     };
+
+    const handleScroll = () => {
+        if (
+            Math.ceil(window.innerHeight + document.documentElement.scrollTop) !== document.documentElement.offsetHeight ||
+            isFetching
+        )
+            return;
+        setIsFetching(true);
+    };
+
     useEffect(() => {
         fetchEvent();
+        window.addEventListener('scroll', handleScroll);
     }, []);
 
     useEffect(() => {
@@ -112,14 +126,16 @@ export const EventAgenda: FC<RouteComponentProps> = ({
             }
         });
     }, []);
+
     const fetchSessions = () => {
-        if (activeDate)
+        if (activeDate && sessionsPage > 1 ? sessionsCount === sessionsPage * 30 : true)
             SessionApi.getAgenda<Session>({
                 "container.id": containerId,
                 "conference.id": id,
                 "start[after]": activeDate?.start,
                 "start[strictly_before]": activeDate?.end,
                 "sessionCategory.id": categoryFilter,
+                "page": sessionsPage,
             }).then(({ error, response }) => {
                 isLoadingSession(false);
                 if (error !== null) {
@@ -163,11 +179,29 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                             sessionItems.push(sessionState);
                         });
                     });
-                    setSessionList(sessionItems);
-                    setSessions(diffCat);
+                    setSessionsCount(sessionsCount + sessionItems.length);
+
+                    if (sessionItems.length > 0) {
+                        setSessionsPage(sessionsPage + 1);
+                        setSessionList(() => {
+                            return [...sessionList, ...sessionItems];
+                        });
+                        setSessions([...sessions, ...diffCat]);
+                    }
                 }
             });
     };
+
+    const fetchMoreListItems = () => {
+        fetchSessions();
+        setIsFetching(false);
+    };
+
+    useEffect(() => {
+        if (!isFetching) return;
+        fetchMoreListItems();
+    }, [isFetching]);
+
     async function handleClone() {
         ConferenceApi.clone<
             Conference,
@@ -185,6 +219,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
             }
         });
     }
+
     async function handleDelete() {
         ConferenceApi.deleteById(data?.id as number).then(({ error }) => {
             if (error !== null) {
@@ -223,6 +258,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
             setCategoryFilter([...categoryFilter, categoryId]);
         }
     }
+
     async function handleChangeSize(cardSize: string, ids: number[]) {
         SessionApi.changeCardSize<Session, { cardSize: string; ids: number[] }>(
             { cardSize, ids }
@@ -291,13 +327,15 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                                         item.cardSize
                                     )} p-0 mx-3`}
                                 >
-                                    <AppSessionItem
-                                        conference={id}
-                                        sessionList={sessionList}
-                                        session={item}
-                                        handleDelete={setDeleteShowSession}
-                                        isGrantedControl={isGrantedControl}
-                                    />
+                                    <Suspense fallback={<div>Loading...</div>}>
+                                        <AppSessionItem
+                                            conference={id}
+                                            sessionList={sessionList}
+                                            session={item}
+                                            handleDelete={setDeleteShowSession}
+                                            isGrantedControl={isGrantedControl}
+                                        />
+                                    </Suspense>
                                 </SwiperSlide>
                             );
                         })}
