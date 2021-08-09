@@ -49,7 +49,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
         UserApi.getAttendeeList<User>(active, {
             ...params,
             order: {
-                firstName: "asc",
+                lastName: "asc",
             },
             isDisplayAsGuest: false,
         }).then(({ response, error }) => {
