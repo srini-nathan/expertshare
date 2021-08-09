@@ -19,6 +19,7 @@ const {
     api_vote_results_patch_item: API_PATCH_ITEM,
     api_vote_results_post_collection: API_POST_COLLECTION,
     api_vote_results_get_my_result_collection: API_GET_MY_RESULT,
+    api_vote_results_overview_collection: API_GET_OVERVIEW,
 } = ROUTES;
 
 export abstract class LiveVoteResultApi extends EntityAPI {
@@ -47,6 +48,41 @@ export abstract class LiveVoteResultApi extends EntityAPI {
 
         return this.makeGet<E>(
             API_GET_MY_RESULT,
+            {
+                "voteQuestion.id": questionId,
+                ...extraParams,
+            },
+            {
+                cancelToken: source.token,
+            }
+        )
+            .then(({ data }) => {
+                const list = this.acceptHydra
+                    ? onFindAllResponseHydra<E>(data)
+                    : onFindAllResponseJson<E>(data);
+                return Promise.resolve(
+                    new FinalResponse<ListResponse<E>>(list)
+                );
+            })
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
+    }
+
+    public static async getOverview<E>(
+        questionId: number,
+        extraParams = {},
+        cancelToken?: (c: Canceler) => void
+    ): Promise<FinalResponse<ListResponse<E> | null>> {
+        const source = this.createCancelTokenSource();
+
+        if (cancelToken) {
+            cancelToken(source.cancel);
+        }
+
+        return this.makeGet<E>(
+            API_GET_OVERVIEW,
             {
                 "voteQuestion.id": questionId,
                 ...extraParams,

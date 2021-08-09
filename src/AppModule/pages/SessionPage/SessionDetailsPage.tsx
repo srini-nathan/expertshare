@@ -16,11 +16,16 @@ import {
 import { Session, User, PSession } from "../../../AdminModule/models";
 import { LiveVoteQuestionApi, SessionApi } from "../../../AdminModule/apis";
 import { errorToast, getDateWT, getTomorrowDate } from "../../utils";
-import { useAuthState, useSessionSocketEvents } from "../../hooks";
+import {
+    useAuthState,
+    useIsGranted,
+    useSessionSocketEvents,
+} from "../../hooks";
 import "./assets/scss/style.scss";
 import { socket, EVENTS } from "../../socket";
 import { AppLiveVote, AppSessionDetailOperatorPanel } from "../../containers";
 import { LiveVoteQuestion } from "../../../AdminModule/models/entities/LiveVoteQuestion";
+import { ROLES } from "../../../config";
 
 const { ON_NEXT_SESSION, ON_LIVE_VOTE_REFRESH } = EVENTS;
 
@@ -52,7 +57,10 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
         }
     };
     const [widgetBar, setWidgetBar] = useState<boolean>(false);
-    const [checkingLiveVote, setCheckingLiveVote] = useState<boolean>(true);
+    const isNormalUser = !useIsGranted(ROLES.ROLE_OPERATOR);
+    const [checkingLiveVote, setCheckingLiveVote] = useState<boolean>(
+        isNormalUser
+    );
     const [vote, setVote] = useState<LiveVoteQuestion>();
 
     useEffect(() => {
@@ -107,11 +115,15 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
     }, [id]);
 
     useEffect(() => {
-        if (id) emitJoinSession(id);
+        if (id && isNormalUser) {
+            emitJoinSession(id);
+        }
         return () => {
-            emitLeaveSession(id);
+            if (id && isNormalUser) {
+                emitLeaveSession(id);
+            }
         };
-    }, [id]);
+    }, [id, isNormalUser]);
 
     const getAgenda = (isLive = false) => {
         let params: { [key: string]: any } = {};
@@ -223,11 +235,11 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
     };
 
     useEffect(() => {
-        if (id) {
+        if (id && isNormalUser) {
             setCheckingLiveVote(true);
             fetchLiveVote(true);
         }
-    }, [id]);
+    }, [id, isNormalUser]);
 
     useEffect(() => {
         socket.on(ON_LIVE_VOTE_REFRESH, () => {

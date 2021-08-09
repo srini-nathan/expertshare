@@ -11,6 +11,8 @@ import {
     leaveSession,
     submittedVote,
     refreshVote,
+    joinLiveVoteResult,
+    leaveLiveVoteResult,
 } from "../socket";
 import { PUser } from "../../AdminModule/models";
 import { PSessionComment } from "../models/entities/SessionComment";
@@ -36,8 +38,10 @@ type SessionSocketEventsType = {
     emitDeleteSessionQa: (sessionId: number, id: number) => void;
     emitJoinSession: (sessionId: number) => void;
     emitLeaveSession: (sessionId: number) => void;
-    emitSubmittedVote: (sessionId: number) => void;
+    emitSubmittedVote: (sessionId: number, voteId: number) => void;
     emitRefreshVote: (sessionId: number) => void;
+    emitJoinLiveVoteResult: (voteId: number) => void;
+    emitLeaveLiveVoteResult: (voteId: number) => void;
 };
 
 export function useSessionSocketEvents(): SessionSocketEventsType {
@@ -91,12 +95,20 @@ export function useSessionSocketEvents(): SessionSocketEventsType {
         leaveSession(sessionId);
     };
 
-    const emitSubmittedVote = (sessionId: number): void => {
-        submittedVote(sessionId);
+    const emitSubmittedVote = (sessionId: number, voteId: number): void => {
+        submittedVote(sessionId, voteId);
     };
 
     const emitRefreshVote = (sessionId: number): void => {
         refreshVote(sessionId);
+    };
+
+    const emitJoinLiveVoteResult = (voteId: number): void => {
+        joinLiveVoteResult(voteId);
+    };
+
+    const emitLeaveLiveVoteResult = (voteId: number): void => {
+        leaveLiveVoteResult(voteId);
     };
 
     return {
@@ -112,5 +124,7 @@ export function useSessionSocketEvents(): SessionSocketEventsType {
         emitLeaveSession,
         emitSubmittedVote,
         emitRefreshVote,
+        emitJoinLiveVoteResult,
+        emitLeaveLiveVoteResult,
     };
 }

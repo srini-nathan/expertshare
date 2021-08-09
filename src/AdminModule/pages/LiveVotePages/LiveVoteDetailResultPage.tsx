@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useState, useRef } from "react";
-import { RouteComponentProps } from "@reach/router";
+import { RouteComponentProps, useParams } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { isString as _isString } from "lodash";
@@ -11,7 +11,7 @@ import {
 import { Canceler } from "axios";
 import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
-import { LanguageApi } from "../../apis";
+import { LiveVoteResultApi } from "../../apis";
 import { Language } from "../../models";
 import { AppPageHeader } from "../../../AppModule/components";
 import {
@@ -20,16 +20,13 @@ import {
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
-import { useAuthState } from "../../../AppModule/hooks";
 import { errorToast, successToast } from "../../../AppModule/utils";
-import "./assets/scss/list.scss";
-import { LANGUAGES } from "../../../AppModule/config/app-env";
 
 export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element => {
+    const { questionId } = useParams();
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
-    const { containerId } = useAuthState();
     const { t } = useTranslation();
 
     function getDataSource(): IServerSideDatasource {
@@ -39,12 +36,12 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
                 const { endRow } = request;
                 const pageNo = endRow / appGridConfig.pageSize;
                 api?.hideOverlay();
-                LanguageApi.find<Language>(
+                LiveVoteResultApi.find<Language>(
                     pageNo,
                     {
                         order: buildSortParams(request),
                         ...buildFilterParams(request),
-                        "container.id": containerId,
+                        "voteQuestion.id": questionId,
                     },
                     (c) => {
                         cancelTokenSourcesRef.current.push(c);
@@ -59,11 +56,6 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
                             api?.showNoRowsOverlay();
                         }
                         setTotalItems(response.totalItems);
-                        localStorage.setItem(
-                            LANGUAGES,
-                            JSON.stringify(response.items)
-                        );
-
                         params.successCallback(
                             response.items,
                             response.totalItems
@@ -75,13 +67,15 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
     }
 
     async function handleDelete(id: number) {
-        LanguageApi.deleteById(id).then(({ error }) => {
+        LiveVoteResultApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(t(error));
                 }
             } else {
-                successToast(t("admin.language.list:delete.toast.success"));
+                successToast(
+                    t("admin.liveVoteResult.list:delete.toast.success")
+                );
                 appGridApi.current?.refreshServerSideStore({
                     purge: false,
                     route: [],
@@ -101,8 +95,7 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
     return (
         <Fragment>
             <AppPageHeader
-                title={t("admin.language.list:header.title")}
-                createLink={"/admin/languages/new"}
+                title={t("admin.liveVoteResult.list:header.title")}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}
                 showToolbar

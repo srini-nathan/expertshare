@@ -43,6 +43,10 @@ export const EVENTS = {
     REFRESH_LIVE_VOTE: "refresh-live-vote",
     ON_LIVE_VOTE_REFRESH: "on-live-vote-refresh",
     LEAVE_SESSION: "leave-session",
+    JOIN_LIVE_VOTE_RESULT: "join-live-vote-result",
+    REFRESH_LIVE_VOTE_RESULT: "refresh-live-vote-result",
+    ON_REFRESH_LIVE_VOTE_RESULT: "on-refresh-live-vote-result",
+    LEAVE_LIVE_VOTE_RESULT: "leave-live-vote-result",
 };
 
 type OnPageChangePayload = {
@@ -238,14 +242,27 @@ export const leaveSession = (sessionId: number): void => {
     });
 };
 
-export const submittedVote = (sessionId: number): void => {
+export const submittedVote = (sessionId: number, voteId: number): void => {
     socket.emit(EVENTS.SUBMITTED_VOTE_RESULT, {
         sessionId,
+        voteId,
     });
 };
 
 export const refreshVote = (sessionId: number): void => {
     socket.emit(EVENTS.REFRESH_LIVE_VOTE, {
         sessionId,
+    });
+};
+
+export const joinLiveVoteResult = (voteId: number): void => {
+    socket.emit(EVENTS.JOIN_LIVE_VOTE_RESULT, {
+        voteId,
+    });
+};
+
+export const leaveLiveVoteResult = (voteId: number): void => {
+    socket.emit(EVENTS.LEAVE_LIVE_VOTE_RESULT, {
+        voteId,
     });
 };

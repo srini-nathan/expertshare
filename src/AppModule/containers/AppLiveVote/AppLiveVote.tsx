@@ -20,6 +20,7 @@ import {
 } from "../../../AdminModule/apis";
 import { LiveVoteResult, PLiveVoteResult } from "../../../AdminModule/models";
 import { useSessionSocketEvents } from "../../hooks";
+import { AppLiveVoteResult } from "./AppLiveVoteResult";
 
 export interface AppLiveVoteProps {
     enable: boolean;
@@ -68,7 +69,7 @@ export const AppLiveVote: FC<AppLiveVoteProps> = ({
         })
             .then(() => {
                 setAlreadyVoted(true);
-                emitSubmittedVote(sessionId);
+                emitSubmittedVote(sessionId, data.id);
             })
             .finally(() => {
                 setIsSubmitting(false);
@@ -127,11 +128,7 @@ export const AppLiveVote: FC<AppLiveVoteProps> = ({
             return null;
         }
 
-        return (
-            <p className="thanks-message mb-0 text-center">
-                Render Result here
-            </p>
-        );
+        return <AppLiveVoteResult questionId={data.id} />;
     };
 
     const renderLoader = () => {
