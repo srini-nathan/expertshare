@@ -23,3 +23,11 @@ export class LiveVoteResult extends BaseEntity {
 }
 
 export type PLiveVoteResult = Partial<LiveVoteResult>;
+
+export interface LiveVoteResultOverview {
+    count: number;
+    color: string | null;
+    imageName: string | null;
+    ord: number | null;
+    title: string;
+}

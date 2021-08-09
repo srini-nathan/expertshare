@@ -28,6 +28,7 @@ import {
     NavigationAddEditPage,
     LiveVoteAddEditPage,
     LiveVoteDetailResultPage,
+    LiveVoteOverviewResultPage,
 } from "./pages";
 import { Layout3D } from "../Layout3DModule";
 import { ModuleRouter } from "../AppModule/models";
@@ -100,6 +101,9 @@ export const routers: ModuleRouter[] = [
                     <LiveVoteAddEditPage path={"live-votes/:sessionId/:id"} />
                     <LiveVoteDetailResultPage
                         path={"live-votes-result/:questionId"}
+                    />
+                    <LiveVoteOverviewResultPage
+                        path={"live-votes-result/:questionId/overview"}
                     />
                 </Router>
             );
