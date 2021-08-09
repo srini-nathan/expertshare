@@ -28,4 +28,40 @@
     .show-full {
       width: 36px;
     }
+    .switch-view {
+      display: flex;
+      justify-content: flex-end;
+      &--content {
+        display: flex;
+        width: fit-content;
+        height: fit-content;
+        background-color: var(--secondary-button-background-color);
+        border: var(--secondary-button-border-width) solid var(--secondary-button-border-color);
+        border-radius: var(--secondary-button-border-radius);
+        box-shadow: 0 3px 9px var(--secondary-button-box-shadow-color);
+        a {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 24px;
+          height: 24px;
+          margin: 6px;
+          font-size: 14px;
+          font-weight: 400;
+          color: var(--secondary-button-text-color);
+          cursor: pointer;
+          border-radius: var(--secondary-button-box-shadow-color);
+
+          &.active-view {
+            color: var(--primary) !important;
+            background-color: var(--primary-20);
+          }
+
+          &:hover {
+            color: var(--secondary-button-text-color);
+          }
+        }
+      }
+    }
+
 }

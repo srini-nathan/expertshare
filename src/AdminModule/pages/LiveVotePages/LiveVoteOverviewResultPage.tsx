@@ -4,6 +4,7 @@ import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { Chart } from "react-google-charts";
 import { useSetRecoilState } from "recoil";
+import { GoogleChartWrapperChartType } from "react-google-charts/dist/types";
 import {
     AppButton,
     AppCard,
@@ -27,6 +28,9 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
     const [loading, setLoading] = useState<boolean>(false);
     const [data, setData] = useState<LiveVoteResultOverview[]>([]);
     const [chartData, setChartData] = useState<any[]>([]);
+    const [chartMode, setChartMode] = useState<GoogleChartWrapperChartType>(
+        "BarChart"
+    );
     const {
         emitJoinLiveVoteResult,
         emitLeaveLiveVoteResult,
@@ -111,29 +115,86 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
             <AppPageHeader
                 title={t("admin.liveVoteResult.overview:header.title")}
             />
-            {viewMode !== "fullscreen" ? (
-                <Row className={"live-voting-result--chart-action-bar"}>
-                    <Col className={"d-flex justify-content-end"}>
+            <Row className={"live-voting-result--chart-action-bar"}>
+                <Col className={"d-flex justify-content-end"}>
+                    <div className={"switch-view p-0 mx-0 ml-sm-2"}>
+                        <div className={"switch-view--content"}>
+                            <a
+                                className={
+                                    chartMode === "BarChart"
+                                        ? `active-view`
+                                        : ""
+                                }
+                                href={"#"}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    setChartMode("BarChart");
+                                }}
+                            >
+                                <i className="fak fa-chart" />
+                            </a>
+                            <a
+                                className={
+                                    chartMode === "Bar" ? `active-view` : ""
+                                }
+                                href={"#"}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    setChartMode("Bar");
+                                }}
+                            >
+                                <i
+                                    className="fak fa-chart"
+                                    style={{
+                                        transform: "rotate(90deg)",
+                                    }}
+                                />
+                            </a>
+                            <a
+                                className={
+                                    chartMode === "PieChart"
+                                        ? `active-view`
+                                        : ""
+                                }
+                                href={"#"}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    setChartMode("PieChart");
+                                }}
+                            >
+                                <i
+                                    className="fak fa-chart"
+                                    style={{
+                                        transform: "rotate(180deg)",
+                                    }}
+                                />
+                            </a>
+                        </div>
+                    </div>
+                    {viewMode !== "fullscreen" ? (
                         <Link
                             to={`/admin/live-votes-result/${questionId}/overview/fullscreen`}
                         >
                             <AppButton
                                 variant={"secondary"}
-                                className={"show-full"}
+                                className={"show-full ml-2"}
                             >
                                 <i className={"fak fa-maximize"}></i>
                             </AppButton>
                         </Link>
-                    </Col>
-                </Row>
-            ) : null}
+                    ) : null}
+                </Col>
+            </Row>
             <AppCard>
                 <Row>
                     <Col>
                         <Chart
                             width={"100%"}
                             height={"100%"}
-                            chartType="BarChart"
+                            chartType={chartMode}
                             loader={<AppLoader />}
                             data={[
                                 [
