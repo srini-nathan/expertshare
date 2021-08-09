@@ -1,85 +1,31 @@
 import React, { ReactElement } from "react";
-import { ICellRendererParams } from "ag-grid-community";
 import { useTranslation } from "react-i18next";
 import {
-    AppRadio,
-    AppSwitch,
     AppGridAction,
     AppGridActionProps,
 } from "../../../AppModule/components";
-import { Language } from "../../models";
-import { LanguageApi } from "../../apis";
-import { errorToast, successToast } from "../../../AppModule/utils";
+import { LiveVoteResult } from "../../models";
 import { AppCellActionWithRenderWithCustom } from "./app-actions";
+import { useBuildAssetPath, useDateTime } from "../../../AppModule/hooks";
+import { User } from "../../../AppModule/models";
+import { UserProfileFileInfo } from "../../../config";
+import UserAvatar from "../../../AppModule/assets/images/user-avatar.png";
 
 export const appGridFrameworkComponents = {
-    AppSwitch: (params: ICellRendererParams): ReactElement => {
-        const { data } = params;
-        const { id, name, isActive, isDefault } = data as Language;
-
-        return (
-            <AppSwitch
-                name={`${name}-${id}`}
-                id={`${name}-${id}`}
-                value={isActive}
-                size={"sm"}
-                onChange={(event) => {
-                    LanguageApi.update<Language, Partial<Language>>(id, {
-                        isActive: event.currentTarget.checked,
-                    }).then();
-                }}
-                disabled={isDefault}
-            />
-        );
-    },
-    AppFormRadio: (params: ICellRendererParams): ReactElement => {
-        const { data, api } = params;
-        const { id, name, isDefault } = data as Language;
-        const { t } = useTranslation();
-
-        return (
-            <AppRadio
-                name={"isDefault"}
-                defaultChecked={isDefault}
-                id={`is-default-${name}-${id}`}
-                onChange={() => {
-                    LanguageApi.setDefaultLanguage<Language>(id).then(
-                        ({ errorMessage, error }) => {
-                            if (error) {
-                                errorToast(errorMessage);
-                            } else {
-                                api.refreshServerSideStore({ purge: true });
-                                successToast(
-                                    t(
-                                        "admin.language.list:defaultlanguage.toast.success"
-                                    )
-                                );
-                            }
-                        }
-                    );
-                }}
-            ></AppRadio>
-        );
-    },
     AppGridActionRenderer: (
         params: AppCellActionWithRenderWithCustom
     ): ReactElement => {
         const { data, onPressDelete } = params;
-        const { id, isDefault } = data as Language;
+        const { id } = data as LiveVoteResult;
         const { t } = useTranslation();
 
         const props: AppGridActionProps = {
-            editAction: {
-                disable: isDefault,
-                url: `/admin/languages/${id}`,
-            },
             deleteAction: {
-                disable: isDefault,
                 confirmation: t(
-                    "admin.language.form:delete.confirmation.message"
+                    "admin.liveVoteResult.list:delete.confirmation.message"
                 ),
                 confirmationTitle: t(
-                    "admin.language.form:delete.confirmation.title"
+                    "admin.liveVoteResult.list:delete.confirmation.title"
                 ),
                 onClick: () => {
                     onPressDelete(id);
@@ -88,5 +34,41 @@ export const appGridFrameworkComponents = {
         };
 
         return <AppGridAction {...props} />;
+    },
+    AppUserInfo: (params: AppCellActionWithRenderWithCustom): ReactElement => {
+        const { data } = params;
+        const { user } = data as LiveVoteResult;
+        const { firstName, lastName, imageName } = user as User;
+        const imagePath = useBuildAssetPath(UserProfileFileInfo, imageName);
+        const style = imageName
+            ? {
+                  backgroundImage: `url(${imagePath})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+              }
+            : {
+                  backgroundImage: `url(${UserAvatar})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+              };
+
+        return (
+            <div className="info">
+                <div className="info--profile-pic mr-2">
+                    <i style={style}></i>
+                </div>
+                <div className="info--det">
+                    <h3 className="mb-1">
+                        {firstName} {lastName}
+                    </h3>
+                </div>
+            </div>
+        );
+    },
+    AppCreatedAt: (params: AppCellActionWithRenderWithCustom): ReactElement => {
+        const { data } = params;
+        const { toShortDate } = useDateTime();
+        const { createdAt } = data as LiveVoteResult;
+        return <>{createdAt ? toShortDate(new Date(createdAt)) : ""}</>;
     },
 };

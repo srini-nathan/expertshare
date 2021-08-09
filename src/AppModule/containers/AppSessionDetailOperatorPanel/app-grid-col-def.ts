@@ -16,7 +16,7 @@ export const appGridColDef = ({
             "sessionDetails:section.operatorActions.liveVote.list:column.actions",
         field: "id",
         sortable: false,
-        maxWidth: 120,
+        maxWidth: 160,
         cellClass: "text-right",
         headerClass: "action-header",
         cellRenderer: "AppGridActionRenderer",

@@ -1,5 +1,6 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "react-i18next";
+import { navigate } from "@reach/router";
 import { AppCellActionWithRenderWithCustom } from "./app-actions";
 import { AppGridAction, AppGridActionProps } from "../../components";
 import { LiveVoteQuestion } from "../../../AdminModule/models";
@@ -29,7 +30,14 @@ export const appGridFrameworkComponents = {
                     onPressDelete(id);
                 },
             },
-            customClickActions: [],
+            customClickActions: [
+                {
+                    icon: "Eye",
+                    onClick: () => {
+                        navigate(`/admin/live-votes-result/${id}`).then();
+                    },
+                },
+            ],
         };
 
         return <AppGridAction {...props} />;
