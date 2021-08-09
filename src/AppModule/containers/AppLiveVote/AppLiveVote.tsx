@@ -145,7 +145,7 @@ export const AppLiveVote: FC<AppLiveVoteProps> = ({
         <AppCard className={"session-details-voting card p-3 mb-4"}>
             <div className="session-details-voting--container">
                 <AppLiveVoteHeader
-                    name={"Live Vote"}
+                    name={t("sessionDetails:section.liveVoting")}
                     isOpen={open}
                     onToggleCollapse={() => {
                         setOpen(!open);
