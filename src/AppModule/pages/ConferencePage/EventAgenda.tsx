@@ -143,7 +143,6 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                         errorToast(error);
                     }
                 } else if (response !== null) {
-                    // debugger; // eslint-disable-line no-debugger
                     const diffCat: any[] = [];
                     let currentCat: Session[] = [];
                     response.items.forEach((e: Session, i: number) => {
