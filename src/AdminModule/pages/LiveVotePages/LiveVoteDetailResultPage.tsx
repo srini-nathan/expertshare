@@ -11,16 +11,22 @@ import {
 import { Canceler } from "axios";
 import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
-import { LiveVoteResultApi } from "../../apis";
+import { LiveVoteQuestionApi, LiveVoteResultApi } from "../../apis";
 import { Language } from "../../models";
-import { AppPageHeader } from "../../../AppModule/components";
+import { AppButton, AppPageHeader } from "../../../AppModule/components";
 import {
     AppGrid,
     buildFilterParams,
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
-import { errorToast, successToast } from "../../../AppModule/utils";
+import {
+    errorToast,
+    hideLoader,
+    showLoader,
+    successToast,
+} from "../../../AppModule/utils";
+import { useDownloadFile } from "../../../AppModule/hooks";
 
 export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { questionId } = useParams();
@@ -28,6 +34,7 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const { t } = useTranslation();
+    const [updateLink] = useDownloadFile();
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -92,6 +99,18 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
         });
     }
 
+    async function handleDownload() {
+        await showLoader(t("admin.liveVoteResult.list:result.downloading"));
+        LiveVoteQuestionApi.downloadResult(questionId).then((res) => {
+            updateLink({
+                name: `${questionId}-result.csv`,
+                type: "file/csv",
+                file: res,
+            });
+            hideLoader();
+        });
+    }
+
     return (
         <Fragment>
             <AppPageHeader
@@ -101,8 +120,8 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
                 showToolbar
             />
             <Row>
-                <Col>
-                    <div className="live-voting-result--tabs mt-4 mb-2">
+                <Col className={"d-flex justify-content-between mb-5"}>
+                    <div className="d-inline-block live-voting-result--tabs">
                         <nav>
                             <div
                                 className="nav nav-tabs"
@@ -113,17 +132,31 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
                                     className="nav-link active"
                                     id="myGrid-tab"
                                 >
-                                    Details
+                                    {t(
+                                        "admin.liveVoteResult:tabSwitch.details"
+                                    )}
                                 </span>
                                 <Link
                                     className="nav-link"
                                     id="myGrid2-tab"
                                     to={`/admin/live-votes-result/${questionId}/overview`}
                                 >
-                                    Results
+                                    {t(
+                                        "admin.liveVoteResult:tabSwitch.results"
+                                    )}
                                 </Link>
                             </div>
                         </nav>
+                    </div>
+                    <div className={""}>
+                        <AppButton
+                            variant={"secondary"}
+                            onClick={handleDownload}
+                        >
+                            <i className={"fak fa-download mr-2"}>
+                                {t("admin.liveVoteResult.list:button.download")}
+                            </i>
+                        </AppButton>
                     </div>
                 </Col>
             </Row>
