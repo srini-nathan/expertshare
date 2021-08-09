@@ -1,5 +1,6 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "react-i18next";
+import { navigate } from "@reach/router";
 import {
     AppGridAction,
     AppGridActionProps,
@@ -38,7 +39,7 @@ export const appGridFrameworkComponents = {
     AppUserInfo: (params: AppCellActionWithRenderWithCustom): ReactElement => {
         const { data } = params;
         const { user } = data as LiveVoteResult;
-        const { firstName, lastName, imageName } = user as User;
+        const { firstName, lastName, imageName, id } = user as User;
         const imagePath = useBuildAssetPath(UserProfileFileInfo, imageName);
         const style = imageName
             ? {
@@ -53,7 +54,12 @@ export const appGridFrameworkComponents = {
               };
 
         return (
-            <div className="info">
+            <div
+                className="info"
+                onClick={() => {
+                    navigate(`/attendee/${id}/show`).then();
+                }}
+            >
                 <div className="info--profile-pic mr-2">
                     <i style={style}></i>
                 </div>
