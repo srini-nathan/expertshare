@@ -199,11 +199,23 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
             })
         );
     };
-
+    const onCreateNew = () => {
+        setTranslationCombines([
+            {
+                translationGroup: undefined,
+                itemKey: randomInteger(),
+                items: undefined,
+            },
+            ...translataionCombines,
+        ]);
+    };
     return (
         <>
-            <Row className={"d-flex justify-content-end"}>
-                <Col md={2} sm={6} className="my-2 my-md-0">
+            <Row className={"justify-content-end"}>
+                <Col
+                    xs={"auto"}
+                    className="my-2 my-md-0 mr-0 ml-auto px-0 px-2"
+                >
                     <AppModal
                         show={showConfirmModal}
                         title={t(
@@ -229,6 +241,16 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                         }}
                     >
                         {t("admin.translation:includedLanguages")}
+                    </AppButton>
+                </Col>
+                <Col xs={"auto"} className="my-2 my-md-0 px-2">
+                    <AppButton
+                        variant={"secondary"}
+                        className="justify-content-center px-4"
+                        block
+                        onClick={onCreateNew}
+                    >
+                        + Create
                     </AppButton>
                 </Col>
             </Row>
@@ -270,16 +292,6 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                                 selected[0],
                             ]);
                         }
-                    }}
-                    onCreateNew={() => {
-                        setTranslationCombines([
-                            {
-                                translationGroup: undefined,
-                                itemKey: randomInteger(),
-                                items: undefined,
-                            },
-                            ...translataionCombines,
-                        ]);
                     }}
                 />
             </AppPageHeader>

@@ -46,8 +46,9 @@ export const AppFormRadioSwitch: FC<AppFormRadioSwitchProps> = ({
     onChange = () => {},
 }): JSX.Element => {
     const controlId = id || name;
-
     return (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         <Form.Group
             className={`button-group p-0 ${className}`}
             as={Col}

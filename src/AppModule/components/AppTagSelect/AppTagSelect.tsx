@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { useTranslation } from "react-i18next";
 import { SimpleObject } from "../../models";
 import "./assets/scss/style.scss";
 import { AppIcon } from "../AppIcon";
@@ -24,6 +25,7 @@ export const AppTagSelect: FC<AppTagSelectProps> = ({
     onBlurHandler,
 }): JSX.Element => {
     const [searchText, setSearchText] = React.useState<string>("");
+    const { t } = useTranslation();
     const renderOptions = () => {
         return options
             .filter((e) =>
@@ -87,7 +89,9 @@ export const AppTagSelect: FC<AppTagSelectProps> = ({
                         className="custom-select-tag-container-search-input form-control"
                         value={searchText}
                         onChange={(e) => setSearchText(e.target.value)}
-                        placeholder="Sreach..."
+                        placeholder={t(
+                            "admin.users.from:label.userGroups.search"
+                        )}
                         onBlur={(e: React.FocusEvent<HTMLInputElement>) => {
                             if (onBlurHandler) onBlurHandler(e);
                         }}

@@ -1,0 +1,255 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "./../../../../assets/scss/variables";
+
+.session-details-voting {
+    &--container {
+        .header {
+            &--title {
+                display: flex;
+                align-items: center;
+                h2 {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 0;
+                    font-size: 20px;
+                    font-weight: 700;
+                    color: var(--card-text-color);
+                    i {
+                        padding-right: 10px;
+                        font-size: 23px;
+                        font-weight: 500;
+                    }
+                }
+            }
+            &--collapse-btn {
+                display: flex;
+                align-items: center;
+                button {
+                    width: 36px;
+                    i {
+                        font-size: 18px;
+                        font-weight: 700;
+                        &::before {
+                            content: "\e018";
+                        }
+                    }
+                    &:not(.collapsed) {
+                        i {
+                            transform: rotate(180deg);
+                        }
+                    }
+                }
+            }
+        }
+        .question-det {
+            &--title {
+                font-size: 16px;
+                color: var(--card-text-color);
+            }
+            &--desc {
+                font-size: 14px;
+                color: var(--card-text-color);
+            }
+        }
+        .inner {
+            border-top: 1px solid var(--card-divider-color);
+            &--container {
+                max-height: 100vh;
+                overflow: auto;
+                scrollbar-color: var(--secondary) var(--secondary-10);
+                scrollbar-width: thin;
+                &::-webkit-scrollbar {
+                    width: 4px;
+                }
+                &::-webkit-scrollbar-track {
+                    background: var(--secondary-10);
+                }
+                &::-webkit-scrollbar-thumb {
+                    background: var(--secondary);
+                }
+                &::-webkit-scrollbar-thumb:hover {
+                    opacity: 50%;
+                }
+                form {
+                    .circle-radio-button {
+                        label {
+                            align-items: flex-start;
+                            &::before {
+                                margin-top: 2px;
+                                margin-bottom: 0;
+                            }
+                            &::after {
+                                top: 0.25rem;
+                                margin-top: 2px;
+                            }
+                        }
+                        .det {
+                            width: 94%;
+                            margin-left: 5px;
+                            user-select: none;
+                            h4 {
+                                font-size: 14px;
+                                font-weight: 500;
+                                color: var(--card-text-color);
+                            }
+                            p {
+                                margin-top: 4px;
+                                font-size: 12px;
+                                font-weight: 400;
+                                color: var(--card-text-color);
+                            }
+                        }
+                    }
+                    .checkbox-label-container {
+                        position: relative;
+                        display: block;
+                        padding-left: 0;
+                        margin: 0;
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: var(--secondary-90);
+                        text-align: left;
+                        cursor: pointer;
+
+                        input {
+                            position: absolute;
+                            width: 0;
+                            height: 0;
+                            cursor: pointer;
+                            opacity: 0;
+
+                            &:checked ~ .custom-checkbox {
+                                background-color: var(--primary-button-background-color);
+                                opacity: 1;
+
+                                &::after {
+                                    display: block;
+                                }
+                            }
+                        }
+
+                        span {
+                            position: absolute;
+                            top: 3px;
+                            left: 0;
+                            width: 14px;
+                            height: 14px;
+                            background-color: var(--primary-20);
+                            border: 1px solid var(--primary-button-background-color);
+
+                            &::after {
+                                position: absolute;
+                                top: 1px;
+                                left: 4px;
+                                display: none;
+                                width: 4px;
+                                height: 8px;
+                                content: "";
+                                border: solid var(--light-clr);
+                                border-width: 0 1px 1px 0;
+                                transform: rotate(45deg);
+                            }
+                        }
+                        .det {
+                            margin-left: 25px;
+                            user-select: none;
+                            h4 {
+                                font-size: 14px;
+                                font-weight: 500;
+                                color: var(--card-text-color);
+                            }
+                            p {
+                                margin-top: 4px;
+                                font-size: 12px;
+                                font-weight: 400;
+                                color: var(--card-text-color);
+                            }
+                        }
+                    }
+                    .submit-btn {
+                        position: relative;
+                        i {
+                            position: absolute;
+                            bottom: 11px;
+                            left: 10px;
+                        }
+                    }
+                }
+                .thanks-message {
+                    font-size: 14px;
+                    color: var(--secondary-70);
+                }
+            }
+            .result-title {
+                display: flex;
+                align-items: center;
+                margin-bottom: 0;
+                font-size: 20px;
+                font-weight: 700;
+                color: var(--card-text-color);
+                i {
+                    padding-right: 10px;
+                    padding-bottom: 4px;
+                    font-size: 23px;
+                    font-weight: 500;
+                }
+            }
+            .result-chart {
+            }
+            .result-details {
+                .res-item {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    .badge {
+                        display: block;
+                        width: 12px;
+                        height: 12px;
+                        margin-bottom: 2px;
+                        content: "";
+                        border-radius: 50%;
+                    }
+                    span {
+                        font-size: 14px;
+                        color: var(--card-text-color);
+                        word-break: break-all;
+                    }
+                    &.green {
+                        .badge {
+                            background-color: #30b7a7;
+                        }
+                    }
+                    &.dark-blue {
+                        .badge {
+                            background-color: #0072c6;
+                        }
+                    }
+                    &.light-blue {
+                        .badge {
+                            background-color: #1ab7ea;
+                        }
+                    }
+                    &.yellow {
+                        .badge {
+                            background-color: #fbbd00;
+                        }
+                    }
+                    &.red {
+                        .badge {
+                            background-color: #c31f27;
+                        }
+                    }
+                }
+
+                button {
+                    padding: 2px;
+                    background-color: unset;
+                    border: none;
+                    i {
+                        font-size: 17px;
+                    }
+                }
+            }
+        }
+    }
+}

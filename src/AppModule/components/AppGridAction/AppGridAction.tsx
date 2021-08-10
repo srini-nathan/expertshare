@@ -160,8 +160,8 @@ export const AppGridAction: FC<AppGridActionProps> = ({
             <LinkAction icon={"Eye"} {...viewAction}></LinkAction>
             <LinkAction icon={"add"} {...addAction}></LinkAction>
             <LinkAction icon={"ListTree"} {...treeAction}></LinkAction>
-            {customClickActions.map(({ icon, text, ...rest }) => (
-                <ClickAction icon={icon} text={text} {...rest}></ClickAction>
+            {customClickActions.map(({ icon, text, ...rest }, index) => (
+                <ClickAction key={index} icon={icon} text={text} {...rest} />
             ))}
             {showItem() ? (
                 <>

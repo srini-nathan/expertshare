@@ -11,26 +11,18 @@ import {
     AppSessionUsers,
     AppQuestionsAndAnswers,
     AppSessionTags,
-    AppButton,
+    AppSessionExtraLink,
 } from "../../components";
 import { Session, User, PSession } from "../../../AdminModule/models";
-import { SessionApi } from "../../../AdminModule/apis";
+import { LiveVoteQuestionApi, SessionApi } from "../../../AdminModule/apis";
 import { errorToast, getDateWT, getTomorrowDate } from "../../utils";
-import {
-    useAuthState,
-    useIsGranted,
-    useSessionSocketEvents,
-} from "../../hooks";
+import { useAuthState, useSessionSocketEvents } from "../../hooks";
 import "./assets/scss/style.scss";
 import { socket, EVENTS } from "../../socket";
-import { CONSTANTS } from "../../../config";
+import { AppLiveVote, AppSessionDetailOperatorPanel } from "../../containers";
+import { LiveVoteQuestion } from "../../../AdminModule/models/entities/LiveVoteQuestion";
 
-const { ON_NEXT_SESSION } = EVENTS;
-const { Role } = CONSTANTS;
-
-const {
-    ROLE: { ROLE_OPERATOR },
-} = Role;
+const { ON_NEXT_SESSION, ON_LIVE_VOTE_REFRESH } = EVENTS;
 
 export const SessionDetailsPage: FC<RouteComponentProps> = ({
     location,
@@ -49,6 +41,8 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
         emitSwitchSessionNext,
         emitJoinNextSession,
         emitLeaveNextSession,
+        emitLeaveSession,
+        emitJoinSession,
     } = useSessionSocketEvents();
     const getOtherSessions = (sessionId: number) => {
         const currentSess = sessionList.find((e: any) => e.id === sessionId);
@@ -57,7 +51,8 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
             setPrev(currentSess.prev);
         }
     };
-    const isGrantedControl = useIsGranted(ROLE_OPERATOR);
+    const [checkingLiveVote, setCheckingLiveVote] = useState<boolean>(false);
+    const [vote, setVote] = useState<LiveVoteQuestion>();
 
     useEffect(() => {
         isLoading(true);
@@ -75,7 +70,6 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                     if (sessionList) {
                         getOtherSessions(res.id);
                     }
-
                     setData(res);
                 }
             }
@@ -105,6 +99,17 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
         if (id) emitJoinNextSession(id);
         return () => {
             emitLeaveNextSession(id);
+        };
+    }, [id]);
+
+    useEffect(() => {
+        if (id) {
+            emitJoinSession(id);
+        }
+        return () => {
+            if (id) {
+                emitLeaveSession(id);
+            }
         };
     }, [id]);
 
@@ -192,7 +197,43 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
         }
     }, [loading]);
 
-    if (loading) {
+    const fetchLiveVote = (setLoading = false) => {
+        LiveVoteQuestionApi.getActiveQuestions<LiveVoteQuestion>(1, {
+            "session.id": id,
+        })
+            .then(({ response }) => {
+                if (response !== null) {
+                    if (response.items && response.items[0]) {
+                        setVote(response.items[0]);
+                    } else {
+                        setVote(undefined);
+                    }
+                }
+            })
+            .finally(() => {
+                if (setLoading) {
+                    setCheckingLiveVote(false);
+                }
+            });
+    };
+
+    useEffect(() => {
+        if (id) {
+            setCheckingLiveVote(true);
+            fetchLiveVote(true);
+        }
+    }, [id, data]);
+
+    useEffect(() => {
+        socket.on(ON_LIVE_VOTE_REFRESH, () => {
+            fetchLiveVote(false);
+        });
+        return () => {
+            socket.off(ON_LIVE_VOTE_REFRESH);
+        };
+    }, []);
+
+    if (loading || checkingLiveVote) {
         return <AppLoader />;
     }
 
@@ -201,11 +242,13 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
             <Row className="m-0">
                 <Col
                     className={
-                        data.isCommentEnable ? "pl-0 comment-enable" : "px-0"
+                        data.isCommentEnable || vote
+                            ? "pl-0 comment-enable"
+                            : "px-0"
                     }
                     md={12}
                     sm={12}
-                    lg={data.isCommentEnable ? 8 : 12}
+                    lg={data.isCommentEnable || vote ? 8 : 12}
                 >
                     <AppCard className="p-0">
                         <AppSessionHeader
@@ -219,7 +262,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                             }}
                         />
                         <AppSessionTags session={data} />
-
+                        <AppSessionExtraLink session={data} />
                         <Row className="my-5 mx-0 px-2">
                             {data.speakers.length > 0 ? (
                                 <Col
@@ -268,45 +311,36 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                         </Row>
                     </AppCard>
 
-                    {isGrantedControl && next && (
-                        <AppCard
-                            title={t("sessionDetails:section.operatorActions")}
-                        >
-                            <Row className="my-5 mx-0 px-2">
-                                <Col className="p-0" sm={12} md={6} lg={3}>
-                                    {next && (
-                                        <AppButton
-                                            onClick={() => {
-                                                emitSwitchSessionNext(id);
-                                                switchTonextSession(
-                                                    next as number
-                                                );
-                                            }}
-                                            variant="secondary"
-                                        >
-                                            {t(
-                                                "sessionDetails:label.switchToNextSession"
-                                            )}
-                                        </AppButton>
-                                    )}
-                                </Col>
-                            </Row>
-                        </AppCard>
-                    )}
+                    <AppSessionDetailOperatorPanel
+                        currentSessionId={id}
+                        nextSessionId={next}
+                        onClickSwitchNextSession={() => {
+                            emitSwitchSessionNext(id);
+                            switchTonextSession(next as number);
+                        }}
+                    />
 
                     {/* <AppSessionDetails session={data} /> */}
                     <AppSessionDescription session={data} />
                 </Col>
-                {data.isCommentEnable && (
-                    <Col md={12} sm={12} lg={4} className="pr-0">
-                        <AppQuestionsAndAnswers
-                            name={t(
-                                "sessionDetails:section.questionAndAnswers"
-                            )}
-                            conferenceNumber={conferenceId}
-                            session={id}
-                            container={containerId}
-                        />
+                {(data.isCommentEnable || vote) && (
+                    <Col
+                        md={12}
+                        sm={12}
+                        lg={4}
+                        className="pr-3 pl-0 pl-lg-3 pr-lg-0"
+                    >
+                        <AppLiveVote enable={true} data={vote} sessionId={id} />
+                        {data.isCommentEnable ? (
+                            <AppQuestionsAndAnswers
+                                name={t(
+                                    "sessionDetails:section.questionAndAnswers"
+                                )}
+                                conferenceNumber={conferenceId}
+                                session={id}
+                                container={containerId}
+                            />
+                        ) : null}
                     </Col>
                 )}
             </Row>
