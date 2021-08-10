@@ -76,7 +76,6 @@ export const EventAgenda: FC<RouteComponentProps> = ({
     const [showClone, setCloneShow] = useState(0);
     const [showDeleteSession, setDeleteShowSession] = useState(0);
     const { selectActiveDate } = useEventAgendaHelper();
-
     const fetchEvent = () => {
         ConferenceApi.findById<Conference>(id).then(
             ({ response, isNotFound, errorMessage }) => {
@@ -97,7 +96,6 @@ export const EventAgenda: FC<RouteComponentProps> = ({
             }
         );
     };
-
     const handleScroll = () => {
         if (
             Math.ceil(
@@ -108,12 +106,10 @@ export const EventAgenda: FC<RouteComponentProps> = ({
             return;
         setIsFetching(true);
     };
-
     useEffect(() => {
         fetchEvent();
         window.addEventListener("scroll", handleScroll);
     }, []);
-
     useEffect(() => {
         SessionCategoryApi.find<SessionCategory>(1, {
             "container.id": containerId,
