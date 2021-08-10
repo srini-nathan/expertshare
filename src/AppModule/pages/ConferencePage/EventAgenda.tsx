@@ -101,7 +101,9 @@ export const EventAgenda: FC<RouteComponentProps> = ({
 
     const handleScroll = () => {
         if (
-            Math.ceil(window.innerHeight + document.documentElement.scrollTop) !== document.documentElement.offsetHeight ||
+            Math.ceil(
+                window.innerHeight + document.documentElement.scrollTop
+            ) !== document.documentElement.offsetHeight ||
             isFetching
         )
             return;
@@ -110,7 +112,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         fetchEvent();
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener("scroll", handleScroll);
     }, []);
 
     useEffect(() => {
@@ -128,14 +130,18 @@ export const EventAgenda: FC<RouteComponentProps> = ({
     }, []);
 
     const fetchSessions = () => {
-        if (activeDate && sessionsPage > 1 ? sessionsCount === sessionsPage * 30 : true)
+        if (
+            activeDate && sessionsPage > 1
+                ? sessionsCount === sessionsPage * 30
+                : true
+        )
             SessionApi.getAgenda<Session>({
                 "container.id": containerId,
                 "conference.id": id,
                 "start[after]": activeDate?.start,
                 "start[strictly_before]": activeDate?.end,
                 "sessionCategory.id": categoryFilter,
-                "page": sessionsPage,
+                page: sessionsPage,
             }).then(({ error, response }) => {
                 isLoadingSession(false);
                 if (error !== null) {
