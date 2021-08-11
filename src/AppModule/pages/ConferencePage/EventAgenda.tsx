@@ -118,7 +118,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
         });
     }, []);
     const fetchSessions = () => {
-        if (activeDate) {
+        if (activeDate && page !== 0) {
             setRequestOnGoing(true);
             setLoadingMore(true);
             SessionApi.getAgenda<Session>({
@@ -137,9 +137,9 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                     } else if (response !== null) {
                         const diffCat: any[] = [];
                         let currentCat: Session[] = [];
-                        if (response.items.length < 30) {
-                            setHasMore(false);
-                        }
+                        // eslint-disable-next-line no-console
+                        console.log(response.items.length === 30, "response.i");
+                        setHasMore(response.items.length === 30);
                         response.items.forEach((e: Session, i: number) => {
                             if (response.items.length - 1 === i) {
                                 currentCat.push(e);
@@ -233,7 +233,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
             } else {
                 successToast(t("event.agenda:update.info.message"));
                 fetchEvent();
-                fetchSessions();
+                setPage(1);
             }
         });
     }
@@ -259,7 +259,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                 }
             } else {
                 successToast(t("event.agenda:sizeChange.info.message"));
-                fetchSessions();
+                setPage(1);
             }
         });
     }
@@ -343,7 +343,11 @@ export const EventAgenda: FC<RouteComponentProps> = ({
     const trackScrolling = () => {
         if (bottomBoundaryRef.current) {
             if (isBottom(bottomBoundaryRef.current)) {
-                if (!requestOnGoing && hasMore && !loadingMore) {
+                // eslint-disable-next-line no-console
+                console.log(hasMore, !requestOnGoing, "isBottom");
+                if (hasMore && !requestOnGoing) {
+                    // eslint-disable-next-line no-console
+                    console.log(page + 1, "hasMore");
                     setPage(page + 1);
                 }
             }
@@ -351,6 +355,8 @@ export const EventAgenda: FC<RouteComponentProps> = ({
     };
 
     useEffect(() => {
+        // eslint-disable-next-line no-console
+        console.log("page changed", page);
         fetchSessions();
     }, [page]);
 
