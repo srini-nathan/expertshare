@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useEffect, useState } from "react";
+import React, { FC, Fragment, useEffect, useState, useRef } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { isString as _isString } from "lodash";
 import { useTranslation } from "react-i18next";
@@ -74,6 +74,11 @@ export const EventAgenda: FC<RouteComponentProps> = ({
     const [showClone, setCloneShow] = useState(0);
     const [showDeleteSession, setDeleteShowSession] = useState(0);
     const { selectActiveDate } = useEventAgendaHelper();
+    const bottomBoundaryRef = useRef<HTMLDivElement>(null);
+    const [loadingMore, setLoadingMore] = useState<boolean>(false);
+    const [page, setPage] = useState<number>(0);
+    const [hasMore, setHasMore] = useState<boolean>(true);
+    const [requestOnGoing, setRequestOnGoing] = useState<boolean>(false);
 
     const fetchEvent = () => {
         ConferenceApi.findById<Conference>(id).then(
@@ -113,60 +118,81 @@ export const EventAgenda: FC<RouteComponentProps> = ({
         });
     }, []);
     const fetchSessions = () => {
-        if (activeDate)
+        if (activeDate) {
+            setRequestOnGoing(true);
+            setLoadingMore(true);
             SessionApi.getAgenda<Session>({
                 "container.id": containerId,
                 "conference.id": id,
                 "start[after]": activeDate?.start,
                 "start[strictly_before]": activeDate?.end,
                 "sessionCategory.id": categoryFilter,
-            }).then(({ error, response }) => {
-                isLoadingSession(false);
-                if (error !== null) {
-                    if (_isString(error)) {
-                        errorToast(error);
-                    }
-                } else if (response !== null) {
-                    const diffCat: any[] = [];
-                    let currentCat: Session[] = [];
-                    response.items.forEach((e: Session, i: number) => {
-                        if (response.items.length - 1 === i) {
-                            currentCat.push(e);
-                            diffCat.push(currentCat);
-                            currentCat = [];
-                        } else if (e.start === response.items[i + 1].start)
-                            currentCat.push(e);
-                        else {
-                            currentCat.push(e);
-                            diffCat.push(currentCat);
-                            currentCat = [];
+                page,
+            })
+                .then(({ error, response }) => {
+                    if (error !== null) {
+                        if (_isString(error)) {
+                            errorToast(error);
                         }
-                    });
-
-                    const sessionItems: any[] = [];
-                    diffCat.forEach((e, i) => {
-                        e.forEach((k: any) => {
-                            const sessionState = {
-                                id: k.id,
-                                prev: null,
-                                next: null,
-                            };
-                            if (i !== 0) {
-                                if (diffCat[i - 1][0])
-                                    sessionState.prev = diffCat[i - 1][0].id;
+                    } else if (response !== null) {
+                        const diffCat: any[] = [];
+                        let currentCat: Session[] = [];
+                        if (response.items.length < 30) {
+                            setHasMore(false);
+                        }
+                        response.items.forEach((e: Session, i: number) => {
+                            if (response.items.length - 1 === i) {
+                                currentCat.push(e);
+                                diffCat.push(currentCat);
+                                currentCat = [];
+                            } else if (
+                                e.start === response.items[i + 1].start
+                            ) {
+                                currentCat.push(e);
+                            } else {
+                                currentCat.push(e);
+                                diffCat.push(currentCat);
+                                currentCat = [];
                             }
-                            if (i < diffCat.length - 1) {
-                                if (diffCat[i + 1][0])
-                                    sessionState.next = diffCat[i + 1][0].id;
-                            }
-
-                            sessionItems.push(sessionState);
                         });
-                    });
-                    setSessionList(sessionItems);
-                    setSessions(diffCat);
-                }
-            });
+
+                        const sessionItems: any[] = [];
+                        diffCat.forEach((e, i) => {
+                            e.forEach((k: any) => {
+                                const sessionState = {
+                                    id: k.id,
+                                    prev: null,
+                                    next: null,
+                                };
+                                if (i !== 0) {
+                                    if (diffCat[i - 1][0])
+                                        sessionState.prev =
+                                            diffCat[i - 1][0].id;
+                                }
+                                if (i < diffCat.length - 1) {
+                                    if (diffCat[i + 1][0])
+                                        sessionState.next =
+                                            diffCat[i + 1][0].id;
+                                }
+
+                                sessionItems.push(sessionState);
+                            });
+                        });
+                        if (page === 1) {
+                            setSessions(diffCat);
+                            setSessionList(sessionItems);
+                        } else {
+                            setSessionList([...sessionList, ...sessionItems]);
+                            setSessions([...sessions, ...diffCat]);
+                        }
+                    }
+                })
+                .finally(() => {
+                    isLoadingSession(false);
+                    setRequestOnGoing(false);
+                    setLoadingMore(false);
+                });
+        }
     };
     async function handleClone() {
         ConferenceApi.clone<
@@ -239,9 +265,12 @@ export const EventAgenda: FC<RouteComponentProps> = ({
     }
 
     useEffect(() => {
-        if (activeDate.start !== "") {
+        if (activeDate && activeDate.start !== "") {
             isLoadingSession(true);
-            fetchSessions();
+            setLoadingMore(false);
+            setRequestOnGoing(false);
+            setHasMore(true);
+            setPage(1);
         }
     }, [activeDate, categoryFilter]);
 
@@ -306,6 +335,31 @@ export const EventAgenda: FC<RouteComponentProps> = ({
             );
         });
     };
+
+    const isBottom = (el: HTMLDivElement) => {
+        return el.getBoundingClientRect().bottom <= window.innerHeight;
+    };
+
+    const trackScrolling = () => {
+        if (bottomBoundaryRef.current) {
+            if (isBottom(bottomBoundaryRef.current)) {
+                if (!requestOnGoing && hasMore && !loadingMore) {
+                    setPage(page + 1);
+                }
+            }
+        }
+    };
+
+    useEffect(() => {
+        fetchSessions();
+    }, [page]);
+
+    useEffect(() => {
+        document.addEventListener("scroll", trackScrolling);
+        return () => {
+            document.removeEventListener("scroll", trackScrolling);
+        };
+    }, []);
 
     if (loading) return <AppLoader />;
     return (
@@ -405,7 +459,28 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                     );
                 })}
             </Row>
-            {loadingSession ? <AppLoader /> : renderSession()}
+            {loadingSession ? (
+                <AppLoader />
+            ) : (
+                <>
+                    {renderSession()}
+                    {loadingMore ? (
+                        <p
+                            style={{
+                                textAlign: "center",
+                                width: "100%",
+                            }}
+                        >
+                            Loading...
+                        </p>
+                    ) : null}
+                    <div
+                        id="page-bottom-boundary"
+                        ref={bottomBoundaryRef}
+                        style={{ height: "10px" }}
+                    ></div>
+                </>
+            )}
         </Fragment>
     );
 };
