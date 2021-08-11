@@ -220,7 +220,9 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
                     }}
                 />
                 <AppButton
-                    className={"text-capitalize mt-4"}
+                    className={
+                        "text-capitalize applyvote-btn ml-3 ml-md-0 mb-3 mb-md-0"
+                    }
                     variant={"secondary"}
                     type={"button"}
                     onClick={handleApplyVote}
@@ -252,22 +254,32 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
 
     return (
         <div className={"mt-4"}>
-            <h5>
-                {t("sessionDetails:section.operatorActions.liveVote.header")}
-                <AppButton
-                    className={
-                        "text-capitalize create-btn float-right d-inline-block"
-                    }
-                    variant={"secondary"}
-                    onClick={() => {
-                        navigate(
-                            `/admin/live-votes/${currentSessionId}/new`
-                        ).then();
-                    }}
-                >
-                    + {t("common.button:create")}
-                </AppButton>
-            </h5>
+            <div className={"header"}>
+                <Row>
+                    <div className={"col-auto"}>
+                        <h5>
+                            {t(
+                                "sessionDetails:section.operatorActions.liveVote.header"
+                            )}
+                        </h5>
+                    </div>
+                    <div className={"col-auto mr-0 ml-auto"}>
+                        <AppButton
+                            className={
+                                "text-capitalize create-btn float-right d-inline-block"
+                            }
+                            variant={"secondary"}
+                            onClick={() => {
+                                navigate(
+                                    `/admin/live-votes/${currentSessionId}/new`
+                                ).then();
+                            }}
+                        >
+                            + {t("common.button:create")}
+                        </AppButton>
+                    </div>
+                </Row>
+            </div>
             <hr />
             <Row>
                 <Col md={12}>
