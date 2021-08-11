@@ -36,8 +36,8 @@ export const AppContainerOverviewCard: FC<AppContainerOverviewCardProps> = ({
           };
 
     return (
-        <div className="container-overview--container--item">
-            <div className="inner-container white-box" onClick={onClick}>
+        <div className="container-overview--container--item card">
+            <div className="inner-container" onClick={onClick}>
                 <div className="inner-container--banner" style={style}>
                     <div className="inner-container--banner--icons">
                         {/* <a href="#" className="add-favorite"> */}
@@ -49,7 +49,7 @@ export const AppContainerOverviewCard: FC<AppContainerOverviewCardProps> = ({
                         {/* </a> */}
                     </div>
                 </div>
-                <div className="inner-container--det card p-3 mx-2">
+                <div className="inner-container--det p-3 mx-2">
                     <div className="inner-container--det--title">
                         <a href="#">
                             <h2>{name}</h2>
