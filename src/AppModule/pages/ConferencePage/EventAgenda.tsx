@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useEffect, useState, useRef } from "react";
+import React, { FC, Fragment, useEffect, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { isString as _isString } from "lodash";
 import { useTranslation } from "react-i18next";
@@ -74,11 +74,6 @@ export const EventAgenda: FC<RouteComponentProps> = ({
     const [showClone, setCloneShow] = useState(0);
     const [showDeleteSession, setDeleteShowSession] = useState(0);
     const { selectActiveDate } = useEventAgendaHelper();
-    const bottomBoundaryRef = useRef<HTMLDivElement>(null);
-    const [loadingMore, setLoadingMore] = useState<boolean>(false);
-    const [page, setPage] = useState<number>(0);
-    const [hasMore, setHasMore] = useState<boolean>(true);
-    const [requestOnGoing, setRequestOnGoing] = useState<boolean>(false);
 
     const fetchEvent = () => {
         ConferenceApi.findById<Conference>(id).then(
@@ -118,81 +113,60 @@ export const EventAgenda: FC<RouteComponentProps> = ({
         });
     }, []);
     const fetchSessions = () => {
-        if (activeDate && page !== 0) {
-            setRequestOnGoing(true);
-            setLoadingMore(true);
+        if (activeDate)
             SessionApi.getAgenda<Session>({
                 "container.id": containerId,
                 "conference.id": id,
                 "start[after]": activeDate?.start,
                 "start[strictly_before]": activeDate?.end,
                 "sessionCategory.id": categoryFilter,
-                page,
-            })
-                .then(({ error, response }) => {
-                    if (error !== null) {
-                        if (_isString(error)) {
-                            errorToast(error);
-                        }
-                    } else if (response !== null) {
-                        const diffCat: any[] = [];
-                        let currentCat: Session[] = [];
-                        // eslint-disable-next-line no-console
-                        console.log(response.items.length === 30, "response.i");
-                        setHasMore(response.items.length === 30);
-                        response.items.forEach((e: Session, i: number) => {
-                            if (response.items.length - 1 === i) {
-                                currentCat.push(e);
-                                diffCat.push(currentCat);
-                                currentCat = [];
-                            } else if (
-                                e.start === response.items[i + 1].start
-                            ) {
-                                currentCat.push(e);
-                            } else {
-                                currentCat.push(e);
-                                diffCat.push(currentCat);
-                                currentCat = [];
-                            }
-                        });
-
-                        const sessionItems: any[] = [];
-                        diffCat.forEach((e, i) => {
-                            e.forEach((k: any) => {
-                                const sessionState = {
-                                    id: k.id,
-                                    prev: null,
-                                    next: null,
-                                };
-                                if (i !== 0) {
-                                    if (diffCat[i - 1][0])
-                                        sessionState.prev =
-                                            diffCat[i - 1][0].id;
-                                }
-                                if (i < diffCat.length - 1) {
-                                    if (diffCat[i + 1][0])
-                                        sessionState.next =
-                                            diffCat[i + 1][0].id;
-                                }
-
-                                sessionItems.push(sessionState);
-                            });
-                        });
-                        if (page === 1) {
-                            setSessions(diffCat);
-                            setSessionList(sessionItems);
-                        } else {
-                            setSessionList([...sessionList, ...sessionItems]);
-                            setSessions([...sessions, ...diffCat]);
-                        }
+            }).then(({ error, response }) => {
+                isLoadingSession(false);
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
                     }
-                })
-                .finally(() => {
-                    isLoadingSession(false);
-                    setRequestOnGoing(false);
-                    setLoadingMore(false);
-                });
-        }
+                } else if (response !== null) {
+                    const diffCat: any[] = [];
+                    let currentCat: Session[] = [];
+                    response.items.forEach((e: Session, i: number) => {
+                        if (response.items.length - 1 === i) {
+                            currentCat.push(e);
+                            diffCat.push(currentCat);
+                            currentCat = [];
+                        } else if (e.start === response.items[i + 1].start)
+                            currentCat.push(e);
+                        else {
+                            currentCat.push(e);
+                            diffCat.push(currentCat);
+                            currentCat = [];
+                        }
+                    });
+
+                    const sessionItems: any[] = [];
+                    diffCat.forEach((e, i) => {
+                        e.forEach((k: any) => {
+                            const sessionState = {
+                                id: k.id,
+                                prev: null,
+                                next: null,
+                            };
+                            if (i !== 0) {
+                                if (diffCat[i - 1][0])
+                                    sessionState.prev = diffCat[i - 1][0].id;
+                            }
+                            if (i < diffCat.length - 1) {
+                                if (diffCat[i + 1][0])
+                                    sessionState.next = diffCat[i + 1][0].id;
+                            }
+
+                            sessionItems.push(sessionState);
+                        });
+                    });
+                    setSessionList(sessionItems);
+                    setSessions(diffCat);
+                }
+            });
     };
     async function handleClone() {
         ConferenceApi.clone<
@@ -233,7 +207,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
             } else {
                 successToast(t("event.agenda:update.info.message"));
                 fetchEvent();
-                setPage(1);
+                fetchSessions();
             }
         });
     }
@@ -259,18 +233,15 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                 }
             } else {
                 successToast(t("event.agenda:sizeChange.info.message"));
-                setPage(1);
+                fetchSessions();
             }
         });
     }
 
     useEffect(() => {
-        if (activeDate && activeDate.start !== "") {
+        if (activeDate.start !== "") {
             isLoadingSession(true);
-            setLoadingMore(false);
-            setRequestOnGoing(false);
-            setHasMore(true);
-            setPage(1);
+            fetchSessions();
         }
     }, [activeDate, categoryFilter]);
 
@@ -335,37 +306,6 @@ export const EventAgenda: FC<RouteComponentProps> = ({
             );
         });
     };
-
-    const isBottom = (el: HTMLDivElement) => {
-        return el.getBoundingClientRect().bottom <= window.innerHeight;
-    };
-
-    const trackScrolling = () => {
-        if (bottomBoundaryRef.current) {
-            if (isBottom(bottomBoundaryRef.current)) {
-                // eslint-disable-next-line no-console
-                console.log(hasMore, !requestOnGoing, "isBottom");
-                if (hasMore && !requestOnGoing) {
-                    // eslint-disable-next-line no-console
-                    console.log(page + 1, "hasMore");
-                    setPage(page + 1);
-                }
-            }
-        }
-    };
-
-    useEffect(() => {
-        // eslint-disable-next-line no-console
-        console.log("page changed", page);
-        fetchSessions();
-    }, [page]);
-
-    useEffect(() => {
-        document.addEventListener("scroll", trackScrolling);
-        return () => {
-            document.removeEventListener("scroll", trackScrolling);
-        };
-    }, []);
 
     if (loading) return <AppLoader />;
     return (
@@ -465,28 +405,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                     );
                 })}
             </Row>
-            {loadingSession ? (
-                <AppLoader />
-            ) : (
-                <>
-                    {renderSession()}
-                    {loadingMore ? (
-                        <p
-                            style={{
-                                textAlign: "center",
-                                width: "100%",
-                            }}
-                        >
-                            Loading...
-                        </p>
-                    ) : null}
-                    <div
-                        id="page-bottom-boundary"
-                        ref={bottomBoundaryRef}
-                        style={{ height: "10px" }}
-                    ></div>
-                </>
-            )}
+            {loadingSession ? <AppLoader /> : renderSession()}
         </Fragment>
     );
 };
