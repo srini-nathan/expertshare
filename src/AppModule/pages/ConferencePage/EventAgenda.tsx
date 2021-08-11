@@ -1,4 +1,4 @@
-import React, { FC, Fragment, Suspense, useEffect, useState } from "react";
+import React, { FC, Fragment, useEffect, useState, useRef } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { isString as _isString } from "lodash";
 import { useTranslation } from "react-i18next";
@@ -69,13 +69,17 @@ export const EventAgenda: FC<RouteComponentProps> = ({
     const navigator = useNavigator(navigate);
     const isGrantedControl = useIsGranted(ROLE_OPERATOR);
     const { t } = useTranslation();
-    const [sessionsCount, setSessionsCount] = React.useState(0);
-    const [sessionsPage, setSessionsPage] = React.useState(1);
-    const [isFetching, setIsFetching] = useState(false);
+
     const [showDelete, setDeleteShow] = useState(0);
     const [showClone, setCloneShow] = useState(0);
     const [showDeleteSession, setDeleteShowSession] = useState(0);
     const { selectActiveDate } = useEventAgendaHelper();
+    const bottomBoundaryRef = useRef<HTMLDivElement>(null);
+    const [loadingMore, setLoadingMore] = useState<boolean>(false);
+    const [page, setPage] = useState<number>(0);
+    const [hasMore, setHasMore] = useState<boolean>(true);
+    const [requestOnGoing, setRequestOnGoing] = useState<boolean>(false);
+
     const fetchEvent = () => {
         ConferenceApi.findById<Conference>(id).then(
             ({ response, isNotFound, errorMessage }) => {
@@ -96,20 +100,10 @@ export const EventAgenda: FC<RouteComponentProps> = ({
             }
         );
     };
-    const handleScroll = () => {
-        if (
-            Math.ceil(
-                window.innerHeight + document.documentElement.scrollTop
-            ) !== document.documentElement.offsetHeight ||
-            isFetching
-        )
-            return;
-        setIsFetching(true);
-    };
     useEffect(() => {
         fetchEvent();
-        window.addEventListener("scroll", handleScroll);
     }, []);
+
     useEffect(() => {
         SessionCategoryApi.find<SessionCategory>(1, {
             "container.id": containerId,
@@ -124,72 +118,81 @@ export const EventAgenda: FC<RouteComponentProps> = ({
         });
     }, []);
     const fetchSessions = () => {
-        if (
-            activeDate && sessionsPage > 1
-                ? sessionsCount === sessionsPage * 30
-                : true
-        )
+        if (activeDate) {
+            setRequestOnGoing(true);
+            setLoadingMore(true);
             SessionApi.getAgenda<Session>({
                 "container.id": containerId,
                 "conference.id": id,
                 "start[after]": activeDate?.start,
                 "start[strictly_before]": activeDate?.end,
                 "sessionCategory.id": categoryFilter,
-                page: sessionsPage,
-            }).then(({ error, response }) => {
-                isLoadingSession(false);
-                if (error !== null) {
-                    if (_isString(error)) {
-                        errorToast(error);
-                    }
-                } else if (response !== null) {
-                    const diffCat: any[] = [];
-                    let currentCat: Session[] = [];
-                    response.items.forEach((e: Session, i: number) => {
-                        if (response.items.length - 1 === i) {
-                            currentCat.push(e);
-                            diffCat.push(currentCat);
-                            currentCat = [];
-                        } else if (e.start === response.items[i + 1].start)
-                            currentCat.push(e);
-                        else {
-                            currentCat.push(e);
-                            diffCat.push(currentCat);
-                            currentCat = [];
+                page,
+            })
+                .then(({ error, response }) => {
+                    if (error !== null) {
+                        if (_isString(error)) {
+                            errorToast(error);
                         }
-                    });
-
-                    const sessionItems: any[] = [];
-                    diffCat.forEach((e, i) => {
-                        e.forEach((k: any) => {
-                            const sessionState = {
-                                id: k.id,
-                                prev: null,
-                                next: null,
-                            };
-                            if (i !== 0) {
-                                if (diffCat[i - 1][0])
-                                    sessionState.prev = diffCat[i - 1][0].id;
+                    } else if (response !== null) {
+                        const diffCat: any[] = [];
+                        let currentCat: Session[] = [];
+                        if (response.items.length < 30) {
+                            setHasMore(false);
+                        }
+                        response.items.forEach((e: Session, i: number) => {
+                            if (response.items.length - 1 === i) {
+                                currentCat.push(e);
+                                diffCat.push(currentCat);
+                                currentCat = [];
+                            } else if (
+                                e.start === response.items[i + 1].start
+                            ) {
+                                currentCat.push(e);
+                            } else {
+                                currentCat.push(e);
+                                diffCat.push(currentCat);
+                                currentCat = [];
                             }
-                            if (i < diffCat.length - 1) {
-                                if (diffCat[i + 1][0])
-                                    sessionState.next = diffCat[i + 1][0].id;
-                            }
-
-                            sessionItems.push(sessionState);
                         });
-                    });
-                    setSessionsCount(sessionsCount + sessionItems.length);
 
-                    if (sessionItems.length > 0) {
-                        setSessionsPage(sessionsPage + 1);
-                        setSessionList(() => {
-                            return [...sessionList, ...sessionItems];
+                        const sessionItems: any[] = [];
+                        diffCat.forEach((e, i) => {
+                            e.forEach((k: any) => {
+                                const sessionState = {
+                                    id: k.id,
+                                    prev: null,
+                                    next: null,
+                                };
+                                if (i !== 0) {
+                                    if (diffCat[i - 1][0])
+                                        sessionState.prev =
+                                            diffCat[i - 1][0].id;
+                                }
+                                if (i < diffCat.length - 1) {
+                                    if (diffCat[i + 1][0])
+                                        sessionState.next =
+                                            diffCat[i + 1][0].id;
+                                }
+
+                                sessionItems.push(sessionState);
+                            });
                         });
-                        setSessions([...sessions, ...diffCat]);
+                        if (page === 1) {
+                            setSessions(diffCat);
+                            setSessionList(sessionItems);
+                        } else {
+                            setSessionList([...sessionList, ...sessionItems]);
+                            setSessions([...sessions, ...diffCat]);
+                        }
                     }
-                }
-            });
+                })
+                .finally(() => {
+                    isLoadingSession(false);
+                    setRequestOnGoing(false);
+                    setLoadingMore(false);
+                });
+        }
     };
     async function handleClone() {
         ConferenceApi.clone<
@@ -261,20 +264,13 @@ export const EventAgenda: FC<RouteComponentProps> = ({
         });
     }
 
-    const fetchMoreListItems = () => {
-        fetchSessions();
-        setIsFetching(false);
-    };
-
     useEffect(() => {
-        if (!isFetching) return;
-        fetchMoreListItems();
-    }, [isFetching]);
-
-    useEffect(() => {
-        if (activeDate.start !== "") {
+        if (activeDate && activeDate.start !== "") {
             isLoadingSession(true);
-            fetchSessions();
+            setLoadingMore(false);
+            setRequestOnGoing(false);
+            setHasMore(true);
+            setPage(1);
         }
     }, [activeDate, categoryFilter]);
 
@@ -324,15 +320,13 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                                         item.cardSize
                                     )} p-0 mx-3`}
                                 >
-                                    <Suspense fallback={<div>Loading...</div>}>
-                                        <AppSessionItem
-                                            conference={id}
-                                            sessionList={sessionList}
-                                            session={item}
-                                            handleDelete={setDeleteShowSession}
-                                            isGrantedControl={isGrantedControl}
-                                        />
-                                    </Suspense>
+                                    <AppSessionItem
+                                        conference={id}
+                                        sessionList={sessionList}
+                                        session={item}
+                                        handleDelete={setDeleteShowSession}
+                                        isGrantedControl={isGrantedControl}
+                                    />
                                 </SwiperSlide>
                             );
                         })}
@@ -341,6 +335,31 @@ export const EventAgenda: FC<RouteComponentProps> = ({
             );
         });
     };
+
+    const isBottom = (el: HTMLDivElement) => {
+        return el.getBoundingClientRect().bottom <= window.innerHeight;
+    };
+
+    const trackScrolling = () => {
+        if (bottomBoundaryRef.current) {
+            if (isBottom(bottomBoundaryRef.current)) {
+                if (!requestOnGoing && hasMore && !loadingMore) {
+                    setPage(page + 1);
+                }
+            }
+        }
+    };
+
+    useEffect(() => {
+        fetchSessions();
+    }, [page]);
+
+    useEffect(() => {
+        document.addEventListener("scroll", trackScrolling);
+        return () => {
+            document.removeEventListener("scroll", trackScrolling);
+        };
+    }, []);
 
     if (loading) return <AppLoader />;
     return (
@@ -440,7 +459,28 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                     );
                 })}
             </Row>
-            {loadingSession ? <AppLoader /> : renderSession()}
+            {loadingSession ? (
+                <AppLoader />
+            ) : (
+                <>
+                    {renderSession()}
+                    {loadingMore ? (
+                        <p
+                            style={{
+                                textAlign: "center",
+                                width: "100%",
+                            }}
+                        >
+                            Loading...
+                        </p>
+                    ) : null}
+                    <div
+                        id="page-bottom-boundary"
+                        ref={bottomBoundaryRef}
+                        style={{ height: "10px" }}
+                    ></div>
+                </>
+            )}
         </Fragment>
     );
 };
