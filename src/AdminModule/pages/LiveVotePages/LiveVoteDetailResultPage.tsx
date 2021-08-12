@@ -26,7 +26,8 @@ import {
     showLoader,
     successToast,
 } from "../../../AppModule/utils";
-import { useDownloadFile } from "../../../AppModule/hooks";
+import { useAuthState, useDownloadFile } from "../../../AppModule/hooks";
+import { ROLES } from "../../../config";
 
 export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { questionId } = useParams();
@@ -35,6 +36,7 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const { t } = useTranslation();
     const [updateLink] = useDownloadFile();
+    const { role } = useAuthState();
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -148,16 +150,20 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
                             </div>
                         </nav>
                     </div>
-                    <div className={""}>
-                        <AppButton
-                            variant={"secondary"}
-                            onClick={handleDownload}
-                        >
-                            <i className={"fak fa-download mr-2"}>
-                                {t("admin.liveVoteResult.list:button.download")}
-                            </i>
-                        </AppButton>
-                    </div>
+                    {role === ROLES.ROLE_ADMIN ? (
+                        <div className={""}>
+                            <AppButton
+                                onClick={handleDownload}
+                                variant={"secondary"}
+                            >
+                                <i className={"fak fa-download mr-2"}>
+                                    {t(
+                                        "admin.liveVoteResult.list:button.download"
+                                    )}
+                                </i>
+                            </AppButton>
+                        </div>
+                    ) : null}
                 </Col>
             </Row>
             <Row>
