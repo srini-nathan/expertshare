@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useState, useRef } from "react";
-import { RouteComponentProps, useParams, Link } from "@reach/router";
+import { RouteComponentProps, useParams } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { isString as _isString } from "lodash";
@@ -121,36 +121,9 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
                 cancelTokenSources={cancelTokenSourcesRef.current}
                 showToolbar
             />
-            <Row>
-                <Col className={"d-flex justify-content-between mb-5"}>
-                    <div className="d-inline-block live-voting-result--tabs">
-                        <nav>
-                            <div
-                                className="nav nav-tabs"
-                                id="nav-tab"
-                                role="tablist"
-                            >
-                                <span
-                                    className="nav-link active"
-                                    id="myGrid-tab"
-                                >
-                                    {t(
-                                        "admin.liveVoteResult:tabSwitch.details"
-                                    )}
-                                </span>
-                                <Link
-                                    className="nav-link"
-                                    id="myGrid2-tab"
-                                    to={`/admin/live-votes-result/${questionId}/overview`}
-                                >
-                                    {t(
-                                        "admin.liveVoteResult:tabSwitch.results"
-                                    )}
-                                </Link>
-                            </div>
-                        </nav>
-                    </div>
-                    {role === ROLES.ROLE_ADMIN ? (
+            {role === ROLES.ROLE_ADMIN ? (
+                <Row>
+                    <Col className={"d-flex justify-content-end mb-5"}>
                         <div className={""}>
                             <AppButton
                                 onClick={handleDownload}
@@ -163,9 +136,9 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
                                 </i>
                             </AppButton>
                         </div>
-                    ) : null}
-                </Col>
-            </Row>
+                    </Col>
+                </Row>
+            ) : null}
             <Row>
                 <Col>
                     <AppGrid
