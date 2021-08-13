@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
-import { RouteComponentProps, useParams, Link } from "@reach/router";
+import { RouteComponentProps, useParams } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { Chart } from "react-google-charts";
@@ -201,8 +201,9 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
                             </div>
                         </div>
                         {viewMode !== "fullscreen" ? (
-                            <Link
-                                to={`/admin/live-votes-result/${conferenceId}/${sessionId}/${questionId}/overview/fullscreen`}
+                            <a
+                                href={`/admin/live-votes-result/${conferenceId}/${sessionId}/${questionId}/overview/fullscreen`}
+                                target="_blank"
                             >
                                 <AppButton
                                     variant={"secondary"}
@@ -210,7 +211,7 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
                                 >
                                     <i className={"fak fa-maximize"}></i>
                                 </AppButton>
-                            </Link>
+                            </a>
                         ) : null}
                     </Col>
                 </Row>
