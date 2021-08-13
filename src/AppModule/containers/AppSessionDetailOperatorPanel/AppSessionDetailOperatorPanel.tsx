@@ -8,12 +8,14 @@ import { AppSessionDetailOperatorVotePanel } from "./AppSessionDetailOperatorVot
 import "./assets/scss/style.scss";
 
 interface AppSessionDetailOperatorPanelType {
+    conferenceId: number;
     currentSessionId: number;
     nextSessionId: number | null;
     onClickSwitchNextSession: () => void;
 }
 
 export const AppSessionDetailOperatorPanel: FC<AppSessionDetailOperatorPanelType> = ({
+    conferenceId,
     currentSessionId,
     nextSessionId,
     onClickSwitchNextSession,
@@ -51,6 +53,7 @@ export const AppSessionDetailOperatorPanel: FC<AppSessionDetailOperatorPanelType
         >
             {renderSwitchNextSession()}
             <AppSessionDetailOperatorVotePanel
+                conferenceId={conferenceId}
                 currentSessionId={currentSessionId}
             />
         </AppCard>

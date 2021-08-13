@@ -13,7 +13,11 @@ import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { LiveVoteQuestionApi, LiveVoteResultApi } from "../../apis";
 import { Language } from "../../models";
-import { AppButton, AppPageHeader } from "../../../AppModule/components";
+import {
+    AppBreadcrumb,
+    AppButton,
+    AppPageHeader,
+} from "../../../AppModule/components";
 import {
     AppGrid,
     buildFilterParams,
@@ -30,7 +34,7 @@ import { useAuthState, useDownloadFile } from "../../../AppModule/hooks";
 import { ROLES } from "../../../config";
 
 export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element => {
-    const { questionId } = useParams();
+    const { questionId, conferenceId, sessionId } = useParams();
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
@@ -115,6 +119,10 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
 
     return (
         <Fragment>
+            <AppBreadcrumb
+                linkText={t("admin.liveVoteResult.list:header.backToSession")}
+                linkUrl={`/event/${conferenceId}/session/${sessionId}`}
+            />
             <AppPageHeader
                 title={t("admin.liveVoteResult.list:header.title")}
                 onQuickFilterChange={handleFilter}

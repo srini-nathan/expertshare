@@ -312,6 +312,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                     </AppCard>
 
                     <AppSessionDetailOperatorPanel
+                        conferenceId={conferenceId}
                         currentSessionId={id}
                         nextSessionId={next}
                         onClickSwitchNextSession={() => {

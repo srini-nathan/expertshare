@@ -4,6 +4,7 @@ import { AppCellActionWithCustom } from "./app-actions";
 export const appGridColDef = ({
     onPressDelete,
     parentId,
+    grandParentId,
 }: AppCellActionWithCustom): ColDef[] => [
     {
         headerName:
@@ -23,6 +24,7 @@ export const appGridColDef = ({
         cellRendererParams: {
             onPressDelete,
             parentId,
+            grandParentId,
         },
     },
 ];
