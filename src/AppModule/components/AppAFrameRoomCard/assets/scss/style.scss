@@ -38,7 +38,8 @@
                 display: flex;
                 flex-wrap: wrap;
                 place-content: flex-start;
-                height: 270px;
+                height: 0;
+                padding-bottom: 56.5%;
                 background-color: var(--default-event-card-background);
                 background-repeat: no-repeat;
                 background-size: cover;
@@ -93,7 +94,7 @@
             }
 
             &--det {
-                margin-top: -40px;
+                margin-top: -30px;
                 background-color: var(--card-background-color);
                 border-radius: var(--card-border-radius);
 
