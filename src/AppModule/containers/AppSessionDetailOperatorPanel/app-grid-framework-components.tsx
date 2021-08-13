@@ -32,11 +32,11 @@ export const appGridFrameworkComponents = {
             customLinkActions: [
                 {
                     icon: "List2",
-                    url: `/admin/live-votes-result/${id}`,
+                    url: `/admin/live-votes-result/${grandParentId}/${parentId}/${id}`,
                 },
                 {
                     icon: "Chart",
-                    url: `/admin/live-votes-result/${id}/overview`,
+                    url: `/admin/live-votes-result/${grandParentId}/${parentId}/${id}/overview`,
                 },
             ],
         };

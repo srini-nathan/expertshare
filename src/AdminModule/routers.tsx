@@ -104,14 +104,18 @@ export const routers: ModuleRouter[] = [
                         path={"live-votes/:conferenceId/:sessionId/:id"}
                     />
                     <LiveVoteDetailResultPage
-                        path={"live-votes-result/:questionId"}
-                    />
-                    <LiveVoteOverviewResultPage
-                        path={"live-votes-result/:questionId/overview"}
+                        path={
+                            "live-votes-result/:conferenceId/:sessionId/:questionId"
+                        }
                     />
                     <LiveVoteOverviewResultPage
                         path={
-                            "live-votes-result/:questionId/overview/:viewMode"
+                            "live-votes-result/:conferenceId/:sessionId/:questionId/overview"
+                        }
+                    />
+                    <LiveVoteOverviewResultPage
+                        path={
+                            "live-votes-result/:conferenceId/:sessionId/:questionId/overview/:viewMode"
                         }
                     />
                 </Router>

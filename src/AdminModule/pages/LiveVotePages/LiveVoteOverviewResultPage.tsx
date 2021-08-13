@@ -6,6 +6,7 @@ import { Chart } from "react-google-charts";
 import { useSetRecoilState } from "recoil";
 import { GoogleChartWrapperChartType } from "react-google-charts/dist/types";
 import {
+    AppBreadcrumb,
     AppButton,
     AppCard,
     AppLoader,
@@ -26,7 +27,12 @@ import { VOTE_QUESTION_CHART_TYPE } from "../../../config";
 
 export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
-    const { questionId, viewMode = "normal" } = useParams();
+    const {
+        questionId,
+        viewMode = "normal",
+        conferenceId,
+        sessionId,
+    } = useParams();
     const [loading, setLoading] = useState<boolean>(true);
     const [loadingQuestion, setLoadingQuestion] = useState<boolean>(true);
     const [data, setData] = useState<LiveVoteResultOverview[]>([]);
@@ -143,6 +149,14 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
 
     return (
         <Fragment>
+            {viewMode !== "fullscreen" ? (
+                <AppBreadcrumb
+                    linkText={t(
+                        "admin.liveVoteResult.overview:header.backToSession"
+                    )}
+                    linkUrl={`/event/${conferenceId}/session/${sessionId}`}
+                />
+            ) : null}
             <AppPageHeader
                 title={t("admin.liveVoteResult.overview:header.title")}
             />
@@ -188,7 +202,7 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
                         </div>
                         {viewMode !== "fullscreen" ? (
                             <Link
-                                to={`/admin/live-votes-result/${questionId}/overview/fullscreen`}
+                                to={`/admin/live-votes-result/${conferenceId}/${sessionId}/${questionId}/overview/fullscreen`}
                             >
                                 <AppButton
                                     variant={"secondary"}
