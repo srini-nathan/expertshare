@@ -62,7 +62,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
         <Col md={12} lg={4} xl={3} className="events-grid--container--item">
             <Col className="inner-container p-0 card">
                 <Link to={`/event/${id}/agenda`}>
-                    <div className="inner-container--banner p-0" style={style}>
+                    <div className="inner-container--banner" style={style}>
                         <div className="inner-container--banner--button">
                             {isLive ? (
                                 <span className="live-now-btn mr-3">
