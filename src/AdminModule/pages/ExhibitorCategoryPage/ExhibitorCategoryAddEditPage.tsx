@@ -13,11 +13,10 @@ import {
     AppFormActions,
     AppCard,
     AppCategoryTranslations,
-    AppFormInputColorPicker,
     CategoryTranslationsType,
 } from "../../../AppModule/components";
-import { SessionCategory } from "../../models";
-import { SessionCategoryApi, ContainerApi } from "../../apis";
+import { ExhibitorCategory } from "../../models";
+import { ExhibitorCategoryApi, ContainerApi } from "../../apis";
 import {
     errorToast,
     setViolations,
@@ -31,17 +30,17 @@ import {
     useLanguages,
 } from "../../../AppModule/hooks";
 
-export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
+export const ExhibitorCategoryAddEditPage: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
     const { id, isEditMode } = useParamId();
     const navigator = useNavigator(navigate);
-    const { containerResourceId, containerId } = useAuthState();
+    const { containerId } = useAuthState();
     const [defaultLanguage, setDefaultLanguage] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
-    const [data, setData] = useState<SessionCategory>(
-        new SessionCategory(containerResourceId)
-    );
+    // const [data, setData] = useState<ExhibitorCategory>(
+    //     new ExhibitorCategory(containerResourceId)
+    // );
     const { Languages } = useLanguages();
     const [translations, setTranslations] = useState<
         CategoryTranslationsType[]
@@ -56,44 +55,22 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
         setValue,
         register,
         ...rest
-    } = useForm<SessionCategory>({
+    } = useForm<ExhibitorCategory>({
         resolver: yupResolver(
             yup.lazy((obj) =>
                 yup.object(
                     mapValues(obj, (_, key) => {
-                        if (key === "color") {
-                            return yup
-                                .string()
-                                .required()
-                                .matches(
-                                    /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8}|[A-Fa-f0-9]{3,4})$/,
-                                    {
-                                        message:
-                                            "Only support valid HEX color code",
-                                    }
-                                );
-                        }
-
-                        if (key === "textColor") {
-                            return yup
-                                .string()
-                                .required()
-                                .matches(
-                                    /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{8}|[A-Fa-f0-9]{3,4})$/,
-                                    {
-                                        message:
-                                            "Only support valid HEX color code",
-                                    }
-                                );
-                        }
-
                         if (
                             defaultLanguage &&
                             key === `name_${defaultLanguage}`
                         ) {
                             return yup
                                 .string()
-                                .required("Name is a required field.");
+                                .required(
+                                    t(
+                                        "admin.exhibitorCategory.form:name.required"
+                                    )
+                                );
                         }
 
                         return yup.string().notRequired();
@@ -130,25 +107,29 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
         return noErrorName;
     };
 
-    const submitForm = async (formData: SessionCategory) => {
+    const submitForm = async (formData: ExhibitorCategory) => {
         if (checkTranslation()) {
             formData.translations = getTranslation();
             formData.container = ContainerApi.toResourceUrl(containerId);
 
-            return SessionCategoryApi.createOrUpdate<SessionCategory>(
+            return ExhibitorCategoryApi.createOrUpdate<ExhibitorCategory>(
                 id,
                 formData
             ).then(({ error, errorMessage }) => {
                 if (error instanceof UnprocessableEntityErrorResponse) {
-                    setViolations<SessionCategory>(error, setError);
+                    setViolations<ExhibitorCategory>(error, setError);
                 } else if (errorMessage) {
                     errorToast(errorMessage);
                 } else {
-                    navigator("/admin/session-categories").then(() => {
+                    navigator("/admin/exhibitor-categories").then(() => {
                         successToast(
                             isEditMode
-                                ? "Session Category updated"
-                                : "Session Category created"
+                                ? t(
+                                      "admin.exhibitorCategory.form:update.success"
+                                  )
+                                : t(
+                                      "admin.exhibitorCategory.form:create.success"
+                                  )
                         );
                     });
                 }
@@ -156,22 +137,21 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
         }
         return Promise.reject();
     };
-    const onSubmit = async (formData: SessionCategory) => {
+    const onSubmit = async (formData: ExhibitorCategory) => {
         return submitForm(formData);
     };
 
     useEffect(() => {
         if (isEditMode) {
-            SessionCategoryApi.findById<SessionCategory>(id, {
-                "groups[]": "SessionCategoryTranslationGroup",
+            ExhibitorCategoryApi.findById<ExhibitorCategory>(id, {
+                "groups[]": "ExhibitorCategoryTranslationGroup",
             }).then(({ response, isNotFound, errorMessage }) => {
                 if (errorMessage) {
                     errorToast(errorMessage);
                 } else if (isNotFound) {
                     errorToast("Language not exist");
                 } else if (response !== null) {
-                    setData(response);
-                    setValue("color", response.color);
+                    // setData(response);
                     const items: CategoryTranslationsType[] = Object.keys(
                         response.translations
                     ).map((key) => {
@@ -217,19 +197,17 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
         return <AppLoader />;
     }
 
-    const { errors } = formState;
-
     return (
         <Fragment>
             <AppBreadcrumb
-                linkText={t("common.breadcrumb:sessionCategory")}
+                linkText={t("common.breadcrumb:exhibitorCategory")}
                 linkUrl={".."}
             />
             <AppPageHeader
                 title={
                     isEditMode
-                        ? t("admin.sessionCategory.form:header.titleEdit")
-                        : t("admin.sessionCategory.form:header.title")
+                        ? t("admin.exhibitorCategory.form:header.titleEdit")
+                        : t("admin.exhibitorCategory.form:header.title")
                 }
             />
 
@@ -255,32 +233,6 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
                                     translations={translations}
                                     onChange={setTranslations}
                                 />
-                                <Form.Row>
-                                    <AppFormInputColorPicker
-                                        label={t(
-                                            "admin.sessionCategory.form:label.color"
-                                        )}
-                                        {...register("color")}
-                                        xl={12}
-                                        lg={12}
-                                        errorMessage={errors.color?.message}
-                                        defaultValue={data.color}
-                                        control={control}
-                                        setValue={setValue}
-                                    />
-                                    <AppFormInputColorPicker
-                                        label={t(
-                                            "admin.sessionCategory.form:label.textColor"
-                                        )}
-                                        {...register("textColor")}
-                                        xl={12}
-                                        lg={12}
-                                        errorMessage={errors.textColor?.message}
-                                        defaultValue={data.textColor}
-                                        control={control}
-                                        setValue={setValue}
-                                    />
-                                </Form.Row>
                             </AppCard>
                             <Row>
                                 <AppFormActions

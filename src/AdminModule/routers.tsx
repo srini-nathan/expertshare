@@ -18,6 +18,8 @@ import {
     UserAddEditPage,
     SessionCategoryListPage,
     SessionCategoryAddEditPage,
+    ExhibitorCategoryListPage,
+    ExhibitorCategoryAddEditPage,
     AFrameRoomGrid,
     AFrameRoomAddEdit,
     AFramePanelGrid,
@@ -82,6 +84,13 @@ export const routers: ModuleRouter[] = [
                     />
                     <SessionCategoryAddEditPage
                         path={"session-categories/new"}
+                    />
+                    <ExhibitorCategoryListPage path={"exhibitor-categories"} />
+                    <ExhibitorCategoryAddEditPage
+                        path={"exhibitor-categories/:id"}
+                    />
+                    <ExhibitorCategoryAddEditPage
+                        path={"exhibitor-categories/new"}
                     />
                     <AFrameRoomGrid path={"rooms/:view"} />
                     <AFrameRoomAddEdit path={"room/new"} />

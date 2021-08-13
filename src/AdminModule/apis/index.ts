@@ -17,6 +17,7 @@ export * from "./ConferenceTagApi";
 export * from "./SessionApi";
 export * from "./SessionTagApi";
 export * from "./SessionCategoryApi";
+export * from "./ExhibitorCategoryApi";
 export * from "./SessionDocumentApi";
 export * from "./AFrameRoomApi";
 export * from "./AFramePanelApi";

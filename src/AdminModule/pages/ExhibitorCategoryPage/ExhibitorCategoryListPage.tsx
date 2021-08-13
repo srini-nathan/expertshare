@@ -11,8 +11,8 @@ import {
 import { Canceler } from "axios";
 import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
-import { SessionCategoryApi } from "../../apis";
-import { SessionCategory } from "../../models";
+import { ExhibitorCategoryApi } from "../../apis";
+import { ExhibitorCategory } from "../../models";
 import { AppPageHeader } from "../../../AppModule/components";
 import {
     AppGrid,
@@ -26,7 +26,7 @@ import { useAuthState } from "../../../AppModule/hooks";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models/context/AuthState";
 
-export const SessionCategoryListPage: FC<RouteComponentProps> = () => {
+export const ExhibitorCategoryListPage: FC<RouteComponentProps> = () => {
     const [totalItems, setTotalItems] = useState<number>(0);
     // const [loading, setLoading] = useState<boolean>(false);
     const appGridApi = useRef<GridApi>();
@@ -43,7 +43,7 @@ export const SessionCategoryListPage: FC<RouteComponentProps> = () => {
                 const { endRow } = request;
                 const pageNo = endRow / appGridConfig.pageSize;
                 api?.hideOverlay();
-                SessionCategoryApi.find<SessionCategory>(
+                ExhibitorCategoryApi.find<ExhibitorCategory>(
                     pageNo,
                     {
                         order: buildSortParams(request),
@@ -76,13 +76,13 @@ export const SessionCategoryListPage: FC<RouteComponentProps> = () => {
     }
 
     async function handleDelete(id: number) {
-        SessionCategoryApi.deleteById(id).then(({ error }) => {
+        ExhibitorCategoryApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
                 }
             } else {
-                successToast("Successfully deleted");
+                successToast(t("admin.exhibitorCategory.list:delete.success"));
                 appGridApi.current?.refreshServerSideStore({
                     purge: false,
                     route: [],
@@ -109,29 +109,29 @@ export const SessionCategoryListPage: FC<RouteComponentProps> = () => {
                                 id="nav-tab"
                                 role="tablist"
                             >
+                                <Link
+                                    className="nav-link"
+                                    id="myGrid2-tab"
+                                    to={`/admin/session-categories`}
+                                >
+                                    {t("admin.sessionCategory.list:tab.title")}
+                                </Link>
                                 <span
                                     className="nav-link active"
                                     id="myGrid-tab"
                                 >
-                                    {t("admin.sessionCategory.list:tab.title")}
-                                </span>
-                                <Link
-                                    className="nav-link"
-                                    id="myGrid2-tab"
-                                    to={`/admin/exhibitor-categories`}
-                                >
                                     {t(
                                         "admin.exhibitorCategory.list:tab.title"
                                     )}
-                                </Link>
+                                </span>
                             </div>
                         </nav>
                     </div>
                 </Col>
             </Row>
             <AppPageHeader
-                title={t("admin.sessionCategory.list:header.title")}
-                createLink={"/admin/session-categories/new"}
+                title={t("admin.exhibitorCategory.list:header.title")}
+                createLink={"/admin/exhibitor-categories/new"}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}
                 showToolbar
