@@ -2,7 +2,7 @@ import React, { FC, useRef, useEffect, useState } from "react";
 import { Col, Row, Form } from "react-bootstrap";
 import { Canceler } from "axios";
 import { useTranslation } from "react-i18next";
-import { find as _find, isString as _isString } from "lodash";
+import { find as _find } from "lodash";
 import {
     GridApi,
     IServerSideDatasource,
@@ -29,10 +29,9 @@ import {
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { appGridColDef } from "./app-grid-col-def";
 import { AppGrid, buildFilterParams, buildSortParams } from "../AppGrid";
-import { errorToast, successToast } from "../../utils";
 import { appGridConfig } from "../../config";
 import { PrimitiveObject } from "../../models";
-import { useSessionSocketEvents } from "../../hooks";
+import { useCRUDHelperFunctions, useSessionSocketEvents } from "../../hooks";
 
 interface AppSessionDetailOperatorVotePanelType {
     currentSessionId: number;
@@ -57,6 +56,7 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
     const { control, getValues } = useForm();
     const [activating, setActivating] = useState<boolean>(false);
     const { emitRefreshVote } = useSessionSocketEvents();
+    const { handleDeleteById } = useCRUDHelperFunctions(LiveVoteQuestionApi);
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -103,22 +103,15 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
     }
 
     function handleDelete(id: number) {
-        LiveVoteQuestionApi.deleteById(id).then(({ error }) => {
-            if (error !== null) {
-                if (_isString(error)) {
-                    errorToast(t(error));
-                }
-            } else {
-                successToast(
-                    t(
-                        "sessionDetails:section.operatorActions.liveVote.delete.toast.success"
-                    )
-                );
+        handleDeleteById(id, {
+            success:
+                "sessionDetails:section.operatorActions.liveVote.delete.toast.success",
+            onSuccess: () => {
                 appGridApi.current?.refreshServerSideStore({
                     purge: false,
                     route: [],
                 });
-            }
+            },
         });
     }
 
