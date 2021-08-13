@@ -104,13 +104,15 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
             } else if (errorMessage) {
                 errorToast(t(errorMessage));
             } else {
-                navigator("..").then(() => {
-                    successToast(
-                        isEditMode
-                            ? t("admin.liveVote.form:toast.success.edit")
-                            : t("admin.liveVote.form:toast.success.add")
-                    );
-                });
+                navigator(`/event/${conferenceId}/session/${sessionId}`).then(
+                    () => {
+                        successToast(
+                            isEditMode
+                                ? t("admin.liveVote.form:toast.success.edit")
+                                : t("admin.liveVote.form:toast.success.add")
+                        );
+                    }
+                );
             }
         });
     };
@@ -504,6 +506,7 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
                         isEditMode={isEditMode}
                         navigation={navigator}
                         isLoading={formState.isSubmitting}
+                        backLink={`/event/${conferenceId}/session/${sessionId}`}
                     />
                 </Row>
             </Form>
