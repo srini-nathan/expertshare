@@ -1,6 +1,5 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "react-i18next";
-import { navigate } from "@reach/router";
 import { AppCellActionWithRenderWithCustom } from "./app-actions";
 import { AppGridAction, AppGridActionProps } from "../../components";
 import { LiveVoteQuestion } from "../../../AdminModule/models";
@@ -30,12 +29,14 @@ export const appGridFrameworkComponents = {
                     onPressDelete(id);
                 },
             },
-            customClickActions: [
+            customLinkActions: [
                 {
-                    icon: "Eye",
-                    onClick: () => {
-                        navigate(`/admin/live-votes-result/${id}`).then();
-                    },
+                    icon: "List2",
+                    url: `/admin/live-votes-result/${id}`,
+                },
+                {
+                    icon: "Chart",
+                    url: `/admin/live-votes-result/${id}/overview`,
                 },
             ],
         };
