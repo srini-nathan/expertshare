@@ -97,8 +97,12 @@ export const routers: ModuleRouter[] = [
                     <NavigationListPage path={"navigations"} />
                     <NavigationAddEditPage path={"navigations/new"} />
                     <NavigationAddEditPage path={"navigations/:key"} />
-                    <LiveVoteAddEditPage path={"live-votes/:sessionId/new"} />
-                    <LiveVoteAddEditPage path={"live-votes/:sessionId/:id"} />
+                    <LiveVoteAddEditPage
+                        path={"live-votes/:conferenceId/:sessionId/new"}
+                    />
+                    <LiveVoteAddEditPage
+                        path={"live-votes/:conferenceId/:sessionId/:id"}
+                    />
                     <LiveVoteDetailResultPage
                         path={"live-votes-result/:questionId"}
                     />

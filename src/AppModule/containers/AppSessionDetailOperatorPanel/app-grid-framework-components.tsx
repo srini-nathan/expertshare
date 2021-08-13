@@ -8,14 +8,14 @@ export const appGridFrameworkComponents = {
     AppGridActionRenderer: (
         params: AppCellActionWithRenderWithCustom
     ): ReactElement => {
-        const { data, onPressDelete, parentId } = params;
+        const { data, onPressDelete, parentId, grandParentId } = params;
         const { id, isSelected } = data as LiveVoteQuestion;
         const { t } = useTranslation();
 
         const props: AppGridActionProps = {
             editAction: {
                 disable: isSelected,
-                url: `/admin/live-votes/${parentId}/${id}`,
+                url: `/admin/live-votes/${grandParentId}/${parentId}/${id}`,
             },
             deleteAction: {
                 disable: isSelected,

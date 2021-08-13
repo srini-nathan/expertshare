@@ -62,7 +62,7 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
     const navigator = useNavigator(navigate);
     const { defaultLanguage, languages } = useGlobalData();
     const { containerResourceId } = useAuthState();
-    const { sessionId } = useParams();
+    const { sessionId, conferenceId } = useParams();
     const sessionResourceId = SessionApi.toResourceUrl(sessionId);
     const [showDelete, setShowDelete] = useState<number>(0);
     const [activeLocale, setActiveLocale] = useState<string>(
@@ -209,7 +209,7 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
         <div className={"live-vote-add-edit-page"}>
             <AppBreadcrumb
                 linkText={t("admin.liveVotes.list:header.backToSession")}
-                linkUrl={".."}
+                linkUrl={`/event/${conferenceId}/session/${sessionId}`}
             />
             <AppPageHeader
                 title={

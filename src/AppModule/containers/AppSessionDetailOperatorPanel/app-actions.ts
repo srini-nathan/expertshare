@@ -3,6 +3,11 @@ import {
     AppCellActionWithRenderParams,
 } from "../../models";
 
-export type AppCellActionWithRenderWithCustom = AppCellActionWithRenderParams;
+export interface AppCellActionWithRenderWithCustom
+    extends AppCellActionWithRenderParams {
+    grandParentId: number;
+}
 
-export type AppCellActionWithCustom = AppCellActionParams;
+export interface AppCellActionWithCustom extends AppCellActionParams {
+    grandParentId: number;
+}

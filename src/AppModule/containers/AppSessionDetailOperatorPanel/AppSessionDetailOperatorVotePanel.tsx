@@ -34,6 +34,7 @@ import { PrimitiveObject } from "../../models";
 import { useCRUDHelperFunctions, useSessionSocketEvents } from "../../hooks";
 
 interface AppSessionDetailOperatorVotePanelType {
+    conferenceId: number;
     currentSessionId: number;
 }
 
@@ -44,6 +45,7 @@ interface LiveVotePublishResultPayload {
 }
 
 export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVotePanelType> = ({
+    conferenceId,
     currentSessionId,
 }): JSX.Element => {
     const { t } = useTranslation();
@@ -254,7 +256,7 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
                     variant={"secondary"}
                     onClick={() => {
                         navigate(
-                            `/admin/live-votes/${currentSessionId}/new`
+                            `/admin/live-votes/${conferenceId}/${currentSessionId}/new`
                         ).then();
                     }}
                 >
@@ -280,6 +282,7 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
                         columnDef={appGridColDef({
                             onPressDelete: handleDelete,
                             parentId: currentSessionId,
+                            grandParentId: conferenceId,
                         })}
                         dataSource={getDataSource()}
                         totalItems={totalItems}
