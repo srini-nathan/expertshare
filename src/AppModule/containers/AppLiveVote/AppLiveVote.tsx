@@ -52,6 +52,7 @@ export const AppLiveVote: FC<AppLiveVoteProps> = ({
                         setAlreadyVoted(true);
                     } else {
                         setAlreadyVoted(false);
+                        setOpen(true);
                     }
                 })
                 .finally(() => {
@@ -59,6 +60,12 @@ export const AppLiveVote: FC<AppLiveVoteProps> = ({
                 });
         }
     }, [data, enable]);
+
+    useEffect(() => {
+        if (alreadyVoted) {
+            setOpen(true);
+        }
+    }, [alreadyVoted]);
 
     if (!enable || !data) {
         return <></>;
@@ -150,12 +157,13 @@ export const AppLiveVote: FC<AppLiveVoteProps> = ({
                     onToggleCollapse={() => {
                         setOpen(!open);
                     }}
+                    hideCollapse={alreadyVoted}
                 />
                 <AppLiveVoteQuestion
                     title={data?.title}
                     description={data?.description}
                 />
-                <Collapse in={open}>
+                <Collapse in={open} timeout={0}>
                     <div className={`inner collapse mt-3 pt-3`}>
                         <div className="inner--container">
                             {renderLoader()}
