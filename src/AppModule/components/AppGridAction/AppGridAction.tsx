@@ -1,59 +1,79 @@
 import React, { FC, useState } from "react";
 import { Link } from "@reach/router";
+import { useTranslation } from "react-i18next";
 import { AppIcon } from "../AppIcon";
 import { AppModal } from "../AppModal";
 
 export interface AppGridActionProps {
+    // @FIXME: remove from this
     doorAction?: AppGridLinkAction;
     screenAction?: AppGridLinkAction;
     billBoardAction?: AppGridLinkAction;
     projectorAction?: AppGridLinkAction;
+    // @FIXME: remove till here
     addAction?: AppGridLinkAction;
     editAction?: AppGridLinkAction;
     viewAction?: AppGridLinkAction;
     treeAction?: AppGridLinkAction;
     deleteAction?: AppGridClickAction;
     customClickActions?: AppGridCustomClickAction[];
+    customLinkActions?: AppGridCustomLinkAction[];
     isGrantedControl?: boolean;
 }
 
 interface AppGridLinkAction {
-    url?: string;
+    url: string;
+    icon?: string;
+    text?: string;
     disable?: boolean;
 }
 
 interface AppGridClickAction {
+    onClick: () => void;
+    disable?: boolean;
     confirmation?: string;
     confirmationTitle?: string;
-    onClick?: () => void;
-    disable?: boolean;
 }
 
-interface AppGridCustomClickAction {
-    confirmation?: string;
-    confirmationTitle?: string;
-    onClick?: () => void;
-    disable?: boolean;
+interface AppGridCustomAction {
     icon?: string;
     text?: string;
-}
-interface ActionProps {
     disable?: boolean;
-    icon?: string;
 }
 
-interface LinkActionProps extends ActionProps {
-    url?: string;
+interface AppGridCustomClickAction extends AppGridCustomAction {
+    onClick: () => void;
+    confirmation?: string;
+    confirmationTitle?: string;
+}
+
+interface AppGridCustomLinkAction extends AppGridCustomAction {
+    url: string;
+}
+
+interface LinkActionProps extends AppGridCustomAction {
+    url: string;
 }
 
 const LinkAction: FC<LinkActionProps> = ({
     url,
     icon,
+    text,
     disable = false,
 }): JSX.Element => {
-    if (!url || !icon) {
+    const { t } = useTranslation();
+    if (!text && !icon) {
         return <></>;
     }
+
+    const renderTextOrIcon = () => {
+        return (
+            <>
+                {icon ? <AppIcon name={icon} /> : null}
+                {text ? t(text) : null}
+            </>
+        );
+    };
 
     if (disable) {
         return (
@@ -65,18 +85,14 @@ const LinkAction: FC<LinkActionProps> = ({
                     event.preventDefault();
                 }}
             >
-                <AppIcon name={icon} />
+                {renderTextOrIcon()}
             </a>
         );
     }
 
-    return (
-        <Link to={url}>
-            <AppIcon name={icon} />
-        </Link>
-    );
+    return <Link to={url}>{renderTextOrIcon()}</Link>;
 };
-interface ClickActionProps extends ActionProps {
+interface ClickActionProps extends AppGridCustomAction {
     onClick?: () => void;
     confirmation?: string;
     text?: string;
@@ -149,6 +165,7 @@ export const AppGridAction: FC<AppGridActionProps> = ({
     viewAction,
     isGrantedControl,
     customClickActions = [],
+    customLinkActions = [],
 }): JSX.Element => {
     const showItem = () => {
         if (isGrantedControl !== undefined) return isGrantedControl;
@@ -157,29 +174,45 @@ export const AppGridAction: FC<AppGridActionProps> = ({
 
     return (
         <div className="actions">
-            <LinkAction icon={"Eye"} {...viewAction}></LinkAction>
-            <LinkAction icon={"add"} {...addAction}></LinkAction>
-            <LinkAction icon={"ListTree"} {...treeAction}></LinkAction>
+            {viewAction ? (
+                <LinkAction icon={"Eye"} {...viewAction}></LinkAction>
+            ) : null}
+            {addAction ? (
+                <LinkAction icon={"add"} {...addAction}></LinkAction>
+            ) : null}
+            {treeAction ? (
+                <LinkAction icon={"ListTree"} {...treeAction}></LinkAction>
+            ) : null}
             {customClickActions.map(({ icon, text, ...rest }, index) => (
                 <ClickAction key={index} icon={icon} text={text} {...rest} />
             ))}
+            {customLinkActions.map(({ icon, text, ...rest }, index) => (
+                <LinkAction key={index} icon={icon} text={text} {...rest} />
+            ))}
             {showItem() ? (
                 <>
-                    <LinkAction icon={"DoorOpen"} {...doorAction}></LinkAction>
-                    <LinkAction icon={"Desktop"} {...screenAction}></LinkAction>
-                    <LinkAction
-                        icon={"Globe"}
-                        {...billBoardAction}
-                    ></LinkAction>
-                    <LinkAction
-                        icon={"Projector"}
-                        {...projectorAction}
-                    ></LinkAction>
-                    <LinkAction icon={"edit"} {...editAction}></LinkAction>
-                    <ClickAction
-                        icon={"delete"}
-                        {...deleteAction}
-                    ></ClickAction>
+                    {doorAction ? (
+                        <LinkAction icon={"DoorOpen"} {...doorAction} />
+                    ) : null}
+                    {screenAction ? (
+                        <LinkAction icon={"Desktop"} {...screenAction} />
+                    ) : null}
+
+                    {billBoardAction ? (
+                        <LinkAction icon={"Globe"} {...billBoardAction} />
+                    ) : null}
+
+                    {projectorAction ? (
+                        <LinkAction icon={"Projector"} {...projectorAction} />
+                    ) : null}
+
+                    {editAction ? (
+                        <LinkAction icon={"edit"} {...editAction} />
+                    ) : null}
+
+                    {deleteAction ? (
+                        <ClickAction icon={"delete"} {...deleteAction} />
+                    ) : null}
                 </>
             ) : null}
         </div>
