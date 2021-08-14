@@ -109,14 +109,14 @@ export const SessionCategoryListPage: FC<RouteComponentProps> = () => {
                                 id="nav-tab"
                                 role="tablist"
                             >
-                                <span
-                                    className="nav-link active"
+                                <a
+                                    className="nav-link active nav-item"
                                     id="myGrid-tab"
                                 >
                                     {t("admin.sessionCategory.list:tab.title")}
-                                </span>
+                                </a>
                                 <Link
-                                    className="nav-link"
+                                    className="nav-link nav-item"
                                     id="myGrid2-tab"
                                     to={`/admin/exhibitor-categories`}
                                 >
