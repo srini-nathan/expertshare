@@ -110,20 +110,20 @@ export const ExhibitorCategoryListPage: FC<RouteComponentProps> = () => {
                                 role="tablist"
                             >
                                 <Link
-                                    className="nav-link"
+                                    className="nav-link nav-item"
                                     id="myGrid2-tab"
                                     to={`/admin/session-categories`}
                                 >
                                     {t("admin.sessionCategory.list:tab.title")}
                                 </Link>
-                                <span
-                                    className="nav-link active"
+                                <a
+                                    className="nav-link active nav-item"
                                     id="myGrid-tab"
                                 >
                                     {t(
                                         "admin.exhibitorCategory.list:tab.title"
                                     )}
-                                </span>
+                                </a>
                             </div>
                         </nav>
                     </div>
