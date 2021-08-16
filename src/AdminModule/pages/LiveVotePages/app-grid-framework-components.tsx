@@ -5,16 +5,15 @@ import {
     AppGridAction,
     AppGridActionProps,
 } from "../../../AppModule/components";
-import { LiveVoteResult } from "../../models";
-import { AppCellActionWithRenderWithCustom } from "./app-actions";
+import { LiveVoteQuestion, LiveVoteResult } from "../../models";
 import { useBuildAssetPath, useDateTime } from "../../../AppModule/hooks";
-import { User } from "../../../AppModule/models";
+import { User, AppCellActionWithRenderParams } from "../../../AppModule/models";
 import { UserProfileFileInfo } from "../../../config";
 import UserAvatar from "../../../AppModule/assets/images/user-avatar.png";
 
 export const appGridFrameworkComponents = {
-    AppGridActionRenderer: (
-        params: AppCellActionWithRenderWithCustom
+    AppLiveVoteResultGridActionRenderer: (
+        params: AppCellActionWithRenderParams
     ): ReactElement => {
         const { data, onPressDelete } = params;
         const { id } = data as LiveVoteResult;
@@ -36,7 +35,7 @@ export const appGridFrameworkComponents = {
 
         return <AppGridAction {...props} />;
     },
-    AppUserInfo: (params: AppCellActionWithRenderWithCustom): ReactElement => {
+    AppUserInfo: (params: AppCellActionWithRenderParams): ReactElement => {
         const { data } = params;
         const { user } = data as LiveVoteResult;
         const { firstName, lastName, imageName, id } = user as User;
@@ -71,10 +70,48 @@ export const appGridFrameworkComponents = {
             </div>
         );
     },
-    AppCreatedAt: (params: AppCellActionWithRenderWithCustom): ReactElement => {
+    AppCreatedAt: (params: AppCellActionWithRenderParams): ReactElement => {
         const { data } = params;
         const { toShortDate } = useDateTime();
         const { createdAt } = data as LiveVoteResult;
         return <>{createdAt ? toShortDate(new Date(createdAt)) : ""}</>;
+    },
+    AppLiveVoteGridActionRenderer: (
+        params: AppCellActionWithRenderParams
+    ): ReactElement => {
+        const { data, onPressDelete } = params;
+        const { id, isSelected } = data as LiveVoteQuestion;
+        const { t } = useTranslation();
+
+        const props: AppGridActionProps = {
+            editAction: {
+                disable: isSelected,
+                url: `/admin/live-votes/${id}`,
+            },
+            deleteAction: {
+                disable: isSelected,
+                confirmation: t(
+                    "admin.liveVote.list:delete.confirmation.message"
+                ),
+                confirmationTitle: t(
+                    "admin.liveVote.list:delete.confirmation.title"
+                ),
+                onClick: () => {
+                    onPressDelete(id);
+                },
+            },
+            customLinkActions: [
+                {
+                    icon: "List2",
+                    url: `/admin/live-votes-result/${id}`,
+                },
+                {
+                    icon: "Chart",
+                    url: `/admin/live-votes-result/${id}/overview`,
+                },
+            ],
+        };
+
+        return <AppGridAction {...props} />;
     },
 };

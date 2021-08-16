@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useState, useRef } from "react";
-import { RouteComponentProps, useParams } from "@reach/router";
+import { RouteComponentProps } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { isString as _isString } from "lodash";
@@ -9,42 +9,26 @@ import {
     IServerSideGetRowsParams,
 } from "ag-grid-community";
 import { Canceler } from "axios";
-import { appLiveVoteResultGridColDef } from "./app-grid-col-def";
+import { appLiveVoteGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
-import { LiveVoteQuestionApi, LiveVoteResultApi } from "../../apis";
+import { LiveVoteQuestionApi } from "../../apis";
 import { Language } from "../../models";
-import {
-    AppBreadcrumb,
-    AppButton,
-    AppPageHeader,
-} from "../../../AppModule/components";
+import { AppPageHeader } from "../../../AppModule/components";
 import {
     AppGrid,
     buildFilterParams,
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
-import {
-    errorToast,
-    hideLoader,
-    showLoader,
-    successToast,
-} from "../../../AppModule/utils";
-import { useAuthState, useDownloadFile } from "../../../AppModule/hooks";
-import { ROLES } from "../../../config";
+import { errorToast, successToast } from "../../../AppModule/utils";
+import { useAuthState } from "../../../AppModule/hooks";
 
-export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element => {
-    const { questionId, conferenceId = null, sessionId = null } = useParams();
+export const LiveVoteListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const { t } = useTranslation();
-    const [updateLink] = useDownloadFile();
-    const { role } = useAuthState();
-    const backLink =
-        conferenceId && sessionId
-            ? `/event/${conferenceId}/session/${sessionId}`
-            : "/admin/live-votes";
+    const { containerId } = useAuthState();
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -53,12 +37,12 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
                 const { endRow } = request;
                 const pageNo = endRow / appGridConfig.pageSize;
                 api?.hideOverlay();
-                LiveVoteResultApi.find<Language>(
+                LiveVoteQuestionApi.find<Language>(
                     pageNo,
                     {
+                        "container.id": containerId,
                         order: buildSortParams(request),
                         ...buildFilterParams(request),
-                        "voteQuestion.id": questionId,
                     },
                     (c) => {
                         cancelTokenSourcesRef.current.push(c);
@@ -84,15 +68,13 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
     }
 
     async function handleDelete(id: number) {
-        LiveVoteResultApi.deleteById(id).then(({ error }) => {
+        LiveVoteQuestionApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(t(error));
                 }
             } else {
-                successToast(
-                    t("admin.liveVoteResult.list:delete.toast.success")
-                );
+                successToast(t("admin.liveVote.list:delete.toast.success"));
                 appGridApi.current?.refreshServerSideStore({
                     purge: false,
                     route: [],
@@ -109,57 +91,19 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
         });
     }
 
-    async function handleDownload() {
-        await showLoader(t("admin.liveVoteResult.list:result.downloading"));
-        LiveVoteQuestionApi.downloadResult(questionId).then((res) => {
-            updateLink({
-                name: `${questionId}-result.csv`,
-                type: "file/csv",
-                file: res,
-            });
-            hideLoader();
-        });
-    }
-
     return (
         <Fragment>
-            <AppBreadcrumb
-                linkText={
-                    conferenceId && sessionId
-                        ? t("admin.liveVotes.list:header.backToSession")
-                        : t("admin.liveVote.list:header.title")
-                }
-                linkUrl={backLink}
-            />
             <AppPageHeader
-                title={t("admin.liveVoteResult.list:header.title")}
+                title={t("admin.liveVote.list:header.title")}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}
                 showToolbar
             />
-            {role === ROLES.ROLE_ADMIN ? (
-                <Row>
-                    <Col className={"d-flex justify-content-end mb-5"}>
-                        <div className={""}>
-                            <AppButton
-                                onClick={handleDownload}
-                                variant={"secondary"}
-                            >
-                                <i className={"fak fa-download mr-2"}>
-                                    {t(
-                                        "admin.liveVoteResult.list:button.download"
-                                    )}
-                                </i>
-                            </AppButton>
-                        </div>
-                    </Col>
-                </Row>
-            ) : null}
             <Row>
                 <Col>
                     <AppGrid
                         frameworkComponents={appGridFrameworkComponents}
-                        columnDef={appLiveVoteResultGridColDef({
+                        columnDef={appLiveVoteGridColDef({
                             onPressDelete: handleDelete,
                         })}
                         dataSource={getDataSource()}

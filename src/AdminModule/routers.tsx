@@ -29,6 +29,7 @@ import {
     LiveVoteAddEditPage,
     LiveVoteDetailResultPage,
     LiveVoteOverviewResultPage,
+    LiveVoteListPage,
 } from "./pages";
 import { Layout3D } from "../Layout3DModule";
 import { ModuleRouter } from "../AppModule/models";
@@ -97,6 +98,8 @@ export const routers: ModuleRouter[] = [
                     <NavigationListPage path={"navigations"} />
                     <NavigationAddEditPage path={"navigations/new"} />
                     <NavigationAddEditPage path={"navigations/:key"} />
+                    <LiveVoteListPage path={"live-votes"} />
+                    <LiveVoteAddEditPage path={"live-votes/:id"} />
                     <LiveVoteAddEditPage
                         path={"live-votes/:conferenceId/:sessionId/new"}
                     />
@@ -104,9 +107,15 @@ export const routers: ModuleRouter[] = [
                         path={"live-votes/:conferenceId/:sessionId/:id"}
                     />
                     <LiveVoteDetailResultPage
+                        path={"live-votes-result/:questionId"}
+                    />
+                    <LiveVoteDetailResultPage
                         path={
                             "live-votes-result/:conferenceId/:sessionId/:questionId"
                         }
+                    />
+                    <LiveVoteOverviewResultPage
+                        path={"live-votes-result/:questionId/overview"}
                     />
                     <LiveVoteOverviewResultPage
                         path={
@@ -116,6 +125,11 @@ export const routers: ModuleRouter[] = [
                     <LiveVoteOverviewResultPage
                         path={
                             "live-votes-result/:conferenceId/:sessionId/:questionId/overview/:viewMode"
+                        }
+                    />
+                    <LiveVoteOverviewResultPage
+                        path={
+                            "live-votes-result/:questionId/overview/:viewMode"
                         }
                     />
                 </Router>
