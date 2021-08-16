@@ -438,7 +438,7 @@
                         font-weight: 400;
 
                         span {
-                            margin: 0 0 0 60px;
+                            margin: 0 0 0 50px;
                         }
                     }
                 }
@@ -477,7 +477,7 @@
                     span {
                         max-width: 70%;
                         max-height: 40px;
-                        margin: 2px 0 auto 10px;
+                        margin: 2px 0 auto 8px;
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;
@@ -486,7 +486,7 @@
                             max-width: 60%;
                         }
                         @include media("xl") {
-                            margin: auto 0 auto 8px;
+                            margin: auto 0 auto 5px;
                         }
                     }
                 }
