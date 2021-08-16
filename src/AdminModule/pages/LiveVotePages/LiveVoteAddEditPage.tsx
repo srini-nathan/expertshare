@@ -4,10 +4,10 @@ import { useTranslation } from "react-i18next";
 import { Row, Form, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { isString as _isString } from "lodash";
 import {
     useAuthState,
     useBuildAssetPath,
+    useCRUDHelperFunctions,
     useDataAddEdit,
     useNavigator,
 } from "../../../AppModule/hooks";
@@ -36,7 +36,9 @@ import {
 import {
     LiveVoteQuestion,
     SLiveVoteQuestionTranslation,
-} from "../../models/entities/LiveVoteQuestion";
+    LiveVoteOption,
+    SLiveVoteOptionTranslation,
+} from "../../models";
 import { LiveVoteOptionApi, LiveVoteQuestionApi, SessionApi } from "../../apis";
 import {
     SimpleObject,
@@ -45,10 +47,7 @@ import {
 } from "../../../AppModule/models";
 import { schema } from "./schema";
 import { useGlobalData } from "../../../AppModule/contexts";
-import {
-    LiveVoteOption,
-    SLiveVoteOptionTranslation,
-} from "../../models/entities/LiveVoteOption";
+
 import { LiveVoteOptionTranslation } from "../../models/entities/LiveVoteOptionTranslation";
 import { LiveVoteQuestionTranslation } from "../../models/entities/LiveVoteQuestionTranslation";
 import { UploadAPI } from "../../../AppModule/apis";
@@ -92,6 +91,7 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
         mode: "all",
     });
     const voteOptionMediaPath = useBuildAssetPath(VoteOptionFileInfo);
+    const { handleDeleteById } = useCRUDHelperFunctions(LiveVoteOptionApi);
 
     const submitForm = async (formData: LiveVoteQuestion) => {
         return LiveVoteQuestionApi.createOrUpdate<LiveVoteQuestion>(id, {
@@ -178,21 +178,12 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
 
     const handleDelete = (optionId: number) => {
         if (newlyAddedIds.indexOf(optionId) === -1) {
-            LiveVoteOptionApi.deleteById(optionId)
-                .then(({ error }) => {
-                    if (error !== null) {
-                        if (_isString(error)) {
-                            errorToast(t(error));
-                        }
-                    } else {
-                        successToast(
-                            t("admin.liveVote.form:delete.toast.success")
-                        );
-                    }
-                })
-                .finally(() => {
+            handleDeleteById(optionId, {
+                onCleanup: () => {
                     setShowDelete(0);
-                });
+                },
+                success: "admin.liveVote.form:delete.toast.success",
+            });
         } else {
             setShowDelete(0);
             successToast(t("admin.liveVote.form:delete.toast.success"));
