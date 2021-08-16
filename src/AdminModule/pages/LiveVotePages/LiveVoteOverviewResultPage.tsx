@@ -115,7 +115,6 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
         const computedData = data?.map((d) => {
             return [d.title, d.count, d.color, null];
         });
-
         if (computedData) {
             setChartData(computedData);
         } else {
@@ -219,29 +218,37 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
             <AppCard>
                 <Row>
                     <Col>
-                        <Chart
-                            width={"100%"}
-                            height={"100%"}
-                            chartType={chartMode}
-                            loader={<AppLoader />}
-                            data={[
-                                [
-                                    "Vote Option",
-                                    "Number Of Votes",
-                                    { role: "style" },
-                                    {
-                                        sourceColumn: 0,
-                                        role: "annotation",
-                                        type: "string",
-                                        calc: "stringify",
-                                    },
-                                ],
-                                ...chartData,
-                            ]}
-                            options={{
-                                legend: { position: "none" },
-                            }}
-                        />
+                        {chartData.length > 0 ? (
+                            <Chart
+                                width={"100%"}
+                                height={"100%"}
+                                chartType={chartMode}
+                                loader={<AppLoader />}
+                                data={[
+                                    [
+                                        "Vote Option",
+                                        "Number Of Votes",
+                                        { role: "style" },
+                                        {
+                                            sourceColumn: 0,
+                                            role: "annotation",
+                                            type: "string",
+                                            calc: "stringify",
+                                        },
+                                    ],
+                                    ...chartData,
+                                ]}
+                                options={{
+                                    legend: { position: "none" },
+                                }}
+                            />
+                        ) : (
+                            <p className={"alert alert-info"}>
+                                {t(
+                                    "admin.liveVoteResult:info.noSufficientData"
+                                )}
+                            </p>
+                        )}
                     </Col>
                 </Row>
                 <br />
