@@ -20,8 +20,8 @@ import {
     buildSortParams,
 } from "../../../AppModule/containers/AppGrid";
 import { appGridConfig } from "../../../AppModule/config";
-import { errorToast, successToast } from "../../../AppModule/utils";
-import { useAuthState } from "../../../AppModule/hooks";
+import { errorToast } from "../../../AppModule/utils";
+import { useAuthState, useCRUDHelperFunctions } from "../../../AppModule/hooks";
 
 export const LiveVoteListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
@@ -29,66 +29,26 @@ export const LiveVoteListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const { t } = useTranslation();
     const { containerId } = useAuthState();
+    const {
+        handleDeleteById,
+        setFilter,
+        buildDataSource,
+    } = useCRUDHelperFunctions(LiveVoteQuestionApi, appGridApi);
 
     function getDataSource(): IServerSideDatasource {
-        return {
-            getRows(params: IServerSideGetRowsParams) {
-                const { request, api } = params;
-                const { endRow } = request;
-                const pageNo = endRow / appGridConfig.pageSize;
-                api?.hideOverlay();
-                LiveVoteQuestionApi.find<Language>(
-                    pageNo,
-                    {
-                        "container.id": containerId,
-                        order: buildSortParams(request),
-                        ...buildFilterParams(request),
-                    },
-                    (c) => {
-                        cancelTokenSourcesRef.current.push(c);
-                    }
-                ).then(({ error, response }) => {
-                    if (error !== null) {
-                        if (_isString(error)) {
-                            errorToast(error);
-                        }
-                    } else if (response !== null) {
-                        if (response.items.length === 0) {
-                            api?.showNoRowsOverlay();
-                        }
-                        setTotalItems(response.totalItems);
-                        params.successCallback(
-                            response.items,
-                            response.totalItems
-                        );
-                    }
-                });
-            },
-        };
+        return buildDataSource({
+            "container.id": containerId,
+        });
     }
 
     async function handleDelete(id: number) {
-        LiveVoteQuestionApi.deleteById(id).then(({ error }) => {
-            if (error !== null) {
-                if (_isString(error)) {
-                    errorToast(t(error));
-                }
-            } else {
-                successToast(t("admin.liveVote.list:delete.toast.success"));
-                appGridApi.current?.refreshServerSideStore({
-                    purge: false,
-                    route: [],
-                });
-            }
+        handleDeleteById(id, {
+            success: "admin.liveVote.list:delete.toast.success",
         });
     }
 
     async function handleFilter(search: string) {
-        appGridApi.current?.setFilterModel({
-            name: {
-                filter: search,
-            },
-        });
+        setFilter(search, ["name"]);
     }
 
     return (
