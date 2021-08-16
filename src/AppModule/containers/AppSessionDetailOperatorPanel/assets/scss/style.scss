@@ -6,4 +6,10 @@
         position: absolute;
         height: auto;
     }
+    .applyvote-btn {
+        margin-top: 21px;
+        @include media("mobtosmall") {
+            margin-top: 0;
+        }
+    }
 }

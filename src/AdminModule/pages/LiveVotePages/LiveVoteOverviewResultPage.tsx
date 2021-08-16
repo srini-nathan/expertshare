@@ -1,18 +1,19 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
-import { RouteComponentProps, useParams, Link } from "@reach/router";
+import { RouteComponentProps, useParams } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { Chart } from "react-google-charts";
 import { useSetRecoilState } from "recoil";
 import { GoogleChartWrapperChartType } from "react-google-charts/dist/types";
 import {
+    AppBreadcrumb,
     AppButton,
     AppCard,
     AppLoader,
     AppPageHeader,
 } from "../../../AppModule/components";
-import { LiveVoteResultApi } from "../../apis";
-import { LiveVoteResultOverview } from "../../models";
+import { LiveVoteQuestionApi, LiveVoteResultApi } from "../../apis";
+import { LiveVoteQuestion, LiveVoteResultOverview } from "../../models";
 import { useSessionSocketEvents } from "../../../AppModule/hooks";
 import { socket, EVENTS } from "../../../AppModule/socket";
 import {
@@ -21,11 +22,19 @@ import {
     normalLayout,
     overViewLayout,
 } from "../../../AppModule/atoms";
+import { errorToast } from "../../../AppModule/utils";
+import { VOTE_QUESTION_CHART_TYPE } from "../../../config";
 
 export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
-    const { questionId, viewMode = "normal" } = useParams();
-    const [loading, setLoading] = useState<boolean>(false);
+    const {
+        questionId,
+        viewMode = "normal",
+        conferenceId,
+        sessionId,
+    } = useParams();
+    const [loading, setLoading] = useState<boolean>(true);
+    const [loadingQuestion, setLoadingQuestion] = useState<boolean>(true);
     const [data, setData] = useState<LiveVoteResultOverview[]>([]);
     const [chartData, setChartData] = useState<any[]>([]);
     const [chartMode, setChartMode] = useState<GoogleChartWrapperChartType>(
@@ -74,6 +83,34 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
             });
     };
 
+    const fetchLiveVote = () => {
+        setLoadingQuestion(true);
+        LiveVoteQuestionApi.findById<LiveVoteQuestion>(questionId)
+            .then(({ isNotFound, response }) => {
+                if (isNotFound) {
+                    errorToast(
+                        t("admin.liveVoteResult.overview:toast.error.notfound")
+                    );
+                } else if (response !== null) {
+                    if (
+                        response.chartType ===
+                        VOTE_QUESTION_CHART_TYPE.VOTEQUESTIONCHARTTYPE_PIE
+                    ) {
+                        setChartMode("PieChart");
+                    } else {
+                        setChartMode("BarChart");
+                    }
+                }
+            })
+            .finally(() => {
+                setLoadingQuestion(false);
+            });
+    };
+
+    useEffect(() => {
+        fetchLiveVote();
+    }, []);
+
     const calculateCharData = () => {
         const computedData = data?.map((d) => {
             return [d.title, d.count, d.color, null];
@@ -106,119 +143,79 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
         calculateCharData();
     }, [data]);
 
-    if (loading) {
+    if (loading || loadingQuestion) {
         return <AppLoader />;
     }
 
     return (
         <Fragment>
+            {viewMode !== "fullscreen" ? (
+                <AppBreadcrumb
+                    linkText={t(
+                        "admin.liveVoteResult.overview:header.backToSession"
+                    )}
+                    linkUrl={`/event/${conferenceId}/session/${sessionId}`}
+                />
+            ) : null}
             <AppPageHeader
                 title={t("admin.liveVoteResult.overview:header.title")}
             />
-            <Row>
-                <Col className={"d-flex justify-content-between mb-5"}>
-                    <div className="d-inline-block live-voting-result--tabs">
-                        <nav>
-                            <div
-                                className="nav nav-tabs"
-                                id="nav-tab"
-                                role="tablist"
-                            >
-                                <Link
-                                    className="nav-link"
-                                    id="myGrid2-tab"
-                                    to={`/admin/live-votes-result/${questionId}`}
+            {chartMode === "PieChart" ? null : (
+                <Row className={"live-voting-result--chart-action-bar"}>
+                    <Col className={"d-flex justify-content-end"}>
+                        <div className={"switch-view p-0 mx-0 ml-sm-2"}>
+                            <div className={"switch-view--content"}>
+                                <a
+                                    className={
+                                        chartMode === "BarChart"
+                                            ? `active-view`
+                                            : ""
+                                    }
+                                    href={"#"}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        e.preventDefault();
+                                        setChartMode("BarChart");
+                                    }}
                                 >
-                                    {t(
-                                        "admin.liveVoteResult:tabSwitch.details"
-                                    )}
-                                </Link>
-                                <span
-                                    className="nav-link active"
-                                    id="myGrid-tab"
+                                    <i className="fak fa-chart" />
+                                </a>
+                                <a
+                                    className={
+                                        chartMode === "Bar" ? `active-view` : ""
+                                    }
+                                    href={"#"}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        e.preventDefault();
+                                        setChartMode("Bar");
+                                    }}
                                 >
-                                    {t(
-                                        "admin.liveVoteResult:tabSwitch.results"
-                                    )}
-                                </span>
+                                    <i
+                                        className="fak fa-chart"
+                                        style={{
+                                            transform: "rotate(90deg)",
+                                        }}
+                                    />
+                                </a>
                             </div>
-                        </nav>
-                    </div>
-                </Col>
-            </Row>
-            <Row className={"live-voting-result--chart-action-bar"}>
-                <Col className={"d-flex justify-content-end"}>
-                    <div className={"switch-view p-0 mx-0 ml-sm-2"}>
-                        <div className={"switch-view--content"}>
-                            <a
-                                className={
-                                    chartMode === "BarChart"
-                                        ? `active-view`
-                                        : ""
-                                }
-                                href={"#"}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    e.preventDefault();
-                                    setChartMode("BarChart");
-                                }}
-                            >
-                                <i className="fak fa-chart" />
-                            </a>
-                            <a
-                                className={
-                                    chartMode === "Bar" ? `active-view` : ""
-                                }
-                                href={"#"}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    e.preventDefault();
-                                    setChartMode("Bar");
-                                }}
-                            >
-                                <i
-                                    className="fak fa-chart"
-                                    style={{
-                                        transform: "rotate(90deg)",
-                                    }}
-                                />
-                            </a>
-                            <a
-                                className={
-                                    chartMode === "PieChart"
-                                        ? `active-view`
-                                        : ""
-                                }
-                                href={"#"}
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    e.preventDefault();
-                                    setChartMode("PieChart");
-                                }}
-                            >
-                                <i
-                                    className="fak fa-chart"
-                                    style={{
-                                        transform: "rotate(180deg)",
-                                    }}
-                                />
-                            </a>
                         </div>
-                    </div>
-                    {viewMode !== "fullscreen" ? (
-                        <Link
-                            to={`/admin/live-votes-result/${questionId}/overview/fullscreen`}
-                        >
-                            <AppButton
-                                variant={"secondary"}
-                                className={"show-full ml-2"}
+                        {viewMode !== "fullscreen" ? (
+                            <a
+                                href={`/admin/live-votes-result/${conferenceId}/${sessionId}/${questionId}/overview/fullscreen`}
+                                target="_blank"
                             >
-                                <i className={"fak fa-maximize"}></i>
-                            </AppButton>
-                        </Link>
-                    ) : null}
-                </Col>
-            </Row>
+                                <AppButton
+                                    variant={"secondary"}
+                                    className={"show-full ml-2"}
+                                >
+                                    <i className={"fak fa-maximize"}></i>
+                                </AppButton>
+                            </a>
+                        ) : null}
+                    </Col>
+                </Row>
+            )}
             <AppCard>
                 <Row>
                     <Col>

@@ -39,6 +39,8 @@ import {
     faGlobe,
     faProjector,
     faUnlink,
+    faChartBar,
+    faList,
 } from "@fortawesome/pro-regular-svg-icons";
 import { AppIconMap } from "../../models";
 
@@ -89,4 +91,8 @@ export const appIconMap: AppIconMap = {
     Globe: faGlobe,
     Projector: faProjector,
     faUnlink,
+    faChartBar,
+    Chart: faChartBar,
+    faList,
+    List2: faList,
 };

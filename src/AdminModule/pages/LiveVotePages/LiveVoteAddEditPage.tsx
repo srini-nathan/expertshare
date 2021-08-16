@@ -62,7 +62,7 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
     const navigator = useNavigator(navigate);
     const { defaultLanguage, languages } = useGlobalData();
     const { containerResourceId } = useAuthState();
-    const { sessionId } = useParams();
+    const { sessionId, conferenceId } = useParams();
     const sessionResourceId = SessionApi.toResourceUrl(sessionId);
     const [showDelete, setShowDelete] = useState<number>(0);
     const [activeLocale, setActiveLocale] = useState<string>(
@@ -104,13 +104,15 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
             } else if (errorMessage) {
                 errorToast(t(errorMessage));
             } else {
-                navigator("..").then(() => {
-                    successToast(
-                        isEditMode
-                            ? t("admin.liveVote.form:toast.success.edit")
-                            : t("admin.liveVote.form:toast.success.add")
-                    );
-                });
+                navigator(`/event/${conferenceId}/session/${sessionId}`).then(
+                    () => {
+                        successToast(
+                            isEditMode
+                                ? t("admin.liveVote.form:toast.success.edit")
+                                : t("admin.liveVote.form:toast.success.add")
+                        );
+                    }
+                );
             }
         });
     };
@@ -209,7 +211,7 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
         <div className={"live-vote-add-edit-page"}>
             <AppBreadcrumb
                 linkText={t("admin.liveVotes.list:header.backToSession")}
-                linkUrl={".."}
+                linkUrl={`/event/${conferenceId}/session/${sessionId}`}
             />
             <AppPageHeader
                 title={
@@ -504,6 +506,7 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
                         isEditMode={isEditMode}
                         navigation={navigator}
                         isLoading={formState.isSubmitting}
+                        backLink={`/event/${conferenceId}/session/${sessionId}`}
                     />
                 </Row>
             </Form>

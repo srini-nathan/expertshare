@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useState, useRef } from "react";
-import { RouteComponentProps, useParams, Link } from "@reach/router";
+import { RouteComponentProps, useParams } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { isString as _isString } from "lodash";
@@ -13,7 +13,11 @@ import { appGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { LiveVoteQuestionApi, LiveVoteResultApi } from "../../apis";
 import { Language } from "../../models";
-import { AppButton, AppPageHeader } from "../../../AppModule/components";
+import {
+    AppBreadcrumb,
+    AppButton,
+    AppPageHeader,
+} from "../../../AppModule/components";
 import {
     AppGrid,
     buildFilterParams,
@@ -26,15 +30,17 @@ import {
     showLoader,
     successToast,
 } from "../../../AppModule/utils";
-import { useDownloadFile } from "../../../AppModule/hooks";
+import { useAuthState, useDownloadFile } from "../../../AppModule/hooks";
+import { ROLES } from "../../../config";
 
 export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element => {
-    const { questionId } = useParams();
+    const { questionId, conferenceId, sessionId } = useParams();
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const { t } = useTranslation();
     const [updateLink] = useDownloadFile();
+    const { role } = useAuthState();
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -113,53 +119,34 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
 
     return (
         <Fragment>
+            <AppBreadcrumb
+                linkText={t("admin.liveVoteResult.list:header.backToSession")}
+                linkUrl={`/event/${conferenceId}/session/${sessionId}`}
+            />
             <AppPageHeader
                 title={t("admin.liveVoteResult.list:header.title")}
                 onQuickFilterChange={handleFilter}
                 cancelTokenSources={cancelTokenSourcesRef.current}
                 showToolbar
             />
-            <Row>
-                <Col className={"d-flex justify-content-between mb-5"}>
-                    <div className="d-inline-block live-voting-result--tabs">
-                        <nav>
-                            <div
-                                className="nav nav-tabs"
-                                id="nav-tab"
-                                role="tablist"
+            {role === ROLES.ROLE_ADMIN ? (
+                <Row>
+                    <Col className={"d-flex justify-content-end mb-5"}>
+                        <div className={""}>
+                            <AppButton
+                                onClick={handleDownload}
+                                variant={"secondary"}
                             >
-                                <span
-                                    className="nav-link active"
-                                    id="myGrid-tab"
-                                >
+                                <i className={"fak fa-download mr-2"}>
                                     {t(
-                                        "admin.liveVoteResult:tabSwitch.details"
+                                        "admin.liveVoteResult.list:button.download"
                                     )}
-                                </span>
-                                <Link
-                                    className="nav-link"
-                                    id="myGrid2-tab"
-                                    to={`/admin/live-votes-result/${questionId}/overview`}
-                                >
-                                    {t(
-                                        "admin.liveVoteResult:tabSwitch.results"
-                                    )}
-                                </Link>
-                            </div>
-                        </nav>
-                    </div>
-                    <div className={""}>
-                        <AppButton
-                            variant={"secondary"}
-                            onClick={handleDownload}
-                        >
-                            <i className={"fak fa-download mr-2"}>
-                                {t("admin.liveVoteResult.list:button.download")}
-                            </i>
-                        </AppButton>
-                    </div>
-                </Col>
-            </Row>
+                                </i>
+                            </AppButton>
+                        </div>
+                    </Col>
+                </Row>
+            ) : null}
             <Row>
                 <Col>
                     <AppGrid

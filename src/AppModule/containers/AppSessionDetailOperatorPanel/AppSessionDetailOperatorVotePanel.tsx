@@ -2,7 +2,7 @@ import React, { FC, useRef, useEffect, useState } from "react";
 import { Col, Row, Form } from "react-bootstrap";
 import { Canceler } from "axios";
 import { useTranslation } from "react-i18next";
-import { find as _find, isString as _isString } from "lodash";
+import { find as _find } from "lodash";
 import {
     GridApi,
     IServerSideDatasource,
@@ -29,12 +29,12 @@ import {
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { appGridColDef } from "./app-grid-col-def";
 import { AppGrid, buildFilterParams, buildSortParams } from "../AppGrid";
-import { errorToast, successToast } from "../../utils";
 import { appGridConfig } from "../../config";
 import { PrimitiveObject } from "../../models";
-import { useSessionSocketEvents } from "../../hooks";
+import { useCRUDHelperFunctions, useSessionSocketEvents } from "../../hooks";
 
 interface AppSessionDetailOperatorVotePanelType {
+    conferenceId: number;
     currentSessionId: number;
 }
 
@@ -45,6 +45,7 @@ interface LiveVotePublishResultPayload {
 }
 
 export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVotePanelType> = ({
+    conferenceId,
     currentSessionId,
 }): JSX.Element => {
     const { t } = useTranslation();
@@ -57,6 +58,7 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
     const { control, getValues } = useForm();
     const [activating, setActivating] = useState<boolean>(false);
     const { emitRefreshVote } = useSessionSocketEvents();
+    const { handleDeleteById } = useCRUDHelperFunctions(LiveVoteQuestionApi);
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -103,22 +105,15 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
     }
 
     function handleDelete(id: number) {
-        LiveVoteQuestionApi.deleteById(id).then(({ error }) => {
-            if (error !== null) {
-                if (_isString(error)) {
-                    errorToast(t(error));
-                }
-            } else {
-                successToast(
-                    t(
-                        "sessionDetails:section.operatorActions.liveVote.delete.toast.success"
-                    )
-                );
+        handleDeleteById(id, {
+            success:
+                "sessionDetails:section.operatorActions.liveVote.delete.toast.success",
+            onSuccess: () => {
                 appGridApi.current?.refreshServerSideStore({
                     purge: false,
                     route: [],
                 });
-            }
+            },
         });
     }
 
@@ -220,7 +215,9 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
                     }}
                 />
                 <AppButton
-                    className={"text-capitalize mt-4"}
+                    className={
+                        "text-capitalize applyvote-btn ml-3 ml-md-0 mb-3 mb-md-0"
+                    }
                     variant={"secondary"}
                     type={"button"}
                     onClick={handleApplyVote}
@@ -252,22 +249,32 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
 
     return (
         <div className={"mt-4"}>
-            <h5>
-                {t("sessionDetails:section.operatorActions.liveVote.header")}
-                <AppButton
-                    className={
-                        "text-capitalize create-btn float-right d-inline-block"
-                    }
-                    variant={"secondary"}
-                    onClick={() => {
-                        navigate(
-                            `/admin/live-votes/${currentSessionId}/new`
-                        ).then();
-                    }}
-                >
-                    + {t("common.button:create")}
-                </AppButton>
-            </h5>
+            <div className={"header"}>
+                <Row>
+                    <div className={"col-auto"}>
+                        <h5>
+                            {t(
+                                "sessionDetails:section.operatorActions.liveVote.header"
+                            )}
+                        </h5>
+                    </div>
+                    <div className={"col-auto mr-0 ml-auto"}>
+                        <AppButton
+                            className={
+                                "text-capitalize create-btn float-right d-inline-block"
+                            }
+                            variant={"secondary"}
+                            onClick={() => {
+                                navigate(
+                                    `/admin/live-votes/${conferenceId}/${currentSessionId}/new`
+                                ).then();
+                            }}
+                        >
+                            + {t("common.button:create")}
+                        </AppButton>
+                    </div>
+                </Row>
+            </div>
             <hr />
             <Row>
                 <Col md={12}>
@@ -287,6 +294,7 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
                         columnDef={appGridColDef({
                             onPressDelete: handleDelete,
                             parentId: currentSessionId,
+                            grandParentId: conferenceId,
                         })}
                         dataSource={getDataSource()}
                         totalItems={totalItems}

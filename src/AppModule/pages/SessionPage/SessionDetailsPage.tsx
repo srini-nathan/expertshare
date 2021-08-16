@@ -243,7 +243,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                 <Col
                     className={
                         data.isCommentEnable || vote
-                            ? "pl-0 comment-enable"
+                            ? "pl-0 pr-0 pr-lg-3 comment-enable"
                             : "px-0"
                     }
                     md={12}
@@ -312,6 +312,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                     </AppCard>
 
                     <AppSessionDetailOperatorPanel
+                        conferenceId={conferenceId}
                         currentSessionId={id}
                         nextSessionId={next}
                         onClickSwitchNextSession={() => {
@@ -324,12 +325,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                     <AppSessionDescription session={data} />
                 </Col>
                 {(data.isCommentEnable || vote) && (
-                    <Col
-                        md={12}
-                        sm={12}
-                        lg={4}
-                        className="pr-3 pl-0 pl-lg-3 pr-lg-0"
-                    >
+                    <Col md={12} sm={12} lg={4} className="pr-0 pl-0 pl-lg-3">
                         <AppLiveVote enable={true} data={vote} sessionId={id} />
                         {data.isCommentEnable ? (
                             <AppQuestionsAndAnswers

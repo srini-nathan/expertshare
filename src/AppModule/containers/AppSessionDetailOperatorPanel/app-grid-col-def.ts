@@ -4,6 +4,7 @@ import { AppCellActionWithCustom } from "./app-actions";
 export const appGridColDef = ({
     onPressDelete,
     parentId,
+    grandParentId,
 }: AppCellActionWithCustom): ColDef[] => [
     {
         headerName:
@@ -16,13 +17,14 @@ export const appGridColDef = ({
             "sessionDetails:section.operatorActions.liveVote.list:column.actions",
         field: "id",
         sortable: false,
-        maxWidth: 160,
+        maxWidth: 200,
         cellClass: "text-right",
         headerClass: "action-header",
         cellRenderer: "AppGridActionRenderer",
         cellRendererParams: {
             onPressDelete,
             parentId,
+            grandParentId,
         },
     },
 ];

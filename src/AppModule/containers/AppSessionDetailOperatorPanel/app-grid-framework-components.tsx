@@ -1,6 +1,5 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "react-i18next";
-import { navigate } from "@reach/router";
 import { AppCellActionWithRenderWithCustom } from "./app-actions";
 import { AppGridAction, AppGridActionProps } from "../../components";
 import { LiveVoteQuestion } from "../../../AdminModule/models";
@@ -9,14 +8,14 @@ export const appGridFrameworkComponents = {
     AppGridActionRenderer: (
         params: AppCellActionWithRenderWithCustom
     ): ReactElement => {
-        const { data, onPressDelete, parentId } = params;
+        const { data, onPressDelete, parentId, grandParentId } = params;
         const { id, isSelected } = data as LiveVoteQuestion;
         const { t } = useTranslation();
 
         const props: AppGridActionProps = {
             editAction: {
                 disable: isSelected,
-                url: `/admin/live-votes/${parentId}/${id}`,
+                url: `/admin/live-votes/${grandParentId}/${parentId}/${id}`,
             },
             deleteAction: {
                 disable: isSelected,
@@ -30,12 +29,14 @@ export const appGridFrameworkComponents = {
                     onPressDelete(id);
                 },
             },
-            customClickActions: [
+            customLinkActions: [
                 {
-                    icon: "Eye",
-                    onClick: () => {
-                        navigate(`/admin/live-votes-result/${id}`).then();
-                    },
+                    icon: "List2",
+                    url: `/admin/live-votes-result/${grandParentId}/${parentId}/${id}`,
+                },
+                {
+                    icon: "Chart",
+                    url: `/admin/live-votes-result/${grandParentId}/${parentId}/${id}/overview`,
                 },
             ],
         };
