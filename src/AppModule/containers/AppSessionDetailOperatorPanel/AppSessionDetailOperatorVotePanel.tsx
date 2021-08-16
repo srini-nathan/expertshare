@@ -294,6 +294,9 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
                             appGridApi.current = event.api;
                         }}
                         paginationContainerClass={"d-none"}
+                        gridOptions={{
+                            suppressContextMenu: true,
+                        }}
                     />
                 </Col>
             </Row>

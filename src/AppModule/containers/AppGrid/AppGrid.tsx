@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { LicenseManager } from "ag-grid-enterprise";
 import {
     GridApi,
+    GridOptions,
     GridReadyEvent,
     IServerSideDatasource,
     PaginationChangedEvent,
@@ -31,6 +32,7 @@ export interface AppGridProps {
     frameworkComponents?: any;
     onReady?: (event: GridReadyEvent) => void;
     paginationContainerClass?: string;
+    gridOptions?: GridOptions;
 }
 
 export const AppGrid: FC<AppGridProps> = ({
@@ -40,6 +42,7 @@ export const AppGrid: FC<AppGridProps> = ({
     frameworkComponents,
     onReady,
     paginationContainerClass = "d-flex flex-row app-grid-action py-3",
+    gridOptions = {},
 }) => {
     const { t } = useTranslation();
     const [gridApi, setGridApi] = useState<GridApi>();
@@ -104,6 +107,7 @@ export const AppGrid: FC<AppGridProps> = ({
                         onGridReady={onGridReady}
                         gridOptions={{
                             domLayout: "autoHeight",
+                            ...gridOptions,
                         }}
                         columnDefs={columns}
                         noRowsOverlayComponent={"customNoRowsOverlay"}
