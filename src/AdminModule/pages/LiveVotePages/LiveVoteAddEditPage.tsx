@@ -4,8 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Row, Form, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { DevTool } from "@hookform/devtools";
+import { useSetRecoilState } from "recoil";
 import {
     useAuthState,
     useBuildAssetPath,
@@ -49,7 +48,6 @@ import {
 } from "../../../AppModule/models";
 import { schema } from "./schema";
 import { useGlobalData } from "../../../AppModule/contexts";
-
 import { LiveVoteOptionTranslation } from "../../models/entities/LiveVoteOptionTranslation";
 import { UploadAPI } from "../../../AppModule/apis";
 import {
@@ -59,6 +57,7 @@ import {
 } from "../../../config";
 import "./assets/scss/style.scss";
 import { LiveVoteQuestionTranslatable } from "./LiveVoteQuestionTranslatable";
+import { appPipPlayer } from "../../../AppModule/atoms";
 
 export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
     navigate,
@@ -103,6 +102,7 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
         conferenceId && sessionId
             ? `/event/${conferenceId}/session/${sessionId}`
             : "/admin/live-votes";
+    const setPipPlayerData = useSetRecoilState(appPipPlayer);
 
     const submitForm = async (formData: LiveVoteQuestion) => {
         return LiveVoteQuestionApi.createOrUpdate<LiveVoteQuestion>(id, {
@@ -111,7 +111,7 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
             session:
                 sessionId !== null
                     ? sessionResourceId
-                    : SessionApi.toResourceUrl(data.session),
+                    : (data.session as string),
         } as LiveVoteQuestion).then(({ error, errorMessage }) => {
             if (error instanceof UnprocessableEntityErrorResponse) {
                 setViolations<LiveVoteQuestion>(error, setError);
@@ -217,6 +217,10 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
             voteOptions: data.voteOptions.filter((opt) => opt.id !== optionId),
         } as LiveVoteQuestion);
     };
+
+    useEffect(() => {
+        setPipPlayerData(null);
+    }, []);
 
     if (isLoading) {
         return <AppLoader />;
@@ -535,7 +539,6 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
                     />
                 </Row>
             </Form>
-            <DevTool control={control} />
         </div>
     );
 };
