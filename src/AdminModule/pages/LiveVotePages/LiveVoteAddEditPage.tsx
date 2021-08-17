@@ -52,7 +52,11 @@ import { useGlobalData } from "../../../AppModule/contexts";
 
 import { LiveVoteOptionTranslation } from "../../models/entities/LiveVoteOptionTranslation";
 import { UploadAPI } from "../../../AppModule/apis";
-import { VoteOptionFileInfo, VOTE_OPTION_POSTER_TYPE } from "../../../config";
+import {
+    VoteOptionFileInfo,
+    VOTE_OPTION_POSTER_TYPE,
+    VOTE_QUESTION_TYPE,
+} from "../../../config";
 import "./assets/scss/style.scss";
 import { LiveVoteQuestionTranslatable } from "./LiveVoteQuestionTranslatable";
 
@@ -87,6 +91,7 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
         trigger,
         setValue,
         register,
+        watch,
     } = useForm<LiveVoteQuestion>({
         resolver: yupResolver(schema),
         mode: "all",
@@ -159,7 +164,7 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
         }
         await submitForm(formData);
     };
-
+    const type = watch("type");
     useEffect(() => {
         if (isEditMode && id !== null) {
             setIsLoading(true);
@@ -289,223 +294,235 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
                         />
                     </Form.Row>
                 </AppCard>
-                <Row>
-                    <Col className="d-flex justify-content-between">
-                        <h2>{t("admin.liveVote.form:header.option")}</h2>
-                        <AppButton
-                            variant={"secondary"}
-                            onClick={() => {
-                                addNewOption();
+                {type !== VOTE_QUESTION_TYPE.VOTEQUESTIONTYPE_TEXT && (
+                    <Row>
+                        <Col className="d-flex justify-content-between">
+                            <h2>{t("admin.liveVote.form:header.option")}</h2>
+                            <AppButton
+                                variant={"secondary"}
+                                onClick={() => {
+                                    addNewOption();
+                                }}
+                            >
+                                + {t("admin.liveVote.form:button.addOption")}
+                            </AppButton>
+                        </Col>
+                        <AppModal
+                            show={showDelete > 0}
+                            handleClose={() => {
+                                setShowDelete(0);
                             }}
-                        >
-                            + {t("admin.liveVote.form:button.addOption")}
-                        </AppButton>
-                    </Col>
-                </Row>
-                {data.voteOptions.map((option, oIndex) => {
-                    const { id: oId, imageName, val, color } = option;
-                    const imageKey = `voteOptions[${oIndex}].imageName` as keyof LiveVoteQuestion;
-                    if (imageName) {
-                        setValue(imageKey, imageName);
-                    }
-                    return (
-                        <AppCard
-                            key={oId}
-                            className={"mt-2 p-4 vote-option-card"}
-                        >
-                            <Row>
-                                <Col className="pb-4">
-                                    <Link
-                                        to={"#"}
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            setShowDelete(oId);
-                                        }}
-                                    >
-                                        <i className="action fak fa-trash-light" />
-                                    </Link>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col className={"p-0"}>
-                                    <>
-                                        {languages?.map(
-                                            ({ locale }, lIndex) => {
-                                                const trans = data
-                                                    .voteOptions?.[oIndex]
-                                                    ?.translations as SLiveVoteOptionTranslation;
-                                                const transData =
-                                                    trans?.[locale] ??
-                                                    LiveVoteOptionTranslation.createFrom(
+                            handleDelete={() => {
+                                handleDelete(showDelete);
+                            }}
+                            bodyContent={t(
+                                "admin.liveVote.form:delete.confirm.message"
+                            )}
+                            title={t(
+                                "admin.liveVote.form:delete.confirm.title"
+                            )}
+                        />
+                    </Row>
+                )}
+                {type !== VOTE_QUESTION_TYPE.VOTEQUESTIONTYPE_TEXT &&
+                    data.voteOptions.map((option, oIndex) => {
+                        const { id: oId, imageName, val, color } = option;
+                        const imageKey = `voteOptions[${oIndex}].imageName` as keyof LiveVoteQuestion;
+                        if (imageName) {
+                            setValue(imageKey, imageName);
+                        }
+                        return (
+                            <AppCard
+                                key={oId}
+                                className={"mt-2 p-4 vote-option-card"}
+                            >
+                                <Row>
+                                    <Col className="pb-4">
+                                        <Link
+                                            to={"#"}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                setShowDelete(oId);
+                                            }}
+                                        >
+                                            <i className="action fak fa-trash-light" />
+                                        </Link>
+                                    </Col>
+                                </Row>
+                                <Row>
+                                    <Col className={"p-0"}>
+                                        <>
+                                            {languages?.map(
+                                                ({ locale }, lIndex) => {
+                                                    const trans = data
+                                                        .voteOptions?.[oIndex]
+                                                        ?.translations as SLiveVoteOptionTranslation;
+                                                    const transData =
+                                                        trans?.[locale] ??
+                                                        LiveVoteOptionTranslation.createFrom(
+                                                            locale
+                                                        );
+                                                    setValue(
+                                                        `voteOptions[${oIndex}].translations[${lIndex}].locale` as keyof LiveVoteQuestion,
                                                         locale
                                                     );
-                                                setValue(
-                                                    `voteOptions[${oIndex}].translations[${lIndex}].locale` as keyof LiveVoteQuestion,
-                                                    locale
-                                                );
 
-                                                if (locale !== activeLocale) {
-                                                    const titleKey = `voteOptions[${oIndex}].translations[${lIndex}].title` as keyof LiveVoteQuestion;
-                                                    const desc = `voteOptions[${oIndex}].translations[${lIndex}].description` as keyof LiveVoteQuestion;
+                                                    if (
+                                                        locale !== activeLocale
+                                                    ) {
+                                                        const titleKey = `voteOptions[${oIndex}].translations[${lIndex}].title` as keyof LiveVoteQuestion;
+                                                        const desc = `voteOptions[${oIndex}].translations[${lIndex}].description` as keyof LiveVoteQuestion;
+                                                        return (
+                                                            <div
+                                                                key={`${oId}${locale}`}
+                                                            >
+                                                                <input
+                                                                    type="hidden"
+                                                                    {...register(
+                                                                        titleKey
+                                                                    )}
+                                                                    defaultValue={
+                                                                        transData?.title
+                                                                    }
+                                                                />
+                                                                <input
+                                                                    type="hidden"
+                                                                    {...register(
+                                                                        desc
+                                                                    )}
+                                                                    defaultValue={
+                                                                        transData?.description
+                                                                    }
+                                                                />
+                                                            </div>
+                                                        );
+                                                    }
+
                                                     return (
                                                         <div
                                                             key={`${oId}${locale}`}
                                                         >
-                                                            <input
-                                                                type="hidden"
-                                                                {...register(
-                                                                    titleKey
+                                                            <AppFormInput
+                                                                name={`voteOptions[${oIndex}].translations[${lIndex}].title`}
+                                                                label={`${t(
+                                                                    "admin.liveVote.form:label.optionTitle"
+                                                                )}(${activeLocale})`}
+                                                                {...validation(
+                                                                    `voteOptions[${oIndex}].translations[${lIndex}].title`,
+                                                                    formState,
+                                                                    isEditMode,
+                                                                    true
                                                                 )}
                                                                 defaultValue={
                                                                     transData?.title
                                                                 }
+                                                                control={
+                                                                    control
+                                                                }
+                                                                lg={12}
+                                                                md={12}
+                                                                xl={12}
                                                             />
-                                                            <input
-                                                                type="hidden"
-                                                                {...register(
-                                                                    desc
+                                                            <AppFormTextArea
+                                                                name={`voteOptions[${oIndex}].translations[${lIndex}].description`}
+                                                                label={`${t(
+                                                                    "admin.liveVote.form:label.optionDescription"
+                                                                )}(${activeLocale})`}
+                                                                {...validation(
+                                                                    `voteOptions[${oIndex}].translations[${lIndex}].description`,
+                                                                    formState,
+                                                                    isEditMode,
+                                                                    true
                                                                 )}
+                                                                control={
+                                                                    control
+                                                                }
                                                                 defaultValue={
                                                                     transData?.description
                                                                 }
+                                                                md={12}
+                                                                lg={12}
+                                                                xl={12}
                                                             />
                                                         </div>
                                                     );
                                                 }
-
-                                                return (
-                                                    <div
-                                                        key={`${oId}${locale}`}
-                                                    >
-                                                        <AppFormInput
-                                                            name={`voteOptions[${oIndex}].translations[${lIndex}].title`}
-                                                            label={`${t(
-                                                                "admin.liveVote.form:label.optionTitle"
-                                                            )}(${activeLocale})`}
-                                                            {...validation(
-                                                                `voteOptions[${oIndex}].translations[${lIndex}].title`,
-                                                                formState,
-                                                                isEditMode,
-                                                                true
-                                                            )}
-                                                            defaultValue={
-                                                                transData?.title
-                                                            }
-                                                            control={control}
-                                                            lg={12}
-                                                            md={12}
-                                                            xl={12}
-                                                        />
-                                                        <AppFormTextArea
-                                                            name={`voteOptions[${oIndex}].translations[${lIndex}].description`}
-                                                            label={`${t(
-                                                                "admin.liveVote.form:label.optionDescription"
-                                                            )}(${activeLocale})`}
-                                                            {...validation(
-                                                                `voteOptions[${oIndex}].translations[${lIndex}].description`,
-                                                                formState,
-                                                                isEditMode,
-                                                                true
-                                                            )}
-                                                            control={control}
-                                                            defaultValue={
-                                                                transData?.description
-                                                            }
-                                                            md={12}
-                                                            lg={12}
-                                                            xl={12}
-                                                        />
-                                                    </div>
-                                                );
+                                            )}
+                                        </>
+                                        <AppFormInput
+                                            name={`voteOptions[${oIndex}].val`}
+                                            label={t(
+                                                "admin.liveVote.form:label.optionValue"
+                                            )}
+                                            {...validation(
+                                                `voteOptions[${oIndex}].val`,
+                                                formState,
+                                                isEditMode,
+                                                true
+                                            )}
+                                            defaultValue={val}
+                                            control={control}
+                                            lg={12}
+                                            md={12}
+                                            xl={12}
+                                        />
+                                        <AppFormInputColorPicker
+                                            label={t(
+                                                "admin.liveVote.form:label.optionColor"
+                                            )}
+                                            {...register(
+                                                `voteOptions[${oIndex}].color` as keyof LiveVoteQuestion
+                                            )}
+                                            xl={12}
+                                            lg={12}
+                                            {...validation(
+                                                `voteOptions[${oIndex}].color`,
+                                                formState,
+                                                isEditMode,
+                                                true
+                                            )}
+                                            defaultValue={color || "#FFF"}
+                                            control={control}
+                                            setValue={setValue}
+                                        />
+                                    </Col>
+                                    <Col className={"p-0"}>
+                                        <AppUploader
+                                            withCropper
+                                            fileInfo={VoteOptionFileInfo}
+                                            imagePath={
+                                                imageName
+                                                    ? `${voteOptionMediaPath}/${imageName}`
+                                                    : ""
                                             }
-                                        )}
-                                    </>
-                                    <AppFormInput
-                                        name={`voteOptions[${oIndex}].val`}
-                                        label={t(
-                                            "admin.liveVote.form:label.optionValue"
-                                        )}
-                                        {...validation(
-                                            `voteOptions[${oIndex}].val`,
-                                            formState,
-                                            isEditMode,
-                                            true
-                                        )}
-                                        defaultValue={val}
-                                        control={control}
-                                        lg={12}
-                                        md={12}
-                                        xl={12}
-                                    />
-                                    <AppFormInputColorPicker
-                                        label={t(
-                                            "admin.liveVote.form:label.optionColor"
-                                        )}
-                                        {...register(
-                                            `voteOptions[${oIndex}].color` as keyof LiveVoteQuestion
-                                        )}
-                                        xl={12}
-                                        lg={12}
-                                        {...validation(
-                                            `voteOptions[${oIndex}].color`,
-                                            formState,
-                                            isEditMode,
-                                            true
-                                        )}
-                                        defaultValue={color || "#FFF"}
-                                        control={control}
-                                        setValue={setValue}
-                                    />
-                                </Col>
-                                <Col className={"p-0"}>
-                                    <AppUploader
-                                        withCropper
-                                        fileInfo={VoteOptionFileInfo}
-                                        imagePath={
-                                            imageName
-                                                ? `${voteOptionMediaPath}/${imageName}`
-                                                : ""
-                                        }
-                                        accept="image/*"
-                                        onFileSelect={(selectedFiles) => {
-                                            if (selectedFiles.length > 0) {
-                                                files = {
-                                                    ...files,
-                                                    [oIndex]: selectedFiles[0],
-                                                };
-                                            }
-                                        }}
-                                        onDelete={() => {
-                                            setValue(imageKey, "");
-                                            option.imageName = "";
-                                        }}
-                                        confirmation={{
-                                            title: t(
-                                                "admin.liveVote.form:deleteImage.confirm.title"
-                                            ),
-                                            bodyContent: t(
-                                                "admin.liveVote.form:deleteImage.confirm.message"
-                                            ),
-                                        }}
-                                    />
-                                </Col>
-                            </Row>
-                        </AppCard>
-                    );
-                })}
-                <AppModal
-                    show={showDelete > 0}
-                    handleClose={() => {
-                        setShowDelete(0);
-                    }}
-                    handleDelete={() => {
-                        handleDelete(showDelete);
-                    }}
-                    bodyContent={t(
-                        "admin.liveVote.form:delete.confirm.message"
-                    )}
-                    title={t("admin.liveVote.form:delete.confirm.title")}
-                />
+                                            accept="image/*"
+                                            onFileSelect={(selectedFiles) => {
+                                                if (selectedFiles.length > 0) {
+                                                    files = {
+                                                        ...files,
+                                                        [oIndex]:
+                                                            selectedFiles[0],
+                                                    };
+                                                }
+                                            }}
+                                            onDelete={() => {
+                                                setValue(imageKey, "");
+                                                option.imageName = "";
+                                            }}
+                                            confirmation={{
+                                                title: t(
+                                                    "admin.liveVote.form:deleteImage.confirm.title"
+                                                ),
+                                                bodyContent: t(
+                                                    "admin.liveVote.form:deleteImage.confirm.message"
+                                                ),
+                                            }}
+                                        />
+                                    </Col>
+                                </Row>
+                            </AppCard>
+                        );
+                    })}
                 <Row>
                     <AppFormActions
                         isEditMode={isEditMode}
