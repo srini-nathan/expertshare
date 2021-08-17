@@ -126,11 +126,9 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
         const ids = Object.keys(files);
         if (ids.length > 0) {
             await Promise.all(
-                ids.map(async (optionId) => {
-                    const file: File = files[optionId];
-                    const voteOption = formData.voteOptions.find(
-                        (option) => option.id === parseInt(optionId, 10)
-                    );
+                ids.map(async (key) => {
+                    const file: File = files[key];
+                    const optionIndex = parseInt(key, 10);
                     const fd = new FormData();
                     fd.set("file", file, file.name);
                     fd.set("container", containerResourceId);
@@ -140,8 +138,19 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
                             if (errorMessage) {
                                 errorToast(errorMessage);
                             }
-                            if (voteOption && response && response.fileName) {
-                                voteOption.imageName = response.fileName;
+                            if (
+                                response &&
+                                response.fileName &&
+                                formData.voteOptions[optionIndex]
+                            ) {
+                                // eslint-disable-next-line no-console
+                                console.table(response);
+                                formData.voteOptions[optionIndex].imageName =
+                                    response.fileName;
+                                // eslint-disable-next-line no-console
+                                console.table(
+                                    formData.voteOptions[optionIndex]
+                                );
                             }
                         }
                     );
@@ -295,6 +304,10 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
                 </Row>
                 {data.voteOptions.map((option, oIndex) => {
                     const { id: oId, imageName, val, color } = option;
+                    const imageKey = `voteOptions[${oIndex}].imageName` as keyof LiveVoteQuestion;
+                    if (imageName) {
+                        setValue(imageKey, imageName);
+                    }
                     return (
                         <AppCard
                             key={oId}
@@ -458,12 +471,21 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
                                             if (selectedFiles.length > 0) {
                                                 files = {
                                                     ...files,
-                                                    [oId]: selectedFiles[0],
+                                                    [oIndex]: selectedFiles[0],
                                                 };
                                             }
                                         }}
                                         onDelete={() => {
+                                            setValue(imageKey, "");
                                             option.imageName = "";
+                                        }}
+                                        confirmation={{
+                                            title: t(
+                                                "admin.liveVote.form:deleteImage.confirm.title"
+                                            ),
+                                            bodyContent: t(
+                                                "admin.liveVote.form:deleteImage.confirm.message"
+                                            ),
                                         }}
                                     />
                                 </Col>
