@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import { Row, Form, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { DevTool } from "@hookform/devtools";
 import {
     useAuthState,
     useBuildAssetPath,
@@ -35,9 +37,9 @@ import {
 } from "../../../AppModule/utils";
 import {
     LiveVoteQuestion,
-    SLiveVoteQuestionTranslation,
     LiveVoteOption,
     SLiveVoteOptionTranslation,
+    SLiveVoteQuestionTranslation,
 } from "../../models";
 import { LiveVoteOptionApi, LiveVoteQuestionApi, SessionApi } from "../../apis";
 import {
@@ -49,10 +51,10 @@ import { schema } from "./schema";
 import { useGlobalData } from "../../../AppModule/contexts";
 
 import { LiveVoteOptionTranslation } from "../../models/entities/LiveVoteOptionTranslation";
-import { LiveVoteQuestionTranslation } from "../../models/entities/LiveVoteQuestionTranslation";
 import { UploadAPI } from "../../../AppModule/apis";
 import { VoteOptionFileInfo, VOTE_OPTION_POSTER_TYPE } from "../../../config";
 import "./assets/scss/style.scss";
+import { LiveVoteQuestionTranslatable } from "./LiveVoteQuestionTranslatable";
 
 export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
     navigate,
@@ -84,7 +86,6 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
         setError,
         trigger,
         setValue,
-        getValues,
         register,
     } = useForm<LiveVoteQuestion>({
         resolver: yupResolver(schema),
@@ -92,6 +93,7 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
     });
     const voteOptionMediaPath = useBuildAssetPath(VoteOptionFileInfo);
     const { handleDeleteById } = useCRUDHelperFunctions(LiveVoteOptionApi);
+    const { findById } = useCRUDHelperFunctions(LiveVoteQuestionApi);
     const backLink =
         conferenceId && sessionId
             ? `/event/${conferenceId}/session/${sessionId}`
@@ -101,7 +103,7 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
         return LiveVoteQuestionApi.createOrUpdate<LiveVoteQuestion>(id, {
             ...formData,
             container: containerResourceId,
-            session: sessionResourceId,
+            session: sessionId || data.session,
         } as LiveVoteQuestion).then(({ error, errorMessage }) => {
             if (error instanceof UnprocessableEntityErrorResponse) {
                 setViolations<LiveVoteQuestion>(error, setError);
@@ -152,19 +154,22 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
     useEffect(() => {
         if (isEditMode && id !== null) {
             setIsLoading(true);
-            LiveVoteQuestionApi.findById<LiveVoteQuestion>(id, {
-                "groups[]": "translations",
-            }).then(({ response, isNotFound, errorMessage }) => {
-                if (errorMessage) {
-                    errorToast(errorMessage);
-                } else if (isNotFound) {
-                    errorToast(t("admin.liveVote.form:toast.error.notfound"));
-                } else if (response !== null) {
-                    setData(response);
-                    trigger();
+            findById<LiveVoteQuestion>(
+                id,
+                {
+                    "groups[]": "translations",
+                },
+                {
+                    error: "admin.liveVote.form:toast.error.notfound",
+                    onSuccess: (response) => {
+                        setData(response);
+                        trigger();
+                    },
+                    onCleanup: () => {
+                        setIsLoading(false);
+                    },
                 }
-                setIsLoading(false);
-            });
+            );
         }
     }, [id]);
 
@@ -246,50 +251,18 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
                             xl={6}
                         />
                     </Form.Row>
-                    <>
-                        {languages?.map(({ locale }, index) => {
-                            const trans = data.translations as SLiveVoteQuestionTranslation;
-                            const transData =
-                                trans?.[locale] ??
-                                LiveVoteQuestionTranslation.createFrom(locale);
-
-                            setValue(
-                                `translations[${index}].locale` as keyof LiveVoteQuestion,
-                                locale
-                            );
-
-                            if (locale !== activeLocale) {
-                                const titleKey = `translations[${index}].title` as keyof LiveVoteQuestion;
-                                setValue(
-                                    titleKey,
-                                    getValues(titleKey) || transData.title
-                                );
-                                return null;
-                            }
-
-                            return (
-                                <Form.Row key={locale}>
-                                    <AppFormInput
-                                        name={`translations[${index}].title`}
-                                        label={`${t(
-                                            "admin.liveVote.form:label.title"
-                                        )}(${activeLocale})`}
-                                        {...validation(
-                                            `translations[${index}].title`,
-                                            formState,
-                                            isEditMode,
-                                            true
-                                        )}
-                                        control={control}
-                                        defaultValue={transData?.title}
-                                        lg={6}
-                                        md={6}
-                                        xl={6}
-                                    />
-                                </Form.Row>
-                            );
-                        })}
-                    </>
+                    <LiveVoteQuestionTranslatable
+                        languages={languages}
+                        control={control}
+                        setValue={setValue}
+                        activeLocale={activeLocale}
+                        formState={formState}
+                        register={register}
+                        isEditMode={isEditMode}
+                        translations={
+                            data.translations as SLiveVoteQuestionTranslation
+                        }
+                    />
                     <Form.Row>
                         <AppFormRadioGroup
                             name={"chartType"}
@@ -361,17 +334,30 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
                                                 if (locale !== activeLocale) {
                                                     const titleKey = `voteOptions[${oIndex}].translations[${lIndex}].title` as keyof LiveVoteQuestion;
                                                     const desc = `voteOptions[${oIndex}].translations[${lIndex}].description` as keyof LiveVoteQuestion;
-                                                    setValue(
-                                                        titleKey,
-                                                        getValues(titleKey) ||
-                                                            transData.title
+                                                    return (
+                                                        <div
+                                                            key={`${oId}${locale}`}
+                                                        >
+                                                            <input
+                                                                type="hidden"
+                                                                {...register(
+                                                                    titleKey
+                                                                )}
+                                                                defaultValue={
+                                                                    transData?.title
+                                                                }
+                                                            />
+                                                            <input
+                                                                type="hidden"
+                                                                {...register(
+                                                                    desc
+                                                                )}
+                                                                defaultValue={
+                                                                    transData?.description
+                                                                }
+                                                            />
+                                                        </div>
                                                     );
-                                                    setValue(
-                                                        desc,
-                                                        getValues(desc) ||
-                                                            transData.description
-                                                    );
-                                                    return null;
                                                 }
 
                                                 return (
@@ -507,6 +493,7 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
                     />
                 </Row>
             </Form>
+            <DevTool control={control} />
         </div>
     );
 };
