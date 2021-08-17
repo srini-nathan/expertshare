@@ -30,8 +30,8 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
     const {
         questionId,
         viewMode = "normal",
-        conferenceId,
-        sessionId,
+        conferenceId = null,
+        sessionId = null,
     } = useParams();
     const [loading, setLoading] = useState<boolean>(true);
     const [loadingQuestion, setLoadingQuestion] = useState<boolean>(true);
@@ -47,6 +47,14 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
     const setLayoutOptions = useSetRecoilState<AppDashboardLayoutOptions>(
         appDashboardLayoutOptions
     );
+    const fullscreenMode =
+        conferenceId && sessionId
+            ? `/admin/live-votes-result/${conferenceId}/${sessionId}/${questionId}/overview/fullscreen`
+            : `/admin/live-votes-result/${questionId}/overview/fullscreen`;
+    const backLink =
+        conferenceId && sessionId
+            ? `/event/${conferenceId}/session/${sessionId}`
+            : "/admin/live-votes";
 
     useEffect(() => {
         if (viewMode === "fullscreen") {
@@ -150,10 +158,12 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
         <Fragment>
             {viewMode !== "fullscreen" ? (
                 <AppBreadcrumb
-                    linkText={t(
-                        "admin.liveVoteResult.overview:header.backToSession"
-                    )}
-                    linkUrl={`/event/${conferenceId}/session/${sessionId}`}
+                    linkText={
+                        conferenceId && sessionId
+                            ? t("admin.liveVotes.list:header.backToSession")
+                            : t("admin.liveVote.list:header.title")
+                    }
+                    linkUrl={backLink}
                 />
             ) : null}
             <AppPageHeader
@@ -200,10 +210,7 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
                             </div>
                         </div>
                         {viewMode !== "fullscreen" ? (
-                            <a
-                                href={`/admin/live-votes-result/${conferenceId}/${sessionId}/${questionId}/overview/fullscreen`}
-                                target="_blank"
-                            >
+                            <a href={fullscreenMode} target="_blank">
                                 <AppButton
                                     variant={"secondary"}
                                     className={"show-full ml-2"}

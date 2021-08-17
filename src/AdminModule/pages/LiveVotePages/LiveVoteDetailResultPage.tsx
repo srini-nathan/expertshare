@@ -9,7 +9,7 @@ import {
     IServerSideGetRowsParams,
 } from "ag-grid-community";
 import { Canceler } from "axios";
-import { appGridColDef } from "./app-grid-col-def";
+import { appLiveVoteResultGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { LiveVoteQuestionApi, LiveVoteResultApi } from "../../apis";
 import { Language } from "../../models";
@@ -34,13 +34,17 @@ import { useAuthState, useDownloadFile } from "../../../AppModule/hooks";
 import { ROLES } from "../../../config";
 
 export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element => {
-    const { questionId, conferenceId, sessionId } = useParams();
+    const { questionId, conferenceId = null, sessionId = null } = useParams();
     const [totalItems, setTotalItems] = useState<number>(0);
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const { t } = useTranslation();
     const [updateLink] = useDownloadFile();
     const { role } = useAuthState();
+    const backLink =
+        conferenceId && sessionId
+            ? `/event/${conferenceId}/session/${sessionId}`
+            : "/admin/live-votes";
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -120,8 +124,12 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
     return (
         <Fragment>
             <AppBreadcrumb
-                linkText={t("admin.liveVoteResult.list:header.backToSession")}
-                linkUrl={`/event/${conferenceId}/session/${sessionId}`}
+                linkText={
+                    conferenceId && sessionId
+                        ? t("admin.liveVotes.list:header.backToSession")
+                        : t("admin.liveVote.list:header.title")
+                }
+                linkUrl={backLink}
             />
             <AppPageHeader
                 title={t("admin.liveVoteResult.list:header.title")}
@@ -151,7 +159,7 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
                 <Col>
                     <AppGrid
                         frameworkComponents={appGridFrameworkComponents}
-                        columnDef={appGridColDef({
+                        columnDef={appLiveVoteResultGridColDef({
                             onPressDelete: handleDelete,
                         })}
                         dataSource={getDataSource()}

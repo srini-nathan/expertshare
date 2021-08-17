@@ -4,10 +4,10 @@ import { useTranslation } from "react-i18next";
 import { Row, Form, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { isString as _isString } from "lodash";
 import {
     useAuthState,
     useBuildAssetPath,
+    useCRUDHelperFunctions,
     useDataAddEdit,
     useNavigator,
 } from "../../../AppModule/hooks";
@@ -36,7 +36,9 @@ import {
 import {
     LiveVoteQuestion,
     SLiveVoteQuestionTranslation,
-} from "../../models/entities/LiveVoteQuestion";
+    LiveVoteOption,
+    SLiveVoteOptionTranslation,
+} from "../../models";
 import { LiveVoteOptionApi, LiveVoteQuestionApi, SessionApi } from "../../apis";
 import {
     SimpleObject,
@@ -45,10 +47,7 @@ import {
 } from "../../../AppModule/models";
 import { schema } from "./schema";
 import { useGlobalData } from "../../../AppModule/contexts";
-import {
-    LiveVoteOption,
-    SLiveVoteOptionTranslation,
-} from "../../models/entities/LiveVoteOption";
+
 import { LiveVoteOptionTranslation } from "../../models/entities/LiveVoteOptionTranslation";
 import { LiveVoteQuestionTranslation } from "../../models/entities/LiveVoteQuestionTranslation";
 import { UploadAPI } from "../../../AppModule/apis";
@@ -62,7 +61,7 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
     const navigator = useNavigator(navigate);
     const { defaultLanguage, languages } = useGlobalData();
     const { containerResourceId } = useAuthState();
-    const { sessionId, conferenceId } = useParams();
+    const { sessionId = null, conferenceId = null } = useParams();
     const sessionResourceId = SessionApi.toResourceUrl(sessionId);
     const [showDelete, setShowDelete] = useState<number>(0);
     const [activeLocale, setActiveLocale] = useState<string>(
@@ -92,6 +91,11 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
         mode: "all",
     });
     const voteOptionMediaPath = useBuildAssetPath(VoteOptionFileInfo);
+    const { handleDeleteById } = useCRUDHelperFunctions(LiveVoteOptionApi);
+    const backLink =
+        conferenceId && sessionId
+            ? `/event/${conferenceId}/session/${sessionId}`
+            : "/admin/live-votes";
 
     const submitForm = async (formData: LiveVoteQuestion) => {
         return LiveVoteQuestionApi.createOrUpdate<LiveVoteQuestion>(id, {
@@ -104,15 +108,13 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
             } else if (errorMessage) {
                 errorToast(t(errorMessage));
             } else {
-                navigator(`/event/${conferenceId}/session/${sessionId}`).then(
-                    () => {
-                        successToast(
-                            isEditMode
-                                ? t("admin.liveVote.form:toast.success.edit")
-                                : t("admin.liveVote.form:toast.success.add")
-                        );
-                    }
-                );
+                navigator(backLink).then(() => {
+                    successToast(
+                        isEditMode
+                            ? t("admin.liveVote.form:toast.success.edit")
+                            : t("admin.liveVote.form:toast.success.add")
+                    );
+                });
             }
         });
     };
@@ -178,21 +180,12 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
 
     const handleDelete = (optionId: number) => {
         if (newlyAddedIds.indexOf(optionId) === -1) {
-            LiveVoteOptionApi.deleteById(optionId)
-                .then(({ error }) => {
-                    if (error !== null) {
-                        if (_isString(error)) {
-                            errorToast(t(error));
-                        }
-                    } else {
-                        successToast(
-                            t("admin.liveVote.form:delete.toast.success")
-                        );
-                    }
-                })
-                .finally(() => {
+            handleDeleteById(optionId, {
+                onCleanup: () => {
                     setShowDelete(0);
-                });
+                },
+                success: "admin.liveVote.form:delete.toast.success",
+            });
         } else {
             setShowDelete(0);
             successToast(t("admin.liveVote.form:delete.toast.success"));
@@ -210,8 +203,12 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
     return (
         <div className={"live-vote-add-edit-page"}>
             <AppBreadcrumb
-                linkText={t("admin.liveVotes.list:header.backToSession")}
-                linkUrl={`/event/${conferenceId}/session/${sessionId}`}
+                linkText={
+                    conferenceId && sessionId
+                        ? t("admin.liveVotes.list:header.backToSession")
+                        : t("admin.liveVote.list:header.title")
+                }
+                linkUrl={backLink}
             />
             <AppPageHeader
                 title={
@@ -506,7 +503,7 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
                         isEditMode={isEditMode}
                         navigation={navigator}
                         isLoading={formState.isSubmitting}
-                        backLink={`/event/${conferenceId}/session/${sessionId}`}
+                        backLink={backLink}
                     />
                 </Row>
             </Form>
