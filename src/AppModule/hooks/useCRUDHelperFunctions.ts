@@ -29,6 +29,13 @@ interface BuildDataSourceMetaData<T> {
     onError?: () => void;
 }
 
+interface FindByIdMetaData<T> {
+    onSuccess?: (data: T) => void;
+    error?: string;
+    onError?: () => void;
+    onCleanup?: () => void;
+}
+
 type UseCRUDHelperFunctionsType = {
     handleDeleteById: (id: number, metaData?: FunctionMetaData) => void;
     setFilter: (search: string, fieldMap: string[]) => void;
@@ -37,6 +44,7 @@ type UseCRUDHelperFunctionsType = {
         cancelTokenSourcesRef?: MutableRefObject<Canceler[]>,
         metaData?: BuildDataSourceMetaData<T>
     ) => IServerSideDatasource;
+    findById: <T>(id: number, qParams: any, meta?: FindByIdMetaData<T>) => void;
 };
 
 export function useCRUDHelperFunctions(
@@ -118,7 +126,7 @@ export function useCRUDHelperFunctions(
                 const { endRow } = request;
                 const pageNo = endRow / appGridConfig.pageSize;
                 api?.hideOverlay();
-                emRef
+                entityManager
                     .find<T>(
                         pageNo,
                         {
@@ -155,9 +163,41 @@ export function useCRUDHelperFunctions(
         };
     };
 
+    const findById = <T>(
+        id: number,
+        qParams: any = {},
+        meta: FindByIdMetaData<T> = {}
+    ): void => {
+        const { onSuccess, onError, error, onCleanup } = meta;
+        entityManager
+            .findById<T>(id, qParams)
+            .then(({ response, isNotFound, errorMessage }) => {
+                if (isNotFound) {
+                    if (error) {
+                        errorToast(t(error));
+                    } else {
+                        errorToast(t(errorMessage));
+                    }
+                    if (onError) {
+                        onError();
+                    }
+                } else if (response !== null) {
+                    if (onSuccess) {
+                        onSuccess(response);
+                    }
+                }
+            })
+            .finally(() => {
+                if (onCleanup) {
+                    onCleanup();
+                }
+            });
+    };
+
     return {
         handleDeleteById,
         setFilter,
         buildDataSource,
+        findById,
     };
 }
