@@ -1,27 +1,16 @@
-import React, { FC, Fragment, useState, useRef } from "react";
+import React, { FC, Fragment, useRef, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { isString as _isString } from "lodash";
-import {
-    GridApi,
-    IServerSideDatasource,
-    IServerSideGetRowsParams,
-} from "ag-grid-community";
+import { GridApi, IServerSideDatasource } from "ag-grid-community";
 import { Canceler } from "axios";
 import { appLiveVoteGridColDef } from "./app-grid-col-def";
 import { appGridFrameworkComponents } from "./app-grid-framework-components";
 import { LiveVoteQuestionApi } from "../../apis";
-import { Language } from "../../models";
 import { AppPageHeader } from "../../../AppModule/components";
-import {
-    AppGrid,
-    buildFilterParams,
-    buildSortParams,
-} from "../../../AppModule/containers/AppGrid";
-import { appGridConfig } from "../../../AppModule/config";
-import { errorToast } from "../../../AppModule/utils";
+import { AppGrid } from "../../../AppModule/containers/AppGrid";
 import { useAuthState, useCRUDHelperFunctions } from "../../../AppModule/hooks";
+import { LiveVoteQuestion } from "../../models";
 
 export const LiveVoteListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [totalItems, setTotalItems] = useState<number>(0);
@@ -36,18 +25,26 @@ export const LiveVoteListPage: FC<RouteComponentProps> = (): JSX.Element => {
     } = useCRUDHelperFunctions(LiveVoteQuestionApi, appGridApi);
 
     function getDataSource(): IServerSideDatasource {
-        return buildDataSource({
-            "container.id": containerId,
-        });
+        return buildDataSource<LiveVoteQuestion>(
+            {
+                "container.id": containerId,
+            },
+            cancelTokenSourcesRef,
+            {
+                onSuccess: (response) => {
+                    setTotalItems(response.totalItems);
+                },
+            }
+        );
     }
 
-    async function handleDelete(id: number) {
+    function handleDelete(id: number) {
         handleDeleteById(id, {
             success: "admin.liveVote.list:delete.toast.success",
         });
     }
 
-    async function handleFilter(search: string) {
+    function handleFilter(search: string) {
         setFilter(search, ["name"]);
     }
 

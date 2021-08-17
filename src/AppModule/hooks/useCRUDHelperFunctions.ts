@@ -1,6 +1,5 @@
 import { useTranslation } from "react-i18next";
 import { MutableRefObject } from "react";
-import { isString } from "lodash";
 import {
     GridApi,
     IServerSideDatasource,
@@ -9,11 +8,12 @@ import {
 import { Canceler } from "axios";
 import { EntityAPI } from "../apis";
 import { errorToast, successToast } from "../utils";
-import { SimpleObject } from "../models";
+import { ListResponse, SimpleObject } from "../models";
 import { appGridConfig } from "../config";
-import { LiveVoteQuestionApi } from "../../AdminModule/apis";
-import { Language } from "../../AdminModule/models";
-import { buildFilterParams, buildSortParams } from "../containers/AppGrid";
+import {
+    buildFilterParams,
+    buildSortParams,
+} from "../containers/AppGrid/app-grid-helpers";
 
 type FunctionMetaData = {
     success?: string;
@@ -24,18 +24,18 @@ type FunctionMetaData = {
     wantToRefreshOnDelete?: boolean;
 };
 
-type BuildDataSourceMetaData = {
-    onSuccess?: <T>(data?: T) => void;
+interface BuildDataSourceMetaData<T> {
+    onSuccess?: (data: ListResponse<T>) => void;
     onError?: () => void;
-};
+}
 
 type UseCRUDHelperFunctionsType = {
     handleDeleteById: (id: number, metaData?: FunctionMetaData) => void;
     setFilter: (search: string, fieldMap: string[]) => void;
-    buildDataSource: (
+    buildDataSource: <T>(
         qParams?: any,
         cancelTokenSourcesRef?: MutableRefObject<Canceler[]>,
-        metaData?: BuildDataSourceMetaData
+        metaData?: BuildDataSourceMetaData<T>
     ) => IServerSideDatasource;
 };
 
@@ -109,8 +109,9 @@ export function useCRUDHelperFunctions(
     const buildDataSource = <T>(
         qParams: any = {},
         cancelTokenSourcesRef?: MutableRefObject<Canceler[]>,
-        meta?: BuildDataSourceMetaData
+        meta: BuildDataSourceMetaData<T> = {}
     ): IServerSideDatasource => {
+        const { onSuccess } = meta;
         return {
             getRows(params: IServerSideGetRowsParams) {
                 const { request, api } = params;
@@ -138,10 +139,12 @@ export function useCRUDHelperFunctions(
                         if (error !== null) {
                             errorToast(errorMessage);
                         } else if (response !== null) {
+                            if (onSuccess) {
+                                onSuccess(response);
+                            }
                             if (response.items.length === 0) {
                                 api?.showNoRowsOverlay();
                             }
-                            setTotalItems(response.totalItems);
                             params.successCallback(
                                 response.items,
                                 response.totalItems
