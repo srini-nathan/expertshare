@@ -108,7 +108,10 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
         return LiveVoteQuestionApi.createOrUpdate<LiveVoteQuestion>(id, {
             ...formData,
             container: containerResourceId,
-            session: sessionId || data.session,
+            session:
+                sessionId !== null
+                    ? sessionResourceId
+                    : SessionApi.toResourceUrl(data.session),
         } as LiveVoteQuestion).then(({ error, errorMessage }) => {
             if (error instanceof UnprocessableEntityErrorResponse) {
                 setViolations<LiveVoteQuestion>(error, setError);
