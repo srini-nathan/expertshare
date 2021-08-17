@@ -24,14 +24,16 @@ export const appGridColDefForRooms = ({
                 headerName: "Actions",
                 field: "id",
                 sortable: false,
-                maxWidth: 320,
-                cellClass: "text-right",
+                minWidth: 320,
+                cellClass: "text-right justify-content-end",
                 headerClass: "action-header",
                 cellRenderer: "appGridActionRenderer",
                 cellRendererParams: {
                     onPressDelete,
                     isGrantedControl,
                 },
+                lockPinned: true,
+                pinned: "right",
             },
         ];
 
@@ -48,13 +50,15 @@ export const appGridColDefForRooms = ({
             field: "id",
             sortable: false,
             maxWidth: 160,
-            cellClass: "text-right",
+            cellClass: "text-right justify-content-end",
             headerClass: "action-header",
             cellRenderer: "appGridActionRenderer",
             cellRendererParams: {
                 onPressDelete,
                 isGrantedControl,
             },
+            lockPinned: true,
+            pinned: "right",
         },
     ];
 };
@@ -77,7 +81,7 @@ export const appGridColDefForPanels = ({
                 field: "id",
                 sortable: false,
                 maxWidth: 160,
-                cellClass: "text-right",
+                cellClass: "text-right justify-content-end",
                 headerClass: "action-header",
                 cellRenderer: "appGridActionRenderer",
                 cellRendererParams: {
@@ -100,7 +104,7 @@ export const appGridColDefForPanels = ({
             field: "id",
             sortable: false,
             maxWidth: 160,
-            cellClass: "text-right",
+            cellClass: "text-right justify-content-end",
             headerClass: "action-header",
             cellRenderer: "appGridActionRenderer",
             cellRendererParams: {
