@@ -9,9 +9,10 @@ import {
     SLiveVoteOptionTranslation,
 } from "../../../AdminModule/models/entities/LiveVoteOption";
 import { AppButton } from "../../components";
-import { useUserLocale } from "../../hooks";
+import { useBuildAssetPath, useUserLocale } from "../../hooks";
 import { LiveVoteOptionTranslation } from "../../../AdminModule/models/entities/LiveVoteOptionTranslation";
 import { getFirstValue } from "../../utils";
+import { VoteOptionFileInfo } from "../../../config";
 
 export const QUESTION_TYPE_RADIO = "RADIO";
 export const QUESTION_TYPE_CHECKBOX = "CHECKBOX";
@@ -64,6 +65,26 @@ export const AppLiveVoteOptionMultiple: FC<AppLiveVoteOptionMultipleType> = ({
             onDataChange(data?.voteChoice?.join(","));
         }
     };
+    const voteOptionMediaPath = useBuildAssetPath(VoteOptionFileInfo);
+
+    const renderOptionItem = (
+        { title, description = "" }: LiveVoteOptionTranslation,
+        imageName = ""
+    ) => {
+        return (
+            <div className="det">
+                <h4 className="mb-0">{title}</h4>
+                {description ? <p className="mb-0">{description}</p> : null}
+                {imageName ? (
+                    <img
+                        src={`${voteOptionMediaPath}/${imageName}`}
+                        alt={title}
+                        className={"w-100"}
+                    />
+                ) : null}
+            </div>
+        );
+    };
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
             {options.map((option, index) => {
@@ -98,16 +119,10 @@ export const AppLiveVoteOptionMultiple: FC<AppLiveVoteOptionMultipleType> = ({
                                     htmlFor={`voteChoice[${index}]`}
                                     className={"form-check-label"}
                                 >
-                                    <div className="det">
-                                        <h4 className="mb-0">
-                                            {translation.title}
-                                        </h4>
-                                        {translation.description ? (
-                                            <p className="mb-0">
-                                                {translation.description}
-                                            </p>
-                                        ) : null}
-                                    </div>
+                                    {renderOptionItem(
+                                        translation,
+                                        option.imageName
+                                    )}
                                 </label>
                             </div>
                         ) : null}
@@ -123,16 +138,10 @@ export const AppLiveVoteOptionMultiple: FC<AppLiveVoteOptionMultipleType> = ({
                                     className={"form-check-input"}
                                 />
                                 <span className="custom-checkbox"></span>
-                                <div className="det">
-                                    <h4 className="mb-0">
-                                        {translation.title}
-                                    </h4>
-                                    {translation.description ? (
-                                        <p className="mb-0">
-                                            {translation.description}
-                                        </p>
-                                    ) : null}
-                                </div>
+                                {renderOptionItem(
+                                    translation,
+                                    option.imageName
+                                )}
                             </label>
                         ) : null}
                     </div>
