@@ -26,7 +26,7 @@ export const appGridColDef = ({
                 field: "id",
                 sortable: false,
                 maxWidth: 220,
-                cellClass: "text-right",
+                cellClass: "text-right justify-content-end",
                 headerClass: "action-header",
                 cellRenderer: "appGridActionRenderer",
                 cellRendererParams: {
@@ -34,6 +34,8 @@ export const appGridColDef = ({
                     isGrantedControl,
                     onPressClone,
                 },
+                lockPinned: true,
+                pinned: "right",
             },
         ];
 
@@ -49,14 +51,16 @@ export const appGridColDef = ({
             headerName: "admin.aframeroom.list:column.actions",
             field: "id",
             sortable: false,
-            maxWidth: 160,
-            cellClass: "text-right",
+            minWidth: 180,
+            cellClass: "text-right justify-content-end",
             headerClass: "action-header",
             cellRenderer: "appGridActionRenderer",
             cellRendererParams: {
                 onPressDelete,
                 isGrantedControl,
             },
+            lockPinned: true,
+            pinned: "right",
         },
     ];
 };

@@ -49,5 +49,7 @@ export const appGridColDef = ({
             onPressGetInContact,
             onPressAddNewUser,
         },
+        lockPinned: true,
+        pinned: "right",
     },
 ];
