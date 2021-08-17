@@ -12,7 +12,7 @@ import {
     QUESTION_TYPE_CHECKBOX,
     QUESTION_TYPE_RADIO,
 } from "./AppLiveVoteOptionMultiple";
-import { VOTE_QUESTION_TYPE } from "../../../config";
+import { VOTE_QUESTION_TYPE, VOTE_QUESTION_CHART_TYPE } from "../../../config";
 import { AppLiveVoteOptionTextBox } from "./AppLiveVoteOptionTextbox";
 import {
     LiveVoteQuestionApi,
@@ -137,7 +137,17 @@ export const AppLiveVote: FC<AppLiveVoteProps> = ({
             return null;
         }
 
-        return <AppLiveVoteResult questionId={data.id} />;
+        return (
+            <AppLiveVoteResult
+                questionId={data.id}
+                chartType={
+                    data.chartType ===
+                    VOTE_QUESTION_CHART_TYPE.VOTEQUESTIONCHARTTYPE_PIE
+                        ? "PieChart"
+                        : "BarChart"
+                }
+            />
+        );
     };
 
     const renderLoader = () => {

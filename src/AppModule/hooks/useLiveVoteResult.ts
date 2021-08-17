@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { round } from "lodash";
 import { LiveVoteResultOverview } from "../../AdminModule/models";
 import { LiveVoteResultApi } from "../../AdminModule/apis";
 
@@ -23,15 +24,15 @@ export function useLiveVoteResult(questionId: number | null) {
     }, [questionId]);
 
     const calculateCharData = () => {
+        let total = 0;
+        data?.forEach((d) => {
+            total += d.count;
+        });
         const computedData = data?.map((d) => {
-            return [d.title, d.count, d.color, null];
+            return [d.title, round((d.count * 100) / total, 1), d.color, null];
         });
 
-        if (computedData) {
-            setChartData(computedData);
-        } else {
-            setChartData([]);
-        }
+        setChartData(computedData || []);
     };
 
     useEffect(() => {

@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Chart } from "react-google-charts";
 import { useSetRecoilState } from "recoil";
 import { GoogleChartWrapperChartType } from "react-google-charts/dist/types";
+import { round } from "lodash";
 import {
     AppBreadcrumb,
     AppButton,
@@ -120,14 +121,15 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
     }, []);
 
     const calculateCharData = () => {
-        const computedData = data?.map((d) => {
-            return [d.title, d.count, d.color, null];
+        let total = 0;
+        data?.forEach((d) => {
+            total += d.count;
         });
-        if (computedData) {
-            setChartData(computedData);
-        } else {
-            setChartData([]);
-        }
+        const computedData = data?.map((d) => {
+            return [d.title, round((d.count * 100) / total, 1), d.color, null];
+        });
+
+        setChartData(computedData || []);
     };
 
     useEffect(() => {
@@ -247,6 +249,10 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
                                 ]}
                                 options={{
                                     legend: { position: "none" },
+                                    hAxis: {
+                                        minValue: 0,
+                                        maxValue: 100,
+                                    },
                                 }}
                             />
                         ) : (
