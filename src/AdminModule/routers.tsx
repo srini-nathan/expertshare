@@ -31,6 +31,7 @@ import {
     LiveVoteOverviewResultPage,
     ExhibitorAddEditPage,
     LiveVoteListPage,
+    ExhibitorAddEditPage,
 } from "./pages";
 import { Layout3D } from "../Layout3DModule";
 import { ModuleRouter } from "../AppModule/models";
@@ -134,6 +135,7 @@ export const routers: ModuleRouter[] = [
                             "live-votes-result/:questionId/overview/:viewMode"
                         }
                     />
+                    <ExhibitorAddEditPage path={"exhibitors/new"} />
                 </Router>
             );
         },
