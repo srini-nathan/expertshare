@@ -1,11 +1,17 @@
 import React, { ReactElement } from "react";
 import { useTranslation } from "react-i18next";
 import { navigate } from "@reach/router";
+import { Badge } from "react-bootstrap";
 import {
     AppGridAction,
     AppGridActionProps,
 } from "../../../AppModule/components";
-import { LiveVoteQuestion, LiveVoteResult } from "../../models";
+import {
+    Conference,
+    LiveVoteQuestion,
+    LiveVoteResult,
+    Session,
+} from "../../models";
 import { useBuildAssetPath, useDateTime } from "../../../AppModule/hooks";
 import { User, AppCellActionWithRenderParams } from "../../../AppModule/models";
 import { UserProfileFileInfo } from "../../../config";
@@ -76,11 +82,45 @@ export const appGridFrameworkComponents = {
         const { createdAt } = data as LiveVoteResult;
         return <>{createdAt ? toShortDate(new Date(createdAt)) : ""}</>;
     },
+    AppIsSelectedBadge: (
+        params: AppCellActionWithRenderParams
+    ): ReactElement => {
+        const { t } = useTranslation();
+        const { data } = params;
+        const { isSelected } = data as LiveVoteQuestion;
+        return isSelected ? (
+            <Badge variant={"success"} pill>
+                {t("admin.liveVote.list:column.isSelected.true")}
+            </Badge>
+        ) : (
+            <Badge variant={"danger"} pill>
+                {t("admin.liveVote.list:column.isSelected.false")}
+            </Badge>
+        );
+    },
+    AppIsResultPublished: (
+        params: AppCellActionWithRenderParams
+    ): ReactElement => {
+        const { t } = useTranslation();
+        const { data } = params;
+        const { isResultPublished } = data as LiveVoteQuestion;
+        return isResultPublished ? (
+            <Badge variant={"success"} pill>
+                {t("admin.liveVote.list:column.isResultPublished.true")}
+            </Badge>
+        ) : (
+            <Badge variant={"danger"} pill>
+                {t("admin.liveVote.list:column.isResultPublished.false")}
+            </Badge>
+        );
+    },
     AppLiveVoteGridActionRenderer: (
         params: AppCellActionWithRenderParams
     ): ReactElement => {
         const { data, onPressDelete } = params;
-        const { id, isSelected } = data as LiveVoteQuestion;
+        const { id, isSelected, session } = data as LiveVoteQuestion;
+        const { id: parentId, conference } = session as Session;
+        const { id: grandParentId } = (conference as unknown) as Conference;
         const { t } = useTranslation();
 
         const props: AppGridActionProps = {
@@ -108,6 +148,10 @@ export const appGridFrameworkComponents = {
                 {
                     icon: "Chart",
                     url: `/admin/live-votes-result/${id}/overview`,
+                },
+                {
+                    icon: "faArrowToRight",
+                    url: `/event/${grandParentId}/session/${parentId}`,
                 },
             ],
         };
