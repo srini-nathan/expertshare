@@ -30,3 +30,5 @@ export * from "./DesignConfiguration";
 export * from "./LiveVoteQuestion";
 export * from "./LiveVoteOption";
 export * from "./LiveVoteResult";
+export * from "./Exhibitor";
+export * from "./ExhibitorTranslation";
