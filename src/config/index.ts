@@ -30,8 +30,8 @@ const {
 const { FILETYPEINFO_VOTEOPTION_POSTER, FILETYPEINFO_USER_PROFILE, FILETYPEINFO_EXHIBITOR_POSTER, FILETYPEINFO_EXHIBITORLOGO_POSTER } = FILE_TYPE_INFO;
 const VoteOptionFileInfo = FILETYPEINFO_VOTEOPTION_POSTER as FileTypeInfo;
 const UserProfileFileInfo = FILETYPEINFO_USER_PROFILE as FileTypeInfo;
-const ExhibotorPosterFileInfo = FILETYPEINFO_EXHIBITOR_POSTER as FileTypeInfo;
-const ExhibotorLogoPosterFileInfo = FILETYPEINFO_EXHIBITORLOGO_POSTER as FileTypeInfo;
+const ExhibitorPosterFileInfo = FILETYPEINFO_EXHIBITOR_POSTER as FileTypeInfo;
+const ExhibitorLogoPosterFileInfo = FILETYPEINFO_EXHIBITORLOGO_POSTER as FileTypeInfo;
 
 // UploadImage types
 const { FILETYPE_VOTEOPTION_POSTER, FILETYPE_EXHIBITOR_POSTER, FILETYPE_EXHIBITORLOGO_POSTER, FILETYPE_USER_PROFILE } = FILE_TYPE;
@@ -50,9 +50,9 @@ export {
   USER_PROFILE_TYPE,
   UserProfileFileInfo,
   EXHIBITOR_POSTER_TYPE,
-  ExhibotorPosterFileInfo,
+  ExhibitorPosterFileInfo,
   EXHIBITOR_LOGO_POSTER_TYPE,
-  ExhibotorLogoPosterFileInfo,
+  ExhibitorLogoPosterFileInfo,
 }
 
 export {

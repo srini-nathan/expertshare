@@ -1,5 +1,6 @@
-import { Form } from "react-bootstrap";
 import React, { FC } from "react";
+import { Form } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 export interface AppFormLabelProps {
     label: string;
@@ -33,4 +34,12 @@ export const AppFormLabel: FC<AppFormLabelProps> = ({
             )}
         </Form.Label>
     ) : null;
+};
+
+export const AppFormLabelTranslatable: FC<AppFormLabelProps> = ({
+    label = "",
+    ...props
+}) => {
+    const { t } = useTranslation();
+    return <AppFormLabel {...props} label={t(label)} />;
 };

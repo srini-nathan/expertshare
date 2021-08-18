@@ -22,6 +22,10 @@ export class ExhibitorTranslation {
         this.description = description;
         this.contactUsCaption = contactUsCaption;
     }
+
+    static createFrom(locale: string, name = ""): ExhibitorTranslation {
+        return new ExhibitorTranslation(locale, name);
+    }
 }
 
 export type SExhibitorTranslation = SimpleObject<ExhibitorTranslation>;

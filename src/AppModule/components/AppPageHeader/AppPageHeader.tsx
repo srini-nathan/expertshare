@@ -1,8 +1,9 @@
 import React, { FC } from "react";
 import { Col, Row } from "react-bootstrap";
 import { Canceler } from "axios";
-import "./assets/scss/style.scss";
+import { useTranslation } from "react-i18next";
 import { AppListPageToolbar } from "../AppListPageToolbar";
+import "./assets/scss/style.scss";
 
 export interface AppPageHeaderProps {
     title: string;
@@ -56,4 +57,12 @@ export const AppPageHeader: FC<AppPageHeaderProps> = ({
             )}
         </Row>
     );
+};
+
+export const AppPageHeaderTranslatable: FC<AppPageHeaderProps> = ({
+    title = "",
+    ...rest
+}): JSX.Element => {
+    const { t } = useTranslation();
+    return <AppPageHeader {...rest} title={t(title)}></AppPageHeader>;
 };

@@ -7,15 +7,18 @@ import {
     UseFormSetValue,
 } from "react-hook-form/dist/types/form";
 import {
+    Exhibitor,
     Language,
-    LiveVoteQuestion,
-    SLiveVoteQuestionTranslation,
+    SExhibitorTranslation,
+    ExhibitorTranslation,
 } from "../../models";
-import { LiveVoteQuestionTranslation } from "../../models/entities/LiveVoteQuestionTranslation";
-import { AppFormInput } from "../../../AppModule/components";
+import {
+    AppFormInput,
+    AppFormRichTextArea,
+} from "../../../AppModule/components";
 import { validation } from "../../../AppModule/utils";
 
-interface LiveVoteQuestionTranslatableProps {
+interface ExhibitorTranslatableProps {
     languages?: Language[];
     activeLocale: string;
     isEditMode: boolean;
@@ -23,10 +26,10 @@ interface LiveVoteQuestionTranslatableProps {
     formState: FormState<any>;
     control: Control<any>;
     register: UseFormRegister<any>;
-    translations: SLiveVoteQuestionTranslation;
+    translations: SExhibitorTranslation;
 }
 
-export const LiveVoteQuestionTranslatable: FC<LiveVoteQuestionTranslatableProps> = ({
+export const ExhibitorTranslatable: FC<ExhibitorTranslatableProps> = ({
     languages,
     activeLocale,
     control,
@@ -40,24 +43,29 @@ export const LiveVoteQuestionTranslatable: FC<LiveVoteQuestionTranslatableProps>
     return (
         <>
             {languages?.map(({ locale }, index) => {
+                const localeKey = `translations[${index}].locale` as keyof Exhibitor;
+                const nameKey = `translations[${index}].name` as keyof Exhibitor;
+                const descriptionKey = `translations[${index}].name` as keyof Exhibitor;
                 const transData =
                     translations?.[locale] ??
-                    LiveVoteQuestionTranslation.createFrom(locale);
+                    ExhibitorTranslation.createFrom(locale);
 
-                setValue(
-                    `translations[${index}].locale` as keyof LiveVoteQuestion,
-                    locale
-                );
+                setValue(localeKey, locale);
 
                 if (locale !== activeLocale) {
-                    const titleKey = `translations[${index}].title` as keyof LiveVoteQuestion;
                     return (
-                        <input
-                            type="hidden"
-                            {...register(titleKey)}
-                            defaultValue={transData?.title}
-                            key={locale}
-                        />
+                        <div key={locale}>
+                            <input
+                                {...register(nameKey)}
+                                type="hidden"
+                                defaultValue={transData?.name}
+                            />
+                            <textarea
+                                {...register(descriptionKey)}
+                                className={"d-none"}
+                                defaultValue={transData?.description}
+                            />
+                        </div>
                     );
                 }
 
@@ -66,19 +74,31 @@ export const LiveVoteQuestionTranslatable: FC<LiveVoteQuestionTranslatableProps>
                         <AppFormInput
                             name={`translations[${index}].title`}
                             label={`${t(
-                                "admin.liveVote.form:label.title"
-                            )}(${activeLocale})`}
+                                "admin.exhibitor.form:label.name"
+                            )} (${activeLocale})`}
                             {...validation(
-                                `translations[${index}].title`,
+                                `translations[${index}].name`,
                                 formState,
                                 isEditMode,
                                 true
                             )}
                             control={control}
-                            defaultValue={transData?.title}
-                            lg={6}
-                            md={6}
-                            xl={6}
+                            defaultValue={transData?.name}
+                            lg={12}
+                            md={12}
+                            xl={12}
+                        />
+                        <AppFormRichTextArea
+                            name={descriptionKey}
+                            md={12}
+                            lg={12}
+                            xl={12}
+                            className="p-0"
+                            label={`${t(
+                                "admin.exhibitor.form:label.description"
+                            )} (${activeLocale})`}
+                            control={control}
+                            value={transData?.description}
                         />
                     </Form.Row>
                 );
