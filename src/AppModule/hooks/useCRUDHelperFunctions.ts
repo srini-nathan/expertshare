@@ -1,6 +1,19 @@
 import { useTranslation } from "react-i18next";
+import { MutableRefObject } from "react";
+import {
+    GridApi,
+    IServerSideDatasource,
+    IServerSideGetRowsParams,
+} from "ag-grid-community";
+import { Canceler } from "axios";
 import { EntityAPI } from "../apis";
 import { errorToast, successToast } from "../utils";
+import { ListResponse, SimpleObject } from "../models";
+import { appGridConfig } from "../config";
+import {
+    buildFilterParams,
+    buildSortParams,
+} from "../containers/AppGrid/app-grid-helpers";
 
 type FunctionMetaData = {
     success?: string;
@@ -8,6 +21,7 @@ type FunctionMetaData = {
     error?: string;
     onError?: () => void;
     onCleanup?: () => void;
+    wantToRefreshOnDelete?: boolean;
 };
 
 interface BuildDataSourceMetaData<T> {
@@ -34,18 +48,24 @@ type UseCRUDHelperFunctionsType = {
 };
 
 export function useCRUDHelperFunctions(
-    emRef: typeof EntityAPI
+    emRef: typeof EntityAPI,
+    agGridApi?: MutableRefObject<GridApi | undefined>
 ): UseCRUDHelperFunctionsType {
     const entityManager: typeof EntityAPI = emRef;
+    const gridApi = agGridApi;
     const { t } = useTranslation();
 
-    const handleDeleteById = (id: number, metaData: FunctionMetaData = {}) => {
+    const handleDeleteById = (
+        id: number,
+        metaData: FunctionMetaData = {}
+    ): void => {
         const {
             success,
             error: customErrorMsg,
             onSuccess,
             onError,
             onCleanup,
+            wantToRefreshOnDelete = true,
         } = metaData;
         entityManager
             .deleteById(id)
@@ -61,6 +81,12 @@ export function useCRUDHelperFunctions(
                     }
                     if (onSuccess) {
                         onSuccess();
+                    }
+                    if (gridApi && gridApi.current && wantToRefreshOnDelete) {
+                        gridApi.current.refreshServerSideStore({
+                            purge: false,
+                            route: [],
+                        });
                     }
                 }
             })
