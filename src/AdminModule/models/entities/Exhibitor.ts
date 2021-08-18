@@ -59,37 +59,35 @@ export class Exhibitor extends BaseEntity {
 
     phone: string;
 
-    constructor(
-        container: string,
-        {
-            id,
-            createdAt,
-            updatedAt,
-            translations = [],
-            logoImageName = "",
-            coverImageName = "",
-            isVisible = true,
-            isCommentEnable = true,
-            isExternal = false,
-            externalUrl = "",
-            isEnableOnlineAttendee = true,
-            email = "",
-            address = "",
-            facebook = "",
-            linkedin = "",
-            twitter = "",
-            streamUrl = "",
-            streamType = STREAM_TYPE.STREAMTYPE_YOUTUBE,
-            category = "",
-            ord = 1,
-            website = "",
-            phone = "",
-            members = [],
-            sessions = [],
-            conferences = [],
-            users = [],
-        }: PExhibitor = {}
-    ) {
+    constructor({
+        id,
+        createdAt,
+        updatedAt,
+        translations = [],
+        logoImageName = "",
+        coverImageName = "",
+        isVisible = true,
+        isCommentEnable = true,
+        isExternal = false,
+        externalUrl = "",
+        isEnableOnlineAttendee = true,
+        email = "",
+        address = "",
+        facebook = "",
+        linkedin = "",
+        twitter = "",
+        streamUrl = "",
+        streamType = STREAM_TYPE.STREAMTYPE_YOUTUBE,
+        category = "",
+        ord = 1,
+        website = "",
+        phone = "",
+        members = [],
+        sessions = [],
+        conferences = [],
+        users = [],
+        container = "",
+    }: PExhibitor = {}) {
         super(id, createdAt, updatedAt);
         this.translations = translations;
         this.logoImageName = logoImageName;
