@@ -39,6 +39,7 @@ import {
     LiveVoteOption,
     SLiveVoteOptionTranslation,
     SLiveVoteQuestionTranslation,
+    Session,
 } from "../../models";
 import { LiveVoteOptionApi, LiveVoteQuestionApi, SessionApi } from "../../apis";
 import {
@@ -105,13 +106,14 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
     const setPipPlayerData = useSetRecoilState(appPipPlayer);
 
     const submitForm = async (formData: LiveVoteQuestion) => {
+        const sessionResUrl =
+            sessionId !== null
+                ? sessionResourceId
+                : SessionApi.toResourceUrl((data.session as Session).id);
         return LiveVoteQuestionApi.createOrUpdate<LiveVoteQuestion>(id, {
             ...formData,
             container: containerResourceId,
-            session:
-                sessionId !== null
-                    ? sessionResourceId
-                    : (data.session as string),
+            session: sessionResUrl,
         } as LiveVoteQuestion).then(({ error, errorMessage }) => {
             if (error instanceof UnprocessableEntityErrorResponse) {
                 setViolations<LiveVoteQuestion>(error, setError);
