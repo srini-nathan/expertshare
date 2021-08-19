@@ -191,43 +191,6 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
             {chartMode === "PieChart" ? null : (
                 <Row className={"live-voting-result--chart-action-bar"}>
                     <Col className={"d-flex justify-content-end"}>
-                        <div className={"switch-view p-0 mx-0 ml-sm-2"}>
-                            <div className={"switch-view--content"}>
-                                <a
-                                    className={
-                                        chartMode === "BarChart"
-                                            ? `active-view`
-                                            : ""
-                                    }
-                                    href={"#"}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        e.preventDefault();
-                                        setChartMode("BarChart");
-                                    }}
-                                >
-                                    <i className="fak fa-chart" />
-                                </a>
-                                <a
-                                    className={
-                                        chartMode === "Bar" ? `active-view` : ""
-                                    }
-                                    href={"#"}
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        e.preventDefault();
-                                        setChartMode("Bar");
-                                    }}
-                                >
-                                    <i
-                                        className="fak fa-chart"
-                                        style={{
-                                            transform: "rotate(90deg)",
-                                        }}
-                                    />
-                                </a>
-                            </div>
-                        </div>
                         {viewMode !== "fullscreen" ? (
                             <a href={fullscreenMode} target="_blank">
                                 <AppButton
@@ -252,13 +215,17 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
                                 loader={<AppLoader />}
                                 data={[
                                     [
-                                        "Vote Option",
-                                        "Number Of Votes",
+                                        t(
+                                            "admin.liveVoteResult.overview:chart.label.voteOption"
+                                        ),
+                                        t(
+                                            "admin.liveVoteResult.overview:chart.label.numberOfVotes"
+                                        ),
                                         { role: "style" },
                                         {
                                             sourceColumn: 0,
                                             role: "annotation",
-                                            type: "string",
+                                            type: "number",
                                             calc: "stringify",
                                         },
                                     ],
@@ -269,9 +236,19 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
                                     hAxis: {
                                         minValue: 0,
                                         maxValue: 100,
+                                        format: "#",
                                     },
                                     slices: colors,
                                 }}
+                                formatters={[
+                                    {
+                                        type: "NumberFormat",
+                                        column: 1,
+                                        options: {
+                                            suffix: "%",
+                                        },
+                                    },
+                                ]}
                             />
                         ) : (
                             <p className={"alert alert-info"}>
