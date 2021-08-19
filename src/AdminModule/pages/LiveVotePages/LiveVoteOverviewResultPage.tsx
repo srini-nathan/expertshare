@@ -244,34 +244,42 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
             <AppCard>
                 <Row>
                     <Col>
-                        <Chart
-                            width={"100%"}
-                            height={"100%"}
-                            chartType={chartMode}
-                            loader={<AppLoader />}
-                            data={[
-                                [
-                                    "Vote Option",
-                                    "Number Of Votes",
-                                    { role: "style" },
-                                    {
-                                        sourceColumn: 0,
-                                        role: "annotation",
-                                        type: "string",
-                                        calc: "stringify",
+                        {chartData.length > 0 ? (
+                            <Chart
+                                width={"100%"}
+                                height={"100%"}
+                                chartType={chartMode}
+                                loader={<AppLoader />}
+                                data={[
+                                    [
+                                        "Vote Option",
+                                        "Number Of Votes",
+                                        { role: "style" },
+                                        {
+                                            sourceColumn: 0,
+                                            role: "annotation",
+                                            type: "string",
+                                            calc: "stringify",
+                                        },
+                                    ],
+                                    ...chartData,
+                                ]}
+                                options={{
+                                    legend: { position: "none" },
+                                    hAxis: {
+                                        minValue: 0,
+                                        maxValue: 100,
                                     },
-                                ],
-                                ...chartData,
-                            ]}
-                            options={{
-                                legend: { position: "none" },
-                                hAxis: {
-                                    minValue: 0,
-                                    maxValue: 100,
-                                },
-                                slices: colors,
-                            }}
-                        />
+                                    slices: colors,
+                                }}
+                            />
+                        ) : (
+                            <p className={"alert alert-info"}>
+                                {t(
+                                    "admin.liveVoteResult:info.noSufficientData"
+                                )}
+                            </p>
+                        )}
                     </Col>
                 </Row>
                 <br />
