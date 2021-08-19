@@ -225,7 +225,7 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
                                         {
                                             sourceColumn: 0,
                                             role: "annotation",
-                                            type: "number",
+                                            type: "string",
                                             calc: "stringify",
                                         },
                                     ],
