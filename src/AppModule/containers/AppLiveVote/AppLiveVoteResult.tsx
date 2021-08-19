@@ -55,19 +55,9 @@ export const AppLiveVoteResult: FC<AppLiveVoteResultType> = ({
                                 hAxis: {
                                     minValue: 0,
                                     maxValue: 100,
-                                    format: "#",
                                 },
                                 slices: colors,
                             }}
-                            formatters={[
-                                {
-                                    type: "NumberFormat",
-                                    column: 1,
-                                    options: {
-                                        suffix: "%",
-                                    },
-                                },
-                            ]}
                         />
                     ) : (
                         <p className={"alert alert-info"}>
