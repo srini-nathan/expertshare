@@ -409,7 +409,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 <AppNavigationItem
                     label={"navigation:administration"}
                     path={""}
-                    icon={{ name: "Settings" }}
+                    icon={{ name: "fak fa-cog-regular" }}
                     className="active main-menu "
                 />
                 {subMenuItems

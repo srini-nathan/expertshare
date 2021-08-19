@@ -7,19 +7,19 @@ import { AppButton } from "../AppButton";
 import { AppFormLabel } from "../AppFormLabel";
 import "./assets/scss/style.scss";
 
-export interface SessionCategoryTranslationsType {
+export interface CategoryTranslationsType {
     locale: string;
     name: string;
 }
 
-export interface AppSessionCategoryTranslationsProps {
+export interface AppCategoryTranslationsProps {
     languages: Language[];
-    onChange: (value: SessionCategoryTranslationsType[]) => void;
-    translations: SessionCategoryTranslationsType[];
+    onChange: (value: CategoryTranslationsType[]) => void;
+    translations: CategoryTranslationsType[];
     defaultLanguage: string;
 }
 
-export const AppSessionCategoryTranslations: FC<AppSessionCategoryTranslationsProps> = ({
+export const AppCategoryTranslations: FC<AppCategoryTranslationsProps> = ({
     languages,
     translations,
     onChange,
