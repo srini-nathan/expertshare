@@ -34,8 +34,12 @@ export const AppLiveVoteResult: FC<AppLiveVoteResultType> = ({
                             loader={<AppLoader />}
                             data={[
                                 [
-                                    "Vote Option",
-                                    "Number Of Votes",
+                                    t(
+                                        "admin.liveVoteResult.overview:chart.label.voteOption"
+                                    ),
+                                    t(
+                                        "admin.liveVoteResult.overview:chart.label.numberOfVotes"
+                                    ),
                                     { role: "style" },
                                     {
                                         sourceColumn: 0,
@@ -51,9 +55,19 @@ export const AppLiveVoteResult: FC<AppLiveVoteResultType> = ({
                                 hAxis: {
                                     minValue: 0,
                                     maxValue: 100,
+                                    format: "#",
                                 },
                                 slices: colors,
                             }}
+                            formatters={[
+                                {
+                                    type: "NumberFormat",
+                                    column: 1,
+                                    options: {
+                                        suffix: "%",
+                                    },
+                                },
+                            ]}
                         />
                     ) : (
                         <p className={"alert alert-info"}>
