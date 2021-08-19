@@ -2,6 +2,7 @@ import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Control } from "react-hook-form";
 import { Form, Row } from "react-bootstrap";
+import { get, find } from "lodash";
 import { ExhibitorTranslation, Language } from "../../models";
 import {
     AppFormLabel,
@@ -36,48 +37,54 @@ export const ExhibitorTranslatable: FC<ExhibitorTranslatableProps> = ({
         });
         onChange(newTranslations);
     };
-    const getValue = (name: string): string => {
-        const item = translations.filter((e) => e.locale === activeLocale);
-
-        if (item.length > 0)
-            if (name === "description") return item[0].description;
-            else return item[0].name;
-
+    const getValue = (fieldName: string): string => {
+        const item = find(translations, { locale: activeLocale });
+        if (item) {
+            return get(item, fieldName);
+        }
         return "";
     };
 
     const getTitleError = (): boolean => {
-        let noErrorTitle = false;
+        let noError = false;
         translations.forEach((e) => {
-            if (!noErrorTitle) noErrorTitle = e.name !== "";
+            if (!noError) noError = e.name !== "";
         });
-        return noErrorTitle;
+        return noError;
+    };
+
+    const getContactLabelError = (): boolean => {
+        let noError = false;
+        translations.forEach((e) => {
+            if (!noError) noError = e.contactUsCaption !== "";
+        });
+        return noError;
     };
 
     const getDescriptionError = (): boolean => {
-        let noErrorTitle = false;
+        let noError = false;
         translations.forEach((e) => {
-            if (!noErrorTitle) noErrorTitle = e.description !== "";
+            if (!noError) noError = e.description !== "";
         });
-        return noErrorTitle;
+        return noError;
     };
 
     return (
         <Row className="translatable-container">
             <Form.Group className="mb-0 px-3 w-100">
                 <AppFormLabel
-                    label={`${t("event.form:label.title")} (${activeLocale})`}
+                    label={`${t(
+                        "admin.exhibitor.form:label.name"
+                    )} (${activeLocale})`}
                     required
                 />
-
                 <Form.Control
-                    value={getValue("title")}
-                    name={`title_${activeLocale}`}
+                    value={getValue("name")}
+                    name={`name_${activeLocale}`}
                     onChange={(e: any) => {
-                        handleValueChange(e.target.value, "title");
+                        handleValueChange(e.target.value, "name");
                     }}
                 />
-
                 <Form.Control.Feedback className={"d-block"} type="invalid">
                     {!getTitleError() && "This field is required"}
                 </Form.Control.Feedback>
@@ -90,7 +97,7 @@ export const ExhibitorTranslatable: FC<ExhibitorTranslatableProps> = ({
                     xl={12}
                     className="p-0"
                     label={`${t(
-                        "event.form:label.description"
+                        "admin.exhibitor.form:label.description"
                     )} (${activeLocale})`}
                     control={control}
                     value={getValue("description")}
@@ -100,6 +107,24 @@ export const ExhibitorTranslatable: FC<ExhibitorTranslatableProps> = ({
                 />
                 <Form.Control.Feedback className={"d-block"} type="invalid">
                     {!getDescriptionError() && "This field is required"}
+                </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group className="mb-0 px-3 w-100">
+                <AppFormLabel
+                    label={`${t(
+                        "admin.exhibitor.form:label.contactUsCaption"
+                    )} (${activeLocale})`}
+                    required
+                />
+                <Form.Control
+                    value={getValue("contactUsCaption")}
+                    name={`contactUsCaption_${activeLocale}`}
+                    onChange={(e: any) => {
+                        handleValueChange(e.target.value, "contactUsCaption");
+                    }}
+                />
+                <Form.Control.Feedback className={"d-block"} type="invalid">
+                    {!getContactLabelError() && "This field is required"}
                 </Form.Control.Feedback>
             </Form.Group>
         </Row>

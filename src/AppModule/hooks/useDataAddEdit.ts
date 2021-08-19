@@ -4,6 +4,7 @@ import { useForm, UseFormReturn } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useGlobalData } from "../contexts";
 import { Language } from "../../AdminModule/models";
+import { ContainerApi } from "../../AdminModule/apis";
 
 type DataAddEditReturnType<T> = {
     id: null | number;
@@ -17,6 +18,8 @@ type DataAddEditReturnType<T> = {
     activeLocale: string;
     defaultLocale: string;
     setActiveLocale: (locale: string) => void;
+    conId: number;
+    conUrl: string;
 };
 
 export function useDataAddEdit<T>(
@@ -31,9 +34,11 @@ export function useDataAddEdit<T>(
         resolver: schema ? yupResolver(schema) : undefined,
         mode: "all",
     });
-    const { defaultLanguage, languages = [] } = useGlobalData();
+    const { defaultLanguage, languages = [], container } = useGlobalData();
     const [defaultLocale] = useState<string>(defaultLanguage?.locale || "en");
     const [activeLocale, setActiveLocale] = useState<string>(defaultLocale);
+    const containerId = container?.id || 0;
+    const containerResUrl = ContainerApi.toResourceUrl(containerId);
 
     return {
         id,
@@ -47,5 +52,7 @@ export function useDataAddEdit<T>(
         activeLocale,
         setActiveLocale,
         defaultLocale,
+        conId: containerId,
+        conUrl: containerResUrl,
     };
 }
