@@ -23,7 +23,7 @@ export const AppLiveVoteResult: FC<AppLiveVoteResultType> = ({
     }
 
     return (
-        <div className="question-det mt-3">
+        <div className="question-det col-12">
             <Row>
                 <Col>
                     {chartData.length > 0 ? (
@@ -64,7 +64,6 @@ export const AppLiveVoteResult: FC<AppLiveVoteResultType> = ({
                     )}
                 </Col>
             </Row>
-            <br />
             <br />
             <Row>
                 <Col>
