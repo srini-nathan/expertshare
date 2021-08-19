@@ -34,8 +34,12 @@ export const AppLiveVoteResult: FC<AppLiveVoteResultType> = ({
                             loader={<AppLoader />}
                             data={[
                                 [
-                                    "Vote Option",
-                                    "Number Of Votes",
+                                    t(
+                                        "admin.liveVoteResult.overview:chart.label.voteOption"
+                                    ),
+                                    t(
+                                        "admin.liveVoteResult.overview:chart.label.numberOfVotes"
+                                    ),
                                     { role: "style" },
                                     {
                                         sourceColumn: 0,
