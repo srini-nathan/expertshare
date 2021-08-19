@@ -15,6 +15,7 @@ type DataAddEditReturnType<T> = {
     hookForm: UseFormReturn<T>;
     languages: Language[];
     activeLocale: string;
+    defaultLocale: string;
     setActiveLocale: (locale: string) => void;
 };
 
@@ -45,5 +46,6 @@ export function useDataAddEdit<T>(
         languages,
         activeLocale,
         setActiveLocale,
+        defaultLocale,
     };
 }

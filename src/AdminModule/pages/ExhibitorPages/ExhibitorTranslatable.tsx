@@ -1,108 +1,107 @@
 import React, { FC } from "react";
-import { Form } from "react-bootstrap";
-import { Control, FormState } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { Control } from "react-hook-form";
+import { Form, Row } from "react-bootstrap";
+import { ExhibitorTranslation, Language } from "../../models";
 import {
-    UseFormRegister,
-    UseFormSetValue,
-} from "react-hook-form/dist/types/form";
-import {
-    Exhibitor,
-    Language,
-    SExhibitorTranslation,
-    ExhibitorTranslation,
-} from "../../models";
-import {
-    AppFormInput,
+    AppFormLabel,
     AppFormRichTextArea,
 } from "../../../AppModule/components";
-import { validation } from "../../../AppModule/utils";
 
-interface ExhibitorTranslatableProps {
+export interface ExhibitorTranslatableProps {
     languages?: Language[];
+    defaultLocale: string;
     activeLocale: string;
-    isEditMode: boolean;
-    setValue: UseFormSetValue<any>;
-    formState: FormState<any>;
+    onChange: (value: ExhibitorTranslation[]) => void;
+    translations: ExhibitorTranslation[];
     control: Control<any>;
-    register: UseFormRegister<any>;
-    translations: SExhibitorTranslation;
 }
 
 export const ExhibitorTranslatable: FC<ExhibitorTranslatableProps> = ({
-    languages,
+    translations,
+    onChange,
     activeLocale,
     control,
-    register,
-    isEditMode,
-    formState,
-    setValue,
-    translations,
-}): JSX.Element => {
+}) => {
     const { t } = useTranslation();
+    const handleValueChange = (value: string, name: string) => {
+        const newTranslations = translations.map((e) => {
+            if (e.locale === activeLocale)
+                return {
+                    ...e,
+                    [name]: value,
+                };
+
+            return e;
+        });
+        onChange(newTranslations);
+    };
+    const getValue = (name: string): string => {
+        const item = translations.filter((e) => e.locale === activeLocale);
+
+        if (item.length > 0)
+            if (name === "description") return item[0].description;
+            else return item[0].name;
+
+        return "";
+    };
+
+    const getTitleError = (): boolean => {
+        let noErrorTitle = false;
+        translations.forEach((e) => {
+            if (!noErrorTitle) noErrorTitle = e.name !== "";
+        });
+        return noErrorTitle;
+    };
+
+    const getDescriptionError = (): boolean => {
+        let noErrorTitle = false;
+        translations.forEach((e) => {
+            if (!noErrorTitle) noErrorTitle = e.description !== "";
+        });
+        return noErrorTitle;
+    };
+
     return (
-        <>
-            {languages?.map(({ locale }, index) => {
-                const localeKey = `translations[${index}].locale` as keyof Exhibitor;
-                const nameKey = `translations[${index}].name` as keyof Exhibitor;
-                const descriptionKey = `translations[${index}].name` as keyof Exhibitor;
-                const transData =
-                    translations?.[locale] ??
-                    ExhibitorTranslation.createFrom(locale);
+        <Row className="translatable-container">
+            <Form.Group className="mb-0 px-3 w-100">
+                <AppFormLabel
+                    label={`${t("event.form:label.title")} (${activeLocale})`}
+                    required
+                />
 
-                setValue(localeKey, locale);
+                <Form.Control
+                    value={getValue("title")}
+                    name={`title_${activeLocale}`}
+                    onChange={(e: any) => {
+                        handleValueChange(e.target.value, "title");
+                    }}
+                />
 
-                if (locale !== activeLocale) {
-                    return (
-                        <div key={locale}>
-                            <input
-                                {...register(nameKey)}
-                                type="hidden"
-                                defaultValue={transData?.name}
-                            />
-                            <textarea
-                                {...register(descriptionKey)}
-                                className={"d-none"}
-                                defaultValue={transData?.description}
-                            />
-                        </div>
-                    );
-                }
-
-                return (
-                    <Form.Row key={locale}>
-                        <AppFormInput
-                            name={`translations[${index}].title`}
-                            label={`${t(
-                                "admin.exhibitor.form:label.name"
-                            )} (${activeLocale})`}
-                            {...validation(
-                                `translations[${index}].name`,
-                                formState,
-                                isEditMode,
-                                true
-                            )}
-                            control={control}
-                            defaultValue={transData?.name}
-                            lg={12}
-                            md={12}
-                            xl={12}
-                        />
-                        <AppFormRichTextArea
-                            name={descriptionKey}
-                            md={12}
-                            lg={12}
-                            xl={12}
-                            className="p-0"
-                            label={`${t(
-                                "admin.exhibitor.form:label.description"
-                            )} (${activeLocale})`}
-                            control={control}
-                            value={transData?.description}
-                        />
-                    </Form.Row>
-                );
-            })}
-        </>
+                <Form.Control.Feedback className={"d-block"} type="invalid">
+                    {!getTitleError() && "This field is required"}
+                </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group className="mb-0 px-3 w-100">
+                <AppFormRichTextArea
+                    name={`description_${activeLocale}`}
+                    md={12}
+                    lg={12}
+                    xl={12}
+                    className="p-0"
+                    label={`${t(
+                        "event.form:label.description"
+                    )} (${activeLocale})`}
+                    control={control}
+                    value={getValue("description")}
+                    onChange={(e: string) => {
+                        handleValueChange(e, "description");
+                    }}
+                />
+                <Form.Control.Feedback className={"d-block"} type="invalid">
+                    {!getDescriptionError() && "This field is required"}
+                </Form.Control.Feedback>
+            </Form.Group>
+        </Row>
     );
 };

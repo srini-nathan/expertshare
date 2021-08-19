@@ -1,7 +1,7 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Col, Form, Row } from "react-bootstrap";
-import { Exhibitor, SExhibitorTranslation } from "../../models";
+import { Exhibitor, ExhibitorTranslation } from "../../models";
 import { useBuildAssetPath, useDataAddEdit } from "../../../AppModule/hooks";
 import {
     AppCard,
@@ -23,13 +23,16 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = (): JSX.Element => 
         isLoading,
         isEditMode,
         activeLocale,
+        defaultLocale,
         setActiveLocale,
-        data,
         languages,
         hookForm,
     } = useDataAddEdit<Exhibitor>(new Exhibitor());
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const logoBasePath = useBuildAssetPath(ExhibitorLogoPosterFileInfo);
+    const [translations, setTranslations] = useState<ExhibitorTranslation[]>(
+        []
+    );
 
     if (isLoading) {
         return <AppLoader />;
@@ -53,14 +56,10 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = (): JSX.Element => 
                             <ExhibitorTranslatable
                                 languages={languages}
                                 control={hookForm.control}
-                                setValue={hookForm.setValue}
                                 activeLocale={activeLocale}
-                                formState={hookForm.formState}
-                                register={hookForm.register}
-                                isEditMode={isEditMode}
-                                translations={
-                                    data.translations as SExhibitorTranslation
-                                }
+                                defaultLocale={defaultLocale}
+                                translations={translations}
+                                onChange={setTranslations}
                             />
                             <Col className={"p-0"}>
                                 <Form.Group>
