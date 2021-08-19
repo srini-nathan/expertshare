@@ -7,6 +7,7 @@ interface VideoProps {
     parcent?: number;
     ownDepth?: number;
     padding: number;
+    percent?: number;
     parent?: any;
     isVideoPlaying: boolean;
 }
@@ -15,6 +16,7 @@ export const Video = ({
     props,
     videoUrl,
     padding,
+    percent = 0,
     parent,
     ownDepth = 0,
     isVideoPlaying = false,
@@ -33,6 +35,13 @@ export const Video = ({
         return vid;
     });
 
+    const calculateFixedRatio = () => {
+        const { height, width, depth } = parent!;
+        const using = height < width ? height * percent : width * percent;
+        setScaleSt(new Vector3(using, using, 1));
+        setPositionSt(new Vector3(0, 0, depth / 2 + ownDepth));
+    };
+
     const reCalculateSize = () => {
         const { height, width, depth } = parent;
         const h = height - padding * 2;
@@ -40,7 +49,9 @@ export const Video = ({
         // const propsDepth = props && props.position ? props.position : null;
         // const propsZ = propsDepth ? (propsDepth as number[])[0] : 0;
         setScaleSt(new Vector3(w, h, 1));
-        setPositionSt(new Vector3(0, 0, depth + ownDepth));
+        // eslint-disable-next-line no-console
+        console.log("vide z: ", depth + ownDepth);
+        setPositionSt(new Vector3(0, 0, depth / 2 + 0.01));
     };
 
     useEffect(() => {
@@ -49,7 +60,8 @@ export const Video = ({
     }, [isVideoPlaying]);
 
     useEffect(() => {
-        reCalculateSize();
+        if (percent) calculateFixedRatio();
+        else reCalculateSize();
     }, []);
 
     return (
