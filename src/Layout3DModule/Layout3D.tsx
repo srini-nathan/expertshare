@@ -35,6 +35,8 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
     const [selectedLocale] = useState<string>("");
     const { emitPageChange } = useUserSocketEvents();
 
+    const [cameraLock] = useState(false);
+
     const [selectedPanel, setSelectedPanel] = useState<PanelInterfaceProps>(
         null!
     );
@@ -101,6 +103,7 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
                 {roomsData && (
                     <SceneCanvas
                         editMode={editMode}
+                        cameraLock={cameraLock}
                         roomsData={roomsData}
                         onItemSelected={onItemSelected}
                         currentMainRoom={mainRoom}

@@ -23,6 +23,7 @@ const { AFramePanel } = CONSTANTS;
 
 interface SceneProps {
     editMode: boolean;
+    cameraLock: boolean;
     roomsData: any[];
     currentMainRoom: number;
     paths: { ROOM_ASSETS_PATH: string; PANEL_ASSETS_PATH: string };
@@ -40,6 +41,7 @@ interface ToFromProps {
 
 export const SceneCanvas = ({
     editMode,
+    cameraLock,
     onItemSelected,
     roomsData,
     currentMainRoom,
