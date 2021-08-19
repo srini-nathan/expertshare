@@ -16,7 +16,7 @@ export const AppLiveVoteResult: FC<AppLiveVoteResultType> = ({
     questionId,
 }) => {
     const { t } = useTranslation();
-    const { loading, chartData, data } = useLiveVoteResult(questionId);
+    const { loading, chartData, data, colors } = useLiveVoteResult(questionId);
 
     if (loading) {
         return <AppLoader />;
@@ -48,6 +48,11 @@ export const AppLiveVoteResult: FC<AppLiveVoteResultType> = ({
                             ]}
                             options={{
                                 legend: { position: "none" },
+                                hAxis: {
+                                    minValue: 0,
+                                    maxValue: 100,
+                                },
+                                slices: colors,
                             }}
                         />
                     ) : (
