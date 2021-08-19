@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Chart } from "react-google-charts";
 import { useSetRecoilState } from "recoil";
 import { GoogleChartWrapperChartType } from "react-google-charts/dist/types";
+import { round } from "lodash";
 import {
     AppBreadcrumb,
     AppButton,
@@ -24,14 +25,15 @@ import {
 } from "../../../AppModule/atoms";
 import { errorToast } from "../../../AppModule/utils";
 import { VOTE_QUESTION_CHART_TYPE } from "../../../config";
+import { SimpleObject } from "../../../AppModule/models";
 
 export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
     const {
         questionId,
         viewMode = "normal",
-        conferenceId,
-        sessionId,
+        conferenceId = null,
+        sessionId = null,
     } = useParams();
     const [loading, setLoading] = useState<boolean>(true);
     const [loadingQuestion, setLoadingQuestion] = useState<boolean>(true);
@@ -40,6 +42,8 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
     const [chartMode, setChartMode] = useState<GoogleChartWrapperChartType>(
         "BarChart"
     );
+    const [colors, setColors] = useState<SimpleObject<any>>({});
+    const [barColors, setBarColors] = useState<string[]>([]);
     const {
         emitJoinLiveVoteResult,
         emitLeaveLiveVoteResult,
@@ -47,6 +51,14 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
     const setLayoutOptions = useSetRecoilState<AppDashboardLayoutOptions>(
         appDashboardLayoutOptions
     );
+    const fullscreenMode =
+        conferenceId && sessionId
+            ? `/admin/live-votes-result/${conferenceId}/${sessionId}/${questionId}/overview/fullscreen`
+            : `/admin/live-votes-result/${questionId}/overview/fullscreen`;
+    const backLink =
+        conferenceId && sessionId
+            ? `/event/${conferenceId}/session/${sessionId}`
+            : "/admin/live-votes";
 
     useEffect(() => {
         if (viewMode === "fullscreen") {
@@ -112,15 +124,29 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
     }, []);
 
     const calculateCharData = () => {
-        const computedData = data?.map((d) => {
-            return [d.title, d.count, d.color, null];
+        let total = 0;
+        const barCls: string[] = [];
+        const cls: SimpleObject<any> = {};
+        data?.forEach((d) => {
+            total += d.count;
         });
-
-        if (computedData) {
-            setChartData(computedData);
-        } else {
-            setChartData([]);
-        }
+        const computedData = data?.map((d, index) => {
+            if (d.color != null) {
+                cls[index] = { color: d.color };
+                barCls.push(d.color);
+                // eslint-disable-next-line no-console
+                console.log(barColors, "barColors");
+            }
+            return [
+                d.title,
+                round((d.count * 100) / total, 1),
+                `color: ${d.color}`,
+                null,
+            ];
+        });
+        setColors(cls);
+        setBarColors(barCls);
+        setChartData(computedData || []);
     };
 
     useEffect(() => {
@@ -151,10 +177,12 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
         <Fragment>
             {viewMode !== "fullscreen" ? (
                 <AppBreadcrumb
-                    linkText={t(
-                        "admin.liveVoteResult.overview:header.backToSession"
-                    )}
-                    linkUrl={`/event/${conferenceId}/session/${sessionId}`}
+                    linkText={
+                        conferenceId && sessionId
+                            ? t("admin.liveVotes.list:header.backToSession")
+                            : t("admin.liveVote.list:header.title")
+                    }
+                    linkUrl={backLink}
                 />
             ) : null}
             <AppPageHeader
@@ -201,10 +229,7 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
                             </div>
                         </div>
                         {viewMode !== "fullscreen" ? (
-                            <a
-                                href={`/admin/live-votes-result/${conferenceId}/${sessionId}/${questionId}/overview/fullscreen`}
-                                target="_blank"
-                            >
+                            <a href={fullscreenMode} target="_blank">
                                 <AppButton
                                     variant={"secondary"}
                                     className={"show-full ml-2"}
@@ -240,6 +265,11 @@ export const LiveVoteOverviewResultPage: FC<RouteComponentProps> = (): JSX.Eleme
                             ]}
                             options={{
                                 legend: { position: "none" },
+                                hAxis: {
+                                    minValue: 0,
+                                    maxValue: 100,
+                                },
+                                slices: colors,
                             }}
                         />
                     </Col>

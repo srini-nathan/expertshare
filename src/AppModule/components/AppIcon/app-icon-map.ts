@@ -41,6 +41,9 @@ import {
     faUnlink,
     faChartBar,
     faList,
+    faExternalLink,
+    faArrowToLeft,
+    faArrowToRight,
 } from "@fortawesome/pro-regular-svg-icons";
 import { AppIconMap } from "../../models";
 
@@ -95,4 +98,7 @@ export const appIconMap: AppIconMap = {
     Chart: faChartBar,
     faList,
     List2: faList,
+    faExternalLink,
+    faArrowToLeft,
+    faArrowToRight,
 };
