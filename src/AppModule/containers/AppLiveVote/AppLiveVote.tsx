@@ -167,7 +167,7 @@ export const AppLiveVote: FC<AppLiveVoteProps> = ({
                     onToggleCollapse={() => {
                         setOpen(!open);
                     }}
-                    hideCollapse={alreadyVoted}
+                    hideCollapse={!data?.isResultPublished && alreadyVoted}
                 />
                 <AppLiveVoteQuestion
                     title={data?.title}
