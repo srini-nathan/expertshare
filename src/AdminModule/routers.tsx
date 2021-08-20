@@ -135,6 +135,7 @@ export const routers: ModuleRouter[] = [
                         }
                     />
                     <ExhibitorAddEditPage path={"exhibitors/new"} />
+                    <ExhibitorAddEditPage path={"exhibitors/:id"} />
                 </Router>
             );
         },

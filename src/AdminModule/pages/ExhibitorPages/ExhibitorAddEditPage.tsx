@@ -7,8 +7,14 @@ import {
     Exhibitor,
     ExhibitorCategory,
     ExhibitorTranslation,
+    User,
 } from "../../models";
-import { useBuildAssetPath, useDataAddEdit } from "../../../AppModule/hooks";
+import {
+    useAuthState,
+    useBuildAssetPath,
+    useDataAddEdit,
+    useNavigator,
+} from "../../../AppModule/hooks";
 import {
     AppCard,
     AppLoader,
@@ -18,6 +24,8 @@ import {
     AppFormSwitch,
     AppFormInput,
     AppFormSelect,
+    AppSessionUsers,
+    AppFormActions,
 } from "../../../AppModule/components";
 import { AppLanguageSwitcher } from "../../../AppModule/containers";
 import {
@@ -25,7 +33,7 @@ import {
     ExhibitorLogoPosterFileInfo,
 } from "../../../config";
 import { ExhibitorTranslatable } from "./ExhibitorTranslatable";
-import { ExhibitorApi, ExhibitorCategoryApi } from "../../apis";
+import { ExhibitorApi, ExhibitorCategoryApi, UserApi } from "../../apis";
 import {
     errorToast,
     setViolations,
@@ -41,6 +49,7 @@ import {
 export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
+    const navigator = useNavigator(navigate);
     const {
         id,
         setData,
@@ -56,6 +65,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
         conId,
         conUrl,
     } = useDataAddEdit<Exhibitor>(new Exhibitor());
+    const { clientId } = useAuthState();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const logoBasePath = useBuildAssetPath(ExhibitorLogoPosterFileInfo);
     const [translations, setTranslations] = useState<ExhibitorTranslation[]>(
@@ -64,13 +74,21 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
     const [loadingLang, setLoadingLang] = useState<boolean>(true);
     const [loadingCategory, setLoadingCategory] = useState<boolean>(true);
     const [categories, setCategories] = useState<SimpleObject<string>[]>([]);
+    const [selectedUsers, setSelectedUsers] = useState<User[]>([]);
+    const [users, setUsers] = useState<User[]>([]);
+    const [totalUsers, setTotalUsers] = useState<number>(0);
+    const [pageUser, setPageUser] = useState<number>(0);
+    const [selectedMembers, setSelectedMembers] = useState<User[]>([]);
+    const [members, setMembers] = useState<User[]>([]);
+    const [totalMembers, setTotalMembers] = useState<number>(0);
+    const [pageMember, setPageMember] = useState<number>(0);
 
     const { t } = useTranslation();
 
     useEffect(() => {
         if (isEditMode && id !== null) {
             ExhibitorApi.findById<Exhibitor>(id, {
-                "groups[]": "translations",
+                "groups[]": "ExhibitorTranslationsGroup",
             })
                 .then(({ response, isNotFound }) => {
                     if (isNotFound) {
@@ -78,19 +96,34 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                             t("admin.exhibitor.form:notfound.error.message")
                         );
                     } else if (response !== null) {
-                        setData(response);
+                        let d = response;
+                        if (d?.category) {
+                            const c = (d.category as unknown) as ExhibitorCategory;
+                            d = {
+                                ...response,
+                                category: ExhibitorCategoryApi.toResourceUrl(
+                                    c.id
+                                ),
+                            } as Exhibitor;
+                        }
+                        setData(d);
                         const items: ExhibitorTranslation[] = [];
-                        Object.entries(response.translations).forEach(
-                            ([, value]) => {
-                                items.push({
-                                    locale: value.locale,
-                                    name: value.name,
-                                    description: value.description,
-                                    contactUsCaption: value.contactUsCaption,
-                                });
-                            }
-                        );
+                        if (response.translations) {
+                            Object.entries(response.translations).forEach(
+                                ([, value]) => {
+                                    items.push({
+                                        locale: value.locale,
+                                        name: value.name,
+                                        description: value.description,
+                                        contactUsCaption:
+                                            value.contactUsCaption,
+                                    });
+                                }
+                            );
+                        }
                         setTranslations(items);
+                        setSelectedUsers(response.users as User[]);
+                        setSelectedMembers(response.members as User[]);
                         hookForm.trigger();
                     }
                 })
@@ -98,7 +131,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                     setIsLoading(false);
                 });
         }
-    }, [hookForm, id, isEditMode, setData, setIsLoading, t]);
+    }, [id, isEditMode]);
 
     useEffect(() => {
         if (languages.length !== translations.length) {
@@ -185,6 +218,12 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
         if (checkTranslation()) {
             formData.translations = getTranslation();
             formData.container = conUrl;
+            formData.users = selectedUsers.map((e) => {
+                return UserApi.toResourceUrl(e.id);
+            });
+            formData.members = selectedMembers.map((e) => {
+                return UserApi.toResourceUrl(e.id);
+            });
 
             return ExhibitorApi.createOrUpdate<Exhibitor>(id, formData).then(
                 ({ error, errorMessage }) => {
@@ -210,6 +249,55 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
         }
         return Promise.reject();
     };
+
+    const getOwners = (search = "") => {
+        const searchStatus = search !== "";
+        if (searchStatus || totalUsers === 0 || totalUsers > users.length)
+            UserApi.getLimited<User>(searchStatus ? 1 : pageUser + 1, {
+                user_search: search,
+                "roles.role": "ROLE_USER",
+                "client.id": clientId,
+            }).then(({ response }) => {
+                if (response !== null) {
+                    if (searchStatus) {
+                        setUsers(response.items);
+                        setTotalUsers(response.totalItems);
+                        setPageUser(0);
+                    } else {
+                        setUsers([...users, ...response.items]);
+                        setTotalUsers(response.totalItems);
+                        setPageUser(pageUser + 1);
+                    }
+                }
+            });
+    };
+
+    const getMembers = (search = "") => {
+        const searchStatus = search !== "";
+        if (searchStatus || totalMembers === 0 || totalMembers > members.length)
+            UserApi.getLimited<User>(searchStatus ? 1 : pageMember + 1, {
+                user_search: search,
+                "roles.role": "ROLE_USER",
+                "client.id": clientId,
+            }).then(({ response }) => {
+                if (response !== null) {
+                    if (searchStatus) {
+                        setMembers(response.items);
+                        setTotalMembers(response.totalItems);
+                        setPageMember(0);
+                    } else {
+                        setMembers([...members, ...response.items]);
+                        setTotalMembers(response.totalItems);
+                        setPageMember(pageMember + 1);
+                    }
+                }
+            });
+    };
+
+    useEffect(() => {
+        getOwners();
+        getMembers();
+    }, []);
 
     const { formState, control, handleSubmit } = hookForm;
     const { errors } = formState;
@@ -485,9 +573,53 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                     lg={6}
                                 />
                             </Row>
+                            <Row>
+                                <Col xl={12} lg={12}>
+                                    <AppSessionUsers
+                                        xl={4}
+                                        lg={4}
+                                        md={12}
+                                        sm={12}
+                                        showAdd
+                                        handleSelectedUsers={setSelectedUsers}
+                                        selectedUsers={selectedUsers}
+                                        title={t(
+                                            "admin.exhibitor.form:label.users"
+                                        )}
+                                        icon="speakers"
+                                        users={users}
+                                        loadMore={getOwners}
+                                    />
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col xl={12} lg={12}>
+                                    <AppSessionUsers
+                                        xl={4}
+                                        lg={4}
+                                        md={12}
+                                        sm={12}
+                                        showAdd
+                                        handleSelectedUsers={setSelectedMembers}
+                                        selectedUsers={selectedMembers}
+                                        title={t(
+                                            "admin.exhibitor.form:label.members"
+                                        )}
+                                        icon="speakers"
+                                        users={members}
+                                        loadMore={getMembers}
+                                    />
+                                </Col>
+                            </Row>
                         </AppCard>
                     </Col>
                 </Row>
+                <AppFormActions
+                    isEditMode={isEditMode}
+                    navigation={navigator}
+                    backLink={`/admin/exhibitors/new`}
+                    isLoading={formState.isSubmitting}
+                />
             </Form>
         </div>
     );
