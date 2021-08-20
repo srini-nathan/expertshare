@@ -25,7 +25,7 @@ import {
     AppFormInput,
     AppFormSelect,
     AppSessionUsers,
-    AppFormActions,
+    AppFormActions, AppSelectStream,
 } from "../../../AppModule/components";
 import { AppLanguageSwitcher } from "../../../AppModule/containers";
 import {
@@ -48,6 +48,7 @@ import {
     UnprocessableEntityErrorResponse,
 } from "../../../AppModule/models";
 import { UploadAPI } from "../../../AppModule/apis";
+import { AppSelectExhibitorStream } from "../../../AppModule/components/AppSelectStream/AppSelectExhibitorStream";
 
 export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
     navigate,
@@ -673,6 +674,21 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                 </Col>
                             </Row>
                         </AppCard>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <AppSelectExhibitorStream
+                            name="streamValue"
+                            streamType={data.streamType}
+                            changeValue={setValue}
+                            control={control}
+                            formState={formState}
+                            isEditMode={isEditMode}
+                            data={data}
+                            errors={errors}
+                            onChange={setTranslations}
+                        />
                     </Col>
                 </Row>
                 <AppFormActions
