@@ -17,6 +17,7 @@ export * from "./ConferenceTag";
 export * from "./SessionTag";
 export * from "./Session";
 export * from "./SessionCategory";
+export * from "./ExhibitorCategory";
 export * from "./SessionDoc";
 export * from "./AFrameRoom";
 export * from "./AFramePanel";
