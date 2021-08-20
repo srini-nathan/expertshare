@@ -2,7 +2,12 @@ import React, { FC, useEffect, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Col, Form, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { Exhibitor, ExhibitorTranslation } from "../../models";
+import { find } from "lodash";
+import {
+    Exhibitor,
+    ExhibitorCategory,
+    ExhibitorTranslation,
+} from "../../models";
 import { useBuildAssetPath, useDataAddEdit } from "../../../AppModule/hooks";
 import {
     AppCard,
@@ -10,6 +15,9 @@ import {
     AppFormLabelTranslatable,
     AppPageHeaderTranslatable,
     AppUploader,
+    AppFormSwitch,
+    AppFormInput,
+    AppFormSelect,
 } from "../../../AppModule/components";
 import { AppLanguageSwitcher } from "../../../AppModule/containers";
 import {
@@ -17,14 +25,18 @@ import {
     ExhibitorLogoPosterFileInfo,
 } from "../../../config";
 import { ExhibitorTranslatable } from "./ExhibitorTranslatable";
-import { ExhibitorApi } from "../../apis";
+import { ExhibitorApi, ExhibitorCategoryApi } from "../../apis";
 import {
     errorToast,
     setViolations,
     successToast,
+    validation,
 } from "../../../AppModule/utils";
 import "./assets/scss/style.scss";
-import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
+import {
+    SimpleObject,
+    UnprocessableEntityErrorResponse,
+} from "../../../AppModule/models";
 
 export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
     navigate,
@@ -32,6 +44,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
     const {
         id,
         setData,
+        data,
         isLoading,
         setIsLoading,
         isEditMode,
@@ -40,6 +53,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
         setActiveLocale,
         languages,
         hookForm,
+        conId,
         conUrl,
     } = useDataAddEdit<Exhibitor>(new Exhibitor());
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -48,6 +62,8 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
         []
     );
     const [loadingLang, setLoadingLang] = useState<boolean>(true);
+    const [loadingCategory, setLoadingCategory] = useState<boolean>(true);
+    const [categories, setCategories] = useState<SimpleObject<string>[]>([]);
 
     const { t } = useTranslation();
 
@@ -82,7 +98,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                     setIsLoading(false);
                 });
         }
-    }, [id]);
+    }, [hookForm, id, isEditMode, setData, setIsLoading, t]);
 
     useEffect(() => {
         if (languages.length !== translations.length) {
@@ -109,7 +125,26 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
             setTranslations(items);
         }
         setLoadingLang(false);
-    }, [languages]);
+    }, [languages, translations]);
+
+    useEffect(() => {
+        setLoadingCategory(true);
+        ExhibitorCategoryApi.find<ExhibitorCategory>(1, {
+            "container.id": conId,
+        }).then(({ response }) => {
+            if (response !== null) {
+                setCategories(
+                    response.items.map((c: ExhibitorCategory) => {
+                        return {
+                            label: c.name,
+                            value: ExhibitorCategoryApi.toResourceUrl(c.id),
+                        };
+                    })
+                );
+            }
+            setLoadingCategory(false);
+        });
+    }, []);
 
     const getTranslation = () => {
         let defaultValues: ExhibitorTranslation = {
@@ -176,7 +211,10 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
         return Promise.reject();
     };
 
-    if (isLoading || loadingLang) {
+    const { formState, control, handleSubmit } = hookForm;
+    const { errors } = formState;
+
+    if (isLoading || loadingLang || loadingCategory) {
         return <AppLoader />;
     }
 
@@ -187,9 +225,9 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                     isEditMode ? "editTitle" : "addTitle"
                 }`}
             />
-            <Form noValidate onSubmit={hookForm.handleSubmit(onSubmit)}>
+            <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                 <Row>
-                    <Col>
+                    <Col md={12}>
                         <AppCard>
                             <AppLanguageSwitcher
                                 activeLocale={activeLocale}
@@ -197,7 +235,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                             />
                             <ExhibitorTranslatable
                                 languages={languages}
-                                control={hookForm.control}
+                                control={control}
                                 activeLocale={activeLocale}
                                 defaultLocale={defaultLocale}
                                 translations={translations}
@@ -235,9 +273,220 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                     />
                                 </Form.Group>
                             </Col>
+                            <AppFormSelect
+                                id={"category"}
+                                name={"category"}
+                                label={t("admin.exhibitor.form:label.category")}
+                                md={12}
+                                lg={12}
+                                xl={12}
+                                {...validation(
+                                    "category",
+                                    formState,
+                                    isEditMode
+                                )}
+                                errorMessage={errors.category?.message}
+                                defaultValue={data.category}
+                                placeholder={t(
+                                    "admin.exhibitor.form:placeholder.chooseCategory"
+                                )}
+                                options={categories}
+                                control={control}
+                                transform={{
+                                    output: (category: SimpleObject<string>) =>
+                                        category?.value,
+                                    input: (value: string) => {
+                                        return find(categories, {
+                                            value,
+                                        });
+                                    },
+                                }}
+                                className={"p-0"}
+                            />
                         </AppCard>
                     </Col>
-                    <Col></Col>
+                    <Col md={12}>
+                        <AppCard>
+                            <Row>
+                                <Col lg={6} className={"pl-0"}>
+                                    <AppFormSwitch
+                                        name={"isEnableOnlineAttendee"}
+                                        label={t(
+                                            "admin.exhibitor.form:label.isEnableOnlineAttendee"
+                                        )}
+                                        {...validation(
+                                            "isEnableOnlineAttendee",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={
+                                            errors.isEnableOnlineAttendee
+                                                ?.message
+                                        }
+                                        defaultChecked={
+                                            data.isEnableOnlineAttendee
+                                        }
+                                        control={control}
+                                        lg={12}
+                                        xl={12}
+                                    />
+                                </Col>
+                                <Col lg={6} className={"pl-0"}>
+                                    <AppFormSwitch
+                                        name={"isCommentEnable"}
+                                        label={t(
+                                            "admin.exhibitor.form:label.isCommentEnable"
+                                        )}
+                                        {...validation(
+                                            "isCommentEnable",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={
+                                            errors.isCommentEnable?.message
+                                        }
+                                        defaultChecked={data.isCommentEnable}
+                                        control={control}
+                                        lg={12}
+                                        xl={12}
+                                    />
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col lg={6} className={"pl-0"}>
+                                    <AppFormSwitch
+                                        name={"isExternal"}
+                                        label={t(
+                                            "admin.exhibitor.form:label.isExternal"
+                                        )}
+                                        {...validation(
+                                            "isExternal",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={
+                                            errors.isExternal?.message
+                                        }
+                                        defaultChecked={data.isExternal}
+                                        control={control}
+                                        lg={12}
+                                        xl={12}
+                                    />
+                                </Col>
+                                <AppFormInput
+                                    name={"externalUrl"}
+                                    label={t(
+                                        "admin.exhibitor.form:label.externalUrl"
+                                    )}
+                                    {...validation(
+                                        "externalUrl",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.externalUrl?.message}
+                                    defaultValue={data.externalUrl}
+                                    control={control}
+                                    lg={6}
+                                />
+                            </Row>
+                            <Row>
+                                <AppFormInput
+                                    name={"website"}
+                                    label={t(
+                                        "admin.exhibitor.form:label.website"
+                                    )}
+                                    {...validation(
+                                        "website",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.website?.message}
+                                    defaultValue={data.website}
+                                    control={control}
+                                    lg={6}
+                                />
+                                <AppFormInput
+                                    name={"phone"}
+                                    label={t(
+                                        "admin.exhibitor.form:label.phone"
+                                    )}
+                                    {...validation(
+                                        "phone",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.phone?.message}
+                                    defaultValue={data.phone}
+                                    control={control}
+                                    lg={6}
+                                />
+                            </Row>
+                            <Row>
+                                <AppFormInput
+                                    name={"email"}
+                                    label={t(
+                                        "admin.exhibitor.form:label.email"
+                                    )}
+                                    {...validation(
+                                        "email",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.email?.message}
+                                    defaultValue={data.email}
+                                    control={control}
+                                    lg={6}
+                                />
+                                <AppFormInput
+                                    name={"address"}
+                                    label={t(
+                                        "admin.exhibitor.form:label.address"
+                                    )}
+                                    {...validation(
+                                        "address",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.address?.message}
+                                    defaultValue={data.address}
+                                    control={control}
+                                    lg={6}
+                                />
+                            </Row>
+                            <Row>
+                                <AppFormInput
+                                    name={"facebook"}
+                                    label={t(
+                                        "admin.exhibitor.form:label.facebook"
+                                    )}
+                                    {...validation(
+                                        "facebook",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.facebook?.message}
+                                    defaultValue={data.facebook}
+                                    control={control}
+                                    lg={6}
+                                />
+                                <AppFormInput
+                                    name={"linkedin"}
+                                    label={t(
+                                        "admin.exhibitor.form:label.linkedin"
+                                    )}
+                                    {...validation(
+                                        "linkedin",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.linkedin?.message}
+                                    defaultValue={data.linkedin}
+                                    control={control}
+                                    lg={6}
+                                />
+                            </Row>
+                        </AppCard>
+                    </Col>
                 </Row>
             </Form>
         </div>
