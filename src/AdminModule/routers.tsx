@@ -29,7 +29,6 @@ import {
     LiveVoteAddEditPage,
     LiveVoteDetailResultPage,
     LiveVoteOverviewResultPage,
-    ExhibitorAddEditPage,
     LiveVoteListPage,
     ExhibitorAddEditPage,
 } from "./pages";
