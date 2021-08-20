@@ -22,6 +22,8 @@ export class AFrameRoom extends BaseEntity {
 
     container?: string;
 
+    isRotateEnable?: boolean;
+
     constructor({
         name = "",
         image,
@@ -33,6 +35,7 @@ export class AFrameRoom extends BaseEntity {
         camRotZ = "",
         isEntryRoom,
         container = "",
+        isRotateEnable,
         id,
         createdAt,
         updatedAt,
@@ -48,6 +51,7 @@ export class AFrameRoom extends BaseEntity {
         this.camRotZ = camRotZ;
         this.isEntryRoom = isEntryRoom;
         this.container = container;
+        this.isRotateEnable = isRotateEnable;
     }
 
     toString(): string {
@@ -67,6 +71,7 @@ export class AFrameRoom extends BaseEntity {
             camRotZ: this.camRotZ,
             isEntryRoom: this.isEntryRoom,
             container: this.container,
+            isRotateEnable: this.isRotateEnable,
         };
     }
 }

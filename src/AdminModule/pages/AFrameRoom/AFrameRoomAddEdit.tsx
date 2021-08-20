@@ -206,6 +206,24 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
                                     defaultChecked={data.isEntryRoom}
                                     control={control}
                                 />
+                                <AppFormSwitch
+                                    name={"isRotateEnable"}
+                                    label={t(
+                                        "admin.aframeroom.form:label.isRotateEnable"
+                                    )}
+                                    {...validation(
+                                        "isRotateEnable",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={
+                                        errors.isRotateEnable?.message
+                                    }
+                                    defaultChecked={
+                                        isEditMode ? data.isRotateEnable : true
+                                    }
+                                    control={control}
+                                />
                             </Form.Row>
                             <Form.Row>
                                 <Form.Group className={"col w-100"}>
@@ -252,7 +270,9 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
                                         isEditMode
                                     )}
                                     errorMessage={errors.camPosX?.message}
-                                    defaultValue={data.camPosX}
+                                    defaultValue={
+                                        isEditMode ? data.camPosX : "0"
+                                    }
                                     control={control}
                                 />
                                 <AppFormInput
@@ -267,7 +287,9 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
                                         isEditMode
                                     )}
                                     errorMessage={errors.camPosY?.message}
-                                    defaultValue={data.camPosY}
+                                    defaultValue={
+                                        isEditMode ? data.camPosY : "0"
+                                    }
                                     control={control}
                                 />
                                 <AppFormInput
@@ -282,7 +304,9 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
                                         isEditMode
                                     )}
                                     errorMessage={errors.camPosZ?.message}
-                                    defaultValue={data.camPosZ}
+                                    defaultValue={
+                                        isEditMode ? data.camPosZ : "0"
+                                    }
                                     control={control}
                                 />
                                 <AppFormInput
@@ -297,7 +321,9 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
                                         isEditMode
                                     )}
                                     errorMessage={errors.camRotX?.message}
-                                    defaultValue={data.camRotX}
+                                    defaultValue={
+                                        isEditMode ? data.camRotX : "0"
+                                    }
                                     control={control}
                                 />
                                 <AppFormInput
@@ -312,7 +338,9 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
                                         isEditMode
                                     )}
                                     errorMessage={errors.camRotY?.message}
-                                    defaultValue={data.camRotY}
+                                    defaultValue={
+                                        isEditMode ? data.camRotY : "0"
+                                    }
                                     control={control}
                                 />
                                 <AppFormInput
@@ -327,7 +355,9 @@ export const AFrameRoomAddEdit: FC<RouteComponentProps> = ({
                                         isEditMode
                                     )}
                                     errorMessage={errors.camRotZ?.message}
-                                    defaultValue={data.camRotZ}
+                                    defaultValue={
+                                        isEditMode ? data.camRotZ : "0"
+                                    }
                                     control={control}
                                 />
                             </Form.Row>
