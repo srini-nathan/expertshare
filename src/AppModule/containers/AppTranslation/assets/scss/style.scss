@@ -203,31 +203,36 @@
                                     border-radius: 50%;
 
                                     &.en {
-                                        background-image: url(../images/en_flag.png);
+                                        background-image: url(../images/en_flag.svg);
                                         background-repeat: no-repeat;
                                         background-size: contain;
                                     }
 
                                     &.pt {
-                                        background-image: url(../images/pt_flag.png);
+                                        background-image: url(../images/pt_flag.svg);
                                         background-repeat: no-repeat;
                                         background-size: contain;
                                     }
 
                                     &.fr {
-                                        background-image: url(../images/fr_flag.png);
+                                        background-image: url(../images/fr_flag.svg);
                                         background-repeat: no-repeat;
                                         background-size: contain;
                                     }
 
                                     &.de {
-                                        background-image: url(../images/germany.png);
+                                        background-image: url(../images/de_flag.svg);
                                         background-repeat: no-repeat;
                                         background-size: contain;
                                     }
 
                                     &.it {
-                                        background-image: url(../images/italian.jpg);
+                                        background-image: url(../images/it_flag.svg);
+                                        background-repeat: no-repeat;
+                                        background-size: contain;
+                                    }
+                                    &.zh {
+                                        background-image: url(../images/zh_flag.svg);
                                         background-repeat: no-repeat;
                                         background-size: contain;
                                     }

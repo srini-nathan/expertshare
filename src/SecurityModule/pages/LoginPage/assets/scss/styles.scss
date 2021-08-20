@@ -2,19 +2,20 @@
 @import "../../../../../AppModule/assets/scss/screens-sizes";
 
 .social-media-button {
+    padding-top: 3px !important;
     &.google {
         background: url("../image/google_icon.svg") no-repeat;
-        background-position: 8px center;
+        background-position: 8px 10px;
     }
 
     &.linkedin {
         background: url("../image/linked_in.svg") no-repeat;
-        background-position: 8px 7px;
+        background-position: 8px 8.5px;
     }
 
     &.azure {
         background: url("../image/azure.svg") no-repeat;
-        background-position: 8px 7px;
+        background-position: 8px 10px;
     }
 }
 
@@ -78,41 +79,41 @@
 
     .en {
         i {
-            background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/en_flag.png);
+            background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/en_flag.svg);
             background-size: 20px;
         }
     }
 
     .pt {
         i {
-            background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/pt_flag.png);
+            background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/pt_flag.svg);
             background-size: 20px;
         }
     }
 
     .it {
         i {
-            background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/it_flag.jpg);
+            background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/it_flag.svg);
             background-size: 20px;
         }
     }
 
     .fr {
         i {
-            background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/fr_flag.png);
+            background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/fr_flag.svg);
             background-size: 20px;
         }
     }
 
     .de {
         i {
-            background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/de_flag.png);
+            background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/de_flag.svg);
             background-size: 20px;
         }
     }
     .zh {
         i {
-            background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/chi_flag.png);
+            background: url(../../../../../AppModule/components/AppFormTranslatable/assets/images/zh_flag.svg);
             background-size: 20px;
         }
     }
