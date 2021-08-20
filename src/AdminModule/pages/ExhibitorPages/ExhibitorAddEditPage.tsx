@@ -2,7 +2,7 @@ import React, { FC, useEffect, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Col, Form, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { find } from "lodash";
+import { find, first } from "lodash";
 import {
     Exhibitor,
     ExhibitorCategory,
@@ -31,6 +31,8 @@ import { AppLanguageSwitcher } from "../../../AppModule/containers";
 import {
     ExhibitorPosterFileInfo,
     ExhibitorLogoPosterFileInfo,
+    EXHIBITOR_LOGO_POSTER_TYPE,
+    EXHIBITOR_POSTER_TYPE,
 } from "../../../config";
 import { ExhibitorTranslatable } from "./ExhibitorTranslatable";
 import { ExhibitorApi, ExhibitorCategoryApi, UserApi } from "../../apis";
@@ -45,6 +47,7 @@ import {
     SimpleObject,
     UnprocessableEntityErrorResponse,
 } from "../../../AppModule/models";
+import { UploadAPI } from "../../../AppModule/apis";
 
 export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
     navigate,
@@ -66,8 +69,8 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
         conUrl,
     } = useDataAddEdit<Exhibitor>(new Exhibitor());
     const { clientId } = useAuthState();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const logoBasePath = useBuildAssetPath(ExhibitorLogoPosterFileInfo);
+    const coverBasePath = useBuildAssetPath(ExhibitorPosterFileInfo);
     const [translations, setTranslations] = useState<ExhibitorTranslation[]>(
         []
     );
@@ -82,8 +85,9 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
     const [members, setMembers] = useState<User[]>([]);
     const [totalMembers, setTotalMembers] = useState<number>(0);
     const [pageMember, setPageMember] = useState<number>(0);
-
     const { t } = useTranslation();
+    let logoImageFile: File | null = null;
+    let coverImageFile: File | null = null;
 
     useEffect(() => {
         if (isEditMode && id !== null) {
@@ -224,7 +228,26 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
             formData.members = selectedMembers.map((e) => {
                 return UserApi.toResourceUrl(e.id);
             });
-
+            if (logoImageFile) {
+                const res = await UploadAPI.upload(
+                    logoImageFile,
+                    EXHIBITOR_LOGO_POSTER_TYPE,
+                    conUrl
+                );
+                if (res.response && res.response?.fileName) {
+                    formData.logoImageName = res.response.fileName;
+                }
+            }
+            if (coverImageFile) {
+                const res = await UploadAPI.upload(
+                    coverImageFile,
+                    EXHIBITOR_POSTER_TYPE,
+                    conUrl
+                );
+                if (res.response && res.response?.fileName) {
+                    formData.coverImageName = res.response.fileName;
+                }
+            }
             return ExhibitorApi.createOrUpdate<Exhibitor>(id, formData).then(
                 ({ error, errorMessage }) => {
                     if (error instanceof UnprocessableEntityErrorResponse) {
@@ -299,7 +322,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
         getMembers();
     }, []);
 
-    const { formState, control, handleSubmit } = hookForm;
+    const { formState, control, handleSubmit, setValue } = hookForm;
     const { errors } = formState;
 
     if (isLoading || loadingLang || loadingCategory) {
@@ -341,7 +364,26 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         withCropper
                                         accept="image/*"
                                         fileInfo={ExhibitorLogoPosterFileInfo}
-                                        onFileSelect={() => {}}
+                                        imagePath={
+                                            data.logoImageName
+                                                ? `${logoBasePath}/${data.logoImageName}`
+                                                : ""
+                                        }
+                                        onFileSelect={(selectedFiles) => {
+                                            logoImageFile =
+                                                first(selectedFiles) ?? null;
+                                        }}
+                                        onDelete={() => {
+                                            setValue("logoImageName", "");
+                                        }}
+                                        confirmation={{
+                                            title: t(
+                                                "admin.exhibitor.form:deleteLogoImage.confirm.title"
+                                            ),
+                                            bodyContent: t(
+                                                "admin.exhibitor.form:deleteLogoImage.confirm.message"
+                                            ),
+                                        }}
                                     />
                                 </Form.Group>
                             </Col>
@@ -349,7 +391,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                 <Form.Group>
                                     <AppFormLabelTranslatable
                                         label={
-                                            "admin.exhibitor.form:label.poster"
+                                            "admin.exhibitor.form:label.cover"
                                         }
                                         required={true}
                                     />
@@ -357,7 +399,26 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         withCropper
                                         accept="image/*"
                                         fileInfo={ExhibitorPosterFileInfo}
-                                        onFileSelect={() => {}}
+                                        imagePath={
+                                            data.coverImageName
+                                                ? `${coverBasePath}/${data.coverImageName}`
+                                                : ""
+                                        }
+                                        onFileSelect={(selectedFiles) => {
+                                            coverImageFile =
+                                                first(selectedFiles) ?? null;
+                                        }}
+                                        onDelete={() => {
+                                            setValue("coverImageName", "");
+                                        }}
+                                        confirmation={{
+                                            title: t(
+                                                "admin.exhibitor.form:deleteCoverImage.confirm.title"
+                                            ),
+                                            bodyContent: t(
+                                                "admin.exhibitor.form:deleteCoverImage.confirm.message"
+                                            ),
+                                        }}
                                     />
                                 </Form.Group>
                             </Col>
