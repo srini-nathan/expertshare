@@ -61,7 +61,7 @@ export const Image = ({
         setScaleSt(new Vector3(w, h, 1));
         setPositionSt(new Vector3(0, 0, depth / 2 + 0.02));
 
-        console.log("image z: ", depth / 2 + 0.01);
+        // console.log("image z: ", depth / 2 + 0.01);
     };
 
     useEffect(() => {

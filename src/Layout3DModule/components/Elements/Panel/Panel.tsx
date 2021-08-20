@@ -173,7 +173,7 @@ export const Panel = ({
     const isBillboard = type === PanelTypes.BILLBOARD;
     const isIframe = type === PanelTypes.IFRAME;
 
-    console.log("panel data video: ", panelData, textureImage);
+    // console.log("panel data video: ", panelData, textureImage);
     const defaultVideoUrl =
         panelData.source.assetId !== "" && panelData.source.assetId !== null
             ? `${panelsPath}/${panelData.source.assetId}`

@@ -50,7 +50,7 @@ export const Video = ({
         // const propsZ = propsDepth ? (propsDepth as number[])[0] : 0;
         setScaleSt(new Vector3(w, h, 1));
         // eslint-disable-next-line no-console
-        console.log("vide z: ", depth + ownDepth);
+        // console.log("vide z: ", depth + ownDepth);
         setPositionSt(new Vector3(0, 0, depth / 2 + 0.01));
     };
 
