@@ -338,7 +338,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
             />
             <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                 <Row>
-                    <Col md={12}>
+                    <Col md={6}>
                         <AppCard>
                             <AppLanguageSwitcher
                                 activeLocale={activeLocale}
@@ -454,7 +454,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                             />
                         </AppCard>
                     </Col>
-                    <Col md={12}>
+                    <Col md={6}>
                         <AppCard>
                             <Row>
                                 <Col lg={6} className={"pl-0"}>
