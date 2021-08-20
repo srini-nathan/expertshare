@@ -318,7 +318,7 @@ export const AppSelectStream: FC<AppSelectStreamProps> = ({
                                 <AppFormInput
                                     className="pl-0"
                                     md={12}
-                                    name={"zoomurl"}
+                                    name={"zoomUrl"}
                                     lg={12}
                                     xl={12}
                                     required={true}
@@ -326,11 +326,11 @@ export const AppSelectStream: FC<AppSelectStreamProps> = ({
                                         "session.form:label.streamingZoomMeetingUrl"
                                     )}
                                     {...validation(
-                                        "zoomurl",
+                                        "zoomUrl",
                                         formState,
                                         isEditMode
                                     )}
-                                    errorMessage={errors.zoomurl?.message}
+                                    errorMessage={errors.zoomUrl?.message}
                                     defaultValue={data.zoomUrl}
                                     control={control}
                                 />
