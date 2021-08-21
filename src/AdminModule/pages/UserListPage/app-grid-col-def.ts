@@ -1,6 +1,10 @@
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 import { AppCellActionParamsUserList } from "./AppCellActionParamsUserList";
 
+let getWidth = "right";
+if (window.innerWidth < 760) {
+    getWidth = "";
+}
 export const appGridColDef = ({
     onPressDelete,
     onCheckHeaderCheckbox,
@@ -92,6 +96,6 @@ export const appGridColDef = ({
             onPressDelete,
         },
         lockPinned: true,
-        pinned: "right",
+        pinned: getWidth,
     },
 ];
