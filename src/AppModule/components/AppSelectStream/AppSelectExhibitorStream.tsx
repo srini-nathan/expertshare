@@ -8,6 +8,9 @@ import { AppFormInput } from "../AppFormInput";
 import { AppFormLabel } from "../AppFormLabel";
 import { validation } from "../../utils";
 import "./assets/scss/style.scss";
+import { AppFormFile } from "../AppFormFile";
+import { useBuildAssetPath } from "../../hooks";
+import { ExhibitorVideoFileInfo } from "../../../config";
 
 export interface AppSelectStreamProps {
     data: Exhibitor;
@@ -16,6 +19,7 @@ export interface AppSelectStreamProps {
     isEditMode: boolean;
     setValue: UseFormSetValue<Exhibitor>;
     control: Control<any>;
+    onFileSelect: (file: File) => void;
 }
 
 export const AppSelectExhibitorStream: FC<AppSelectStreamProps> = ({
@@ -25,8 +29,10 @@ export const AppSelectExhibitorStream: FC<AppSelectStreamProps> = ({
     isEditMode,
     setValue,
     control,
+    onFileSelect,
 }) => {
     const { t } = useTranslation();
+    const videoBasePath = useBuildAssetPath(ExhibitorVideoFileInfo);
     const [activeKey, setActiveKey] = React.useState<string>(
         data.streamType === "FILE" ? "FILE" : data.streamType
     );
@@ -119,7 +125,26 @@ export const AppSelectExhibitorStream: FC<AppSelectStreamProps> = ({
                                 {renderInput("DACAST")}
                             </Tab.Pane>
                             <Tab.Pane className="mt-4" eventKey="FILE">
-                                <p>FILE</p>
+                                <AppFormFile
+                                    name={"streamUrl"}
+                                    onFileSelect={(files: File[]) => {
+                                        if (onFileSelect)
+                                            onFileSelect(files[0]);
+                                    }}
+                                    control={control}
+                                    className={"p-0 mb-4"}
+                                    hideDownload={true}
+                                    md={12}
+                                    xl={12}
+                                    lg={12}
+                                />
+                                {data.streamUrl ? (
+                                    <video controls={true} className={"w-100"}>
+                                        <source
+                                            src={`${videoBasePath}/${data.streamUrl}`}
+                                        />
+                                    </video>
+                                ) : null}
                             </Tab.Pane>
                         </Col>
                     </Row>

@@ -32,6 +32,8 @@ export interface AppFormFileProps {
     onFileSelect?: (files: File[]) => void;
     control?: Control<any>;
     filePath?: string;
+    className?: string;
+    hideDownload?: boolean;
 }
 
 export const AppFormFile: FC<AppFormFileProps> = ({
@@ -50,6 +52,8 @@ export const AppFormFile: FC<AppFormFileProps> = ({
     control,
     onFileSelect = () => {},
     filePath,
+    className,
+    hideDownload = false,
 }): JSX.Element => {
     const controlId = id || name;
     let placeholderText = "";
@@ -65,7 +69,13 @@ export const AppFormFile: FC<AppFormFileProps> = ({
     }
 
     return (
-        <Col md={md} sm={sm} lg={lg} xl={xl} className="form-group">
+        <Col
+            md={md}
+            sm={sm}
+            lg={lg}
+            xl={xl}
+            className={`form-group ${className}`}
+        >
             {label?.length > 0 ? (
                 <Form.Label>
                     {label}
@@ -97,19 +107,22 @@ export const AppFormFile: FC<AppFormFileProps> = ({
                         />
                     )}
                 />
-
-                <a
-                    target="_blank"
-                    href={filePath ? `${filePath}/${value}` : settingFilePath}
-                    onClick={(e) => {
-                        if (!value) {
-                            e.preventDefault();
+                {hideDownload ? null : (
+                    <a
+                        target="_blank"
+                        href={
+                            filePath ? `${filePath}/${value}` : settingFilePath
                         }
-                    }}
-                    className={`btn btn-secondary ${!value && "disabled"}`}
-                >
-                    <AppIcon name="Download" />
-                </a>
+                        onClick={(e) => {
+                            if (!value) {
+                                e.preventDefault();
+                            }
+                        }}
+                        className={`btn btn-secondary ${!value && "disabled"}`}
+                    >
+                        <AppIcon name="Download" />
+                    </a>
+                )}
             </Row>
 
             <Form.Control.Feedback

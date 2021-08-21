@@ -3,6 +3,8 @@ import { RouteComponentProps } from "@reach/router";
 import { Col, Form, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { find, first } from "lodash";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { DevTool } from "@hookform/devtools";
 import {
     Exhibitor,
     ExhibitorCategory,
@@ -33,6 +35,7 @@ import {
     ExhibitorLogoPosterFileInfo,
     EXHIBITOR_LOGO_POSTER_TYPE,
     EXHIBITOR_POSTER_TYPE,
+    EXHIBITOR_VIDEO_TYPE,
 } from "../../../config";
 import { ExhibitorTranslatable } from "./ExhibitorTranslatable";
 import { ExhibitorApi, ExhibitorCategoryApi, UserApi } from "../../apis";
@@ -89,6 +92,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
     const { t } = useTranslation();
     let logoImageFile: File | null = null;
     let coverImageFile: File | null = null;
+    let videoFile: File | null = null;
 
     useEffect(() => {
         if (isEditMode && id !== null) {
@@ -247,6 +251,16 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                 );
                 if (res.response && res.response?.fileName) {
                     formData.coverImageName = res.response.fileName;
+                }
+            }
+            if (videoFile) {
+                const res = await UploadAPI.upload(
+                    videoFile,
+                    EXHIBITOR_VIDEO_TYPE,
+                    conUrl
+                );
+                if (res.response && res.response?.fileName) {
+                    formData.streamUrl = res.response.fileName;
                 }
             }
             return ExhibitorApi.createOrUpdate<Exhibitor>(id, formData).then(
@@ -686,6 +700,9 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                 control={control}
                                 isEditMode={isEditMode}
                                 errors={errors}
+                                onFileSelect={(f) => {
+                                    videoFile = f;
+                                }}
                             />
                         </AppCard>
                     </Col>
@@ -697,6 +714,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                     isLoading={formState.isSubmitting}
                 />
             </Form>
+            <DevTool control={control} />
         </div>
     );
 };
