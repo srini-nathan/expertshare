@@ -25,7 +25,7 @@ import {
     AppFormInput,
     AppFormSelect,
     AppSessionUsers,
-    AppFormActions, AppSelectStream,
+    AppFormActions,
 } from "../../../AppModule/components";
 import { AppLanguageSwitcher } from "../../../AppModule/containers";
 import {
@@ -677,18 +677,17 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                     </Col>
                 </Row>
                 <Row>
-                    <Col>
-                        <AppSelectExhibitorStream
-                            name="streamValue"
-                            streamType={data.streamType}
-                            changeValue={setValue}
-                            control={control}
-                            formState={formState}
-                            isEditMode={isEditMode}
-                            data={data}
-                            errors={errors}
-                            onChange={setTranslations}
-                        />
+                    <Col md={6}>
+                        <AppCard>
+                            <AppSelectExhibitorStream
+                                data={data}
+                                setValue={setValue}
+                                formState={formState}
+                                control={control}
+                                isEditMode={isEditMode}
+                                errors={errors}
+                            />
+                        </AppCard>
                     </Col>
                 </Row>
                 <AppFormActions
