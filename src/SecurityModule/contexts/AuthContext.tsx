@@ -172,11 +172,14 @@ export const socialLogin = async (
 
 export const autoLogin = async (
     token: string,
-    dispatch: React.Dispatch<IAuthAction>
+    dispatch: React.Dispatch<IAuthAction>,
+    skip = null
 ): Promise<void> => {
     await clearAuthStorage();
-    localStorage.setItem(AUTH_CHOSEN_CONTAINER, "true");
-    localStorage.setItem(AUTH_SKIP_ONBOARDING, "true");
+    if (skip === "1") {
+        localStorage.setItem(AUTH_CHOSEN_CONTAINER, "true");
+        localStorage.setItem(AUTH_SKIP_ONBOARDING, "true");
+    }
     return socialLogin(token, dispatch);
 };
 
