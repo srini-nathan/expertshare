@@ -32,6 +32,7 @@ export const routers: ModuleRouter[] = [
                     <ResetPasswordConfirmationPage
                         path={"reset-password-confirmation"}
                     />
+                    <AutoLogin path={"auto-login/:token/:skip"} />
                     <AutoLogin path={"auto-login/:token"} />
                 </Router>
             );
