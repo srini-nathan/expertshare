@@ -337,8 +337,9 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
         getMembers();
     }, []);
 
-    const { formState, control, handleSubmit, setValue } = hookForm;
+    const { formState, control, handleSubmit, setValue, watch } = hookForm;
     const { errors } = formState;
+    const isExternal = watch("isExternal");
 
     if (isLoading || loadingLang || loadingCategory) {
         return <AppLoader />;
@@ -537,21 +538,27 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         xl={12}
                                     />
                                 </Col>
-                                <AppFormInput
-                                    name={"externalUrl"}
-                                    label={t(
-                                        "admin.exhibitor.form:label.externalUrl"
-                                    )}
-                                    {...validation(
-                                        "externalUrl",
-                                        formState,
-                                        isEditMode
-                                    )}
-                                    errorMessage={errors.externalUrl?.message}
-                                    defaultValue={data.externalUrl}
-                                    control={control}
-                                    lg={6}
-                                />
+                                {isExternal && (
+                                    <AppFormInput
+                                        name={"externalUrl"}
+                                        label={t(
+                                            "admin.exhibitor.form:label.externalUrl"
+                                        )}
+                                        {...validation(
+                                            "externalUrl",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={
+                                            errors.externalUrl?.message
+                                        }
+                                        defaultValue={data.externalUrl}
+                                        control={control}
+                                        lg={6}
+                                        xl={6}
+                                        md={6}
+                                    />
+                                )}
                             </Row>
                             <Row>
                                 <AppFormInput
@@ -568,6 +575,9 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                     defaultValue={data.website}
                                     control={control}
                                     lg={6}
+                                    xl={6}
+                                    md={6}
+                                    required={false}
                                 />
                                 <AppFormInput
                                     name={"phone"}
@@ -583,6 +593,9 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                     defaultValue={data.phone}
                                     control={control}
                                     lg={6}
+                                    xl={6}
+                                    md={6}
+                                    required={false}
                                 />
                             </Row>
                             <Row>
@@ -600,6 +613,9 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                     defaultValue={data.email}
                                     control={control}
                                     lg={6}
+                                    xl={6}
+                                    md={6}
+                                    required={false}
                                 />
                                 <AppFormInput
                                     name={"address"}
@@ -615,6 +631,9 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                     defaultValue={data.address}
                                     control={control}
                                     lg={6}
+                                    xl={6}
+                                    md={6}
+                                    required={false}
                                 />
                             </Row>
                             <Row>
@@ -632,6 +651,9 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                     defaultValue={data.facebook}
                                     control={control}
                                     lg={6}
+                                    xl={6}
+                                    md={6}
+                                    required={false}
                                 />
                                 <AppFormInput
                                     name={"linkedin"}
@@ -647,6 +669,9 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                     defaultValue={data.linkedin}
                                     control={control}
                                     lg={6}
+                                    xl={6}
+                                    md={6}
+                                    required={false}
                                 />
                             </Row>
                             <Row>
