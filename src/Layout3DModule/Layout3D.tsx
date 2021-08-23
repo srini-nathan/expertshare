@@ -35,7 +35,7 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
     const [selectedLocale] = useState<string>("");
     const { emitPageChange } = useUserSocketEvents();
 
-    const [cameraLock] = useState(false);
+    const [cameraLock, setCameraLock] = useState(false);
 
     const [selectedPanel, setSelectedPanel] = useState<PanelInterfaceProps>(
         null!
@@ -69,22 +69,21 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
     };
 
     useEffect(() => {
-        // console.log(
-        //     "make request with: clientId: ",
-        //     clientId,
-        //     "\n containerId: ",
-        //     containerId,
-        //     selectedLocale
-        // );
         Layout3DApi.exportLayout3DData(
             containerId as number,
             selectedLocale
         ).then((response) => {
             console.log("response: ", response);
+            let startAtRoom = 0;
             // response.forEach(room:any => {
             //     if (room.isE)
             // });
-            setMainRoom(0);
+            response.forEach((room: any, i: number) => {
+                if (room.isEntryRoom) startAtRoom = i;
+                // console.log("room: ", room);
+            });
+            setCameraLock(!response[startAtRoom].isRotateEnable);
+            setMainRoom(startAtRoom);
             setRoomsData(response);
         });
     }, []);
@@ -100,7 +99,7 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <>
             <div className={"canvas-3d"}>
-                {roomsData && (
+                {roomsData && mainRoom && (
                     <SceneCanvas
                         editMode={editMode}
                         cameraLock={cameraLock}
