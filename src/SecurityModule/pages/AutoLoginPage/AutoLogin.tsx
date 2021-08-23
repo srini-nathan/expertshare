@@ -4,10 +4,10 @@ import { AuthContext, autoLogin } from "../../contexts/AuthContext";
 import { AppLoader } from "../../../AppModule/components";
 
 export const AutoLogin: FC<RouteComponentProps> = (): JSX.Element => {
-    const { token } = useParams();
+    const { token, skip } = useParams();
     const { dispatch, state } = React.useContext(AuthContext);
     if (token && token.length > 0) {
-        autoLogin(token, dispatch).then();
+        autoLogin(token, dispatch, skip).then();
     }
 
     if (state.isAuthenticated === null) {

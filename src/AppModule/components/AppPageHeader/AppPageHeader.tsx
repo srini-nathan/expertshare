@@ -1,8 +1,9 @@
 import React, { FC } from "react";
 import { Col, Row } from "react-bootstrap";
 import { Canceler } from "axios";
-import "./assets/scss/style.scss";
+import { useTranslation } from "react-i18next";
 import { AppListPageToolbar } from "../AppListPageToolbar";
+import "./assets/scss/style.scss";
 
 export interface AppPageHeaderProps {
     title: string;
@@ -26,17 +27,17 @@ export const AppPageHeader: FC<AppPageHeaderProps> = ({
 }): JSX.Element => {
     let mdSize = 6;
     if (customToolbar) {
-        mdSize = 3;
+        mdSize = 12;
     } else if (showToolbar === false) {
         mdSize = 12;
     }
     return (
         <Row className="pt-sm-3">
-            <Col md={mdSize} xs={12} className="page-title">
+            <Col xs={12} md={mdSize} lg={"auto"} className="page-title">
                 <h1>{title}</h1>
             </Col>
             {showToolbar && (
-                <Col md={6} className="d-flex justify-content-end">
+                <Col md={6} className="d-flex justify-content-end mr-0 ml-auto">
                     <AppListPageToolbar
                         createLabel={createLabel}
                         createLink={createLink}
@@ -47,13 +48,22 @@ export const AppPageHeader: FC<AppPageHeaderProps> = ({
             )}
             {customToolbar && (
                 <Col
-                    className="d-flex justify-content-start justify-content-sm-end"
-                    md={9}
+                    className="d-flex justify-content-start justify-content-sm-end mr-0 ml-auto"
                     xs={12}
+                    md={12}
+                    lg={"auto"}
                 >
                     {children}
                 </Col>
             )}
         </Row>
     );
+};
+
+export const AppPageHeaderTranslatable: FC<AppPageHeaderProps> = ({
+    title = "",
+    ...rest
+}): JSX.Element => {
+    const { t } = useTranslation();
+    return <AppPageHeader {...rest} title={t(title)}></AppPageHeader>;
 };

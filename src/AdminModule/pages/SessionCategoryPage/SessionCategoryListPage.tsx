@@ -1,5 +1,5 @@
 import React, { FC, Fragment, useState, useRef } from "react";
-import { RouteComponentProps } from "@reach/router";
+import { RouteComponentProps, Link } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { isString as _isString } from "lodash";
@@ -100,6 +100,35 @@ export const SessionCategoryListPage: FC<RouteComponentProps> = () => {
 
     return (
         <Fragment>
+            <Row>
+                <Col className={"d-flex justify-content-between mb-5"}>
+                    <div className="d-inline-block categories-nav--tabs">
+                        <nav>
+                            <div
+                                className="nav nav-tabs"
+                                id="nav-tab"
+                                role="tablist"
+                            >
+                                <a
+                                    className="nav-link active nav-item"
+                                    id="myGrid-tab"
+                                >
+                                    {t("admin.sessionCategory.list:tab.title")}
+                                </a>
+                                <Link
+                                    className="nav-link nav-item"
+                                    id="myGrid2-tab"
+                                    to={`/admin/exhibitor-categories`}
+                                >
+                                    {t(
+                                        "admin.exhibitorCategory.list:tab.title"
+                                    )}
+                                </Link>
+                            </div>
+                        </nav>
+                    </div>
+                </Col>
+            </Row>
             <AppPageHeader
                 title={t("admin.sessionCategory.list:header.title")}
                 createLink={"/admin/session-categories/new"}

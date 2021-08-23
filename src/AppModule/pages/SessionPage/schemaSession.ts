@@ -30,7 +30,7 @@ const schema = yup.object().shape({
         then: yup.string().required(),
     }),
 
-    zoomurl: yup
+    zoomUrl: yup
         .string()
         .when("streamType", {
             is: "ZOOM",

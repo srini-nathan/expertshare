@@ -22,11 +22,13 @@ export const appGridColDef = ({
         field: "id",
         sortable: false,
         maxWidth: 160,
-        cellClass: "text-right",
+        cellClass: "text-right justify-content-end",
         headerClass: "action-header",
         cellRenderer: "appGridActionRenderer",
         cellRendererParams: {
             onPressDelete,
         },
+        lockPinned: true,
+        pinned: "right",
     },
 ];

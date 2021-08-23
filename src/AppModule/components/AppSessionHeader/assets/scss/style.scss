@@ -200,38 +200,37 @@
                             display: block;
                             width: 24px;
                             height: 24px;
-
                             &.en {
-                                background: url(../../../AppFormTranslatable/assets/images/en_flag.png) no-repeat;
+                                background: url(../../../AppFormTranslatable/assets/images/en_flag.svg) no-repeat;
                                 background-position: center;
                                 background-size: contain;
                             }
 
                             &.it {
-                                background: url(../../../AppFormTranslatable/assets/images/it_flag.jpg) no-repeat;
+                                background: url(../../../AppFormTranslatable/assets/images/it_flag.svg) no-repeat;
                                 background-position: center;
                                 background-size: contain;
                             }
 
                             &.de {
-                                background: url(../../../AppFormTranslatable/assets/images/de_flag.png) no-repeat;
+                                background: url(../../../AppFormTranslatable/assets/images/de_flag.svg) no-repeat;
                                 background-position: center;
                                 background-size: contain;
                             }
 
                             &.pt {
-                                background: url(../../../AppFormTranslatable/assets/images/pt_flag.png) no-repeat;
+                                background: url(../../../AppFormTranslatable/assets/images/pt_flag.svg) no-repeat;
                                 background-position: center;
                                 background-size: contain;
                             }
 
                             &.fr {
-                                background: url(../../../AppFormTranslatable/assets/images/fr_flag.png) no-repeat;
+                                background: url(../../../AppFormTranslatable/assets/images/fr_flag.svg) no-repeat;
                                 background-position: center;
                                 background-size: contain;
                             }
                             &.zh {
-                                background: url(../../../AppFormTranslatable/assets/images/chi_flag.png) no-repeat;
+                                background: url(../../../AppFormTranslatable/assets/images/zh_flag.svg) no-repeat;
                                 background-position: center;
                                 background-size: contain;
                             }
@@ -277,38 +276,39 @@
                                 margin-right: 10px;
                                 background-position: center;
                                 background-size: 24px;
+                                image-rendering: -webkit-optimize-contrast;
 
                                 &.en {
-                                    background: url(../../../AppFormTranslatable/assets/images/en_flag.png) no-repeat;
+                                    background: url(../../../AppFormTranslatable/assets/images/en_flag.svg) no-repeat;
                                     background-position: center;
                                     background-size: 24px;
                                 }
 
                                 &.it {
-                                    background: url(../../../AppFormTranslatable/assets/images/it_flag.jpg) no-repeat;
+                                    background: url(../../../AppFormTranslatable/assets/images/it_flag.svg) no-repeat;
                                     background-position: center;
                                     background-size: 24px;
                                 }
 
                                 &.de {
-                                    background: url(../../../AppFormTranslatable/assets/images/de_flag.png) no-repeat;
+                                    background: url(../../../AppFormTranslatable/assets/images/de_flag.svg) no-repeat;
                                     background-position: center;
                                     background-size: 24px;
                                 }
 
                                 &.pt {
-                                    background: url(../../../AppFormTranslatable/assets/images/pt_flag.png) no-repeat;
+                                    background: url(../../../AppFormTranslatable/assets/images/pt_flag.svg) no-repeat;
                                     background-position: center;
                                     background-size: 24px;
                                 }
 
                                 &.fr {
-                                    background: url(../../../AppFormTranslatable/assets/images/fr_flag.png) no-repeat;
+                                    background: url(../../../AppFormTranslatable/assets/images/fr_flag.svg) no-repeat;
                                     background-position: center;
                                     background-size: 24px;
                                 }
                                 &.zh {
-                                    background: url(../../../AppFormTranslatable/assets/images/chi_flag.png) no-repeat;
+                                    background: url(../../../AppFormTranslatable/assets/images/zh_flag.svg) no-repeat;
                                     background-position: center;
                                     background-size: 24px;
                                 }

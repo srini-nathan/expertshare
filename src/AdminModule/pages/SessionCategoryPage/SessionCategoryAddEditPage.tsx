@@ -12,9 +12,9 @@ import {
     AppLoader,
     AppFormActions,
     AppCard,
-    AppSessionCategoryTranslations,
+    AppCategoryTranslations,
     AppFormInputColorPicker,
-    SessionCategoryTranslationsType,
+    CategoryTranslationsType,
 } from "../../../AppModule/components";
 import { SessionCategory } from "../../models";
 import { SessionCategoryApi, ContainerApi } from "../../apis";
@@ -44,7 +44,7 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
     );
     const { Languages } = useLanguages();
     const [translations, setTranslations] = useState<
-        SessionCategoryTranslationsType[]
+        CategoryTranslationsType[]
     >([]);
     const { t } = useTranslation();
     const {
@@ -105,7 +105,7 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
     });
 
     const getTranslation = () => {
-        let defaultValues: SessionCategoryTranslationsType = {
+        let defaultValues: CategoryTranslationsType = {
             locale: defaultLanguage,
             name: "",
         };
@@ -172,7 +172,7 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
                 } else if (response !== null) {
                     setData(response);
                     setValue("color", response.color);
-                    const items: SessionCategoryTranslationsType[] = Object.keys(
+                    const items: CategoryTranslationsType[] = Object.keys(
                         response.translations
                     ).map((key) => {
                         return {
@@ -193,23 +193,21 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
             }
         });
         if (Languages().length !== translations.length) {
-            const items: SessionCategoryTranslationsType[] = Languages().map(
-                (e) => {
-                    let item = {
-                        locale: e.locale,
-                        name: "",
-                    };
-                    translations.forEach((k) => {
-                        if (k.locale === e.locale) {
-                            item = {
-                                locale: k.locale,
-                                name: k.name,
-                            };
-                        }
-                    });
-                    return item;
-                }
-            );
+            const items: CategoryTranslationsType[] = Languages().map((e) => {
+                let item = {
+                    locale: e.locale,
+                    name: "",
+                };
+                translations.forEach((k) => {
+                    if (k.locale === e.locale) {
+                        item = {
+                            locale: k.locale,
+                            name: k.name,
+                        };
+                    }
+                });
+                return item;
+            });
             setTranslations(items);
         }
         setLoading(false);
@@ -251,7 +249,7 @@ export const SessionCategoryAddEditPage: FC<RouteComponentProps> = ({
                     >
                         <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                             <AppCard>
-                                <AppSessionCategoryTranslations
+                                <AppCategoryTranslations
                                     languages={Languages()}
                                     defaultLanguage={defaultLanguage}
                                     translations={translations}

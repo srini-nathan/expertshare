@@ -48,5 +48,7 @@ export const appGridColDef = ({
             onPressExport,
             onPressImport,
         },
+        lockPinned: true,
+        pinned: "right",
     },
 ];

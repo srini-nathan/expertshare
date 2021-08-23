@@ -948,7 +948,11 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                         formState,
                                         isEditMode
                                     )}
-                                    defaultChecked={data?.isAllowCommunication}
+                                    defaultChecked={
+                                        isEditMode
+                                            ? data?.isAllowCommunication
+                                            : true
+                                    }
                                     errorMessage={
                                         errors.isAllowCommunication?.message
                                     }

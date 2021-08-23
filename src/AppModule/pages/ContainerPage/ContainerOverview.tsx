@@ -67,7 +67,7 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
         showLoader(t("container:label.redirecting"));
         const { domain, id } = container;
         // @TODO: do something with hardcoded paths
-        const path = `${window.location.protocol}//${domain}/auth/auto-login/{token}`;
+        const path = `${window.location.protocol}//${domain}/auth/auto-login/{token}/1`;
         if (id) {
             // @TODO: remove any type from here
             AuthApi.checkAndGetToken<GetToken | any>(id)

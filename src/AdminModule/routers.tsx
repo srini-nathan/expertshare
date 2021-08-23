@@ -18,6 +18,8 @@ import {
     UserAddEditPage,
     SessionCategoryListPage,
     SessionCategoryAddEditPage,
+    ExhibitorCategoryListPage,
+    ExhibitorCategoryAddEditPage,
     AFrameRoomGrid,
     AFrameRoomAddEdit,
     AFramePanelGrid,
@@ -30,6 +32,7 @@ import {
     LiveVoteDetailResultPage,
     LiveVoteOverviewResultPage,
     LiveVoteListPage,
+    ExhibitorAddEditPage,
 } from "./pages";
 import { Layout3D } from "../Layout3DModule";
 import { ModuleRouter } from "../AppModule/models";
@@ -84,6 +87,13 @@ export const routers: ModuleRouter[] = [
                     <SessionCategoryAddEditPage
                         path={"session-categories/new"}
                     />
+                    <ExhibitorCategoryListPage path={"exhibitor-categories"} />
+                    <ExhibitorCategoryAddEditPage
+                        path={"exhibitor-categories/:id"}
+                    />
+                    <ExhibitorCategoryAddEditPage
+                        path={"exhibitor-categories/new"}
+                    />
                     <AFrameRoomGrid path={"rooms/:view"} />
                     <AFrameRoomAddEdit path={"room/new"} />
                     <AFrameRoomAddEdit path={"room/:id"} />
@@ -127,11 +137,14 @@ export const routers: ModuleRouter[] = [
                             "live-votes-result/:conferenceId/:sessionId/:questionId/overview/:viewMode"
                         }
                     />
+                    <ExhibitorAddEditPage path={"exhibitors/new"} />
                     <LiveVoteOverviewResultPage
                         path={
                             "live-votes-result/:questionId/overview/:viewMode"
                         }
                     />
+                    <ExhibitorAddEditPage path={"exhibitors/new"} />
+                    <ExhibitorAddEditPage path={"exhibitors/:id"} />
                 </Router>
             );
         },

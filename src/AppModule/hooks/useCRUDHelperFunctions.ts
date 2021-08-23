@@ -6,10 +6,11 @@ import {
     IServerSideGetRowsParams,
 } from "ag-grid-community";
 import { Canceler } from "axios";
-import { EntityAPI } from "../apis";
-import { errorToast, successToast } from "../utils";
-import { ListResponse, SimpleObject } from "../models";
-import { appGridConfig } from "../config";
+import { EntityAPI } from "../apis/EntityAPI";
+import { errorToast, successToast } from "../utils/notification";
+import { SimpleObject } from "../models/SimpleObject";
+import { ListResponse } from "../models/apis/ListResponse";
+import { pageSize } from "../config/app-grid";
 import {
     buildFilterParams,
     buildSortParams,
@@ -124,7 +125,7 @@ export function useCRUDHelperFunctions(
             getRows(params: IServerSideGetRowsParams) {
                 const { request, api } = params;
                 const { endRow } = request;
-                const pageNo = endRow / appGridConfig.pageSize;
+                const pageNo = endRow / pageSize;
                 api?.hideOverlay();
                 entityManager
                     .find<T>(

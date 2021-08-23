@@ -1,6 +1,10 @@
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 import { AppCellActionParams } from "../../models";
 
+let getWidth = "right";
+if (window.innerWidth < 760) {
+    getWidth = "";
+}
 export const appGridColDef = ({
     onPressDelete,
     onPressClone,
@@ -38,8 +42,8 @@ export const appGridColDef = ({
                 headerName: "event.list:column.actions",
                 field: "id",
                 sortable: false,
-                flex: 1,
-                minWidth: 250,
+                flex: 0.2,
+                minWidth: 200,
                 cellClass: "action-cell text-right",
                 headerClass: "action-header",
                 cellRenderer: "appGridActionRenderer",
@@ -48,6 +52,8 @@ export const appGridColDef = ({
                     isGrantedControl,
                     onPressClone,
                 },
+                lockPinned: true,
+                pinned: getWidth,
             },
         ];
 

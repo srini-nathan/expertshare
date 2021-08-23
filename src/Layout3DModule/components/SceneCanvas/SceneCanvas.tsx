@@ -23,6 +23,7 @@ const { AFramePanel } = CONSTANTS;
 
 interface SceneProps {
     editMode: boolean;
+    cameraLock: boolean;
     roomsData: any[];
     currentMainRoom: number;
     paths: { ROOM_ASSETS_PATH: string; PANEL_ASSETS_PATH: string };
@@ -40,6 +41,7 @@ interface ToFromProps {
 
 export const SceneCanvas = ({
     editMode,
+    cameraLock,
     onItemSelected,
     roomsData,
     currentMainRoom,
@@ -69,6 +71,7 @@ export const SceneCanvas = ({
 
     const [currentRoom, setCurrentRoom] = useState<number>(-1);
     const [currentRoomActive, setCurrentRoomActive] = useState<number>(null!);
+    const [isCameraLocked, setIsCameraLocked] = useState<boolean>(cameraLock);
 
     const selected = useRef<THREE.Object3D>(null!);
     const { buildPageUrl } = use3DHelper();
@@ -117,6 +120,13 @@ export const SceneCanvas = ({
     };
 
     const changeRoomNow = (n: number) => {
+        let room: any;
+        for (let i = 0; i < rooms.length; i++)
+            if (rooms[i].id === n) room = rooms[i];
+
+        if (room.isRotateEnable !== null)
+            setIsCameraLocked(!room.isRotateEnable);
+        else setIsCameraLocked(true);
         setCurrentRoomActive(n);
     };
 
@@ -191,6 +201,7 @@ export const SceneCanvas = ({
                         setSrcUrl={setUrlContent}
                         setInitialCameraRotation={setCameraRotation}
                         onPageChange={onPageChange}
+                        firstRoom={currentMainRoom}
                     />
 
                     {editMode && (
@@ -212,6 +223,7 @@ export const SceneCanvas = ({
                         onOrbitDrag={onOrbitDrag}
                         onClickObject={onClickObject}
                         changeRoomNow={changeRoomNow}
+                        isCameraLocked={isCameraLocked}
                     />
                     {editMode && selectedMesh && (
                         <Transform

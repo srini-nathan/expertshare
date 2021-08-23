@@ -1,6 +1,10 @@
 import { ColDef } from "ag-grid-community/dist/lib/entities/colDef";
 import { AppCellActionWithCustom } from "./app-actions";
 
+let getWidth = "right";
+if (window.innerWidth < 760) {
+    getWidth = "";
+}
 export const appGridColDef = ({
     onPressBookSession,
     onPressGetInContact,
@@ -49,5 +53,7 @@ export const appGridColDef = ({
             onPressGetInContact,
             onPressAddNewUser,
         },
+        lockPinned: true,
+        pinned: getWidth,
     },
 ];

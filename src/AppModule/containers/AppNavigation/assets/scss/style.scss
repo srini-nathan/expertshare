@@ -158,31 +158,31 @@
 
     .languages {
         &.en {
-            background: url("../images/en_flag.png") no-repeat center;
+            background: url("../images/en_flag.svg") no-repeat center;
             background-size: 24px;
         }
 
         &.pt {
-            background: url("../images/pt_flag.png") no-repeat center;
+            background: url("../images/pt_flag.svg") no-repeat center;
             background-size: 24px;
         }
 
         &.de {
-            background: url("../images/de_flag.png") no-repeat center;
+            background: url("../images/de_flag.svg") no-repeat center;
             background-size: 24px;
         }
 
         &.fr {
-            background: url("../images/fr_flag.png") no-repeat center;
+            background: url("../images/fr_flag.svg") no-repeat center;
             background-size: 24px;
         }
 
         &.it {
-            background: url("../images/italian.jpg") no-repeat center;
+            background: url("../images/it_flag.svg") no-repeat center;
             background-size: 24px;
         }
         &.zh {
-            background: url("../images/chi_flag.png") no-repeat center;
+            background: url("../images/zh_flag.svg") no-repeat center;
             background-size: 24px;
         }
     }
@@ -438,7 +438,7 @@
                         font-weight: 400;
 
                         span {
-                            margin: 0 0 0 60px;
+                            margin: 0 0 0 50px;
                         }
                     }
                 }
@@ -477,7 +477,7 @@
                     span {
                         max-width: 70%;
                         max-height: 40px;
-                        margin: 2px 0 auto 10px;
+                        margin: 2px 0 auto 8px;
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;
@@ -486,7 +486,7 @@
                             max-width: 60%;
                         }
                         @include media("xl") {
-                            margin: auto 0 auto 8px;
+                            margin: auto 0 auto 5px;
                         }
                     }
                 }

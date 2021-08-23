@@ -248,7 +248,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
     const getSize = (size: string) => {
         switch (size) {
             case "SMALL":
-                return "col-lg-3 col-md-6 col-sm-12 ";
+                return "col-xl-3 col-lg-4 col-md-6 col-sm-12 ";
             case "MEDIUM":
                 return "col-lg-4 col-md-6 col-sm-12";
             case "LARGE":
@@ -287,9 +287,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                         {e.map((item: Session) => {
                             return (
                                 <SwiperSlide
-                                    className={`${getSize(
-                                        item.cardSize
-                                    )} p-0 mx-3`}
+                                    className={`${getSize(item.cardSize)} px-3`}
                                 >
                                     <AppSessionItem
                                         conference={id}

@@ -33,6 +33,7 @@ interface RoomBuilderParams {
     ) => void;
     setInitialCameraRotation: (arg0: Euler) => void;
     onPageChange: (pageUrl: string) => void;
+    firstRoom: number;
 }
 
 export const RoomBuilder = ({
@@ -47,8 +48,11 @@ export const RoomBuilder = ({
     onChangeRoom,
     onPageChange,
     setInitialCameraRotation,
+    firstRoom,
 }: RoomBuilderParams): JSX.Element => {
-    const [currentRoomId, setCurrentRoomId] = useState<number>(rooms[0].id);
+    const [currentRoomId, setCurrentRoomId] = useState<number>(
+        rooms[firstRoom].id
+    );
 
     const findPanelPosition = (
         currentRoom: number,

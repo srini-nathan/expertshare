@@ -103,7 +103,9 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
         <Col className={`p-0 ${getSize()[0]}`}>
             <Col
                 sm={12}
-                className={`event-detail-admin--workshop--container--content--item p-0`}
+                className={`event-detail-admin--workshop--container--content--item p-0 ${
+                    getSize()[1]
+                }`}
             >
                 <AppShowUserListPopup
                     show={showMore}
@@ -112,7 +114,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                         [...session.speakers, ...session.moderators] as User[]
                     }
                 />
-                <AppCard className={`inner-container p-0  ${getSize()[1]}`}>
+                <AppCard className={`inner-container p-0`}>
                     <Row className="m-0 p-0">
                         <Col
                             sm={12}
