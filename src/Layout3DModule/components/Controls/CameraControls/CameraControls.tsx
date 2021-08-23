@@ -84,6 +84,7 @@ interface OrbitControlsProps
     initialCameraRotation: Euler;
     initialCameraPosition: any;
     rooms: RoomProps[];
+    isCameraLocked: boolean;
 }
 
 export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
@@ -106,6 +107,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
         currentRoom,
         changeRoomNow,
         rooms,
+        isCameraLocked,
     } = props;
 
     const [startPlayingVideo, setStartPlayingVideo] = useState<boolean>(false);
@@ -120,6 +122,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
     const orbitCount = useRef<number>(0);
 
     const [zoomIn, setZoomIn] = useState<boolean>(false);
+    const [camLocked, setCamLocked] = useState<boolean>(isCameraLocked);
 
     const afterVideoReference = useRef<{
         to: Euler;
@@ -250,7 +253,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                     0.001
                 );
                 orbit.current.update();
-                orbit.current.enabled = true;
+                orbit.current.enabled = camLocked;
             }
         );
     };
@@ -266,6 +269,11 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
 
         if (orbit.current) orbit.current.update();
     }, [perspectiveOrbit.current]);
+
+    useEffect(() => {
+        // console.log("camera is now: ", isCameraLocked);
+        setCamLocked(isCameraLocked);
+    }, [isCameraLocked]);
 
     useEffect(() => {
         if (perspectiveFirstPerson.current) {
@@ -498,7 +506,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                         0.001
                     );
                     orbit.current.update();
-                    orbit.current.enabled = true;
+                    orbit.current.enabled = camLocked;
                     // orbit.current.update();
                 }, ROOM_FADE_DURATION + PANEL_ANIMATION_DURATION);
             }
@@ -610,7 +618,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                     <orbitControls
                         args={[perspectiveOrbit.current as any, domElement]}
                         ref={orbit}
-                        enabled={orbitEnabled}
+                        enabled={orbitEnabled && !camLocked}
                     />
                     <PerspectiveCamera
                         args={[80, 1, 1, 10000]}
