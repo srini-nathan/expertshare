@@ -17,6 +17,7 @@ const {
     api_sessions_put_item: API_PUT_ITEM,
     api_sessions_patch_item: API_PATCH_ITEM,
     api_sessions_post_collection: API_POST_COLLECTION,
+    api_sessions_get_collection: API_GET_COLLECTION,
     api_sessions_get_agenda_collection: API_GET_AGENDA,
     api_sessions_change_card_size_collection: API_CHANGE_CARD_SIZE,
     api_sessions_get_item_collection: GET_ITEM,
@@ -24,6 +25,8 @@ const {
 
 export abstract class SessionApi extends EntityAPI {
     protected static POST_COLLECTION = API_POST_COLLECTION;
+
+    protected static GET_COLLECTION = API_GET_COLLECTION;
 
     protected static GET_ITEM = API_GET_ITEM;
 

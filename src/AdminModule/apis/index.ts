@@ -25,3 +25,4 @@ export * from "./InfoPageApi";
 export * from "./LiveVoteQuestionApi";
 export * from "./LiveVoteOptionApi";
 export * from "./LiveVoteResultApi";
+export * from "./ExhibitorApi";

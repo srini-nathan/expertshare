@@ -18,3 +18,4 @@ export * from "./AFramePanel";
 export * from "./InfoPage";
 export * from "./NavigationPage";
 export * from "./LiveVotePages";
+export * from "./ExhibitorPages";
