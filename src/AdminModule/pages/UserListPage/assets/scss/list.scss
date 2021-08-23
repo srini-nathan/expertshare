@@ -65,6 +65,14 @@
     .ag-react-container {
         display: flex;
     }
+    .checkbox-header {
+        .ag-header-cell-resize {
+            display: none;
+        }
+        &:hover {
+            background-color: var(--table-header-background-color) !important;
+        }
+    }
 }
 
 .role-container {
