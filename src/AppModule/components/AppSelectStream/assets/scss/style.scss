@@ -10,6 +10,19 @@
         }
     }
 
+    .tabs{
+        >div {
+            height: 52px;
+            padding: 10px;
+            background-color: var(--tab-background-color) !important;
+
+            &.active {
+                border: 1px solid var(--primary) !important;
+                background-color: var(--tab-background-color--active) !important;
+            }
+        }
+    }
+
     .stream-items {
         display: block;
         width: 64px;

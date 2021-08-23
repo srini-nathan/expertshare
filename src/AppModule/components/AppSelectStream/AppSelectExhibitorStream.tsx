@@ -1,9 +1,8 @@
 import React, { FC } from "react";
-import { Row, Col, Tab } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
 import { Control, UseFormSetValue } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Exhibitor } from "../../../AdminModule/models";
-import { AppCustomTab } from "../AppCustomTab";
 import { AppFormInput } from "../AppFormInput";
 import { AppFormLabel } from "../AppFormLabel";
 import { validation } from "../../utils";
@@ -33,28 +32,12 @@ export const AppSelectExhibitorStream: FC<AppSelectStreamProps> = ({
 }) => {
     const { t } = useTranslation();
     const videoBasePath = useBuildAssetPath(ExhibitorVideoFileInfo);
-    const [activeKey, setActiveKey] = React.useState<string>(
+    const [type, setType] = React.useState<string>(
         data.streamType === "FILE" ? "FILE" : data.streamType
     );
-
-    const renderInput = (id: string) => {
-        return (
-            <AppFormInput
-                id={id}
-                value={data.streamUrl}
-                className="pl-0"
-                md={12}
-                name={"streamUrl"}
-                lg={12}
-                xl={12}
-                required={true}
-                label={`${t("admin.exhibitor.form:label.streamUrl")}`}
-                {...validation("streamUrl", formState, isEditMode)}
-                errorMessage={errors.streamUrl?.message}
-                control={control}
-            />
-        );
-    };
+    const [activeKey, setActiveKey] = React.useState<string>(
+        data.streamType === "FILE" ? "FILE" : "STREAM"
+    );
 
     return (
         <Row className="streams-container">
@@ -65,90 +48,127 @@ export const AppSelectExhibitorStream: FC<AppSelectStreamProps> = ({
                 />
             </Col>
             <Col md={12} className="d-flex mb-4">
-                <Tab.Container
-                    onSelect={(e: string | null) => {
-                        if (e) {
-                            if (e === "FILE") {
-                                setActiveKey("FILE");
-                                setValue("streamType", e);
-                            } else {
-                                setActiveKey(e);
-                                setValue("streamType", e);
-                            }
-                        }
-                    }}
-                    activeKey={activeKey}
-                >
+                <div>
                     <Row className="m-0 w-100 ">
-                        <Row className="m-0">
-                            <AppCustomTab
-                                className="mr-3 mb-3"
-                                eventKey="YOUTUBE"
+                        <Row className="m-0 tabs">
+                            <div
+                                className={`mr-3 mb-3 ${
+                                    type === "YOUTUBE" ? "active" : ""
+                                }`}
+                                onClick={() => {
+                                    setActiveKey("STREAM");
+                                    setType("YOUTUBE");
+                                    setValue("streamType", "YOUTUBE");
+                                }}
                             >
                                 <span className={"stream-items youtube"}></span>
-                            </AppCustomTab>
-                            <AppCustomTab
-                                className="mr-3 mb-3"
-                                eventKey="VIMEO"
+                            </div>
+                            <div
+                                className={`mr-3 mb-3 ${
+                                    type === "VIMEO" ? "active" : ""
+                                }`}
+                                onClick={() => {
+                                    setActiveKey("STREAM");
+                                    setType("VIMEO");
+                                    setValue("streamType", "VIMEO");
+                                }}
                             >
                                 <span className={"stream-items vimeo"}></span>
-                            </AppCustomTab>
-                            <AppCustomTab
-                                className="mr-3 mb-3"
-                                eventKey="SWISSCOM"
+                            </div>
+                            <div
+                                className={`mr-3 mb-3 ${
+                                    type === "SWISSCOM" ? "active" : ""
+                                }`}
+                                onClick={() => {
+                                    setActiveKey("STREAM");
+                                    setType("SWISSCOM");
+                                    setValue("streamType", "SWISSCOM");
+                                }}
                             >
                                 <span
                                     className={"stream-items swisscom"}
                                 ></span>
-                            </AppCustomTab>
-                            <AppCustomTab
-                                className="mr-3 mb-3"
-                                eventKey="DACAST"
+                            </div>
+                            <div
+                                className={`mr-3 mb-3 ${
+                                    type === "DACAST" ? "active" : ""
+                                }`}
+                                onClick={() => {
+                                    setActiveKey("STREAM");
+                                    setType("DACAST");
+                                    setValue("streamType", "DACAST");
+                                }}
                             >
                                 <span className={"stream-items dacast"}></span>
-                            </AppCustomTab>
-                            <AppCustomTab className="mr-3 mb-3" eventKey="FILE">
+                            </div>
+                            <div
+                                className={`mr-3 mb-3 ${
+                                    type === "FILE" ? "active" : ""
+                                }`}
+                                onClick={() => {
+                                    setActiveKey("FILE");
+                                    setType("FILE");
+                                    setValue("streamType", "FILE");
+                                }}
+                            >
                                 <span className={"stream-items"}>VIDEO</span>
-                            </AppCustomTab>
+                            </div>
                         </Row>
                         <Col className="p-0" md={12}>
-                            <Tab.Pane className="mt-4" eventKey="YOUTUBE">
-                                {renderInput("YOUTUBE")}
-                            </Tab.Pane>
-                            <Tab.Pane className="mt-4" eventKey="VIMEO">
-                                {renderInput("VIMEO")}
-                            </Tab.Pane>
-                            <Tab.Pane className="mt-4" eventKey="SWISSCOM">
-                                {renderInput("SWISSCOM")}
-                            </Tab.Pane>
-                            <Tab.Pane className="mt-4" eventKey="DACAST">
-                                {renderInput("DACAST")}
-                            </Tab.Pane>
-                            <Tab.Pane className="mt-4" eventKey="FILE">
-                                <AppFormFile
-                                    name={"streamUrl"}
-                                    onFileSelect={(files: File[]) => {
-                                        if (onFileSelect)
-                                            onFileSelect(files[0]);
-                                    }}
-                                    control={control}
-                                    className={"p-0 mb-4"}
-                                    hideDownload={true}
-                                    md={12}
-                                    xl={12}
-                                    lg={12}
-                                />
-                                {data.streamUrl ? (
-                                    <video controls={true} className={"w-100"}>
-                                        <source
-                                            src={`${videoBasePath}/${data.streamUrl}`}
-                                        />
-                                    </video>
-                                ) : null}
-                            </Tab.Pane>
+                            {activeKey === "STREAM" && (
+                                <div className="mt-4">
+                                    <AppFormInput
+                                        id={"streamUrl"}
+                                        defaultValue={data.streamUrl}
+                                        className="pl-0"
+                                        md={12}
+                                        name={"streamUrl"}
+                                        lg={12}
+                                        xl={12}
+                                        required={true}
+                                        label={`${t(
+                                            "admin.exhibitor.form:label.streamUrl"
+                                        )}`}
+                                        {...validation(
+                                            "streamUrl",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={errors.streamUrl?.message}
+                                        control={control}
+                                    />
+                                </div>
+                            )}
+                            {activeKey === "FILE" && (
+                                <div className="mt-4">
+                                    <AppFormFile
+                                        name={"streamFileInput"}
+                                        onFileSelect={(files: File[]) => {
+                                            if (onFileSelect)
+                                                onFileSelect(files[0]);
+                                        }}
+                                        control={control}
+                                        className={"p-0 mb-4"}
+                                        hideDownload={true}
+                                        md={12}
+                                        xl={12}
+                                        lg={12}
+                                    />
+                                    {data.streamUrl ? (
+                                        <video
+                                            controls={true}
+                                            className={"w-100"}
+                                        >
+                                            <source
+                                                src={`${videoBasePath}/${data.streamUrl}`}
+                                            />
+                                        </video>
+                                    ) : null}
+                                </div>
+                            )}
                         </Col>
                     </Row>
-                </Tab.Container>
+                </div>
             </Col>
         </Row>
     );

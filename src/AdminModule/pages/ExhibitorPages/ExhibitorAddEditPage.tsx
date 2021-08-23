@@ -3,13 +3,13 @@ import { RouteComponentProps } from "@reach/router";
 import { Col, Form, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { find, first } from "lodash";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { DevTool } from "@hookform/devtools";
 import {
     Exhibitor,
     ExhibitorCategory,
     ExhibitorTranslation,
     User,
+    Session,
+    Conference,
 } from "../../models";
 import {
     useAuthState,
@@ -28,6 +28,8 @@ import {
     AppFormSelect,
     AppSessionUsers,
     AppFormActions,
+    AppSessionPicker,
+    AppEventPicker,
 } from "../../../AppModule/components";
 import { AppLanguageSwitcher } from "../../../AppModule/containers";
 import {
@@ -36,9 +38,16 @@ import {
     EXHIBITOR_LOGO_POSTER_TYPE,
     EXHIBITOR_POSTER_TYPE,
     EXHIBITOR_VIDEO_TYPE,
+    ROLES,
 } from "../../../config";
 import { ExhibitorTranslatable } from "./ExhibitorTranslatable";
-import { ExhibitorApi, ExhibitorCategoryApi, UserApi } from "../../apis";
+import {
+    ExhibitorApi,
+    ExhibitorCategoryApi,
+    UserApi,
+    SessionApi,
+    ConferenceApi,
+} from "../../apis";
 import {
     errorToast,
     setViolations,
@@ -52,6 +61,8 @@ import {
 } from "../../../AppModule/models";
 import { UploadAPI } from "../../../AppModule/apis";
 import { AppSelectExhibitorStream } from "../../../AppModule/components/AppSelectStream/AppSelectExhibitorStream";
+
+const { ROLE_EXHIBITOR, ROLE_USER } = ROLES;
 
 export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
     navigate,
@@ -89,6 +100,15 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
     const [members, setMembers] = useState<User[]>([]);
     const [totalMembers, setTotalMembers] = useState<number>(0);
     const [pageMember, setPageMember] = useState<number>(0);
+    const [selectedSessions, setSelectedSessions] = useState<Session[]>([]);
+    const [sessions, setSessions] = useState<Session[]>([]);
+    const [totalSessions, setTotalSessions] = useState<number>(0);
+    const [pageSession, setPageSession] = useState<number>(0);
+    const [selectedEvents, setSelectedEvents] = useState<Conference[]>([]);
+    const [events, setEvents] = useState<Conference[]>([]);
+    const [totalEvents, setTotalEvents] = useState<number>(0);
+    const [pageEvent, setPageEvent] = useState<number>(0);
+
     const { t } = useTranslation();
     let logoImageFile: File | null = null;
     let coverImageFile: File | null = null;
@@ -133,6 +153,8 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                         setTranslations(items);
                         setSelectedUsers(response.users as User[]);
                         setSelectedMembers(response.members as User[]);
+                        setSelectedEvents(response.conferences as Conference[]);
+                        setSelectedSessions(response.sessions as Session[]);
                         hookForm.trigger();
                     }
                 })
@@ -233,6 +255,12 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
             formData.members = selectedMembers.map((e) => {
                 return UserApi.toResourceUrl(e.id);
             });
+            formData.conferences = selectedEvents.map((e) => {
+                return ConferenceApi.toResourceUrl(e.id);
+            });
+            formData.sessions = selectedSessions.map((e) => {
+                return SessionApi.toResourceUrl(e.id);
+            });
             if (logoImageFile) {
                 const res = await UploadAPI.upload(
                     logoImageFile,
@@ -293,7 +321,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
         if (searchStatus || totalUsers === 0 || totalUsers > users.length)
             UserApi.getLimited<User>(searchStatus ? 1 : pageUser + 1, {
                 user_search: search,
-                "roles.role": "ROLE_USER",
+                "roles.role": ROLE_EXHIBITOR,
                 "client.id": clientId,
             }).then(({ response }) => {
                 if (response !== null) {
@@ -315,7 +343,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
         if (searchStatus || totalMembers === 0 || totalMembers > members.length)
             UserApi.getLimited<User>(searchStatus ? 1 : pageMember + 1, {
                 user_search: search,
-                "roles.role": "ROLE_USER",
+                "roles.role": ROLE_USER,
                 "client.id": clientId,
             }).then(({ response }) => {
                 if (response !== null) {
@@ -332,9 +360,57 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
             });
     };
 
+    const getSessions = (search = "") => {
+        const searchStatus = search !== "";
+        if (
+            searchStatus ||
+            totalSessions === 0 ||
+            totalSessions > sessions.length
+        )
+            SessionApi.find<Session>(searchStatus ? 1 : pageSession + 1, {
+                title: search,
+                "container.id": conId,
+            }).then(({ response }) => {
+                if (response !== null) {
+                    if (searchStatus) {
+                        setPageSession(0);
+                        setSessions(response.items);
+                        setTotalSessions(response.totalItems);
+                    } else {
+                        setSessions([...sessions, ...response.items]);
+                        setTotalSessions(response.totalItems);
+                        setPageSession(pageMember + 1);
+                    }
+                }
+            });
+    };
+
+    const getEvents = (search = "") => {
+        const searchStatus = search !== "";
+        if (searchStatus || totalEvents === 0 || totalEvents > events.length)
+            ConferenceApi.find<Conference>(searchStatus ? 1 : pageEvent + 1, {
+                title: search,
+                "container.id": conId,
+            }).then(({ response }) => {
+                if (response !== null) {
+                    if (searchStatus) {
+                        setEvents(response.items);
+                        setTotalEvents(response.totalItems);
+                        setPageEvent(0);
+                    } else {
+                        setEvents([...events, ...response.items]);
+                        setTotalEvents(response.totalItems);
+                        setPageEvent(pageEvent + 1);
+                    }
+                }
+            });
+    };
+
     useEffect(() => {
         getOwners();
         getMembers();
+        getSessions();
+        getEvents();
     }, []);
 
     const { formState, control, handleSubmit, setValue, watch } = hookForm;
@@ -712,6 +788,44 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                     />
                                 </Col>
                             </Row>
+                            <Row>
+                                <Col xl={12} lg={12}>
+                                    <AppEventPicker
+                                        xl={4}
+                                        lg={4}
+                                        md={12}
+                                        sm={12}
+                                        showAdd
+                                        handleSelected={setSelectedEvents}
+                                        selectedList={selectedEvents}
+                                        title={t(
+                                            "admin.exhibitor.form:label.events"
+                                        )}
+                                        icon="speakers"
+                                        list={events}
+                                        loadMore={getEvents}
+                                    />
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col xl={12} lg={12}>
+                                    <AppSessionPicker
+                                        xl={4}
+                                        lg={4}
+                                        md={12}
+                                        sm={12}
+                                        showAdd
+                                        handleSelected={setSelectedSessions}
+                                        selectedList={selectedSessions}
+                                        title={t(
+                                            "admin.exhibitor.form:label.sessions"
+                                        )}
+                                        icon="speakers"
+                                        list={sessions}
+                                        loadMore={getSessions}
+                                    />
+                                </Col>
+                            </Row>
                         </AppCard>
                     </Col>
                 </Row>
@@ -739,7 +853,6 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                     isLoading={formState.isSubmitting}
                 />
             </Form>
-            <DevTool control={control} />
         </div>
     );
 };

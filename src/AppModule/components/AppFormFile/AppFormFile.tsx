@@ -100,6 +100,7 @@ export const AppFormFile: FC<AppFormFileProps> = ({
                             id={controlId}
                             placeholder={placeholderText}
                             {...field}
+                            value={""}
                             custom
                             onChange={(e: any) => {
                                 onFileSelect(e.target.files);
