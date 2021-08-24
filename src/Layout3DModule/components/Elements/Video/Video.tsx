@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Vector3 } from "three";
+import { RGBEFormat, sRGBEncoding, Vector3 } from "three";
 
 interface VideoProps {
     props: JSX.IntrinsicElements["mesh"];
@@ -68,9 +68,14 @@ export const Video = ({
         <>
             <mesh {...props} position={positionSt} scale={scaleSt} ref={mesh}>
                 <planeBufferGeometry args={[1, 1]} />
-                <meshStandardMaterial>
-                    <videoTexture attach="map" args={[videoTexture]} />
-                </meshStandardMaterial>
+                <meshBasicMaterial toneMapped={true}>
+                    <videoTexture
+                        attach="map"
+                        args={[videoTexture]}
+                        encoding={sRGBEncoding}
+                        format={RGBEFormat}
+                    />
+                </meshBasicMaterial>
             </mesh>
         </>
     );
