@@ -173,6 +173,7 @@ export const Panel = ({
     const isBillboard = type === PanelTypes.BILLBOARD;
     const isIframe = type === PanelTypes.IFRAME;
 
+    // console.log("panel data video: ", panelData, textureImage);
     const defaultVideoUrl =
         panelData.source.assetId !== "" && panelData.source.assetId !== null
             ? `${panelsPath}/${panelData.source.assetId}`
@@ -426,7 +427,13 @@ export const Panel = ({
                         {/* SCREEN IMAGE */}
                         {!isVideoPlaying && (
                             <Image
-                                props={{ position: [0, 0, 0.02] }}
+                                props={{
+                                    position: [
+                                        0,
+                                        0,
+                                        0.02 + (isProjector ? -0.05 : 0),
+                                    ],
+                                }}
                                 textureUrl={defaultImageUrl}
                                 padding={padding}
                                 parent={parent}
