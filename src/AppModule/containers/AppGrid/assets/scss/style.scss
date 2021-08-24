@@ -135,7 +135,13 @@
                 opacity: 0;
             }
         }
-
+        .ag-header-cell-sorted-none {
+            .ag-sort-descending-icon {
+                &.ag-hidden {
+                    opacity: 1;
+                }
+            }
+        }
         .ag-sort-ascending-icon:not(.ag-hidden) {
             & + .ag-hidden {
                 color: var(--primary) !important;
@@ -149,7 +155,7 @@
         }
 
         .ag-hidden {
-            color: var(--secondary) !important;
+            color: var(--secondary-80) !important;
         }
 
         .ag-icon-desc {
@@ -237,11 +243,19 @@
         }
 
         .ag-header-cell-resize {
+            right: -3px;
             &::after {
+                position: absolute;
+                top: 25%;
+                left: 0;
+                height: 50%;
+                margin-top: auto;
+                margin-bottom: auto;
+                content: " ";
                 background-color: unset;
+                border-right: 1px solid var(--table-divider-color);
             }
         }
-
         .ag-header {
             background-color: var(--table-header-background-color);
             border-bottom: unset;
@@ -261,6 +275,21 @@
                         justify-content: center;
                     }
                 }
+                &:hover {
+                    background-color: var(--table-header-background-color--hover);
+                    .ag-header-cell-resize {
+                        &::after {
+                            display: none;
+                        }
+                    }
+                }
+                &:last-child {
+                    .ag-header-cell-resize {
+                        &::after {
+                            display: none;
+                        }
+                    }
+                }
             }
 
             .ag-header-cell-sorted-asc,
@@ -273,7 +302,15 @@
                 border: none;
                 .ag-header-row {
                     &::after {
-                        display: none;
+                        position: absolute;
+                        top: 25%;
+                        left: 0;
+                        height: 50%;
+                        margin-top: auto;
+                        margin-bottom: auto;
+                        content: " ";
+                        background-color: unset;
+                        border-right: 1px solid var(--table-divider-color);
                     }
                 }
             }
