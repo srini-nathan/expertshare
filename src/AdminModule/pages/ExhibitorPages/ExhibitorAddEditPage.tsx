@@ -368,7 +368,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
             totalSessions > sessions.length
         )
             SessionApi.find<Session>(searchStatus ? 1 : pageSession + 1, {
-                title: search,
+                "translations.title": search,
                 "container.id": conId,
             }).then(({ response }) => {
                 if (response !== null) {
@@ -389,7 +389,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
         const searchStatus = search !== "";
         if (searchStatus || totalEvents === 0 || totalEvents > events.length)
             ConferenceApi.find<Conference>(searchStatus ? 1 : pageEvent + 1, {
-                title: search,
+                "translations.title": search,
                 "container.id": conId,
             }).then(({ response }) => {
                 if (response !== null) {
