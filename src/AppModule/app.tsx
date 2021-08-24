@@ -81,10 +81,15 @@ const App = (): JSX.Element => {
     const overViewPage = useMatch("/container");
     const onBoardingPage = useMatch("/onboarding");
     const autoLoginPage = useMatch("/auth/auto-login/:token");
+    const autoLoginPageFromContainer = useMatch(
+        "/auth/auto-login/:token/:skip"
+    );
     const sessionDetailPage = useMatch("/event/:conferenceId/session/:id");
     const reloadingPage = useMatch("/reloading");
     const isOverViewPage = overViewPage !== null;
-    const isAutoLoginPage = autoLoginPage !== null;
+    const isAutoLoginPage = !(
+        autoLoginPage === null && autoLoginPageFromContainer === null
+    );
     const showPipPlayer = sessionDetailPage === null && reloadingPage === null;
     const { emitLogin, emitLogout, emitPageChange } = useUserSocketEvents();
     const { handler } = useCommandCenterSocketEvents();
@@ -143,7 +148,6 @@ const App = (): JSX.Element => {
     if (status === "LOADING" || isAuthenticated === null) {
         return <AppFullScreenLoader />;
     }
-
     if (!isAutoLoginPage && isAuthenticated === true && user && container) {
         if (!user.isOnboarded && !isSkipOnboarding() && !onBoardingPage) {
             navigator("/onboarding").then();
