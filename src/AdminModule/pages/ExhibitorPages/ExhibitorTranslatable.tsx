@@ -53,22 +53,6 @@ export const ExhibitorTranslatable: FC<ExhibitorTranslatableProps> = ({
         return noError;
     };
 
-    const getContactLabelError = (): boolean => {
-        let noError = false;
-        translations.forEach((e) => {
-            if (!noError) noError = e.contactUsCaption !== "";
-        });
-        return noError;
-    };
-
-    const getDescriptionError = (): boolean => {
-        let noError = false;
-        translations.forEach((e) => {
-            if (!noError) noError = e.description !== "";
-        });
-        return noError;
-    };
-
     return (
         <Row className="translatable-container">
             <Form.Group className="mb-0 px-3 w-100">
@@ -105,16 +89,13 @@ export const ExhibitorTranslatable: FC<ExhibitorTranslatableProps> = ({
                         handleValueChange(e, "description");
                     }}
                 />
-                <Form.Control.Feedback className={"d-block"} type="invalid">
-                    {!getDescriptionError() && "This field is required"}
-                </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-0 px-3 w-100">
                 <AppFormLabel
                     label={`${t(
                         "admin.exhibitor.form:label.contactUsCaption"
                     )} (${activeLocale})`}
-                    required
+                    required={false}
                 />
                 <Form.Control
                     value={getValue("contactUsCaption")}
@@ -123,9 +104,6 @@ export const ExhibitorTranslatable: FC<ExhibitorTranslatableProps> = ({
                         handleValueChange(e.target.value, "contactUsCaption");
                     }}
                 />
-                <Form.Control.Feedback className={"d-block"} type="invalid">
-                    {!getContactLabelError() && "This field is required"}
-                </Form.Control.Feedback>
             </Form.Group>
         </Row>
     );
