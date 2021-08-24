@@ -1,5 +1,6 @@
 import React, { FC } from "react";
 import { Form, Row, Col } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { AppButton } from "../AppButton";
 import "./assets/scss/style.scss";
 import { Conference } from "../../../AdminModule/models";
@@ -29,6 +30,7 @@ export const AppEventSelector: FC<AppEventSelectorProps> = ({
     selectedItems = [],
     loadMore,
 }): JSX.Element => {
+    const { t } = useTranslation();
     const addActiveId = (id: number) => {
         const item = items.find((i: Conference) => i.id === id);
 
@@ -82,7 +84,7 @@ export const AppEventSelector: FC<AppEventSelectorProps> = ({
                                 <div className="header--title col-auto pl-0">
                                     <h2 className="mb-0">
                                         <i className="fak fa-create-group mr-2"></i>
-                                        Select Session
+                                        {t("exhibitor.form:select.event")}
                                     </h2>
                                 </div>
                                 <div className="header--close col-auto mr-0 ml-auto pr-0">
@@ -172,7 +174,9 @@ export const AppEventSelector: FC<AppEventSelectorProps> = ({
                         <div className="select-box--header">
                             <div className="row m-0 p-0">
                                 <div className="title col-6">
-                                    <h4 className="mb-0">Users</h4>
+                                    <h4 className="mb-0">
+                                        {t("exhibitor.form:selected.events")}
+                                    </h4>
                                 </div>
                             </div>
                             <div className="select-box--content px-2">
