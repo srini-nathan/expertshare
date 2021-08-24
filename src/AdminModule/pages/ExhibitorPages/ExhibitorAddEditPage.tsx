@@ -30,6 +30,7 @@ import {
     AppFormActions,
     AppSessionPicker,
     AppEventPicker,
+    AppBreadcrumb,
 } from "../../../AppModule/components";
 import { AppLanguageSwitcher } from "../../../AppModule/containers";
 import {
@@ -423,6 +424,10 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
 
     return (
         <div className={"exhibitor-add-edit-page"}>
+            <AppBreadcrumb
+                linkText={t("exhibitor.list:header.title")}
+                linkUrl={".."}
+            />
             <AppPageHeaderTranslatable
                 title={`admin.exhibitor.form:header.${
                     isEditMode ? "editTitle" : "addTitle"
@@ -450,7 +455,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         label={
                                             "admin.exhibitor.form:label.logo"
                                         }
-                                        required={true}
+                                        required={false}
                                     />
                                     <AppUploader
                                         withCropper
@@ -485,7 +490,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         label={
                                             "admin.exhibitor.form:label.cover"
                                         }
-                                        required={true}
+                                        required={false}
                                     />
                                     <AppUploader
                                         withCropper
@@ -517,6 +522,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                             <AppFormSelect
                                 id={"category"}
                                 name={"category"}
+                                required={true}
                                 label={t("admin.exhibitor.form:label.category")}
                                 md={12}
                                 lg={12}
