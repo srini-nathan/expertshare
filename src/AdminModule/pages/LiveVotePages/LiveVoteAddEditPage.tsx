@@ -153,14 +153,8 @@ export const LiveVoteAddEditPage: FC<RouteComponentProps> = ({
                                 response.fileName &&
                                 formData.voteOptions[optionIndex]
                             ) {
-                                // eslint-disable-next-line no-console
-                                console.table(response);
                                 formData.voteOptions[optionIndex].imageName =
                                     response.fileName;
-                                // eslint-disable-next-line no-console
-                                console.table(
-                                    formData.voteOptions[optionIndex]
-                                );
                             }
                         }
                     );

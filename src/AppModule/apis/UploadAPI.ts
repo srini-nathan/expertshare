@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { FinalResponse, ServerError, SimpleObject } from "../models";
+import { FinalResponse, ServerError, SimpleObject, Upload } from "../models";
 import { ROUTES } from "../../config";
 import { EntityAPI } from "./EntityAPI";
 
@@ -34,5 +34,18 @@ export abstract class UploadAPI extends EntityAPI {
             .catch((error: AxiosError | ServerError) =>
                 this.handleErrorDuringCreatingOrUpdating(error)
             );
+    }
+
+    public static async upload(
+        file: File,
+        fileType: string,
+        containerResourceId: string
+    ): Promise<FinalResponse<Upload | null>> {
+        const fd = new FormData();
+        fd.set("file", file, file.name);
+        fd.set("container", containerResourceId);
+        fd.set("fileType", fileType);
+
+        return this.createResource<Upload, FormData>(fd);
     }
 }

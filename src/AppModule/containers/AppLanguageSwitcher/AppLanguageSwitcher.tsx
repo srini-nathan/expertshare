@@ -32,12 +32,12 @@ export const AppLanguageSwitcher: FC<AppLanguageSwitcherType> = ({
                     required
                 />
             </Col>
-            <Col xs={12} className="d-flex mb-4 mt-2">
+            <Col xs={12} className="d-flex mb-4 mt-2 flex-wrap">
                 {languages.map(({ locale, name }: Language) => {
                     return (
                         <AppButton
                             key={locale}
-                            className={`mr-2 ${
+                            className={`mr-2 mb-2 ${
                                 activeLocale === locale && "active"
                             }`}
                             variant="secondary"

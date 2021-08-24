@@ -54,7 +54,13 @@ const {
 } = UPLOAD;
 
 const {
-    ROLE: { ROLE_SUPER_ADMIN, ROLE_ADMIN, ROLE_OPERATOR, ROLE_SUPPORT },
+    ROLE: {
+        ROLE_SUPER_ADMIN,
+        ROLE_ADMIN,
+        ROLE_OPERATOR,
+        ROLE_SUPPORT,
+        ROLE_EXHIBITOR,
+    },
 } = Role;
 
 interface AppNavigationProps {
@@ -238,6 +244,14 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 name: "",
             },
             isVisible: isGranted(role, ROLE_OPERATOR),
+        },
+        {
+            label: "navigation:administration.exhibitors",
+            path: "/admin/exhibitors",
+            icon: {
+                name: "",
+            },
+            isVisible: isGranted(role, ROLE_EXHIBITOR),
         },
     ]);
     const [showSubMenuItems, isSubMenuItems] = useState<boolean>(false);

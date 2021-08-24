@@ -30,6 +30,9 @@ import {
     LiveVoteDetailResultPage,
     LiveVoteOverviewResultPage,
     LiveVoteListPage,
+    ExhibitorAddEditPage,
+    ExhibitorListPage,
+    ExhibitorDetailPage,
 } from "./pages";
 import { Layout3D } from "../Layout3DModule";
 import { ModuleRouter } from "../AppModule/models";
@@ -127,11 +130,16 @@ export const routers: ModuleRouter[] = [
                             "live-votes-result/:conferenceId/:sessionId/:questionId/overview/:viewMode"
                         }
                     />
+                    <ExhibitorAddEditPage path={"exhibitors/new"} />
                     <LiveVoteOverviewResultPage
                         path={
                             "live-votes-result/:questionId/overview/:viewMode"
                         }
                     />
+                    <ExhibitorListPage path={"exhibitors"} />
+                    <ExhibitorAddEditPage path={"exhibitors/new"} />
+                    <ExhibitorAddEditPage path={"exhibitors/:id"} />
+                    <ExhibitorDetailPage path={"exhibitors/:id/detail"} />
                 </Router>
             );
         },
