@@ -303,3 +303,22 @@ a {
         background-color: var(--input-background-color) !important;
     }
 }
+//badge styles
+.badge {
+    display: inline-grid;
+    align-content: center;
+    min-height: 26px;
+    padding: 0 15px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--light-clr);
+    border-radius: var(--tag-border-radius);
+    &.badge-success {
+        background-color: var(--success);
+        border: 1px solid var(--success);
+    }
+    &.badge-danger {
+        background-color: var(--danger);
+        border: 1px solid var(--danger);
+    }
+}

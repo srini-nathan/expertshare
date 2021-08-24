@@ -39,5 +39,7 @@ export const appGridColDef = ({
         cellRendererParams: {
             onPressDelete,
         },
+        lockPinned: true,
+        pinned: "right",
     },
 ];

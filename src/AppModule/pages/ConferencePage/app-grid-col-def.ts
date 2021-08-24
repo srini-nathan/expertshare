@@ -48,6 +48,8 @@ export const appGridColDef = ({
                     isGrantedControl,
                     onPressClone,
                 },
+                lockPinned: true,
+                pinned: "right",
             },
         ];
 

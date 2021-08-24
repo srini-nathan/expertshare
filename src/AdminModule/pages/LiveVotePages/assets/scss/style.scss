@@ -1,6 +1,17 @@
 @import "../../../../../AppModule/assets/scss/variables";
 @import "../../../../../AppModule/assets/scss/screens-sizes";
-
+.live-vote-result-header-button {
+  .download-btn {
+    position: relative;
+    i {
+      position: absolute;
+      left: 5px;
+      &::before {
+        content: "\e07b";
+      }
+    }
+  }
+}
 .live-vote-add-edit-page {
   .action {
     display: inline-flex;
@@ -21,48 +32,46 @@
   .vote-option-card {
     background-color: var(--primary-30) !important;
   }
-
 }
 .live-voting-result--chart-action-bar {
-    .show-full {
-      width: 36px;
-    }
-    .switch-view {
+  .show-full {
+    width: 36px;
+  }
+  .switch-view {
+    display: flex;
+    justify-content: flex-end;
+    &--content {
       display: flex;
-      justify-content: flex-end;
-      &--content {
+      width: fit-content;
+      height: fit-content;
+      background-color: var(--secondary-button-background-color);
+      border: var(--secondary-button-border-width) solid var(--secondary-button-border-color);
+      border-radius: var(--secondary-button-border-radius);
+      box-shadow: 0 3px 9px var(--secondary-button-box-shadow-color);
+      a {
         display: flex;
-        width: fit-content;
-        height: fit-content;
-        background-color: var(--secondary-button-background-color);
-        border: var(--secondary-button-border-width) solid var(--secondary-button-border-color);
-        border-radius: var(--secondary-button-border-radius);
-        box-shadow: 0 3px 9px var(--secondary-button-box-shadow-color);
-        a {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 24px;
-          height: 24px;
-          margin: 6px;
-          font-size: 14px;
-          font-weight: 400;
+        align-items: center;
+        justify-content: center;
+        width: 24px;
+        height: 24px;
+        margin: 6px;
+        font-size: 14px;
+        font-weight: 400;
+        color: var(--secondary-button-text-color);
+        cursor: pointer;
+        border-radius: var(--secondary-button-box-shadow-color);
+
+        &.active-view {
+          color: var(--primary) !important;
+          background-color: var(--primary-20);
+        }
+
+        &:hover {
           color: var(--secondary-button-text-color);
-          cursor: pointer;
-          border-radius: var(--secondary-button-box-shadow-color);
-
-          &.active-view {
-            color: var(--primary) !important;
-            background-color: var(--primary-20);
-          }
-
-          &:hover {
-            color: var(--secondary-button-text-color);
-          }
         }
       }
     }
-
+  }
 }
 
 .live-voting-result {
@@ -75,7 +84,7 @@
           padding-bottom: 3px;
           font-size: 16px;
           &::before {
-            content: '\e07b';
+            content: "\e07b";
           }
         }
       }
@@ -349,4 +358,3 @@
     }
   }
 }
-

@@ -27,17 +27,17 @@ export const AppPageHeader: FC<AppPageHeaderProps> = ({
 }): JSX.Element => {
     let mdSize = 6;
     if (customToolbar) {
-        mdSize = 3;
+        mdSize = 12;
     } else if (showToolbar === false) {
         mdSize = 12;
     }
     return (
         <Row className="pt-sm-3">
-            <Col md={mdSize} xs={12} className="page-title">
+            <Col xs={12} md={mdSize} lg={"auto"} className="page-title">
                 <h1>{title}</h1>
             </Col>
             {showToolbar && (
-                <Col md={6} className="d-flex justify-content-end">
+                <Col md={6} className="d-flex justify-content-end mr-0 ml-auto">
                     <AppListPageToolbar
                         createLabel={createLabel}
                         createLink={createLink}
@@ -48,9 +48,10 @@ export const AppPageHeader: FC<AppPageHeaderProps> = ({
             )}
             {customToolbar && (
                 <Col
-                    className="d-flex justify-content-start justify-content-sm-end"
-                    md={9}
+                    className="d-flex justify-content-start justify-content-sm-end mr-0 ml-auto"
                     xs={12}
+                    md={12}
+                    lg={"auto"}
                 >
                     {children}
                 </Col>

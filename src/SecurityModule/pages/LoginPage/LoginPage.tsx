@@ -117,16 +117,23 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                 errorToast(errorMessage);
             } else if (response) {
                 if (response.isExist) {
-                    setEmailStatus("exist");
-                    setFocus("password");
-                    localStorage.removeItem(AUTH_CHOSEN_CONTAINER);
-                    localStorage.removeItem(AUTH_TOKEN_KEY);
-                    localStorage.removeItem(AUTH_USER_KEY);
-                    localStorage.removeItem(AUTH_SKIP_ONBOARDING);
-                    localStorage.removeItem(CONTAINER_LOCALE);
+                    if (
+                        response.isActivationEmailEnable &&
+                        !response.isOnboarded
+                    ) {
+                        setEmailStatus("activationsent");
+                    } else {
+                        setEmailStatus("exist");
+                        setFocus("password");
+                        localStorage.removeItem(AUTH_CHOSEN_CONTAINER);
+                        localStorage.removeItem(AUTH_TOKEN_KEY);
+                        localStorage.removeItem(AUTH_USER_KEY);
+                        localStorage.removeItem(AUTH_SKIP_ONBOARDING);
+                        localStorage.removeItem(CONTAINER_LOCALE);
 
-                    if (response.isOnboarded) {
-                        isOnboarded(true);
+                        if (response.isOnboarded) {
+                            isOnboarded(true);
+                        }
                     }
                 } else {
                     setEmailStatus("notexist");
@@ -161,7 +168,25 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                         </Col>
                     </>
                 );
-
+            case "activationsent":
+                return (
+                    <>
+                        <AppAuthHeader
+                            title={t("login.form:activationTitle")}
+                            description={t("login.form:activationDescription")}
+                        />
+                        <Col className="text-center justify-content-center d-flex p-3">
+                            <AppButton
+                                variant="primary"
+                                onClick={() => {
+                                    setEmailStatus("");
+                                }}
+                            >
+                                <b>{t("login.form:goBack")}</b>
+                            </AppButton>
+                        </Col>
+                    </>
+                );
             default:
                 return (
                     <>

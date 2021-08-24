@@ -139,17 +139,15 @@ export const LiveVoteDetailResultPage: FC<RouteComponentProps> = (): JSX.Element
             />
             {role === ROLES.ROLE_ADMIN ? (
                 <Row>
-                    <Col className={"d-flex justify-content-end mb-5"}>
-                        <div className={""}>
+                    <Col className={"d-flex justify-content-end mb-4"}>
+                        <div className={"live-vote-result-header-button"}>
                             <AppButton
                                 onClick={handleDownload}
                                 variant={"secondary"}
+                                className={"download-btn pl-4 pr-3 mr-2"}
                             >
-                                <i className={"fak fa-download mr-2"}>
-                                    {t(
-                                        "admin.liveVoteResult.list:button.download"
-                                    )}
-                                </i>
+                                <i className={"fak fa-download"}></i>
+                                {t("admin.liveVoteResult.list:button.download")}
                             </AppButton>
                         </div>
                     </Col>
