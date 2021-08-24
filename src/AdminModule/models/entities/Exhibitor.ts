@@ -12,6 +12,12 @@ import { STREAM_TYPE } from "../../../config";
 export class Exhibitor extends BaseEntity {
     translations: ExhibitorTranslation[] | SExhibitorTranslation;
 
+    name: string;
+
+    description: string;
+
+    contactUsCaption: string;
+
     logoImageName: string;
 
     coverImageName: string;
@@ -87,6 +93,9 @@ export class Exhibitor extends BaseEntity {
         conferences = [],
         users = [],
         container = "",
+        name = "",
+        description = "",
+        contactUsCaption = "",
     }: PExhibitor = {}) {
         super(id, createdAt, updatedAt);
         this.translations = translations;
@@ -113,6 +122,9 @@ export class Exhibitor extends BaseEntity {
         this.users = users;
         this.website = website;
         this.phone = phone;
+        this.name = name;
+        this.description = description;
+        this.contactUsCaption = contactUsCaption;
     }
 }
 
