@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Col, Form, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
@@ -30,6 +30,7 @@ import {
     AppFormActions,
     AppSessionPicker,
     AppEventPicker,
+    AppBreadcrumb,
 } from "../../../AppModule/components";
 import { AppLanguageSwitcher } from "../../../AppModule/containers";
 import {
@@ -61,8 +62,9 @@ import {
 } from "../../../AppModule/models";
 import { UploadAPI } from "../../../AppModule/apis";
 import { AppSelectExhibitorStream } from "../../../AppModule/components/AppSelectStream/AppSelectExhibitorStream";
+import { schema } from "./schema";
 
-const { ROLE_EXHIBITOR, ROLE_USER } = ROLES;
+const { ROLE_EXHIBITOR } = ROLES;
 
 export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
     navigate,
@@ -82,7 +84,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
         hookForm,
         conId,
         conUrl,
-    } = useDataAddEdit<Exhibitor>(new Exhibitor());
+    } = useDataAddEdit<Exhibitor>(new Exhibitor(), schema);
     const { clientId } = useAuthState();
     const logoBasePath = useBuildAssetPath(ExhibitorLogoPosterFileInfo);
     const coverBasePath = useBuildAssetPath(ExhibitorPosterFileInfo);
@@ -110,9 +112,9 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
     const [pageEvent, setPageEvent] = useState<number>(0);
 
     const { t } = useTranslation();
-    let logoImageFile: File | null = null;
-    let coverImageFile: File | null = null;
-    let videoFile: File | null = null;
+    const logoImageFileRef = useRef<File | null>(null);
+    const coverImageFileRef = useRef<File | null>(null);
+    const videoFileRef = useRef<File | null>(null);
 
     useEffect(() => {
         if (isEditMode && id !== null) {
@@ -236,11 +238,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
     const checkTranslation = () => {
         let error = false;
         translations.forEach((e) => {
-            if (!error)
-                error =
-                    e.description !== "" &&
-                    e.name !== "" &&
-                    e.contactUsCaption !== "";
+            if (!error) error = e.name !== "";
         });
         return error;
     };
@@ -261,9 +259,9 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
             formData.sessions = selectedSessions.map((e) => {
                 return SessionApi.toResourceUrl(e.id);
             });
-            if (logoImageFile) {
+            if (logoImageFileRef.current) {
                 const res = await UploadAPI.upload(
-                    logoImageFile,
+                    logoImageFileRef.current,
                     EXHIBITOR_LOGO_POSTER_TYPE,
                     conUrl
                 );
@@ -271,9 +269,9 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                     formData.logoImageName = res.response.fileName;
                 }
             }
-            if (coverImageFile) {
+            if (coverImageFileRef.current) {
                 const res = await UploadAPI.upload(
-                    coverImageFile,
+                    coverImageFileRef.current,
                     EXHIBITOR_POSTER_TYPE,
                     conUrl
                 );
@@ -281,9 +279,9 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                     formData.coverImageName = res.response.fileName;
                 }
             }
-            if (videoFile) {
+            if (videoFileRef.current) {
                 const res = await UploadAPI.upload(
-                    videoFile,
+                    videoFileRef.current,
                     EXHIBITOR_VIDEO_TYPE,
                     conUrl
                 );
@@ -343,7 +341,6 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
         if (searchStatus || totalMembers === 0 || totalMembers > members.length)
             UserApi.getLimited<User>(searchStatus ? 1 : pageMember + 1, {
                 user_search: search,
-                "roles.role": ROLE_USER,
                 "client.id": clientId,
             }).then(({ response }) => {
                 if (response !== null) {
@@ -423,6 +420,10 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
 
     return (
         <div className={"exhibitor-add-edit-page"}>
+            <AppBreadcrumb
+                linkText={t("exhibitor.list:header.title")}
+                linkUrl={".."}
+            />
             <AppPageHeaderTranslatable
                 title={`admin.exhibitor.form:header.${
                     isEditMode ? "editTitle" : "addTitle"
@@ -450,7 +451,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         label={
                                             "admin.exhibitor.form:label.logo"
                                         }
-                                        required={true}
+                                        required={false}
                                     />
                                     <AppUploader
                                         withCropper
@@ -462,8 +463,9 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                                 : ""
                                         }
                                         onFileSelect={(selectedFiles) => {
-                                            logoImageFile =
+                                            const file =
                                                 first(selectedFiles) ?? null;
+                                            logoImageFileRef.current = file;
                                         }}
                                         onDelete={() => {
                                             setValue("logoImageName", "");
@@ -485,7 +487,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         label={
                                             "admin.exhibitor.form:label.cover"
                                         }
-                                        required={true}
+                                        required={false}
                                     />
                                     <AppUploader
                                         withCropper
@@ -497,8 +499,9 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                                 : ""
                                         }
                                         onFileSelect={(selectedFiles) => {
-                                            coverImageFile =
+                                            const file =
                                                 first(selectedFiles) ?? null;
+                                            coverImageFileRef.current = file;
                                         }}
                                         onDelete={() => {
                                             setValue("coverImageName", "");
@@ -517,6 +520,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                             <AppFormSelect
                                 id={"category"}
                                 name={"category"}
+                                required={true}
                                 label={t("admin.exhibitor.form:label.category")}
                                 md={12}
                                 lg={12}
@@ -840,7 +844,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                 isEditMode={isEditMode}
                                 errors={errors}
                                 onFileSelect={(f) => {
-                                    videoFile = f;
+                                    videoFileRef.current = f;
                                 }}
                             />
                         </AppCard>

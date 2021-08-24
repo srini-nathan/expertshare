@@ -308,6 +308,7 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
 
     const onSubmit = async (formData: AFramePanel) => {
         formData.translations = translations;
+        formData.source = sourceVideoFileName;
         Promise.all(
             [...translations, { fieldName: "remoteImage" }].map((item: any) => {
                 if (item.locale && typeof item.image === "string") {
