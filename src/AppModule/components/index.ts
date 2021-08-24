@@ -70,7 +70,7 @@ export * from "./AppStreamManager";
 export * from "./AppSessionDetails";
 export * from "./AppSessionDescription";
 export * from "./AppSessionTags";
-export * from "./AppSessionCategoryTranslations";
+export * from "./AppCategoryTranslations";
 export * from "./AttendeeCard";
 export * from "./AppFeedAdder";
 export * from "./AppFeedShower";

@@ -12,6 +12,7 @@ export * from "./EmailTemplatePage";
 export * from "./UserFieldPage";
 export * from "./UserListPage";
 export * from "./SessionCategoryPage";
+export * from "./ExhibitorCategoryPage";
 export * from "./AFrameRoom";
 export * from "./AFramePanel";
 export * from "./InfoPage";
