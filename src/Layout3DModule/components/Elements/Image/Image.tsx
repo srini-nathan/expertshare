@@ -59,7 +59,9 @@ export const Image = ({
         const h = height - padding * 2;
         const w = width - padding * 2;
         setScaleSt(new Vector3(w, h, 1));
-        setPositionSt(new Vector3(0, 0, depth / 2 + 0.01));
+        setPositionSt(new Vector3(0, 0, depth / 2 + 0.02));
+
+        // console.log("image z: ", depth / 2 + 0.01);
     };
 
     useEffect(() => {
@@ -77,6 +79,7 @@ export const Image = ({
             matgif.current = texture2; // = new MeshBasicMaterial({
         }
         // console.log("in image: ", parent, padding);
+
         return () => {
             // matgif.current.dispose();
             matgif.current = null;
