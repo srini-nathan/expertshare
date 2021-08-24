@@ -27,6 +27,7 @@ export const appGridColDef = ({
         maxWidth: 50,
         flex: 0.2,
         sortable: false,
+        headerClass: "checkbox-header",
     },
 
     {
@@ -34,17 +35,16 @@ export const appGridColDef = ({
         field: "user_search",
         filter: "text",
         cellRenderer: "appNameTemplateRenderer",
-        maxWidth: 220,
         minWidth: 220,
         flex: 1.5,
-        sortable: false,
+        sortable: true,
     },
 
     {
         headerName: "admin.users.list:column.companyName",
         field: "company",
         sortable: true,
-        minWidth: 150,
+        minWidth: 190,
         flex: 1,
     },
     {
@@ -79,7 +79,7 @@ export const appGridColDef = ({
         field: "isBlocked",
         cellRenderer: "appSwitch",
         flex: 1,
-        minWidth: 80,
+        minWidth: 140,
         sortable: true,
     },
     {
