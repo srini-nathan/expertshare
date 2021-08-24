@@ -99,7 +99,7 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <>
             <div className={"canvas-3d"}>
-                {roomsData && mainRoom && (
+                {roomsData && mainRoom !== null && (
                     <SceneCanvas
                         editMode={editMode}
                         cameraLock={cameraLock}
