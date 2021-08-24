@@ -20,7 +20,6 @@ export interface AppExhibitorCardProps {
 
 export const AppExhibitorCard: FC<AppExhibitorCardProps> = ({
     data,
-    handleClone,
     handleDelete,
     isGrantedControl,
 }): JSX.Element => {
@@ -70,15 +69,6 @@ export const AppExhibitorCard: FC<AppExhibitorCardProps> = ({
                         <div className="inner-container--banner--icons ">
                             {isGrantedControl && (
                                 <>
-                                    <Link
-                                        to={"#"}
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            handleClone(id as number);
-                                        }}
-                                    >
-                                        <i className="far fa-clone"></i>
-                                    </Link>
                                     <Link to={`/admin/exhibitors/${id}`}>
                                         <i className="fak fa-pen-regular"></i>
                                     </Link>
