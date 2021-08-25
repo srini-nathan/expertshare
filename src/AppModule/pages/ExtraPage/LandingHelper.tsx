@@ -2,9 +2,11 @@ import React, { FC, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { useSetRecoilState } from "recoil";
 import {
+    useAuthState,
     useChosenContainer,
     useNavigator,
     useResolveEntryPage,
+    useSkipOnBoarding,
 } from "../../hooks";
 import {
     appDashboardLayoutOptions,
@@ -18,6 +20,8 @@ export const LandingHelper: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
     const { isChosen } = useChosenContainer();
+    const { isSkipOnBoarding } = useSkipOnBoarding();
+    const { user } = useAuthState();
     const nav = useNavigator(navigate);
     const setLayoutOptions = useSetRecoilState<AppDashboardLayoutOptions>(
         appDashboardLayoutOptions
@@ -42,7 +46,9 @@ export const LandingHelper: FC<RouteComponentProps> = ({
     });
 
     useEffect(() => {
-        if (!isChosen()) {
+        if (user && !user.isOnboarded && !isSkipOnBoarding()) {
+            nav("/onboarding").then();
+        } else if (!isChosen()) {
             nav("/container").then();
         } else {
             nav(getPath()).then();
