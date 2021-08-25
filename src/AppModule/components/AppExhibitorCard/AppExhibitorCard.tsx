@@ -56,12 +56,10 @@ export const AppExhibitorCard: FC<AppExhibitorCardProps> = ({
                         <div className="inner-container--banner--button">
                             {!isVisible ? (
                                 <span className="live-now-btn mr-3">
-                                    <i className="fak fa-close"></i>
                                     {t("exhibitor.list:badge.inActive")}
                                 </span>
                             ) : (
                                 <span className="archived-btn mr-3">
-                                    <i className="fak fa-archive-regular"></i>
                                     {t("exhibitor.list:badge.active")}
                                 </span>
                             )}
