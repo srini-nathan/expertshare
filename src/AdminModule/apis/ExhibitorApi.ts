@@ -1,5 +1,15 @@
+import { AxiosError } from "axios";
 import { EntityAPI } from "../../AppModule/apis/EntityAPI";
 import { ROUTES } from "../../config";
+import {
+    FinalResponse,
+    ServerError,
+    ListResponse,
+} from "../../AppModule/models";
+import {
+    onFindAllResponseHydra,
+    onFindAllResponseJson,
+} from "../../AppModule/apis/transformer";
 
 const {
     api_exhibitors_get_collection: API_GET_COLLECTION,
@@ -22,4 +32,21 @@ export abstract class ExhibitorApi extends EntityAPI {
     protected static PATCH_ITEM = API_PATCH_ITEM;
 
     protected static DELETE_ITEM = API_DELETE_ITEM;
+
+    public static async getExhibitor<R>(
+        extraparams = {}
+    ): Promise<FinalResponse<ListResponse<R> | null>> {
+        return this.makeGet<R>(ExhibitorApi.GET_ITEM, { ...extraparams })
+            .then(({ data }) => {
+                const list = this.acceptHydra
+                    ? onFindAllResponseHydra<R>(data)
+                    : onFindAllResponseJson<R>(data);
+                return Promise.resolve(
+                    new FinalResponse<ListResponse<R>>(list)
+                );
+            })
+            .catch((error: AxiosError | ServerError) =>
+                this.handleErrorDuringCreatingOrUpdating(error)
+            );
+    }
 }

@@ -3,7 +3,6 @@ import { Col } from "react-bootstrap";
 import { AppСhoseMethodMessage } from "../AppСhoseMethodMessage";
 import { AppQAThread } from "../AppQAThread";
 import { errorToast } from "../../utils";
-import { SessionCommentsAPI } from "../../apis";
 
 import {
     useAuthState,
@@ -14,13 +13,21 @@ import { socket, EVENTS } from "../../socket";
 
 import "./assets/scss/style.scss";
 
-const { ON_NEW_SESSION_QA, ON_DELETE_SESSION_QA, ON_EDIT_SESSION_QA } = EVENTS;
+const {
+    ON_NEW_DISCUSSION_QA,
+    ON_DELETE_DISCUSSION_QA,
+    ON_EDIT_DISCUSSION_QA,
+} = EVENTS;
 
 export interface QuestionAndAnswersProps {
     name?: string;
-    conferenceNumber: number;
-    session: number;
+    conferenceNumber?: number;
+    parentId: number;
     container: number;
+    commentsAPI: any;
+    mainElement: string;
+    parentElement: string;
+    socketParentId: string;
 }
 
 function createCore() {
@@ -88,7 +95,11 @@ const core = createCore();
 export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> = ({
     name,
     container,
-    session,
+    parentId,
+    commentsAPI,
+    mainElement,
+    parentElement,
+    socketParentId,
 }) => {
     const [data, setData] = useState<any[]>(core.getState());
     const [page, setPage] = useState<number>(1);
@@ -102,20 +113,19 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
     } = useSessionSocketEvents();
     const { user } = useAuthState();
     const isGranted = useIsGranted("ROLE_USER");
-
     useEffect(() => {
-        if (session) emitJoinSessionQa(session);
+        if (socketParentId) emitJoinSessionQa(socketParentId);
 
         return () => {
-            emitLeaveSessionQa(session);
+            emitLeaveSessionQa(socketParentId);
         };
-    }, [session]);
+    }, [socketParentId]);
 
     useEffect(() => {
         socket.on(
-            ON_NEW_SESSION_QA,
+            ON_NEW_DISCUSSION_QA,
             (sessionId: number, u: any, parent: any, payload: any) => {
-                if (sessionId === session && u) {
+                if (sessionId === parentId && u) {
                     if (parent) {
                         const p = core
                             .getState()
@@ -132,7 +142,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
             }
         );
 
-        socket.on(ON_DELETE_SESSION_QA, (qaId: number) => {
+        socket.on(ON_DELETE_DISCUSSION_QA, (qaId: number) => {
             if (qaId) {
                 const p = core.getState().find((e: any) => e.id === qaId);
                 if (p) {
@@ -142,9 +152,9 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
         });
 
         socket.on(
-            ON_EDIT_SESSION_QA,
-            (sessionId: number, u: any, parent: any, payload: any) => {
-                if (sessionId === session && u) {
+            ON_EDIT_DISCUSSION_QA,
+            (roomId: string, u: any, parent: any, payload: any) => {
+                if (roomId === socketParentId && u) {
                     core.editQa(payload, setData);
                 }
             }
@@ -152,8 +162,9 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
     }, []);
 
     const getCurrentQestionsAndAnswersThread = (pageNo = 1) => {
-        SessionCommentsAPI.getMessages(session, container, pageNo).then(
-            (response) => {
+        commentsAPI
+            .getMessages(parentId, container, pageNo)
+            .then((response: any) => {
                 if (response) {
                     if (pageNo === 1) {
                         setPage(1);
@@ -170,8 +181,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                     }
                     setTotalItems(response["hydra:totalItems"] as number);
                 }
-            }
-        );
+            });
     };
     useEffect(() => {
         getCurrentQestionsAndAnswersThread(page);
@@ -182,44 +192,45 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
             status: "NEW",
             isReplyed: true,
             container: `api/containers/${container}`,
-            session: `api/sessions/${session}`,
+            mainElement: `${mainElement}/${parentId}`,
         };
 
         const messageToPost = JSON.stringify(meesageObj);
 
-        SessionCommentsAPI.postComment<any, any>(messageToPost).then(
-            ({ errorMessage, response }) => {
+        commentsAPI
+            .postComment(messageToPost)
+            .then(({ errorMessage, response }: any) => {
                 if (errorMessage) {
                     errorToast(errorMessage);
                 }
                 if (response) {
-                    emitPostNewSessionQa(session, user, response, null);
+                    emitPostNewSessionQa(socketParentId, user, response, null);
                     getCurrentQestionsAndAnswersThread(1);
                 }
-            }
-        );
+            });
     };
 
     const sendAnswerMessage = (message: string, aId: number) => {
         const meesageObj = {
             message: `${message}`,
             status: "NEW",
-            parent: `/api/session_comments/${aId}`,
+            parent: `${parentElement}/${aId}`,
             isReplyed: true,
             container: `api/containers/${container}`,
-            session: `api/sessions/${session}`,
+            mainElement: `${mainElement}/${parentId}`,
         };
 
         const messageToPost = JSON.stringify(meesageObj);
 
-        SessionCommentsAPI.postComment<any, any>(messageToPost).then(
-            ({ errorMessage, response }) => {
+        commentsAPI
+            .postComment(messageToPost)
+            .then(({ errorMessage, response }: any) => {
                 if (errorMessage) {
                     errorToast(errorMessage);
                 }
                 if (response) {
                     emitPostNewSessionQa(
-                        session,
+                        socketParentId,
                         user,
                         {
                             ...response,
@@ -230,8 +241,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
 
                     getCurrentQestionsAndAnswersThread(1);
                 }
-            }
-        );
+            });
     };
 
     const patchMessage = (message: string, id: number) => {
@@ -240,27 +250,27 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
             status: "NEW",
             isReplyed: true,
             container: `api/containers/${container}`,
-            session: `api/sessions/${session}`,
+            mainElement: `${mainElement}/${parentId}`,
         };
 
         const messageToPost = JSON.stringify(meesageObj);
 
-        SessionCommentsAPI.update<any, any>(id, messageToPost).then(
-            ({ errorMessage, response }) => {
+        commentsAPI
+            .update(id, messageToPost)
+            .then(({ errorMessage, response }: any) => {
                 if (errorMessage) {
                     errorToast(errorMessage);
                 }
                 if (response) {
-                    emitEditSessionQa(session, user, response, null);
+                    emitEditSessionQa(socketParentId, user, response, null);
                     getCurrentQestionsAndAnswersThread(1);
                 }
-            }
-        );
+            });
     };
 
     const deleteQuestion = (qId: number) => {
-        SessionCommentsAPI.deleteById(qId).then(() => {
-            emitDeleteSessionQa(session, qId);
+        commentsAPI.deleteById(qId).then(() => {
+            emitDeleteSessionQa(socketParentId, qId);
             getCurrentQestionsAndAnswersThread(1);
         });
     };
