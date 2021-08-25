@@ -1,13 +1,16 @@
 import { AUTH_SKIP_ONBOARDING } from "../config/app-env";
 
-export function useSkipOnboarding() {
-    const setSkipOnboarding = (isSet = false) => {
+export function useSkipOnBoarding() {
+    const setSkipOnBoarding = (isSet = false) => {
         localStorage.setItem(AUTH_SKIP_ONBOARDING, `${isSet}`);
     };
 
-    const isSkipOnboarding = () => {
+    const isSkipOnBoarding = () => {
         return !!localStorage.getItem(AUTH_SKIP_ONBOARDING);
     };
 
-    return { setSkipOnboarding, isSkipOnboarding };
+    return {
+        setSkipOnBoarding,
+        isSkipOnBoarding,
+    };
 }

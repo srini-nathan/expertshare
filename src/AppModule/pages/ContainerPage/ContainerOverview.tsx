@@ -64,7 +64,7 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
     });
 
     const checkForAccess = (container: PContainer) => {
-        showLoader(t("container:label.redirecting"));
+        showLoader(t("container:label.redirecting")).then(() => {});
         const { domain, id } = container;
         // @TODO: do something with hardcoded paths
         const path = `${window.location.protocol}//${domain}/auth/auto-login/{token}/1`;
@@ -97,9 +97,11 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
                     errorToast(error);
                 }
             } else if (response !== null) {
-                if (response.items.length === 1)
+                if (response.items.length === 1) {
                     checkForAccess(response.items[0]);
-                else setOverviews(response.items);
+                } else {
+                    setOverviews(response.items);
+                }
             }
         });
     }, []);

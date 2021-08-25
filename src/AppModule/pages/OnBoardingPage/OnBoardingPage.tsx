@@ -40,7 +40,7 @@ import {
     useAuthState,
     useBuildAssetPath,
     useNavigator,
-    useSkipOnboarding,
+    useSkipOnBoarding,
     useUserLocale,
 } from "../../hooks";
 import {
@@ -75,7 +75,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
     const [files, setFiles] = useState<File[]>([]);
     const navigator = useNavigator(navigate);
     const { state, dispatch } = React.useContext(AuthContext);
-    const { setSkipOnboarding } = useSkipOnboarding();
+    const { setSkipOnBoarding } = useSkipOnBoarding();
     const [dataLoading, isDataLoading] = React.useState<boolean>(true);
     const { clientId, containerId, user, containerResourceId } = useAuthState();
     const [, setData] = useState<PUser>(new User(containerResourceId));
@@ -517,7 +517,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
 
                                 <AppButton
                                     onClick={() => {
-                                        setSkipOnboarding(true);
+                                        setSkipOnBoarding(true);
                                         navigator("/").then();
                                     }}
                                     variant="link"

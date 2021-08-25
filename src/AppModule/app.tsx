@@ -12,7 +12,7 @@ import {
     useChosenContainer,
     useCommandCenterSocketEvents,
     useNavigator,
-    useSkipOnboarding,
+    useSkipOnBoarding,
     useUserSocketEvents,
 } from "./hooks";
 import { AppLoader, AppPictureInPicture, AppWelcomeModal } from "./components";
@@ -70,7 +70,7 @@ const App = (): JSX.Element => {
     const { isAuthenticated, user } = state as AuthState;
     const navigator = useNavigator();
     const { isChosen } = useChosenContainer();
-    const { isSkipOnboarding } = useSkipOnboarding();
+    const { isSkipOnBoarding } = useSkipOnBoarding();
     const [showWelcomeModal, setShowWelcomeModal] = React.useState(true);
     const dashboardRoutes: ModuleRouter[] = appRouters.filter(
         ({ layout }) => layout === "dashboard"
@@ -93,6 +93,7 @@ const App = (): JSX.Element => {
     const showPipPlayer = sessionDetailPage === null && reloadingPage === null;
     const { emitLogin, emitLogout, emitPageChange } = useUserSocketEvents();
     const { handler } = useCommandCenterSocketEvents();
+    const skippedOnBoarding = isSkipOnBoarding();
 
     useEffect(() => {
         if (isAppLoadedInIFrame()) {
@@ -149,7 +150,7 @@ const App = (): JSX.Element => {
         return <AppFullScreenLoader />;
     }
     if (!isAutoLoginPage && isAuthenticated === true && user && container) {
-        if (!user.isOnboarded && !isSkipOnboarding() && !onBoardingPage) {
+        if (!user.isOnboarded && !onBoardingPage && !skippedOnBoarding) {
             navigator("/onboarding").then();
         } else if (!isChosen() && !isOverViewPage && !onBoardingPage) {
             navigator("/container").then();

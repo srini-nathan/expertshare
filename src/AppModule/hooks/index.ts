@@ -10,7 +10,7 @@ export * from "./useBuildAssetPath";
 export * from "./useIsGranted";
 export * from "./useChosenContainer";
 export * from "./useUserLocale";
-export * from "./useSkipOnboarding";
+export * from "./useSkipOnBoarding";
 export * from "./useInitChat";
 export * from "./useInitChatBox";
 export * from "./useDateTime";
