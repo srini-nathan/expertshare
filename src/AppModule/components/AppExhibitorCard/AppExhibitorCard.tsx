@@ -87,7 +87,7 @@ export const AppExhibitorCard: FC<AppExhibitorCardProps> = ({
                 </Link>
                 <div className="inner-container--det p-3 mx-2">
                     <Col className="inner-container--det--title p-0">
-                        <Link to={`/admin/exhibitors/${id}/details`}>
+                        <Link to={`/admin/exhibitors/${id}/detail`}>
                             <h2>{name}</h2>
                         </Link>
                     </Col>
