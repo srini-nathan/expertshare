@@ -70,13 +70,14 @@
 
         .inner-container {
             &--banner {
+                position: relative;
                 display: flex;
-                height: 270px;
+                height: 0;
+                padding-bottom: 56.5%;
                 background-color: var(--secondary-10);
                 background-repeat: no-repeat;
                 background-size: cover;
                 border-radius: var(--card-border-radius) var(--card-border-radius) 0 0;
-                position: relative;
 
                 > img {
                     position: absolute;
@@ -153,7 +154,6 @@
                         color: var(--card-text-color);
                     }
                 }
-
 
                 &--participants {
                     display: flex;

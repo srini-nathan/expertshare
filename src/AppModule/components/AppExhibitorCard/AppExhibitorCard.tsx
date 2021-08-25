@@ -69,7 +69,7 @@ export const AppExhibitorCard: FC<AppExhibitorCardProps> = ({
                             {isGrantedControl && (
                                 <>
                                     <Link to={`/admin/exhibitors/${id}`}>
-                                        <i className="fak fa-pen-regular"></i>
+                                        <i className="fak fa-pen-regular mb-1"></i>
                                     </Link>
                                     <Link
                                         to={"#"}
