@@ -47,12 +47,12 @@ export const AppUserSelector: FC<AppUserSelectorProps> = ({
         };
 
         return (
-            <div className="badge badge-green">
+            <div className="badge">
                 {name}
                 <button
                     aria-label="Close"
                     type="button"
-                    className="badge-green--close"
+                    className="badge--close"
                     id={`${id}`}
                     onClick={removeId}
                 >
