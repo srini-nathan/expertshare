@@ -9,16 +9,20 @@ const validations = {
 
 const schema = yup.object().shape({
     category: yup.string().required(),
-    isExternal: yup.boolean(),
+    isVisible: yup.boolean().nullable(),
+    isExternal: yup.boolean().nullable(),
     externalUrl: yup.string().when("isExternal", {
         is: true,
         then: yup.string().url().required(),
     }),
-    streamType: yup.string(),
-    streamUrl: yup.string().when("streamType", {
-        is: (val: string) => val !== "FILE",
-        then: yup.string().url(),
-    }),
+    streamType: yup.string().nullable(),
+    streamUrl: yup
+        .string()
+        .when("streamType", {
+            is: (val: string) => val !== "FILE",
+            then: yup.string().url(),
+        })
+        .nullable(),
 });
 
 export { schema, validations };

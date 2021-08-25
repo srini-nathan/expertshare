@@ -600,6 +600,26 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                             <Row>
                                 <Col lg={6} className={"pl-0"}>
                                     <AppFormSwitch
+                                        name={"isVisible"}
+                                        label={t(
+                                            "admin.exhibitor.form:label.isVisible"
+                                        )}
+                                        {...validation(
+                                            "isVisible",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={errors.isVisible?.message}
+                                        defaultChecked={data.isVisible}
+                                        control={control}
+                                        lg={12}
+                                        xl={12}
+                                    />
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col lg={6} className={"pl-0"}>
+                                    <AppFormSwitch
                                         name={"isExternal"}
                                         label={t(
                                             "admin.exhibitor.form:label.isExternal"
@@ -618,7 +638,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         xl={12}
                                     />
                                 </Col>
-                                {isExternal && (
+                                {isExternal ? (
                                     <AppFormInput
                                         name={"externalUrl"}
                                         label={t(
@@ -638,6 +658,8 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         xl={6}
                                         md={6}
                                     />
+                                ) : (
+                                    <></>
                                 )}
                             </Row>
                             <Row>
