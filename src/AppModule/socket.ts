@@ -25,14 +25,14 @@ export const EVENTS = {
     ON_NEXT_SESSION: "on-next-session",
     SWITCH_NEXT_SESSION: "switch-next-session",
     NEW_MESSAGE: "new-message",
-    JOIN_SESSION_QA: "join-session-qa",
-    LEAVE_SESSION_QA: "leave-session-qa",
-    POST_NEW_SESSION_QA: "post-new-session-qa",
-    EDIT_SESSION_QA: "edit-session-qa",
-    DELETE_SESSION_QA: "delete-session-qa",
-    ON_NEW_SESSION_QA: "on-new-session-qa",
-    ON_EDIT_SESSION_QA: "on-edit-session-qa",
-    ON_DELETE_SESSION_QA: "on-delete-session-qa",
+    JOIN_DISCUSSION_QA: "join-discussion-qa",
+    LEAVE_DISCUSSION_QA: "leave-discussion-qa",
+    POST_NEW_DISCUSSION_QA: "post-new-discussion-qa",
+    EDIT_DISCUSSION_QA: "edit-discussion-qa",
+    DELETE_DISCUSSION_QA: "delete-discussion-qa",
+    ON_NEW_DISCUSSION_QA: "on-new-discussion-qa",
+    ON_EDIT_DISCUSSION_QA: "on-edit-discussion-qa",
+    ON_DELETE_DISCUSSION_QA: "on-delete-discussion-qa",
     JOIN_COMMAND_CENTER: "join-command-center",
     NEW_COMMAND: "new-command",
     ON_NEW_COMMAND: "on-new-command",
@@ -141,26 +141,26 @@ export const switchNextSession = (sessionId: number): void => {
     });
 };
 
-export const joinSessionQa = (sessionId: number): void => {
-    socket.emit(EVENTS.JOIN_SESSION_QA, {
-        sessionId,
+export const joinSessionQa = (socketParentId: string): void => {
+    socket.emit(EVENTS.JOIN_DISCUSSION_QA, {
+        socketParentId,
     });
 };
 
-export const leaveSessionQa = (sessionId: number): void => {
-    socket.emit(EVENTS.LEAVE_SESSION_QA, {
-        sessionId,
+export const leaveSessionQa = (socketParentId: string): void => {
+    socket.emit(EVENTS.LEAVE_DISCUSSION_QA, {
+        socketParentId,
     });
 };
 
 export const postNewSessionQa = (
-    sessionId: number,
+    socketParentId: string,
     sender: PUser,
     payload: PSessionComment,
     parentId: number | null = null
 ): void => {
-    socket.emit(EVENTS.POST_NEW_SESSION_QA, {
-        sessionId,
+    socket.emit(EVENTS.POST_NEW_DISCUSSION_QA, {
+        socketParentId,
         sender,
         payload,
         parentId,
@@ -168,22 +168,22 @@ export const postNewSessionQa = (
 };
 
 export const editSessionQa = (
-    sessionId: number,
+    socketParentId: string,
     sender: PUser,
     payload: PSessionComment,
     parentId: number | null = null
 ): void => {
-    socket.emit(EVENTS.EDIT_SESSION_QA, {
-        sessionId,
+    socket.emit(EVENTS.EDIT_DISCUSSION_QA, {
+        socketParentId,
         sender,
         payload,
         parentId,
     });
 };
 
-export const deleteSessionQa = (sessionId: number, id: number): void => {
-    socket.emit(EVENTS.DELETE_SESSION_QA, {
-        sessionId,
+export const deleteSessionQa = (socketParentId: string, id: number): void => {
+    socket.emit(EVENTS.DELETE_DISCUSSION_QA, {
+        socketParentId,
         id,
     });
 };

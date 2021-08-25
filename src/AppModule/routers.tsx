@@ -10,6 +10,7 @@ import {
     SessionAddEdit,
     EventAgenda,
     SessionDetailsPage,
+    ExhibitorDetailsPage,
     AttendeeOverview,
     OnBoardingPage,
     ReloadingPage,
@@ -44,6 +45,7 @@ export const routers: ModuleRouter[] = [
                     <SessionDetailsPage
                         path={"event/:conferenceId/session/:id"}
                     />
+                    <ExhibitorDetailsPage path={"exhibitor/:id"} />
                     <ContainerOverview path={"containers/overview"} />
                     <ConferenceGrid path={"conferences"} />
                     <ConferenceGrid path={"conferences/:view"} />

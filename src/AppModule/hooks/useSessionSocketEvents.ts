@@ -21,21 +21,21 @@ type SessionSocketEventsType = {
     emitJoinNextSession: (sessionId: number) => void;
     emitLeaveNextSession: (sessionId: number) => void;
     emitSwitchSessionNext: (sessionId: number) => void;
-    emitJoinSessionQa: (sessionId: number) => void;
-    emitLeaveSessionQa: (sessionId: number) => void;
+    emitJoinSessionQa: (socketParentId: string) => void;
+    emitLeaveSessionQa: (socketParentId: string) => void;
     emitPostNewSessionQa: (
-        sessionId: number,
+        socketParentId: string,
         user: PUser,
         payload: PSessionComment,
         parentId: number | null
     ) => void;
     emitEditSessionQa: (
-        sessionId: number,
+        socketParentId: string,
         user: PUser,
         payload: PSessionComment,
         parentId: number | null
     ) => void;
-    emitDeleteSessionQa: (sessionId: number, id: number) => void;
+    emitDeleteSessionQa: (socketParentId: string, id: number) => void;
     emitJoinSession: (sessionId: number) => void;
     emitLeaveSession: (sessionId: number) => void;
     emitSubmittedVote: (sessionId: number, voteId: number) => void;
@@ -57,34 +57,34 @@ export function useSessionSocketEvents(): SessionSocketEventsType {
         switchNextSession(sessionId);
     };
 
-    const emitJoinSessionQa = (sessionId: number): void => {
-        joinSessionQa(sessionId);
+    const emitJoinSessionQa = (socketParentId: string): void => {
+        joinSessionQa(socketParentId);
     };
 
-    const emitLeaveSessionQa = (sessionId: number): void => {
-        leaveSessionQa(sessionId);
+    const emitLeaveSessionQa = (socketParentId: string): void => {
+        leaveSessionQa(socketParentId);
     };
 
     const emitPostNewSessionQa = (
-        sessionId: number,
+        socketParentId: string,
         user: PUser,
         payload: PSessionComment,
         parentId: number | null = null
     ): void => {
-        postNewSessionQa(sessionId, user, payload, parentId);
+        postNewSessionQa(socketParentId, user, payload, parentId);
     };
 
     const emitEditSessionQa = (
-        sessionId: number,
+        socketParentId: string,
         user: PUser,
         payload: PSessionComment,
         parentId: number | null = null
     ): void => {
-        editSessionQa(sessionId, user, payload, parentId);
+        editSessionQa(socketParentId, user, payload, parentId);
     };
 
-    const emitDeleteSessionQa = (sessionId: number, id: number): void => {
-        deleteSessionQa(sessionId, id);
+    const emitDeleteSessionQa = (socketParentId: string, id: number): void => {
+        deleteSessionQa(socketParentId, id);
     };
 
     const emitJoinSession = (sessionId: number): void => {

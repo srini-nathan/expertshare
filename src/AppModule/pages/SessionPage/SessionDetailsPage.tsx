@@ -21,6 +21,7 @@ import "./assets/scss/style.scss";
 import { socket, EVENTS } from "../../socket";
 import { AppLiveVote, AppSessionDetailOperatorPanel } from "../../containers";
 import { LiveVoteQuestion } from "../../../AdminModule/models/entities/LiveVoteQuestion";
+import { SessionCommentsAPI } from "../../apis";
 
 const { ON_NEXT_SESSION, ON_LIVE_VOTE_REFRESH } = EVENTS;
 
@@ -332,9 +333,12 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                                 name={t(
                                     "sessionDetails:section.questionAndAnswers"
                                 )}
-                                conferenceNumber={conferenceId}
-                                session={id}
+                                parentId={id}
+                                socketParentId={`session_${id}`}
                                 container={containerId}
+                                commentsAPI={SessionCommentsAPI}
+                                mainElement="api/sessions"
+                                parentElement="/api/session_comments"
                             />
                         ) : null}
                     </Col>

@@ -4,10 +4,12 @@ import {
 } from "./ExhibitorTranslation";
 import { Session } from "./Session";
 import { BaseEntity } from "../../../AppModule/models/entities/BaseEntity";
+import { JsonResponseData } from "../../../AppModule/models";
 import { Container } from "./Container";
 import { User } from "./User";
 import { Conference } from "./Conference";
 import { STREAM_TYPE } from "../../../config";
+import { ExhibitorApi } from "../../apis";
 
 export class Exhibitor extends BaseEntity {
     translations: ExhibitorTranslation[] | SExhibitorTranslation;
@@ -126,6 +128,42 @@ export class Exhibitor extends BaseEntity {
         this.description = description;
         this.contactUsCaption = contactUsCaption;
     }
+
+    toString(): string {
+        return ExhibitorApi.toResourceUrl(this.id);
+    }
+
+    toJSON(addExtraData = false): JsonResponseData {
+        const data: JsonResponseData = {
+            ...super.toJSON(addExtraData),
+            name: this.name,
+            description: this.description,
+            contactUsCaption: this.contactUsCaption,
+            logoImageName: this.logoImageName,
+            coverImageName: this.coverImageName,
+            isVisible: this.isVisible,
+            isCommentEnable: this.isCommentEnable,
+            isExternal: this.isExternal,
+            externalUrl: this.externalUrl,
+            isEnableOnlineAttendee: this.isEnableOnlineAttendee,
+            address: this.address,
+            facebook: this.facebook,
+            linkedin: this.linkedin,
+            twitter: this.twitter,
+            streamUrl: this.streamUrl,
+            streamType: this.streamType,
+            container: this.container,
+            website: this.website,
+            phone: this.phone,
+            email: this.email,
+        };
+
+        return data;
+    }
 }
 
 export type PExhibitor = Partial<Exhibitor>;
+
+export type PRExhibitor = {
+    "@id": string;
+} & PExhibitor;
