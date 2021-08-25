@@ -99,7 +99,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
         return ` ${Math.floor(minutes)} mins`;
     };
 
-    const getUsesForSession = (
+    const getUsersForSession = (
         speakers: User[] | string[],
         moderators: User[] | string[]
     ) => {
@@ -260,7 +260,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                             }}
                                             className="inner-container--det--content--speakers mt-3"
                                         >
-                                            {getUsesForSession(
+                                            {getUsersForSession(
                                                 session.speakers,
                                                 session.moderators
                                             )?.map((e: any, i: number) => {
