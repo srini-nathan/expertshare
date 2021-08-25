@@ -21,6 +21,7 @@ import {
     pageSizeOptions,
     defaultPageSize,
 } from "../../../AppModule/containers/AppGrid";
+import { ExhibitorListTabs } from "./ExhibitorListTabs";
 
 export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
@@ -31,7 +32,7 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [pageSize, setPageSize] = useState<number>(30);
     const [page, setPage] = useState<number>(1);
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
-    const [active] = useState<boolean>(true);
+    const [isVisible, setIsVisible] = useState<boolean>(true);
     const [data, setData] = useState<Exhibitor[]>([]);
     const [showDelete, setDeleteShow] = useState(0);
     const [filter, setFilter] = useState<string>("");
@@ -42,7 +43,7 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
             page,
             {
                 "container.id": containerId,
-                active,
+                isVisible,
                 "translations.name": filter,
                 ...params,
             },
@@ -63,7 +64,7 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
 
     useEffect(() => {
         fetchData();
-    }, [active, pageSize]);
+    }, [isVisible, pageSize]);
 
     async function handleFilter(search: string) {
         setFilter(search);
@@ -98,6 +99,10 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
                     />
                 </div>
             </AppPageHeader>
+            <ExhibitorListTabs
+                isVisible={isVisible}
+                setIsVisible={setIsVisible}
+            />
             <Row>
                 {loading ? (
                     <AppLoader />
