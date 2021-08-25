@@ -99,6 +99,24 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
         return ` ${Math.floor(minutes)} mins`;
     };
 
+    const getUsesForSession = (
+        speakers: User[] | string[],
+        moderators: User[] | string[]
+    ) => {
+        let users;
+        if (speakers.length >= 3) {
+            users = [...speakers];
+        }
+        if (speakers.length === 2 && moderators.length >= 1) {
+            users = [...speakers, ...moderators.slice(0, 1)];
+        }
+
+        if (speakers.length === 1 && moderators.length >= 1) {
+            users = [...speakers, ...moderators.slice(0, 2)];
+        }
+        return users;
+    };
+
     return (
         <Col className={`p-0 ${getSize()[0]}`}>
             <Col
@@ -242,16 +260,17 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                             }}
                                             className="inner-container--det--content--speakers mt-3"
                                         >
-                                            {session.speakers
-                                                .slice(0, 3)
-                                                .map((e: any, i: number) => {
-                                                    return (
-                                                        <AppUserListItem
-                                                            key={i}
-                                                            user={e as User}
-                                                        />
-                                                    );
-                                                })}
+                                            {getUsesForSession(
+                                                session.speakers,
+                                                session.moderators
+                                            )?.map((e: any, i: number) => {
+                                                return (
+                                                    <AppUserListItem
+                                                        key={i}
+                                                        user={e as User}
+                                                    />
+                                                );
+                                            })}
                                         </div>
                                         <div className="inner-container--det--content--more">
                                             {session.moderators.length +
