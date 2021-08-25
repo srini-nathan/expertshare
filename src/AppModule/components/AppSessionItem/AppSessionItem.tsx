@@ -114,6 +114,9 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
         if (speakers.length === 1 && moderators.length >= 1) {
             users = [...speakers, ...moderators.slice(0, 2)];
         }
+        if (speakers.length === 0 && moderators.length >= 1) {
+            users = [...speakers, ...moderators.slice(0, 3)];
+        }
         return users;
     };
 
