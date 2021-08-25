@@ -99,7 +99,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
         return ` ${Math.floor(minutes)} mins`;
     };
 
-    const getUsesForSession = (
+    const getUsersForSession = (
         speakers: User[] | string[],
         moderators: User[] | string[]
     ) => {
@@ -113,6 +113,9 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
 
         if (speakers.length === 1 && moderators.length >= 1) {
             users = [...speakers, ...moderators.slice(0, 2)];
+        }
+        if (speakers.length === 0 && moderators.length >= 1) {
+            users = [...speakers, ...moderators.slice(0, 3)];
         }
         return users;
     };
@@ -260,7 +263,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                             }}
                                             className="inner-container--det--content--speakers mt-3"
                                         >
-                                            {getUsesForSession(
+                                            {getUsersForSession(
                                                 session.speakers,
                                                 session.moderators
                                             )?.map((e: any, i: number) => {
