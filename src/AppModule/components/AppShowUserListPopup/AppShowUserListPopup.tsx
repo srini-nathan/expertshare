@@ -10,12 +10,16 @@ export interface AppShowUserListPopupProps {
     show: boolean;
     handleClose: (show: boolean) => void;
     users: User[];
+    title?: string;
+    icon?: string;
 }
 
 export const AppShowUserListPopup: FC<AppShowUserListPopupProps> = ({
     show,
     handleClose,
     users,
+    title = "",
+    icon = "speakers",
 }): JSX.Element => {
     const { t } = useTranslation();
 
@@ -30,11 +34,18 @@ export const AppShowUserListPopup: FC<AppShowUserListPopupProps> = ({
                             <div className="row m-0 p-0">
                                 <div className="header--title col-auto pl-0">
                                     <h2 className="mb-0">
-                                        <i className="fak fa-speakers mr-2"></i>
-                                        {t(
-                                            "session.form:label.speakers"
-                                        )} &{" "}
-                                        {t("session.form:label.moderators")}
+                                        <i
+                                            className={`fak fa-${icon} mr-2`}
+                                        ></i>
+                                        {title
+                                            ? t(title)
+                                            : `
+                                                ${t(
+                                                    "session.form:label.speakers"
+                                                )} & ${t(
+                                                  "session.form:label.moderators"
+                                              )}
+                                            `}
                                     </h2>
                                 </div>
                                 <div className="header--close col-auto mr-0 ml-auto pr-0">
