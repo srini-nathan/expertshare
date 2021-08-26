@@ -56,7 +56,7 @@ export const AppUserSelector: FC<AppUserSelectorProps> = ({
                     id={`${id}`}
                     onClick={removeId}
                 >
-                    <span aria-hidden="true">×</span>
+                    <i className="fak fa-times-light" aria-hidden="true"></i>
                 </button>
             </div>
         );
