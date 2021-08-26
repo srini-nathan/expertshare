@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useRef } from "react";
 import { sortBy } from "lodash";
 import { useSetRecoilState } from "recoil";
+import ReactGA from "react-ga";
+import { Helmet } from "react-helmet";
 import { GenerateApi } from "../../AdminModule/apis/GenerateApi";
 import { ContainerApi } from "../../AdminModule/apis/ContainerApi";
 import {
+    Configuration,
     I18nMap,
     Language,
     MyContainer,
@@ -16,7 +19,7 @@ import { useAssetHelper } from "../hooks/useAssetHelper";
 import { useDomHelper } from "../hooks/useDomHelper";
 import { CONSTANTS } from "../../config";
 import { FileTypeInfo } from "../models";
-import { parseDesign } from "../utils";
+import { parseConfiguration, parseDesign } from "../utils";
 
 interface GlobalState {
     status: "LOADED" | "LOADING" | "ERROR";
@@ -43,6 +46,37 @@ export const useGlobalData = (): GlobalState => {
     return context;
 };
 
+const injectGA = (configuration: Configuration) => {
+    if (configuration.googleAnalyticsCode) {
+        ReactGA.initialize(configuration.googleAnalyticsCode);
+        ReactGA.pageview(window.location.pathname + window.location.search);
+    }
+};
+
+const renderHelmet = (configuration?: Configuration) => {
+    if (configuration) {
+        const { projectName, hubspotId, isHubspotEnable } = configuration;
+        return (
+            <>
+                {injectGA(configuration)}
+                <Helmet>
+                    {projectName !== "" ? <title>{projectName}</title> : null}
+                    {isHubspotEnable && hubspotId !== "" ? (
+                        <script
+                            type="text/javascript"
+                            id="hs-script-loader"
+                            async
+                            defer
+                            src={`//js.hs-scripts.com/${hubspotId}.js`}
+                        ></script>
+                    ) : null}
+                </Helmet>
+            </>
+        );
+    }
+    return <></>;
+};
+
 export const GlobalProvider: React.FC = (props) => {
     const [state, setState] = React.useState<GlobalState>({
         status: "LOADING",
@@ -51,6 +85,7 @@ export const GlobalProvider: React.FC = (props) => {
     const setMyContainer = useSetRecoilState(appMyContainer);
     const { buildPath } = useAssetHelper();
     const { setFavicon, setStyle } = useDomHelper();
+    const configuration = useRef<Configuration>();
 
     React.useEffect(() => {
         setState({
@@ -90,6 +125,7 @@ export const GlobalProvider: React.FC = (props) => {
                 setNavigation(sortBy(navigation, [(n) => n.ord]));
                 setMyContainer(response);
                 const designConfiguration = parseDesign(response);
+                configuration.current = parseConfiguration(response);
                 const { genImageFavicon } = designConfiguration;
                 const favicon = buildPath(
                     response,
@@ -117,5 +153,10 @@ export const GlobalProvider: React.FC = (props) => {
         })();
     }, [setState]);
 
-    return <Global.Provider value={state}>{props.children}</Global.Provider>;
+    return (
+        <Global.Provider value={state}>
+            {renderHelmet(configuration.current)}
+            {props.children}
+        </Global.Provider>
+    );
 };
