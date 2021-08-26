@@ -115,6 +115,12 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
     const logoImageFileRef = useRef<File | null>(null);
     const coverImageFileRef = useRef<File | null>(null);
     const videoFileRef = useRef<File | null>(null);
+    const [pickerState, setPickerState] = useState({
+        owner: false,
+        member: false,
+        event: false,
+        session: false,
+    });
 
     useEffect(() => {
         if (isEditMode && id !== null) {
@@ -792,6 +798,17 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         icon="speakers"
                                         users={users}
                                         loadMore={getOwners}
+                                        state={pickerState.owner}
+                                        onStateChange={(state) => {
+                                            if (state === true) {
+                                                setPickerState({
+                                                    session: false,
+                                                    event: false,
+                                                    member: false,
+                                                    owner: true,
+                                                });
+                                            }
+                                        }}
                                     />
                                 </Col>
                             </Row>
@@ -811,6 +828,17 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         icon="speakers"
                                         users={members}
                                         loadMore={getMembers}
+                                        state={pickerState.member}
+                                        onStateChange={(state) => {
+                                            if (state === true) {
+                                                setPickerState({
+                                                    session: false,
+                                                    event: false,
+                                                    owner: false,
+                                                    member: true,
+                                                });
+                                            }
+                                        }}
                                     />
                                 </Col>
                             </Row>
@@ -830,6 +858,17 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         icon="speakers"
                                         list={events}
                                         loadMore={getEvents}
+                                        state={pickerState.event}
+                                        onStateChange={(state) => {
+                                            if (state === true) {
+                                                setPickerState({
+                                                    session: false,
+                                                    event: true,
+                                                    owner: false,
+                                                    member: false,
+                                                });
+                                            }
+                                        }}
                                     />
                                 </Col>
                             </Row>
@@ -849,6 +888,17 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         icon="speakers"
                                         list={sessions}
                                         loadMore={getSessions}
+                                        state={pickerState.session}
+                                        onStateChange={(state) => {
+                                            if (state === true) {
+                                                setPickerState({
+                                                    session: true,
+                                                    event: false,
+                                                    owner: false,
+                                                    member: false,
+                                                });
+                                            }
+                                        }}
                                     />
                                 </Col>
                             </Row>
