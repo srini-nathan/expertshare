@@ -47,7 +47,7 @@ export const AppSelectExhibitorStream: FC<AppSelectStreamProps> = ({
                     required
                 />
             </Col>
-            <Col md={12} className="d-flex mb-4">
+            <Col md={12} className="d-flex mb-1">
                 <div>
                     <Row className="m-0 w-100 ">
                         <Row className="m-0 tabs">
