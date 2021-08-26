@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { AppSessionSelector } from "./AppSessionSelector";
@@ -19,6 +19,8 @@ export interface AppSessionPickerProps {
     xl: number;
     showAdd?: boolean;
     loadMore?: (value?: string) => void;
+    onStateChange?: (state: boolean) => void;
+    state?: boolean;
 }
 
 export const AppSessionPicker: FC<AppSessionPickerProps> = ({
@@ -33,9 +35,20 @@ export const AppSessionPicker: FC<AppSessionPickerProps> = ({
     loadMore,
     handleSelected = () => {},
     selectedList = [],
+    onStateChange = () => {},
+    state = false,
 }): JSX.Element => {
     const [show, isShow] = useState<boolean>(false);
     const { t } = useTranslation();
+
+    useEffect(() => {
+        onStateChange(show);
+    }, [show]);
+
+    useEffect(() => {
+        isShow(state);
+    }, [state]);
+
     return (
         <Row className="m-0">
             <Col sm={12} className="create-session--speakers--header px-0">
