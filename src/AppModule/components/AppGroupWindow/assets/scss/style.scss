@@ -81,20 +81,21 @@
                 }
             }
 
-            .badge-green {
-                background: var(--primary-20);
-                border-radius: 10px;
-                margin-right: 5px;
-                padding: 0.5em;
-                padding-top: 0.1em;
-                margin-bottom: 0.5em;
-
+            .badge {
+                display: flex;
+                align-items: center;
+                padding: 4px 7px;
+                margin: 5px;
+                color: var(--card-text-color);
+                background-color: var(--primary-10);
+                border-radius: var(--tag-border-radius);
                 &--close {
-                    border: none;
-                    font-size: 18px;
-                    background: none;
-                    position: relative;
-                    top: 2px;
+                    padding-right: 0;
+                    background: unset;
+                    border: unset;
+                    i {
+                        font-size: 17px;
+                    }
                 }
             }
         }
