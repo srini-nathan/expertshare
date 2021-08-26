@@ -420,24 +420,23 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
             <div className="auth-container--box">
                 <Row className="p-0 m-auto">
                     <div className="tabs-translation-auth mb-3 justify-content-center">
-                        <Row className="m-0 p-0 justify-content-center">
+                        <Row className="m-0 p-0 justify-content-center app-language-switcher">
                             {container &&
                                 activeLanguages?.map((e, i) => {
                                     return (
-                                        <AppButton
-                                            variant="secondary"
+                                        <div
                                             className={`${e.locale} ${
                                                 activeLanguage === e.locale &&
                                                 "active"
-                                            } mx-1 px-2 my-1 mx-sm-1 col-auto col-sm-auto`}
+                                            } mx-1 my-1 mx-sm-1 col-auto col-sm-auto lang-item`}
                                             onClick={() => {
                                                 setActiveLanguage(e.locale);
                                             }}
                                             key={i}
                                         >
-                                            <i></i>
+                                            <i className="flag"></i>
                                             {e.name}
-                                        </AppButton>
+                                        </div>
                                     );
                                 })}
                         </Row>
