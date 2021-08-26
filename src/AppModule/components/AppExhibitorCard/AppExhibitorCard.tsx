@@ -56,12 +56,10 @@ export const AppExhibitorCard: FC<AppExhibitorCardProps> = ({
                         <div className="inner-container--banner--button">
                             {!isVisible ? (
                                 <span className="live-now-btn mr-3">
-                                    <i className="fak fa-close"></i>
                                     {t("exhibitor.list:badge.inActive")}
                                 </span>
                             ) : (
                                 <span className="archived-btn mr-3">
-                                    <i className="fak fa-archive-regular"></i>
                                     {t("exhibitor.list:badge.active")}
                                 </span>
                             )}
@@ -71,7 +69,7 @@ export const AppExhibitorCard: FC<AppExhibitorCardProps> = ({
                             {isGrantedControl && (
                                 <>
                                     <Link to={`/admin/exhibitors/${id}`}>
-                                        <i className="fak fa-pen-regular"></i>
+                                        <i className="fak fa-pen-regular mb-1"></i>
                                     </Link>
                                     <Link
                                         to={"#"}
@@ -89,7 +87,7 @@ export const AppExhibitorCard: FC<AppExhibitorCardProps> = ({
                 </Link>
                 <div className="inner-container--det p-3 mx-2">
                     <Col className="inner-container--det--title p-0">
-                        <Link to={`/admin/exhibitors/${id}/details`}>
+                        <Link to={`/admin/exhibitors/${id}/detail`}>
                             <h2>{name}</h2>
                         </Link>
                     </Col>
