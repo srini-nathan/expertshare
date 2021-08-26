@@ -1,6 +1,4 @@
 import React, { FC, useEffect } from "react";
-import { Helmet } from "react-helmet";
-import ReactGA from "react-ga";
 import { useSetRecoilState } from "recoil";
 import { Container, Role } from "../../../AdminModule/models";
 import { ContainerApi, RoleApi } from "../../../AdminModule/apis";
@@ -11,15 +9,13 @@ import { ContainerTypes } from "../../contexts/types/container-types";
 import { AuthState } from "../../../SecurityModule/models";
 import { appContainer } from "../../atoms/AppContainer";
 
+// @TODO: Remove this, as we have global context provider
 export const AppConfiguration: FC = ({ children }) => {
     const { dispatch } = React.useContext(AppContext);
     const { state } = React.useContext(AuthContext);
     const setAppContainer = useSetRecoilState(appContainer);
     const { containerId } = state as AuthState;
-    const [
-        containerConfiguration,
-        setContainerConfiguration,
-    ] = React.useState<any>();
+    const [, setContainerConfiguration] = React.useState<any>();
 
     useEffect(() => {
         if (containerId) {
@@ -65,45 +61,6 @@ export const AppConfiguration: FC = ({ children }) => {
             );
         }
     }, []);
-    const injectGA = () => {
-        if (
-            containerConfiguration &&
-            containerConfiguration.googleAnalyticsCode &&
-            containerConfiguration.googleAnalyticsCode !== ""
-        ) {
-            ReactGA.initialize(containerConfiguration.googleAnalyticsCode);
-            ReactGA.pageview(window.location.pathname + window.location.search);
-        }
-        return <></>;
-    };
-    const renderScripts = () => {
-        injectGA();
-        return (
-            <Helmet>
-                {containerConfiguration &&
-                    containerConfiguration.projectName &&
-                    containerConfiguration.projectName !== "" && (
-                        <title>{containerConfiguration.projectName}</title>
-                    )}
-                {containerConfiguration &&
-                    containerConfiguration.isHubspotEnable &&
-                    containerConfiguration.hubspotId !== "" && (
-                        <script
-                            type="text/javascript"
-                            id="hs-script-loader"
-                            async
-                            defer
-                            src={`//js.hs-scripts.com/${containerConfiguration.hubspotId}.js`}
-                        ></script>
-                    )}
-            </Helmet>
-        );
-    };
 
-    return (
-        <>
-            {renderScripts()}
-            {children}
-        </>
-    );
+    return <>{children}</>;
 };
