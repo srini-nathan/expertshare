@@ -1,5 +1,6 @@
 import { forEach as _forEach, isString as _isString } from "lodash";
 import { UseFormSetError } from "react-hook-form/dist/types/form";
+import { Canceler } from "axios";
 import { randomAlphaNumeric } from "./random";
 import { SimpleObject, UnprocessableEntityErrorResponse } from "../models";
 
@@ -46,4 +47,13 @@ export const setViolations = <T>(
             message: value,
         });
     });
+};
+
+export const cancelAllPrevRequest = (cancelTokenSources: Canceler[]) => {
+    while (cancelTokenSources.length > 0) {
+        const c = cancelTokenSources.shift();
+        if (c) {
+            c();
+        }
+    }
 };
