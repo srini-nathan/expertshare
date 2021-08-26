@@ -3,15 +3,15 @@
 .streams-container {
     .tab-pane {
         display: none;
-        min-height: 205px;
+        min-height: 10px;
 
         &.show {
             display: block;
         }
     }
 
-    .tabs{
-        >div {
+    .tabs {
+        > div {
             height: 52px;
             padding: 10px;
             background-color: var(--tab-background-color) !important;
