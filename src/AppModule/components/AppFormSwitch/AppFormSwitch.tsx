@@ -91,7 +91,7 @@ export const AppFormSwitch: FC<AppFormSwitchProps> = ({
                     />
                 )}
             />
-            <Form.Control.Feedback type="invalid">
+            <Form.Control.Feedback className={"d-block"} type="invalid">
                 {errorMessage}
             </Form.Control.Feedback>
         </Form.Group>
