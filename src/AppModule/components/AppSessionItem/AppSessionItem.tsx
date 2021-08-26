@@ -52,6 +52,8 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
     const [showMore, isShowMore] = useState<boolean>(false);
     const { container } = useGlobalData();
     const { t } = useTranslation();
+    const users = [...session.speakers, ...session.moderators];
+    const limited = users?.slice(0, 3);
 
     const getSize = (): string[] => {
         switch (session.cardSize) {
@@ -99,27 +101,6 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
         return ` ${Math.floor(minutes)} mins`;
     };
 
-    const getUsersForSession = (
-        speakers: User[] | string[],
-        moderators: User[] | string[]
-    ) => {
-        let users;
-        if (speakers.length >= 3) {
-            users = [...speakers];
-        }
-        if (speakers.length === 2 && moderators.length >= 1) {
-            users = [...speakers, ...moderators.slice(0, 1)];
-        }
-
-        if (speakers.length === 1 && moderators.length >= 1) {
-            users = [...speakers, ...moderators.slice(0, 2)];
-        }
-        if (speakers.length === 0 && moderators.length >= 1) {
-            users = [...speakers, ...moderators.slice(0, 3)];
-        }
-        return users;
-    };
-
     return (
         <Col className={`p-0 ${getSize()[0]}`}>
             <Col
@@ -131,9 +112,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                 <AppShowUserListPopup
                     show={showMore}
                     handleClose={isShowMore}
-                    users={
-                        [...session.speakers, ...session.moderators] as User[]
-                    }
+                    users={users as User[]}
                 />
                 <AppCard className={`inner-container p-0`}>
                     <Row className="m-0 p-0">
@@ -246,8 +225,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                 </Link>
                             </div>
                             <div className="inner-container--det--content mt-3">
-                                {(session.moderators.length > 0 ||
-                                    session.speakers.length > 0) && (
+                                {users?.length > 0 && (
                                     <>
                                         <div className="inner-container--det--content--title">
                                             <i className="fak fa-speakers"></i>
@@ -263,22 +241,19 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                             }}
                                             className="inner-container--det--content--speakers mt-3"
                                         >
-                                            {getUsersForSession(
-                                                session.speakers,
-                                                session.moderators
-                                            )?.map((e: any, i: number) => {
-                                                return (
-                                                    <AppUserListItem
-                                                        key={i}
-                                                        user={e as User}
-                                                    />
-                                                );
-                                            })}
+                                            {limited?.map(
+                                                (e: any, i: number) => {
+                                                    return (
+                                                        <AppUserListItem
+                                                            key={i}
+                                                            user={e as User}
+                                                        />
+                                                    );
+                                                }
+                                            )}
                                         </div>
                                         <div className="inner-container--det--content--more">
-                                            {session.moderators.length +
-                                                session.speakers.length >
-                                                3 && (
+                                            {users.length > 3 && (
                                                 <span
                                                     onClick={() => {
                                                         isShowMore(!showMore);
