@@ -16,9 +16,14 @@ import { Exhibitor, User } from "../../models";
 import {
     ExhibitorPosterFileInfo,
     ExhibitorLogoPosterFileInfo,
+    ROLES,
 } from "../../../config";
 import placeholder from "../../../AppModule/assets/images/imgthumb.svg";
-import { useAuthState, useBuildAssetPath } from "../../../AppModule/hooks";
+import {
+    useAuthState,
+    useBuildAssetPath,
+    useIsGranted,
+} from "../../../AppModule/hooks";
 import { ExhibitorCommentsAPI } from "../../../AppModule/apis";
 
 export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
@@ -29,6 +34,7 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { containerId } = useAuthState();
     const imagePath = useBuildAssetPath(ExhibitorPosterFileInfo);
     const logoPath = useBuildAssetPath(ExhibitorLogoPosterFileInfo);
+    const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
 
     useEffect(() => {
         isLoading(true);
@@ -66,7 +72,7 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                     <Row className="m-0 card mb-3 mb-lg-4">
                         <Col className="exhibitors-header" xs={12}>
                             <div className="row exhibitors-header--detail mb-3 px-2 pt-4">
-                                <div className="col-12 exhibitors-header--detail--buttons d-flex">
+                                <div className="col-auto exhibitors-header--detail--left-buttons d-flex">
                                     <Link
                                         to={"/admin/exhibitors"}
                                         className="back-btn btn btn-secondary mr-3"
@@ -75,6 +81,16 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                                         {t("exhibitor.detail:button.back")}
                                     </Link>
                                 </div>
+                                {isGrantedControl && (
+                                    <div className="col-auto exhibitors-header--detail--right-buttons d-flex mr-0 ml-auto">
+                                        <Link
+                                            to={`/admin/exhibitors/${id}`}
+                                            className="btn btn-secondary edit-btn ml-2"
+                                        >
+                                            <i className="fak fa-pen-regular mb-1"></i>
+                                        </Link>
+                                    </div>
+                                )}
                                 <div className="col-12 exhibitors-header--detail--title mt-4">
                                     <h1>{data?.name}</h1>
                                 </div>
