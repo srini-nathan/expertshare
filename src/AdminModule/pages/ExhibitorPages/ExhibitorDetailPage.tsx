@@ -85,7 +85,8 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                             <Row className="m-0 mb-3 mb-lg-4">
                                 {haveMembers ? (
                                     <Col
-                                        lg={8}
+                                        lg={7}
+                                        xl={7}
                                         md={12}
                                         className={`create-session--speakers divider-right`}
                                     >
@@ -97,8 +98,8 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                                     <></>
                                 )}
                                 <Col
-                                    lg={haveMembers ? 4 : 12}
-                                    xl={haveMembers ? 4 : 12}
+                                    lg={haveMembers ? 5 : 12}
+                                    xl={haveMembers ? 5 : 12}
                                 >
                                     <ExhibitorDetailPageContact data={data} />
                                 </Col>
