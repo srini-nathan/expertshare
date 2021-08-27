@@ -126,8 +126,8 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
     useEffect(() => {
         socket.on(
             ON_NEW_DISCUSSION_QA,
-            (sessionId: number, u: any, parent: any, payload: any) => {
-                if (sessionId === parentId && u) {
+            (roomId: string, u: any, parent: any, payload: any) => {
+                if (roomId === socketParentId && u) {
                     if (parent) {
                         const p = core
                             .getState()
