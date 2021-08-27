@@ -4,13 +4,17 @@ import { Col, Row } from "react-bootstrap";
 import { Exhibitor } from "../../models";
 
 type ExhibitorDetailPageContactType = {
-    data: Exhibitor;
+    data?: Exhibitor;
 };
 
 export const ExhibitorDetailPageContact: FC<ExhibitorDetailPageContactType> = ({
     data,
 }): JSX.Element => {
     const { t } = useTranslation();
+
+    if (!data) {
+        return <></>;
+    }
     const {
         contactUsCaption,
         facebook,
@@ -34,11 +38,18 @@ export const ExhibitorDetailPageContact: FC<ExhibitorDetailPageContactType> = ({
     };
 
     const renderLink = (text = "", icon: string) => {
-        return (
-            <div className={"d-flex"}>
-                <i className={`fak fa-${icon} mr-1 mt-1`}></i> <p>{text}</p>
-            </div>
-        );
+        if (text !== "") {
+            return (
+                <Col sm={6} className={"pr-0"}>
+                    <div className={"d-flex"}>
+                        <i className={`fak fa-${icon} mr-1 mt-1`}></i>
+                        <p>{text}</p>
+                    </div>
+                </Col>
+            );
+        }
+
+        return <></>;
     };
 
     return (
@@ -49,20 +60,10 @@ export const ExhibitorDetailPageContact: FC<ExhibitorDetailPageContactType> = ({
             </h5>
             <div className={"mt-4"}>
                 <Row>
-                    <Col sm={6} className={"pr-0"}>
-                        {renderLink(email, "seat")}
-                    </Col>
-                    <Col sm={6} className={"pr-0"}>
-                        {renderLink(website, "seat")}
-                    </Col>
-                </Row>
-                <Row>
-                    <Col sm={6} className={"pr-0"}>
-                        {renderLink(address, "icon-map")}
-                    </Col>
-                    <Col sm={6} className={"pr-0"}>
-                        {renderLink(phone, "cellphone")}
-                    </Col>
+                    {renderLink(email, "seat")}
+                    {renderLink(website, "seat")}
+                    {renderLink(address, "icon-map")}
+                    {renderLink(phone, "cellphone")}
                 </Row>
                 <Row className={"mt-4"}>
                     <Col sm={6}>
