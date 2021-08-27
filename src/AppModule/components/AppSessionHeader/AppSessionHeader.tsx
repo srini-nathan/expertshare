@@ -11,14 +11,8 @@ import { useGlobalData } from "../../contexts";
 import { getDateTimeWithoutTimezone } from "../../utils";
 import { useAuthState, useUserLocale, useIsGranted } from "../../hooks";
 import { UserApi } from "../../../AdminModule/apis";
-import { CONSTANTS } from "../../../config";
+import { ROLES } from "../../../config";
 import { appPipPlayer } from "../../atoms";
-
-const { Role: ROLE } = CONSTANTS;
-
-const {
-    ROLE: { ROLE_OPERATOR },
-} = ROLE;
 
 export interface AppSessionHeaderProps {
     session: Session;
@@ -44,7 +38,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
     const location = useLocation();
     const { userId } = useAuthState();
     const setPipPlayerData = useSetRecoilState(appPipPlayer);
-    const isGrantedControl = useIsGranted(ROLE_OPERATOR);
+    const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
 
     useEffect(() => {
         return () => {
