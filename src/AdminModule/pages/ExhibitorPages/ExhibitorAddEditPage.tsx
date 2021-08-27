@@ -115,6 +115,12 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
     const logoImageFileRef = useRef<File | null>(null);
     const coverImageFileRef = useRef<File | null>(null);
     const videoFileRef = useRef<File | null>(null);
+    const [pickerState, setPickerState] = useState({
+        owner: false,
+        member: false,
+        event: false,
+        session: false,
+    });
 
     useEffect(() => {
         if (isEditMode && id !== null) {
@@ -445,7 +451,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                 translations={translations}
                                 onChange={setTranslations}
                             />
-                            <Col className={"p-0"}>
+                            <Col className={"p-0 mt-3"}>
                                 <Form.Group>
                                     <AppFormLabelTranslatable
                                         label={
@@ -789,9 +795,20 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         title={t(
                                             "admin.exhibitor.form:label.users"
                                         )}
-                                        icon="speakers"
+                                        icon="fak fa-users-tg"
                                         users={users}
                                         loadMore={getOwners}
+                                        state={pickerState.owner}
+                                        onStateChange={(state) => {
+                                            if (state === true) {
+                                                setPickerState({
+                                                    session: false,
+                                                    event: false,
+                                                    member: false,
+                                                    owner: true,
+                                                });
+                                            }
+                                        }}
                                     />
                                 </Col>
                             </Row>
@@ -808,14 +825,25 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         title={t(
                                             "admin.exhibitor.form:label.members"
                                         )}
-                                        icon="speakers"
+                                        icon="fak fa-users-tg"
                                         users={members}
                                         loadMore={getMembers}
+                                        state={pickerState.member}
+                                        onStateChange={(state) => {
+                                            if (state === true) {
+                                                setPickerState({
+                                                    session: false,
+                                                    event: false,
+                                                    owner: false,
+                                                    member: true,
+                                                });
+                                            }
+                                        }}
                                     />
                                 </Col>
                             </Row>
                             <Row>
-                                <Col xl={12} lg={12}>
+                                <Col xl={12} lg={12} className="test">
                                     <AppEventPicker
                                         xl={4}
                                         lg={4}
@@ -827,9 +855,20 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         title={t(
                                             "admin.exhibitor.form:label.events"
                                         )}
-                                        icon="speakers"
+                                        icon="fak fa-right"
                                         list={events}
                                         loadMore={getEvents}
+                                        state={pickerState.event}
+                                        onStateChange={(state) => {
+                                            if (state === true) {
+                                                setPickerState({
+                                                    session: false,
+                                                    event: true,
+                                                    owner: false,
+                                                    member: false,
+                                                });
+                                            }
+                                        }}
                                     />
                                 </Col>
                             </Row>
@@ -846,9 +885,20 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         title={t(
                                             "admin.exhibitor.form:label.sessions"
                                         )}
-                                        icon="speakers"
+                                        icon="fak fa-users-tg"
                                         list={sessions}
                                         loadMore={getSessions}
+                                        state={pickerState.session}
+                                        onStateChange={(state) => {
+                                            if (state === true) {
+                                                setPickerState({
+                                                    session: true,
+                                                    event: false,
+                                                    owner: false,
+                                                    member: false,
+                                                });
+                                            }
+                                        }}
                                     />
                                 </Col>
                             </Row>

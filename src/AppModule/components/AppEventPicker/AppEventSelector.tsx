@@ -52,16 +52,16 @@ export const AppEventSelector: FC<AppEventSelectorProps> = ({
         };
 
         return (
-            <div className="badge badge-green">
+            <div className="badge">
                 {name}
                 <button
                     aria-label="Close"
                     type="button"
-                    className="badge-green--close"
+                    className="badge--close"
                     id={`${id}`}
                     onClick={removeId}
                 >
-                    <span aria-hidden="true">×</span>
+                    <i className="fak fa-times-light" aria-hidden="true"></i>
                 </button>
             </div>
         );
@@ -83,7 +83,7 @@ export const AppEventSelector: FC<AppEventSelectorProps> = ({
                             <div className="row m-0 p-0">
                                 <div className="header--title col-auto pl-0">
                                     <h2 className="mb-0">
-                                        <i className="fak fa-create-group mr-2"></i>
+                                        <i className="fak fa-right mr-2"></i>
                                         {t("exhibitor.form:select.event")}
                                     </h2>
                                 </div>
