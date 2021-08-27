@@ -77,8 +77,8 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                     sm={12}
                     lg={data?.isCommentEnable ? 8 : 12}
                 >
-                    <Row className="m-0 card mb-3 mb-lg-4">
-                        <Col className="exhibitors-header" xs={12}>
+                    <Row className="m-0 card mb-3 mb-lg-4 exhibitors-header">
+                        <Col xs={12}>
                             <div className="row exhibitors-header--detail mb-3 px-2 pt-4">
                                 <div className="col-auto exhibitors-header--detail--left-buttons d-flex">
                                     <Link
@@ -116,13 +116,13 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                         </Col>
                     </Row>
                     <AppCard>
-                        <Row className="m-0 mb-3 mb-lg-4">
+                        <Row className="my-2">
                             {haveMembers ? (
                                 <Col
                                     lg={7}
                                     xl={7}
                                     md={12}
-                                    className={`create-session--speakers divider-right`}
+                                    className={`exhibitor-detail--members mb-4 mb-lg-0`}
                                 >
                                     <ExhibitorDetailPageMembers
                                         members={members}
@@ -134,6 +134,7 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                             <Col
                                 lg={haveMembers ? 5 : 12}
                                 xl={haveMembers ? 5 : 12}
+                                className="exhibitor-detail--contact"
                             >
                                 <ExhibitorDetailPageContact data={data} />
                             </Col>
@@ -146,13 +147,13 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                     {data?.description && data?.description !== "" ? (
                         <AppCard>
                             <Row className={"mb-3"}>
-                                <Col>
-                                    <h4>
+                                <Col className={"exhibitor-detail--desc"}>
+                                    <h3 className="mb-0">
                                         <i className="fak fa-description mr-2"></i>
                                         {t(
                                             "exhibitor.detail:section.description"
                                         )}
-                                    </h4>
+                                    </h3>
                                 </Col>
                             </Row>
                             <Row>

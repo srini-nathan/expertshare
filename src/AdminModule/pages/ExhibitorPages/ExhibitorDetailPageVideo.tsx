@@ -25,13 +25,13 @@ export const ExhibitorDetailPageVideo: FC<ExhibitorDetailPageVideoType> = ({
 
     if (type && url && url !== "") {
         return (
-            <AppCard>
+            <AppCard className="exhibitor-detail--video p-4">
                 <Row className={"mb-3"}>
                     <Col>
-                        <h4>
+                        <h3 className="mb-0">
                             <i className="fak fa-video mr-2"></i>
                             {t("exhibitor.detail:section.corporateVideo")}
-                        </h4>
+                        </h3>
                     </Col>
                 </Row>
                 <Row>
