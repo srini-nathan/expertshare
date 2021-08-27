@@ -6,6 +6,7 @@ export interface AppPipPlayerType {
     isLive: boolean;
     streamType: string;
     streamUrl: string;
+    zoomMeeting: string;
 }
 
 export const appPipPlayer = atom<AppPipPlayerType | null>({

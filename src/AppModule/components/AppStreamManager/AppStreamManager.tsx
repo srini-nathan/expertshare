@@ -6,6 +6,7 @@ import { AppYoutubeFrame } from "../AppYoutubeFrame";
 import { AppDacastFrame } from "../AppDacastFrame";
 import { AppKnovioPlayer } from "../AppKnovioPlayer";
 import { AppSwisscomFrame } from "../AppSwisscomFrame";
+import { AppZoomFrame } from "../AppZoomFrame";
 import { Session } from "../../../AdminModule/models";
 import { useBuildAssetPath } from "../../hooks";
 import { FileTypeInfo } from "../../models";
@@ -28,6 +29,7 @@ interface AppStreamManagerProps {
 export const renderStreams = (
     streamType: string,
     streamUrl: string,
+    zoomMeetingNumber: string,
     showImage = false,
     style = {}
 ) => {
@@ -63,7 +65,10 @@ export const renderStreams = (
             return (
                 <AppSwisscomFrame url={streamUrl} width={1522} height={910} />
             );
-
+        case "ZOOM":
+            return (
+                <AppZoomFrame meetNumber={zoomMeetingNumber} />
+            );
         default:
             if (showImage)
                 return (
@@ -87,7 +92,7 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
     const [time, setTime] = useState<Duration>();
     const [startedSession, isSessionStarted] = useState<boolean>(
         getDateTimeWithoutTimezone(session.currentTime) >
-            getDateTimeWithoutTimezone(session.start)
+        getDateTimeWithoutTimezone(session.start)
     );
 
     const conferencePosterPath = useBuildAssetPath(
@@ -96,17 +101,17 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
     );
     const style = session.imageName
         ? {
-              backgroundImage: `url(${conferencePosterPath})`,
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-          }
+            backgroundImage: `url(${conferencePosterPath})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+        }
         : {
-              backgroundImage: `url(${placeholder})`,
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "inherit",
-              backgroundPosition: "center",
-          };
+            backgroundImage: `url(${placeholder})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "inherit",
+            backgroundPosition: "center",
+        };
 
     useEffect(() => {
         let timer: any;
@@ -134,7 +139,7 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
         } else if (
             isLive &&
             getDateTimeWithoutTimezone(session.currentTime) <
-                getDateTimeWithoutTimezone(session.end)
+            getDateTimeWithoutTimezone(session.end)
         ) {
             isLive(true);
         }
@@ -194,7 +199,7 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
         if (
             !session.isReply &&
             getDateTimeWithoutTimezone(session.currentTime) >
-                getDateTimeWithoutTimezone(session.end)
+            getDateTimeWithoutTimezone(session.end)
         ) {
             return (
                 <div className="imageContainer">
@@ -213,10 +218,11 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
         return renderStreams(
             session.streamType,
             session.streamUrl,
+            session.zoomMeetingNumber,
             true,
-            style
+            style,
         );
     };
 
-    return <div className="app-video-stream">{renderStream()}</div>;
+    return <div className="app-video-stream" id="showZoomLink">{renderStream()}</div>;
 };

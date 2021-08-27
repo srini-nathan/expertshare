@@ -322,3 +322,14 @@ a {
         border: 1px solid var(--danger);
     }
 }
+
+#zmmtg-root {
+    display: none;
+    position: static;
+    transform: translateX(10px);
+    height: auto;
+}
+.app-video-stream {
+    padding-bottom:0;
+}
+
