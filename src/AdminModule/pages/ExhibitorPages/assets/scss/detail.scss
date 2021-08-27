@@ -2,9 +2,14 @@
     &--detail {
         &--buttons {
             .back-btn {
+                position: relative;
+                padding-left: 30px !important;
+                white-space: nowrap;
                 i {
+                    position: absolute;
+                    left: 10px;
                     &::before {
-                        content: '\e017';
+                        content: "\e017";
                     }
                 }
             }
