@@ -21,7 +21,7 @@ import {
     pageSizeOptions,
     defaultPageSize,
 } from "../../../AppModule/containers/AppGrid";
-import { ExhibitorListTabs } from "./ExhibitorListTabs";
+import { ExhibitorListPageTabs } from "./ExhibitorListPageTabs";
 
 export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
@@ -99,7 +99,7 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
                     />
                 </div>
             </AppPageHeader>
-            <ExhibitorListTabs
+            <ExhibitorListPageTabs
                 isVisible={isVisible}
                 setIsVisible={setIsVisible}
             />
