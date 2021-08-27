@@ -30,3 +30,4 @@ export * from "./useResolveEntryPage";
 export * from "./useDataAddEdit";
 export * from "./useCRUDHelperFunctions";
 export * from "./useLiveVoteResult";
+export * from "./useQASocketEvents";

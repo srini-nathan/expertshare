@@ -141,19 +141,19 @@ export const switchNextSession = (sessionId: number): void => {
     });
 };
 
-export const joinSessionQa = (socketParentId: string): void => {
+export const joinQA = (socketParentId: string): void => {
     socket.emit(EVENTS.JOIN_DISCUSSION_QA, {
         socketParentId,
     });
 };
 
-export const leaveSessionQa = (socketParentId: string): void => {
+export const leaveQA = (socketParentId: string): void => {
     socket.emit(EVENTS.LEAVE_DISCUSSION_QA, {
         socketParentId,
     });
 };
 
-export const postNewSessionQa = (
+export const postNewQA = (
     socketParentId: string,
     sender: PUser,
     payload: PSessionComment,
@@ -167,7 +167,7 @@ export const postNewSessionQa = (
     });
 };
 
-export const editSessionQa = (
+export const editQA = (
     socketParentId: string,
     sender: PUser,
     payload: PSessionComment,
@@ -181,7 +181,7 @@ export const editSessionQa = (
     });
 };
 
-export const deleteSessionQa = (socketParentId: string, id: number): void => {
+export const deleteQA = (socketParentId: string, id: number): void => {
     socket.emit(EVENTS.DELETE_DISCUSSION_QA, {
         socketParentId,
         id,
