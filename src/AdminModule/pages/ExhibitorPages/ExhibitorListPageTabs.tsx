@@ -7,7 +7,7 @@ interface ExhibitorListTabsType {
     setIsVisible: (status: boolean) => void;
 }
 
-export const ExhibitorListTabs: FC<ExhibitorListTabsType> = ({
+export const ExhibitorListPageTabs: FC<ExhibitorListTabsType> = ({
     isVisible,
     setIsVisible,
 }) => {
