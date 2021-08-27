@@ -81,17 +81,17 @@
 
                 > img {
                     position: absolute;
-                    height: 70px;
                     bottom: 25px;
                     left: 22px;
-                    background-color: white;
+                    height: 70px;
+                    background-color: var(--light-clr);
                     border-radius: var(--card-border-radius);
                 }
 
                 .click-image {
                     position: absolute;
-                    height: 100%;
                     width: 100%;
+                    height: 100%;
                 }
 
                 &--button {
