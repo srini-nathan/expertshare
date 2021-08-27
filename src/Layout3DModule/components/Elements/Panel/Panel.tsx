@@ -107,6 +107,8 @@ export const Panel = ({
     const labelText = label.value;
     const labelFontSize = label.width;
 
+    const autoplay = true;
+
     const DEFAULT_DURATION = 3000;
     // console.log("panel data: ", panelData, depth, labelColor, color);
 
@@ -425,24 +427,25 @@ export const Panel = ({
                             />
                         )}
                         {/* SCREEN IMAGE */}
-                        {!isVideoPlaying && (
-                            <Image
-                                props={{
-                                    position: [
-                                        0,
-                                        0,
-                                        0.02 + (isProjector ? -0.05 : 0),
-                                    ],
-                                }}
-                                textureUrl={defaultImageUrl}
-                                padding={padding}
-                                parent={parent}
-                                transparent={true}
-                                alphaTest={0.01}
-                                depthWrite={false}
-                                depthTest={true}
-                            />
-                        )}
+                        {!isVideoPlaying ||
+                            (autoplay && isVisibleNow && (
+                                <Image
+                                    props={{
+                                        position: [
+                                            0,
+                                            0,
+                                            0.02 + (isProjector ? -0.05 : 0),
+                                        ],
+                                    }}
+                                    textureUrl={defaultImageUrl}
+                                    padding={padding}
+                                    parent={parent}
+                                    transparent={true}
+                                    alphaTest={0.01}
+                                    depthWrite={false}
+                                    depthTest={true}
+                                />
+                            ))}
                         {/* SCREEN VIDEO */}
                         {isProjector && (
                             <VideoPanel
@@ -450,7 +453,9 @@ export const Panel = ({
                                 parent={parent}
                                 defaultVideoUrl={defaultVideoUrl}
                                 editMode={editMode}
-                                isVideoPlaying={isVideoPlaying}
+                                isVideoPlaying={
+                                    isVideoPlaying || (autoplay && isVisibleNow)
+                                }
                             />
                         )}
                         {/* SCREEN BACKGROUND */}

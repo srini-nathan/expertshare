@@ -30,6 +30,7 @@ export const Video = ({
         vid.src = videoUrl;
         vid.crossOrigin = "Anonymous";
         vid.loop = true;
+        vid.muted = true;
         // vid.play();
         // eslint-disable-next-line no-console
         return vid;
