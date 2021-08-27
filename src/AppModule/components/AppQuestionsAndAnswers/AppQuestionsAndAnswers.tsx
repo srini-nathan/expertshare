@@ -7,6 +7,8 @@ import { useAuthState, useIsGranted, useQASocketEvents } from "../../hooks";
 import { socket, EVENTS } from "../../socket";
 
 import "./assets/scss/style.scss";
+import { SessionComment } from "../../models/entities/SessionComment";
+import { ExhibitorCommentsAPI, SessionCommentsAPI } from "../../apis";
 
 const {
     ON_NEW_DISCUSSION_QA,
@@ -14,12 +16,17 @@ const {
     ON_EDIT_DISCUSSION_QA,
 } = EVENTS;
 
+// @TODO: move following types to models directory
+type CommentApi = typeof SessionCommentsAPI | typeof ExhibitorCommentsAPI;
+type Comment = SessionComment;
+type PComment = Partial<Comment>;
+
 export interface QuestionAndAnswersProps {
     name?: string;
     conferenceNumber?: number;
     parentId: number;
     container: number;
-    commentsAPI: any;
+    commentsAPI: CommentApi;
     mainElement: string;
     parentElement: string;
     socketParentId: string;
@@ -190,11 +197,9 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
             mainElement: `${mainElement}/${parentId}`,
         };
 
-        const messageToPost = JSON.stringify(meesageObj);
-
         commentsAPI
-            .postComment(messageToPost)
-            .then(({ errorMessage, response }: any) => {
+            .create<PComment, PComment>(meesageObj)
+            .then(({ errorMessage, response }) => {
                 if (errorMessage) {
                     errorToast(errorMessage);
                 }
@@ -215,11 +220,9 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
             mainElement: `${mainElement}/${parentId}`,
         };
 
-        const messageToPost = JSON.stringify(meesageObj);
-
         commentsAPI
-            .postComment(messageToPost)
-            .then(({ errorMessage, response }: any) => {
+            .create<PComment, PComment>(meesageObj)
+            .then(({ errorMessage, response }) => {
                 if (errorMessage) {
                     errorToast(errorMessage);
                 }
@@ -248,11 +251,9 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
             mainElement: `${mainElement}/${parentId}`,
         };
 
-        const messageToPost = JSON.stringify(meesageObj);
-
         commentsAPI
-            .update(id, messageToPost)
-            .then(({ errorMessage, response }: any) => {
+            .update<PComment, PComment>(id, meesageObj)
+            .then(({ errorMessage, response }) => {
                 if (errorMessage) {
                     errorToast(errorMessage);
                 }
