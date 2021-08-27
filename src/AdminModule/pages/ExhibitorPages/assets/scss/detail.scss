@@ -48,9 +48,15 @@
 }
 
 .exhibitor-detail {
-    .stream-player iframe {
-        width: 100% !important;
-        height: 600px;
+    .stream-player {
+        iframe {
+            width: 100% !important;
+            height: 600px;
+        }
+        video {
+            width: 100% !important;
+            height: 100%;
+        }
     }
     .fa-video:before{
         content: "\e007";

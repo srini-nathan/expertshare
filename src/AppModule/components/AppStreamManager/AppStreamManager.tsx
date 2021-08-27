@@ -14,6 +14,7 @@ import placeholder from "./assets/images/imgthumb.svg";
 import { AppButton } from "../AppButton";
 import { getDateTimeWithoutTimezone } from "../../utils";
 import "./assets/scss/style.scss";
+import { AppVideoPlayer } from "../AppVideoPlayer";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -63,7 +64,8 @@ export const renderStreams = (
             return (
                 <AppSwisscomFrame url={streamUrl} width={1522} height={910} />
             );
-
+        case "FILE":
+            return <AppVideoPlayer url={streamUrl} />;
         default:
             if (showImage)
                 return (
