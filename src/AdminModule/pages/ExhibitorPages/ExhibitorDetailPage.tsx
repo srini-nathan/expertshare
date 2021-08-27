@@ -8,6 +8,7 @@ import {
     AppCard,
 } from "../../../AppModule/components";
 import { errorToast, getBGStyle, resolveImage } from "../../../AppModule/utils";
+
 import { ExhibitorApi } from "../../apis";
 import { Exhibitor, User } from "../../models";
 import {
@@ -15,10 +16,8 @@ import {
     ExhibitorLogoPosterFileInfo,
 } from "../../../config";
 import placeholder from "../../../AppModule/assets/images/imgthumb.svg";
-
 import { useAuthState, useBuildAssetPath } from "../../../AppModule/hooks";
 import { ExhibitorCommentsAPI } from "../../../AppModule/apis";
-
 import { ExhibitorDetailPageMembers } from "./ExhibitorDetailPageMembers";
 import { ExhibitorDetailPageContact } from "./ExhibitorDetailPageContact";
 import { ExhibitorDetailPageVideo } from "./ExhibitorDetailPageVideo";
@@ -60,9 +59,10 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
 
     const style = getBGStyle(logoPath, data?.logoImageName, placeholder);
     const poster = resolveImage(imagePath, data?.coverImageName, placeholder);
+
     return (
         <Fragment>
-            <Row className="m-0">
+            <Row className="m-0  exhibitor-detail">
                 <Col
                     className={
                         data?.isCommentEnable
