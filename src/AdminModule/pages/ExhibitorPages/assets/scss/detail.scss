@@ -4,7 +4,7 @@
             .back-btn {
                 i {
                     &::before {
-                        content: '\e017';
+                        content: "\e017";
                     }
                 }
             }
@@ -27,14 +27,13 @@
             align-items: center;
             width: 160px;
             height: 90px;
-            padding: 5px;
             overflow: hidden;
-            background-color: var(--light-clr);
             border-radius: var(--card-border-radius);
             i {
                 display: block;
                 width: inherit;
                 height: 100%;
+                background-color: var(--light-clr);
                 background-repeat: no-repeat;
                 background-position: center;
                 background-size: cover;
