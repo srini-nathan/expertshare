@@ -115,32 +115,30 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                             </div>
                         </Col>
                     </Row>
-                    {data?.members && data?.members.length > 0 ? (
-                        <AppCard>
-                            <Row className="m-0 mb-3 mb-lg-4">
-                                {haveMembers ? (
-                                    <Col
-                                        lg={7}
-                                        xl={7}
-                                        md={12}
-                                        className={`create-session--speakers divider-right`}
-                                    >
-                                        <ExhibitorDetailPageMembers
-                                            members={members}
-                                        />
-                                    </Col>
-                                ) : (
-                                    <></>
-                                )}
+                    <AppCard>
+                        <Row className="m-0 mb-3 mb-lg-4">
+                            {haveMembers ? (
                                 <Col
-                                    lg={haveMembers ? 5 : 12}
-                                    xl={haveMembers ? 5 : 12}
+                                    lg={7}
+                                    xl={7}
+                                    md={12}
+                                    className={`create-session--speakers divider-right`}
                                 >
-                                    <ExhibitorDetailPageContact data={data} />
+                                    <ExhibitorDetailPageMembers
+                                        members={members}
+                                    />
                                 </Col>
-                            </Row>
-                        </AppCard>
-                    ) : null}
+                            ) : (
+                                <></>
+                            )}
+                            <Col
+                                lg={haveMembers ? 5 : 12}
+                                xl={haveMembers ? 5 : 12}
+                            >
+                                <ExhibitorDetailPageContact data={data} />
+                            </Col>
+                        </Row>
+                    </AppCard>
                     <ExhibitorDetailPageVideo
                         type={data?.streamType}
                         url={data?.streamUrl}
