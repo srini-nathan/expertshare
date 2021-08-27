@@ -4,13 +4,11 @@ import { useTranslation } from "react-i18next";
 import "./assets/scss/detail.scss";
 import { Col, Row } from "react-bootstrap";
 import {
+    AppQuestionsAndAnswers,
     AppLoader,
     AppCard,
-    AppSessionUsers,
-    AppButton,
-    AppQuestionsAndAnswers,
 } from "../../../AppModule/components";
-import { errorToast, getBGStyle } from "../../../AppModule/utils";
+import { errorToast, getBGStyle, resolveImage } from "../../../AppModule/utils";
 import { ExhibitorApi } from "../../apis";
 import { Exhibitor, User } from "../../models";
 import {
@@ -18,8 +16,12 @@ import {
     ExhibitorLogoPosterFileInfo,
 } from "../../../config";
 import placeholder from "../../../AppModule/assets/images/imgthumb.svg";
+
 import { useAuthState, useBuildAssetPath } from "../../../AppModule/hooks";
 import { ExhibitorCommentsAPI } from "../../../AppModule/apis";
+
+import { ExhibitorDetailPageMembers } from "./ExhibitorDetailPageMembers";
+import { ExhibitorDetailPageContact } from "./ExhibitorDetailPageContact";
 
 export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
@@ -29,6 +31,8 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { containerId } = useAuthState();
     const imagePath = useBuildAssetPath(ExhibitorPosterFileInfo);
     const logoPath = useBuildAssetPath(ExhibitorLogoPosterFileInfo);
+    const [members, setMembers] = useState<User[]>([]);
+    const [haveMembers, setHaveMembers] = useState<boolean>(members.length > 0);
 
     useEffect(() => {
         isLoading(true);
@@ -38,6 +42,9 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                     errorToast(t("exhibitor.detail:error.message.notExist"));
                 } else if (response !== null) {
                     setData(response);
+                    const users = response?.members ?? [];
+                    setMembers(users as User[]);
+                    setHaveMembers(users.length > 0);
                 }
                 isLoading(false);
             }
@@ -48,7 +55,8 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
         return <AppLoader />;
     }
 
-    const style = getBGStyle(logoPath, data?.logoImageName ?? "");
+    const style = getBGStyle(logoPath, data?.logoImageName, placeholder);
+    const poster = resolveImage(imagePath, data?.coverImageName, placeholder);
 
     return (
         <Fragment>
@@ -84,13 +92,7 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                                     <div className="sponsor">
                                         <i style={style}></i>
                                     </div>
-                                    <img
-                                        src={
-                                            data?.coverImageName
-                                                ? `${imagePath}/${data?.coverImageName}`
-                                                : placeholder
-                                        }
-                                    />
+                                    <img src={poster} />
                                 </div>
                             </div>
                         </Col>
@@ -98,43 +100,24 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                     {data?.members && data?.members.length > 0 ? (
                         <AppCard>
                             <Row className="m-0 mb-3 mb-lg-4">
-                                <Col
-                                    lg={8}
-                                    md={12}
-                                    className={`create-session--speakers`}
-                                >
-                                    <AppSessionUsers
-                                        xl={6}
-                                        lg={6}
+                                {haveMembers ? (
+                                    <Col
+                                        lg={8}
                                         md={12}
-                                        sm={12}
-                                        selectedUsers={data.members as User[]}
-                                        title={t(
-                                            "exhibitor.detail:label.members"
-                                        )}
-                                        icon="speakers"
-                                    />
-                                </Col>
-                                <Col lg={4}>
-                                    <h2>
-                                        <i className="fak fa-speakers"></i>
-                                        {t("exhibitor.detail:section.contact")}
-                                    </h2>
-                                    <div className="d-flex">
-                                        <Row>
-                                            <Col>
-                                                {data.contactUsCaption ? (
-                                                    <AppButton
-                                                        type="button"
-                                                        variant={"secondary"}
-                                                    >
-                                                        <i className="fa fa-phone-alt mr-1"></i>
-                                                        {data.contactUsCaption}
-                                                    </AppButton>
-                                                ) : null}
-                                            </Col>
-                                        </Row>
-                                    </div>
+                                        className={`create-session--speakers divider-right`}
+                                    >
+                                        <ExhibitorDetailPageMembers
+                                            members={members}
+                                        />
+                                    </Col>
+                                ) : (
+                                    <></>
+                                )}
+                                <Col
+                                    lg={haveMembers ? 4 : 12}
+                                    xl={haveMembers ? 4 : 12}
+                                >
+                                    <ExhibitorDetailPageContact data={data} />
                                 </Col>
                             </Row>
                         </AppCard>
