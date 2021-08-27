@@ -62,7 +62,7 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                             className="back-btn btn btn-secondary back-btn mr-3 mb-3"
                         >
                             <i className="fak fa-chevron-left"></i>
-                            {t("Back")}
+                            {t("event.agenda:button.back")}
                         </Link>
                         <Link to="#">
                             <h1 className="mb-0">{conference?.title}</h1>

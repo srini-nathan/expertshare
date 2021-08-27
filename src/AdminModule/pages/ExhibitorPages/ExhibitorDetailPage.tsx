@@ -72,7 +72,7 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                                         className="back-btn btn btn-secondary mr-3"
                                     >
                                         <i className="fak fa-chevron-left mr-3"></i>
-                                        {t("Back")}
+                                        {t("exhibitor.detail:button.back")}
                                     </Link>
                                 </div>
                                 <div className="col-12 exhibitors-header--detail--title mt-4">
