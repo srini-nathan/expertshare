@@ -47,12 +47,12 @@ export const AppSelectExhibitorStream: FC<AppSelectStreamProps> = ({
                     required
                 />
             </Col>
-            <Col md={12} className="d-flex mb-1">
-                <div>
+            <Col md={12} className="d-flex mb-4">
+                <div className="streaming-tab mt-2">
                     <Row className="m-0 w-100 ">
                         <Row className="m-0 tabs">
                             <div
-                                className={`mr-3 mb-3 ${
+                                className={`mr-3 mb-3 nav-link ${
                                     type === "YOUTUBE" ? "active" : ""
                                 }`}
                                 onClick={() => {
@@ -64,7 +64,7 @@ export const AppSelectExhibitorStream: FC<AppSelectStreamProps> = ({
                                 <span className={"stream-items youtube"}></span>
                             </div>
                             <div
-                                className={`mr-3 mb-3 ${
+                                className={`mr-3 mb-3 nav-link ${
                                     type === "VIMEO" ? "active" : ""
                                 }`}
                                 onClick={() => {
@@ -76,7 +76,7 @@ export const AppSelectExhibitorStream: FC<AppSelectStreamProps> = ({
                                 <span className={"stream-items vimeo"}></span>
                             </div>
                             <div
-                                className={`mr-3 mb-3 ${
+                                className={`mr-3 mb-3 nav-link ${
                                     type === "SWISSCOM" ? "active" : ""
                                 }`}
                                 onClick={() => {
@@ -90,7 +90,7 @@ export const AppSelectExhibitorStream: FC<AppSelectStreamProps> = ({
                                 ></span>
                             </div>
                             <div
-                                className={`mr-3 mb-3 ${
+                                className={`mr-3 mb-3 nav-link ${
                                     type === "DACAST" ? "active" : ""
                                 }`}
                                 onClick={() => {
@@ -102,7 +102,7 @@ export const AppSelectExhibitorStream: FC<AppSelectStreamProps> = ({
                                 <span className={"stream-items dacast"}></span>
                             </div>
                             <div
-                                className={`mr-3 mb-3 ${
+                                className={`mr-3 mb-3 nav-link ${
                                     type === "FILE" ? "active" : ""
                                 }`}
                                 onClick={() => {
@@ -111,7 +111,9 @@ export const AppSelectExhibitorStream: FC<AppSelectStreamProps> = ({
                                     setValue("streamType", "FILE");
                                 }}
                             >
-                                <span className={"stream-items"}>VIDEO</span>
+                                <span className={"stream-items upload"}>
+                                    <i className="fak fa-upload"></i>
+                                </span>
                             </div>
                         </Row>
                         <Col className="p-0" md={12}>

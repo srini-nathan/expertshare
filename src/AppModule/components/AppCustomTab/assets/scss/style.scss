@@ -5,11 +5,16 @@
     .nav-link {
         height: 52px;
         padding: 10px;
+        color: var(--tab-text-color);
+        cursor: pointer;
         background-color: var(--tab-background-color) !important;
+        border: 1px solid var(--tab-background-color);
+        border-radius: var(--tab-border-radius);
+        box-shadow: 0 3px 9px var(--tab-box-shadow-color);
 
         &.active {
-            border: 1px solid var(--primary) !important;
             background-color: var(--tab-background-color--active) !important;
+            border: 1px solid var(--primary) !important;
         }
     }
 }
