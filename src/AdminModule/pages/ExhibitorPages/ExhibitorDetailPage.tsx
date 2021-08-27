@@ -3,7 +3,11 @@ import { Link, RouteComponentProps, useParams } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import "./assets/scss/detail.scss";
 import { Col, Row } from "react-bootstrap";
-import { AppLoader, AppCard } from "../../../AppModule/components";
+import {
+    AppLoader,
+    AppCard,
+    renderStreams,
+} from "../../../AppModule/components";
 import { errorToast, getBGStyle, resolveImage } from "../../../AppModule/utils";
 import { ExhibitorApi } from "../../apis";
 import { Exhibitor, User } from "../../models";
@@ -49,10 +53,9 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
 
     const style = getBGStyle(logoPath, data?.logoImageName, placeholder);
     const poster = resolveImage(imagePath, data?.coverImageName, placeholder);
-
     return (
         <>
-            <div className="row m-0">
+            <div className="row m-0 exhibitor-detail">
                 <div className="col-md-12 col-sm-12 col-xl-8 p-3 p-lg-4">
                     <div className="row m-0 card mb-3 mb-lg-4">
                         <div className="exhibitors-header col-12">
@@ -106,26 +109,51 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                             </Row>
                         </AppCard>
                     ) : null}
+                    {data?.streamType && data?.streamUrl ? (
+                        <AppCard>
+                            <Row className={"mb-3"}>
+                                <Col>
+                                    <h4>
+                                        <i className="fak fa-video mr-2"></i>
+                                        {t(
+                                            "exhibitor.detail:section.corporateVideo"
+                                        )}
+                                    </h4>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <div className={"stream-player"}>
+                                        {renderStreams(
+                                            data.streamType,
+                                            data.streamUrl
+                                        )}
+                                    </div>
+                                </Col>
+                            </Row>
+                        </AppCard>
+                    ) : (
+                        <></>
+                    )}
                     {data?.description && data?.description !== "" ? (
                         <AppCard>
-                            <Row className="m-0 mb-3 mb-lg-4">
-                                <Col
-                                    sm={12}
-                                    className="session-details-desc my-4 pt-1 px-2"
-                                >
-                                    <h2>
-                                        <i className="fak fa-description"></i>
+                            <Row className={"mb-3"}>
+                                <Col>
+                                    <h4>
+                                        <i className="fak fa-description mr-2"></i>
                                         {t(
                                             "exhibitor.detail:section.description"
                                         )}
-                                    </h2>
-                                    <div className="session-details-desc--container mt-3">
-                                        <p
-                                            dangerouslySetInnerHTML={{
-                                                __html: data.description,
-                                            }}
-                                        ></p>
-                                    </div>
+                                    </h4>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col className="session-details-desc">
+                                    <p
+                                        dangerouslySetInnerHTML={{
+                                            __html: data.description,
+                                        }}
+                                    ></p>
                                 </Col>
                             </Row>
                         </AppCard>
