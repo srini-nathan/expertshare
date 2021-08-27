@@ -46,3 +46,14 @@
         }
     }
 }
+
+.exhibitor-detail {
+    .stream-player iframe {
+        max-width: 100% !important;
+        min-width: 100%;
+        max-height: 600px;
+    }
+    .fa-video:before{
+        content: "\e007";
+    }
+}
