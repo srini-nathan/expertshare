@@ -1,13 +1,8 @@
 import React, { FC, useEffect, useState } from "react";
 import { Link, RouteComponentProps, useParams } from "@reach/router";
 import { useTranslation } from "react-i18next";
-import "./assets/scss/detail.scss";
 import { Col, Row } from "react-bootstrap";
-import {
-    AppLoader,
-    AppCard,
-    renderStreams,
-} from "../../../AppModule/components";
+import { AppLoader, AppCard } from "../../../AppModule/components";
 import { errorToast, getBGStyle, resolveImage } from "../../../AppModule/utils";
 import { ExhibitorApi } from "../../apis";
 import { Exhibitor, User } from "../../models";
@@ -19,6 +14,8 @@ import placeholder from "../../../AppModule/assets/images/imgthumb.svg";
 import { useBuildAssetPath } from "../../../AppModule/hooks";
 import { ExhibitorDetailPageMembers } from "./ExhibitorDetailPageMembers";
 import { ExhibitorDetailPageContact } from "./ExhibitorDetailPageContact";
+import { ExhibitorDetailPageVideo } from "./ExhibitorDetailPageVideo";
+import "./assets/scss/detail.scss";
 
 export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
@@ -109,32 +106,10 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                             </Row>
                         </AppCard>
                     ) : null}
-                    {data?.streamType && data?.streamUrl ? (
-                        <AppCard>
-                            <Row className={"mb-3"}>
-                                <Col>
-                                    <h4>
-                                        <i className="fak fa-video mr-2"></i>
-                                        {t(
-                                            "exhibitor.detail:section.corporateVideo"
-                                        )}
-                                    </h4>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col>
-                                    <div className={"stream-player"}>
-                                        {renderStreams(
-                                            data.streamType,
-                                            data.streamUrl
-                                        )}
-                                    </div>
-                                </Col>
-                            </Row>
-                        </AppCard>
-                    ) : (
-                        <></>
-                    )}
+                    <ExhibitorDetailPageVideo
+                        type={data?.streamType}
+                        url={data?.streamUrl}
+                    />
                     {data?.description && data?.description !== "" ? (
                         <AppCard>
                             <Row className={"mb-3"}>
