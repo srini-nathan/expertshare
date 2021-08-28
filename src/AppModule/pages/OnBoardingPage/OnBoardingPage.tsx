@@ -473,7 +473,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                                 formState,
                                                 true
                                             )}
-                                            defaultChecked={true}
+                                            defaultChecked={
+                                                user?.isDisplayAsGuest
+                                            }
                                             errorMessage={
                                                 errors.isDisplayAsGuest?.message
                                             }
@@ -495,7 +497,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                             formState,
                                             true
                                         )}
-                                        defaultChecked={false}
+                                        defaultChecked={user?.isExposeEmail}
                                         errorMessage={
                                             errors.isExposeEmail?.message
                                         }
@@ -516,7 +518,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                             formState,
                                             true
                                         )}
-                                        defaultChecked={true}
+                                        defaultChecked={
+                                            user?.isAllowCommunication
+                                        }
                                         errorMessage={
                                             errors.isAllowCommunication?.message
                                         }
