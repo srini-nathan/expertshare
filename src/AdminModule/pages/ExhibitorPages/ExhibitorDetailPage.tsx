@@ -110,7 +110,14 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                                             <i style={style}></i>
                                         ) : null}
                                     </div>
-                                    <img src={poster} />
+                                    <img
+                                        src={poster}
+                                        className={
+                                            data?.coverImageName
+                                                ? ""
+                                                : "placeholderImg"
+                                        }
+                                    />
                                 </div>
                             </div>
                         </Col>

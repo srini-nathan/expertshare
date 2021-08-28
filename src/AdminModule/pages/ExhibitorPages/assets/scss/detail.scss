@@ -56,6 +56,11 @@
         img {
             width: inherit;
             min-height: 120px;
+            &.placeholderImg {
+                height: 300px;
+                padding: 70px;
+                background-color: var(--default-session-card-background);
+            }
         }
     }
 }
@@ -104,9 +109,6 @@
         .create-session--speakers--container {
             height: auto;
             margin-top: 15px;
-            .create-session--moderators--container--item {
-                margin-top: 7px !important;
-            }
         }
         .inner-container--det--content--more {
             margin-top: 10px;

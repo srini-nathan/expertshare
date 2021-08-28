@@ -109,18 +109,18 @@ export const AppExhibitorCard: FC<AppExhibitorCardProps> = ({
                             {limited?.length > 0 && (
                                 <>
                                     <div className="inner-container--det--content--title">
-                                        <i className="fak fa-atendees-cs"></i>
-                                        <h6 className="mb-0 pl-0">
+                                        <h3>
+                                            <i className="fak fa-atendees-cs mr-2"></i>
                                             {t(
                                                 "exhibitor.list:section.title.members"
                                             )}
-                                        </h6>
+                                        </h3>
                                     </div>
                                     <div
                                         style={{
                                             overflow: "hidden",
                                         }}
-                                        className="inner-container--det--content--speakers mt-2 ml-2"
+                                        className="inner-container--det--content--speakers mt-2 ml-4"
                                     >
                                         {limited?.map((e: any, i: number) => {
                                             return (
