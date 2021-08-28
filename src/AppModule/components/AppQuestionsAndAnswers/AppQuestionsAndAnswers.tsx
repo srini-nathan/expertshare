@@ -3,15 +3,16 @@ import { Col } from "react-bootstrap";
 import { AppСhoseMethodMessage } from "../AppСhoseMethodMessage";
 import { AppQAThread } from "../AppQAThread";
 import { errorToast } from "../../utils";
-
-import {
-    useAuthState,
-    useIsGranted,
-    useSessionSocketEvents,
-} from "../../hooks";
+import { useAuthState, useIsGranted, useQASocketEvents } from "../../hooks";
 import { socket, EVENTS } from "../../socket";
-
+import { ExhibitorCommentsAPI, SessionCommentsAPI } from "../../apis";
 import "./assets/scss/style.scss";
+import { PExhibitorComment } from "../../models/entities/ExhibitorComment";
+import { PSessionComment } from "../../models/entities/SessionComment";
+import { PUser } from "../../../AdminModule/models";
+
+type CommentApi = typeof SessionCommentsAPI | typeof ExhibitorCommentsAPI;
+type PComment = PSessionComment | PExhibitorComment;
 
 const {
     ON_NEW_DISCUSSION_QA,
@@ -24,7 +25,7 @@ export interface QuestionAndAnswersProps {
     conferenceNumber?: number;
     parentId: number;
     container: number;
-    commentsAPI: any;
+    commentsAPI: CommentApi;
     mainElement: string;
     parentElement: string;
     socketParentId: string;
@@ -101,35 +102,35 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
     parentElement,
     socketParentId,
 }) => {
-    const [data, setData] = useState<any[]>(core.getState());
+    const [data, setData] = useState<PComment[]>(core.getState());
     const [page, setPage] = useState<number>(1);
     const [, setTotalItems] = useState<number>(1);
     const {
-        emitPostNewSessionQa,
-        emitJoinSessionQa,
-        emitLeaveSessionQa,
-        emitDeleteSessionQa,
-        emitEditSessionQa,
-    } = useSessionSocketEvents();
+        emitPostNewQA,
+        emitJoinQA,
+        emitLeaveQA,
+        emitDeleteQA,
+        emitEditQA,
+    } = useQASocketEvents();
     const { user } = useAuthState();
     const isGranted = useIsGranted("ROLE_USER");
     useEffect(() => {
-        if (socketParentId) emitJoinSessionQa(socketParentId);
+        if (socketParentId) emitJoinQA(socketParentId);
 
         return () => {
-            emitLeaveSessionQa(socketParentId);
+            emitLeaveQA(socketParentId);
         };
     }, [socketParentId]);
 
     useEffect(() => {
         socket.on(
             ON_NEW_DISCUSSION_QA,
-            (sessionId: number, u: any, parent: any, payload: any) => {
-                if (sessionId === parentId && u) {
+            (u: PUser, parent: number | null, payload: PComment) => {
+                if (u && payload) {
                     if (parent) {
                         const p = core
                             .getState()
-                            .find((e: any) => e.id === parent);
+                            .find((e: PComment) => e.id === parent);
                         const index = core.getState().indexOf(p);
 
                         if (index !== -1) {
@@ -144,7 +145,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
 
         socket.on(ON_DELETE_DISCUSSION_QA, (qaId: number) => {
             if (qaId) {
-                const p = core.getState().find((e: any) => e.id === qaId);
+                const p = core.getState().find((e: PComment) => e.id === qaId);
                 if (p) {
                     core.deleteQa(qaId, setData);
                 }
@@ -153,8 +154,8 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
 
         socket.on(
             ON_EDIT_DISCUSSION_QA,
-            (roomId: string, u: any, parent: any, payload: any) => {
-                if (roomId === socketParentId && u) {
+            (u: PUser, parent: number | null, payload: PComment) => {
+                if (u && payload) {
                     core.editQa(payload, setData);
                 }
             }
@@ -163,15 +164,16 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
 
     const getCurrentQestionsAndAnswersThread = (pageNo = 1) => {
         commentsAPI
-            .getMessages(parentId, container, pageNo)
-            .then((response: any) => {
+            .getMessages<PComment>(parentId, container, pageNo)
+            .then(({ response }) => {
                 if (response) {
+                    const { totalItems, items } = response;
                     if (pageNo === 1) {
                         setPage(1);
-                        core.createState(response["hydra:member"], setData);
+                        core.createState(items, setData);
                     } else {
                         const newData = data;
-                        response["hydra:member"].forEach((e: any) => {
+                        items.forEach((e: PComment) => {
                             const item = data.find((d: any) => d.id === e.id);
                             if (!item) {
                                 newData.push(e);
@@ -179,7 +181,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                         });
                         core.createState(newData, setData);
                     }
-                    setTotalItems(response["hydra:totalItems"] as number);
+                    setTotalItems(totalItems);
                 }
             });
     };
@@ -195,16 +197,14 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
             mainElement: `${mainElement}/${parentId}`,
         };
 
-        const messageToPost = JSON.stringify(meesageObj);
-
         commentsAPI
-            .postComment(messageToPost)
-            .then(({ errorMessage, response }: any) => {
+            .create<PComment, PComment>(meesageObj)
+            .then(({ errorMessage, response }) => {
                 if (errorMessage) {
                     errorToast(errorMessage);
                 }
                 if (response) {
-                    emitPostNewSessionQa(socketParentId, user, response, null);
+                    emitPostNewQA(socketParentId, user, response, null);
                     getCurrentQestionsAndAnswersThread(1);
                 }
             });
@@ -220,16 +220,14 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
             mainElement: `${mainElement}/${parentId}`,
         };
 
-        const messageToPost = JSON.stringify(meesageObj);
-
         commentsAPI
-            .postComment(messageToPost)
-            .then(({ errorMessage, response }: any) => {
+            .create<PComment, PComment>(meesageObj)
+            .then(({ errorMessage, response }) => {
                 if (errorMessage) {
                     errorToast(errorMessage);
                 }
                 if (response) {
-                    emitPostNewSessionQa(
+                    emitPostNewQA(
                         socketParentId,
                         user,
                         {
@@ -253,16 +251,14 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
             mainElement: `${mainElement}/${parentId}`,
         };
 
-        const messageToPost = JSON.stringify(meesageObj);
-
         commentsAPI
-            .update(id, messageToPost)
-            .then(({ errorMessage, response }: any) => {
+            .update<PComment, PComment>(id, meesageObj)
+            .then(({ errorMessage, response }) => {
                 if (errorMessage) {
                     errorToast(errorMessage);
                 }
                 if (response) {
-                    emitEditSessionQa(socketParentId, user, response, null);
+                    emitEditQA(socketParentId, user, response, null);
                     getCurrentQestionsAndAnswersThread(1);
                 }
             });
@@ -270,7 +266,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
 
     const deleteQuestion = (qId: number) => {
         commentsAPI.deleteById(qId).then(() => {
-            emitDeleteSessionQa(socketParentId, qId);
+            emitDeleteQA(socketParentId, qId);
             getCurrentQestionsAndAnswersThread(1);
         });
     };

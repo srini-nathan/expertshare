@@ -3,7 +3,10 @@ import { SOCKET_HOST } from "./config/app-env";
 import { PChatMessage } from "./models/entities/ChatMessage";
 import { PUser } from "../AdminModule/models";
 import { PSessionComment } from "./models/entities/SessionComment";
+import { PExhibitorComment } from "./models/entities/ExhibitorComment";
 import { SocketCommandPayload } from "./models";
+
+type PComment = PSessionComment | PExhibitorComment;
 
 export const socket = io(SOCKET_HOST, {
     transports: ["websocket"],
@@ -141,22 +144,22 @@ export const switchNextSession = (sessionId: number): void => {
     });
 };
 
-export const joinSessionQa = (socketParentId: string): void => {
+export const joinQA = (socketParentId: string): void => {
     socket.emit(EVENTS.JOIN_DISCUSSION_QA, {
         socketParentId,
     });
 };
 
-export const leaveSessionQa = (socketParentId: string): void => {
+export const leaveQA = (socketParentId: string): void => {
     socket.emit(EVENTS.LEAVE_DISCUSSION_QA, {
         socketParentId,
     });
 };
 
-export const postNewSessionQa = (
+export const postNewQA = (
     socketParentId: string,
     sender: PUser,
-    payload: PSessionComment,
+    payload: PComment,
     parentId: number | null = null
 ): void => {
     socket.emit(EVENTS.POST_NEW_DISCUSSION_QA, {
@@ -167,10 +170,10 @@ export const postNewSessionQa = (
     });
 };
 
-export const editSessionQa = (
+export const editQA = (
     socketParentId: string,
     sender: PUser,
-    payload: PSessionComment,
+    payload: PComment,
     parentId: number | null = null
 ): void => {
     socket.emit(EVENTS.EDIT_DISCUSSION_QA, {
@@ -181,7 +184,7 @@ export const editSessionQa = (
     });
 };
 
-export const deleteSessionQa = (socketParentId: string, id: number): void => {
+export const deleteQA = (socketParentId: string, id: number): void => {
     socket.emit(EVENTS.DELETE_DISCUSSION_QA, {
         socketParentId,
         id,
