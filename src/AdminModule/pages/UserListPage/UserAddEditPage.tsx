@@ -908,7 +908,11 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                         formState,
                                         isEditMode
                                     )}
-                                    defaultChecked={data?.isDisplayAsGuest}
+                                    defaultChecked={
+                                        isEditMode
+                                            ? data?.isDisplayAsGuest
+                                            : false
+                                    }
                                     errorMessage={
                                         errors.isDisplayAsGuest?.message
                                     }
@@ -929,7 +933,9 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                                         formState,
                                         isEditMode
                                     )}
-                                    defaultChecked={data?.isExposeEmail}
+                                    defaultChecked={
+                                        isEditMode ? data?.isExposeEmail : false
+                                    }
                                     errorMessage={errors.isExposeEmail?.message}
                                     control={control}
                                 />
