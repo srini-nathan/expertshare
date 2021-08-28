@@ -124,25 +124,19 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
     }, [socketParentId]);
 
     useEffect(() => {
-        socket.on(
-            ON_NEW_DISCUSSION_QA,
-            (roomId: string, u: any, parent: any, payload: any) => {
-                if (roomId === socketParentId && u) {
-                    if (parent) {
-                        const p = core
-                            .getState()
-                            .find((e: any) => e.id === parent);
-                        const index = core.getState().indexOf(p);
-
-                        if (index !== -1) {
-                            core.addNewChildQa(payload, setData, index);
-                        }
-                    } else {
-                        core.addNewQa(payload, setData);
+        socket.on(ON_NEW_DISCUSSION_QA, (u: any, parent: any, payload: any) => {
+            if (u && payload) {
+                if (parent) {
+                    const p = core.getState().find((e: any) => e.id === parent);
+                    const index = core.getState().indexOf(p);
+                    if (index !== -1) {
+                        core.addNewChildQa(payload, setData, index);
                     }
+                } else {
+                    core.addNewQa(payload, setData);
                 }
             }
-        );
+        });
 
         socket.on(ON_DELETE_DISCUSSION_QA, (qaId: number) => {
             if (qaId) {
@@ -155,8 +149,8 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
 
         socket.on(
             ON_EDIT_DISCUSSION_QA,
-            (roomId: string, u: any, parent: any, payload: any) => {
-                if (roomId === socketParentId && u) {
+            (u: any, parent: any, payload: any) => {
+                if (u && payload) {
                     core.editQa(payload, setData);
                 }
             }
