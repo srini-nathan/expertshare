@@ -5,21 +5,20 @@ import { AppQAThread } from "../AppQAThread";
 import { errorToast } from "../../utils";
 import { useAuthState, useIsGranted, useQASocketEvents } from "../../hooks";
 import { socket, EVENTS } from "../../socket";
-
-import "./assets/scss/style.scss";
-import { SessionComment } from "../../models/entities/SessionComment";
 import { ExhibitorCommentsAPI, SessionCommentsAPI } from "../../apis";
+import "./assets/scss/style.scss";
+import { PExhibitorComment } from "../../models/entities/ExhibitorComment";
+import { PSessionComment } from "../../models/entities/SessionComment";
+import { PUser } from "../../../AdminModule/models";
+
+type CommentApi = typeof SessionCommentsAPI | typeof ExhibitorCommentsAPI;
+type PComment = PSessionComment | PExhibitorComment;
 
 const {
     ON_NEW_DISCUSSION_QA,
     ON_DELETE_DISCUSSION_QA,
     ON_EDIT_DISCUSSION_QA,
 } = EVENTS;
-
-// @TODO: move following types to models directory
-type CommentApi = typeof SessionCommentsAPI | typeof ExhibitorCommentsAPI;
-type Comment = SessionComment;
-type PComment = Partial<Comment>;
 
 export interface QuestionAndAnswersProps {
     name?: string;
@@ -103,7 +102,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
     parentElement,
     socketParentId,
 }) => {
-    const [data, setData] = useState<any[]>(core.getState());
+    const [data, setData] = useState<PComment[]>(core.getState());
     const [page, setPage] = useState<number>(1);
     const [, setTotalItems] = useState<number>(1);
     const {
@@ -124,23 +123,29 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
     }, [socketParentId]);
 
     useEffect(() => {
-        socket.on(ON_NEW_DISCUSSION_QA, (u: any, parent: any, payload: any) => {
-            if (u && payload) {
-                if (parent) {
-                    const p = core.getState().find((e: any) => e.id === parent);
-                    const index = core.getState().indexOf(p);
-                    if (index !== -1) {
-                        core.addNewChildQa(payload, setData, index);
+        socket.on(
+            ON_NEW_DISCUSSION_QA,
+            (u: PUser, parent: number | null, payload: PComment) => {
+                if (u && payload) {
+                    if (parent) {
+                        const p = core
+                            .getState()
+                            .find((e: PComment) => e.id === parent);
+                        const index = core.getState().indexOf(p);
+
+                        if (index !== -1) {
+                            core.addNewChildQa(payload, setData, index);
+                        }
+                    } else {
+                        core.addNewQa(payload, setData);
                     }
-                } else {
-                    core.addNewQa(payload, setData);
                 }
             }
-        });
+        );
 
         socket.on(ON_DELETE_DISCUSSION_QA, (qaId: number) => {
             if (qaId) {
-                const p = core.getState().find((e: any) => e.id === qaId);
+                const p = core.getState().find((e: PComment) => e.id === qaId);
                 if (p) {
                     core.deleteQa(qaId, setData);
                 }
@@ -149,7 +154,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
 
         socket.on(
             ON_EDIT_DISCUSSION_QA,
-            (u: any, parent: any, payload: any) => {
+            (u: PUser, parent: number | null, payload: PComment) => {
                 if (u && payload) {
                     core.editQa(payload, setData);
                 }
@@ -159,15 +164,16 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
 
     const getCurrentQestionsAndAnswersThread = (pageNo = 1) => {
         commentsAPI
-            .getMessages(parentId, container, pageNo)
-            .then((response: any) => {
+            .getMessages<PComment>(parentId, container, pageNo)
+            .then(({ response }) => {
                 if (response) {
+                    const { totalItems, items } = response;
                     if (pageNo === 1) {
                         setPage(1);
-                        core.createState(response["hydra:member"], setData);
+                        core.createState(items, setData);
                     } else {
                         const newData = data;
-                        response["hydra:member"].forEach((e: any) => {
+                        items.forEach((e: PComment) => {
                             const item = data.find((d: any) => d.id === e.id);
                             if (!item) {
                                 newData.push(e);
@@ -175,7 +181,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                         });
                         core.createState(newData, setData);
                     }
-                    setTotalItems(response["hydra:totalItems"] as number);
+                    setTotalItems(totalItems);
                 }
             });
     };

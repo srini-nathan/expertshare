@@ -3,7 +3,10 @@ import { SOCKET_HOST } from "./config/app-env";
 import { PChatMessage } from "./models/entities/ChatMessage";
 import { PUser } from "../AdminModule/models";
 import { PSessionComment } from "./models/entities/SessionComment";
+import { PExhibitorComment } from "./models/entities/ExhibitorComment";
 import { SocketCommandPayload } from "./models";
+
+type PComment = PSessionComment | PExhibitorComment;
 
 export const socket = io(SOCKET_HOST, {
     transports: ["websocket"],
@@ -156,7 +159,7 @@ export const leaveQA = (socketParentId: string): void => {
 export const postNewQA = (
     socketParentId: string,
     sender: PUser,
-    payload: PSessionComment,
+    payload: PComment,
     parentId: number | null = null
 ): void => {
     socket.emit(EVENTS.POST_NEW_DISCUSSION_QA, {
@@ -170,7 +173,7 @@ export const postNewQA = (
 export const editQA = (
     socketParentId: string,
     sender: PUser,
-    payload: PSessionComment,
+    payload: PComment,
     parentId: number | null = null
 ): void => {
     socket.emit(EVENTS.EDIT_DISCUSSION_QA, {
