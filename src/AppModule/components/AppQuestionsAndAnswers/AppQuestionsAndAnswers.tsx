@@ -3,12 +3,7 @@ import { Col } from "react-bootstrap";
 import { AppСhoseMethodMessage } from "../AppСhoseMethodMessage";
 import { AppQAThread } from "../AppQAThread";
 import { errorToast } from "../../utils";
-
-import {
-    useAuthState,
-    useIsGranted,
-    useSessionSocketEvents,
-} from "../../hooks";
+import { useAuthState, useIsGranted, useQASocketEvents } from "../../hooks";
 import { socket, EVENTS } from "../../socket";
 
 import "./assets/scss/style.scss";
@@ -105,19 +100,19 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
     const [page, setPage] = useState<number>(1);
     const [, setTotalItems] = useState<number>(1);
     const {
-        emitPostNewSessionQa,
-        emitJoinSessionQa,
-        emitLeaveSessionQa,
-        emitDeleteSessionQa,
-        emitEditSessionQa,
-    } = useSessionSocketEvents();
+        emitPostNewQA,
+        emitJoinQA,
+        emitLeaveQA,
+        emitDeleteQA,
+        emitEditQA,
+    } = useQASocketEvents();
     const { user } = useAuthState();
     const isGranted = useIsGranted("ROLE_USER");
     useEffect(() => {
-        if (socketParentId) emitJoinSessionQa(socketParentId);
+        if (socketParentId) emitJoinQA(socketParentId);
 
         return () => {
-            emitLeaveSessionQa(socketParentId);
+            emitLeaveQA(socketParentId);
         };
     }, [socketParentId]);
 
@@ -199,7 +194,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                     errorToast(errorMessage);
                 }
                 if (response) {
-                    emitPostNewSessionQa(socketParentId, user, response, null);
+                    emitPostNewQA(socketParentId, user, response, null);
                     getCurrentQestionsAndAnswersThread(1);
                 }
             });
@@ -224,7 +219,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                     errorToast(errorMessage);
                 }
                 if (response) {
-                    emitPostNewSessionQa(
+                    emitPostNewQA(
                         socketParentId,
                         user,
                         {
@@ -257,7 +252,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                     errorToast(errorMessage);
                 }
                 if (response) {
-                    emitEditSessionQa(socketParentId, user, response, null);
+                    emitEditQA(socketParentId, user, response, null);
                     getCurrentQestionsAndAnswersThread(1);
                 }
             });
@@ -265,7 +260,7 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
 
     const deleteQuestion = (qId: number) => {
         commentsAPI.deleteById(qId).then(() => {
-            emitDeleteSessionQa(socketParentId, qId);
+            emitDeleteQA(socketParentId, qId);
             getCurrentQestionsAndAnswersThread(1);
         });
     };
