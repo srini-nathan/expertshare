@@ -1,7 +1,6 @@
-import { AxiosError } from "axios";
-import { FinalResponse, ServerError } from "../models";
 import { ROUTES } from "../../config";
 import { EntityAPI } from "./EntityAPI";
+import { FinalResponse, ListResponse } from "../models";
 
 const {
     api_session_comments_get_collection: API_GET_SESSIONS_COMMENTS,
@@ -12,7 +11,7 @@ const {
 } = ROUTES;
 
 export abstract class SessionCommentsAPI extends EntityAPI {
-    protected static GET_SESSION_COMMENT = API_GET_SESSIONS_COMMENTS;
+    protected static GET_COLLECTION = API_GET_SESSIONS_COMMENTS;
 
     protected static POST_COLLECTION = API_POST_SESSION_COMMENTS;
 
@@ -22,23 +21,15 @@ export abstract class SessionCommentsAPI extends EntityAPI {
 
     protected static PATCH_ITEM = API_PATCH_SESSION_ITEM;
 
-    public static async getMessages(
+    public static async getMessages<E>(
         session: number,
         container: number,
         page = 1
-    ): Promise<any> {
-        return this.makeGet<any>(API_GET_SESSIONS_COMMENTS, {
-            page,
+    ): Promise<FinalResponse<ListResponse<E> | null>> {
+        return this.find<E>(page, {
             "session.id": session,
             "container.id": container,
             "order[id]": "desc",
-        })
-            .then(({ data }) => {
-                return data;
-            })
-            .catch((error: AxiosError | ServerError) => {
-                const { message } = error;
-                return Promise.resolve(new FinalResponse(null, message));
-            });
+        });
     }
 }
