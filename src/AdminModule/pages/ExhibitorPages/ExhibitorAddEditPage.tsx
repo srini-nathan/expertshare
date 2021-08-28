@@ -451,7 +451,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                 translations={translations}
                                 onChange={setTranslations}
                             />
-                            <Col className={"p-0"}>
+                            <Col className={"p-0 mt-3"}>
                                 <Form.Group>
                                     <AppFormLabelTranslatable
                                         label={
@@ -795,7 +795,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         title={t(
                                             "admin.exhibitor.form:label.users"
                                         )}
-                                        icon="speakers"
+                                        icon="fak fa-users-tg"
                                         users={users}
                                         loadMore={getOwners}
                                         state={pickerState.owner}
@@ -825,7 +825,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         title={t(
                                             "admin.exhibitor.form:label.members"
                                         )}
-                                        icon="speakers"
+                                        icon="fak fa-users-tg"
                                         users={members}
                                         loadMore={getMembers}
                                         state={pickerState.member}
@@ -843,7 +843,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                 </Col>
                             </Row>
                             <Row>
-                                <Col xl={12} lg={12}>
+                                <Col xl={12} lg={12} className="test">
                                     <AppEventPicker
                                         xl={4}
                                         lg={4}
@@ -855,7 +855,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         title={t(
                                             "admin.exhibitor.form:label.events"
                                         )}
-                                        icon="speakers"
+                                        icon="fak fa-right"
                                         list={events}
                                         loadMore={getEvents}
                                         state={pickerState.event}
@@ -885,7 +885,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                         title={t(
                                             "admin.exhibitor.form:label.sessions"
                                         )}
-                                        icon="speakers"
+                                        icon="fak fa-users-tg"
                                         list={sessions}
                                         loadMore={getSessions}
                                         state={pickerState.session}

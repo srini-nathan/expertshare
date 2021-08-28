@@ -7,7 +7,11 @@ import { ExhibitorApi } from "../../apis";
 import { Exhibitor } from "../../models";
 import { useAuthState, useIsGranted } from "../../../AppModule/hooks";
 import { ROLES } from "../../../config";
-import { errorToast, successToast } from "../../../AppModule/utils";
+import {
+    cancelAllPrevRequest,
+    errorToast,
+    successToast,
+} from "../../../AppModule/utils";
 import {
     AppGridPagination,
     AppFormDropdown,
@@ -20,8 +24,9 @@ import {
 import {
     pageSizeOptions,
     defaultPageSize,
+    itemsPerPage as defaultItemsPerPage,
 } from "../../../AppModule/containers/AppGrid";
-import { ExhibitorListTabs } from "./ExhibitorListTabs";
+import { ExhibitorListPageTabs } from "./ExhibitorListPageTabs";
 
 export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
@@ -29,7 +34,9 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
     const [totalItems, setTotalItems] = useState<number>(0);
     const [loading, isLoading] = useState<boolean>(true);
-    const [pageSize, setPageSize] = useState<number>(30);
+    const [itemsPerPage, setItemsPerPage] = useState<number>(
+        defaultItemsPerPage
+    );
     const [page, setPage] = useState<number>(1);
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const [isVisible, setIsVisible] = useState<boolean>(true);
@@ -39,9 +46,11 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
 
     const fetchData = (params = {}) => {
         isLoading(true);
+        cancelAllPrevRequest(cancelTokenSourcesRef.current);
         ExhibitorApi.find<Exhibitor>(
             page,
             {
+                itemsPerPage,
                 "container.id": containerId,
                 isVisible,
                 "translations.name": filter,
@@ -64,7 +73,7 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
 
     useEffect(() => {
         fetchData();
-    }, [isVisible, pageSize]);
+    }, [isVisible, itemsPerPage, page]);
 
     async function handleFilter(search: string) {
         setFilter(search);
@@ -99,9 +108,12 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
                     />
                 </div>
             </AppPageHeader>
-            <ExhibitorListTabs
+            <ExhibitorListPageTabs
                 isVisible={isVisible}
-                setIsVisible={setIsVisible}
+                setIsVisible={(status) => {
+                    setPage(1);
+                    setIsVisible(status);
+                }}
             />
             <Row>
                 {loading ? (
@@ -136,12 +148,11 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
                 <div className="d-flex flex-row app-grid-action py-2">
                     <AppGridPagination
                         className="mr-3"
-                        itemsPerPage={pageSize}
+                        itemsPerPage={itemsPerPage}
                         totalItems={totalItems}
                         active={page}
                         onClick={(p) => {
                             setPage(p);
-                            fetchData();
                         }}
                     />
 
@@ -150,7 +161,10 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
                             id={"pageSize"}
                             defaultValue={defaultPageSize()}
                             options={pageSizeOptions()}
-                            onChange={(e: any) => setPageSize(e.value)}
+                            onChange={(e: any) => {
+                                setItemsPerPage(e.value);
+                                setPage(1);
+                            }}
                             menuPlacement={"top"}
                         />
                     </div>

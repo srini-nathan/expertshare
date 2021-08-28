@@ -3,7 +3,7 @@ import { Row, Col } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { useGlobalData } from "../../contexts";
 import { Language } from "../../../AdminModule/models";
-import { AppButton, AppFormLabel } from "../../components";
+import { AppFormLabel } from "../../components";
 
 import "./assets/scss/style.scss";
 
@@ -35,19 +35,18 @@ export const AppLanguageSwitcher: FC<AppLanguageSwitcherType> = ({
             <Col xs={12} className="d-flex mb-4 mt-2 flex-wrap">
                 {languages.map(({ locale, name }: Language) => {
                     return (
-                        <AppButton
+                        <div
                             key={locale}
-                            className={`mr-2 mb-2 ${
+                            className={`lang-item mr-2 mb-2 ${
                                 activeLocale === locale && "active"
                             }`}
-                            variant="secondary"
                             onClick={() => {
                                 onChange(locale);
                             }}
                         >
                             <i className={`flag flag-${locale}`}></i>
                             {name}
-                        </AppButton>
+                        </div>
                     );
                 })}
             </Col>

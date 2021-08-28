@@ -167,7 +167,12 @@
             @include media("mobile") {
                 justify-content: flex-start;
             }
-
+            .edit-btn {
+                width: 36px;
+                i {
+                    font-size: 18px;
+                }
+            }
             .language-dropdown {
                 .dropdown {
                     button {
