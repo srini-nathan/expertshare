@@ -47,6 +47,8 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                     isLive: live,
                     streamType: session.streamType,
                     streamUrl: session.streamUrl,
+                    zoomMeeting: session.zoomMeetingNumber,
+                    zoomSignature: session.zoomSignature,
                 });
             } else {
                 setPipPlayerData(null);
@@ -267,7 +269,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                                             (container.configuration as any)
                                                 .shortDate
                                             ? (container.configuration as any)
-                                                  .shortDate
+                                                .shortDate
                                             : "EEEE MMMM, dd"
                                     )}
                             </span>
@@ -282,7 +284,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                                             (container.configuration as any)
                                                 .shortTime
                                             ? (container.configuration as any)
-                                                  .shortTime
+                                                .shortTime
                                             : "hh:mm a"
                                     )}{" "}
                                 -{" "}
@@ -294,7 +296,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                                             (container.configuration as any)
                                                 .shortTime
                                             ? (container.configuration as any)
-                                                  .shortTime
+                                                .shortTime
                                             : "hh:mm a"
                                     )}
                             </span>
