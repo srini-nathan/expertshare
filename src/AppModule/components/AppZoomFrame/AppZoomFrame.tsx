@@ -4,7 +4,7 @@ import { useLocation } from "@reach/router";
 
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models/context/AuthState";
-import { ZOOM_API_KEY } from "../../config/app-env";
+import { useGlobalData } from "../../contexts";
 
 export interface AppZoom {
     meetNumber: string;
@@ -18,8 +18,9 @@ export const AppZoomFrame: FC<AppZoom> = ({
     const { state } = React.useContext(AuthContext);
     const { user } = state as AuthState;
     const location = useLocation();
+    const { container } = useGlobalData();
 
-    const apiKeyValue = `${ZOOM_API_KEY}`;
+    const apiKeyValue = container?.configuration?.zoomKey;
     const leaveUrl = location.pathname;
 
     const initiateMeeting = () => {
@@ -31,7 +32,7 @@ export const AppZoomFrame: FC<AppZoom> = ({
                     signature,
                     meetingNumber: meetNumber,
                     userName: `${user?.firstName} ${user?.lastName}` || "",
-                    apiKey: apiKeyValue,
+                    apiKey: apiKeyValue || "",
                     success: (s: any) => {
                         console.log(s);
                     },
