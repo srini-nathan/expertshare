@@ -321,6 +321,7 @@
 .app-grid-action {
     position: fixed;
     bottom: 0;
+    z-index: 1000;
     width: 100%;
     background-color: var(--body-background-color);
 
