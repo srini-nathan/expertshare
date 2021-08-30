@@ -33,3 +33,5 @@ export * from "./LiveVoteOption";
 export * from "./LiveVoteResult";
 export * from "./Exhibitor";
 export * from "./ExhibitorTranslation";
+export * from "./ExhibitorProduct";
+export * from "./ExhibitorProductTranslation";
