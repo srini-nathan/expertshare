@@ -33,7 +33,7 @@ export const requestMediaPermission = async (
 
 export const parseDesign = (container: any): DesignConfiguration => {
     let design: DesignConfiguration = new DesignConfiguration();
-    if (container?.designConfiguration) {
+    if (container.designConfiguration) {
         design = { ...design, ...container.designConfiguration };
     }
 

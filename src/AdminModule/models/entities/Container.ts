@@ -5,10 +5,6 @@ import { UserGroup } from "./UserGroup";
 import { CONSTANTS } from "../../../config";
 import { ContainerApi } from "../../apis";
 
-interface Config {
-    zoomKey: string;
-}
-
 export class Container extends BaseEntity {
     domain: string;
 
@@ -32,7 +28,7 @@ export class Container extends BaseEntity {
 
     description: string;
 
-    configuration: Config;
+    configuration: string[] | any[];
 
     configurationTypes: string[] | any[];
 
@@ -63,7 +59,7 @@ export class Container extends BaseEntity {
             bucketRegion = "",
             bucketEndpoint = "",
             description = "",
-            configuration = { zoomKey: "" },
+            configuration = [],
             configurationTypes = [],
             designConfiguration = [],
             designConfigurationTypes = [],
