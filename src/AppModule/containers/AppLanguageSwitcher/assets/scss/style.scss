@@ -1,37 +1,48 @@
 @import "../../../../assets/scss/variables";
 
 .app-language-switcher {
-    .flag {
-        width: 20px;
-        height: 20px;
-        margin-right: 10px;
-        margin-left: -10px;
-        background-size: 20px;
-        border-radius: 50%;
-        &-en {
-            background-image: url("../images/en_flag.svg");
-        }
-        &-pt {
-            background-image: url("../images/pt_flag.svg");
-        }
-        &-it {
-            background-image: url("../images/it_flag.svg");
-        }
-        &-fr {
-            background-image: url("../images/fr_flag.svg");
-        }
-        &-de {
-            background-image: url("../images/de_flag.svg");
-        }
-        &-zh {
-            background-image: url("../images/zh_flag.svg");
-        }
-    }
-    .btn-secondary {
+    .lang-item {
+        display: flex;
+        align-items: center;
+        height: 36px;
+        padding: 5px 20px;
+        color: var(--tab-text-color);
+        cursor: pointer;
+        background-color: var(--tab-background-color) !important;
+        border-radius: var(--tab-border-radius);
+        box-shadow: 0 3px 9px var(--tab-box-shadow-color);
+
         &.active {
-            color: var(--primary) !important;
-            background-color: var(--primary-20) !important;
-            border-color: transparent !important;
+            color: var(--tab-text-color--active);
+            background-color: var(--tab-background-color--active) !important;
+            box-shadow: 0 3px 9px var(--tab-box-shadow-color--active);
+        }
+        .flag {
+            display: flex;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            margin-left: -10px;
+            background-size: 20px;
+            border-radius: 50%;
+            &-en {
+                background-image: url("../images/en_flag.svg");
+            }
+            &-pt {
+                background-image: url("../images/pt_flag.svg");
+            }
+            &-it {
+                background-image: url("../images/it_flag.svg");
+            }
+            &-fr {
+                background-image: url("../images/fr_flag.svg");
+            }
+            &-de {
+                background-image: url("../images/de_flag.svg");
+            }
+            &-zh {
+                background-image: url("../images/zh_flag.svg");
+            }
         }
     }
 }
