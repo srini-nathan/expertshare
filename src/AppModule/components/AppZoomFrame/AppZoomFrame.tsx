@@ -4,7 +4,8 @@ import { ZoomMtg } from "@zoomus/websdk";
 import crypto from "crypto";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models/context/AuthState";
-import { ZOOM_API_KEY, ZOOM_SECRET_KEY, API_HOST } from "../../config/app-env";
+import { ZOOM_API_KEY, ZOOM_SECRET_KEY } from "../../config/app-env";
+import { useGlobalData } from "../../contexts";
 
 export interface AppZoom {
     meetNumber: string;
@@ -13,6 +14,16 @@ export interface AppZoom {
 export const AppZoomFrame: FC<AppZoom> = ({ meetNumber }): JSX.Element => {
     const { state } = React.useContext(AuthContext);
     const { user } = state as AuthState;
+    const { container } = useGlobalData();
+
+    // let apiKeyValue = "";
+    // if (
+    //     container &&
+    //     container.configuration &&
+    //     container.configuration.zoomKey
+    // ) {
+    //     apiKeyValue = container.configuration.zoomKey;
+    // }
 
     const apiKeyValue = `${ZOOM_API_KEY}`;
     const apiSecretValue = `${ZOOM_SECRET_KEY}`;
@@ -74,20 +85,18 @@ export const AppZoomFrame: FC<AppZoom> = ({ meetNumber }): JSX.Element => {
         const { document } = window;
         if (document && document !== null) {
             const meet = document?.getElementById("zmmtg-root");
-            const root = document?.getElementById("showZoomLink");
-            if (meet !== null && root !== null) {
+            if (meet !== null) {
                 meet.style.display = "block";
-                root.append(meet);
             }
         }
     };
 
     React.useEffect(() => {
+        showZoomDiv();
         ZoomMtg.setZoomJSLib("https://source.zoom.us/1.9.8/lib", "/av");
         ZoomMtg.preLoadWasm();
         ZoomMtg.prepareJssdk();
         initiateMeeting();
-        showZoomDiv();
     }, []);
 
     return <></>;
