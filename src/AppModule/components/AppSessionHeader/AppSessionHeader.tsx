@@ -46,6 +46,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                     streamType: session.streamType,
                     streamUrl: session.streamUrl,
                     zoomMeeting: session.zoomMeetingNumber,
+                    zoomSignature: session.zoomSignature,
                 });
             } else {
                 setPipPlayerData(null);

@@ -22,7 +22,7 @@ export const AppPictureInPicture = (): JSX.Element => {
         return <></>;
     }
 
-    const { streamType, streamUrl, zoomMeeting } = value;
+    const { streamType, streamUrl, zoomMeeting, zoomSignature } = value;
 
     const closeDraggable = () => {
         setValue(null);
@@ -47,7 +47,7 @@ export const AppPictureInPicture = (): JSX.Element => {
                         >
                             <i className="fas fa-times"></i>
                         </span>
-                        {renderStreams(streamType, streamUrl, zoomMeeting)}
+                        {renderStreams(streamType, streamUrl, zoomMeeting, zoomSignature)}
                     </div>
                 </Draggable>
             )}

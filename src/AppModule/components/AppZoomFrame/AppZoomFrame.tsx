@@ -1,61 +1,26 @@
 import React, { FC } from "react";
 import { ZoomMtg } from "@zoomus/websdk";
+import { useLocation } from "@reach/router";
 
-import crypto from "crypto";
 import { AuthContext } from "../../../SecurityModule/contexts/AuthContext";
 import { AuthState } from "../../../SecurityModule/models/context/AuthState";
-import { ZOOM_API_KEY, ZOOM_SECRET_KEY } from "../../config/app-env";
-import { useGlobalData } from "../../contexts";
+import { ZOOM_API_KEY } from "../../config/app-env";
 
 export interface AppZoom {
     meetNumber: string;
+    signature: string;
 }
 
-export const AppZoomFrame: FC<AppZoom> = ({ meetNumber }): JSX.Element => {
+export const AppZoomFrame: FC<AppZoom> = ({
+    meetNumber,
+    signature,
+}): JSX.Element => {
     const { state } = React.useContext(AuthContext);
     const { user } = state as AuthState;
-    const { container } = useGlobalData();
-
-    // let apiKeyValue = "";
-    // if (
-    //     container &&
-    //     container.configuration &&
-    //     container.configuration.zoomKey
-    // ) {
-    //     apiKeyValue = container.configuration.zoomKey;
-    // }
+    const location = useLocation();
 
     const apiKeyValue = `${ZOOM_API_KEY}`;
-    const apiSecretValue = `${ZOOM_SECRET_KEY}`;
-    const roleValue = 0;
-    const leaveUrl = "http://test2.localhost:3000/event";
-
-    const generateSignature = (
-        apiKey: string,
-        apiSecret: string,
-        meetingNumber: number,
-        role: number
-    ) => {
-        const timestamp = new Date().getTime() - 30000;
-        const msg = Buffer.from(
-            apiKey + meetingNumber + timestamp + role
-        ).toString("base64");
-        const hash = crypto
-            .createHmac("sha256", apiSecret)
-            .update(msg)
-            .digest("base64");
-        const signature = Buffer.from(
-            `${apiKey}.${meetingNumber}.${timestamp}.${role}.${hash}`
-        ).toString("base64");
-        return signature;
-    };
-
-    const signature = generateSignature(
-        apiKeyValue,
-        apiSecretValue,
-        +meetNumber,
-        roleValue
-    );
+    const leaveUrl = location.pathname;
 
     const initiateMeeting = () => {
         ZoomMtg.init({

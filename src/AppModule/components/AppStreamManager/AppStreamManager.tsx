@@ -15,6 +15,7 @@ import placeholder from "./assets/images/imgthumb.svg";
 import { AppButton } from "../AppButton";
 import { getDateTimeWithoutTimezone } from "../../utils";
 import "./assets/scss/style.scss";
+import { useGlobalData } from "../../contexts";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -30,6 +31,7 @@ export const renderStreams = (
     streamType: string,
     streamUrl: string,
     zoomMeetingNumber: string,
+    zoomSignature: string,
     showImage = false,
     style = {}
 ) => {
@@ -67,7 +69,7 @@ export const renderStreams = (
             );
         case "ZOOM":
             return (
-                <AppZoomFrame meetNumber={zoomMeetingNumber} />
+                <AppZoomFrame meetNumber={zoomMeetingNumber} signature={zoomSignature} />
             );
         default:
             if (showImage)
@@ -219,6 +221,7 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
             session.streamType,
             session.streamUrl,
             session.zoomMeetingNumber,
+            session.zoomSignature,
             true,
             style,
         );
