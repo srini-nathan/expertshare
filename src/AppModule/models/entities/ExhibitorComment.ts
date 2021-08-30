@@ -1,33 +1,31 @@
-import { Container, Session, User } from "../../../AdminModule/models";
-import { SessionCommentsAPI } from "../../apis/SessionCommentsAPI";
+import { Container, User, Exhibitor } from "../../../AdminModule/models";
+import { ExhibitorCommentsAPI } from "../../apis";
 import { BaseEntity } from "./BaseEntity";
-import { ContainerApi } from "../../../AdminModule/apis/ContainerApi";
-import { SessionApi } from "../../../AdminModule/apis/SessionApi";
-import { UserApi } from "../../../AdminModule/apis/UserApi";
-import { getRandomId, getUTCDate } from "../../utils";
 import { CONSTANTS } from "../../../config";
+import { ContainerApi, UserApi, ExhibitorApi } from "../../../AdminModule/apis";
+import { getRandomId, getUTCDate } from "../../utils";
 
 const {
-    SessionComment: { STATUS },
+    ExhibitorComment: { STATUS },
 } = CONSTANTS;
 
-export class SessionComment extends BaseEntity {
+export class ExhibitorComment extends BaseEntity {
     message: string;
 
     status: string;
 
     isReplyed: boolean;
 
-    parent: string | SessionComment | null;
+    parent: string | ExhibitorComment | null;
 
     container: string | Container;
 
-    session: string | Session;
+    exhibitor: string | Exhibitor;
 
     user: string | User;
 
     constructor(
-        session: string,
+        exhibitor: string,
         message: string,
         user: string,
         container: string,
@@ -38,10 +36,10 @@ export class SessionComment extends BaseEntity {
             id,
             createdAt,
             updatedAt,
-        }: Partial<SessionComment> = {}
+        }: PExhibitorComment = {}
     ) {
         super(id, createdAt, updatedAt);
-        this.session = session;
+        this.exhibitor = exhibitor;
         this.message = message;
         this.user = user;
         this.container = container;
@@ -51,22 +49,22 @@ export class SessionComment extends BaseEntity {
     }
 
     toString(): string {
-        return SessionCommentsAPI.toResourceUrl(this.id);
+        return ExhibitorCommentsAPI.toResourceUrl(this.id);
     }
 
     static createFrom(
-        sessionId: number,
+        exhibitorId: number,
         message: string,
         userId: number,
         containerId: number,
         parentId: number | null = null,
         isReplied = true
-    ): SessionComment {
+    ): ExhibitorComment {
         const parent = parentId
-            ? SessionCommentsAPI.toResourceUrl(parentId)
+            ? ExhibitorCommentsAPI.toResourceUrl(parentId)
             : null;
-        return new SessionComment(
-            SessionApi.toResourceUrl(sessionId),
+        return new ExhibitorComment(
+            ExhibitorApi.toResourceUrl(exhibitorId),
             message,
             UserApi.toResourceUrl(userId),
             ContainerApi.toResourceUrl(containerId),
@@ -80,4 +78,4 @@ export class SessionComment extends BaseEntity {
     }
 }
 
-export type PSessionComment = Partial<SessionComment>;
+export type PExhibitorComment = Partial<ExhibitorComment>;

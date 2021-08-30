@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { useForm } from "react-hook-form";
 import { Container, Row, Col, Form } from "react-bootstrap";
@@ -52,6 +52,7 @@ import {
 } from "../../models";
 import { UploadAPI } from "../../apis";
 import { CONSTANTS } from "../../../config";
+import { useGlobalData } from "../../contexts";
 
 const {
     Role: { ROLE },
@@ -83,8 +84,24 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
         FILETYPEINFO_USER_PROFILE as FileTypeInfo
     );
     const { t } = useTranslation();
-    const { setLocale } = useUserLocale();
+    const { locale, setLocale } = useUserLocale();
     const { role } = useAuthState();
+    const desclaimer = useRef<HTMLDivElement>(null);
+    const { container } = useGlobalData();
+    const [agree, isAgree] = useState<boolean>(false);
+
+    const getValue = (name: string) => {
+        let val = "";
+        if (
+            container &&
+            container.configuration &&
+            (container?.configuration as any).translations
+        )
+            (container?.configuration as any).translations.forEach((e: any) => {
+                if (e.locale === locale) val = e[name];
+            });
+        return val;
+    };
 
     const validationShape = {
         plainPassword: yup.string().min(6).required(),
@@ -383,8 +400,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                         options={languages}
                                         control={control}
                                         transform={{
-                                            output: (locale: PrimitiveObject) =>
-                                                locale?.value,
+                                            output: (
+                                                localex: PrimitiveObject
+                                            ) => localex?.value,
                                             input: (value: string) => {
                                                 return _find(languages, {
                                                     value,
@@ -432,7 +450,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                         control={control}
                                     />
                                 </Form.Row>
-                                <Form.Row className="mb-3">
+                                <Form.Row>
                                     <Col sm="12" className="mb-3  text-center">
                                         <span className="onboarding-sectoin">
                                             {t("onboarding.section:privacy")}
@@ -455,7 +473,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                                 formState,
                                                 true
                                             )}
-                                            defaultChecked={true}
+                                            defaultChecked={
+                                                user?.isDisplayAsGuest
+                                            }
                                             errorMessage={
                                                 errors.isDisplayAsGuest?.message
                                             }
@@ -477,7 +497,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                             formState,
                                             true
                                         )}
-                                        defaultChecked={false}
+                                        defaultChecked={user?.isExposeEmail}
                                         errorMessage={
                                             errors.isExposeEmail?.message
                                         }
@@ -498,33 +518,88 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                             formState,
                                             true
                                         )}
-                                        defaultChecked={true}
+                                        defaultChecked={
+                                            user?.isAllowCommunication
+                                        }
                                         errorMessage={
                                             errors.isAllowCommunication?.message
                                         }
                                         control={control}
                                     />
                                 </Form.Row>
+                                <Form.Row className="mb-3">
+                                    {container &&
+                                        container.configuration &&
+                                        (container.configuration as any)
+                                            .isDisclaimerEnable &&
+                                        (container.configuration as any)
+                                            .isActivationEmailEnable && (
+                                            <Form.Group className="col-12">
+                                                <div className="agreement-box mt-2 p-2">
+                                                    <div
+                                                        ref={desclaimer}
+                                                        className="agreement-box--inner"
+                                                    >
+                                                        <div
+                                                            dangerouslySetInnerHTML={{
+                                                                __html: getValue(
+                                                                    "disclaimerText"
+                                                                ),
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <Form.Check
+                                                    onChange={() => {
+                                                        isAgree(!agree);
+                                                    }}
+                                                    className="mt-2"
+                                                    type="checkbox"
+                                                    label={t(
+                                                        "login.form:disclaimerAgree"
+                                                    )}
+                                                    id="checkbox-des"
+                                                />
+                                            </Form.Group>
+                                        )}
+                                </Form.Row>
                                 <AppButton
                                     block={true}
                                     type={"submit"}
                                     loadingTxt={t("common.button:submit")}
-                                    disabled={formState.isSubmitting}
+                                    disabled={
+                                        formState.isSubmitting ||
+                                        (container &&
+                                            container.configuration &&
+                                            (container.configuration as any)
+                                                .isDisclaimerEnable &&
+                                            (container.configuration as any)
+                                                .isActivationEmailEnable &&
+                                            !agree)
+                                    }
                                     isLoading={formState.isSubmitting}
                                 >
                                     {t("common.button:submit")}
                                 </AppButton>
-
-                                <AppButton
-                                    onClick={() => {
-                                        setSkipOnBoarding(true);
-                                        navigator("/").then();
-                                    }}
-                                    variant="link"
-                                    className="btn-block mt-3"
-                                >
-                                    {t("onboarding.label:skip")}
-                                </AppButton>
+                                {container &&
+                                    container.configuration &&
+                                    !(
+                                        (container.configuration as any)
+                                            .isDisclaimerEnable &&
+                                        (container.configuration as any)
+                                            .isActivationEmailEnable
+                                    ) && (
+                                        <AppButton
+                                            onClick={() => {
+                                                setSkipOnBoarding(true);
+                                                navigator("/").then();
+                                            }}
+                                            variant="link"
+                                            className="btn-block mt-3"
+                                        >
+                                            {t("onboarding.label:skip")}
+                                        </AppButton>
+                                    )}
                             </Form>
                         </Col>
                     </div>

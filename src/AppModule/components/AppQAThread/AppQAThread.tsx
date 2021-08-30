@@ -20,10 +20,10 @@ export const AppQAThread: FC<QAThreadProps> = ({
     return (
         <>
             {data.length > 0 &&
-                data.map((item: any, index: number) => (
+                data.map((item: any) => (
                     <>
                         <AppDetailsAction
-                            key={index}
+                            key={item.id}
                             questionId={item.id}
                             userObj={item.user}
                             handleAnswerMessage={(message, qid) => {
@@ -43,33 +43,31 @@ export const AppQAThread: FC<QAThreadProps> = ({
                             <p className="base-text pb-3">{item.message}</p>
                             {item.children &&
                                 item.children.length > 0 &&
-                                item.children
-                                    .reverse()
-                                    .map((answer: any, i: number) => (
-                                        <AppDetailsAction
-                                            key={i}
-                                            questionId={answer.id}
-                                            userObj={answer.user}
-                                            isChild
-                                            showShareBtn
-                                            handleAnswerMessage={(message) => {
-                                                sendAnswer(message, item.id);
-                                            }}
-                                            handleDeleteQuestion={(qId) => {
-                                                deleteQuestion(qId);
-                                            }}
-                                            updateMessage={(message, iId) => {
-                                                updateMessage(message, iId);
-                                            }}
-                                            commentMessage={answer.message}
-                                            addComment
-                                            createdAt={answer.createdAt}
-                                        >
-                                            <p className="base-text pb-3">
-                                                {answer.message}
-                                            </p>
-                                        </AppDetailsAction>
-                                    ))}
+                                item.children.reverse().map((answer: any) => (
+                                    <AppDetailsAction
+                                        key={answer.id}
+                                        questionId={answer.id}
+                                        userObj={answer.user}
+                                        isChild
+                                        showShareBtn
+                                        handleAnswerMessage={(message) => {
+                                            sendAnswer(message, item.id);
+                                        }}
+                                        handleDeleteQuestion={(qId) => {
+                                            deleteQuestion(qId);
+                                        }}
+                                        updateMessage={(message, iId) => {
+                                            updateMessage(message, iId);
+                                        }}
+                                        commentMessage={answer.message}
+                                        addComment
+                                        createdAt={answer.createdAt}
+                                    >
+                                        <p className="base-text pb-3">
+                                            {answer.message}
+                                        </p>
+                                    </AppDetailsAction>
+                                ))}
                         </AppDetailsAction>
                     </>
                 ))}

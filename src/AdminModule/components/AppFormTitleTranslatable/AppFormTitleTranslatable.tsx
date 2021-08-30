@@ -3,7 +3,7 @@ import { Row, Col, Form } from "react-bootstrap";
 import "./assets/scss/style.scss";
 import { useTranslation } from "react-i18next";
 import { Language } from "../../models";
-import { AppButton, AppFormLabel } from "../../../AppModule/components";
+import { AppFormLabel } from "../../../AppModule/components";
 
 export interface AppFormTitleTranslatableType {
     locale: string;
@@ -70,22 +70,21 @@ export const AppFormTitleTranslatable: FC<AppFormTitleTranslatableProps> = ({
                     required
                 />
             </Col>
-            <Col md={12} className="d-flex mb-4 chooselang-row">
+            <Col md={12} className="d-flex mb-4 app-language-switcher">
                 {languages.map((e: Language, i: number) => {
                     return (
-                        <AppButton
-                            className={`mr-2 ${
+                        <div
+                            className={`mr-2 lang-item ${
                                 active === e.locale ? "active" : ""
                             } ${e.locale}`}
                             onClick={() => {
                                 setActive(e.locale);
                             }}
-                            variant="secondary"
                             key={i}
                         >
-                            <i></i>
+                            <i className="flag"></i>
                             {e.name}
-                        </AppButton>
+                        </div>
                     );
                 })}
             </Col>

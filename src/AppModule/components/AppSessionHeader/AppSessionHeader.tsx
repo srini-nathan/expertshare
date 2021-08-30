@@ -9,8 +9,9 @@ import { AppStreamManager } from "../AppStreamManager";
 import { PUser, Session } from "../../../AdminModule/models";
 import { useGlobalData } from "../../contexts";
 import { getDateTimeWithoutTimezone } from "../../utils";
-import { useAuthState, useUserLocale } from "../../hooks";
+import { useAuthState, useUserLocale, useIsGranted } from "../../hooks";
 import { UserApi } from "../../../AdminModule/apis";
+import { ROLES } from "../../../config";
 import { appPipPlayer } from "../../atoms";
 
 export interface AppSessionHeaderProps {
@@ -37,6 +38,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
     const location = useLocation();
     const { userId } = useAuthState();
     const setPipPlayerData = useSetRecoilState(appPipPlayer);
+    const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
 
     useEffect(() => {
         return () => {
@@ -89,6 +91,15 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                     md={6}
                     className="text-right session-details-header--detail--action mt-2 mt-lg-0"
                 >
+                    {isGrantedControl && (
+                        <Link
+                            to={`/event/${conferenceId}/session/${session.id}/update`}
+                            state={{ sessionList }}
+                            className="btn btn-secondary edit-btn ml-2"
+                        >
+                            <i className="fak fa-pen-regular"></i>
+                        </Link>
+                    )}
                     <div className="col-auto language-dropdown pr-0 pl-0 pl-lg-2">
                         <div className="dropdown">
                             <button

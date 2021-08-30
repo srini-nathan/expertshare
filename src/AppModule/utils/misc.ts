@@ -42,14 +42,31 @@ export const parseDesign = (container: any): DesignConfiguration => {
 
 export const getBGStyle = (
     basePath: string,
-    image: string
+    image = "",
+    placeholder?: any
 ): PrimitiveObject => {
-    if (image !== "") {
+    if (image && image !== "") {
         return {
             backgroundImage: `url(${basePath}/${image})`,
         };
     }
+    if (placeholder) {
+        return {
+            backgroundImage: `url(${placeholder})`,
+        };
+    }
     return {};
+};
+
+export const resolveImage = (
+    basePath: string,
+    image = "",
+    placeholder: any
+): string | any => {
+    if (image && image !== "") {
+        return `${basePath}/${image}`;
+    }
+    return placeholder;
 };
 
 export const parseConfiguration = (container: any): Configuration => {

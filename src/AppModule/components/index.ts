@@ -91,3 +91,4 @@ export * from "./AppSessionExtraLink";
 export * from "./AppSessionPicker";
 export * from "./AppEventPicker";
 export * from "./AppExhibitorCard";
+export * from "./AppVideoPlayer";

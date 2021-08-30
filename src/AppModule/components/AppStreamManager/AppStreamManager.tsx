@@ -16,6 +16,7 @@ import { AppButton } from "../AppButton";
 import { getDateTimeWithoutTimezone } from "../../utils";
 import "./assets/scss/style.scss";
 import { useGlobalData } from "../../contexts";
+import { AppVideoPlayer } from "../AppVideoPlayer";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -71,6 +72,8 @@ export const renderStreams = (
             return (
                 <AppZoomFrame meetNumber={zoomMeetingNumber} signature={zoomSignature} />
             );
+        case "FILE":
+            return <AppVideoPlayer url={streamUrl} />;
         default:
             if (showImage)
                 return (
