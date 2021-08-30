@@ -12,7 +12,6 @@ import {
     useInitChatOneToOne,
     useOpenChatOneToOne,
     useChatSocketEvents,
-    useCommandCenterSocketEvents,
 } from "../../hooks";
 import { PUser } from "../../../AdminModule/models";
 import { socket, EVENTS } from "../../socket";
@@ -42,7 +41,6 @@ export const AppChatOneToOne: FC = () => {
             behavior: "smooth",
         });
     };
-    const { makeAudioCall, makeVideoCall } = useCommandCenterSocketEvents();
 
     useEffect(() => {
         if (openThread !== null && openThread.id) {
@@ -120,44 +118,44 @@ export const AppChatOneToOne: FC = () => {
                         </div>
                     </div>
                 </div>
-                <div className="row m-0 px-3 py-0">
-                    <div className="tab col-auto p-0 mb-2 w-100">
-                        <div className="row m-0 p-0">
-                            <div className="tab--item active text col-4 pl-0 pr-2">
-                                <a href="#" className="px-3">
-                                    <i className="fak fa-text"></i>
-                                    Text
-                                </a>
-                            </div>
-                            <div className="tab--item audio col-4 pl-0 pr-2">
-                                <a
-                                    href="#"
-                                    className="px-3"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        makeAudioCall(loginUser, otherUser);
-                                    }}
-                                >
-                                    <i className="fak fa-voice"></i>
-                                    Audio
-                                </a>
-                            </div>
-                            <div className="tab--item video col-4 pl-0 pr-1">
-                                <a
-                                    href="#"
-                                    className="px-3"
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        makeVideoCall(loginUser, otherUser);
-                                    }}
-                                >
-                                    <i className="fak fa-video"></i>
-                                    Video
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {/* <div className="row m-0 px-3 py-0"> */}
+                {/*    <div className="tab col-auto p-0 mb-2 w-100"> */}
+                {/*        <div className="row m-0 p-0"> */}
+                {/*            <div className="tab--item active text col-4 pl-0 pr-2"> */}
+                {/*                <a href="#" className="px-3"> */}
+                {/*                    <i className="fak fa-text"></i> */}
+                {/*                    Text */}
+                {/*                </a> */}
+                {/*            </div> */}
+                {/*            <div className="tab--item audio col-4 pl-0 pr-2"> */}
+                {/*                <a */}
+                {/*                    href="#" */}
+                {/*                    className="px-3" */}
+                {/*                    onClick={(e) => { */}
+                {/*                        e.preventDefault(); */}
+                {/*                        makeAudioCall(loginUser, otherUser); */}
+                {/*                    }} */}
+                {/*                > */}
+                {/*                    <i className="fak fa-voice"></i> */}
+                {/*                    Audio */}
+                {/*                </a> */}
+                {/*            </div> */}
+                {/*            <div className="tab--item video col-4 pl-0 pr-1"> */}
+                {/*                <a */}
+                {/*                    href="#" */}
+                {/*                    className="px-3" */}
+                {/*                    onClick={(e) => { */}
+                {/*                        e.preventDefault(); */}
+                {/*                        makeVideoCall(loginUser, otherUser); */}
+                {/*                    }} */}
+                {/*                > */}
+                {/*                    <i className="fak fa-video"></i> */}
+                {/*                    Video */}
+                {/*                </a> */}
+                {/*            </div> */}
+                {/*        </div> */}
+                {/*    </div> */}
+                {/* </div> */}
                 <AppChatOneToOneComposer
                     onSendAction={(txt: string) => {
                         if (
