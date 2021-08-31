@@ -21,6 +21,19 @@
             }
 
             &--title {
+                .back-btn {
+                    width: fit-content;
+                    min-width: 100px;
+                    padding-left: 30px !important;
+                    white-space: nowrap;
+                    i {
+                        position: absolute;
+                        left: 10px;
+                        &::before {
+                            content: "\e017";
+                        }
+                    }
+                }
                 a {
                     h1 {
                         font-size: 42px;

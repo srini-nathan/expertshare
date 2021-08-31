@@ -3,15 +3,15 @@
 .streams-container {
     .tab-pane {
         display: none;
-        min-height: 205px;
+        min-height: 10px;
 
         &.show {
             display: block;
         }
     }
 
-    .tabs{
-        >div {
+    .tabs {
+        > div {
             height: 52px;
             padding: 10px;
             background-color: var(--tab-background-color) !important;
@@ -32,31 +32,44 @@
         background-size: contain;
 
         &.youtube {
-            background-image: url(../images/youtube.png);
+            background-image: url(../images/youtube.svg);
         }
 
         &.knovio {
-            background-image: url(../images/knovio.png);
+            background-image: url(../images/knovio.svg);
         }
 
         &.vimeo {
-            background-image: url(../images/vimeo.png);
+            background-image: url(../images/vimeo.svg);
         }
 
         &.zoom {
-            background-image: url(../images/zoom.png);
+            background-image: url(../images/zoom.svg);
         }
 
         &.webex {
-            background-image: url(../images/webex.png);
+            background-image: url(../images/webex.svg);
         }
 
         &.swisscom {
-            background-image: url(../images/swisscom.png);
+            background-image: url(../images/swisscom.svg);
         }
 
         &.dacast {
-            background-image: url(../images/dacast.png);
+            background-image: url(../images/dacast.svg);
+        }
+        &.upload {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            i {
+                padding-bottom: 3px;
+                font-size: 21px;
+                color: var(--tab-text-color);
+                &::before {
+                    content: "\e058";
+                }
+            }
         }
     }
 }

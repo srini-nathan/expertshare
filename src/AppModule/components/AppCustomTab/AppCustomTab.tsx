@@ -15,9 +15,7 @@ export const AppCustomTab: FunctionComponent<AppCustomTabProps> = ({
     return (
         <Nav className={`flex-column streaming-tab ${className}`}>
             <Nav.Item>
-                <Nav.Link eventKey={eventKey} className="btn btn-secondary">
-                    {children}
-                </Nav.Link>
+                <Nav.Link eventKey={eventKey}>{children}</Nav.Link>
             </Nav.Item>
         </Nav>
     );

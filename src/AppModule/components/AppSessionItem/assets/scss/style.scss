@@ -504,9 +504,9 @@
                         z-index: 1;
                     }
                     .show-users {
-                        right: 56%;
+                        right: 15px;
                         bottom: 26px;
-                        width: 350px;
+                        width: 52%;
                         height: auto;
                         @include media("ea-1") {
                             right: 8px;
@@ -514,6 +514,13 @@
                             left: 8px;
                             width: initial;
                             height: auto;
+                        }
+                        @include media("ea-3") {
+                            right: 20px;
+                        }
+                        @include media("ea-4") {
+                            right: 8px;
+                            bottom: 75px;
                         }
                         .header {
                             padding: 10px !important;

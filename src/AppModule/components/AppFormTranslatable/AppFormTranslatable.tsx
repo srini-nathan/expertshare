@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import "./assets/scss/style.scss";
 import { useTranslation } from "react-i18next";
 import { Language } from "../../../AdminModule/models";
-import { AppButton } from "../AppButton";
 import { AppFormLabel } from "../AppFormLabel";
 import { AppFormRichTextArea } from "../AppFormRichTextArea";
 
@@ -85,26 +84,25 @@ export const AppFormTranslatable: FC<AppFormTranslatableProps> = ({
                     required
                 />
             </Col>
-            <Col md={12} className="d-flex mb-4 chooselang-row">
+            <Col md={12} className="d-flex mb-4 app-language-switcher">
                 {languages
                     // .sort((a: Language, b: Language) =>
                     //     b.isDefault > a.isDefault ? 1 : -1
                     // )
                     .map((e: Language, i: number) => {
                         return (
-                            <AppButton
-                                className={`mr-2 ${
+                            <div
+                                className={`mr-2 lang-item ${
                                     active === e.locale ? "active" : ""
                                 } ${e.locale}`}
                                 onClick={() => {
                                     setActive(e.locale);
                                 }}
-                                variant="secondary"
                                 key={i}
                             >
-                                <i></i>
+                                <i className="flag"></i>
                                 {e.name}
-                            </AppButton>
+                            </div>
                         );
                     })}
             </Col>
