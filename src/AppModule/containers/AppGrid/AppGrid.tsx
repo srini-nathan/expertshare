@@ -119,17 +119,18 @@ export const AppGrid: FC<AppGridProps> = ({
                     />
                 </div>
                 <br />
-                <div className={paginationContainerClass}>
-                    <AppGridPagination
-                        className="mr-3"
-                        itemsPerPage={pageSize}
-                        totalItems={totalItems}
-                        active={active}
-                        onClick={(pageNumber) => {
-                            gridApi?.paginationGoToPage(pageNumber - 1);
-                        }}
-                    />
-                    {totalItems > 0 ? (
+                {totalItems > 9 ? (
+                    <div className={paginationContainerClass}>
+                        <AppGridPagination
+                            className="mr-3"
+                            itemsPerPage={pageSize}
+                            totalItems={totalItems}
+                            active={active}
+                            onClick={(pageNumber) => {
+                                gridApi?.paginationGoToPage(pageNumber - 1);
+                            }}
+                        />
+
                         <div className="pagination-container">
                             <AppFormDropdown
                                 id={"pageSize"}
@@ -145,8 +146,8 @@ export const AppGrid: FC<AppGridProps> = ({
                                 }}
                             />
                         </div>
-                    ) : null}
-                </div>
+                    </div>
+                ) : null}
             </div>
         </React.Fragment>
     );

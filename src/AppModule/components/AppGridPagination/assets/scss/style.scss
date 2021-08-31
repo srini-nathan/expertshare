@@ -2,8 +2,14 @@
 @import "../../../../assets/scss/variables";
 
 .pagination {
+    flex-flow: wrap;
     .page-item {
+        display: flex;
+        align-items: center;
         margin-left: 5px;
+        @include media("mobile") {
+            margin-bottom: 5px;
+        }
 
         &.active {
             .page-link {
