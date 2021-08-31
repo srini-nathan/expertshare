@@ -58,9 +58,6 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [emailStatus, setEmailStatus] = useState<string>("");
     const [agree, isAgree] = useState<boolean>(false);
     const [onboarded, isOnboarded] = useState<boolean>(false);
-    const [activationEmailEnable, isActivationEmailEnable] = useState<boolean>(
-        false
-    );
     const [activeLanguage, setActiveLanguage] = useState<string>("");
     const [userEmail, setUserEmail] = useState<string>("");
     const {
@@ -120,7 +117,6 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                 errorToast(errorMessage);
             } else if (response) {
                 if (response.isExist) {
-                    isActivationEmailEnable(response.isActivationEmailEnable);
                     if (
                         response.isActivationEmailEnable &&
                         !response.isOnboarded
@@ -273,8 +269,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                             (container.configuration as any)
                                                 .isDisclaimerEnable &&
                                             emailStatus === "exist" &&
-                                            !onboarded &&
-                                            !activationEmailEnable && (
+                                            !onboarded && (
                                                 <Form.Group>
                                                     <div className="agreement-box mt-2 p-2">
                                                         <div
@@ -425,24 +420,23 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
             <div className="auth-container--box">
                 <Row className="p-0 m-auto">
                     <div className="tabs-translation-auth mb-3 justify-content-center">
-                        <Row className="m-0 p-0 justify-content-center">
+                        <Row className="m-0 p-0 justify-content-center app-language-switcher">
                             {container &&
                                 activeLanguages?.map((e, i) => {
                                     return (
-                                        <AppButton
-                                            variant="secondary"
+                                        <div
                                             className={`${e.locale} ${
                                                 activeLanguage === e.locale &&
                                                 "active"
-                                            } mx-1 px-2 my-1 mx-sm-1 col-auto col-sm-auto`}
+                                            } mx-1 my-1 mx-sm-1 col-auto col-sm-auto lang-item`}
                                             onClick={() => {
                                                 setActiveLanguage(e.locale);
                                             }}
                                             key={i}
                                         >
-                                            <i></i>
+                                            <i className="flag"></i>
                                             {e.name}
-                                        </AppButton>
+                                        </div>
                                     );
                                 })}
                         </Row>
