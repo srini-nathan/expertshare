@@ -296,15 +296,15 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                 />
             </AppPageHeader>
             {renderTranslations()}
-            <div className="d-flex flex-row app-grid-action py-3">
-                <AppGridPagination
-                    className="mr-3"
-                    itemsPerPage={pageSize}
-                    totalItems={totalItems}
-                    active={active}
-                    onClick={setActive}
-                />
-                {totalItems > 0 ? (
+            {totalItems > 9 ? (
+                <div className="d-flex flex-row app-grid-action py-3">
+                    <AppGridPagination
+                        className="mr-3"
+                        itemsPerPage={pageSize}
+                        totalItems={totalItems}
+                        active={active}
+                        onClick={setActive}
+                    />
                     <div className="pagination-container">
                         <AppFormDropdown
                             id={"pageSize"}
@@ -314,8 +314,8 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                             menuPlacement={"top"}
                         />
                     </div>
-                ) : null}
-            </div>
+                </div>
+            ) : null}
         </>
     );
 };
