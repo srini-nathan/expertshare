@@ -58,9 +58,6 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [emailStatus, setEmailStatus] = useState<string>("");
     const [agree, isAgree] = useState<boolean>(false);
     const [onboarded, isOnboarded] = useState<boolean>(false);
-    const [activationEmailEnable, isActivationEmailEnable] = useState<boolean>(
-        false
-    );
     const [activeLanguage, setActiveLanguage] = useState<string>("");
     const [userEmail, setUserEmail] = useState<string>("");
     const {
@@ -120,7 +117,6 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                 errorToast(errorMessage);
             } else if (response) {
                 if (response.isExist) {
-                    isActivationEmailEnable(response.isActivationEmailEnable);
                     if (
                         response.isActivationEmailEnable &&
                         !response.isOnboarded
@@ -273,8 +269,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                             (container.configuration as any)
                                                 .isDisclaimerEnable &&
                                             emailStatus === "exist" &&
-                                            !onboarded &&
-                                            !activationEmailEnable && (
+                                            !onboarded && (
                                                 <Form.Group>
                                                     <div className="agreement-box mt-2 p-2">
                                                         <div
