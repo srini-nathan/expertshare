@@ -221,6 +221,7 @@ a {
 .right-container {
     @include media("mobile") {
         width: 100%;
+        padding-top: 60px;
     }
 
     @include media("lr-1") {
@@ -249,21 +250,6 @@ a {
 
     @include media("lr-7") {
         width: 92%;
-    }
-    .event-detail-admin--workshop {
-        &--container {
-            &--content {
-                &--item {
-                    &.xlarge-size {
-                        .show-users {
-                            @include media("ea-4") {
-                                bottom: 32px;
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
 }
 
