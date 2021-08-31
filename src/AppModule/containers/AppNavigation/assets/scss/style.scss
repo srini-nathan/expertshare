@@ -49,6 +49,10 @@
         &.show {
             position: initial;
             z-index: 10000;
+            @include media("mobile") {
+                max-height: 100vh;
+                overflow-y: auto;
+            }
         }
     }
     @include media("not-mobile") {
@@ -861,7 +865,7 @@
     height: 100%;
 
     @include media("mobile") {
-        position: relative !important;
+        height: auto;
     }
 
     @include media("lr-0") {
