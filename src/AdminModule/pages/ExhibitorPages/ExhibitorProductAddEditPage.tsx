@@ -3,7 +3,11 @@ import { RouteComponentProps, useParams } from "@reach/router";
 import { Col, Form, Row } from "react-bootstrap";
 import { first } from "lodash";
 import { useTranslation } from "react-i18next";
-import { ExhibitorProduct, ExhibitorProductTranslation } from "../../models";
+import {
+    ExhibitorProduct,
+    ExhibitorProductTag,
+    ExhibitorProductTranslation,
+} from "../../models";
 import {
     useAuthState,
     useBuildAssetPath,
@@ -15,7 +19,9 @@ import {
     AppBreadcrumb,
     AppCard,
     AppFormActions,
+    AppFormInput,
     AppFormLabelTranslatable,
+    AppFormSelectCreatable,
     AppFormSwitch,
     AppLoader,
     AppPageHeaderTranslatable,
@@ -28,7 +34,7 @@ import {
     ExhibitorProductPosterFileInfo,
 } from "../../../config";
 import { ExhibitorProductTranslatable } from "./ExhibitorProductTranslatable";
-import { ExhibitorProductApi } from "../../apis";
+import { ExhibitorApi, ExhibitorProductApi } from "../../apis";
 import {
     errorToast,
     setViolations,
@@ -36,15 +42,19 @@ import {
     validation,
 } from "../../../AppModule/utils";
 import { UploadAPI } from "../../../AppModule/apis";
-import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
+import {
+    SimpleObject,
+    UnprocessableEntityErrorResponse,
+} from "../../../AppModule/models";
+import { ExhibitorProductTagApi } from "../../apis/ExhibitorProductTagApi";
 
 export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
     navigate,
 }): JSX.Element => {
     const navigator = useNavigator(navigate);
-    const { clientResourceId } = useAuthState();
     const { parentId } = useParams();
-    const eProductUrl = ExhibitorProductApi.toResourceUrl(parentId);
+    const { containerResourceId, containerId } = useAuthState();
+    const exhibitorUrl = ExhibitorApi.toResourceUrl(parentId);
     const {
         id,
         isEditMode,
@@ -58,7 +68,7 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
         setData,
         data,
     } = useDataAddEdit<ExhibitorProduct>(
-        new ExhibitorProduct(clientResourceId, eProductUrl),
+        new ExhibitorProduct(containerResourceId, exhibitorUrl),
         productSchema
     );
     const posterBasePath = useBuildAssetPath(ExhibitorProductPosterFileInfo);
@@ -68,6 +78,11 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
     >([]);
     const { t } = useTranslation();
     const [loadingLang, setLoadingLang] = useState<boolean>(true);
+    const [tags, setTags] = React.useState<SimpleObject<string>[]>([]);
+    const [selectedTags, setSelectedTags] = React.useState<
+        SimpleObject<string>[]
+    >([]);
+    const [loadingTags, setLoadingTags] = useState<boolean>(true);
 
     useEffect(() => {
         if (isEditMode && id !== null) {
@@ -96,6 +111,16 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
                                 }
                             );
                         }
+                        const selected = [] as SimpleObject<string>[];
+                        const selTags = response.exhibitorProductTags as ExhibitorProductTag[];
+                        selTags?.forEach(({ id: ugId, name }) => {
+                            selected.push({
+                                label: name,
+                                value: name,
+                                id: `${ugId}`,
+                            });
+                        });
+                        setSelectedTags(selected);
                         setTranslations(items);
                         hookForm.trigger();
                     }
@@ -133,6 +158,29 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
         setLoadingLang(false);
     }, [languages, translations]);
 
+    useEffect(() => {
+        setLoadingTags(true);
+        ExhibitorProductTagApi.find<ExhibitorProductTag>(1, {
+            "container.id": containerId,
+        })
+            .then(({ response }) => {
+                if (response !== null) {
+                    setTags(
+                        response.items.map((tag) => {
+                            return {
+                                label: tag.name,
+                                value: tag.name,
+                                id: `${tag.id}`,
+                            };
+                        })
+                    );
+                }
+            })
+            .finally(() => {
+                setLoadingTags(false);
+            });
+    }, []);
+
     const getTranslation = () => {
         let defaultValues: ExhibitorProductTranslation = {
             locale: defaultLocale,
@@ -167,13 +215,25 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
     const onSubmit = async (formData: ExhibitorProduct) => {
         if (checkTranslation()) {
             formData.translations = getTranslation();
-            formData.container = clientResourceId;
-            formData.exhibitor = eProductUrl;
+            formData.container = containerResourceId;
+            formData.exhibitor = exhibitorUrl;
+            formData.exhibitorProductTags = [];
+            selectedTags.forEach((e) => {
+                if (e.id) {
+                    formData.exhibitorProductTags.push(
+                        ExhibitorProductTagApi.toResourceUrl(parseInt(e.id, 10))
+                    );
+                }
+                formData.exhibitorProductTags.push({
+                    name: e.value,
+                    container: containerResourceId,
+                } as ExhibitorProductTag);
+            });
             if (posterImageFileRef.current) {
                 const res = await UploadAPI.upload(
                     posterImageFileRef.current,
                     EXHIBITOR_PRODUCT_POSTER_TYPE,
-                    clientResourceId
+                    containerResourceId
                 );
                 if (res.response && res.response?.fileName) {
                     formData.imageName = res.response.fileName;
@@ -208,7 +268,7 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
     const { formState, control, setValue, handleSubmit } = hookForm;
     const { errors } = formState;
 
-    if (isLoading || loadingLang) {
+    if (isLoading || loadingLang || loadingTags) {
         return <AppLoader />;
     }
 
@@ -280,6 +340,61 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
                                         xl={12}
                                     />
                                 </Col>
+                            </Row>
+                            <Row>
+                                <AppFormSelectCreatable
+                                    name="exhibitorProductTags"
+                                    label={t(
+                                        "admin.exhibitorProduct.form:label.exhibitorProductTags"
+                                    )}
+                                    md={6}
+                                    sm={6}
+                                    lg={6}
+                                    xl={6}
+                                    id="where-filter"
+                                    onChangeHandler={setSelectedTags}
+                                    value={selectedTags}
+                                    options={tags}
+                                    control={control}
+                                />
+                                <AppFormInput
+                                    name={"price"}
+                                    label={t(
+                                        "admin.exhibitorProduct.form:label.price"
+                                    )}
+                                    {...validation(
+                                        "price",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.price?.message}
+                                    defaultValue={data.price}
+                                    control={control}
+                                    lg={6}
+                                    xl={6}
+                                    md={6}
+                                    required={true}
+                                />
+                            </Row>
+                            <Row>
+                                <AppFormInput
+                                    name={"ctaUrl"}
+                                    label={t(
+                                        "admin.exhibitorProduct.form:label.ctaUrl"
+                                    )}
+                                    {...validation(
+                                        "ctaUrl",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.ctaUrl?.message}
+                                    defaultValue={data.ctaUrl}
+                                    control={control}
+                                    lg={6}
+                                    xl={6}
+                                    md={6}
+                                    required={false}
+                                />
                             </Row>
                         </AppCard>
                     </Col>

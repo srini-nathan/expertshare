@@ -30,7 +30,7 @@ export class ExhibitorProduct extends BaseEntity {
 
     exhibitor: string | Exhibitor;
 
-    exhibitorProductTags: string[];
+    exhibitorProductTags: any[];
 
     exhibitorProductDocs: string[];
 
