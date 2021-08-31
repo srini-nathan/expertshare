@@ -83,6 +83,8 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
         SimpleObject<string>[]
     >([]);
     const [loadingTags, setLoadingTags] = useState<boolean>(true);
+    const { formState, control, setValue, handleSubmit, watch } = hookForm;
+    const isCTA = watch("isCta");
 
     useEffect(() => {
         if (isEditMode && id !== null) {
@@ -195,11 +197,12 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
         });
 
         return translations.map((e) => {
-            if (e.name === "")
+            if (e.name === "") {
                 return {
                     ...defaultValues,
                     locale: e.locale,
                 };
+            }
             return e;
         });
     };
@@ -207,7 +210,13 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
     const checkTranslation = () => {
         let error = false;
         translations.forEach((e) => {
-            if (!error) error = e.name !== "";
+            if (!error) {
+                if (isCTA) {
+                    error = e.name !== "" && e.ctaLabel !== "";
+                } else {
+                    error = e.name !== "";
+                }
+            }
         });
         return error;
     };
@@ -264,8 +273,6 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
         }
         return Promise.reject();
     };
-
-    const { formState, control, setValue, handleSubmit } = hookForm;
     const { errors } = formState;
 
     if (isLoading || loadingLang || loadingTags) {
@@ -298,6 +305,7 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
                                 defaultLocale={defaultLocale}
                                 translations={translations}
                                 onChange={setTranslations}
+                                ctaRequire={isCTA}
                             />
                         </AppCard>
                     </Col>
@@ -347,16 +355,18 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
                                     label={t(
                                         "admin.exhibitorProduct.form:label.exhibitorProductTags"
                                     )}
-                                    md={6}
-                                    sm={6}
-                                    lg={6}
-                                    xl={6}
+                                    md={12}
+                                    sm={12}
+                                    lg={12}
+                                    xl={12}
                                     id="where-filter"
                                     onChangeHandler={setSelectedTags}
                                     value={selectedTags}
                                     options={tags}
                                     control={control}
                                 />
+                            </Row>
+                            <Row>
                                 <AppFormInput
                                     name={"price"}
                                     label={t(
@@ -375,8 +385,6 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
                                     md={6}
                                     required={true}
                                 />
-                            </Row>
-                            <Row>
                                 <AppFormInput
                                     name={"ctaUrl"}
                                     label={t(
@@ -393,7 +401,7 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
                                     lg={6}
                                     xl={6}
                                     md={6}
-                                    required={false}
+                                    required={isCTA}
                                 />
                             </Row>
                         </AppCard>

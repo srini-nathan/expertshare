@@ -16,6 +16,7 @@ export interface ExhibitorProductTranslatableProps {
     onChange: (value: ExhibitorProductTranslation[]) => void;
     translations: ExhibitorProductTranslation[];
     control: Control<any>;
+    ctaRequire?: boolean;
 }
 
 export const ExhibitorProductTranslatable: FC<ExhibitorProductTranslatableProps> = ({
@@ -23,6 +24,7 @@ export const ExhibitorProductTranslatable: FC<ExhibitorProductTranslatableProps>
     onChange,
     activeLocale,
     control,
+    ctaRequire = false,
 }) => {
     const { t } = useTranslation();
     const handleValueChange = (value: string, name: string) => {
@@ -104,7 +106,7 @@ export const ExhibitorProductTranslatable: FC<ExhibitorProductTranslatableProps>
                     label={`${t(
                         "admin.exhibitorProduct.form:label.ctaLabel"
                     )} (${activeLocale})`}
-                    required
+                    required={ctaRequire}
                 />
                 <Form.Control
                     value={getValue("ctaLabel")}
@@ -114,7 +116,8 @@ export const ExhibitorProductTranslatable: FC<ExhibitorProductTranslatableProps>
                     }}
                 />
                 <Form.Control.Feedback className={"d-block"} type="invalid">
-                    {!getCtaLabelError() &&
+                    {ctaRequire &&
+                        !getCtaLabelError() &&
                         t("admin.exhibitorProduct.form:error.fieldIsRequired")}
                 </Form.Control.Feedback>
             </Form.Group>
