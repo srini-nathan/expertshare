@@ -1,3 +1,5 @@
+import { AxiosError } from "axios";
+import { FinalResponse, ServerError } from "../models";
 import { EntityAPI } from "./EntityAPI";
 import { ROUTES } from "../../config";
 
@@ -8,6 +10,7 @@ const {
     api_chat_messages_put_item: API_PUT_ITEM,
     api_chat_messages_patch_item: API_PATCH_ITEM,
     api_chat_messages_post_collection: API_POST_COLLECTION,
+    api_chat_messages_export_collection: API_EXPORT,
 } = ROUTES;
 
 export abstract class ChatMessageApi extends EntityAPI {
@@ -22,4 +25,15 @@ export abstract class ChatMessageApi extends EntityAPI {
     protected static PATCH_ITEM = API_PATCH_ITEM;
 
     protected static DELETE_ITEM = API_DELETE_ITEM;
+
+    public static async export(): Promise<any> {
+        return this.makeGet<any>(API_EXPORT)
+            .then(({ data }) => {
+                return data;
+            })
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
+    }
 }
