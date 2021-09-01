@@ -232,11 +232,12 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
                     formData.exhibitorProductTags.push(
                         ExhibitorProductTagApi.toResourceUrl(parseInt(e.id, 10))
                     );
+                } else {
+                    formData.exhibitorProductTags.push({
+                        name: e.value,
+                        container: containerResourceId,
+                    } as ExhibitorProductTag);
                 }
-                formData.exhibitorProductTags.push({
-                    name: e.value,
-                    container: containerResourceId,
-                } as ExhibitorProductTag);
             });
             if (posterImageFileRef.current) {
                 const res = await UploadAPI.upload(
