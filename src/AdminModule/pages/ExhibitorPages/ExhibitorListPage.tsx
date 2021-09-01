@@ -1,10 +1,9 @@
 import React, { FC, useState, useEffect, useRef } from "react";
-import { RouteComponentProps } from "@reach/router";
+import { RouteComponentProps, useMatch } from "@reach/router";
 import { Canceler } from "axios";
 import { useTranslation } from "react-i18next";
-import { Row } from "react-bootstrap";
 import { ExhibitorApi } from "../../apis";
-import { Exhibitor } from "../../models";
+import { Exhibitor, ExhibitorCategory } from "../../models";
 import { useAuthState, useIsGranted } from "../../../AppModule/hooks";
 import { ROLES } from "../../../config";
 import {
@@ -18,7 +17,6 @@ import {
     AppListPageToolbar,
     AppPageHeader,
     AppLoader,
-    AppExhibitorCard,
     AppModal,
 } from "../../../AppModule/components";
 import {
@@ -27,9 +25,13 @@ import {
     itemsPerPage as defaultItemsPerPage,
 } from "../../../AppModule/containers/AppGrid";
 import { ExhibitorListPageTabs } from "./ExhibitorListPageTabs";
+import { SimpleObject } from "../../../AppModule/models";
+import { ExhibitorListItems } from "./ExhibitorListPageItems";
 
 export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
+    const adminPage = useMatch("/admin/exhibitors");
+    const isFrontPage = adminPage === null;
     const { containerId } = useAuthState();
     const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
     const [totalItems, setTotalItems] = useState<number>(0);
@@ -41,18 +43,26 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const [isVisible, setIsVisible] = useState<boolean>(true);
     const [data, setData] = useState<Exhibitor[]>([]);
+    const [catWiseData, setCatWiseData] = useState<SimpleObject<Exhibitor[]>>(
+        {}
+    );
     const [showDelete, setDeleteShow] = useState(0);
     const [filter, setFilter] = useState<string>("");
 
     const fetchData = (params = {}) => {
         isLoading(true);
         cancelAllPrevRequest(cancelTokenSourcesRef.current);
+        if (!isFrontPage) {
+            params = {
+                isVisible,
+                ...params,
+            };
+        }
         ExhibitorApi.find<Exhibitor>(
             page,
             {
                 itemsPerPage,
                 "container.id": containerId,
-                isVisible,
                 "translations.name": filter,
                 ...params,
             },
@@ -62,6 +72,21 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
         )
             .then(({ response }) => {
                 if (response !== null) {
+                    const { items } = response;
+                    const catWiseItems: SimpleObject<Exhibitor[]> = {};
+                    items.forEach((item) => {
+                        const cat = (item.category as unknown) as ExhibitorCategory;
+                        const catName = cat.name;
+                        if (catWiseItems[catName]) {
+                            catWiseItems[catName] = [
+                                ...catWiseItems[catName],
+                                item,
+                            ];
+                        } else {
+                            catWiseItems[catName] = [item];
+                        }
+                    });
+                    setCatWiseData(catWiseItems);
                     setData(response.items);
                     setTotalItems(response.totalItems);
                 }
@@ -108,30 +133,22 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
                     />
                 </div>
             </AppPageHeader>
-            <ExhibitorListPageTabs
-                isVisible={isVisible}
-                setIsVisible={(status) => {
-                    setPage(1);
-                    setIsVisible(status);
-                }}
-            />
-            <Row>
-                {loading ? (
-                    <AppLoader />
-                ) : (
-                    data.map((e) => (
-                        <AppExhibitorCard
-                            key={e.id}
-                            data={e}
-                            isGrantedControl={isGrantedControl}
-                            handleDelete={(id) => {
-                                setDeleteShow(id);
-                            }}
-                            handleClone={() => {}}
-                        />
-                    ))
-                )}
-            </Row>
+            {isFrontPage ? null : (
+                <ExhibitorListPageTabs
+                    isVisible={isVisible}
+                    setIsVisible={setIsVisible}
+                />
+            )}
+            {loading ? (
+                <AppLoader />
+            ) : (
+                <ExhibitorListItems
+                    isFrontPage={isFrontPage}
+                    data={data}
+                    catWiseData={catWiseData}
+                    setDeleteShow={setDeleteShow}
+                />
+            )}
             <AppModal
                 show={showDelete > 0}
                 title={t("exhibitor.list:delete.confirm.title")}
