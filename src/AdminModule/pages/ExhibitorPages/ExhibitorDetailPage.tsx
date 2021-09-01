@@ -1,10 +1,11 @@
-import React, { FC, Fragment, useEffect, useState } from "react";
-import { Link, RouteComponentProps, useParams, useMatch } from "@reach/router";
+import { FC, useEffect, useState, Fragment } from "react";
+import { Link, RouteComponentProps, useMatch, useParams } from "@reach/router";
 import { useTranslation } from "react-i18next";
+import "./assets/scss/detail.scss";
 import { Col, Row } from "react-bootstrap";
 import {
-    AppQuestionsAndAnswers,
     AppLoader,
+    AppQuestionsAndAnswers,
 } from "../../../AppModule/components";
 import { errorToast, getBGStyle, resolveImage } from "../../../AppModule/utils";
 import { ExhibitorApi } from "../../apis";
@@ -19,7 +20,6 @@ import { ExhibitorDetailTabDetails } from "./ExhibitorDetailTabDetails";
 import { ExhibitorDetailTabProducts } from "./ExhibitorDetailTabProducts";
 import { useAuthState, useBuildAssetPath } from "../../../AppModule/hooks";
 import { ExhibitorCommentsAPI } from "../../../AppModule/apis";
-import "./assets/scss/detail.scss";
 
 export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
