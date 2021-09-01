@@ -44,6 +44,7 @@ import {
     useDownloadFile,
 } from "../../../AppModule/hooks";
 import { CONSTANTS } from "../../../config";
+import { ChatMessageApi } from "../../../AppModule/apis";
 
 const { Role } = CONSTANTS;
 
@@ -150,12 +151,23 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
     }
     async function handleExport() {
         showLoader(t("admin.users.list:exportingusers"));
-        UserApi.exportUsers().then((reponse) => {
+        UserApi.exportUsers().then((response) => {
             hideLoader();
             updateLink({
                 name: `users.csv`,
                 type: "file/csv",
-                file: reponse,
+                file: response,
+            });
+        });
+    }
+    async function handleExportChat() {
+        showLoader(t("admin.users.list:exportingchatmessages"));
+        ChatMessageApi.export().then((response) => {
+            hideLoader();
+            updateLink({
+                name: `messages.json`,
+                type: "application/json",
+                file: JSON.stringify(response),
             });
         });
     }
@@ -372,6 +384,22 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
                                 >
                                     <AppIcon className="mr-2" name="Download" />
                                     {t("common.button:import")}
+                                </AppButton>
+                            </>
+                        )}
+
+                    {!isGranted(role, ROLE_SUPER_ADMIN) &&
+                        isGranted(role, ROLE_ADMIN) && (
+                            <>
+                                <AppButton
+                                    onClick={() => {
+                                        handleExportChat();
+                                    }}
+                                    className="p-3 chat-ex"
+                                    variant="secondary"
+                                >
+                                    <AppIcon className="mr-2" name="Upload" />
+                                    {t("common.button:exportChat")}
                                 </AppButton>
                             </>
                         )}
