@@ -26,7 +26,6 @@ import {
     AppLoader,
     AppPageHeaderTranslatable,
     AppUploader,
-    AppDocs,
 } from "../../../AppModule/components";
 import "./assets/scss/style.scss";
 import { AppLanguageSwitcher } from "../../../AppModule/containers";
@@ -85,8 +84,6 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
     >([]);
     const [loadingTags, setLoadingTags] = useState<boolean>(true);
     const { formState, control, setValue, handleSubmit, watch } = hookForm;
-    const [files, setFiles] = useState<File[]>([]);
-    const [docsFile, setDocsFile] = useState<SimpleObject<string>[]>([]);
     const isCTA = watch("isCta");
 
     useEffect(() => {
@@ -279,44 +276,6 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
         }
         return Promise.reject();
     };
-
-    const onRemoveDoc = (index: number) => {
-        setDocsFile([
-            ...docsFile.slice(0, index),
-            ...docsFile.slice(index + 1),
-        ]);
-    };
-
-    const onDocsSelect = (selectedFiles: File[]) => {
-        if (selectedFiles) {
-            const fd = new FormData();
-            fd.set("file", selectedFiles[0], selectedFiles[0].name);
-            fd.set("fileType", FILETYPE_SESSION_DOC);
-
-            UploadAPI.createResource<Upload, FormData>(fd).then(
-                ({ response }) => {
-                    if (response && response.fileName) {
-                        setDocsFile([
-                            {
-                                fileName: response.fileName,
-                                name: selectedFiles[0].name,
-                                size: selectedFiles[0].size.toString(),
-                                container: ContainerApi.toResourceUrl(
-                                    containerId
-                                ),
-                            },
-                            ...docsFile,
-                        ]);
-                    }
-                }
-            );
-        }
-    };
-
-    const onFileSelect = (selectedFiles: File[]) => {
-        setFiles(selectedFiles);
-    };
-
     const { errors } = formState;
 
     if (isLoading || loadingLang || loadingTags) {
@@ -447,16 +406,6 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
                                     md={6}
                                     required={isCTA}
                                 />
-                            </Row>
-                            <Row>
-                                <Col>
-                                    <AppDocs
-                                        showAddDelete={true}
-                                        onFileSelect={onDocsSelect}
-                                        onRemoveDoc={onRemoveDoc}
-                                        files={docsFile}
-                                    />
-                                </Col>
                             </Row>
                         </AppCard>
                     </Col>
