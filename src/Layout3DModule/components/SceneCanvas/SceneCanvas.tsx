@@ -124,6 +124,8 @@ export const SceneCanvas = ({
         for (let i = 0; i < rooms.length; i++)
             if (rooms[i].id === n) room = rooms[i];
 
+        // eslint-disable-next-line no-console
+        console.log("switch to room: ", room);
         if (room.isRotateEnable !== null)
             setIsCameraLocked(!room.isRotateEnable);
         else {

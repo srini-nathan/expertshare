@@ -95,6 +95,7 @@ export interface PanelInterfaceProps {
     video: Video360Props;
     source: { assetId: string };
     width: number;
+    isRotateEnable: boolean;
 }
 
 export interface RoomProps {
