@@ -271,7 +271,8 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
     }, [perspectiveOrbit.current]);
 
     useEffect(() => {
-        // console.log("camera is now: ", isCameraLocked);
+        console.log("camera is now: ", isCameraLocked);
+        if (orbit.current) orbit.current.enabled = !isCameraLocked;
         setCamLocked(isCameraLocked);
     }, [isCameraLocked]);
 
@@ -506,7 +507,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                         0.001
                     );
                     orbit.current.update();
-                    orbit.current.enabled = camLocked;
+                    orbit.current.enabled = !camLocked;
                     // orbit.current.update();
                 }, ROOM_FADE_DURATION + PANEL_ANIMATION_DURATION);
             }

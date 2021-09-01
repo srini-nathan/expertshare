@@ -126,7 +126,13 @@ export const SceneCanvas = ({
 
         if (room.isRotateEnable !== null)
             setIsCameraLocked(!room.isRotateEnable);
-        else setIsCameraLocked(true);
+        else {
+            // eslint-disable-next-line no-console
+            console.log("setting false!");
+            setIsCameraLocked(false);
+        }
+        // eslint-disable-next-line no-console
+        console.log("setting next room locked: ", room.isRotateEnable);
         setCurrentRoomActive(n);
     };
 
