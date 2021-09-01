@@ -1,23 +1,20 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Link, RouteComponentProps, useParams } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import "./assets/scss/detail.scss";
-import { Col, Row } from "react-bootstrap";
-import {
-    AppLoader,
-    AppCard,
-    AppSessionUsers,
-    AppButton,
-} from "../../../AppModule/components";
+import { AppLoader } from "../../../AppModule/components";
 import { errorToast } from "../../../AppModule/utils";
 import { ExhibitorApi } from "../../apis";
-import { Exhibitor, User } from "../../models";
+import { Exhibitor } from "../../models";
 import {
     ExhibitorPosterFileInfo,
     ExhibitorLogoPosterFileInfo,
 } from "../../../config";
 import placeholder from "../../../AppModule/assets/images/imgthumb.svg";
 import { useBuildAssetPath } from "../../../AppModule/hooks";
+import { ExhibitorDetailTabs } from "./ExhibitorDetailTabs";
+import { ExhibitorDetailTabDetails } from "./ExhibitorDetailTabDetails";
+import { ExhibitorDetailTabProducts } from "./ExhibitorDetailTabProducts";
 
 export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
@@ -26,6 +23,7 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [data, setData] = useState<Exhibitor>();
     const imagePath = useBuildAssetPath(ExhibitorPosterFileInfo);
     const logoPath = useBuildAssetPath(ExhibitorLogoPosterFileInfo);
+    const [activeTab, setActiveTab] = useState<string>("details");
 
     useEffect(() => {
         isLoading(true);
@@ -89,73 +87,15 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                             </div>
                         </div>
                     </div>
-                    {data?.members && data?.members.length > 0 ? (
-                        <AppCard>
-                            <Row className="m-0 mb-3 mb-lg-4">
-                                <Col
-                                    lg={8}
-                                    md={12}
-                                    className={`create-session--speakers`}
-                                >
-                                    <AppSessionUsers
-                                        xl={6}
-                                        lg={6}
-                                        md={12}
-                                        sm={12}
-                                        selectedUsers={data.members as User[]}
-                                        title={t(
-                                            "exhibitor.detail:label.members"
-                                        )}
-                                        icon="speakers"
-                                    />
-                                </Col>
-                                <Col lg={4}>
-                                    <h2>
-                                        <i className="fak fa-speakers"></i>
-                                        {t("exhibitor.detail:section.contact")}
-                                    </h2>
-                                    <div className="d-flex">
-                                        <Row>
-                                            <Col>
-                                                {data.contactUsCaption ? (
-                                                    <AppButton
-                                                        type="button"
-                                                        variant={"secondary"}
-                                                    >
-                                                        <i className="fa fa-phone-alt mr-1"></i>
-                                                        {data.contactUsCaption}
-                                                    </AppButton>
-                                                ) : null}
-                                            </Col>
-                                        </Row>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </AppCard>
+                    <ExhibitorDetailTabs
+                        activeTab={activeTab}
+                        setActiveTab={setActiveTab}
+                    />
+                    {data && activeTab === "details" ? (
+                        <ExhibitorDetailTabDetails data={data} />
                     ) : null}
-                    {data?.description && data?.description !== "" ? (
-                        <AppCard>
-                            <Row className="m-0 mb-3 mb-lg-4">
-                                <Col
-                                    sm={12}
-                                    className="session-details-desc my-4 pt-1 px-2"
-                                >
-                                    <h2>
-                                        <i className="fak fa-description"></i>
-                                        {t(
-                                            "exhibitor.detail:section.description"
-                                        )}
-                                    </h2>
-                                    <div className="session-details-desc--container mt-3">
-                                        <p
-                                            dangerouslySetInnerHTML={{
-                                                __html: data.description,
-                                            }}
-                                        ></p>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </AppCard>
+                    {data && activeTab === "products" ? (
+                        <ExhibitorDetailTabProducts exhibitor={data} />
                     ) : null}
                 </div>
             </div>
