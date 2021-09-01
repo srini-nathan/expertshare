@@ -16,6 +16,7 @@ import {
     ReloadingPage,
     InfoPage,
 } from "./pages";
+import { ExhibitorListPage, ExhibitorDetailPage } from "../AdminModule/pages";
 import { ModuleRouter } from "./models";
 import { Layout3D } from "../Layout3DModule";
 
@@ -63,6 +64,8 @@ export const routers: ModuleRouter[] = [
                     <OnBoardingPage path={"onboarding"} />
                     <ReloadingPage path={"reloading"} />
                     <Layout3D path={"a3d"} />
+                    <ExhibitorListPage path={"exhibitors"} />
+                    <ExhibitorDetailPage path={"exhibitors/:id/detail"} />
                 </Router>
             );
         },

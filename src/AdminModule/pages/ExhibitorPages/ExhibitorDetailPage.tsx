@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import { Link, RouteComponentProps, useParams } from "@reach/router";
+import { Link, RouteComponentProps, useParams, useMatch } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { Col, Row } from "react-bootstrap";
 import { AppLoader, AppCard } from "../../../AppModule/components";
@@ -19,6 +19,8 @@ import "./assets/scss/detail.scss";
 
 export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
+    const adminPage = useMatch("/admin/exhibitors/:id/detail");
+    const isFrontPage = adminPage === null;
     const { id } = useParams();
     const [loading, isLoading] = useState<boolean>(true);
     const [data, setData] = useState<Exhibitor>();
@@ -59,7 +61,11 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                             <div className="row exhibitors-header--detail mb-3 px-2 pt-4">
                                 <div className="col-12 exhibitors-header--detail--buttons d-flex">
                                     <Link
-                                        to={"/admin/exhibitors"}
+                                        to={
+                                            isFrontPage
+                                                ? "/exhibitors"
+                                                : "/admin/exhibitors"
+                                        }
                                         className="back-btn btn btn-secondary mr-3"
                                     >
                                         <i className="fak fa-chevron-left mr-3"></i>
