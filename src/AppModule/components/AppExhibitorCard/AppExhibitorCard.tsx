@@ -59,19 +59,19 @@ export const AppExhibitorCard: FC<AppExhibitorCardProps> = ({
                 <Link to={detailLink}>
                     <div className="inner-container--banner" style={style}>
                         {logoImageName ? <img src={logoPath} /> : null}
-                        <div className="inner-container--banner--button">
-                            {!isVisible ? (
-                                <span className="live-now-btn mr-3">
-                                    <i className={"fak fa-times-light"}></i>
-                                    {t("exhibitor.list:badge.inActive")}
-                                </span>
-                            ) : (
-                                <span className="archived-btn mr-3">
-                                    <i className="fak fa-check-circle-regular"></i>
-                                    {t("exhibitor.list:badge.active")}
-                                </span>
-                            )}
-                        </div>
+                        {isGrantedControl ? (
+                            <div className="inner-container--banner--button">
+                                {!isVisible ? (
+                                    <span className="live-now-btn mr-3">
+                                        {t("exhibitor.list:badge.inActive")}
+                                    </span>
+                                ) : (
+                                    <span className="archived-btn mr-3 success-bg">
+                                        {t("exhibitor.list:badge.active")}
+                                    </span>
+                                )}
+                            </div>
+                        ) : null}
 
                         <div className="inner-container--banner--icons ">
                             {isGrantedControl && (
