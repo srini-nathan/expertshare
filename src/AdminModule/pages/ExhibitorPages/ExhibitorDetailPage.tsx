@@ -73,7 +73,9 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                             <div className="row exhibitors-header--banner">
                                 <div className="col-12 p-0">
                                     <div className="sponsor">
-                                        <i style={style}></i>
+                                        {data?.logoImageName ? (
+                                            <i style={style}></i>
+                                        ) : null}
                                     </div>
                                     <img src={poster} />
                                 </div>
