@@ -7,6 +7,7 @@ import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { Canceler } from "axios";
 import { AppButton } from "../AppButton";
 import { AppIcon } from "../AppIcon";
+import { cancelAllPrevRequest } from "../../utils";
 import "./assets/scss/style.scss";
 
 export interface AppListPageToolbarProps {
@@ -35,12 +36,7 @@ export const AppListPageToolbar: FC<AppListPageToolbarProps> = ({
                 takeUntil(destroy$)
             )
             .subscribe((search: string) => {
-                while (cancelTokenSources.length > 0) {
-                    const c = cancelTokenSources.shift();
-                    if (c) {
-                        c();
-                    }
-                }
+                cancelAllPrevRequest(cancelTokenSources);
                 onQuickFilterChange(search);
             });
         return () => {
