@@ -1,66 +1,53 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import {
-    AppCard,
-    AppSessionUsers,
-    AppButton,
-} from "../../../AppModule/components";
+import { AppCard } from "../../../AppModule/components";
 import { Exhibitor, User } from "../../models";
+import { ExhibitorDetailPageContact } from "./ExhibitorDetailPageContact";
+import { ExhibitorDetailPageMembers } from "./ExhibitorDetailPageMembers";
+import { ExhibitorDetailPageVideo } from "./ExhibitorDetailPageVideo";
 
 interface ExhibitorDetailTabDetailsType {
     data: Exhibitor;
+    members: User[];
 }
 
 export const ExhibitorDetailTabDetails: FC<ExhibitorDetailTabDetailsType> = ({
     data,
+    members,
 }) => {
+    const [haveMembers] = useState<boolean>(members.length > 0);
     const { t } = useTranslation();
 
     return (
         <>
-            {data?.members && data?.members.length > 0 ? (
-                <AppCard>
-                    <Row className="m-0 mb-3 mb-lg-4">
+            <AppCard>
+                <Row className="my-2">
+                    {haveMembers ? (
                         <Col
-                            lg={8}
+                            lg={7}
+                            xl={7}
                             md={12}
-                            className={`create-session--speakers`}
+                            className={`exhibitor-detail--members mb-4 mb-lg-0`}
                         >
-                            <AppSessionUsers
-                                xl={6}
-                                lg={6}
-                                md={12}
-                                sm={12}
-                                selectedUsers={data.members as User[]}
-                                title={t("exhibitor.detail:label.members")}
-                                icon="speakers"
-                            />
+                            <ExhibitorDetailPageMembers members={members} />
                         </Col>
-                        <Col lg={4}>
-                            <h2>
-                                <i className="fak fa-speakers"></i>
-                                {t("exhibitor.detail:section.contact")}
-                            </h2>
-                            <div className="d-flex">
-                                <Row>
-                                    <Col>
-                                        {data.contactUsCaption ? (
-                                            <AppButton
-                                                type="button"
-                                                variant={"secondary"}
-                                            >
-                                                <i className="fa fa-phone-alt mr-1"></i>
-                                                {data.contactUsCaption}
-                                            </AppButton>
-                                        ) : null}
-                                    </Col>
-                                </Row>
-                            </div>
-                        </Col>
-                    </Row>
-                </AppCard>
-            ) : null}
+                    ) : (
+                        <></>
+                    )}
+                    <Col
+                        lg={haveMembers ? 5 : 12}
+                        xl={haveMembers ? 5 : 12}
+                        className="exhibitor-detail--contact"
+                    >
+                        <ExhibitorDetailPageContact data={data} />
+                    </Col>
+                </Row>
+            </AppCard>
+            <ExhibitorDetailPageVideo
+                type={data?.streamType}
+                url={data?.streamUrl}
+            />
             {data?.description && data?.description !== "" ? (
                 <AppCard>
                     <Row className="m-0 mb-3 mb-lg-4">
