@@ -82,7 +82,7 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
                 if (room.isEntryRoom) startAtRoom = i;
                 // console.log("room: ", room);
             });
-            setCameraLock(!response[startAtRoom].isRotateEnable);
+            setCameraLock(response[startAtRoom].isRotateEnable);
             setMainRoom(startAtRoom);
             setRoomsData(response);
         });
@@ -102,7 +102,6 @@ export const Layout3D: FC<RouteComponentProps> = (): JSX.Element => {
                 {roomsData && mainRoom !== null && (
                     <SceneCanvas
                         editMode={editMode}
-                        cameraLock={cameraLock}
                         roomsData={roomsData}
                         onItemSelected={onItemSelected}
                         currentMainRoom={mainRoom}
