@@ -77,7 +77,8 @@
                 background-color: var(--secondary-10);
                 background-repeat: no-repeat;
                 background-size: cover;
-                border-radius: var(--card-border-radius) var(--card-border-radius) 0 0;
+                border-radius: var(--card-border-radius)
+                    var(--card-border-radius) 0 0;
 
                 > img {
                     position: absolute;
@@ -120,10 +121,16 @@
                             font-size: 18px;
                             font-weight: 500;
                             color: var(--secondary-button-text-color);
-                            background-color: var(--secondary-button-background-color);
-                            border: 1px solid var(--secondary-button-border-color);
-                            border-radius: var(--secondary-button-border-radius);
-                            box-shadow: 0 3px 9px var(--secondary-button-box-shadow-color);
+                            background-color: var(
+                                --secondary-button-background-color
+                            );
+                            border: 1px solid
+                                var(--secondary-button-border-color);
+                            border-radius: var(
+                                --secondary-button-border-radius
+                            );
+                            box-shadow: 0 3px 9px
+                                var(--secondary-button-box-shadow-color);
                         }
 
                         &.add-favorite {
@@ -203,8 +210,13 @@
                                                 width: 10px;
                                                 height: 10px;
                                                 content: "";
-                                                background-color: var(--primary);
-                                                border: 1px solid var(--border-border-radius-clr);
+                                                background-color: var(
+                                                    --primary
+                                                );
+                                                border: 1px solid
+                                                    var(
+                                                        --border-border-radius-clr
+                                                    );
                                                 border-radius: 50%;
                                             }
                                         }
@@ -224,7 +236,9 @@
                                         span {
                                             font-size: 12px;
                                             font-weight: 400;
-                                            color: var(--card-second-text-color);
+                                            color: var(
+                                                --card-second-text-color
+                                            );
                                         }
                                     }
                                 }
@@ -362,4 +376,7 @@
             font-size: 20px;
         }
     }
+}
+.success-bg {
+    background-color: var(--success);
 }
