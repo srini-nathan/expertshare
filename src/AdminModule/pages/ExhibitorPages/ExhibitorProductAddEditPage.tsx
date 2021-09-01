@@ -258,17 +258,19 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
                 } else if (errorMessage) {
                     errorToast(errorMessage);
                 } else if (navigate) {
-                    navigate("..").then(() => {
-                        successToast(
-                            isEditMode
-                                ? t(
-                                      "admin.exhibitorProduct.form:updated.info.message"
-                                  )
-                                : t(
-                                      "admin.exhibitorProduct.form:created.info.message"
-                                  )
-                        );
-                    });
+                    navigate(`/admin/exhibitors/${parentId}/detail`).then(
+                        () => {
+                            successToast(
+                                isEditMode
+                                    ? t(
+                                          "admin.exhibitorProduct.form:updated.info.message"
+                                      )
+                                    : t(
+                                          "admin.exhibitorProduct.form:created.info.message"
+                                      )
+                            );
+                        }
+                    );
                 }
             });
         }
@@ -284,7 +286,7 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
         <div className={"exhibitor-product-add-edit-page"}>
             <AppBreadcrumb
                 linkText={t("admin.exhibitorProduct.list:header.title")}
-                linkUrl={".."}
+                linkUrl={`/admin/exhibitors/${parentId}/detail`}
             />
             <AppPageHeaderTranslatable
                 title={`admin.exhibitorProduct.form:header.${
@@ -455,7 +457,7 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
                 <AppFormActions
                     isEditMode={isEditMode}
                     navigation={navigator}
-                    backLink={`/admin/exhibitors/${parentId}?tab=products`}
+                    backLink={`/admin/exhibitors/${parentId}/detail`}
                     isLoading={formState.isSubmitting}
                 />
             </Form>
