@@ -266,7 +266,7 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
             </AppPageHeader>
 
             {renderView()}
-            {totalItems > 9 ? (
+            {totalItems > 10 ? (
                 <div className="d-flex flex-row app-grid-action py-2">
                     <AppGridPagination
                         className="mr-3"

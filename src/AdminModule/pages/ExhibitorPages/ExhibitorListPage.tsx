@@ -161,7 +161,7 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
                 }}
                 bodyContent={t("exhibitor.list:delete.confirm.message")}
             />
-            {totalItems > 9 ? (
+            {totalItems > 10 ? (
                 <div className="d-flex flex-row app-grid-action py-2">
                     <AppGridPagination
                         className="mr-3"

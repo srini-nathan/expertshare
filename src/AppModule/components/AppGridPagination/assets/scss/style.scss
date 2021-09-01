@@ -8,6 +8,7 @@
         align-items: center;
         margin-left: 5px;
         @include media("mobile") {
+            margin-top: 5px;
             margin-bottom: 5px;
         }
 
@@ -39,6 +40,10 @@
 
             &:focus {
                 box-shadow: none;
+            }
+            @include media("mobile") {
+                width: 25px;
+                height: 25px;
             }
         }
     }
