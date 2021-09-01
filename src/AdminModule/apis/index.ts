@@ -26,3 +26,5 @@ export * from "./LiveVoteQuestionApi";
 export * from "./LiveVoteOptionApi";
 export * from "./LiveVoteResultApi";
 export * from "./ExhibitorApi";
+export * from "./ExhibitorProductApi";
+export * from "./ExhibitorProductTagApi";

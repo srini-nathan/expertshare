@@ -35,6 +35,7 @@ import {
     ExhibitorAddEditPage,
     ExhibitorListPage,
     ExhibitorDetailPage,
+    ExhibitorProductAddEditPage,
 } from "./pages";
 import { Layout3D } from "../Layout3DModule";
 import { ModuleRouter } from "../AppModule/models";
@@ -148,6 +149,12 @@ export const routers: ModuleRouter[] = [
                     <ExhibitorAddEditPage path={"exhibitors/new"} />
                     <ExhibitorAddEditPage path={"exhibitors/:id"} />
                     <ExhibitorDetailPage path={"exhibitors/:id/detail"} />
+                    <ExhibitorProductAddEditPage
+                        path={"exhibitors/:parentId/products/new"}
+                    />
+                    <ExhibitorProductAddEditPage
+                        path={"exhibitors/:parentId/products/:id"}
+                    />
                 </Router>
             );
         },

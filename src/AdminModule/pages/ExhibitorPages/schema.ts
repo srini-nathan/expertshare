@@ -25,4 +25,13 @@ const schema = yup.object().shape({
         .nullable(),
 });
 
-export { schema, validations };
+const productSchema = yup.object().shape({
+    price: yup.string().required(),
+    isCta: yup.boolean().nullable(),
+    ctaUrl: yup.string().when("isCta", {
+        is: true,
+        then: yup.string().url().required(),
+    }),
+});
+
+export { schema, validations, productSchema };

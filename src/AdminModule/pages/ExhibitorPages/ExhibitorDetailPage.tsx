@@ -1,16 +1,15 @@
-import React, { FC, Fragment, useEffect, useState } from "react";
-import { Link, RouteComponentProps, useParams, useMatch } from "@reach/router";
+import { FC, useEffect, useState, Fragment } from "react";
+import { Link, RouteComponentProps, useMatch, useParams } from "@reach/router";
 import { useTranslation } from "react-i18next";
+import "./assets/scss/detail.scss";
 import { Col, Row } from "react-bootstrap";
 import {
-    AppQuestionsAndAnswers,
     AppLoader,
-    AppCard,
+    AppQuestionsAndAnswers,
 } from "../../../AppModule/components";
 import { errorToast, getBGStyle, resolveImage } from "../../../AppModule/utils";
-
 import { ExhibitorApi } from "../../apis";
-import { Exhibitor, User } from "../../models";
+import { Exhibitor } from "../../models";
 import {
     ExhibitorPosterFileInfo,
     ExhibitorLogoPosterFileInfo,
@@ -18,10 +17,9 @@ import {
 import placeholder from "../../../AppModule/assets/images/imgthumb.svg";
 import { useAuthState, useBuildAssetPath } from "../../../AppModule/hooks";
 import { ExhibitorCommentsAPI } from "../../../AppModule/apis";
-import { ExhibitorDetailPageMembers } from "./ExhibitorDetailPageMembers";
-import { ExhibitorDetailPageContact } from "./ExhibitorDetailPageContact";
-import { ExhibitorDetailPageVideo } from "./ExhibitorDetailPageVideo";
-import "./assets/scss/detail.scss";
+import { ExhibitorDetailTabs } from "./ExhibitorDetailTabs";
+import { ExhibitorDetailTabDetails } from "./ExhibitorDetailTabDetails";
+import { ExhibitorDetailTabProducts } from "./ExhibitorDetailTabProducts";
 
 export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
@@ -33,8 +31,7 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { containerId } = useAuthState();
     const imagePath = useBuildAssetPath(ExhibitorPosterFileInfo);
     const logoPath = useBuildAssetPath(ExhibitorLogoPosterFileInfo);
-    const [members, setMembers] = useState<User[]>([]);
-    const [haveMembers, setHaveMembers] = useState<boolean>(members.length > 0);
+    const [activeTab, setActiveTab] = useState<string>("details");
 
     useEffect(() => {
         isLoading(true);
@@ -44,9 +41,6 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                     errorToast(t("exhibitor.detail:error.message.notExist"));
                 } else if (response !== null) {
                     setData(response);
-                    const users = response?.members ?? [];
-                    setMembers(users as User[]);
-                    setHaveMembers(users.length > 0);
                 }
                 isLoading(false);
             }
@@ -105,56 +99,15 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                             </div>
                         </Col>
                     </Row>
-                    <AppCard>
-                        <Row className="m-0 mb-3 mb-lg-4">
-                            {haveMembers ? (
-                                <Col
-                                    lg={7}
-                                    xl={7}
-                                    md={12}
-                                    className={`create-session--speakers divider-right`}
-                                >
-                                    <ExhibitorDetailPageMembers
-                                        members={members}
-                                    />
-                                </Col>
-                            ) : (
-                                <></>
-                            )}
-                            <Col
-                                lg={haveMembers ? 5 : 12}
-                                xl={haveMembers ? 5 : 12}
-                            >
-                                <ExhibitorDetailPageContact data={data} />
-                            </Col>
-                        </Row>
-                    </AppCard>
-                    <ExhibitorDetailPageVideo
-                        type={data?.streamType}
-                        url={data?.streamUrl}
+                    <ExhibitorDetailTabs
+                        activeTab={activeTab}
+                        setActiveTab={setActiveTab}
                     />
-                    {data?.description && data?.description !== "" ? (
-                        <AppCard>
-                            <Row className={"mb-3"}>
-                                <Col>
-                                    <h4>
-                                        <i className="fak fa-description mr-2"></i>
-                                        {t(
-                                            "exhibitor.detail:section.description"
-                                        )}
-                                    </h4>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col className="session-details-desc">
-                                    <p
-                                        dangerouslySetInnerHTML={{
-                                            __html: data.description,
-                                        }}
-                                    ></p>
-                                </Col>
-                            </Row>
-                        </AppCard>
+                    {data && activeTab === "details" ? (
+                        <ExhibitorDetailTabDetails data={data} />
+                    ) : null}
+                    {data && activeTab === "products" ? (
+                        <ExhibitorDetailTabProducts exhibitor={data} />
                     ) : null}
                 </Col>
                 {data?.isCommentEnable && (

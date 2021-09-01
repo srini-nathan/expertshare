@@ -51,6 +51,8 @@ export const AppFormSelectCreatable: FC<AppFormSelectCreatableProps> = ({
 }): JSX.Element => {
     const controlId = id || name;
     return (
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         <Form.Group
             as={Col}
             md={md}

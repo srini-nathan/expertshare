@@ -1,0 +1,118 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.exhibitors-products {
+    &--content {
+        &--item {
+            .inner-content {
+                &--pic {
+                    a {
+                        i {
+                            display: flex;
+                            align-items: center;
+                            width: 100%;
+                            height: 180px;
+                            background-repeat: no-repeat;
+                            background-position: center;
+                            background-size: contain;
+                        }
+                    }
+                }
+                &--title {
+                    a {
+                        h2 {
+                            display: -webkit-box;
+                            height: 85px;
+                            overflow: hidden;
+                            -webkit-box-orient: vertical;
+                            -webkit-line-clamp: 3;
+                            font-size: 20px;
+                            font-weight: 700;
+                            line-height: 28px;
+                            color: var(--card-text-color);
+                        }
+                    }
+                }
+                &--category {
+                    a {
+                        h3 {
+                            display: -webkit-box;
+                            height: 27px;
+                            overflow: hidden;
+                            -webkit-box-orient: vertical;
+                            -webkit-line-clamp: 1;
+                            font-size: 20px;
+                            font-weight: 400;
+                            line-height: 28px;
+                            color: var(--card-second-text-color);
+                        }
+                    }
+                }
+                &--price {
+                    span {
+                        display: -webkit-box;
+                        height: 30px;
+                        overflow: hidden;
+                        -webkit-box-orient: vertical;
+                        -webkit-line-clamp: 1;
+                        font-size: 20px;
+                        font-weight: 700;
+                        line-height: 28px;
+                        color: var(--card-text-color);
+                    }
+                }
+            }
+            &.product {
+                .inner-content {
+                    &--pic {
+                        i.poster {
+                            background-image: url("../../../../assets/images/imgthumb.svg");
+                        }
+                    }
+
+                    &--icons {
+                        margin-top: 8px;
+                        margin-right: 8px;
+                        margin-left: auto;
+
+                        span,
+                        a {
+                            margin-left: 6px;
+                            cursor: pointer;
+
+                            i {
+                                display: inline-flex;
+                                align-items: center;
+                                justify-content: center;
+                                width: 36px;
+                                height: 36px;
+                                padding-bottom: 2px;
+                                font-size: 18px;
+                                font-weight: 500;
+                                color: var(--secondary-button-text-color);
+                                background-color: var(
+                                    --secondary-button-background-color
+                                );
+                                border: 1px solid
+                                    var(--secondary-button-border-color);
+                                border-radius: var(
+                                    --secondary-button-border-radius
+                                );
+                                box-shadow: 0 3px 9px
+                                    var(--secondary-button-box-shadow-color);
+                            }
+
+                            &.add-favorite {
+                                &.active {
+                                    i {
+                                        color: var(--primary);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
