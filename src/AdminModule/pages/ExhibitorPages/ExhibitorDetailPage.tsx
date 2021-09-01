@@ -1,13 +1,13 @@
-import React, { FC, useEffect, useState, Fragment } from "react";
+import { FC, useEffect, useState, Fragment } from "react";
 import { Link, RouteComponentProps, useParams, useMatch } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { Col, Row } from "react-bootstrap";
 import {
     AppLoader,
-    AppCard,
     AppQuestionsAndAnswers,
 } from "../../../AppModule/components";
 import { errorToast, getBGStyle, resolveImage } from "../../../AppModule/utils";
+import "./assets/scss/detail.scss";
 
 import { ExhibitorApi } from "../../apis";
 import { Exhibitor, User } from "../../models";
@@ -24,10 +24,9 @@ import {
 } from "../../../AppModule/hooks";
 import { ExhibitorCommentsAPI } from "../../../AppModule/apis";
 
-import { ExhibitorDetailPageMembers } from "./ExhibitorDetailPageMembers";
-import { ExhibitorDetailPageContact } from "./ExhibitorDetailPageContact";
-import { ExhibitorDetailPageVideo } from "./ExhibitorDetailPageVideo";
-import "./assets/scss/detail.scss";
+import { ExhibitorDetailTabs } from "./ExhibitorDetailTabs";
+import { ExhibitorDetailTabDetails } from "./ExhibitorDetailTabDetails";
+import { ExhibitorDetailTabProducts } from "./ExhibitorDetailTabProducts";
 
 export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
@@ -40,8 +39,9 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const imagePath = useBuildAssetPath(ExhibitorPosterFileInfo);
     const logoPath = useBuildAssetPath(ExhibitorLogoPosterFileInfo);
     const [members, setMembers] = useState<User[]>([]);
-    const [haveMembers, setHaveMembers] = useState<boolean>(members.length > 0);
     const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
+    const [activeTab, setActiveTab] = useState<string>("details");
+
     useEffect(() => {
         isLoading(true);
         ExhibitorApi.findById<Exhibitor>(id).then(
@@ -52,7 +52,6 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                     setData(response);
                     const users = response?.members ?? [];
                     setMembers(users as User[]);
-                    setHaveMembers(users.length > 0);
                 }
                 isLoading(false);
             }
@@ -128,57 +127,18 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                             </div>
                         </Col>
                     </Row>
-                    <AppCard>
-                        <Row className="my-2">
-                            {haveMembers ? (
-                                <Col
-                                    lg={7}
-                                    xl={7}
-                                    md={12}
-                                    className={`exhibitor-detail--members mb-4 mb-lg-0`}
-                                >
-                                    <ExhibitorDetailPageMembers
-                                        members={members}
-                                    />
-                                </Col>
-                            ) : (
-                                <></>
-                            )}
-                            <Col
-                                lg={haveMembers ? 5 : 12}
-                                xl={haveMembers ? 5 : 12}
-                                className="exhibitor-detail--contact"
-                            >
-                                <ExhibitorDetailPageContact data={data} />
-                            </Col>
-                        </Row>
-                    </AppCard>
-                    <ExhibitorDetailPageVideo
-                        type={data?.streamType}
-                        url={data?.streamUrl}
+                    <ExhibitorDetailTabs
+                        activeTab={activeTab}
+                        setActiveTab={setActiveTab}
                     />
-                    {data?.description && data?.description !== "" ? (
-                        <AppCard>
-                            <Row className={"mb-3"}>
-                                <Col className={"exhibitor-detail--desc"}>
-                                    <h3 className="mb-0">
-                                        <i className="fak fa-description mr-2"></i>
-                                        {t(
-                                            "exhibitor.detail:section.description"
-                                        )}
-                                    </h3>
-                                </Col>
-                            </Row>
-                            <Row>
-                                <Col className="session-details-desc">
-                                    <p
-                                        dangerouslySetInnerHTML={{
-                                            __html: data.description,
-                                        }}
-                                    ></p>
-                                </Col>
-                            </Row>
-                        </AppCard>
+                    {data && activeTab === "details" ? (
+                        <ExhibitorDetailTabDetails
+                            data={data}
+                            members={members}
+                        />
+                    ) : null}
+                    {data && activeTab === "products" ? (
+                        <ExhibitorDetailTabProducts exhibitor={data} />
                     ) : null}
                 </Col>
                 {data?.isCommentEnable && (
