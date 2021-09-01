@@ -1,15 +1,9 @@
 import React, { FC, useEffect, useState } from "react";
 import { Link, RouteComponentProps, useParams } from "@reach/router";
 import { useTranslation } from "react-i18next";
-import "./assets/scss/detail.scss";
 import { Col, Row } from "react-bootstrap";
-import {
-    AppLoader,
-    AppCard,
-    AppSessionUsers,
-    AppButton,
-} from "../../../AppModule/components";
-import { errorToast } from "../../../AppModule/utils";
+import { AppLoader, AppCard } from "../../../AppModule/components";
+import { errorToast, getBGStyle, resolveImage } from "../../../AppModule/utils";
 import { ExhibitorApi } from "../../apis";
 import { Exhibitor, User } from "../../models";
 import {
@@ -18,6 +12,10 @@ import {
 } from "../../../config";
 import placeholder from "../../../AppModule/assets/images/imgthumb.svg";
 import { useBuildAssetPath } from "../../../AppModule/hooks";
+import { ExhibitorDetailPageMembers } from "./ExhibitorDetailPageMembers";
+import { ExhibitorDetailPageContact } from "./ExhibitorDetailPageContact";
+import { ExhibitorDetailPageVideo } from "./ExhibitorDetailPageVideo";
+import "./assets/scss/detail.scss";
 
 export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
@@ -26,6 +24,8 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [data, setData] = useState<Exhibitor>();
     const imagePath = useBuildAssetPath(ExhibitorPosterFileInfo);
     const logoPath = useBuildAssetPath(ExhibitorLogoPosterFileInfo);
+    const [members, setMembers] = useState<User[]>([]);
+    const [haveMembers, setHaveMembers] = useState<boolean>(members.length > 0);
 
     useEffect(() => {
         isLoading(true);
@@ -35,6 +35,9 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                     errorToast(t("exhibitor.detail:error.message.notExist"));
                 } else if (response !== null) {
                     setData(response);
+                    const users = response?.members ?? [];
+                    setMembers(users as User[]);
+                    setHaveMembers(users.length > 0);
                 }
                 isLoading(false);
             }
@@ -45,17 +48,11 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
         return <AppLoader />;
     }
 
-    const style = data?.logoImageName
-        ? {
-              backgroundImage: `url(${logoPath}/${data?.logoImageName})`,
-          }
-        : {
-              backgroundImage: `url(${placeholder})`,
-          };
-
+    const style = getBGStyle(logoPath, data?.logoImageName, placeholder);
+    const poster = resolveImage(imagePath, data?.coverImageName, placeholder);
     return (
         <>
-            <div className="row m-0">
+            <div className="row m-0 exhibitor-detail">
                 <div className="col-md-12 col-sm-12 col-xl-8 p-3 p-lg-4">
                     <div className="row m-0 card mb-3 mb-lg-4">
                         <div className="exhibitors-header col-12">
@@ -78,81 +75,58 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                                     <div className="sponsor">
                                         <i style={style}></i>
                                     </div>
-                                    <img
-                                        src={
-                                            data?.coverImageName
-                                                ? `${imagePath}/${data?.coverImageName}`
-                                                : placeholder
-                                        }
-                                    />
+                                    <img src={poster} />
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {data?.members && data?.members.length > 0 ? (
-                        <AppCard>
-                            <Row className="m-0 mb-3 mb-lg-4">
+                    <AppCard>
+                        <Row className="m-0 mb-3 mb-lg-4">
+                            {haveMembers ? (
                                 <Col
-                                    lg={8}
+                                    lg={7}
+                                    xl={7}
                                     md={12}
-                                    className={`create-session--speakers`}
+                                    className={`create-session--speakers divider-right`}
                                 >
-                                    <AppSessionUsers
-                                        xl={6}
-                                        lg={6}
-                                        md={12}
-                                        sm={12}
-                                        selectedUsers={data.members as User[]}
-                                        title={t(
-                                            "exhibitor.detail:label.members"
-                                        )}
-                                        icon="speakers"
+                                    <ExhibitorDetailPageMembers
+                                        members={members}
                                     />
                                 </Col>
-                                <Col lg={4}>
-                                    <h2>
-                                        <i className="fak fa-speakers"></i>
-                                        {t("exhibitor.detail:section.contact")}
-                                    </h2>
-                                    <div className="d-flex">
-                                        <Row>
-                                            <Col>
-                                                {data.contactUsCaption ? (
-                                                    <AppButton
-                                                        type="button"
-                                                        variant={"secondary"}
-                                                    >
-                                                        <i className="fa fa-phone-alt mr-1"></i>
-                                                        {data.contactUsCaption}
-                                                    </AppButton>
-                                                ) : null}
-                                            </Col>
-                                        </Row>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </AppCard>
-                    ) : null}
+                            ) : (
+                                <></>
+                            )}
+                            <Col
+                                lg={haveMembers ? 5 : 12}
+                                xl={haveMembers ? 5 : 12}
+                            >
+                                <ExhibitorDetailPageContact data={data} />
+                            </Col>
+                        </Row>
+                    </AppCard>
+                    <ExhibitorDetailPageVideo
+                        type={data?.streamType}
+                        url={data?.streamUrl}
+                    />
                     {data?.description && data?.description !== "" ? (
                         <AppCard>
-                            <Row className="m-0 mb-3 mb-lg-4">
-                                <Col
-                                    sm={12}
-                                    className="session-details-desc my-4 pt-1 px-2"
-                                >
-                                    <h2>
-                                        <i className="fak fa-description"></i>
+                            <Row className={"mb-3"}>
+                                <Col>
+                                    <h4>
+                                        <i className="fak fa-description mr-2"></i>
                                         {t(
                                             "exhibitor.detail:section.description"
                                         )}
-                                    </h2>
-                                    <div className="session-details-desc--container mt-3">
-                                        <p
-                                            dangerouslySetInnerHTML={{
-                                                __html: data.description,
-                                            }}
-                                        ></p>
-                                    </div>
+                                    </h4>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col className="session-details-desc">
+                                    <p
+                                        dangerouslySetInnerHTML={{
+                                            __html: data.description,
+                                        }}
+                                    ></p>
                                 </Col>
                             </Row>
                         </AppCard>
