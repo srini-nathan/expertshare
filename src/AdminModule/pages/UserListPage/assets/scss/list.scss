@@ -12,6 +12,9 @@
         flex: none;
     }
 }
+.impexp-options {
+    flex-flow: wrap;
+}
 .right-container {
     .user-header-width {
         @include media("tabtomob") {
@@ -43,20 +46,6 @@
         top: -60px;
         right: 5px;
         width: 80px;
-    }
-}
-.user-inv {
-    @include media("mobtosmall") {
-        position: absolute;
-        left: 15px;
-        min-width: 80px;
-    }
-}
-.user-ex {
-    @include media("mobtosmall") {
-        position: absolute;
-        right: 5px;
-        min-width: 80px;
     }
 }
 .ag-theme-alpine {
