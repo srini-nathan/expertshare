@@ -57,6 +57,11 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
                 isVisible,
                 ...params,
             };
+        } else if (!isGrantedControl) {
+            params = {
+                isVisible: true,
+                ...params,
+            };
         }
         ExhibitorApi.find<Exhibitor>(
             page,
