@@ -1,9 +1,9 @@
-import { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Link, RouteComponentProps, useParams } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import "./assets/scss/detail.scss";
 import { AppLoader } from "../../../AppModule/components";
-import { errorToast } from "../../../AppModule/utils";
+import { errorToast, getBGStyle, resolveImage } from "../../../AppModule/utils";
 import { ExhibitorApi } from "../../apis";
 import { Exhibitor } from "../../models";
 import {
@@ -43,17 +43,11 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
         return <AppLoader />;
     }
 
-    const style = data?.logoImageName
-        ? {
-              backgroundImage: `url(${logoPath}/${data?.logoImageName})`,
-          }
-        : {
-              backgroundImage: `url(${placeholder})`,
-          };
-
+    const style = getBGStyle(logoPath, data?.logoImageName, placeholder);
+    const poster = resolveImage(imagePath, data?.coverImageName, placeholder);
     return (
         <>
-            <div className="row m-0">
+            <div className="row m-0 exhibitor-detail">
                 <div className="col-md-12 col-sm-12 col-xl-8 p-3 p-lg-4">
                     <div className="row m-0 card mb-3 mb-lg-4">
                         <div className="exhibitors-header col-12">
@@ -76,13 +70,7 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                                     <div className="sponsor">
                                         <i style={style}></i>
                                     </div>
-                                    <img
-                                        src={
-                                            data?.coverImageName
-                                                ? `${imagePath}/${data?.coverImageName}`
-                                                : placeholder
-                                        }
-                                    />
+                                    <img src={poster} />
                                 </div>
                             </div>
                         </div>
