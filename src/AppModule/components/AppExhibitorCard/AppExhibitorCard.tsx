@@ -18,12 +18,14 @@ export interface AppExhibitorCardProps {
     isGrantedControl?: boolean;
     handleDelete: (id: number) => void;
     handleClone: (id: number) => void;
+    detailLink: string;
 }
 
 export const AppExhibitorCard: FC<AppExhibitorCardProps> = ({
     data,
     handleDelete,
     isGrantedControl,
+    detailLink,
 }): JSX.Element => {
     const { t } = useTranslation();
     const { id, name, coverImageName, isVisible, logoImageName } = data;
@@ -54,7 +56,7 @@ export const AppExhibitorCard: FC<AppExhibitorCardProps> = ({
     return (
         <Col md={12} lg={4} xl={3} className="exhibitor-grid--container--item">
             <Col className="inner-container p-0 card">
-                <Link to={`/admin/exhibitors/${id}/detail`}>
+                <Link to={detailLink}>
                     <div className="inner-container--banner" style={style}>
                         {logoImageName ? <img src={logoPath} /> : null}
                         <div className="inner-container--banner--button">
@@ -93,7 +95,7 @@ export const AppExhibitorCard: FC<AppExhibitorCardProps> = ({
                 </Link>
                 <div className="inner-container--det p-3 mx-2">
                     <Col className="inner-container--det--title p-0">
-                        <Link to={`/admin/exhibitors/${id}/detail`}>
+                        <Link to={detailLink}>
                             <h2>{name}</h2>
                         </Link>
                     </Col>

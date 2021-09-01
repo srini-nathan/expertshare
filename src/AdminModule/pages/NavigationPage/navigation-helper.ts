@@ -11,6 +11,10 @@ export const getInternalLinksOptions = (t: any): SimpleObject<string>[] => {
             value: "/attendee",
             label: t("Attendee"),
         },
+        {
+            value: "/exhibitors",
+            label: t("Exhibitors"),
+        },
     ];
     return options;
 };
