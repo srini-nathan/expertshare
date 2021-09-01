@@ -45,8 +45,9 @@
                 padding-right: 0;
                 background: unset;
                 border: unset;
-                i {
-                    font-size: 17px;
+                span {
+                    font-size: 18px;
+                    line-height: 11px;
                 }
             }
         }
@@ -237,7 +238,6 @@
                 span {
                     font-size: 12px;
                     font-weight: 700;
-                    color: var(--counter-att-select-fg-clr);
                 }
             }
         }
