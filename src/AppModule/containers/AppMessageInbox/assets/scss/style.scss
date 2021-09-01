@@ -133,6 +133,9 @@
                             box-shadow: 0 -1px 9px var(--secondary-button-box-shadow-color);
                             &::before {
                                 content: "\e018";
+                                @include media("mobile") {
+                                    content: "\e028";
+                                }
                             }
                         }
                     }
@@ -407,12 +410,14 @@
         }
 
         @include media("mobile") {
-            position: absolute;
-            bottom: 60px;
-            left: 16px;
-            width: 145px;
+            position: fixed;
+            top: 9px;
+            right: 65px;
+            width: 40px;
             height: 40px;
-
+            background-color: transparent;
+            border-radius: unset;
+            box-shadow: none;
             .app-message-inbox-header {
                 padding-top: 0 !important;
                 padding-right: 5px !important;
@@ -422,9 +427,7 @@
                     &--details {
                         &--content {
                             &--profile {
-                                width: 30px;
-                                height: 30px;
-                                margin-right: 5px;
+                                display: none;
                             }
                         }
                     }
@@ -432,18 +435,22 @@
                     &--action {
                         .btn-collapse {
                             i {
-                                width: 25px;
-                                height: 25px;
-                                font-size: 19px;
+                                background-color: transparent;
+                                box-shadow: none;
+                                &::before {
+                                    content: "\e056" !important;
+                                    font-size: 29px;
+                                    font-family: "Font Awesome Kit";
+                                    color: var(--navigation-item-text-color);
+                                    transform: rotate(180deg);
+                                }
                             }
                         }
                     }
                 }
 
                 h2 {
-                    width: 70px;
-                    overflow: hidden;
-                    font-size: 13px;
+                    display: none;
                 }
             }
         }
