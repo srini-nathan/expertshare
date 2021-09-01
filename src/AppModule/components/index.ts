@@ -93,4 +93,3 @@ export * from "./AppEventPicker";
 export * from "./AppExhibitorCard";
 export * from "./AppExhibitorProductCard";
 export * from "./AppVideoPlayer";
-export * from "./AppExhibitorProductCard";
