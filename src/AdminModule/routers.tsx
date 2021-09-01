@@ -139,7 +139,6 @@ export const routers: ModuleRouter[] = [
                             "live-votes-result/:conferenceId/:sessionId/:questionId/overview/:viewMode"
                         }
                     />
-                    <ExhibitorAddEditPage path={"exhibitors/new"} />
                     <LiveVoteOverviewResultPage
                         path={
                             "live-votes-result/:questionId/overview/:viewMode"
