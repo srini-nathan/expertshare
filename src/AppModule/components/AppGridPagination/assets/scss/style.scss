@@ -2,8 +2,15 @@
 @import "../../../../assets/scss/variables";
 
 .pagination {
+    flex-flow: wrap;
     .page-item {
+        display: flex;
+        align-items: center;
         margin-left: 5px;
+        @include media("mobile") {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
 
         &.active {
             .page-link {
@@ -33,6 +40,10 @@
 
             &:focus {
                 box-shadow: none;
+            }
+            @include media("mobile") {
+                width: 25px;
+                height: 25px;
             }
         }
     }

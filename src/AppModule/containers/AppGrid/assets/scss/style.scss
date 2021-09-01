@@ -2,7 +2,6 @@
 @import "./../../../../assets/scss/variables";
 
 .app-grid {
-    padding: 15px;
     background-color: var(--card-background-color);
     border-radius: var(--card-border-radius);
     box-shadow: 0 3px 9px var(--card-box-shadow-color);
@@ -327,5 +326,9 @@
 
     .pagination-container {
         width: 130px;
+        @include media("mobile") {
+            width: 100px;
+            margin-right: 5px;
+        }
     }
 }

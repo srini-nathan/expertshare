@@ -224,15 +224,16 @@ export const AFrameRoomGrid: FC<RouteComponentProps> = (): JSX.Element => {
             </AppPageHeader>
 
             {renderView()}
-            <div className="d-flex flex-row app-grid-action py-3">
-                <AppGridPagination
-                    className="mr-3"
-                    itemsPerPage={pageSize}
-                    totalItems={totalItems}
-                    active={active}
-                    onClick={setActive}
-                />
-                {totalItems > 0 ? (
+            {totalItems > 10 ? (
+                <div className="d-flex flex-row app-grid-action py-1 py-md-3">
+                    <AppGridPagination
+                        className="mr-3"
+                        itemsPerPage={pageSize}
+                        totalItems={totalItems}
+                        active={active}
+                        onClick={setActive}
+                    />
+
                     <div className="pagination-container">
                         <AppFormDropdown
                             id={"pageSize"}
@@ -242,8 +243,8 @@ export const AFrameRoomGrid: FC<RouteComponentProps> = (): JSX.Element => {
                             menuPlacement={"top"}
                         />
                     </div>
-                ) : null}
-            </div>
+                </div>
+            ) : null}
         </Fragment>
     );
 };

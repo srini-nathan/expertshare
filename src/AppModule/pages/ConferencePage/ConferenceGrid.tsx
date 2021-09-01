@@ -266,15 +266,15 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
             </AppPageHeader>
 
             {renderView()}
-            <div className="d-flex flex-row app-grid-action py-2">
-                <AppGridPagination
-                    className="mr-3"
-                    itemsPerPage={pageSize}
-                    totalItems={totalItems}
-                    active={active}
-                    onClick={setActive}
-                />
-                {totalItems > 0 ? (
+            {totalItems > 10 ? (
+                <div className="d-flex flex-row app-grid-action py-2">
+                    <AppGridPagination
+                        className="mr-3"
+                        itemsPerPage={pageSize}
+                        totalItems={totalItems}
+                        active={active}
+                        onClick={setActive}
+                    />
                     <div className="pagination-container">
                         <AppFormDropdown
                             id={"pageSize"}
@@ -284,8 +284,8 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                             menuPlacement={"top"}
                         />
                     </div>
-                ) : null}
-            </div>
+                </div>
+            ) : null}
         </Fragment>
     );
 };
