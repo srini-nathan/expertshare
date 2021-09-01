@@ -1,11 +1,14 @@
 import { Canceler } from "axios";
 import React, { FC, useRef, useState, useEffect } from "react";
-import { Row } from "react-bootstrap";
+import { Row, Col } from "react-bootstrap";
+import { navigate } from "@reach/router";
+import { useTranslation } from "react-i18next";
 import {
     AppGridPagination,
     AppFormDropdown,
     AppLoader,
     AppExhibitorProductCard,
+    AppButton,
 } from "../../../AppModule/components";
 import {
     defaultPageSize,
@@ -32,6 +35,7 @@ export const ExhibitorDetailTabProducts: FC<ExhibitorDetailTabProductType> = ({
     const [data, setData] = useState<ExhibitorProduct[]>([]);
     const { id } = exhibitor;
     const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
+    const { t } = useTranslation();
 
     const fetchData = (params = {}) => {
         isLoading(true);
@@ -63,6 +67,19 @@ export const ExhibitorDetailTabProducts: FC<ExhibitorDetailTabProductType> = ({
 
     return (
         <>
+            <Row>
+                <Col className="d-flex justify-content-end">
+                    <AppButton
+                        className={"text-capitalize"}
+                        variant={"secondary"}
+                        onClick={() => {
+                            navigate(`/admin/exhibitors/${id}/products/new`);
+                        }}
+                    >
+                        + {t("common.button:create")}
+                    </AppButton>
+                </Col>
+            </Row>
             <Row>
                 {loading ? (
                     <AppLoader />
