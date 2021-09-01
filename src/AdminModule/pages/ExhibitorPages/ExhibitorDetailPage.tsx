@@ -1,30 +1,32 @@
 import { FC, useEffect, useState, Fragment } from "react";
-import { Link, RouteComponentProps, useMatch, useParams } from "@reach/router";
+import { Link, RouteComponentProps, useParams, useMatch } from "@reach/router";
 import { useTranslation } from "react-i18next";
-import "./assets/scss/detail.scss";
 import { Col, Row } from "react-bootstrap";
 import {
     AppLoader,
     AppQuestionsAndAnswers,
 } from "../../../AppModule/components";
 import { errorToast, getBGStyle, resolveImage } from "../../../AppModule/utils";
+import "./assets/scss/detail.scss";
+
 import { ExhibitorApi } from "../../apis";
-import { Exhibitor } from "../../models";
+import { Exhibitor, User } from "../../models";
 import {
     ExhibitorPosterFileInfo,
     ExhibitorLogoPosterFileInfo,
     ROLES,
 } from "../../../config";
 import placeholder from "../../../AppModule/assets/images/imgthumb.svg";
-import { ExhibitorCommentsAPI } from "../../../AppModule/apis";
-import { ExhibitorDetailTabs } from "./ExhibitorDetailTabs";
-import { ExhibitorDetailTabDetails } from "./ExhibitorDetailTabDetails";
-import { ExhibitorDetailTabProducts } from "./ExhibitorDetailTabProducts";
 import {
     useAuthState,
     useBuildAssetPath,
     useIsGranted,
 } from "../../../AppModule/hooks";
+import { ExhibitorCommentsAPI } from "../../../AppModule/apis";
+
+import { ExhibitorDetailTabs } from "./ExhibitorDetailTabs";
+import { ExhibitorDetailTabDetails } from "./ExhibitorDetailTabDetails";
+import { ExhibitorDetailTabProducts } from "./ExhibitorDetailTabProducts";
 
 export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
@@ -36,8 +38,10 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { containerId } = useAuthState();
     const imagePath = useBuildAssetPath(ExhibitorPosterFileInfo);
     const logoPath = useBuildAssetPath(ExhibitorLogoPosterFileInfo);
-    const [activeTab, setActiveTab] = useState<string>("details");
+    const [members, setMembers] = useState<User[]>([]);
     const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
+    const [activeTab, setActiveTab] = useState<string>("details");
+
     useEffect(() => {
         isLoading(true);
         ExhibitorApi.findById<Exhibitor>(id).then(
@@ -46,6 +50,8 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                     errorToast(t("exhibitor.detail:error.message.notExist"));
                 } else if (response !== null) {
                     setData(response);
+                    const users = response?.members ?? [];
+                    setMembers(users as User[]);
                 }
                 isLoading(false);
             }
@@ -61,7 +67,7 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
 
     return (
         <Fragment>
-            <Row className="m-0  exhibitor-detail">
+            <Row className="m-0 exhibitor-detail">
                 <Col
                     className={
                         data?.isCommentEnable
@@ -126,7 +132,10 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                         setActiveTab={setActiveTab}
                     />
                     {data && activeTab === "details" ? (
-                        <ExhibitorDetailTabDetails data={data} />
+                        <ExhibitorDetailTabDetails
+                            data={data}
+                            members={members}
+                        />
                     ) : null}
                     {data && activeTab === "products" ? (
                         <ExhibitorDetailTabProducts exhibitor={data} />
