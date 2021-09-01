@@ -13,13 +13,18 @@ import { Exhibitor } from "../../models";
 import {
     ExhibitorPosterFileInfo,
     ExhibitorLogoPosterFileInfo,
+    ROLES,
 } from "../../../config";
 import placeholder from "../../../AppModule/assets/images/imgthumb.svg";
-import { useAuthState, useBuildAssetPath } from "../../../AppModule/hooks";
 import { ExhibitorCommentsAPI } from "../../../AppModule/apis";
 import { ExhibitorDetailTabs } from "./ExhibitorDetailTabs";
 import { ExhibitorDetailTabDetails } from "./ExhibitorDetailTabDetails";
 import { ExhibitorDetailTabProducts } from "./ExhibitorDetailTabProducts";
+import {
+    useAuthState,
+    useBuildAssetPath,
+    useIsGranted,
+} from "../../../AppModule/hooks";
 
 export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
@@ -32,7 +37,7 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const imagePath = useBuildAssetPath(ExhibitorPosterFileInfo);
     const logoPath = useBuildAssetPath(ExhibitorLogoPosterFileInfo);
     const [activeTab, setActiveTab] = useState<string>("details");
-
+    const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
     useEffect(() => {
         isLoading(true);
         ExhibitorApi.findById<Exhibitor>(id).then(
@@ -67,10 +72,10 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                     sm={12}
                     lg={data?.isCommentEnable ? 8 : 12}
                 >
-                    <Row className="m-0 card mb-3 mb-lg-4">
-                        <Col className="exhibitors-header" xs={12}>
+                    <Row className="m-0 card mb-3 mb-lg-4 exhibitors-header">
+                        <Col xs={12}>
                             <div className="row exhibitors-header--detail mb-3 px-2 pt-4">
-                                <div className="col-12 exhibitors-header--detail--buttons d-flex">
+                                <div className="col-auto exhibitors-header--detail--left-buttons d-flex">
                                     <Link
                                         to={
                                             isFrontPage
@@ -80,9 +85,19 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                                         className="back-btn btn btn-secondary mr-3"
                                     >
                                         <i className="fak fa-chevron-left mr-3"></i>
-                                        {t("Back")}
+                                        {t("exhibitor.detail:button.back")}
                                     </Link>
                                 </div>
+                                {isGrantedControl && (
+                                    <div className="col-auto exhibitors-header--detail--right-buttons d-flex mr-0 ml-auto">
+                                        <Link
+                                            to={`/admin/exhibitors/${id}`}
+                                            className="btn btn-secondary edit-btn ml-2"
+                                        >
+                                            <i className="fak fa-pen-regular mb-1"></i>
+                                        </Link>
+                                    </div>
+                                )}
                                 <div className="col-12 exhibitors-header--detail--title mt-4">
                                     <h1>{data?.name}</h1>
                                 </div>
@@ -94,7 +109,14 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                                             <i style={style}></i>
                                         ) : null}
                                     </div>
-                                    <img src={poster} />
+                                    <img
+                                        src={poster}
+                                        className={
+                                            data?.coverImageName
+                                                ? ""
+                                                : "placeholderImg"
+                                        }
+                                    />
                                 </div>
                             </div>
                         </Col>

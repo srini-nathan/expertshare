@@ -91,7 +91,10 @@ export const AppSessionUsers: FC<AppSessionUsersProps> = ({
                     )}
                 </Row>
             </Col>
-            <Col sm={12} className="create-session--speakers--container px-0">
+            <Col
+                sm={12}
+                className="create-session--speakers--container px-0 mt-3"
+            >
                 <Row className="m-0 p-0">
                     {selectedUsers.map((item: User) => {
                         return (
@@ -100,7 +103,7 @@ export const AppSessionUsers: FC<AppSessionUsersProps> = ({
                                 sm={sm}
                                 lg={lg}
                                 xl={xl}
-                                className="create-session--moderators--container--item pl-0 mt-4"
+                                className="create-session--moderators--container--item pl-0 mt-2"
                             >
                                 <AppUserListItem user={item as User} />
                             </Col>

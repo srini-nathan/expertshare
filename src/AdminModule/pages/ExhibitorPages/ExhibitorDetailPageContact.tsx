@@ -40,10 +40,14 @@ export const ExhibitorDetailPageContact: FC<ExhibitorDetailPageContactType> = ({
     const renderLink = (text = "", icon: string) => {
         if (text !== "") {
             return (
-                <Col sm={6} className={"pr-0"}>
-                    <div className={"d-flex"}>
-                        <i className={`fak fa-${icon} mr-1 mt-1`}></i>
-                        <p>{text}</p>
+                <Col xs={"auto"} className={"pr-0 custom-contact-item"}>
+                    <div
+                        className={
+                            "d-flex custom-contact-item--content mr-2 mr-lg-3"
+                        }
+                    >
+                        <i className={`fak fa-${icon} mr-2`}></i>
+                        <p className={"mb-0"}>{text}</p>
                     </div>
                 </Col>
             );
@@ -54,26 +58,30 @@ export const ExhibitorDetailPageContact: FC<ExhibitorDetailPageContactType> = ({
 
     return (
         <>
-            <h5>
+            <h3 className="mb-0">
                 <i className="fak fa-moderators mr-2"></i>
                 {t("exhibitor.detail:section.contacts")}
-            </h5>
+            </h3>
             <div className={"mt-4"}>
                 <Row>
-                    {renderLink(email, "seat")}
-                    {renderLink(website, "seat")}
+                    {renderLink(email, "envelope-light")}
+                    {renderLink(website, "globe-light")}
                     {renderLink(address, "icon-map")}
                     {renderLink(phone, "cellphone")}
                 </Row>
-                <Row className={"mt-4"}>
-                    <Col sm={6}>
-                        <div className={"d-flex justify-content-between"}>
+                <Row>
+                    <Col sm={"auto"} className="mt-2 mr-2">
+                        <div
+                            className={
+                                "d-flex justify-content-between social-icons"
+                            }
+                        >
                             {renderSocialLink(facebook, "facebook-f")}
                             {renderSocialLink(linkedin, "linkedin")}
                             {renderSocialLink(twitter, "twitter")}
                         </div>
                     </Col>
-                    <Col sm={6}>
+                    <Col sm={"auto"} className="mt-2 pr-0">
                         <div className={"d-flex"}>
                             {contactUsCaption && (phone || email) ? (
                                 <a
@@ -82,7 +90,7 @@ export const ExhibitorDetailPageContact: FC<ExhibitorDetailPageContactType> = ({
                                             ? `callto:${phone}`
                                             : `mailto:${email}`
                                     }
-                                    className={"btn btn-secondary"}
+                                    className={"btn btn-secondary contact-btn"}
                                 >
                                     <i className="fak fa-message-incoming mr-1"></i>
                                     {contactUsCaption}

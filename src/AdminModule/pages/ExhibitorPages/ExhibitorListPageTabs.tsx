@@ -14,7 +14,7 @@ export const ExhibitorListPageTabs: FC<ExhibitorListTabsType> = ({
     const { t } = useTranslation();
     return (
         <Row>
-            <Col className={"d-flex justify-content-between mb-5"}>
+            <Col className={"d-flex justify-content-between mb-4"}>
                 <div className="d-inline-block categories-nav--tabs">
                     <nav>
                         <div className="nav nav-tabs">

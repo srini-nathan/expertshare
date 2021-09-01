@@ -2,7 +2,7 @@
 @import "./../../../../assets/scss/screens-sizes";
 
 .sidebar {
-    z-index: 10;
+    z-index: 10000;
     background-color: var(--navigation-background-color);
     @include media("mobile") {
         position: relative;
