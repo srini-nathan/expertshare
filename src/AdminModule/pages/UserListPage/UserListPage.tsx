@@ -333,76 +333,86 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
         <Fragment>
             {renderModal()}
             <AppPageHeader title={"Users"} customToolbar>
-                <div className="d-block d-sm-flex pt-2 mb-5 user-header-width">
-                    <AppButton
-                        className="mr-2 p-3 user-filter"
-                        variant="secondary"
-                    >
-                        <AppIcon className="mr-2" name="Filter" />
-                        {t("common.button:filter")}
-                    </AppButton>
-                    <AppListPageToolbar
-                        createLink={"/admin/users/new"}
-                        createLabel="Create"
-                        onQuickFilterChange={handleFilter}
-                        cancelTokenSources={cancelTokenSourcesRef.current}
-                    />
-                    <AppButton
-                        onClick={() => {
-                            isShow(true);
-                        }}
-                        className="mx-0 mx-sm-2 p-3 user-inv"
-                        variant="secondary"
-                    >
-                        <AppIcon className="mr-2" name="Email" />
-                        {t("common.button:invite")}
-                    </AppButton>
-                    {isGranted(role, ROLE_ADMIN) && (
-                        <>
-                            <AppButton
-                                onClick={() => {
-                                    handleExport();
-                                }}
-                                className="mr-2 p-3 user-ex"
-                                variant="secondary"
-                            >
-                                <AppIcon className="mr-2" name="Upload" />
-                                {t("common.button:export")}
-                            </AppButton>
-                        </>
-                    )}
-
-                    {!isGranted(role, ROLE_SUPER_ADMIN) &&
-                        isGranted(role, ROLE_ADMIN) && (
+                <div className="d-block mb-3 mb-md-5">
+                    <div className="d-block d-sm-flex pt-2 justify-content-end user-header-width">
+                        <AppButton
+                            className="mr-2 p-3 user-filter"
+                            variant="secondary"
+                        >
+                            <AppIcon className="mr-2" name="Filter" />
+                            {t("common.button:filter")}
+                        </AppButton>
+                        <AppListPageToolbar
+                            createLink={"/admin/users/new"}
+                            createLabel="Create"
+                            onQuickFilterChange={handleFilter}
+                            cancelTokenSources={cancelTokenSourcesRef.current}
+                        />
+                    </div>
+                    <div className="d-flex impexp-options justify-content-end">
+                        <AppButton
+                            onClick={() => {
+                                isShow(true);
+                            }}
+                            className="ml-2 mb-2 p-3 user-inv"
+                            variant="secondary"
+                        >
+                            <AppIcon className="mr-2" name="Email" />
+                            {t("common.button:invite")}
+                        </AppButton>
+                        {isGranted(role, ROLE_ADMIN) && (
                             <>
                                 <AppButton
                                     onClick={() => {
-                                        handleImport();
+                                        handleExport();
                                     }}
-                                    className="p-3 user-imp"
-                                    variant="secondary"
-                                >
-                                    <AppIcon className="mr-2" name="Download" />
-                                    {t("common.button:import")}
-                                </AppButton>
-                            </>
-                        )}
-
-                    {!isGranted(role, ROLE_SUPER_ADMIN) &&
-                        isGranted(role, ROLE_ADMIN) && (
-                            <>
-                                <AppButton
-                                    onClick={() => {
-                                        handleExportChat();
-                                    }}
-                                    className="p-3 chat-ex"
+                                    className="mb-2 ml-2 p-3 user-ex"
                                     variant="secondary"
                                 >
                                     <AppIcon className="mr-2" name="Upload" />
-                                    {t("common.button:exportChat")}
+                                    {t("common.button:export")}
                                 </AppButton>
                             </>
                         )}
+
+                        {!isGranted(role, ROLE_SUPER_ADMIN) &&
+                            isGranted(role, ROLE_ADMIN) && (
+                                <>
+                                    <AppButton
+                                        onClick={() => {
+                                            handleImport();
+                                        }}
+                                        className="p-3 user-imp mb-2 ml-2"
+                                        variant="secondary"
+                                    >
+                                        <AppIcon
+                                            className="mr-2"
+                                            name="Download"
+                                        />
+                                        {t("common.button:import")}
+                                    </AppButton>
+                                </>
+                            )}
+
+                        {!isGranted(role, ROLE_SUPER_ADMIN) &&
+                            isGranted(role, ROLE_ADMIN) && (
+                                <>
+                                    <AppButton
+                                        onClick={() => {
+                                            handleExportChat();
+                                        }}
+                                        className="p-3 chat-ex ml-2 mb-2"
+                                        variant="secondary"
+                                    >
+                                        <AppIcon
+                                            className="mr-2"
+                                            name="Upload"
+                                        />
+                                        {t("common.button:exportChat")}
+                                    </AppButton>
+                                </>
+                            )}
+                    </div>
                 </div>
             </AppPageHeader>
 
