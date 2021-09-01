@@ -160,7 +160,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                                 <AttendeeCard attendee={item} key={index} />
                             </Col>
                         ))}
-                        {totalItems > 9 ? (
+                        {totalItems > 10 ? (
                             <div className="d-flex flex-row app-grid-action py-2">
                                 <AppGridPagination
                                     className="mr-3"

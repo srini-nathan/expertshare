@@ -327,6 +327,7 @@
     .pagination-container {
         width: 130px;
         @include media("mobile") {
+            width: 100px;
             margin-right: 5px;
         }
     }

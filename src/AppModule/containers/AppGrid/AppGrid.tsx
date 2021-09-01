@@ -41,7 +41,7 @@ export const AppGrid: FC<AppGridProps> = ({
     totalItems,
     frameworkComponents,
     onReady,
-    paginationContainerClass = "d-flex flex-row app-grid-action py-3",
+    paginationContainerClass = "d-flex flex-row app-grid-action py-1 py-md-2",
     gridOptions = {},
 }) => {
     const { t } = useTranslation();
@@ -119,7 +119,7 @@ export const AppGrid: FC<AppGridProps> = ({
                     />
                 </div>
                 <br />
-                {totalItems > 9 ? (
+                {totalItems > 10 ? (
                     <div className={paginationContainerClass}>
                         <AppGridPagination
                             className="mr-3"

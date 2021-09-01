@@ -296,8 +296,8 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
                 />
             </AppPageHeader>
             {renderTranslations()}
-            {totalItems > 9 ? (
-                <div className="d-flex flex-row app-grid-action py-3">
+            {totalItems > 10 ? (
+                <div className="d-flex flex-row app-grid-action py-1 py-md-3">
                     <AppGridPagination
                         className="mr-3"
                         itemsPerPage={pageSize}
