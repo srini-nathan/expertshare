@@ -36,3 +36,4 @@ export * from "./ExhibitorTranslation";
 export * from "./ExhibitorProduct";
 export * from "./ExhibitorProductTranslation";
 export * from "./ExhibitorProductTag";
+export * from "./ExhibitorProductDoc";
