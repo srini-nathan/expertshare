@@ -26,7 +26,7 @@ const schema = yup.object().shape({
 });
 
 const productSchema = yup.object().shape({
-    price: yup.string().required(),
+    price: yup.string(),
     isCta: yup.boolean().nullable(),
     ctaUrl: yup.string().when("isCta", {
         is: true,
