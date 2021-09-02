@@ -77,3 +77,20 @@ export const parseConfiguration = (container: any): Configuration => {
 
     return configuration;
 };
+
+export const resolveImageWithStyle = (
+    basePath: string,
+    image = "",
+    placeholder?: any
+): string | any => {
+    const bgStyle = getBGStyle(basePath, image, placeholder);
+    const css =
+        image === ""
+            ? {
+                  ...bgStyle,
+                  backgroundSize: "inherit",
+                  backgroundPosition: "center",
+              }
+            : bgStyle;
+    return css;
+};
