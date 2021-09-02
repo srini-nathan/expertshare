@@ -21,7 +21,7 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
     handleDelete,
     parentId,
 }): JSX.Element => {
-    const { id, name, imageName, price } = data;
+    const { id, name, imageName, price, isCta, ctaUrl, ctaLabel } = data;
 
     const basePath = useBuildAssetPath(ExhibitorProductPosterFileInfo);
 
@@ -71,6 +71,15 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
                 ) : (
                     <></>
                 )}
+                {isCta ? (
+                    <a
+                        className="btn btn-secondary"
+                        href={ctaUrl}
+                        target="_blank"
+                    >
+                        {ctaLabel}
+                    </a>
+                ) : null}
             </div>
         </Col>
     );
