@@ -250,6 +250,9 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
                     container: e.container,
                 };
             });
+            if (formData.price === "") {
+                formData.price = "0";
+            }
             selectedTags.forEach((e) => {
                 if (e.id) {
                     formData.exhibitorProductTags.push(
@@ -437,7 +440,7 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
                                     lg={6}
                                     xl={6}
                                     md={6}
-                                    required={true}
+                                    required={false}
                                 />
                                 <AppFormInput
                                     name={"ctaUrl"}

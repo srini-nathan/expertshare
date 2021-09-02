@@ -64,14 +64,13 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
                         <h2 className="mb-0">{name}</h2>
                     </a>
                 </div>
-                {/* <div className="inner-content--category mb-3">
-                    <a href="#">
-                        <h3 className="mb-0">Category</h3>
-                    </a>
-                </div> */}
-                <div className="inner-content--price">
-                    <span> {price} </span>
-                </div>
+                {parseInt(price, 10) > 0 ? (
+                    <div className="inner-content--price">
+                        <span> {price} </span>
+                    </div>
+                ) : (
+                    <></>
+                )}
             </div>
         </Col>
     );
