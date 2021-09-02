@@ -17,7 +17,8 @@ mkdir -p "${GENERATE_STYLE_OUTPUT}";
 
 for containerId in "${ES_CONTAINERS_ID[@]}"
 do
-  wget "${GENERATE_STYLE_API}/${containerId}" -O "${GENERATE_STYLE_OUTPUT}/${containerId}_style.css"
+  echo "/* Auto generated file for container#${containerId}. Please dont write anything here. */" > "${GENERATE_STYLE_OUTPUT}/${containerId}_style.css"
+  wget "${GENERATE_STYLE_API}/${containerId}" -O ->> "${GENERATE_STYLE_OUTPUT}/${containerId}_style.css"
 done
 
 
