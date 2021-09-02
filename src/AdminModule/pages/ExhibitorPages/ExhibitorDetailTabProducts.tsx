@@ -67,19 +67,25 @@ export const ExhibitorDetailTabProducts: FC<ExhibitorDetailTabProductType> = ({
 
     return (
         <>
-            <Row>
-                <Col className="d-flex justify-content-end">
-                    <AppButton
-                        className={"text-capitalize"}
-                        variant={"secondary"}
-                        onClick={() => {
-                            navigate(`/admin/exhibitors/${id}/products/new`);
-                        }}
-                    >
-                        + {t("common.button:create")}
-                    </AppButton>
-                </Col>
-            </Row>
+            {isGrantedControl ? (
+                <Row className={"mb-2"}>
+                    <Col className="d-flex justify-content-end">
+                        <AppButton
+                            className={"text-capitalize"}
+                            variant={"secondary"}
+                            onClick={() => {
+                                navigate(
+                                    `/admin/exhibitors/${id}/products/new`
+                                );
+                            }}
+                        >
+                            + {t("common.button:create")}
+                        </AppButton>
+                    </Col>
+                </Row>
+            ) : (
+                <></>
+            )}
             <Row>
                 {loading ? (
                     <AppLoader />
