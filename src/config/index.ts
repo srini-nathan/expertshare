@@ -43,7 +43,6 @@ const ExhibitorPosterFileInfo = FILETYPEINFO_EXHIBITOR_POSTER as FileTypeInfo;
 const ExhibitorLogoPosterFileInfo = FILETYPEINFO_EXHIBITORLOGO_POSTER as FileTypeInfo;
 const ExhibitorVideoFileInfo = FILETYPEINFO_EXHIBITORVIDEO_MEDIA as FileTypeInfo;
 const ExhibitorProductPosterFileInfo = FILETYPEINFO_EXHIBITORPRODUCT_POSTER as FileTypeInfo;
-
 const ConferencePosterFileInfo = FILETYPEINFO_CONFERENCE_POSTER as FileTypeInfo;
 const ExhibitorDocFileInfo = FILETYPEINFO_EXHIBITOR_DOC as FileTypeInfo;
 
