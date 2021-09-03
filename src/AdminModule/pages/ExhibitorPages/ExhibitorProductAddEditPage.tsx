@@ -7,6 +7,7 @@ import {
     ExhibitorProduct,
     ExhibitorProductTag,
     ExhibitorProductTranslation,
+    PExhibitorProductDoc,
 } from "../../models";
 import {
     useAuthState,
@@ -28,10 +29,12 @@ import {
     AppUploader,
 } from "../../../AppModule/components";
 import "./assets/scss/style.scss";
-import { AppLanguageSwitcher } from "../../../AppModule/containers";
+import { AppLanguageSwitcher, AppDocs } from "../../../AppModule/containers";
 import {
     EXHIBITOR_PRODUCT_POSTER_TYPE,
+    ExhibitorDocFileInfo,
     ExhibitorProductPosterFileInfo,
+    EXHIBITOR_DOC_TYPE,
 } from "../../../config";
 import { ExhibitorProductTranslatable } from "./ExhibitorProductTranslatable";
 import { ExhibitorApi, ExhibitorProductApi } from "../../apis";
@@ -45,6 +48,7 @@ import { UploadAPI } from "../../../AppModule/apis";
 import {
     SimpleObject,
     UnprocessableEntityErrorResponse,
+    Upload,
 } from "../../../AppModule/models";
 import { ExhibitorProductTagApi } from "../../apis/ExhibitorProductTagApi";
 
@@ -68,7 +72,7 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
         setData,
         data,
     } = useDataAddEdit<ExhibitorProduct>(
-        new ExhibitorProduct(containerResourceId, exhibitorUrl),
+        new ExhibitorProduct(containerResourceId as string, exhibitorUrl),
         productSchema
     );
     const posterBasePath = useBuildAssetPath(ExhibitorProductPosterFileInfo);
@@ -85,6 +89,7 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
     const [loadingTags, setLoadingTags] = useState<boolean>(true);
     const { formState, control, setValue, handleSubmit, watch } = hookForm;
     const isCTA = watch("isCta");
+    const [docsFile, setDocsFile] = useState<PExhibitorProductDoc[]>([]);
 
     useEffect(() => {
         if (isEditMode && id !== null) {
@@ -123,6 +128,17 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
                             });
                         });
                         setSelectedTags(selected);
+                        const existingDocs: PExhibitorProductDoc[] = response?.exhibitorProductDocs?.map(
+                            (e) => {
+                                return {
+                                    fileName: e.fileName,
+                                    name: e.name,
+                                    size: "",
+                                    container: containerResourceId,
+                                };
+                            }
+                        );
+                        setDocsFile(existingDocs);
                         setTranslations(items);
                         hookForm.trigger();
                     }
@@ -227,6 +243,13 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
             formData.container = containerResourceId;
             formData.exhibitor = exhibitorUrl;
             formData.exhibitorProductTags = [];
+            formData.exhibitorProductDocs = docsFile.map((e) => {
+                return {
+                    name: e.name,
+                    fileName: e.fileName,
+                    container: e.container,
+                };
+            });
             if (formData.price === "") {
                 formData.price = "0";
             }
@@ -279,6 +302,34 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
         }
         return Promise.reject();
     };
+
+    const onDocsSelect = (file: File) => {
+        const fd = new FormData();
+        fd.set("file", file, file.name);
+        fd.set("fileType", EXHIBITOR_DOC_TYPE);
+
+        UploadAPI.createResource<Upload, FormData>(fd).then(({ response }) => {
+            if (response && response.fileName) {
+                setDocsFile([
+                    {
+                        fileName: response.fileName,
+                        size: file.size.toString(),
+                        name: file.name,
+                        container: containerResourceId,
+                    },
+                    ...docsFile,
+                ]);
+            }
+        });
+    };
+
+    const onRemoveDoc = (index: number) => {
+        setDocsFile([
+            ...docsFile.slice(0, index),
+            ...docsFile.slice(index + 1),
+        ]);
+    };
+
     const { errors } = formState;
 
     if (isLoading || loadingLang || loadingTags) {
@@ -410,6 +461,14 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
                                     required={isCTA}
                                 />
                             </Row>
+                        </AppCard>
+                        <AppCard>
+                            <AppDocs
+                                fileTypeInfo={ExhibitorDocFileInfo}
+                                onDocSelect={onDocsSelect}
+                                onDocDelete={onRemoveDoc}
+                                docs={docsFile}
+                            />
                         </AppCard>
                     </Col>
                 </Row>

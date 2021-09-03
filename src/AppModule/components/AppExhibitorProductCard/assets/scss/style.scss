@@ -22,15 +22,28 @@
                     a {
                         h2 {
                             display: -webkit-box;
-                            height: 85px;
+                            height: 59px;
                             overflow: hidden;
                             -webkit-box-orient: vertical;
-                            -webkit-line-clamp: 3;
+                            -webkit-line-clamp: 2;
                             font-size: 20px;
                             font-weight: 700;
                             line-height: 28px;
                             color: var(--card-text-color);
                         }
+                    }
+                }
+                &--desc {
+                    p {
+                        display: -webkit-box;
+                        height: 53px;
+                        overflow: hidden;
+                        -webkit-box-orient: vertical;
+                        -webkit-line-clamp: 3;
+                        font-size: 16px;
+                        font-weight: 400;
+                        line-height: 18px;
+                        color: var(--card-second-text-color);
                     }
                 }
                 &--category {
@@ -49,17 +62,20 @@
                     }
                 }
                 &--price {
+                    display: -webkit-box;
+                    height: 32px;
+                    overflow: hidden;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 1;
+                    font-size: 20px;
+                    font-weight: 700;
+                    line-height: 28px;
+                    color: var(--card-text-color);
                     span {
-                        display: -webkit-box;
-                        height: 30px;
-                        overflow: hidden;
-                        -webkit-box-orient: vertical;
-                        -webkit-line-clamp: 1;
-                        font-size: 20px;
-                        font-weight: 700;
-                        line-height: 28px;
-                        color: var(--card-text-color);
                     }
+                }
+                &--buttons {
+                    height: 40px;
                 }
             }
             &.product {
@@ -71,8 +87,6 @@
                     }
 
                     &--icons {
-                        margin-top: 8px;
-                        margin-right: 8px;
                         margin-left: auto;
 
                         span,
@@ -90,16 +104,10 @@
                                 font-size: 18px;
                                 font-weight: 500;
                                 color: var(--secondary-button-text-color);
-                                background-color: var(
-                                    --secondary-button-background-color
-                                );
-                                border: 1px solid
-                                    var(--secondary-button-border-color);
-                                border-radius: var(
-                                    --secondary-button-border-radius
-                                );
-                                box-shadow: 0 3px 9px
-                                    var(--secondary-button-box-shadow-color);
+                                background-color: var(--secondary-button-background-color);
+                                border: 1px solid var(--secondary-button-border-color);
+                                border-radius: var(--secondary-button-border-radius);
+                                box-shadow: 0 3px 9px var(--secondary-button-box-shadow-color);
                             }
 
                             &.add-favorite {
