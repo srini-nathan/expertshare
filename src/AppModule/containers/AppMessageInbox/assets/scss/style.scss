@@ -32,6 +32,7 @@
 
     &--container {
         display: flex;
+        max-height: 590px;
 
         @include media("mobile") {
             height: 100%;

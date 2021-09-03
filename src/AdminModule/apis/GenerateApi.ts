@@ -4,7 +4,7 @@ import { API } from "../../AppModule/apis/API";
 import { route, ROUTES } from "../../config";
 import { API_HOST, APP_ENV } from "../../AppModule/config/app-env";
 
-import * as translations from "../../translations";
+import * as translations from "../translations";
 
 const GENERATE_TRANSLATION = "static/translations/{containerId}/{locale}.json";
 const GENERATED_STYLE = "static/css/{id}_style.css";
