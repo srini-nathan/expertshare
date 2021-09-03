@@ -783,6 +783,26 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                 />
                             </Row>
                             <Row>
+                                <AppFormInput
+                                    name={"twitter"}
+                                    label={t(
+                                        "admin.exhibitor.form:label.twitter"
+                                    )}
+                                    {...validation(
+                                        "twitter",
+                                        formState,
+                                        isEditMode
+                                    )}
+                                    errorMessage={errors.twitter?.message}
+                                    defaultValue={data.twitter}
+                                    control={control}
+                                    lg={6}
+                                    xl={6}
+                                    md={6}
+                                    required={false}
+                                />
+                            </Row>
+                            <Row>
                                 <Col xl={12} lg={12}>
                                     <AppSessionUsers
                                         xl={4}
