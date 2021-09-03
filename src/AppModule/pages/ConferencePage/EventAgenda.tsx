@@ -288,6 +288,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                             return (
                                 <SwiperSlide
                                     className={`${getSize(item.cardSize)} px-3`}
+                                    key={item.id}
                                 >
                                     <AppSessionItem
                                         conference={id}
@@ -386,6 +387,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                             }}
                             variant="secondary"
                             className="mr-2 mb-2 category-btn"
+                            key={e.id}
                         >
                             <span
                                 style={{
