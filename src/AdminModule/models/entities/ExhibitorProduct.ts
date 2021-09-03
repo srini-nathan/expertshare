@@ -6,6 +6,7 @@ import { BaseEntity } from "../../../AppModule/models/entities/BaseEntity";
 import { Container } from "./Container";
 import { ExhibitorProductApi } from "../../apis";
 import { Exhibitor } from "./Exhibitor";
+import { PExhibitorProductDoc } from "./ExhibitorProductDoc";
 
 export class ExhibitorProduct extends BaseEntity {
     translations: ExhibitorProductTranslation[] | SExhibitorProductTranslation;
@@ -32,7 +33,7 @@ export class ExhibitorProduct extends BaseEntity {
 
     exhibitorProductTags: any[];
 
-    exhibitorProductDocs: string[];
+    exhibitorProductDocs: PExhibitorProductDoc[];
 
     constructor(
         container: string | Container,
@@ -49,7 +50,7 @@ export class ExhibitorProduct extends BaseEntity {
             isActive = true,
             isCta = false,
             ctaUrl = "",
-            price = "",
+            price = "0",
             exhibitorProductTags = [],
             exhibitorProductDocs = [],
         }: PExhibitorProduct = {}

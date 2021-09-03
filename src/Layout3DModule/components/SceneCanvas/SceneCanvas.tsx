@@ -23,7 +23,6 @@ const { AFramePanel } = CONSTANTS;
 
 interface SceneProps {
     editMode: boolean;
-    cameraLock: boolean;
     roomsData: any[];
     currentMainRoom: number;
     paths: { ROOM_ASSETS_PATH: string; PANEL_ASSETS_PATH: string };
@@ -41,7 +40,6 @@ interface ToFromProps {
 
 export const SceneCanvas = ({
     editMode,
-    cameraLock,
     onItemSelected,
     roomsData,
     currentMainRoom,
@@ -71,7 +69,11 @@ export const SceneCanvas = ({
 
     const [currentRoom, setCurrentRoom] = useState<number>(-1);
     const [currentRoomActive, setCurrentRoomActive] = useState<number>(null!);
-    const [isCameraLocked, setIsCameraLocked] = useState<boolean>(cameraLock);
+    const [isRotateEnable, setIsRotateEnable] = useState<boolean>(
+        roomsData[currentMainRoom].isRotateEnable !== null
+            ? roomsData[currentMainRoom].isRotateEnable
+            : false
+    );
 
     const selected = useRef<THREE.Object3D>(null!);
     const { buildPageUrl } = use3DHelper();
@@ -125,8 +127,11 @@ export const SceneCanvas = ({
             if (rooms[i].id === n) room = rooms[i];
 
         if (room.isRotateEnable !== null)
-            setIsCameraLocked(!room.isRotateEnable);
-        else setIsCameraLocked(true);
+            setIsRotateEnable(room.isRotateEnable);
+        else {
+            setIsRotateEnable(false);
+        }
+
         setCurrentRoomActive(n);
     };
 
@@ -146,6 +151,15 @@ export const SceneCanvas = ({
     ) => {
         setCurrentRoom(roomNumber);
         setIsTransitionEnabled(isTransEn);
+        let room: any;
+        for (let i = 0; i < rooms.length; i++)
+            if (rooms[i].id === roomNumber) room = rooms[i];
+
+        if (room.isRotateEnable !== null)
+            setIsRotateEnable(room.isRotateEnable);
+        else {
+            setIsRotateEnable(false);
+        }
         // console.log("from pos: ", tgtPos, " to pos: ", toPos);
         setTargetPosition({
             duration,
@@ -223,7 +237,7 @@ export const SceneCanvas = ({
                         onOrbitDrag={onOrbitDrag}
                         onClickObject={onClickObject}
                         changeRoomNow={changeRoomNow}
-                        isCameraLocked={isCameraLocked}
+                        isRotateEnable={isRotateEnable}
                     />
                     {editMode && selectedMesh && (
                         <Transform

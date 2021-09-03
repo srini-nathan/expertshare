@@ -4,7 +4,6 @@ export * from "./UserProfilePage";
 export * from "./ContainerPage";
 export * from "./ConferencePage";
 export * from "./SessionPage";
-export * from "./ExhibitorPage";
 export * from "./AttendeePage";
 export * from "./NewsFeedPage";
 export * from "./ExtraPage";

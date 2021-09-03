@@ -16,7 +16,10 @@ export const onResponseRejected = (error: AxiosError): Promise<any> => {
     // status code available
     if (status) {
         if (status === 401) {
-            if (message === "Invalid JWT Token") {
+            if (
+                message === "Invalid JWT Token" ||
+                message === "Expired JWT Token"
+            ) {
                 navigate("/auth/login", { state: {} }).then(() => {
                     clearAuthStorage().then(() => {
                         // we don't need to show any message here, just kickout
