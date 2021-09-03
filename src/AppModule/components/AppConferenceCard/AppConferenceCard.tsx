@@ -255,7 +255,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                         <div className="inner-container--sponsors--carousel--group mt-1">
                             <AppSponsors
                                 data={
-                                    (conference.exhibitors as unknown) as Exhibitor[]
+                                    (conference?.exhibitors as unknown) as Exhibitor[]
                                 }
                                 basePath={exhibitorLogoBasePath}
                                 options={{
