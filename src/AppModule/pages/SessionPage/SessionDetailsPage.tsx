@@ -12,16 +12,27 @@ import {
     AppQuestionsAndAnswers,
     AppSessionTags,
     AppSessionExtraLink,
+    AppSponsors,
 } from "../../components";
-import { Session, User, PSession } from "../../../AdminModule/models";
+import {
+    Session,
+    User,
+    PSession,
+    Exhibitor,
+} from "../../../AdminModule/models";
 import { LiveVoteQuestionApi, SessionApi } from "../../../AdminModule/apis";
 import { errorToast, getDateWT, getTomorrowDate } from "../../utils";
-import { useAuthState, useSessionSocketEvents } from "../../hooks";
+import {
+    useAuthState,
+    useBuildAssetPath,
+    useSessionSocketEvents,
+} from "../../hooks";
 import "./assets/scss/style.scss";
 import { socket, EVENTS } from "../../socket";
 import { AppLiveVote, AppSessionDetailOperatorPanel } from "../../containers";
 import { LiveVoteQuestion } from "../../../AdminModule/models/entities/LiveVoteQuestion";
 import { SessionCommentsAPI } from "../../apis";
+import { ExhibitorLogoPosterFileInfo } from "../../../config";
 
 const { ON_NEXT_SESSION, ON_LIVE_VOTE_REFRESH } = EVENTS;
 
@@ -54,6 +65,9 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
     };
     const [checkingLiveVote, setCheckingLiveVote] = useState<boolean>(false);
     const [vote, setVote] = useState<LiveVoteQuestion>();
+    const exhibitorLogoBasePath = useBuildAssetPath(
+        ExhibitorLogoPosterFileInfo
+    );
 
     useEffect(() => {
         isLoading(true);
@@ -311,7 +325,16 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                             ) : null}
                         </Row>
                     </AppCard>
-
+                    <AppCard>
+                        <h5 className="mb-2">
+                            <i className="fak fa-handshake-alt-light mr-1"></i>
+                            {t("sessionDetails:label.sponsors")}
+                        </h5>
+                        <AppSponsors
+                            data={(data.exhibitors as unknown) as Exhibitor[]}
+                            basePath={exhibitorLogoBasePath}
+                        />
+                    </AppCard>
                     <AppSessionDetailOperatorPanel
                         conferenceId={conferenceId}
                         currentSessionId={id}
