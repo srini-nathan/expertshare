@@ -9,6 +9,7 @@ import {
     AppLoader,
     AppExhibitorProductCard,
     AppButton,
+    AppModal,
 } from "../../../AppModule/components";
 import {
     defaultPageSize,
@@ -18,6 +19,7 @@ import { useAuthState, useIsGranted } from "../../../AppModule/hooks";
 import { ExhibitorProductApi } from "../../apis";
 import { Exhibitor, ExhibitorProduct } from "../../models";
 import { ROLES } from "../../../config";
+import { errorToast, successToast } from "../../../AppModule/utils";
 
 interface ExhibitorDetailTabProductType {
     exhibitor: Exhibitor;
@@ -36,6 +38,7 @@ export const ExhibitorDetailTabProducts: FC<ExhibitorDetailTabProductType> = ({
     const { id } = exhibitor;
     const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
     const { t } = useTranslation();
+    const [showDelete, setDeleteShow] = useState(0);
 
     const fetchData = (params = {}) => {
         isLoading(true);
@@ -60,6 +63,18 @@ export const ExhibitorDetailTabProducts: FC<ExhibitorDetailTabProductType> = ({
                 isLoading(false);
             });
     };
+
+    async function handleDelete(pId: number) {
+        ExhibitorProductApi.deleteById(pId).then(({ error, errorMessage }) => {
+            if (error !== null) {
+                errorToast(errorMessage);
+            } else {
+                successToast(t("admin.exhibitor.details:delete.info.message"));
+                setPage(1);
+                fetchData();
+            }
+        });
+    }
 
     useEffect(() => {
         fetchData();
@@ -94,13 +109,27 @@ export const ExhibitorDetailTabProducts: FC<ExhibitorDetailTabProductType> = ({
                         <AppExhibitorProductCard
                             data={e}
                             isGrantedControl={isGrantedControl}
-                            handleDelete={() => {}}
+                            handleDelete={(pId) => {
+                                setDeleteShow(pId);
+                            }}
                             handleClone={() => {}}
                             parentId={id}
                         />
                     ))
                 )}
             </Row>
+            <AppModal
+                show={showDelete > 0}
+                title={t("admin.exhibitor.detail:delete.confirm.title")}
+                bodyContent={t("admin.exhibitor.detail:delete.confirm.message")}
+                handleClose={() => {
+                    setDeleteShow(0);
+                }}
+                handleDelete={() => {
+                    setDeleteShow(0);
+                    handleDelete(showDelete).then();
+                }}
+            />
             {totalItems > 0 ? (
                 <div className="d-flex flex-row app-grid-action py-2">
                     <AppGridPagination
