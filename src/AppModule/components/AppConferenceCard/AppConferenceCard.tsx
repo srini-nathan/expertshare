@@ -3,19 +3,17 @@ import { format } from "date-fns";
 import { Link } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { PConference } from "../../../AdminModule/models";
-import { CONSTANTS } from "../../../config";
+import { Exhibitor, PConference } from "../../../AdminModule/models";
+import {
+    ExhibitorLogoPosterFileInfo,
+    ConferencePosterFileInfo,
+} from "../../../config";
 import { useBuildAssetPath } from "../../hooks";
-import "./assets/scss/style.scss";
 import placeholder from "../../assets/images/imgthumb.svg";
-import { FileTypeInfo } from "../../models";
 import { useGlobalData } from "../../contexts";
-import { getDateTimeWithoutTimezone } from "../../utils";
-
-const { Upload: UPLOAD } = CONSTANTS;
-const {
-    FILETYPEINFO: { FILETYPEINFO_CONFERENCE_POSTER },
-} = UPLOAD;
+import { getDateTimeWithoutTimezone, resolveImageWithStyle } from "../../utils";
+import { AppSponsors } from "../AppSponsors";
+import "./assets/scss/style.scss";
 
 export interface AppConferenceCardProps {
     conference: PConference;
@@ -44,19 +42,11 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
 
     const { container } = useGlobalData();
 
-    const imagePath = useBuildAssetPath(
-        FILETYPEINFO_CONFERENCE_POSTER as FileTypeInfo,
-        imageName
+    const basePath = useBuildAssetPath(ConferencePosterFileInfo);
+    const exhibitorLogoBasePath = useBuildAssetPath(
+        ExhibitorLogoPosterFileInfo
     );
-    const style = imageName
-        ? {
-              backgroundImage: `url(${imagePath})`,
-          }
-        : {
-              backgroundImage: `url(${placeholder})`,
-              backgroundSize: "inherit",
-              backgroundPosition: "center",
-          };
+    const style = resolveImageWithStyle(basePath, imageName, placeholder);
 
     return (
         <Col md={12} lg={4} xl={3} className="events-grid--container--item">
@@ -256,59 +246,25 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                     </div>
                 */}
                 </div>
-                {/* <div className="inner-container--sponsors px-3 pt-3 pb-3">
+                <div className="inner-container--sponsors px-3 pt-3 pb-3">
                     <h3 className="mb-0 pl-2 pt-1">
                         <i className="fak fa-handshake-alt-light mr-2"></i>
                         Sponsors
                     </h3>
                     <div className="inner-container--sponsors--carousel mt-1 sponsor-carousel">
                         <div className="inner-container--sponsors--carousel--group mt-1">
-                            <div className="inner-container--sponsors--carousel--item sponsor-1 mr-2">
-                                <div className="inner-container--sponsors--carousel--item--logo">
-                                    <a>
-                                        <i></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="inner-container--sponsors--carousel--item sponsor-2 mr-2">
-                                <div className="inner-container--sponsors--carousel--item--logo">
-                                    <a>
-                                        <i></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="inner-container--sponsors--carousel--item sponsor-3 mr-2">
-                                <div className="inner-container--sponsors--carousel--item--logo">
-                                    <a>
-                                        <i></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="inner-container--sponsors--carousel--item sponsor-1 mr-2">
-                                <div className="inner-container--sponsors--carousel--item--logo">
-                                    <a>
-                                        <i></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="inner-container--sponsors--carousel--item sponsor-2 mr-2">
-                                <div className="inner-container--sponsors--carousel--item--logo">
-                                    <a>
-                                        <i></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div className="inner-container--sponsors--carousel--item sponsor-3 mr-2">
-                                <div className="inner-container--sponsors--carousel--item--logo">
-                                    <a>
-                                        <i></i>
-                                    </a>
-                                </div>
-                            </div>
+                            <AppSponsors
+                                data={
+                                    (conference.exhibitors as unknown) as Exhibitor[]
+                                }
+                                basePath={exhibitorLogoBasePath}
+                                options={{
+                                    slidesPerView: 2,
+                                }}
+                            />
                         </div>
                     </div>
                 </div>
-           */}
             </Col>
         </Col>
     );
