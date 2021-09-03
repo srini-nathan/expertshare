@@ -41,6 +41,7 @@ export const ExhibitorCategoryAddEditPage: FC<RouteComponentProps> = ({
     const { containerId, containerResourceId } = useAuthState();
     const [defaultLanguage, setDefaultLanguage] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(true);
+    const [loadingLang, setLoadingLang] = useState<boolean>(true);
     const [data, setData] = useState<ExhibitorCategory>(
         new ExhibitorCategory(containerResourceId)
     );
@@ -145,31 +146,37 @@ export const ExhibitorCategoryAddEditPage: FC<RouteComponentProps> = ({
     };
 
     useEffect(() => {
-        if (isEditMode) {
+        if (isEditMode && id) {
+            setLoading(true);
             ExhibitorCategoryApi.findById<ExhibitorCategory>(id, {
                 "groups[]": "ExhibitorCategoryTranslationGroup",
-            }).then(({ response, isNotFound, errorMessage }) => {
-                if (errorMessage) {
-                    errorToast(errorMessage);
-                } else if (isNotFound) {
-                    errorToast("Language not exist");
-                } else if (response !== null) {
-                    setData(response);
-                    const items: CategoryTranslationsType[] = Object.keys(
-                        response.translations
-                    ).map((key) => {
-                        return {
-                            locale: response.translations[key].locale,
-                            name: response.translations[key].name,
-                        };
-                    });
-                    setTranslations(items);
-                }
-            });
+            })
+                .then(({ response, isNotFound, errorMessage }) => {
+                    if (errorMessage) {
+                        errorToast(errorMessage);
+                    } else if (isNotFound) {
+                        errorToast("Language not exist");
+                    } else if (response !== null) {
+                        setData(response);
+                        const items: CategoryTranslationsType[] = Object.keys(
+                            response.translations
+                        ).map((key) => {
+                            return {
+                                locale: response.translations[key].locale,
+                                name: response.translations[key].name,
+                            };
+                        });
+                        setTranslations(items);
+                    }
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
         }
     }, [id, isEditMode]);
 
     useEffect(() => {
+        setLoadingLang(true);
         Languages().forEach((e) => {
             if (e.isDefault) {
                 setDefaultLanguage(e.locale);
@@ -193,11 +200,11 @@ export const ExhibitorCategoryAddEditPage: FC<RouteComponentProps> = ({
             });
             setTranslations(items);
         }
-        setLoading(false);
+        setLoadingLang(false);
     }, [Languages()]);
 
     const { errors } = formState;
-    if (loading) {
+    if (loading || loadingLang) {
         return <AppLoader />;
     }
 
