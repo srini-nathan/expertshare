@@ -78,9 +78,11 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
                         <h3 className="mb-0">Category</h3>
                     </a>
                 </div> */}
-                <div className="inner-content--price">
-                    <span> {price} </span>
-                </div>
+                {parseInt(price, 10) > 0 ? (
+                    <div className="inner-content--price">
+                        <span> {price} </span>
+                    </div>
+                ) : null}
                 <div className="inner-content--buttons">
                     {isCta ? (
                         <a
