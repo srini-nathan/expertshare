@@ -6,6 +6,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import mapValues from "lodash/mapValues";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { toNumber } from "lodash";
 import {
     AppPageHeader,
     AppBreadcrumb,
@@ -14,6 +15,7 @@ import {
     AppCard,
     AppCategoryTranslations,
     CategoryTranslationsType,
+    AppFormInput,
 } from "../../../AppModule/components";
 import { ExhibitorCategory } from "../../models";
 import { ExhibitorCategoryApi, ContainerApi } from "../../apis";
@@ -21,6 +23,7 @@ import {
     errorToast,
     setViolations,
     successToast,
+    validation,
 } from "../../../AppModule/utils";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
 import {
@@ -35,12 +38,13 @@ export const ExhibitorCategoryAddEditPage: FC<RouteComponentProps> = ({
 }): JSX.Element => {
     const { id, isEditMode } = useParamId();
     const navigator = useNavigator(navigate);
-    const { containerId } = useAuthState();
+    const { containerId, containerResourceId } = useAuthState();
     const [defaultLanguage, setDefaultLanguage] = useState<string>("");
-    const [loading, setLoading] = useState<boolean>(true);
-    // const [data, setData] = useState<ExhibitorCategory>(
-    //     new ExhibitorCategory(containerResourceId)
-    // );
+    const [loadingLang, setLoadingLang] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [data, setData] = useState<ExhibitorCategory>(
+        new ExhibitorCategory(containerResourceId)
+    );
     const { Languages } = useLanguages();
     const [translations, setTranslations] = useState<
         CategoryTranslationsType[]
@@ -111,7 +115,7 @@ export const ExhibitorCategoryAddEditPage: FC<RouteComponentProps> = ({
         if (checkTranslation()) {
             formData.translations = getTranslation();
             formData.container = ContainerApi.toResourceUrl(containerId);
-
+            formData.ord = toNumber(formData.ord);
             return ExhibitorCategoryApi.createOrUpdate<ExhibitorCategory>(
                 id,
                 formData
@@ -142,31 +146,37 @@ export const ExhibitorCategoryAddEditPage: FC<RouteComponentProps> = ({
     };
 
     useEffect(() => {
-        if (isEditMode) {
+        if (isEditMode && id) {
+            setLoading(true);
             ExhibitorCategoryApi.findById<ExhibitorCategory>(id, {
                 "groups[]": "ExhibitorCategoryTranslationGroup",
-            }).then(({ response, isNotFound, errorMessage }) => {
-                if (errorMessage) {
-                    errorToast(errorMessage);
-                } else if (isNotFound) {
-                    errorToast("Language not exist");
-                } else if (response !== null) {
-                    // setData(response);
-                    const items: CategoryTranslationsType[] = Object.keys(
-                        response.translations
-                    ).map((key) => {
-                        return {
-                            locale: response.translations[key].locale,
-                            name: response.translations[key].name,
-                        };
-                    });
-                    setTranslations(items);
-                }
-            });
+            })
+                .then(({ response, isNotFound, errorMessage }) => {
+                    if (errorMessage) {
+                        errorToast(errorMessage);
+                    } else if (isNotFound) {
+                        errorToast("Language not exist");
+                    } else if (response !== null) {
+                        setData(response);
+                        const items: CategoryTranslationsType[] = Object.keys(
+                            response.translations
+                        ).map((key) => {
+                            return {
+                                locale: response.translations[key].locale,
+                                name: response.translations[key].name,
+                            };
+                        });
+                        setTranslations(items);
+                    }
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
         }
     }, [id, isEditMode]);
 
     useEffect(() => {
+        setLoadingLang(true);
         Languages().forEach((e) => {
             if (e.isDefault) {
                 setDefaultLanguage(e.locale);
@@ -190,10 +200,11 @@ export const ExhibitorCategoryAddEditPage: FC<RouteComponentProps> = ({
             });
             setTranslations(items);
         }
-        setLoading(false);
+        setLoadingLang(false);
     }, [Languages()]);
 
-    if (loading) {
+    const { errors } = formState;
+    if (loading || loadingLang) {
         return <AppLoader />;
     }
 
@@ -233,6 +244,27 @@ export const ExhibitorCategoryAddEditPage: FC<RouteComponentProps> = ({
                                     translations={translations}
                                     onChange={setTranslations}
                                 />
+                                <Row>
+                                    <AppFormInput
+                                        sm={12}
+                                        md={12}
+                                        lg={12}
+                                        xl={12}
+                                        name={"ord"}
+                                        type={"number"}
+                                        label={t(
+                                            "admin.navigation.form:label.order"
+                                        )}
+                                        {...validation(
+                                            "ord",
+                                            formState,
+                                            isEditMode
+                                        )}
+                                        errorMessage={errors.ord?.message}
+                                        defaultValue={`${data.ord}`}
+                                        control={control}
+                                    />
+                                </Row>
                             </AppCard>
                             <Row>
                                 <AppFormActions
