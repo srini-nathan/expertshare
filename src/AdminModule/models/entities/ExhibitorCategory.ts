@@ -7,6 +7,8 @@ export class ExhibitorCategory extends BaseEntity {
 
     translations?: any;
 
+    ord: number;
+
     container: string | Container;
 
     constructor(
@@ -14,6 +16,7 @@ export class ExhibitorCategory extends BaseEntity {
         {
             name = "",
             translations,
+            ord = 1,
             id,
             createdAt,
             updatedAt,
@@ -23,6 +26,7 @@ export class ExhibitorCategory extends BaseEntity {
         this.container = container;
         this.name = name;
         this.translations = translations;
+        this.ord = ord;
     }
 
     toString(): string {

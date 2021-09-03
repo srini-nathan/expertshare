@@ -1,14 +1,21 @@
 import React, { FC } from "react";
 import { Row, Col } from "react-bootstrap";
+import { sortBy, map } from "lodash";
 import { AppExhibitorCard } from "../../../AppModule/components/AppExhibitorCard";
 import { useIsGranted } from "../../../AppModule/hooks";
 import { SimpleObject } from "../../../AppModule/models";
 import { ROLES } from "../../../config";
 import { Exhibitor } from "../../models";
 
+export interface CatWise {
+    data: Exhibitor[];
+    name: string;
+    ord: number;
+}
+
 interface ExhibitorListItemsType {
     isFrontPage: boolean;
-    catWiseData: SimpleObject<Exhibitor[]>;
+    catWiseData: SimpleObject<CatWise>;
     data: Exhibitor[];
     setDeleteShow: (id: number) => void;
 }
@@ -20,17 +27,17 @@ export const ExhibitorListItems: FC<ExhibitorListItemsType> = ({
     setDeleteShow,
 }) => {
     const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
-    const cats = Object.keys(catWiseData);
+    const sortedCats = sortBy(catWiseData, ["ord"]);
 
     if (isFrontPage) {
         return (
             <>
-                {cats.map((catName) => {
-                    const items = catWiseData[catName];
+                {map(sortedCats, (cat) => {
+                    const items = cat.data;
                     return (
                         <Row>
                             <Col sm={12}>
-                                <h4 className="pb-1 pt-3">{catName}</h4>
+                                <h4 className="pb-1 pt-3">{cat.name}</h4>
                             </Col>
                             {items.map((e) => (
                                 <AppExhibitorCard
