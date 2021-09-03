@@ -1,0 +1,13 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.app-sponsors {
+    width: 100%;
+    &--item{
+        width: 150px;
+        padding: 10px;
+        img {
+            width: 100%;
+        }
+    }
+}

@@ -2,18 +2,18 @@ import React, { FC } from "react";
 import { Link } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { Row, Col } from "react-bootstrap";
-import { Conference } from "../../../AdminModule/models";
-import "./assets/scss/style.scss";
+import { Conference, Exhibitor } from "../../../AdminModule/models";
 import placeholder from "../../assets/images/imgthumb.svg";
 import { useBuildAssetPath } from "../../hooks";
-import { CONSTANTS } from "../../../config";
+import {
+    ExhibitorLogoPosterFileInfo,
+    ConferencePosterFileInfo,
+} from "../../../config";
 import { AppButton } from "../AppButton";
-import { FileTypeInfo } from "../../models";
+import { AppSponsors } from "../AppSponsors";
+import "./assets/scss/style.scss";
+import { resolveImageWithStyle } from "../../utils";
 
-const { Upload: UPLOAD } = CONSTANTS;
-const {
-    FILETYPEINFO: { FILETYPEINFO_CONFERENCE_POSTER },
-} = UPLOAD;
 export interface AppEventAgendaHeeaderProps {
     conference: Conference;
     handleClone: () => void;
@@ -27,26 +27,17 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
     handleDelete,
     isGrantedControl,
 }): JSX.Element => {
-    const conferencePosterPath = useBuildAssetPath(
-        FILETYPEINFO_CONFERENCE_POSTER as FileTypeInfo,
-        conference?.imageName
+    const conferencePosterPath = useBuildAssetPath(ConferencePosterFileInfo);
+    const exhibitorLogoBasePath = useBuildAssetPath(
+        ExhibitorLogoPosterFileInfo
     );
     const { t } = useTranslation();
-    const styles = conference?.imageName
-        ? {
-              backgroundImage: `url(${conferencePosterPath})`,
-          }
-        : {
-              backgroundImage: `url(${placeholder})`,
-              backgroundSize: "inherit",
-              backgroundPosition: "center",
-          };
-    // const [isReadMore, setIsReadMore] = useState(true);
-    // const showMore = () => {
-    //     if (conference?.description.length < 800) return "";
-    //     if (isReadMore) return `+${t("common:showMore")}`;
-    //     return `-${t("common:showLess")}`;
-    // };
+    const styles = resolveImageWithStyle(
+        conferencePosterPath,
+        conference?.imageName,
+        placeholder
+    );
+
     return (
         <Col className="event-detail-admin--det--container card col-12 mb-3 px-0">
             <Col className="inner-container top px-4 pt-4 pb-3">
@@ -212,16 +203,17 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                         <Col className="inner-container--det--sponsors p-0 mt-4">
                             <Col className="inner-container--det--sponsors--title p-0 mb-3">
                                 <h2 className="mb-0">
-                                    <i className="fak fa -handshake-alt-light"></i>
-                                    {/* Sponsors */}
+                                    <i className="fak fa-handshake-alt-light"></i>
+                                    {t("event.agenda:label.sponsors")}
                                 </h2>
                             </Col>
                             <Col className="inner-container--det--sponsors--content carousel p-0">
-                                <Col className="p-0 inner-container--det--sponsors--content--item sponsor-1">
-                                    <a href="#">
-                                        <i></i>
-                                    </a>
-                                </Col>
+                                <AppSponsors
+                                    data={
+                                        (conference?.exhibitors as unknown) as Exhibitor[]
+                                    }
+                                    basePath={exhibitorLogoBasePath}
+                                />
                             </Col>
                         </Col>
                     </Col>
