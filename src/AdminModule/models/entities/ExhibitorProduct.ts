@@ -49,7 +49,7 @@ export class ExhibitorProduct extends BaseEntity {
             isActive = true,
             isCta = false,
             ctaUrl = "",
-            price = "",
+            price = "0",
             exhibitorProductTags = [],
             exhibitorProductDocs = [],
         }: PExhibitorProduct = {}
