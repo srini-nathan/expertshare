@@ -21,7 +21,16 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
     handleDelete,
     parentId,
 }): JSX.Element => {
-    const { id, name, imageName, price, isCta, ctaUrl, ctaLabel } = data;
+    const {
+        id,
+        name,
+        imageName,
+        price,
+        isCta,
+        ctaUrl,
+        ctaLabel,
+        description,
+    } = data;
 
     const basePath = useBuildAssetPath(ExhibitorProductPosterFileInfo);
 
@@ -66,12 +75,7 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
                     </a>
                 </div>
                 <div className="inner-content--desc mb-2">
-                    <p className="mb-0">
-                        Your Platform for Virtual Events Expertshare is a
-                        web-based conference and collaboration platform for
-                        virtual events. It combines solutions for e-learning,
-                        online conferences, virtual events with livestream and
-                    </p>
+                    <p className="mb-0">{description}</p>
                 </div>
                 {/* <div className="inner-content--category mb-3">
                     <a href="#">
@@ -93,7 +97,7 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
                             {ctaLabel}
                         </a>
                     ) : null}
-                    <a className="btn btn-secondary">Document</a>
+                    <a className="btn btn-secondary d-none">Document</a>
                 </div>
             </div>
         </Col>
