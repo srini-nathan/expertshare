@@ -27,9 +27,13 @@ export const ExhibitorDetailPageContact: FC<ExhibitorDetailPageContactType> = ({
     } = data;
 
     const renderSocialLink = (link = "", icon: string) => {
-        if (link !== "") {
+        if (link) {
             return (
-                <a className={"btn btn-secondary mr-2"} href={link}>
+                <a
+                    className={"btn btn-secondary mr-2"}
+                    href={link}
+                    target="_blank"
+                >
                     <i className={`fa fa-${icon}`}></i>
                 </a>
             );
