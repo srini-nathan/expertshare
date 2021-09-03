@@ -40,7 +40,7 @@ export const ExhibitorCategoryAddEditPage: FC<RouteComponentProps> = ({
     const navigator = useNavigator(navigate);
     const { containerId, containerResourceId } = useAuthState();
     const [defaultLanguage, setDefaultLanguage] = useState<string>("");
-    const [loadingLang, setLoadingLang] = useState<boolean>(false);
+    const [loadingLang, setLoadingLang] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(false);
     const [data, setData] = useState<ExhibitorCategory>(
         new ExhibitorCategory(containerResourceId)
