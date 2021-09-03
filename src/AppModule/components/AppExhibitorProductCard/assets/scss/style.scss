@@ -62,20 +62,20 @@
                     }
                 }
                 &--price {
+                    display: -webkit-box;
+                    height: 32px;
+                    overflow: hidden;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 1;
+                    font-size: 20px;
+                    font-weight: 700;
+                    line-height: 28px;
+                    color: var(--card-text-color);
                     span {
-                        display: -webkit-box;
-                        height: 35px;
-                        overflow: hidden;
-                        -webkit-box-orient: vertical;
-                        -webkit-line-clamp: 1;
-                        font-size: 20px;
-                        font-weight: 700;
-                        line-height: 28px;
-                        color: var(--card-text-color);
                     }
                 }
                 &--buttons {
-                    height: 80px;
+                    height: 40px;
                 }
             }
             &.product {
