@@ -26,7 +26,7 @@ import {
 } from "../../../AppModule/containers/AppGrid";
 import { ExhibitorListPageTabs } from "./ExhibitorListPageTabs";
 import { SimpleObject } from "../../../AppModule/models";
-import { ExhibitorListItems } from "./ExhibitorListPageItems";
+import { ExhibitorListItems, CatWise } from "./ExhibitorListPageItems";
 
 export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
@@ -43,9 +43,7 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const [isVisible, setIsVisible] = useState<boolean>(true);
     const [data, setData] = useState<Exhibitor[]>([]);
-    const [catWiseData, setCatWiseData] = useState<SimpleObject<Exhibitor[]>>(
-        {}
-    );
+    const [catWiseData, setCatWiseData] = useState<SimpleObject<CatWise>>({});
     const [showDelete, setDeleteShow] = useState(0);
     const [filter, setFilter] = useState<string>("");
 
@@ -78,17 +76,21 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
             .then(({ response }) => {
                 if (response !== null) {
                     const { items } = response;
-                    const catWiseItems: SimpleObject<Exhibitor[]> = {};
+                    const catWiseItems: SimpleObject<CatWise> = {};
                     items.forEach((item) => {
                         const cat = (item.category as unknown) as ExhibitorCategory;
-                        const catName = cat.name;
-                        if (catWiseItems[catName]) {
-                            catWiseItems[catName] = [
-                                ...catWiseItems[catName],
-                                item,
-                            ];
+                        const { ord, name } = cat;
+                        if (catWiseItems[name]) {
+                            catWiseItems[name] = {
+                                ...catWiseItems[name],
+                                data: [...catWiseItems[name].data, item],
+                            };
                         } else {
-                            catWiseItems[catName] = [item];
+                            catWiseItems[name] = {
+                                data: [item],
+                                name,
+                                ord,
+                            };
                         }
                     });
                     setCatWiseData(catWiseItems);
