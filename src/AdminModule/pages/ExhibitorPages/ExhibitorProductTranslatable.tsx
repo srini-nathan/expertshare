@@ -4,10 +4,7 @@ import { Control } from "react-hook-form";
 import { Form, Row } from "react-bootstrap";
 import { get, find } from "lodash";
 import { ExhibitorProductTranslation, Language } from "../../models";
-import {
-    AppFormLabel,
-    AppFormRichTextArea,
-} from "../../../AppModule/components";
+import { AppFormLabel, AppFormTextArea } from "../../../AppModule/components";
 
 export interface ExhibitorProductTranslatableProps {
     languages?: Language[];
@@ -85,20 +82,20 @@ export const ExhibitorProductTranslatable: FC<ExhibitorProductTranslatableProps>
                 </Form.Control.Feedback>
             </Form.Group>
             <Form.Group className="mb-0 px-3 w-100">
-                <AppFormRichTextArea
-                    name={`description_${activeLocale}`}
+                <AppFormTextArea
                     md={12}
                     lg={12}
                     xl={12}
-                    className="p-0"
+                    name={`description_${activeLocale}`}
                     label={`${t(
                         "admin.exhibitorProduct.form:label.description"
                     )} (${activeLocale})`}
-                    control={control}
                     value={getValue("description")}
-                    onChange={(e: string) => {
-                        handleValueChange(e, "description");
+                    onChange={(e: any) => {
+                        handleValueChange(e.target.value, "description");
                     }}
+                    control={control}
+                    className={"p-0"}
                 />
             </Form.Group>
             <Form.Group className="mb-0 px-3 w-100">
