@@ -21,6 +21,7 @@ import { Exhibitor, ExhibitorCategory, ExhibitorProduct } from "../../models";
 import { ROLES } from "../../../config";
 import { DropDownOption } from "../../../AppModule/models";
 import { errorToast, successToast } from "../../../AppModule/utils";
+import { DropDownOption } from "../../../AppModule/models";
 
 interface ExhibitorDetailTabProductType {
     exhibitor: Exhibitor;
@@ -43,6 +44,9 @@ export const ExhibitorDetailTabProducts: FC<ExhibitorDetailTabProductType> = ({
     const [, setSelectedTag] = useState<number>(0);
     const [loadingTags, setLoadingTags] = useState<boolean>(true);
     const [showDelete, setDeleteShow] = useState(0);
+    const [optionTags, setOptionTags] = useState<DropDownOption[]>([]);
+    const [, setSelectedTag] = useState<number>(0);
+    const [loadingTags, setLoadingTags] = useState<boolean>(true);
 
     const fetchData = (params = {}) => {
         isLoading(true);
