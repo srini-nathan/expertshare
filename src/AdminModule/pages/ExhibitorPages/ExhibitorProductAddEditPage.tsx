@@ -25,6 +25,7 @@ import {
     AppFormSelectCreatable,
     AppFormSwitch,
     AppLoader,
+    AppModal,
     AppPageHeaderTranslatable,
     AppUploader,
 } from "../../../AppModule/components";
@@ -90,6 +91,7 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
     const { formState, control, setValue, handleSubmit, watch } = hookForm;
     const isCTA = watch("isCta");
     const [docsFile, setDocsFile] = useState<PExhibitorProductDoc[]>([]);
+    const [showDelete, setDeleteShow] = useState(-1);
 
     useEffect(() => {
         if (isEditMode && id !== null) {
@@ -328,6 +330,7 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
             ...docsFile.slice(0, index),
             ...docsFile.slice(index + 1),
         ]);
+        setDeleteShow(-1);
     };
 
     const { errors } = formState;
@@ -364,6 +367,46 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
                                 onChange={setTranslations}
                                 ctaRequire={isCTA}
                             />
+                        </AppCard>
+                        <AppCard>
+                            <Col className={"p-0"}>
+                                <Form.Group>
+                                    <AppFormLabelTranslatable
+                                        label={
+                                            "admin.exhibitorProduct.form:label.cover"
+                                        }
+                                        required={false}
+                                    />
+                                    <AppUploader
+                                        withCropper
+                                        accept="image/*"
+                                        fileInfo={
+                                            ExhibitorProductPosterFileInfo
+                                        }
+                                        imagePath={
+                                            data.imageName
+                                                ? `${posterBasePath}/${data.imageName}`
+                                                : ""
+                                        }
+                                        onFileSelect={(selectedFiles) => {
+                                            const file =
+                                                first(selectedFiles) ?? null;
+                                            posterImageFileRef.current = file;
+                                        }}
+                                        onDelete={() => {
+                                            setValue("imageName", "");
+                                        }}
+                                        confirmation={{
+                                            title: t(
+                                                "admin.exhibitorProduct.form:deleteImage.confirm.title"
+                                            ),
+                                            bodyContent: t(
+                                                "admin.exhibitorProduct.form:deleteImage.confirm.message"
+                                            ),
+                                        }}
+                                    />
+                                </Form.Group>
+                            </Col>
                         </AppCard>
                     </Col>
                     <Col md={6}>
@@ -466,56 +509,27 @@ export const ExhibitorProductAddEditPage: FC<RouteComponentProps> = ({
                             <AppDocs
                                 fileTypeInfo={ExhibitorDocFileInfo}
                                 onDocSelect={onDocsSelect}
-                                onDocDelete={onRemoveDoc}
+                                onDocDelete={(i) => setDeleteShow(i)}
                                 docs={docsFile}
                             />
                         </AppCard>
                     </Col>
                 </Row>
-                <Row>
-                    <Col md={6}>
-                        <AppCard>
-                            <Col className={"p-0"}>
-                                <Form.Group>
-                                    <AppFormLabelTranslatable
-                                        label={
-                                            "admin.exhibitorProduct.form:label.cover"
-                                        }
-                                        required={false}
-                                    />
-                                    <AppUploader
-                                        withCropper
-                                        accept="image/*"
-                                        fileInfo={
-                                            ExhibitorProductPosterFileInfo
-                                        }
-                                        imagePath={
-                                            data.imageName
-                                                ? `${posterBasePath}/${data.imageName}`
-                                                : ""
-                                        }
-                                        onFileSelect={(selectedFiles) => {
-                                            const file =
-                                                first(selectedFiles) ?? null;
-                                            posterImageFileRef.current = file;
-                                        }}
-                                        onDelete={() => {
-                                            setValue("imageName", "");
-                                        }}
-                                        confirmation={{
-                                            title: t(
-                                                "admin.exhibitorProduct.form:deleteImage.confirm.title"
-                                            ),
-                                            bodyContent: t(
-                                                "admin.exhibitorProduct.form:deleteImage.confirm.message"
-                                            ),
-                                        }}
-                                    />
-                                </Form.Group>
-                            </Col>
-                        </AppCard>
-                    </Col>
-                </Row>
+                <AppModal
+                    show={showDelete > -1}
+                    title={t(
+                        "exhibitor.exhibitorProduct:docs.delete.confirm.title"
+                    )}
+                    handleClose={() => {
+                        setDeleteShow(-1);
+                    }}
+                    handleDelete={() => {
+                        onRemoveDoc(showDelete);
+                    }}
+                    bodyContent={t(
+                        "exhibitor.exhibitorProduct:docs.delete.confirm.message"
+                    )}
+                />
                 <AppFormActions
                     isEditMode={isEditMode}
                     navigation={navigator}
