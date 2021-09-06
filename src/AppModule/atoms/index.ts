@@ -6,3 +6,4 @@ export * from "./AppUserLocale";
 export * from "./AppContainerNavigation";
 export * from "./AppPipPlayer";
 export * from "./AppMyContainer";
+export * from "./AppExhibitors";
