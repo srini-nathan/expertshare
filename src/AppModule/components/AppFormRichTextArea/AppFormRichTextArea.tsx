@@ -1,15 +1,26 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useRef } from "react";
 import { Form, Col } from "react-bootstrap";
 import { Control, Controller } from "react-hook-form";
 import { isString as _isString, startCase as _startCase } from "lodash";
 import FroalaEditorComponent from "react-froala-wysiwyg";
+import { UploadAPI } from "../../apis";
 
 import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
 import "froala-editor/js/plugins.pkgd.min";
+import { useBuildAssetPath } from "../../hooks";
+import { Upload, FileTypeInfo } from "../../models";
+import { CONSTANTS } from "../../../config";
 
 import "./assets/scss/style.scss";
 import { useGlobalData } from "../../contexts";
+
+const { Upload: UPLOAD } = CONSTANTS;
+
+const {
+    FILETYPE: { FILETYPE_TEXT_EDITOR },
+    FILETYPEINFO: { FILETYPEINFO_TEXT_EDITOR },
+} = UPLOAD;
 
 export interface AppFormRichTextAreaProps {
     id?: string;
@@ -57,7 +68,11 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
     let val = defaultValue;
     if (value) val = value;
     const [model, setModel] = useState<string>(val);
+    const ref = useRef<any>(null);
     const { container } = useGlobalData();
+    const imagePath = useBuildAssetPath(
+        FILETYPEINFO_TEXT_EDITOR as FileTypeInfo
+    );
     let authKey = "";
     if (
         container &&
@@ -73,6 +88,27 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
             ? placeholder
             : `Enter ${_startCase(label) || _startCase(name)}`;
     }
+
+    const uploadImage = async (imageObject: Blob, imageName: string) => {
+        const fd = new FormData();
+        fd.set("file", imageObject, imageName);
+        fd.set("fileType", FILETYPE_TEXT_EDITOR);
+        fd.set("container", `${container}`);
+
+        return UploadAPI.createResource<Upload, FormData>(fd).then(
+            ({ response }) => {
+                if (response) {
+                    ref.current.editor.image.insert(
+                        `${imagePath}/${response.fileName}`,
+                        true,
+                        { name: response.fileName, id: response.id },
+                        "",
+                        null
+                    );
+                }
+            }
+        );
+    };
 
     return (
         <Col
@@ -102,6 +138,7 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
                 control={control}
                 render={({ field }) => (
                     <FroalaEditorComponent
+                        ref={ref}
                         model={value}
                         onModelChange={(e: string) => {
                             if (onChange) {
@@ -120,6 +157,21 @@ export const AppFormRichTextArea: FC<AppFormRichTextAreaProps> = ({
                             charCounterCount: withCounter,
                             charCounterMax: maxCount,
                             heightMin: minHeight,
+                            imageEditButtons: [
+                                "imageDisplay",
+                                "imageAlign",
+                                "imageInfo",
+                                "imageRemove",
+                                "imageStyle",
+                                "imageAlt",
+                                "imageSize",
+                            ],
+                            events: {
+                                "image.beforeUpload": (images: any) => {
+                                    uploadImage(images[0], images[0].name);
+                                    return false;
+                                },
+                            },
                         }}
                     />
                 )}
