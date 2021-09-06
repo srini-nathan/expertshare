@@ -16,7 +16,10 @@ export const AppSponsor: FC<AppSponsorType> = ({ data, basePath }) => {
     return (
         <div className={"app-sponsors--item"}>
             <Link to={`/exhibitors/${id}/detail`}>
-                <img src={img} />
+                <img
+                    src={img}
+                    className={data?.logoImageName ? "" : "placeholderImg"}
+                />
             </Link>
         </div>
     );

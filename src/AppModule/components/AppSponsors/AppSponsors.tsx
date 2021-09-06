@@ -20,7 +20,7 @@ export const AppSponsors: FC<AppSponsorsType> = ({
     data,
     basePath,
     options = {
-        slidesPerView: 6,
+        slidesPerView: "auto",
         autoplay: true,
     },
     containerId,
@@ -45,7 +45,7 @@ export const AppSponsors: FC<AppSponsorsType> = ({
         <div className={"app-sponsors"}>
             <Swiper {...options}>
                 {exhibitors.map((d) => (
-                    <SwiperSlide key={d.id}>
+                    <SwiperSlide key={d.id} className={""}>
                         <AppSponsor data={d} basePath={basePath} />
                     </SwiperSlide>
                 ))}
