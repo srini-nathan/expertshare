@@ -61,16 +61,16 @@ export const AppChatOneToOne: FC = () => {
         SCREEN_WIDTH - (SCREEN_WIDTH / 100) * findPercent(SCREEN_WIDTH);
 
     const chatsWidth =
-        CHAT_WIDTH * (openChats.length + 1) + PADDING * (openChats.length - 1);
+        CHAT_WIDTH * (openChats.length + 1) + PADDING * (openChats.length + 3);
 
     const collapseChatsWidth =
         COLLAPSED_CHAT_WIDTH * (openChats.length - 1) +
         CHAT_WIDTH * 2 +
-        PADDING * (openChats.length - 1);
+        PADDING * (openChats.length + 3);
 
     useEffect(() => {
         if (openThread !== null && openThread.id) {
-            const chats = [...openChats];
+            let chats = [...openChats];
             let currentChat: ICurrentChat = {
                 isOpen: true,
                 messages: [],
@@ -78,22 +78,26 @@ export const AppChatOneToOne: FC = () => {
                 currentUser: {},
                 isLoading: true,
             };
-            const isChatOpen = chats.find(
+            const isChatExist = chats.find(
                 (user: ICurrentChat) => user.currentUser.id === openThread.id
             );
             const secondPerson = find(
                 openThread?.users,
                 (u: PUser) => loginUser.id !== u.id
             ) as PUser;
-            if (!isChatOpen) {
+            if (!isChatExist) {
                 currentChat = {
                     ...currentChat,
-                    isOpen: !!isChatOpen,
                     secondUser: secondPerson,
                     currentUser: openThread,
                 };
                 chats.unshift(currentChat);
                 setOpenChats(() => chats);
+            } else {
+                chats = chats.map((chat: ICurrentChat) => {
+                    chat.isOpen = chat.currentUser.id === openThread.id;
+                    return chat;
+                });
             }
             setLoading(true);
             emitJoinChatThread(openThread.id);
@@ -102,7 +106,7 @@ export const AppChatOneToOne: FC = () => {
             })
                 .then(({ response }) => {
                     if (response && response.items) {
-                        if (!isChatOpen) {
+                        if (!isChatExist) {
                             currentChat.messages = response.items;
                             chats.shift();
                             chats.unshift(currentChat);
@@ -134,6 +138,15 @@ export const AppChatOneToOne: FC = () => {
         if (chatsWidth > accessScreenWidth) {
             if (collapseChatsWidth < accessScreenWidth) {
                 setCollapseChats(true);
+                const chats = openChats.map(
+                    (chat: ICurrentChat, index: number) => {
+                        if (index) {
+                            chat.isOpen = false;
+                        }
+                        return chat;
+                    }
+                );
+                setOpenChats(chats);
             } else {
                 const chats = [...openChats];
                 chats.pop();
@@ -141,13 +154,7 @@ export const AppChatOneToOne: FC = () => {
                 setCollapseChats(false);
             }
         }
-    }, [
-        collapseChatsWidth,
-        chatsWidth,
-        isCollapseChats,
-        openChats,
-        accessScreenWidth,
-    ]);
+    }, [collapseChatsWidth, chatsWidth, isCollapseChats, accessScreenWidth]);
 
     useEffect(() => {
         if (openThread && openThread.id) {
@@ -157,6 +164,23 @@ export const AppChatOneToOne: FC = () => {
             setCollapseChats(false);
         }
     }, [openThread]);
+
+    const collapseChat = (user: ICurrentChat, index: number): void => {
+        let chats = [...openChats];
+        chats[index].isOpen = !chats[index].isOpen;
+        chats = chats.map((chat) => {
+            if (chat !== chats[index]) {
+                chat.isOpen = false;
+            }
+            return chat;
+        });
+        setOpenChats(chats);
+        setCurrentIndex(
+            user.currentUser.id && user.currentUser.id !== currentOpenIndex
+                ? user.currentUser.id
+                : 0
+        );
+    };
 
     return (
         <>
@@ -171,18 +195,7 @@ export const AppChatOneToOne: FC = () => {
                     }`}
                 >
                     <div className="inner-container">
-                        <div
-                            onClick={() => {
-                                if (
-                                    user.currentUser.id &&
-                                    user.currentUser.id !== currentOpenIndex
-                                ) {
-                                    setCurrentIndex(user.currentUser.id);
-                                } else {
-                                    setCurrentIndex(0);
-                                }
-                            }}
-                        >
+                        <div onClick={() => collapseChat(user, index)}>
                             <AppChatOneToOneHeader
                                 onCollapseAction={() => {
                                     setCollapsed(!collapsed);
@@ -190,15 +203,17 @@ export const AppChatOneToOne: FC = () => {
                                 onCloseAction={(e) => {
                                     e.stopPropagation();
                                     setOpenChats(() =>
-                                        openChats.filter((chat) => {
-                                            return (
-                                                chat.currentUser.id !==
-                                                user.currentUser.id
-                                            );
-                                        })
+                                        openChats.filter(
+                                            (chat: ICurrentChat) => {
+                                                return (
+                                                    chat.currentUser.id !==
+                                                    user.currentUser.id
+                                                );
+                                            }
+                                        )
                                     );
                                 }}
-                                maxWidth={isCollapseChats}
+                                maxWidth={isCollapseChats && !user.isOpen}
                                 user={user.secondUser}
                             />
                         </div>
