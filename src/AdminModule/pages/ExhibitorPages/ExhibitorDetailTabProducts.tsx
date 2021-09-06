@@ -15,9 +15,10 @@ import {
     pageSizeOptions,
 } from "../../../AppModule/containers/AppGrid";
 import { useAuthState, useIsGranted } from "../../../AppModule/hooks";
-import { ExhibitorProductApi } from "../../apis";
-import { Exhibitor, ExhibitorProduct } from "../../models";
+import { ExhibitorCategoryApi, ExhibitorProductApi } from "../../apis";
+import { Exhibitor, ExhibitorCategory, ExhibitorProduct } from "../../models";
 import { ROLES } from "../../../config";
+import { DropDownOption } from "../../../AppModule/models";
 
 interface ExhibitorDetailTabProductType {
     exhibitor: Exhibitor;
@@ -36,6 +37,9 @@ export const ExhibitorDetailTabProducts: FC<ExhibitorDetailTabProductType> = ({
     const { id } = exhibitor;
     const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
     const { t } = useTranslation();
+    const [optionTags, setOptionTags] = useState<DropDownOption[]>([]);
+    const [, setSelectedTag] = useState<number>(0);
+    const [loadingTags, setLoadingTags] = useState<boolean>(true);
 
     const fetchData = (params = {}) => {
         isLoading(true);
@@ -65,11 +69,46 @@ export const ExhibitorDetailTabProducts: FC<ExhibitorDetailTabProductType> = ({
         fetchData();
     }, [pageSize]);
 
+    useEffect(() => {
+        setLoadingTags(true);
+        ExhibitorCategoryApi.find<ExhibitorCategory>()
+            .then(({ response }) => {
+                if (response !== null) {
+                    setOptionTags(
+                        response.items.map((item) => {
+                            return {
+                                label: item.name,
+                                value: item.id,
+                            };
+                        })
+                    );
+                }
+            })
+            .finally(() => {
+                setLoadingTags(false);
+            });
+    }, []);
+
     return (
         <>
             {isGrantedControl ? (
                 <Row className={"mb-2"}>
                     <Col className="d-flex justify-content-end">
+                        <AppFormDropdown
+                            className={"mr-1"}
+                            id={"tagFilter"}
+                            defaultValue={null}
+                            menuPlacement={"bottom"}
+                            options={optionTags}
+                            onChange={(e) => {
+                                if (e) {
+                                    const { value } = e as DropDownOption;
+                                    setSelectedTag(value);
+                                    setPage(1);
+                                }
+                            }}
+                            isLoading={loadingTags}
+                        />
                         <AppButton
                             className={"text-capitalize"}
                             variant={"secondary"}
