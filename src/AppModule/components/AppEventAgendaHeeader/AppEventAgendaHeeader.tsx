@@ -190,18 +190,7 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                                 </Row>
                             </Col>
                         </Col>
-                    </Col>
-                </Row>
-            </Col>
-            {conference?.exhibitors.length > 0 ? (
-                <Col className="inner-container bottom px-4 pt-0 pb-4">
-                    <Row className="m-0 p-0">
-                        <Col className="col-offset-4"></Col>
-                        <Col
-                            lg={7}
-                            xl={9}
-                            className="inner-container--det px-0 pl-lg-4 pr-lg-0 mr-0 ml-auto"
-                        >
+                        {conference?.exhibitors.length > 0 ? (
                             <Col className="inner-container--det--sponsors p-0 mt-4">
                                 <Col className="inner-container--det--sponsors--title p-0 mb-3">
                                     <h2 className="mb-0">
@@ -219,10 +208,10 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                                     />
                                 </Col>
                             </Col>
-                        </Col>
-                    </Row>
-                </Col>
-            ) : null}
+                        ) : null}
+                    </Col>
+                </Row>
+            </Col>
         </Col>
     );
 };

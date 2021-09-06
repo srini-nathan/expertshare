@@ -14,11 +14,6 @@
             &.top {
                 background-color: var(--card-background-color);
             }
-
-            &.bottom {
-                background-color: var(--widget-bg-clr);
-            }
-
             &--title {
                 .back-btn {
                     width: fit-content;
@@ -179,15 +174,10 @@
                     }
 
                     &--content {
-                        display: flex;
-                        overflow: auto;
-
-                        &::-webkit-scrollbar {
-                            display: none;
+                        .swiper-slide {
+                            width: 150px !important;
                         }
-
                         &--item {
-                            flex: 0 0 auto;
                             width: 150px;
                             padding: 15px;
                             margin-right: 15px;
@@ -204,50 +194,6 @@
                                     background-repeat: no-repeat;
                                     background-position: center;
                                     background-size: contain;
-                                }
-                            }
-
-                            &.sponsor-1 {
-                                a {
-                                    i {
-                                        // background-image: url(/v2/assets/images/sponsors_logo/sponsor-1.png);
-                                    }
-                                }
-                            }
-
-                            &.sponsor-2 {
-                                background-color: var(--custom-bg-clr-sp2);
-
-                                a {
-                                    i {
-                                        // background-image: url(/v2/assets/images/sponsors_logo/sponsor-2.png);
-                                    }
-                                }
-                            }
-
-                            &.sponsor-3 {
-                                a {
-                                    i {
-                                        // background-image: url(/v2/assets/images/sponsors_logo/sponsor-3.png);
-                                    }
-                                }
-                            }
-
-                            &.sponsor-4 {
-                                a {
-                                    i {
-                                        // background-image: url(/v2/assets/images/sponsors_logo/sponsor-4.png);
-                                    }
-                                }
-                            }
-
-                            &.sponsor-5 {
-                                background-color: var(--secondary);
-
-                                a {
-                                    i {
-                                        // background-image: url(/v2/assets/images/sponsors_logo/sponsor-5.png);
-                                    }
                                 }
                             }
                         }

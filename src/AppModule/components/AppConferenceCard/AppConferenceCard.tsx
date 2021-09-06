@@ -248,28 +248,31 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                     </div>
                 */}
                 </div>
-                {exhibitors.length > 0 ? (
-                    <div className="inner-container--sponsors px-3 pt-3 pb-3">
-                        <h3 className="mb-0 pl-2 pt-1">
-                            <i className="fak fa-handshake-alt-light mr-2"></i>
-                            Sponsors
-                        </h3>
-                        <div className="inner-container--sponsors--carousel mt-1 sponsor-carousel">
-                            <div className="inner-container--sponsors--carousel--group mt-1">
-                                <AppSponsors
-                                    data={
-                                        (conference?.exhibitors as unknown) as string[]
-                                    }
-                                    basePath={exhibitorLogoBasePath}
-                                    options={{
-                                        slidesPerView: 2,
-                                    }}
-                                    containerId={containerId}
-                                />
+
+                <div className="inner-container--sponsors">
+                    {exhibitors.length > 0 ? (
+                        <div className="content px-3 pt-3 pb-3">
+                            <h3 className="mb-0 pl-2 pt-1">
+                                <i className="fak fa-handshake-alt-light mr-2"></i>
+                                Sponsors
+                            </h3>
+                            <div className="inner-container--sponsors--carousel mt-1 sponsor-carousel">
+                                <div className="inner-container--sponsors--carousel--group mt-1">
+                                    <AppSponsors
+                                        data={
+                                            (conference?.exhibitors as unknown) as string[]
+                                        }
+                                        basePath={exhibitorLogoBasePath}
+                                        options={{
+                                            slidesPerView: "auto",
+                                        }}
+                                        containerId={containerId}
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ) : null}
+                    ) : null}
+                </div>
             </Col>
         </Col>
     );
