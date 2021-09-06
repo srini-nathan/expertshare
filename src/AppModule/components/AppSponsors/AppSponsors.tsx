@@ -1,15 +1,19 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { SwiperOptions } from "swiper/types/swiper-options";
 import { Exhibitor } from "../../../AdminModule/models";
 import { AppSponsor } from "./AppSponsor";
 
 import "./assets/scss/style.scss";
+import { useExhibitors } from "../../hooks";
+import { AppLoader } from "../AppLoader";
+import { ExhibitorApi } from "../../../AdminModule/apis";
 
 interface AppSponsorsType {
-    data: Exhibitor[];
+    data: string[];
     basePath: string;
     options?: SwiperOptions;
+    containerId: number;
 }
 
 export const AppSponsors: FC<AppSponsorsType> = ({
@@ -19,12 +23,28 @@ export const AppSponsors: FC<AppSponsorsType> = ({
         slidesPerView: 6,
         autoplay: true,
     },
+    containerId,
 }) => {
-    const activeSponsors = data.filter((d) => d.isVisible);
+    const { loading, getExhibitors } = useExhibitors();
+    const [exhibitors, setExhibitors] = useState<Exhibitor[]>([]);
+
+    useEffect(() => {
+        getExhibitors(containerId).then((items) => {
+            setExhibitors(
+                items.filter((i) => {
+                    return data.indexOf(ExhibitorApi.toResourceUrl(i.id)) > -1;
+                })
+            );
+        });
+    }, []);
+
+    if (loading) {
+        return <AppLoader />;
+    }
     return (
         <div className={"app-sponsors"}>
             <Swiper {...options}>
-                {activeSponsors.map((d) => (
+                {exhibitors.map((d) => (
                     <SwiperSlide key={d.id}>
                         <AppSponsor data={d} basePath={basePath} />
                     </SwiperSlide>

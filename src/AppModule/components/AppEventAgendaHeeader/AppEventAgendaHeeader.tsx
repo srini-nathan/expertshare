@@ -2,9 +2,9 @@ import React, { FC } from "react";
 import { Link } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { Row, Col } from "react-bootstrap";
-import { Conference, Exhibitor } from "../../../AdminModule/models";
+import { Conference } from "../../../AdminModule/models";
 import placeholder from "../../assets/images/imgthumb.svg";
-import { useBuildAssetPath } from "../../hooks";
+import { useAuthState, useBuildAssetPath } from "../../hooks";
 import {
     ExhibitorLogoPosterFileInfo,
     ConferencePosterFileInfo,
@@ -27,6 +27,7 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
     handleDelete,
     isGrantedControl,
 }): JSX.Element => {
+    const { containerId } = useAuthState();
     const conferencePosterPath = useBuildAssetPath(ConferencePosterFileInfo);
     const exhibitorLogoBasePath = useBuildAssetPath(
         ExhibitorLogoPosterFileInfo
@@ -192,33 +193,36 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                     </Col>
                 </Row>
             </Col>
-            <Col className="inner-container bottom px-4 pt-0 pb-4">
-                <Row className="m-0 p-0">
-                    <Col className="col-offset-4"></Col>
-                    <Col
-                        lg={7}
-                        xl={9}
-                        className="inner-container--det px-0 pl-lg-4 pr-lg-0 mr-0 ml-auto"
-                    >
-                        <Col className="inner-container--det--sponsors p-0 mt-4">
-                            <Col className="inner-container--det--sponsors--title p-0 mb-3">
-                                <h2 className="mb-0">
-                                    <i className="fak fa-handshake-alt-light"></i>
-                                    {t("event.agenda:label.sponsors")}
-                                </h2>
-                            </Col>
-                            <Col className="inner-container--det--sponsors--content carousel p-0">
-                                <AppSponsors
-                                    data={
-                                        (conference?.exhibitors as unknown) as Exhibitor[]
-                                    }
-                                    basePath={exhibitorLogoBasePath}
-                                />
+            {conference?.exhibitors.length > 0 ? (
+                <Col className="inner-container bottom px-4 pt-0 pb-4">
+                    <Row className="m-0 p-0">
+                        <Col className="col-offset-4"></Col>
+                        <Col
+                            lg={7}
+                            xl={9}
+                            className="inner-container--det px-0 pl-lg-4 pr-lg-0 mr-0 ml-auto"
+                        >
+                            <Col className="inner-container--det--sponsors p-0 mt-4">
+                                <Col className="inner-container--det--sponsors--title p-0 mb-3">
+                                    <h2 className="mb-0">
+                                        <i className="fak fa-handshake-alt-light"></i>
+                                        {t("event.agenda:label.sponsors")}
+                                    </h2>
+                                </Col>
+                                <Col className="inner-container--det--sponsors--content carousel p-0">
+                                    <AppSponsors
+                                        data={
+                                            (conference?.exhibitors as unknown) as string[]
+                                        }
+                                        basePath={exhibitorLogoBasePath}
+                                        containerId={containerId}
+                                    />
+                                </Col>
                             </Col>
                         </Col>
-                    </Col>
-                </Row>
-            </Col>
+                    </Row>
+                </Col>
+            ) : null}
         </Col>
     );
 };

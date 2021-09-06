@@ -14,12 +14,7 @@ import {
     AppSessionExtraLink,
     AppSponsors,
 } from "../../components";
-import {
-    Session,
-    User,
-    PSession,
-    Exhibitor,
-} from "../../../AdminModule/models";
+import { Session, User, PSession } from "../../../AdminModule/models";
 import { LiveVoteQuestionApi, SessionApi } from "../../../AdminModule/apis";
 import { errorToast, getDateWT, getTomorrowDate } from "../../utils";
 import {
@@ -325,16 +320,19 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                             ) : null}
                         </Row>
                     </AppCard>
-                    <AppCard>
-                        <h5 className="mb-2">
-                            <i className="fak fa-handshake-alt-light mr-1"></i>
-                            {t("sessionDetails:label.sponsors")}
-                        </h5>
-                        <AppSponsors
-                            data={(data.exhibitors as unknown) as Exhibitor[]}
-                            basePath={exhibitorLogoBasePath}
-                        />
-                    </AppCard>
+                    {data.exhibitors.length > 0 ? (
+                        <AppCard>
+                            <h5 className="mb-2">
+                                <i className="fak fa-handshake-alt-light mr-1"></i>
+                                {t("sessionDetails:label.sponsors")}
+                            </h5>
+                            <AppSponsors
+                                data={(data.exhibitors as unknown) as string[]}
+                                basePath={exhibitorLogoBasePath}
+                                containerId={containerId}
+                            />
+                        </AppCard>
+                    ) : null}
                     <AppSessionDetailOperatorPanel
                         conferenceId={conferenceId}
                         currentSessionId={id}
