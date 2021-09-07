@@ -24,6 +24,21 @@
     border-radius: var(--tag-border-radius);
 }
 .session-det-sponsors {
+    h3 {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0;
+        font-size: 20px;
+        font-weight: 700;
+        color: var(--card-text-color);
+
+        i {
+            padding-right: 10px;
+            padding-bottom: 5px;
+            font-size: 22px;
+            font-weight: 500;
+        }
+    }
     .app-sponsors {
         .swiper-slide {
             width: 140px !important;
