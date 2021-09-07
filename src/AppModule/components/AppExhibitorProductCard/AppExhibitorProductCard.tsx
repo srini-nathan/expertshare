@@ -1,6 +1,7 @@
 import React, { FC } from "react";
-import { Col } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import { Link } from "@reach/router";
+import { useTranslation } from "react-i18next";
 import { ExhibitorProduct } from "../../../AdminModule/models";
 import { ExhibitorProductPosterFileInfo } from "../../../config";
 import { useBuildAssetPath } from "../../hooks";
@@ -30,11 +31,36 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
         ctaUrl,
         ctaLabel,
         description,
+        exhibitorProductTags,
     } = data;
 
     const basePath = useBuildAssetPath(ExhibitorProductPosterFileInfo);
 
     const style = getBGStyle(basePath, imageName);
+    const { t } = useTranslation();
+
+    const renderTags = () => {
+        if (exhibitorProductTags.length === 0) {
+            return <></>;
+        }
+        return (
+            <div className="inner-content--category mb-3">
+                <div className="conference-tags-container--title ">
+                    <i className="fak fa-tags mr-2"></i>
+                    <span>{t("admin.exhibitorProduct:label.tags")}</span>
+                </div>
+                <Row className={"m-0 mt-3 p-0 conference-tags-container--tags"}>
+                    {exhibitorProductTags.map((e) => {
+                        return (
+                            <div className={"conference-tags"} key={e.id}>
+                                {e.name}
+                            </div>
+                        );
+                    })}
+                </Row>
+            </div>
+        );
+    };
 
     return (
         <Col
@@ -77,11 +103,7 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
                 <div className="inner-content--desc mb-2">
                     <p className="mb-0">{description}</p>
                 </div>
-                {/* <div className="inner-content--category mb-3">
-                    <a href="#">
-                        <h3 className="mb-0">Category</h3>
-                    </a>
-                </div> */}
+                {renderTags()}
                 <div className="inner-content--price">
                     {parseInt(price, 10) > 0 ? <span> {price} </span> : null}
                 </div>
