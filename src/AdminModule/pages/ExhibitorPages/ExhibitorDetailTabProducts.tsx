@@ -120,20 +120,24 @@ export const ExhibitorDetailTabProducts: FC<ExhibitorDetailTabProductType> = ({
             {isGrantedControl ? (
                 <Row className={"mb-2"}>
                     <Col className="d-flex justify-content-end">
-                        <AppFormDropdown
-                            className={"mr-1"}
-                            id={"tagFilter"}
-                            defaultValue={optionTags[0]}
-                            options={optionTags}
-                            onChange={(e) => {
-                                if (e) {
-                                    const { value } = e as DropDownOption;
-                                    setPage(1);
-                                    setSelectedTag(value);
-                                }
-                            }}
-                            isLoading={loadingTags}
-                        />
+                        {loadingTags ||
+                        (data.length === 0 && selectedTag === 0) ? null : (
+                            <AppFormDropdown
+                                className={"mr-1"}
+                                id={"tagFilter"}
+                                defaultValue={optionTags[0]}
+                                options={optionTags}
+                                onChange={(e) => {
+                                    if (e) {
+                                        const { value } = e as DropDownOption;
+                                        setPage(1);
+                                        setSelectedTag(value);
+                                    }
+                                }}
+                                isLoading={loadingTags}
+                            />
+                        )}
+
                         <AppButton
                             className={"text-capitalize"}
                             variant={"secondary"}
