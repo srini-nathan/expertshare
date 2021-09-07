@@ -25,6 +25,8 @@ export class Conference extends BaseEntity {
 
     isArchive: boolean;
 
+    exhibitors: string[];
+
     constructor({
         title = "",
         sessionDates = {},
@@ -37,6 +39,7 @@ export class Conference extends BaseEntity {
         isLive = true,
         isArchive = true,
         description = "",
+        exhibitors = [],
         id,
         createdAt,
         updatedAt,
@@ -53,6 +56,7 @@ export class Conference extends BaseEntity {
         this.isArchive = isArchive;
         this.isLive = isLive;
         this.description = description;
+        this.exhibitors = exhibitors;
     }
 
     toString(): string {

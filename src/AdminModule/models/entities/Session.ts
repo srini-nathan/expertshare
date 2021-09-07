@@ -90,6 +90,8 @@ export class Session extends BaseEntity {
 
     moderators: string[] | User[];
 
+    exhibitors: string[];
+
     constructor({
         title = "",
         container = "",
@@ -131,6 +133,7 @@ export class Session extends BaseEntity {
         isShowInVideoLibrary = false,
         isVisible = true,
         description = "",
+        exhibitors = [],
         id,
         createdAt,
         updatedAt,
@@ -178,6 +181,7 @@ export class Session extends BaseEntity {
         this.translations = translations;
         this.isVisible = isVisible;
         this.description = description;
+        this.exhibitors = exhibitors;
     }
 
     toString(): string {
