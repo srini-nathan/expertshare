@@ -17,6 +17,7 @@ export interface AppFormDropdownProps {
     size?: "lg" | "sm";
     options: PrimitiveObject[];
     menuPlacement?: MenuPlacement;
+    isLoading?: boolean;
 }
 
 export const AppFormDropdown: FC<AppFormDropdownProps> = ({
@@ -28,6 +29,7 @@ export const AppFormDropdown: FC<AppFormDropdownProps> = ({
     onChange = () => {},
     options,
     menuPlacement = "auto",
+    isLoading = false,
 }): JSX.Element => {
     return (
         <Select
@@ -40,6 +42,7 @@ export const AppFormDropdown: FC<AppFormDropdownProps> = ({
             placeholder={placeholder}
             className={`custom-select-container ${className}`}
             classNamePrefix="custom-select"
+            isLoading={isLoading}
             menuPlacement={menuPlacement}
         />
     );

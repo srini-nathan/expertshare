@@ -1,7 +1,6 @@
 import React from "react";
 import { Router } from "@reach/router";
 import {
-    KitchenSink,
     UserProfilePage,
     MyProfilePage,
     ContainerOverview,
@@ -28,7 +27,6 @@ export const routers: ModuleRouter[] = [
             return (
                 <Router>
                     <InfoPage path={"page/:id/:slugKey"} />
-                    <KitchenSink path={"kitchen-sink"} />
                     <MyProfilePage path={"my-profile"} />
                     <ContainerOverview path={"container"} />
                     <ConferenceGrid path={"event"} />
