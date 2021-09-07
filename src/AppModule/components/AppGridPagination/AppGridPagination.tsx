@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Pagination } from "react-bootstrap";
 import { AppIcon } from "../AppIcon";
 import "./assets/scss/style.scss";
@@ -22,96 +22,104 @@ export const AppGridPagination: FC<AppGridPaginationProps> = ({
     onClick = () => {},
     className = "d-flex justify-content-end",
 }): JSX.Element => {
-    if (totalItems === 0) {
-        return <Pagination />;
-    }
+    const [pages, setPages] = useState<React.ReactElement[]>([]);
+    useEffect(() => {
+        if (totalItems > 0) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const delta = 2;
+            const left = active - delta;
+            const right = active + delta + 1;
+            const range = [];
+            const pageCollection = [];
+            let l;
 
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-    const delta = 2;
-    const left = active - delta;
-    const right = active + delta + 1;
-    const range = [];
-    const pages = [];
-    let l;
+            for (let i = 1; i <= totalPages; i += 1) {
+                if (i === 1 || i === totalPages || (i >= left && i < right)) {
+                    range.push(i);
+                }
+            }
 
-    for (let i = 1; i <= totalPages; i += 1) {
-        if (i === 1 || i === totalPages || (i >= left && i < right)) {
-            range.push(i);
-        }
-    }
+            if (firstLastCtrl) {
+                pageCollection.push(
+                    <Pagination.First
+                        key={"pageFirst"}
+                        disabled={active === 1}
+                        onClick={() => onClick(1)}
+                    />
+                );
+            }
 
-    if (firstLastCtrl) {
-        pages.push(
-            <Pagination.First
-                key={"pageFirst"}
-                disabled={active === 1}
-                onClick={() => onClick(1)}
-            />
-        );
-    }
-
-    if (nextPrevCtrl) {
-        pages.push(
-            <Pagination.Prev
-                key={"pagePrev"}
-                disabled={active === 1}
-                onClick={() => onClick(active - 1)}
-            >
-                <AppIcon name={"back"} />
-            </Pagination.Prev>
-        );
-    }
-
-    for (let i1 = 0; i1 < range.length; i1 += 1) {
-        const i = range[i1];
-        if (l) {
-            if (i - l === 2) {
-                const page = l + 1;
-                pages.push(
-                    <Pagination.Item
-                        key={`page${page}`}
-                        active={page === active}
-                        onClick={() => onClick(page)}
+            if (nextPrevCtrl) {
+                pageCollection.push(
+                    <Pagination.Prev
+                        key={"pagePrev"}
+                        disabled={active === 1}
+                        onClick={() => onClick(active - 1)}
                     >
-                        {page}
+                        <AppIcon name={"back"} />
+                    </Pagination.Prev>
+                );
+            }
+
+            for (let i1 = 0; i1 < range.length; i1 += 1) {
+                const i = range[i1];
+                if (l) {
+                    if (i - l === 2) {
+                        const page = l + 1;
+                        pageCollection.push(
+                            <Pagination.Item
+                                key={`page${page}`}
+                                active={page === active}
+                                onClick={() => onClick(page)}
+                            >
+                                {page}
+                            </Pagination.Item>
+                        );
+                    } else if (i - l !== 1) {
+                        pageCollection.push(
+                            <Pagination.Ellipsis key={`page${i - l}`} />
+                        );
+                    }
+                }
+                pageCollection.push(
+                    <Pagination.Item
+                        key={`page${i}`}
+                        active={i === active}
+                        onClick={() => onClick(i)}
+                    >
+                        {i}
                     </Pagination.Item>
                 );
-            } else if (i - l !== 1) {
-                pages.push(<Pagination.Ellipsis key={`page${i - l}`} />);
+                l = i;
             }
+
+            if (nextPrevCtrl) {
+                pageCollection.push(
+                    <Pagination.Next
+                        key={"pageNext"}
+                        disabled={active === totalPages}
+                        onClick={() => onClick(active + 1)}
+                    >
+                        <AppIcon name={"next"} />
+                    </Pagination.Next>
+                );
+            }
+
+            if (firstLastCtrl) {
+                pageCollection.push(
+                    <Pagination.Last
+                        key={"pageLast"}
+                        disabled={active === totalPages}
+                        onClick={() => onClick(totalPages)}
+                    />
+                );
+            }
+            setPages(pageCollection);
         }
-        pages.push(
-            <Pagination.Item
-                key={`page${i}`}
-                active={i === active}
-                onClick={() => onClick(i)}
-            >
-                {i}
-            </Pagination.Item>
-        );
-        l = i;
-    }
+    }, [totalItems]);
 
-    if (nextPrevCtrl) {
-        pages.push(
-            <Pagination.Next
-                key={"pageNext"}
-                disabled={active === totalPages}
-                onClick={() => onClick(active + 1)}
-            >
-                <AppIcon name={"next"} />
-            </Pagination.Next>
-        );
-    }
-
-    if (firstLastCtrl) {
-        pages.push(
-            <Pagination.Last
-                key={"pageLast"}
-                disabled={active === totalPages}
-                onClick={() => onClick(totalPages)}
-            />
-        );
+    if (totalItems === 0) {
+        return <Pagination />;
     }
 
     return <Pagination className={`mb-0 ${className}`}>{pages}</Pagination>;

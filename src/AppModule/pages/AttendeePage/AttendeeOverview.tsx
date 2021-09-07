@@ -7,7 +7,6 @@ import {
 } from "ag-grid-community";
 import { Canceler } from "axios";
 import { Row, Col } from "react-bootstrap";
-import { isString as _isString } from "lodash";
 import { useTranslation } from "react-i18next";
 import { appGridColDef } from "./app-grid-col-def";
 import {
@@ -26,12 +25,13 @@ import {
     buildFilterParams,
     buildSortParams,
     defaultPageSize,
+    itemsPerPage as defaultItemsPerPage,
     pageSizeOptions,
 } from "../../containers/AppGrid";
 import { appGridConfig } from "../../config";
 import { UserApi } from "../../../AdminModule/apis";
 import { User } from "../../models/entities/User";
-import { errorToast } from "../../utils";
+import { cancelAllPrevRequest, errorToast } from "../../utils";
 
 export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
     const appGridApi = useRef<GridApi>();
@@ -39,47 +39,62 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const [total, setTotal] = useState<number>(0);
     const [loading, isLoading] = useState<boolean>(true);
-    const [attendees, setAttendees] = useState<User[]>([]);
-    const [pageSize, setPageSize] = useState<number>(30);
-    const [active, setActive] = useState<number>(1);
     const [totalItems, setTotalItems] = useState<number>(0);
+    const [data, setData] = useState<User[]>([]);
+    const [itemsPerPage, setItemsPerPage] = useState<number>(
+        defaultItemsPerPage
+    );
+    const [page, setPage] = useState<number>(1);
+    const [filter, setFilter] = useState<string>("");
     const { t } = useTranslation();
     const fetchData = (params = {}) => {
         isLoading(true);
-        UserApi.getAttendeeList<User>(active, {
-            ...params,
-            order: {
-                lastName: "asc",
+        cancelAllPrevRequest(cancelTokenSourcesRef.current);
+        UserApi.getAttendeeList<User>(
+            page,
+            {
+                itemsPerPage,
+                order: {
+                    lastName: "asc",
+                },
+                user_search: filter,
+                isDisplayAsGuest: false,
+                ...params,
             },
-            isDisplayAsGuest: false,
-        }).then(({ response, error }) => {
-            isLoading(false);
-
-            if (error !== null) {
-                if (_isString(error)) {
-                    errorToast(error);
+            (c) => cancelTokenSourcesRef.current.push(c)
+        )
+            .then(({ response, errorMessage }) => {
+                if (errorMessage) {
+                    errorToast(errorMessage);
+                    setData([]);
+                    setTotalItems(0);
+                } else if (response !== null) {
+                    setData(response.items);
+                    setTotalItems(response.totalItems);
                 }
-            } else if (response !== null) {
-                setTotalItems(response.totalItems);
-                setAttendees(response.items);
-            }
-        });
+            })
+            .finally(() => {
+                isLoading(false);
+            });
     };
 
     useEffect(() => {
         if (view !== "list") {
             fetchData();
         }
-    }, [active, pageSize]);
+    }, [page, itemsPerPage]);
 
     async function handleFilter(search: string) {
-        if (view === "list")
+        setFilter(search);
+        if (view === "list") {
             appGridApi.current?.setFilterModel({
                 user_search: {
                     filter: search,
                 },
             });
-        else fetchData({ user_search: search });
+        } else {
+            setPage(1);
+        }
     }
     function getDataSource(): IServerSideDatasource {
         return {
@@ -92,16 +107,13 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                     isDisplayAsGuest: false,
                     order: buildSortParams(request),
                     ...buildFilterParams(request),
-                }).then(({ response, error }) => {
-                    if (error !== null) {
-                        if (_isString(error)) {
-                            errorToast(error);
-                        }
+                }).then(({ response, errorMessage }) => {
+                    if (errorMessage) {
+                        errorToast(errorMessage);
                     } else if (response !== null) {
                         if (response.items.length === 0) {
                             api?.showNoRowsOverlay();
                         }
-                        setAttendees(response.items);
                         setTotal(response.totalItems);
                         params.successCallback(
                             response.items,
@@ -144,39 +156,44 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 );
             case "grid":
             default:
-                if (loading) return <AppLoader />;
-
                 return (
                     <Row>
-                        {attendees.map((item, index) => (
-                            <Col
-                                xs={12}
-                                md={6}
-                                lg={4}
-                                xl={3}
-                                className="attendees-grid--container--item"
-                                key={index}
-                            >
-                                <AttendeeCard attendee={item} key={index} />
-                            </Col>
-                        ))}
+                        {loading ? (
+                            <AppLoader />
+                        ) : (
+                            data.map((item) => (
+                                <Col
+                                    xs={12}
+                                    md={6}
+                                    lg={4}
+                                    xl={3}
+                                    className="attendees-grid--container--item"
+                                    key={item.id}
+                                >
+                                    <AttendeeCard attendee={item} />
+                                </Col>
+                            ))
+                        )}
                         {totalItems > 10 ? (
                             <div className="d-flex flex-row app-grid-action py-2">
                                 <AppGridPagination
                                     className="mr-3"
-                                    itemsPerPage={pageSize}
+                                    itemsPerPage={itemsPerPage}
                                     totalItems={totalItems}
-                                    active={active}
-                                    onClick={setActive}
+                                    active={page}
+                                    onClick={(p) => {
+                                        setPage(p);
+                                    }}
                                 />
                                 <div className="pagination-container">
                                     <AppFormDropdown
                                         id={"pageSize"}
                                         defaultValue={defaultPageSize()}
                                         options={pageSizeOptions()}
-                                        onChange={(e: any) =>
-                                            setPageSize(e.value)
-                                        }
+                                        onChange={(e: any) => {
+                                            setItemsPerPage(e.value);
+                                            setPage(1);
+                                        }}
                                         menuPlacement={"top"}
                                     />
                                 </div>
