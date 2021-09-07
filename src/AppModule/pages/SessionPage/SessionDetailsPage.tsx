@@ -321,8 +321,8 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                         </Row>
                     </AppCard>
                     {data.exhibitors.length > 0 ? (
-                        <AppCard>
-                            <h5 className="mb-2">
+                        <AppCard className="session-det-sponsors py-3">
+                            <h5 className="mb-3 mt-2">
                                 <i className="fak fa-handshake-alt-light mr-1"></i>
                                 {t("sessionDetails:label.sponsors")}
                             </h5>
