@@ -31,9 +31,19 @@ export const AppChatOneToOneHeader: FC<AppChatOneToOneHeaderProps> = ({
     );
     const avatarUrl = user.imageName ? avatar : placeholder;
 
-    const maxWidthStyle = maxWidth
+    const maxWidthCommentStyle = maxWidth
         ? { maxWidth: "120px" }
         : { maxWidth: "255px" };
+
+    const maxWidthSenderStyle = maxWidth
+        ? {
+              maxWidth: "120px",
+              lineHeight: "22px",
+          }
+        : {
+              maxWidth: "255px",
+              lineHeight: "22px",
+          };
 
     return (
         <div className="row m-0 px-3 pt-3 pb-3">
@@ -50,12 +60,12 @@ export const AppChatOneToOneHeader: FC<AppChatOneToOneHeaderProps> = ({
                         </div>
                         <div className="name pl-2">
                             <div className="name--sender">
-                                <h3 style={maxWidthStyle}>
+                                <h3 style={maxWidthSenderStyle}>
                                     {user?.firstName} {user?.lastName}
                                 </h3>
                             </div>
                             <div className="name--comment">
-                                <span style={maxWidthStyle}>
+                                <span style={maxWidthCommentStyle}>
                                     {user?.jobTitle} @ {user?.company}
                                 </span>
                             </div>
