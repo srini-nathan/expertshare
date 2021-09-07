@@ -46,8 +46,10 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
         return (
             <div className="inner-content--category mb-3">
                 <div className="conference-tags-container--title ">
-                    <i className="fak fa-tags mr-2"></i>
-                    <span>{t("admin.exhibitorProduct:label.tags")}</span>
+                    <h3 className="mb-0">
+                        <i className="fak fa-tags"></i>
+                        {t("admin.exhibitorProduct:label.tags")}
+                    </h3>
                 </div>
                 <Row className={"m-0 mt-3 p-0 conference-tags-container--tags"}>
                     {exhibitorProductTags.map((e) => {
@@ -68,7 +70,8 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
             xs={12}
             sm={6}
             md={6}
-            lg={4}
+            lg={6}
+            xl={4}
         >
             <div className="inner-content card p-3">
                 <div className="inner-content--icons ">
@@ -91,12 +94,12 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
                     )}
                 </div>
                 <div className="inner-content--pic mb-2">
-                    <a href="#">
+                    <a>
                         <i className={"poster"} style={style}></i>
                     </a>
                 </div>
                 <div className="inner-content--title mb-2">
-                    <a href="#">
+                    <a>
                         <h2 className="mb-0">{name}</h2>
                     </a>
                 </div>

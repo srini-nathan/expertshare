@@ -47,6 +47,7 @@
                     }
                 }
                 &--category {
+                    height: 120px;
                     a {
                         h3 {
                             display: -webkit-box;
@@ -58,6 +59,31 @@
                             font-weight: 400;
                             line-height: 28px;
                             color: var(--card-second-text-color);
+                        }
+                    }
+
+                    .conference-tags-container {
+                        &--title {
+                            h3 {
+                                display: flex;
+                                align-items: center;
+                                font-size: 16px;
+                                font-weight: 700;
+                                color: var(--card-text-color);
+                                word-break: break-word;
+                                i {
+                                    position: relative;
+                                    padding-right: 10px;
+                                    font-size: 20px;
+                                }
+                            }
+                        }
+                        &--tags {
+                            height: 65px;
+                            overflow: hidden;
+                            .conference-tags {
+                                margin: 3px;
+                            }
                         }
                     }
                 }
@@ -87,6 +113,8 @@
                     }
 
                     &--icons {
+                        position: absolute;
+                        right: 15px;
                         margin-left: auto;
 
                         span,
