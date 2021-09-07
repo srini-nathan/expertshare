@@ -233,8 +233,6 @@
             }
 
             &--sponsors {
-                background-color: var(--secondary-08);
-
                 h3 {
                     font-size: 16px;
                     font-weight: 700;
@@ -242,40 +240,6 @@
 
                     i {
                         color: var(--card-text-color);
-                    }
-                }
-
-                &--carousel {
-                    overflow: auto;
-
-                    &::-webkit-scrollbar {
-                        display: none;
-                    }
-
-                    &--group {
-                        display: flex;
-                    }
-
-                    &--item {
-                        flex: 0 0 auto;
-                        width: 137px;
-                        height: 80px;
-                        background-color: var(--card-background-color);
-                        border-radius: var(--secondary-button-border-radius);
-
-                        &--logo {
-                            a {
-                                cursor: pointer;
-
-                                i {
-                                    display: flex;
-                                    align-items: center;
-                                    height: 75px;
-                                    background-repeat: no-repeat;
-                                    background-size: cover;
-                                }
-                            }
-                        }
                     }
                 }
             }
