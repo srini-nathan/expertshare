@@ -23,3 +23,19 @@
     border: 1px solid var(--primary);
     border-radius: var(--tag-border-radius);
 }
+.session-det-sponsors {
+    .app-sponsors {
+        .swiper-slide {
+            width: 140px !important;
+            .app-sponsors--item {
+                padding: 5px;
+                img {
+                    &.placeholderImg {
+                        height: 60px;
+                        padding: 5px;
+                    }
+                }
+            }
+        }
+    }
+}
