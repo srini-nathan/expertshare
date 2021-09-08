@@ -74,4 +74,8 @@ export const defaultPageSize = (): AppGridPageSizeOption => {
     return { label: appGridConfig.pageSize, value: appGridConfig.pageSize };
 };
 
+export const getSelectedPageSize = (size: number): AppGridPageSizeOption => {
+    return { label: size, value: size };
+};
+
 export const itemsPerPage = appGridConfig.pageSize;
