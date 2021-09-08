@@ -16,6 +16,7 @@ import { AppUploader } from "../AppUploader";
 import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath } from "../../hooks";
 import { AppFormSelect } from "../AppFormSelect";
+import { AppFormMultiSelect } from "../AppFormMultiSelect";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -227,6 +228,28 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             />
         );
     };
+    const renderMultiSelector = () => {
+        const dropDownOptions: string[] = [];
+
+        Object.keys(items.options.choices).forEach((key) => {
+            dropDownOptions.push(items.options.choices[key]);
+        });
+        const { defaultValue: backendValue } = items.options;
+
+        return (
+            <AppFormMultiSelect
+                name={properties.title}
+                id={properties.title}
+                label={items.label}
+                {...getLayoutProms()}
+                required={false}
+                defaultValue={defaultValue || backendValue}
+                placeholder={items.label}
+                options={dropDownOptions}
+                control={control}
+            />
+        );
+    };
     const renderTextarea = () => {
         let prps: AppDataProps = {
             type: items.attr ? items.attr.type : "text",
@@ -386,7 +409,9 @@ export const AppFormElementGenerator: FunctionComponent<AppFormElementGeneratorP
             case "TEXT":
                 return renderText();
             case "CHOICE":
-                return renderDropDown();
+                return properties.items?.options?.multiple
+                    ? renderMultiSelector()
+                    : renderDropDown();
             case "SWITCH":
                 return renderSwitch();
             case "SECTION":
