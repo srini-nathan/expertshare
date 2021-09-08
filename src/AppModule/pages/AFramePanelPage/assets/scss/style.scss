@@ -1,0 +1,21 @@
+@import "../../../../../AppModule/assets/scss/screens-sizes";
+@import "../../../../../AppModule/assets/scss/variables";
+
+.aframe-panel-page {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+    > * {
+        height: 100%;
+        width: 100%;
+        text-align: center;
+        background-color: var(--primary-10);
+        video {
+            width: auto;
+            height: 100%;
+        }
+    }
+
+}
