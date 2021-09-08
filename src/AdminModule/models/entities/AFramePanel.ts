@@ -113,6 +113,8 @@ export class AFramePanel extends BaseEntity {
 
     aFrameRoom?: string;
 
+    sourceType: string;
+
     constructor({
         translations,
         image,
@@ -164,6 +166,7 @@ export class AFramePanel extends BaseEntity {
         type = CONSTANTS.AFramePanel.TYPE.TYPE_DOOR,
         targetUrl,
         source,
+        sourceType = "FILE",
         transitionVideo,
         content,
         isTransitionEnabled,
@@ -229,6 +232,7 @@ export class AFramePanel extends BaseEntity {
         this.isTransitionEnabled = isTransitionEnabled;
         this.container = container;
         this.aFrameRoom = aFrameRoom;
+        this.sourceType = sourceType;
     }
 
     toString(): string {
@@ -287,6 +291,7 @@ export class AFramePanel extends BaseEntity {
             type: this.type,
             targetUrl: this.targetUrl,
             source: this.source,
+            sourceType: this.sourceType,
             transitionVideo: this.transitionVideo,
             content: this.content,
             isTransitionEnabled: this.isTransitionEnabled,
