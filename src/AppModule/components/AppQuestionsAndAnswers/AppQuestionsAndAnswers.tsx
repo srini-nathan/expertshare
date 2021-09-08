@@ -160,6 +160,12 @@ export const AppQuestionsAndAnswers: FunctionComponent<QuestionAndAnswersProps> 
                 }
             }
         );
+
+        return () => {
+            socket.off(ON_NEW_DISCUSSION_QA);
+            socket.off(ON_DELETE_DISCUSSION_QA);
+            socket.off(ON_EDIT_DISCUSSION_QA);
+        };
     }, []);
 
     const getCurrentQestionsAndAnswersThread = (pageNo = 1) => {
