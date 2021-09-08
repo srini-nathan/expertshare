@@ -116,7 +116,7 @@ export const AppGridPagination: FC<AppGridPaginationProps> = ({
             }
             setPages(pageCollection);
         }
-    }, [totalItems]);
+    }, [totalItems, active, itemsPerPage]);
 
     if (totalItems === 0) {
         return <Pagination />;

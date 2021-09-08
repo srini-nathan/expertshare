@@ -24,7 +24,7 @@ import {
     AppGrid,
     buildFilterParams,
     buildSortParams,
-    defaultPageSize,
+    getSelectedPageSize,
     itemsPerPage as defaultItemsPerPage,
     pageSizeOptions,
 } from "../../containers/AppGrid";
@@ -53,13 +53,13 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
         UserApi.getAttendeeList<User>(
             page,
             {
+                ...params,
                 itemsPerPage,
                 order: {
                     lastName: "asc",
                 },
                 user_search: filter,
                 isDisplayAsGuest: false,
-                ...params,
             },
             (c) => cancelTokenSourcesRef.current.push(c)
         )
@@ -82,10 +82,9 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
         if (view !== "list") {
             fetchData();
         }
-    }, [page, itemsPerPage]);
+    }, [page, itemsPerPage, filter]);
 
     async function handleFilter(search: string) {
-        setFilter(search);
         if (view === "list") {
             appGridApi.current?.setFilterModel({
                 user_search: {
@@ -93,6 +92,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 },
             });
         } else {
+            setFilter(search);
             setPage(1);
         }
     }
@@ -188,7 +188,9 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                                 <div className="pagination-container">
                                     <AppFormDropdown
                                         id={"pageSize"}
-                                        defaultValue={defaultPageSize()}
+                                        defaultValue={getSelectedPageSize(
+                                            itemsPerPage
+                                        )}
                                         options={pageSizeOptions()}
                                         onChange={(e: any) => {
                                             setItemsPerPage(e.value);
