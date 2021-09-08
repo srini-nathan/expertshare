@@ -76,7 +76,7 @@ export const ClientSettings: FC<RouteComponentProps> = ({
     });
 
     const buildContainer = (data: ClientFormType): ContainerRequestData => {
-        return { configuration: data, storage: "Local" };
+        return { configuration: data };
     };
 
     const onSubmit = async (formData: ClientFormType) => {
