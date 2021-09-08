@@ -126,10 +126,12 @@ export const SceneCanvas = ({
         for (let i = 0; i < rooms.length; i++)
             if (rooms[i].id === n) room = rooms[i];
 
-        if (room.isRotateEnable !== null)
-            setIsRotateEnable(room.isRotateEnable);
-        else {
-            setIsRotateEnable(false);
+        if (room) {
+            if (room.isRotateEnable !== null)
+                setIsRotateEnable(room.isRotateEnable);
+            else {
+                setIsRotateEnable(false);
+            }
         }
 
         setCurrentRoomActive(n);
@@ -238,6 +240,7 @@ export const SceneCanvas = ({
                         onClickObject={onClickObject}
                         changeRoomNow={changeRoomNow}
                         isRotateEnable={isRotateEnable}
+                        panelsPath={paths?.PANEL_ASSETS_PATH}
                     />
                     {editMode && selectedMesh && (
                         <Transform

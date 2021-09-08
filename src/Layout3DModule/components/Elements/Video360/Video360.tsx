@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useEffect, useState } from "react";
-import { BackSide } from "three";
+import React, { useEffect, useRef, useState } from "react";
+import { BackSide, RGBEFormat, sRGBEncoding } from "three";
 
 interface Video360Props {
     props?: JSX.IntrinsicElements["mesh"];
@@ -27,8 +27,8 @@ export const Video360 = ({
     onVideoEnded,
 }: Video360Props): JSX.Element => {
     const [play, setPlay] = useState<boolean>(false);
+    // const video360ref = useRef<any>(null);
 
-    // eslint-disable-next-line no-console
     // console.log("vid 360 details: ", roomId, panelId, targetId, videoUrl, play);
     const videoEnded = () => {
         setPlay(false);
@@ -36,8 +36,9 @@ export const Video360 = ({
     };
 
     const [videoTexture] = useState(() => {
+        // eslint-disable-next-line no-console
         const vid = document.createElement("video");
-        vid.src = tempUrl;
+        vid.src = videoUrl;
         vid.crossOrigin = "Anonymous";
         vid.loop = false;
         vid.onended = videoEnded;
@@ -46,10 +47,10 @@ export const Video360 = ({
 
     useEffect(() => {
         if (startPlaying) {
-            // eslint-disable-next-line no-console
             setPlay(true);
             videoTexture.currentTime = 0;
             videoTexture.play();
+            // console.log("mesh containing video: ", video360ref.current);
         }
     }, [startPlaying]);
 
@@ -59,10 +60,15 @@ export const Video360 = ({
                 <sphereBufferGeometry args={[49, 32, 32]} />
                 <meshBasicMaterial
                     side={BackSide}
-                    toneMapped={false}
-                    color={"black"}
+                    toneMapped={true}
+                    // color={"black"}
                 >
-                    <videoTexture attach="map" args={[videoTexture]} />
+                    <videoTexture
+                        attach="map"
+                        args={[videoTexture]}
+                        encoding={sRGBEncoding}
+                        format={RGBEFormat}
+                    />
                 </meshBasicMaterial>
             </mesh>
         </>
