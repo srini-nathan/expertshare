@@ -254,7 +254,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                         <div className="content px-3 pt-3 pb-3">
                             <h3 className="mb-0 pl-2 pt-1">
                                 <i className="fak fa-handshake-alt-light mr-2"></i>
-                                Sponsors
+                                {t("event.list:label.sponsors")}
                             </h3>
                             <div className="inner-container--sponsors--carousel mt-1 sponsor-carousel">
                                 <div className="inner-container--sponsors--carousel--group mt-1">
