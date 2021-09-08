@@ -10,3 +10,4 @@ export * from "./ExtraPage";
 export * from "./OnBoardingPage";
 export * from "./ReloadingPage";
 export * from "./InfoPage";
+export * from "./AFramePanelPage";

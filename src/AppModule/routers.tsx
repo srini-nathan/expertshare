@@ -14,6 +14,7 @@ import {
     OnBoardingPage,
     ReloadingPage,
     InfoPage,
+    AFramePanelPage,
 } from "./pages";
 import { ExhibitorListPage, ExhibitorDetailPage } from "../AdminModule/pages";
 import { ModuleRouter } from "./models";
@@ -64,6 +65,7 @@ export const routers: ModuleRouter[] = [
                     <Layout3D path={"a3d"} />
                     <ExhibitorListPage path={"exhibitors"} />
                     <ExhibitorDetailPage path={"exhibitors/:id/detail"} />
+                    <AFramePanelPage path={"layout3d/:roomId/panel/:id"} />
                 </Router>
             );
         },

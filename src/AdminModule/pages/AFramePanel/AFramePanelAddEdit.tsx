@@ -174,8 +174,6 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
         setTransitionVideoFileName,
     ] = useState<string>("");
 
-    const [sourceVideoFileName, setSourceVideoFileName] = useState<string>("");
-
     const {
         handleSubmit,
         setError,
@@ -214,9 +212,6 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                         successToast("Image uploaded");
                         if (fieldName === "transitionVideo") {
                             setTransitionVideoFileName(response.fileName);
-                        }
-                        if (fieldName === "source") {
-                            setSourceVideoFileName(response.fileName);
                         }
                     }
                 }
@@ -317,7 +312,6 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
 
     const onSubmit = async (formData: AFramePanel) => {
         formData.translations = translations;
-        formData.source = sourceVideoFileName;
         Promise.all(
             [...translations, { fieldName: "remoteImage" }].map((item: any) => {
                 if (item.locale && typeof item.image === "string") {
@@ -1572,28 +1566,6 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                                 )}
                                 {panelType === "projector" && (
                                     <Form.Row>
-                                        <AppFormFile
-                                            required={false}
-                                            label={t(
-                                                "admin.aframepanel.form:label.source"
-                                            )}
-                                            {...validation(
-                                                "source",
-                                                formState,
-                                                isEditMode
-                                            )}
-                                            name={"source"}
-                                            defaultValue={data.source}
-                                            onFileSelect={onFileSelect(
-                                                "source"
-                                            )}
-                                            errorMessage={
-                                                errors.source?.message
-                                            }
-                                            control={control}
-                                            value={sourceVideoFileName}
-                                            filePath={aframepanelImagePath}
-                                        />
                                         <AppSelectPanelStream
                                             data={data}
                                             setValue={setValue}
