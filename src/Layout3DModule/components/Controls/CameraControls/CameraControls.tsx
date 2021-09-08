@@ -85,6 +85,7 @@ interface OrbitControlsProps
     initialCameraPosition: any;
     rooms: RoomProps[];
     isRotateEnable: boolean;
+    panelsPath: string;
 }
 
 export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
@@ -108,6 +109,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
         changeRoomNow,
         rooms,
         isRotateEnable,
+        panelsPath,
     } = props;
 
     const [startPlayingVideo, setStartPlayingVideo] = useState<boolean>(false);
@@ -431,17 +433,19 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                         );
                     },
                     onRest: () => {
+                        // console.log("targetdata: ", targetData);
                         if (
                             targetData.video &&
-                            targetData.video.assetUrl &&
-                            targetData.video.assetUrl !== ""
+                            targetData.video.assetId &&
+                            targetData.video.assetId !== ""
                         ) {
                             // change room with video first
                             changeRoomNow(-2);
                             videoSphereData.forEach((videoData) => {
                                 if (
-                                    videoData.videoUrl ===
-                                    targetData.video.assetUrl
+                                    videoData.videoUrl.indexOf(
+                                        targetData.video.assetId
+                                    ) >= 0
                                 ) {
                                     videoData.visible = true;
                                 }
@@ -573,14 +577,19 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
             panels.forEach((panel: PanelInterfaceProps) => {
                 if (panel.type === PanelTypes.DOOR) {
                     const { video, target } = panel;
-                    if (video.assetUrl) {
+                    if (video.assetId) {
+                        const videoUrl =
+                            video.assetId !== "" && video.assetId !== null
+                                ? `${panelsPath}/${video.assetId}`
+                                : "";
                         vs.push({
                             visible: false,
                             panelId: panel.id,
                             roomId: room.id,
                             targetId: target.id,
-                            videoUrl: video.assetUrl,
-                            tempUrl: texture360Video.default,
+                            videoUrl, // video.assetId,
+                            tempUrl: "",
+                            // tempUrl: texture360Video.default,
                         });
                     }
                 }
@@ -637,7 +646,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                     return (
                         <Video360
                             props={{ visible: video.visible }}
-                            // ref={getRef}
+                            // ref={video360ref}
                             key={i}
                             roomId={video.roomId}
                             panelId={video.panelId}
