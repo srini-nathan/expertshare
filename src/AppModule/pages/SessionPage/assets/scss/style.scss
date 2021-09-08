@@ -24,6 +24,7 @@
     border-radius: var(--tag-border-radius);
 }
 .session-det-sponsors {
+    background-color: var(--widget-background-color) !important;
     .app-sponsors {
         .swiper-slide {
             width: 140px !important;

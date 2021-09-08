@@ -190,7 +190,8 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                                 </Row>
                             </Col>
                         </Col>
-                        {conference?.exhibitors.length > 0 ? (
+                        {conference?.exhibitors.length > 0 &&
+                        conference?.description.length < 200 ? (
                             <Col className="inner-container--det--sponsors p-0 mt-4">
                                 <Col className="inner-container--det--sponsors--title p-0 mb-3">
                                     <h2 className="mb-0">
@@ -211,6 +212,26 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                         ) : null}
                     </Col>
                 </Row>
+                {conference?.exhibitors.length > 0 &&
+                conference?.description.length > 200 ? (
+                    <Col className="inner-container--det--sponsors p-0 mt-4">
+                        <Col className="inner-container--det--sponsors--title p-0 mb-3">
+                            <h2 className="mb-0">
+                                <i className="fak fa-handshake-alt-light"></i>
+                                {t("event.agenda:label.sponsors")}
+                            </h2>
+                        </Col>
+                        <Col className="inner-container--det--sponsors--content carousel p-0">
+                            <AppSponsors
+                                data={
+                                    (conference?.exhibitors as unknown) as string[]
+                                }
+                                basePath={exhibitorLogoBasePath}
+                                containerId={containerId}
+                            />
+                        </Col>
+                    </Col>
+                ) : null}
             </Col>
         </Col>
     );
