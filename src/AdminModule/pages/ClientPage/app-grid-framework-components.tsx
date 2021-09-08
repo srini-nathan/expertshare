@@ -17,6 +17,9 @@ export const appGridFrameworkComponents = {
             editAction: {
                 url: `/admin/clients/${id}`,
             },
+            configAction: {
+                url: `/admin/clients/${id}/settings`,
+            },
             deleteAction: {
                 confirmation: "Are you sure want to delete ?",
                 onClick: () => {
