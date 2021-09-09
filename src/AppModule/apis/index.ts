@@ -10,3 +10,4 @@ export * from "./NewsfeedApi";
 export * from "./NewsfeedCommentApi";
 export * from "./ChatThreadApi";
 export * from "./ChatMessageApi";
+export * from "./SessionQuestionApi";
