@@ -15,6 +15,7 @@ export interface AppGridActionProps {
     editAction?: AppGridLinkAction;
     viewAction?: AppGridLinkAction;
     treeAction?: AppGridLinkAction;
+    configAction?: AppGridLinkAction;
     deleteAction?: AppGridClickAction;
     customClickActions?: AppGridCustomClickAction[];
     customLinkActions?: AppGridCustomLinkAction[];
@@ -160,6 +161,7 @@ export const AppGridAction: FC<AppGridActionProps> = ({
     projectorAction,
     addAction,
     editAction,
+    configAction,
     treeAction,
     deleteAction,
     viewAction,
@@ -182,6 +184,9 @@ export const AppGridAction: FC<AppGridActionProps> = ({
             ) : null}
             {treeAction ? (
                 <LinkAction icon={"ListTree"} {...treeAction}></LinkAction>
+            ) : null}
+            {configAction ? (
+                <LinkAction icon={"Settings"} {...configAction}></LinkAction>
             ) : null}
             {customClickActions.map(({ icon, text, ...rest }, index) => (
                 <ClickAction key={index} icon={icon} text={text} {...rest} />

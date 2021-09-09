@@ -4,6 +4,7 @@ import {
     TranslationAddEdit,
     ClientList,
     ClientAddEdit,
+    ClientSettings,
     LanguageListPage,
     LanguageAddEditPage,
     ContainerList,
@@ -53,6 +54,7 @@ export const routers: ModuleRouter[] = [
                     <ClientList path={"clients"} />
                     <ClientAddEdit path={"clients/new"} />
                     <ClientAddEdit path={"clients/:id"} />
+                    <ClientSettings path={"clients/:clientId/settings"} />
                     <ContainerList path={"clients/:clientId/containers"} />
                     <ContainerList path={"containers"} />
                     <ContainerAddEdit
