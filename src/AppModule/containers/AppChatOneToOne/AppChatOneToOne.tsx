@@ -137,10 +137,10 @@ export const AppChatOneToOne: FC = () => {
                     }
                 );
                 setOpenChats(chats);
-            } else {
+            } else if (openChats.length !== 1) {
                 const chats = [...openChats];
                 chats.pop();
-                setOpenChats(chats);
+                setOpenChats(() => chats);
                 setCollapseChats(false);
             }
         }
