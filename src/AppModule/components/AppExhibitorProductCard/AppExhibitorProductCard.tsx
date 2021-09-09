@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { Col, Row } from "react-bootstrap";
 import { Link } from "@reach/router";
 import { useTranslation } from "react-i18next";
@@ -7,6 +7,7 @@ import { ExhibitorProductPosterFileInfo } from "../../../config";
 import { useBuildAssetPath } from "../../hooks";
 import { getBGStyle } from "../../utils";
 import "./assets/scss/style.scss";
+import { AppDocDownload } from "../AppDocDownload";
 
 export interface AppExhibitorProductCardProps {
     data: ExhibitorProduct;
@@ -32,8 +33,9 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
         ctaLabel,
         description,
         exhibitorProductTags,
+        exhibitorProductDocs,
     } = data;
-
+    const [showMore, isShowMore] = useState<boolean>(false);
     const basePath = useBuildAssetPath(ExhibitorProductPosterFileInfo);
 
     const style = getBGStyle(basePath, imageName);
@@ -70,6 +72,11 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
             md={6}
             lg={4}
         >
+            <AppDocDownload
+                show={showMore}
+                handleClose={isShowMore}
+                docs={exhibitorProductDocs}
+            />
             <div className="inner-content card p-3">
                 <div className="inner-content--icons ">
                     {isGrantedControl && (
@@ -117,7 +124,18 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
                             {ctaLabel}
                         </a>
                     ) : null}
-                    <a className="btn btn-secondary d-none">Document</a>
+                    {exhibitorProductDocs?.length > 0 ? (
+                        <a
+                            className="btn btn-secondary"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                isShowMore(true);
+                            }}
+                        >
+                            {t("admin.exhibitorProduct:button.showDocuments")}
+                        </a>
+                    ) : null}
                 </div>
             </div>
         </Col>
