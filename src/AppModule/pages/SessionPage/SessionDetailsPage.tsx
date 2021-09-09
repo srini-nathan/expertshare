@@ -24,7 +24,11 @@ import {
 } from "../../hooks";
 import "./assets/scss/style.scss";
 import { socket, EVENTS } from "../../socket";
-import { AppLiveVote, AppSessionDetailOperatorPanel } from "../../containers";
+import {
+    AppAskSpeaker,
+    AppLiveVote,
+    AppSessionDetailOperatorPanel,
+} from "../../containers";
 import { LiveVoteQuestion } from "../../../AdminModule/models/entities/LiveVoteQuestion";
 import { SessionCommentsAPI } from "../../apis";
 import { ExhibitorLogoPosterFileInfo } from "../../../config";
@@ -91,13 +95,13 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
         if (nextSession) {
             navigate(`/event/${conferenceId}/session/${nextSession}`, {
                 state: { sessionList },
-            });
+            }).then(() => {});
         } else if (location) {
             navigate(`/reload`, {
                 state: {
                     url: location.pathname,
                 },
-            });
+            }).then(() => {});
         }
     };
 
@@ -349,6 +353,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                 {(data.isCommentEnable || vote) && (
                     <Col md={12} sm={12} lg={4} className="pr-0 pl-0 pl-lg-3">
                         <AppLiveVote enable={true} data={vote} sessionId={id} />
+                        <AppAskSpeaker enable={true} sessionId={id} />
                         {data.isCommentEnable ? (
                             <AppQuestionsAndAnswers
                                 name={t(
