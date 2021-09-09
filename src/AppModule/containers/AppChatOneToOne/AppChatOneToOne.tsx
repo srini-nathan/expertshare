@@ -18,7 +18,7 @@ import { socket, EVENTS } from "../../socket";
 import { ChatMessageApi } from "../../apis";
 
 import "./assets/scss/style.scss";
-import { findPercent } from "../../helpers/findScreenWidthPercent";
+import { getChatsWidth } from "../../helpers/getChatsWidth";
 
 interface ICurrentChat {
     currentUser: PUser;
@@ -30,10 +30,6 @@ interface ICurrentChat {
 
 export const AppChatOneToOne: FC = () => {
     const SCREEN_WIDTH = window.screen.width;
-
-    const CHAT_WIDTH = 364;
-    const COLLAPSED_CHAT_WIDTH = 250;
-    const PADDING = 20;
 
     const [collapsed, setCollapsed] = useState<boolean>(false);
     const [, setLoading] = useState(true);
@@ -57,16 +53,10 @@ export const AppChatOneToOne: FC = () => {
         });
     };
 
-    const accessScreenWidth =
-        SCREEN_WIDTH - (SCREEN_WIDTH / 100) * findPercent(SCREEN_WIDTH);
-
-    const chatsWidth =
-        CHAT_WIDTH * (openChats.length + 1) + PADDING * (openChats.length + 3);
-
-    const collapseChatsWidth =
-        COLLAPSED_CHAT_WIDTH * (openChats.length - 1) +
-        CHAT_WIDTH * 2 +
-        PADDING * (openChats.length + 3);
+    const { accessScreenWidth, chatsWidth, collapseChatsWidth } = getChatsWidth(
+        openChats.length,
+        SCREEN_WIDTH
+    );
 
     useEffect(() => {
         if (openThread !== null && openThread.id) {
