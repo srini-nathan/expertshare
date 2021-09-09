@@ -533,7 +533,10 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                         (container.configuration as any)
                                             .isDisclaimerEnable &&
                                         (container.configuration as any)
-                                            .isActivationEmailEnable && (
+                                            .isActivationEmailEnable &&
+                                        (container.configuration as any).activationEmailRole.indexOf(
+                                            role
+                                        ) !== -1 && (
                                             <Form.Group className="col-12">
                                                 <div className="agreement-box mt-2 p-2">
                                                     <div
@@ -575,6 +578,9 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                                 .isDisclaimerEnable &&
                                             (container.configuration as any)
                                                 .isActivationEmailEnable &&
+                                            (container.configuration as any).activationEmailRole.indexOf(
+                                                role
+                                            ) !== -1 &&
                                             !agree)
                                     }
                                     isLoading={formState.isSubmitting}
@@ -587,7 +593,10 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                         (container.configuration as any)
                                             .isDisclaimerEnable &&
                                         (container.configuration as any)
-                                            .isActivationEmailEnable
+                                            .isActivationEmailEnable &&
+                                        (container.configuration as any).activationEmailRole.indexOf(
+                                            role
+                                        ) !== -1
                                     ) && (
                                         <AppButton
                                             onClick={() => {
