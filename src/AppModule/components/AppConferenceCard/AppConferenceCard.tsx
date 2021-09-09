@@ -248,7 +248,6 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                     </div>
                 */}
                 </div>
-
                 <div className="inner-container--sponsors">
                     {exhibitors.length > 0 ? (
                         <div className="content px-3 pt-3 pb-3">
