@@ -16,9 +16,10 @@ import {
     pageSizeOptions,
 } from "../../../AppModule/containers/AppGrid";
 import { useAuthState, useIsGranted } from "../../../AppModule/hooks";
-import { ExhibitorProductApi } from "../../apis";
-import { Exhibitor, ExhibitorProduct } from "../../models";
+import { ExhibitorProductApi, ExhibitorProductTagApi } from "../../apis";
+import { Exhibitor, ExhibitorProduct, ExhibitorProductTag } from "../../models";
 import { ROLES } from "../../../config";
+import { DropDownOption } from "../../../AppModule/models";
 import { errorToast, successToast } from "../../../AppModule/utils";
 
 interface ExhibitorDetailTabProductType {
@@ -38,9 +39,15 @@ export const ExhibitorDetailTabProducts: FC<ExhibitorDetailTabProductType> = ({
     const { id } = exhibitor;
     const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
     const { t } = useTranslation();
+    const [optionTags, setOptionTags] = useState<DropDownOption[]>([]);
+    const [selectedTag, setSelectedTag] = useState<number>(0);
+    const [loadingTags, setLoadingTags] = useState<boolean>(true);
     const [showDelete, setDeleteShow] = useState(0);
 
     const fetchData = (params = {}) => {
+        if (selectedTag > 0) {
+            params = { ...params, "exhibitorProductTags.id": selectedTag };
+        }
         isLoading(true);
         ExhibitorProductApi.find<ExhibitorProduct>(
             page,
@@ -78,13 +85,59 @@ export const ExhibitorDetailTabProducts: FC<ExhibitorDetailTabProductType> = ({
 
     useEffect(() => {
         fetchData();
-    }, [pageSize]);
+    }, [pageSize, selectedTag]);
+
+    useEffect(() => {
+        setLoadingTags(true);
+        ExhibitorProductTagApi.find<ExhibitorProductTag>(1, {
+            "container.id": containerId,
+        })
+            .then(({ response }) => {
+                if (response !== null) {
+                    setOptionTags([
+                        {
+                            label: t(
+                                "admin.exhibitor.detail:filter.select.label.all"
+                            ),
+                            value: 0,
+                        },
+                        ...response.items.map((item) => {
+                            return {
+                                label: item.name,
+                                value: item.id,
+                            };
+                        }),
+                    ]);
+                }
+            })
+            .finally(() => {
+                setLoadingTags(false);
+            });
+    }, []);
 
     return (
         <>
             {isGrantedControl ? (
                 <Row className={"mb-2"}>
                     <Col className="d-flex justify-content-end">
+                        {loadingTags ||
+                        (data.length === 0 && selectedTag === 0) ? null : (
+                            <AppFormDropdown
+                                className={"mr-1"}
+                                id={"tagFilter"}
+                                defaultValue={optionTags[0]}
+                                options={optionTags}
+                                onChange={(e) => {
+                                    if (e) {
+                                        const { value } = e as DropDownOption;
+                                        setPage(1);
+                                        setSelectedTag(value);
+                                    }
+                                }}
+                                isLoading={loadingTags}
+                            />
+                        )}
+
                         <AppButton
                             className={"text-capitalize"}
                             variant={"secondary"}
@@ -107,6 +160,7 @@ export const ExhibitorDetailTabProducts: FC<ExhibitorDetailTabProductType> = ({
                 ) : (
                     data.map((e) => (
                         <AppExhibitorProductCard
+                            key={e.id}
                             data={e}
                             isGrantedControl={isGrantedControl}
                             handleDelete={(pId) => {

@@ -1,7 +1,6 @@
 import React from "react";
 import { Router } from "@reach/router";
 import {
-    IndexPage,
     TranslationAddEdit,
     ClientList,
     ClientAddEdit,
@@ -50,7 +49,6 @@ export const routers: ModuleRouter[] = [
         RouterPlug: (): JSX.Element => {
             return (
                 <Router>
-                    <IndexPage path={"/"} />
                     <TranslationAddEdit path={"translations"} />
                     <ClientList path={"clients"} />
                     <ClientAddEdit path={"clients/new"} />

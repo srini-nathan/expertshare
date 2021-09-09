@@ -11,7 +11,6 @@ import { AuthContext } from "../SecurityModule/contexts";
 import { SelectionInspector } from "./components/Inspectors/SelectionInspector";
 import { useBuildAssetPath, useUserSocketEvents } from "../AppModule/hooks";
 import { CONSTANTS } from "../config";
-import { mainMessageTabs } from "../AppModule/containers/AppMessageBox/tabs-configurator";
 import { PanelInterfaceProps } from "./components/Types/Interfaces";
 import { FileTypeInfo } from "../AppModule/models";
 
