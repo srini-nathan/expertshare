@@ -10,7 +10,7 @@ interface WaveformProps {
 const Waveform: FC<WaveformProps> = ({ url, loop }) => {
     const audioRef: { current: any } = useRef(null);
     const [playing, setPlaying] = useState(false);
-    const [captureImage, setCaptureImage] = useState(null);
+    const [captureImage, setCaptureImage] = useState(null) as any;
     const [mute, setMute] = useState(false);
 
     // const url = "https://www.mfiles.co.uk/mp3-downloads/gs-cd-track2.mp3";
