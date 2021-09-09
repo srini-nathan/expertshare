@@ -30,8 +30,8 @@ export const AppGridPagination: FC<AppGridPaginationProps> = ({
     const delta = 2;
     const left = active - delta;
     const right = active + delta + 1;
-    const range: any = [];
-    const pages: any = [];
+    const range = [];
+    const pages = [];
     let l;
 
     for (let i = 1; i <= totalPages; i += 1) {

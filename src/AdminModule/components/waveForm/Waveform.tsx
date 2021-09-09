@@ -44,8 +44,7 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
         }
         setMute(!mute);
     };
-    // eslint-disable-next-line
-    debugger;
+
     return (
         <div
             className={`waveformContainer ${
