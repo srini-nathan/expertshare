@@ -77,8 +77,7 @@
                 background-color: var(--secondary-10);
                 background-repeat: no-repeat;
                 background-size: cover;
-                border-radius: var(--card-border-radius)
-                    var(--card-border-radius) 0 0;
+                border-radius: var(--card-border-radius) var(--card-border-radius) 0 0;
 
                 > img {
                     position: absolute;
@@ -121,16 +120,10 @@
                             font-size: 18px;
                             font-weight: 500;
                             color: var(--secondary-button-text-color);
-                            background-color: var(
-                                --secondary-button-background-color
-                            );
-                            border: 1px solid
-                                var(--secondary-button-border-color);
-                            border-radius: var(
-                                --secondary-button-border-radius
-                            );
-                            box-shadow: 0 3px 9px
-                                var(--secondary-button-box-shadow-color);
+                            background-color: var(--secondary-button-background-color);
+                            border: 1px solid var(--secondary-button-border-color);
+                            border-radius: var(--secondary-button-border-radius);
+                            box-shadow: 0 3px 9px var(--secondary-button-box-shadow-color);
                         }
 
                         &.add-favorite {
@@ -182,6 +175,7 @@
                     }
                     &--more {
                         a {
+                            padding-left: 40px;
                             font-size: 14px;
                             font-weight: 500;
                             color: var(--primary);
@@ -194,8 +188,11 @@
                     &.show-users {
                         left: 0;
                         width: auto;
+                        height: inherit;
+                        overflow: hidden;
+                        border-radius: var(--card-border-radius);
                         .content {
-                            height: 240px;
+                            height: 200px;
                         }
                     }
                 }
@@ -209,86 +206,6 @@
 
                             &::before {
                                 content: "\e000";
-                            }
-                        }
-                    }
-
-                    &--content {
-                        padding-top: 3px;
-
-                        &--title {
-                            h3 {
-                                font-size: 16px;
-                                font-weight: 700;
-                                color: var(--card-text-color);
-                            }
-                        }
-
-                        &--user {
-                            &--item {
-                                display: flex;
-                                align-items: center;
-
-                                &--avatar {
-                                    a {
-                                        i {
-                                            display: block;
-                                            width: 36px;
-                                            height: 36px;
-                                            background-repeat: no-repeat;
-                                            background-size: cover;
-                                            border-radius: 50%;
-
-                                            &::after {
-                                                position: relative;
-                                                top: 0;
-                                                left: 24px;
-                                                display: block;
-                                                width: 10px;
-                                                height: 10px;
-                                                content: "";
-                                                background-color: var(
-                                                    --primary
-                                                );
-                                                border: 1px solid
-                                                    var(
-                                                        --border-border-radius-clr
-                                                    );
-                                                border-radius: 50%;
-                                            }
-                                        }
-                                    }
-                                }
-
-                                &--info {
-                                    a {
-                                        display: grid;
-
-                                        h4 {
-                                            font-size: 16px;
-                                            font-weight: 400;
-                                            color: var(--card-text-color);
-                                        }
-
-                                        span {
-                                            font-size: 12px;
-                                            font-weight: 400;
-                                            color: var(
-                                                --card-second-text-color
-                                            );
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        &--more {
-                            padding-left: 40px;
-
-                            a {
-                                font-size: 14px;
-                                font-weight: 500;
-                                color: var(--primary);
                             }
                         }
                     }
