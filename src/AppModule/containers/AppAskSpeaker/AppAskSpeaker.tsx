@@ -109,7 +109,7 @@ export const AppAskSpeaker: FC<AppAskSpeakerProps> = ({
                     }}
                 />
                 <Collapse in={open} timeout={0}>
-                    <div className={"inner mt-2 pt-3"}>
+                    <div className={"inner mt-2"}>
                         <div className="inner--container">
                             {renderQuestion()}
                             {renderThankYou()}
