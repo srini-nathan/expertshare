@@ -32,7 +32,7 @@
 
     &--container {
         display: flex;
-        max-height: 513px;
+        max-height: 493px;
 
         @include media("mobile") {
             height: 100%;
@@ -51,7 +51,7 @@
         width: 384px;
         overflow: hidden;
         background-color: var(--card-background-color);
-        border-radius: var(--card-border-radius);
+        border-radius: var(--card-border-radius) var(--card-border-radius) 0 0;
         box-shadow: 0 -3px 9px var(--card-box-shadow-color);
 
         @include media("mobile") {
@@ -396,8 +396,8 @@
     }
 
     .collapsed {
-        height: 68px;
-        padding-top: 5px;
+        height: 55px;
+        padding-top: 3px;
         margin-top: auto;
         margin-bottom: 0;
         overflow: hidden;
@@ -408,6 +408,7 @@
         }
 
         .btn-collapse {
+            margin-bottom: 10px;
             transform: rotate(180deg);
         }
 

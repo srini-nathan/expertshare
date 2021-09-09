@@ -17,7 +17,7 @@ export const AppChatOneToOneComposer: FC<AppChatOneToOneComposerProps> = ({
     const target = useRef(null);
 
     return (
-        <div className="row m-0 px-3 pt-1 pb-3 mb-0 mt-auto">
+        <div className="row m-0 px-2 pt-1 pb-3 mb-0 mt-auto">
             <div className="insert col-auto p-0 w-100">
                 <div className="insert--container">
                     <div className="char">

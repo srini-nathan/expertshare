@@ -12,10 +12,10 @@
     margin-top: 0;
     margin-right: 20px;
     margin-bottom: 0;
-    transition: width 300ms, margin-top 300ms;
     background-color: var(--card-background-color);
-    border-radius: var(--card-border-radius);
+    border-radius: var(--card-border-radius) var(--card-border-radius) 0 0;
     box-shadow: 0 -3px 9px var(--card-box-shadow-color);
+    transition: width 300ms, margin-top 300ms;
     @include media("mb-1") {
         position: absolute;
         right: 0;

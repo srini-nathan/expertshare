@@ -207,7 +207,7 @@ export const AppChatOneToOne: FC = () => {
                                 user={user.secondUser}
                             />
                         </div>
-                        <div className="row m-0 px-0 pb-3">
+                        <div className="row m-0 px-0 pb-1">
                             <div className="chat-list col-auto p-0 w-100">
                                 <div className="chat-list--container p-3 ">
                                     {user.isLoading ? (
