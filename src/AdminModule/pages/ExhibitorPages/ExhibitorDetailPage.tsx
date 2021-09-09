@@ -28,11 +28,13 @@ import { ExhibitorDetailTabs } from "./ExhibitorDetailTabs";
 import { ExhibitorDetailTabDetails } from "./ExhibitorDetailTabDetails";
 import { ExhibitorDetailTabProducts } from "./ExhibitorDetailTabProducts";
 
-export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
+export const ExhibitorDetailPage: FC<RouteComponentProps> = ({
+    navigate,
+}): JSX.Element => {
     const { t } = useTranslation();
     const adminPage = useMatch("/admin/exhibitors/:id/detail");
     const isFrontPage = adminPage === null;
-    const { id } = useParams();
+    const { id, view = "details" } = useParams();
     const [loading, isLoading] = useState<boolean>(true);
     const [data, setData] = useState<Exhibitor>();
     const { containerId } = useAuthState();
@@ -40,7 +42,7 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const logoPath = useBuildAssetPath(ExhibitorLogoPosterFileInfo);
     const [members, setMembers] = useState<User[]>([]);
     const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
-    const [activeTab, setActiveTab] = useState<string>("details");
+    const [activeTab, setActiveTab] = useState<string>(view);
 
     useEffect(() => {
         isLoading(true);
@@ -129,7 +131,15 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
                     </Row>
                     <ExhibitorDetailTabs
                         activeTab={activeTab}
-                        setActiveTab={setActiveTab}
+                        setActiveTab={(tab) => {
+                            if (navigate) {
+                                setActiveTab(tab);
+                                const pageUrl = isFrontPage
+                                    ? `/exhibitors/${id}/detail/${tab}`
+                                    : `/admin/exhibitors/${id}/detail/${tab}`;
+                                navigate(pageUrl);
+                            }
+                        }}
                     />
                     {data && activeTab === "details" ? (
                         <ExhibitorDetailTabDetails

@@ -62,6 +62,7 @@ export const routers: ModuleRouter[] = [
                     <Layout3D path={"a3d"} />
                     <ExhibitorListPage path={"exhibitors"} />
                     <ExhibitorDetailPage path={"exhibitors/:id/detail"} />
+                    <ExhibitorDetailPage path={"exhibitors/:id/detail/:view"} />
                 </Router>
             );
         },

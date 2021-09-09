@@ -149,6 +149,7 @@ export const routers: ModuleRouter[] = [
                     <ExhibitorAddEditPage path={"exhibitors/new"} />
                     <ExhibitorAddEditPage path={"exhibitors/:id"} />
                     <ExhibitorDetailPage path={"exhibitors/:id/detail"} />
+                    <ExhibitorDetailPage path={"exhibitors/:id/detail/:view"} />
                     <ExhibitorProductAddEditPage
                         path={"exhibitors/:parentId/products/new"}
                     />
