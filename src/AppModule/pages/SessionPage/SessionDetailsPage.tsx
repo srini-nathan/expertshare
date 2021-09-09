@@ -321,11 +321,11 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                         </Row>
                     </AppCard>
                     {data.exhibitors.length > 0 ? (
-                        <AppCard>
-                            <h5 className="mb-2">
+                        <AppCard className="session-det-sponsors px-4 py-3">
+                            <h3 className="mb-3 mt-2">
                                 <i className="fak fa-handshake-alt-light mr-1"></i>
                                 {t("sessionDetails:label.sponsors")}
-                            </h5>
+                            </h3>
                             <AppSponsors
                                 data={(data.exhibitors as unknown) as string[]}
                                 basePath={exhibitorLogoBasePath}
