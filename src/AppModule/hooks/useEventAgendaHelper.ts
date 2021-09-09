@@ -17,8 +17,8 @@ export function useEventAgendaHelper(): EventAgendaHelperType {
         dates: string[],
         format: string
     ): string | null => {
-        let today = null;
-        let closedToToday = null;
+        let today: any = null;
+        let closedToToday: any = null;
         const futureDates: Date[] = [];
         const pastDates: Date[] = [];
         dates.forEach((dt) => {

@@ -5,6 +5,9 @@ export interface Configuration {
     googleAnalyticsCode: string;
     hubspotId: string;
     projectName: string;
+    isMusicEnable: boolean;
+    isMusicLoop: boolean;
+    musicFilename: string;
 }
 
 export class Configuration implements Configuration {
@@ -19,4 +22,10 @@ export class Configuration implements Configuration {
     hubspotId = "";
 
     projectName = "";
+
+    isMusicEnable = false;
+
+    isMusicLoop = false;
+
+    musicFilename = "";
 }
