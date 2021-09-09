@@ -93,7 +93,7 @@ export interface PanelInterfaceProps {
     target: TargetProps;
     type: string;
     video: Video360Props;
-    source: { assetId: string };
+    source: { assetId: string; type: string };
     width: number;
     isRotateEnable: boolean;
 }

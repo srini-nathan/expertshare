@@ -26,7 +26,7 @@ import {
     PANEL_ANIMATION_DURATION,
     FOV_ANIMATION_DURATION,
 } from "../../Helpers/Utils";
-import { PanelTypes, TargetTypes } from "../../Types/SceneTypes";
+import { PanelTypes, SourceTypes, TargetTypes } from "../../Types/SceneTypes";
 import {
     PanelInterfaceProps,
     Video360Props,
@@ -34,6 +34,7 @@ import {
 } from "../../Types/Interfaces";
 import { use3DHelper } from "../../../hooks";
 import { useUserSocketEvents } from "../../../../AppModule/hooks";
+import { IframePanel } from "../IframePanel";
 
 interface PanelProps {
     props: JSX.IntrinsicElements["mesh"];
@@ -173,7 +174,21 @@ export const Panel = ({
     const isBillboard = type === PanelTypes.BILLBOARD;
     const isIframe = type === PanelTypes.IFRAME;
 
-    // console.log("panel data video: ", panelData, textureImage);
+    const isEmbedVideo =
+        panelData.source.type &&
+        (panelData.source.type === SourceTypes.YOUTUBE ||
+            panelData.source.type === SourceTypes.VIMEO ||
+            panelData.source.type === SourceTypes.SWISSCOM ||
+            panelData.source.type === SourceTypes.DACAST);
+    // console.log(
+    //     "indexof result: ",
+    //     panelData.video.assetId.indexOf("youtube"),
+    //     panelData.video.assetId
+    // );
+    if (isEmbedVideo)
+        console.log("we have embed video: ", panelData.source.assetId);
+
+    // console.log("panel data video: ", panelData);
     const defaultVideoUrl =
         panelData.source.assetId !== "" && panelData.source.assetId !== null
             ? `${panelsPath}/${panelData.source.assetId}`
@@ -425,7 +440,7 @@ export const Panel = ({
                             />
                         )}
                         {/* SCREEN IMAGE */}
-                        {!isVideoPlaying && (
+                        {!isVideoPlaying && !isEmbedVideo && (
                             <Image
                                 props={{
                                     position: [
@@ -444,7 +459,7 @@ export const Panel = ({
                             />
                         )}
                         {/* SCREEN VIDEO */}
-                        {isProjector && (
+                        {isProjector && !isEmbedVideo && (
                             <VideoPanel
                                 padding={padding}
                                 parent={parent}
@@ -453,16 +468,26 @@ export const Panel = ({
                                 isVideoPlaying={isVideoPlaying}
                             />
                         )}
-                        {/* SCREEN BACKGROUND */}
-                        <mesh>
-                            <boxBufferGeometry args={[size.x, size.y, depth]} />
-                            <meshBasicMaterial
-                                color={color}
-                                toneMapped={false}
-                                transparent={true}
-                                opacity={opacity}
+                        {isEmbedVideo && (
+                            <IframePanel
+                                size={size}
+                                source={panelData.source.assetId}
                             />
-                        </mesh>
+                        )}
+                        {/* SCREEN BACKGROUND */}
+                        {!isEmbedVideo && (
+                            <mesh>
+                                <boxBufferGeometry
+                                    args={[size.x, size.y, depth]}
+                                />
+                                <meshBasicMaterial
+                                    color={color}
+                                    toneMapped={false}
+                                    transparent={true}
+                                    opacity={opacity}
+                                />
+                            </mesh>
+                        )}
                     </a.group>
                     {/* REMOTE ITEM */}
                     <Remote
