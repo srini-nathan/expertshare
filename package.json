@@ -44,6 +44,7 @@
         "qs": "^6.10.1",
         "react": "16",
         "react-ace": "^9.4.1",
+        "react-audio-spectrum": "^0.1.0",
         "react-bootstrap": "^1.6.1",
         "react-color": "2.17.3",
         "react-cropper": "^2.1.7",

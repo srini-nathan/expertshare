@@ -44,12 +44,14 @@ import { LanguageApi, UserApi } from "../../../AdminModule/apis";
 import { Language, Navigation, PUser } from "../../../AdminModule/models";
 import { FileTypeInfo } from "../../models";
 import { appContainerNavigation } from "../../atoms";
+import Waveform from "../../../AdminModule/components/waveForm/Waveform";
 
 const { Upload: UPLOAD, Role } = CONSTANTS;
 const {
     FILETYPEINFO: {
         FILETYPEINFO_USER_PROFILE,
         FILETYPEINFO_DESIGN_CONFIGURATION,
+        FILETYPEINFO_CONFIGURATION,
     },
 } = UPLOAD;
 
@@ -87,6 +89,9 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const [navOpen, isNavOpen] = useState<boolean>(false);
     const baseDesignConfig = useBuildAssetPath(
         FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo
+    );
+    const baseConfig = useBuildAssetPath(
+        FILETYPEINFO_CONFIGURATION as FileTypeInfo
     );
     const design = parseDesign(container);
     const configuration = parseConfiguration(container);
@@ -313,7 +318,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
     const updateScreenSize = () => {
         if (width > 767) {
             const numberOfMenusToShow = Math.floor(getMenuItemsHeight() / 66);
-            const oItems = [];
+            const oItems: any = [];
             for (let i = numberOfMenusToShow; i < items.length; i += 1) {
                 oItems.push(items[i]);
             }
@@ -579,6 +584,14 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                 }
                             >
                                 {renderMenu()}
+                                {configuration.isMusicEnable && (
+                                    <div style={{ width: "100%" }}>
+                                        <Waveform
+                                            url={`${baseConfig}/${configuration.musicFilename}`}
+                                            loop={configuration.isMusicLoop}
+                                        />
+                                    </div>
+                                )}
                             </div>
                             <ListGroupItem
                                 className={`bottom-menu p-0 ${
