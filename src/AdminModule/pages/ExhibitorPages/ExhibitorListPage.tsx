@@ -131,7 +131,7 @@ export const ExhibitorListPage: FC<RouteComponentProps> = (): JSX.Element => {
                 title={t("exhibitor.list:header.title")}
                 customToolbar
             >
-                <div className="d-flex pt-2 mb-5 event-header-width">
+                <div className="d-flex pt-2 mb-2 event-header-width">
                     <AppListPageToolbar
                         createLink={"/admin/exhibitors/new"}
                         grantedControl={isGrantedControl}

@@ -101,7 +101,7 @@ export const SessionCategoryListPage: FC<RouteComponentProps> = () => {
     return (
         <Fragment>
             <Row>
-                <Col className={"d-flex justify-content-between mb-5"}>
+                <Col className={"d-flex justify-content-between mb-1"}>
                     <div className="d-inline-block categories-nav--tabs">
                         <nav>
                             <div
