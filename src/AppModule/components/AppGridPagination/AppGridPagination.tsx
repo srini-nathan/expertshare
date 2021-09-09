@@ -29,7 +29,7 @@ export const AppGridPagination: FC<AppGridPaginationProps> = ({
             const delta = 2;
             const left = active - delta;
             const right = active + delta + 1;
-            const range = [];
+            const range: number[] = [];
             const pageCollection = [];
             let l;
 
