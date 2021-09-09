@@ -11,7 +11,7 @@ export const AppAskSpeakerForm: FC<AppAskSpeakerFormProps> = ({
     onDataChange,
 }) => {
     const { t } = useTranslation();
-    const onSubmit = (data: any) => onDataChange(data?.question);
+    const onSubmit = (data: any) => onDataChange(data);
 
     return (
         <div className={"typing-block"}>
