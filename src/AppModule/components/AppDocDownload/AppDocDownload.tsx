@@ -70,6 +70,7 @@ export const AppDocDownload: FC<AppDocDownloadProps> = ({
                                                     >
                                                         <a
                                                             href={`${docBasePath}/${doc.fileName}`}
+                                                            className="left-content"
                                                         >
                                                             <div className="doc-row">
                                                                 <i className="doc-icon">
@@ -85,7 +86,7 @@ export const AppDocDownload: FC<AppDocDownloadProps> = ({
                                                         <a
                                                             target="_blank"
                                                             href={`${docBasePath}/${doc.fileName}`}
-                                                            className="btn-delete btn-secondary btn "
+                                                            className="btn-download btn-secondary btn "
                                                         >
                                                             <i className="fa fa-arrow-down"></i>
                                                         </a>
