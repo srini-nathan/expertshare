@@ -9,9 +9,10 @@ interface WaveformProps {
 
 const Waveform: FC<WaveformProps> = ({ url, loop }) => {
     const audioRef: { current: any } = useRef(null);
-    const [playing, setPlaying] = useState(false);
+    const [playing, setPlaying] = useState(true);
     const [captureImage, setCaptureImage] = useState(null) as any;
-    const [mute, setMute] = useState(false);
+    const [showRange, setShowRange] = useState(false);
+    const [volRang, setVolRang] = useState(100);
 
     // const url = "https://www.mfiles.co.uk/mp3-downloads/gs-cd-track2.mp3";
 
@@ -33,18 +34,22 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
     };
 
     const isMusicPlaying = () => {
-        return playing && !mute;
+        return playing;
     };
 
     const onVolumeChange = () => {
-        const el = document.getElementById("audio-canvas") as HTMLCanvasElement;
-        if (el) {
-            const image = el.toDataURL("image/png");
-            setCaptureImage(image);
-        }
-        setMute(!mute);
+        setShowRange(!showRange);
     };
 
+    const handleRange = (event) => {
+        audioRef.current.volume = event.target.value / 100;
+        setVolRang(event.target.value);
+    };
+
+    const handleVolumeClick = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+    };
     return (
         <div
             className={`waveformContainer ${
@@ -61,7 +66,7 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
             <audio
                 id="audio-element"
                 preload="true"
-                muted={mute}
+                autoPlay
                 src={url}
                 crossOrigin="anonymous"
                 ref={audioRef}
@@ -71,7 +76,7 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
             <AudioSpectrum
                 id="audio-canvas"
                 height={45}
-                width={210}
+                width={180}
                 audioId="audio-element"
                 capHeight={2}
                 meterWidth={2}
@@ -82,11 +87,24 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
             />
 
             <div className="playButton margin-left" onClick={onVolumeChange}>
-                {mute ? (
-                    <i className="fas fa-volume-mute" />
-                ) : (
+                <div>
+                    <div className={showRange ? "range" : "disableRange"}>
+                        <label className="volumeRange">
+                            <input
+                                id="audio-element"
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={volRang}
+                                onChange={handleRange}
+                                onAbortCapture={handleVolumeClick}
+                                step="1"
+                            />
+                            {setShowRange}
+                        </label>
+                    </div>
                     <i className="fas fa-volume-up" />
-                )}
+                </div>
             </div>
         </div>
     );
