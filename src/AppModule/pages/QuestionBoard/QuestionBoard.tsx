@@ -148,7 +148,6 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                                                 )
                                             }
                                         >
-                                            title=
                                             {t("questionboard.list:status.new")}
                                             <i
                                                 className="fak fa-check-light"
@@ -169,7 +168,6 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                                                 )
                                             }
                                         >
-                                            title=
                                             {t(
                                                 "questionboard.list:status.approve"
                                             )}
@@ -192,7 +190,6 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                                                 )
                                             }
                                         >
-                                            title=
                                             {t(
                                                 "questionboard.list:status.reject"
                                             )}
@@ -209,7 +206,6 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                                         className="btn btn-secondary"
                                         onClick={() => deleteQuestion(q.id)}
                                     >
-                                        title=
                                         {t("questionboard.list:status.delete")}
                                         <i
                                             className="fak fa-trash-light"
@@ -219,7 +215,6 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                                 </div>
                                 <div className="question-item--content--action--button edit col-6 py-2 pl-2">
                                     <a href="#" className="btn btn-secondary">
-                                        title=
                                         {t("questionboard.list:status.edit")}
                                         <i
                                             className="fak fa-pen-regular"
