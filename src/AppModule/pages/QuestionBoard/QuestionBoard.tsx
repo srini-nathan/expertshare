@@ -1,16 +1,18 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
+import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 import { isString as _isString } from "lodash";
 import { useBuildAssetPath } from "../../hooks";
 import { FileTypeInfo } from "../../models";
 import { AppPageHeader, AppLoader } from "../../components";
 import { SessionQuestionApi } from "../../apis";
-import { errorToast } from "../../utils";
+import { errorToast, getDateTimeWithoutTimezone } from "../../utils";
 import { SessionQuestion } from "../../models/entities/SessionQuestion";
 import { CONSTANTS } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
+import { useGlobalData } from "../../contexts";
 
 import "./assets/scss/style.scss";
 import "./assets/scss/_common.scss";
@@ -29,6 +31,7 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
     const statusQuestions = questions.filter(
         (q) => q.status === status.toUpperCase()
     );
+    const { container } = useGlobalData();
     const profilePictureBasePath = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo
     );
@@ -52,6 +55,20 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
         });
     };
 
+    const getDateFormat = () => {
+        let f = "";
+
+        if (container) {
+            if ((container.configuration as any).shortDate)
+                f = `${(container.configuration as any).shortDate}`;
+            else f = `EEEE MMMM, dd`;
+            if ((container.configuration as any).shortTime)
+                f = `${f} ${(container.configuration as any).shortTime}`;
+            else f = `${f} hh:mm a`;
+        }
+        return f;
+    };
+
     const deleteQuestion = (id: number) => {
         SessionQuestionApi.deleteById(id).then(({ error }) => {
             if (error !== null) {
@@ -65,7 +82,7 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
     };
     return statusQuestions.length <= 0 ? (
         <span className="error mt-3 d-block w-100 text-center">
-            title={t("questionboard.list:noquestions")}
+            {t("questionboard.list:noquestions")}
         </span>
     ) : (
         statusQuestions.map((q) => (
@@ -102,8 +119,16 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                                 style={loginUserProfileStyle(q.user)}
                             ></i>
                             <div className="question-item--content--header--det">
-                                <h4 className="mb-0">{q.user.name}</h4>
-                                <span>1 hour</span>
+                                <h4 className="mb-0">
+                                    {q.user.firstName} {q.user.lastName}
+                                </h4>
+                                <span>
+                                    {format(
+                                        getDateTimeWithoutTimezone(q.createdAt),
+
+                                        getDateFormat()
+                                    )}
+                                </span>
                             </div>
                         </div>
                         <div className="question-item--content--comm py-2">
@@ -220,6 +245,12 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
         STATUS_REJECTED,
         "ANSWERED",
     ];
+    const columnLabelKeys = {
+        NEW: "questionboard.list:columns.title.new",
+        ACCEPTED: "questionboard.list:columns.title.accepted",
+        REJECTED: "questionboard.list:columns.title.rejected",
+        ANSWERED: "questionboard.list:columns.title.answered",
+    };
     const { t } = useTranslation();
     const fetchQuestions = (params = {}) => {
         isLoading(true);
@@ -265,7 +296,9 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
                             <div className="inner-container--header py-3 px-3">
                                 <div className="inner-container--header--title">
                                     <i className="fak fa-message-incoming"></i>
-                                    <h2 className="mb-0 pl-2">{boardCol}</h2>
+                                    <h2 className="mb-0 pl-2">
+                                        {t(columnLabelKeys[boardCol])}
+                                    </h2>
                                 </div>
                                 <div className="inner-container--header--search mt-3">
                                     <div className="search-input-box left-icon input-text">

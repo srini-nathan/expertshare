@@ -62,6 +62,7 @@ const {
         ROLE_OPERATOR,
         ROLE_SUPPORT,
         ROLE_EXHIBITOR,
+        ROLE_SPEAKER,
     },
 } = Role;
 
@@ -483,6 +484,31 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         );
     };
 
+    const renderVideoMenu = () => {
+        if (
+            !(
+                configuration.isQuestionBoardEnable &&
+                (role === ROLE_ADMIN ||
+                    role === ROLE_OPERATOR ||
+                    role === ROLE_SPEAKER ||
+                    role === ROLE_EXHIBITOR)
+            )
+        ) {
+            return null;
+        }
+        return (
+            <AppNavigationItem
+                label={"navigation:questionboard"}
+                path={"/questionboard"}
+                icon={{
+                    name: "fak fa-video",
+                }}
+                className="main-menu"
+                onClick={() => isNavOpen(!navOpen)}
+            />
+        );
+    };
+
     const renderMenu = () => {
         if (showSubMenuItems && (menuLocation === "LEFT" || width < 768)) {
             return renderSubMenu();
@@ -531,6 +557,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                             />
                         );
                     })}
+                {renderVideoMenu()}
                 {render3dMenu()}
                 {renderMoreMenu()}
             </>
