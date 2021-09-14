@@ -5,29 +5,67 @@
   justify-content: space-between;
   margin: 10px;
   background: transparent;
-  min-height: 45px;
+  min-height: 70px;
+  background: white;
+  border-radius: 5px;
   &.not-playing {
     canvas {
       display: none;
+      margin-bottom: 20px;
+      margin-right: 2px;
     }
   }
+  .img-margin{
+    margin-bottom: 20px;
+    margin-right: 2px;
+  }
   .playButton {
+    .range {
+      display: block;
+      .volumeRange {
+        position: relative;
+        div {
+          position: absolute;
+          transform: rotate(270deg);
+          left: -52px;
+          bottom: 16px;
+          background-color: var(--card-background-color);
+          border-radius: 5px;
+          box-shadow: 0 12px 38px rgba(155, 167, 186, 0.5);
+          padding: 5px;
+          z-index: 999;
+          input {
+            width: 75px;
+          }
+        }
+        .btn-volume{
+          flex-direction: row-reverse;
+          display: flex;
+          height: 50px;
+          i {
+            transform: rotate(90deg);
+            margin: 4px 14px 6px 10px;
+            font-size: 20px;
+          }
+        }
+      }
+    }
+    .disableRange {
+      display: none;
+    }
     i {
+      margin: 0px 22px 20px 24px;
       font-size: 24px;
-      margin-right: 10px;
-      color: #EFEFEF;
+      color: var(--navigation-item-text-color);
       &:hover {
-        color: #0052CC;
+        color: var(--navigation-item-text-color--hover) !important;
         cursor: pointer;
       }
     }
-    &.margin-left {
-      margin-right: 0;
-      margin-left: 10px;
-    }
   }
   canvas {
-    width: 100%;
+    margin-bottom: 20px;
+    margin-right: 2px;
   }
   .wrapper {
     position: relative;

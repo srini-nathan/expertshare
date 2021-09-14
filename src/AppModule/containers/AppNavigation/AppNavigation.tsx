@@ -509,6 +509,19 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         );
     };
 
+    const LiveNow = () => {
+        return (
+            <AppNavigationItem
+                label={"navigation:livenow"}
+                path={"/live"}
+                icon={{
+                    name: "fa fa-video",
+                }}
+                className="main-menu"
+                onClick={() => isNavOpen(!navOpen)}
+            />
+        );
+    };
     const renderMenu = () => {
         if (showSubMenuItems && (menuLocation === "LEFT" || width < 768)) {
             return renderSubMenu();
@@ -560,6 +573,15 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 {renderVideoMenu()}
                 {render3dMenu()}
                 {renderMoreMenu()}
+                {LiveNow()}
+                {configuration.isMusicEnable && (
+                    <div style={{ width: "100%" }}>
+                        <Waveform
+                            url={`${baseConfig}/${configuration.musicFilename}`}
+                            loop={configuration.isMusicLoop}
+                        />
+                    </div>
+                )}
             </>
         );
     };
@@ -611,14 +633,6 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                 }
                             >
                                 {renderMenu()}
-                                {configuration.isMusicEnable && (
-                                    <div style={{ width: "100%" }}>
-                                        <Waveform
-                                            url={`${baseConfig}/${configuration.musicFilename}`}
-                                            loop={configuration.isMusicLoop}
-                                        />
-                                    </div>
-                                )}
                             </div>
                             <ListGroupItem
                                 className={`bottom-menu p-0 ${
