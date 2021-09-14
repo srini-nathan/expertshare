@@ -21,6 +21,7 @@ const {
     api_sessions_get_agenda_collection: API_GET_AGENDA,
     api_sessions_change_card_size_collection: API_CHANGE_CARD_SIZE,
     api_sessions_get_item_collection: GET_ITEM,
+    api_sessions_get_session_collection: GET_LIVE_SESSION,
 } = ROUTES;
 
 export abstract class SessionApi extends EntityAPI {
@@ -57,6 +58,23 @@ export abstract class SessionApi extends EntityAPI {
         extraparams = {}
     ): Promise<FinalResponse<ListResponse<R> | null>> {
         return this.makeGet<R>(GET_ITEM, { ...extraparams })
+            .then(({ data }) => {
+                const list = this.acceptHydra
+                    ? onFindAllResponseHydra<R>(data)
+                    : onFindAllResponseJson<R>(data);
+                return Promise.resolve(
+                    new FinalResponse<ListResponse<R>>(list)
+                );
+            })
+            .catch((error: AxiosError | ServerError) =>
+                this.handleErrorDuringCreatingOrUpdating(error)
+            );
+    }
+
+    public static async getLiveSession<R>(
+        extraparams = {}
+    ): Promise<FinalResponse<ListResponse<R> | null>> {
+        return this.makeGet<R>(GET_LIVE_SESSION, { ...extraparams })
             .then(({ data }) => {
                 const list = this.acceptHydra
                     ? onFindAllResponseHydra<R>(data)

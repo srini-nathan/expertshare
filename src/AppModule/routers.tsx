@@ -16,6 +16,7 @@ import {
     InfoPage,
     AFramePanelPage,
     WidgetPage,
+    LiveNowPage,
 } from "./pages";
 import { ExhibitorListPage, ExhibitorDetailPage } from "../AdminModule/pages";
 import { ModuleRouter } from "./models";
@@ -64,6 +65,7 @@ export const routers: ModuleRouter[] = [
                     <ReloadingPage path={"reloading"} />
                     <QuestionBoard path={"questionboard"} />
                     <Layout3D path={"a3d"} />
+                    <LiveNowPage path={"live"} />
                     <ExhibitorListPage path={"exhibitors"} />
                     <ExhibitorDetailPage path={"exhibitors/:id/detail"} />
                     <ExhibitorDetailPage path={"exhibitors/:id/detail/:view"} />

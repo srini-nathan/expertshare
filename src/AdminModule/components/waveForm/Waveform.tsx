@@ -12,6 +12,8 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
     const [playing, setPlaying] = useState(false);
     const [captureImage, setCaptureImage] = useState(null) as any;
     const [mute, setMute] = useState(false);
+    const [showRange, setShowRange] = useState(false);
+    const [volRang, setVolRang] = useState(100);
 
     // const url = "https://www.mfiles.co.uk/mp3-downloads/gs-cd-track2.mp3";
 
@@ -33,7 +35,7 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
     };
 
     const isMusicPlaying = () => {
-        return playing && !mute;
+        return playing;
     };
 
     const onVolumeChange = () => {
@@ -45,6 +47,20 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
         setMute(!mute);
     };
 
+    const handleRange = (event) => {
+        // audioRef.current.volume = event.target.value / 100;
+        setVolRang(event.target.value);
+    };
+    const handleMouseEvent = () => {
+        setShowRange(true);
+    };
+    const handleMouseLeave = () => {
+        setShowRange(false);
+    };
+    const handleVolumeClick = (e) => {
+        e.stopPropagation();
+        e.preventDefault();
+    };
     return (
         <div
             className={`waveformContainer ${
@@ -61,31 +77,58 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
             <audio
                 id="audio-element"
                 preload="true"
-                muted={mute}
+                muted={true}
                 src={url}
                 crossOrigin="anonymous"
                 ref={audioRef}
                 loop={loop}
             />
-            {!isMusicPlaying() && <img src={captureImage} alt="" />}
+            {!isMusicPlaying() && (
+                <img src={captureImage} alt="" className={"img-margin"} />
+            )}
             <AudioSpectrum
                 id="audio-canvas"
-                height={45}
-                width={210}
+                height={35}
+                width={140}
                 audioId="audio-element"
                 capHeight={2}
                 meterWidth={2}
                 meterCount={512}
-                silent={true}
                 meterColor={[{ stop: 0.5, color: "#0CD7FD" }]}
                 gap={4}
             />
-
-            <div className="playButton margin-left" onClick={onVolumeChange}>
+            <div className="playButton" onClick={onVolumeChange}>
                 {mute ? (
-                    <i className="fas fa-volume-mute" />
+                    <i className="fal fa-volume-mute" />
                 ) : (
-                    <i className="fas fa-volume-up" />
+                    <div className="audio-volume">
+                        <div className={showRange ? "range" : "disableRange"}>
+                            <label className="volumeRange">
+                                <div
+                                    className="btn-volume"
+                                    onMouseLeave={() => handleMouseLeave()}
+                                >
+                                    <i className="far fa-volume" />
+                                    <input
+                                        id="audio-element"
+                                        type="range"
+                                        min="0"
+                                        max="100"
+                                        value={volRang}
+                                        onChange={handleRange}
+                                        onClick={(e) => handleVolumeClick(e)}
+                                        step="1"
+                                    />
+                                    <i className="fal fa-volume-mute" />
+                                </div>
+                                {setShowRange}
+                            </label>
+                        </div>
+                        <i
+                            className="far fa-volume"
+                            onMouseEnter={() => handleMouseEvent()}
+                        />
+                    </div>
                 )}
             </div>
         </div>
