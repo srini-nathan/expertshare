@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, MouseEventHandler } from "react";
 import { PUser } from "../../../AdminModule/models";
 import { FileTypeInfo } from "../../models";
 import { CONSTANTS } from "../../../config";
@@ -13,8 +13,9 @@ const {
 export interface AppChatOneToOneHeaderProps {
     user: PUser;
     isOnline?: boolean;
-    onCloseAction: () => void;
+    onCloseAction: MouseEventHandler<HTMLDivElement>;
     onCollapseAction: () => void;
+    maxWidth?: boolean;
 }
 
 export const AppChatOneToOneHeader: FC<AppChatOneToOneHeaderProps> = ({
@@ -22,12 +23,27 @@ export const AppChatOneToOneHeader: FC<AppChatOneToOneHeaderProps> = ({
     isOnline = false,
     onCloseAction,
     onCollapseAction,
+    maxWidth,
 }) => {
     const avatar = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         user.imageName
     );
     const avatarUrl = user.imageName ? avatar : placeholder;
+
+    const maxWidthCommentStyle = maxWidth
+        ? { maxWidth: "120px" }
+        : { maxWidth: "255px" };
+
+    const maxWidthSenderStyle = maxWidth
+        ? {
+              maxWidth: "120px",
+              lineHeight: "22px",
+          }
+        : {
+              maxWidth: "255px",
+              lineHeight: "22px",
+          };
 
     return (
         <div className="row m-0 px-3 pt-3 pb-3">
@@ -40,16 +56,16 @@ export const AppChatOneToOneHeader: FC<AppChatOneToOneHeaderProps> = ({
                                 style={{
                                     backgroundImage: `url(${avatarUrl})`,
                                 }}
-                            ></i>
+                            />
                         </div>
                         <div className="name pl-2">
                             <div className="name--sender">
-                                <h3>
+                                <h3 style={maxWidthSenderStyle}>
                                     {user?.firstName} {user?.lastName}
                                 </h3>
                             </div>
                             <div className="name--comment">
-                                <span>
+                                <span style={maxWidthCommentStyle}>
                                     {user?.jobTitle} @ {user?.company}
                                 </span>
                             </div>
@@ -64,7 +80,7 @@ export const AppChatOneToOneHeader: FC<AppChatOneToOneHeaderProps> = ({
                         onClick={onCollapseAction}
                     >
                         <a>
-                            <i className="fak fa-chevron-down"></i>
+                            <i className="fak fa-chevron-down" />
                         </a>
                     </div>
                     <div
@@ -73,7 +89,7 @@ export const AppChatOneToOneHeader: FC<AppChatOneToOneHeaderProps> = ({
                         onClick={onCloseAction}
                     >
                         <a>
-                            <i className="fak fa-times-light"></i>
+                            <i className="fak fa-times-light" />
                         </a>
                     </div>
                 </div>

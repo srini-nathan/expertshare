@@ -21,6 +21,7 @@ import {
     AppFormRichTextArea,
     AppButton,
     AppFormLabel,
+    AppSelectPanelStream,
 } from "../../../AppModule/components";
 import {
     Upload,
@@ -48,7 +49,7 @@ import {
     useBuildAssetPath,
 } from "../../../AppModule/hooks";
 import { schema, validations } from "./schema";
-import { CONSTANTS } from "../../../config";
+import { AFRAME_PANEL_MEDIA_TYPE, CONSTANTS } from "../../../config";
 import { UploadAPI } from "../../../AppModule/apis";
 
 interface TranslationsType {
@@ -167,13 +168,11 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
     const [defaultLanguage, setDefaultLanguage] = useState<string>("");
     const [translations, setTranslations] = useState<TranslationsType[]>([]);
     const [active, setActive] = React.useState<string>(defaultLanguage);
-
+    const videoFileRef = useRef<File | null>(null);
     const [
         transitionVideoFileName,
         setTransitionVideoFileName,
     ] = useState<string>("");
-
-    const [sourceVideoFileName, setSourceVideoFileName] = useState<string>("");
 
     const {
         handleSubmit,
@@ -214,9 +213,6 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                         if (fieldName === "transitionVideo") {
                             setTransitionVideoFileName(response.fileName);
                         }
-                        if (fieldName === "source") {
-                            setSourceVideoFileName(response.fileName);
-                        }
                     }
                 }
             );
@@ -231,8 +227,6 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
     };
 
     const getPanelType = () => {
-        // eslint-disable-next-line no-console
-        console.log(panelType);
         switch (panelType) {
             case "screen":
                 return "iframe";
@@ -265,10 +259,20 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
         if (checkTranslation()) {
             setFilesToUpload({});
             formData.container = ContainerApi.toResourceUrl(containerId);
-            formData.aFrameRoom = `/api/a_frame_rooms/${roomId}`;
+            formData.aFrameRoom = AFrameRoomApi.toResourceUrl(roomId);
             formData.type = panelType;
             formData.targetType = getPanelType();
             formData.transitionVideo = transitionVideoFileName;
+            if (formData.sourceType === "FILE" && videoFileRef.current) {
+                const res = await UploadAPI.upload(
+                    videoFileRef.current,
+                    AFRAME_PANEL_MEDIA_TYPE,
+                    containerResourceId
+                );
+                if (res.response && res.response?.fileName) {
+                    formData.source = res.response.fileName;
+                }
+            }
 
             return AFramePanelApi.createOrUpdate<AFramePanel>(
                 id,
@@ -308,7 +312,6 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
 
     const onSubmit = async (formData: AFramePanel) => {
         formData.translations = translations;
-        formData.source = sourceVideoFileName;
         Promise.all(
             [...translations, { fieldName: "remoteImage" }].map((item: any) => {
                 if (item.locale && typeof item.image === "string") {
@@ -1563,27 +1566,15 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                                 )}
                                 {panelType === "projector" && (
                                     <Form.Row>
-                                        <AppFormFile
-                                            required={false}
-                                            label={t(
-                                                "admin.aframepanel.form:label.source"
-                                            )}
-                                            {...validation(
-                                                "source",
-                                                formState,
-                                                isEditMode
-                                            )}
-                                            name={"source"}
-                                            defaultValue={data.source}
-                                            onFileSelect={onFileSelect(
-                                                "source"
-                                            )}
-                                            errorMessage={
-                                                errors.source?.message
-                                            }
+                                        <AppSelectPanelStream
+                                            data={data}
+                                            setValue={setValue}
+                                            formState={formState}
                                             control={control}
-                                            value={sourceVideoFileName}
-                                            filePath={aframepanelImagePath}
+                                            isEditMode={isEditMode}
+                                            onFileSelect={(f) => {
+                                                videoFileRef.current = f;
+                                            }}
                                         />
                                     </Form.Row>
                                 )}
@@ -1601,7 +1592,7 @@ export const AFramePanelAddEdit: FC<RouteComponentProps> = ({
                                                 )
                                             }
                                             label={`${t(
-                                                "admin.aframepanel.form:label.content"
+                                                "admin.aframePanel.form:label.content"
                                             )} (${active})`}
                                             maxCount={content.max}
                                             {...validation(
