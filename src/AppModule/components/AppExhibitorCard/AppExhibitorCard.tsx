@@ -94,19 +94,19 @@ export const AppExhibitorCard: FC<AppExhibitorCardProps> = ({
                     </div>
                 </Link>
                 <div className="inner-container--det p-3 mx-2">
+                    <AppShowUserListPopup
+                        show={showMore}
+                        handleClose={isShowMore}
+                        users={users as User[]}
+                        icon={"atendees-cs"}
+                        title={"exhibitor.listCard:section.title.members"}
+                    />
                     <Col className="inner-container--det--title p-0">
                         <Link to={detailLink}>
                             <h2>{name}</h2>
                         </Link>
                     </Col>
                     <Col className={"p-0"}>
-                        <AppShowUserListPopup
-                            show={showMore}
-                            handleClose={isShowMore}
-                            users={users as User[]}
-                            icon={"atendees-cs"}
-                            title={"exhibitor.listCard:section.title.members"}
-                        />
                         <div className="inner-container--det--content mt-0">
                             {limited?.length > 0 && (
                                 <>
