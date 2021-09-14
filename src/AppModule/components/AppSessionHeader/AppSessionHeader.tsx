@@ -308,6 +308,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                         <AppStreamManager
                             getAgenda={getAgenda}
                             isLive={isLive}
+                            live={live}
                             session={session}
                         />
                     )}

@@ -40,6 +40,8 @@ export class Session extends BaseEntity {
 
     zoomMeetingPassword: string;
 
+    zoomSignature: string;
+
     webexUrl: string;
 
     webexMeetingPassword: string;
@@ -105,6 +107,7 @@ export class Session extends BaseEntity {
         zoomMeetingPassword = "",
         zoomMeetingNumber = "",
         zoomUrl = "",
+        zoomSignature = "",
         streamType = "YOUTUBE",
         externalLinkUrl = "",
         externalLinkLabel = "",
@@ -157,6 +160,7 @@ export class Session extends BaseEntity {
         this.zoomMeetingPassword = zoomMeetingPassword;
         this.zoomMeetingNumber = zoomMeetingNumber;
         this.zoomUrl = zoomUrl;
+        this.zoomSignature = zoomSignature;
         this.streamUrl = streamUrl;
         this.streamType = streamType;
         this.isSessionAutoSwitch = isSessionAutoSwitch;
@@ -212,6 +216,7 @@ export class Session extends BaseEntity {
             zoomMeetingPassword: this.zoomMeetingPassword,
             zoomMeetingNumber: this.zoomMeetingNumber,
             zoomUrl: this.zoomUrl,
+            zoomSignature: this.zoomSignature,
             streamUrl: this.streamUrl,
             streamType: this.streamType,
             isSessionAutoSwitch: this.isSessionAutoSwitch,
