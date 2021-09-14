@@ -8,6 +8,7 @@ export interface Configuration {
     isMusicEnable: boolean;
     isMusicLoop: boolean;
     musicFilename: string;
+    isQuestionBoardEnable: boolean;
 }
 
 export class Configuration implements Configuration {
@@ -28,4 +29,6 @@ export class Configuration implements Configuration {
     isMusicLoop = false;
 
     musicFilename = "";
+
+    isQuestionBoardEnable = false;
 }

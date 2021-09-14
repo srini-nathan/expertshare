@@ -4,6 +4,7 @@ export * from "./ContainerPage";
 export * from "./ConferencePage";
 export * from "./SessionPage";
 export * from "./AttendeePage";
+export * from "./QuestionBoard";
 export * from "./NewsFeedPage";
 export * from "./ExtraPage";
 export * from "./OnBoardingPage";

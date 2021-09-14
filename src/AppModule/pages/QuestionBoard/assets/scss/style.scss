@@ -1,0 +1,179 @@
+@import "../../../../assets/scss/screens-sizes";
+
+.questionboard-admin--container {
+    &--item {
+        @include media("ag-1") {
+            flex: 0 0 100%;
+            max-width: 100%;
+        }
+        @include media("ag-2") {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+        @include media("ag-3") {
+            flex: 0 0 33.33%;
+            max-width: 33.33%;
+        }
+        margin-bottom: 30px;
+        .inner-container {
+            box-shadow: 0 3px 9px var(--secondary-10);
+            &--header {
+                border-bottom: 1px solid var(--secondary-20);
+                &--title {
+                    display: flex;
+                    i {
+                        font-size: 23px;
+                        color: var(--secondary);
+                    }
+                    h2 {
+                        font-size: 20px;
+                        font-weight: 700;
+                        color: var(--secondary);
+                    }
+                }
+            }
+            &--content {
+                &--group {
+                    height: 700px;
+                    overflow: auto;
+                    scrollbar-color: var(--secondary) var(--secondary-10);
+                    scrollbar-width: thin;
+                    &::-webkit-scrollbar {
+                        width: 3.5px;
+                    }
+                    &::-webkit-scrollbar-track {
+                        background: var(--secondary-10);
+                    }
+                    &::-webkit-scrollbar-thumb {
+                        background: var(--secondary);
+                    }
+                    &::-webkit-scrollbar-thumb:hover {
+                        opacity: 50%;
+                    }
+                    .question-item {
+                        overflow: hidden;
+                        &--header {
+                            border-bottom: 1px solid var(--secondary-20);
+                            &--title {
+                                h3 {
+                                    display: -webkit-box;
+                                    height: 56px;
+                                    overflow: hidden;
+                                    -webkit-box-orient: vertical;
+                                    -webkit-line-clamp: 2;
+                                    font-size: 20px;
+                                    font-weight: 700;
+                                    line-height: 28px;
+                                    color: var(--secondary);
+                                }
+                            }
+                            &--button {
+                                display: flex;
+                                justify-content: flex-end;
+                                a {
+                                    width: 36px;
+                                    i {
+                                        font-size: 17px;
+                                    }
+                                }
+                                &--arrow-right {
+                                    a {
+                                        i {
+                                            font-weight: 700;
+                                            &::before {
+                                                content: "\e016";
+                                            }
+                                        }
+                                    }
+                                }
+                                &--move {
+                                    a {
+                                        cursor: move;
+                                        i {
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        &--content {
+                            &--header {
+                                display: flex;
+                                align-items: center;
+                                &--avatar {
+                                    display: block;
+                                    width: 36px;
+                                    height: 36px;
+                                    content: "";
+                                    background-repeat: no-repeat;
+                                    background-size: cover;
+                                    border-radius: var(--circle-border-radius);
+                                }
+                                &--det {
+                                    display: grid;
+                                    h4 {
+                                        font-size: 16px;
+                                        font-weight: 500;
+                                        color: var(--secondary);
+                                    }
+                                    span {
+                                        font-size: 12px;
+                                        font-weight: 500;
+                                        color: var(--secondary-70);
+                                    }
+                                }
+                            }
+                            &--comm {
+                                img {
+                                    width: 100%;
+                                    height: auto;
+                                    cursor: pointer;
+                                }
+                                p {
+                                    padding-left: 45px;
+                                    font-size: 14px;
+                                    font-weight: 400;
+                                }
+                            }
+                            &--action {
+                                &--button {
+                                    a {
+                                        position: relative;
+                                        font-size: 14px;
+                                        font-weight: 500;
+                                        i {
+                                            position: absolute;
+                                            right: 10px;
+                                            font-size: 18px;
+                                        }
+                                    }
+                                    &.approve {
+                                        a {
+                                            i {
+                                                font-weight: 600;
+                                            }
+                                        }
+                                    }
+                                    &.reject {
+                                        a {
+                                            i {
+                                                font-weight: 600;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            &.rep {
+                                border-top: 1px solid var(--secondary-20);
+                            }
+                        }
+                    }
+                    .error {
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: var(--secondary-70);
+                    }
+                }
+            }
+        }
+    }
+}

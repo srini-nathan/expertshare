@@ -10,6 +10,7 @@ import {
     EventAgenda,
     SessionDetailsPage,
     AttendeeOverview,
+    QuestionBoard,
     OnBoardingPage,
     ReloadingPage,
     InfoPage,
@@ -61,6 +62,7 @@ export const routers: ModuleRouter[] = [
                     <UserProfilePage path={"attendee/:id/show"} />
                     <OnBoardingPage path={"onboarding"} />
                     <ReloadingPage path={"reloading"} />
+                    <QuestionBoard path={"questionboard"} />
                     <Layout3D path={"a3d"} />
                     <ExhibitorListPage path={"exhibitors"} />
                     <ExhibitorDetailPage path={"exhibitors/:id/detail"} />
