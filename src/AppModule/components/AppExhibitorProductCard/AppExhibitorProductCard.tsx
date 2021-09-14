@@ -75,12 +75,12 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
             lg={6}
             xl={4}
         >
-            <AppDocDownload
-                show={showMore}
-                handleClose={isShowMore}
-                docs={exhibitorProductDocs}
-            />
             <div className="inner-content card p-3">
+                <AppDocDownload
+                    show={showMore}
+                    handleClose={isShowMore}
+                    docs={exhibitorProductDocs}
+                />
                 <div className="inner-content--icons ">
                     {isGrantedControl && (
                         <>
@@ -129,7 +129,7 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
                     ) : null}
                     {exhibitorProductDocs?.length > 0 ? (
                         <a
-                            className="btn btn-secondary"
+                            className="btn btn-secondary document-btn"
                             onClick={(e) => {
                                 e.stopPropagation();
                                 e.preventDefault();

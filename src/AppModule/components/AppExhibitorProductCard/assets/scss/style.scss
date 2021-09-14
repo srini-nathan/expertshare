@@ -148,6 +148,44 @@
                         }
                     }
                 }
+                .edit-users--popup {
+                    &.show-users {
+                        left: 0;
+                        width: 100%;
+                        height: auto;
+                        border-radius: var(--card-border-radius);
+                        .content {
+                            height: 260px;
+                            &--inner {
+                                &--item {
+                                    .row {
+                                        padding-right: 0 !important;
+                                    }
+                                    .create-session--docs--container--item {
+                                        display: flex;
+                                        align-items: center;
+                                        .left-content {
+                                            width: 85%;
+                                            .doc-row {
+                                                align-items: center;
+                                            }
+                                            .doc-title {
+                                                font-size: 14px;
+                                                font-weight: 400;
+                                                color: var(--card-text-color);
+                                            }
+                                        }
+                                        .btn-download {
+                                            width: 36px;
+                                            margin-right: 0;
+                                            margin-left: auto;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
