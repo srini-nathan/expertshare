@@ -4,9 +4,8 @@
   align-items: flex-end;
   justify-content: space-between;
   margin: 10px;
-  background: transparent;
   min-height: 70px;
-  background: white;
+  background-color: var(--background-music-player-background-color);
   border-radius: 5px;
   &.not-playing {
     canvas {
@@ -15,9 +14,11 @@
       margin-right: 2px;
     }
   }
-  .img-margin{
-    margin-bottom: 20px;
-    margin-right: 2px;
+  .img-wrapper {
+    img {
+      margin-bottom: 20px;
+      margin-right: 2px;
+    }
   }
   .playButton {
     .range {
@@ -29,12 +30,12 @@
           transform: rotate(270deg);
           left: -52px;
           bottom: 16px;
-          background-color: var(--card-background-color);
+          background-color: var(--background-music-player-background-color);
           border-radius: 5px;
           box-shadow: 0 12px 38px rgba(155, 167, 186, 0.5);
           padding: 5px;
           z-index: 999;
-          input {
+          input[type="range"] {
             width: 75px;
           }
         }

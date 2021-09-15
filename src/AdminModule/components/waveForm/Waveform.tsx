@@ -1,5 +1,6 @@
 import React, { FC, useState, useRef } from "react";
 import AudioSpectrum from "react-audio-spectrum";
+import { useGlobalData } from "../../../AppModule/contexts";
 import "./waveform.scss";
 
 interface WaveformProps {
@@ -8,14 +9,14 @@ interface WaveformProps {
 }
 
 const Waveform: FC<WaveformProps> = ({ url, loop }) => {
+    const { container } = useGlobalData();
+
     const audioRef: { current: any } = useRef(null);
     const [playing, setPlaying] = useState(false);
     const [captureImage, setCaptureImage] = useState(null) as any;
     const [mute, setMute] = useState(false);
     const [showRange, setShowRange] = useState(false);
     const [volRang, setVolRang] = useState(100);
-
-    // const url = "https://www.mfiles.co.uk/mp3-downloads/gs-cd-track2.mp3";
 
     const onPlayPause = () => {
         const el = document.getElementById("audio-canvas") as HTMLCanvasElement;
@@ -48,8 +49,8 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
     };
 
     const handleRange = (event) => {
-        // audioRef.current.volume = event.target.value / 100;
-        setVolRang(event.target.value);
+        audioRef.current.volume = event.target.value / 100;
+        setVolRang(Number(event.target.value));
     };
     const handleMouseEvent = () => {
         setShowRange(true);
@@ -77,14 +78,25 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
             <audio
                 id="audio-element"
                 preload="true"
-                muted={true}
+                muted={mute}
                 src={url}
                 crossOrigin="anonymous"
                 ref={audioRef}
                 loop={loop}
             />
             {!isMusicPlaying() && (
-                <img src={captureImage} alt="" className={"img-margin"} />
+                <div className="img-wrapper">
+                    <img
+                        src={captureImage}
+                        style={{
+                            borderColor:
+                                container?.designConfiguration
+                                    ?.widMusicBarColor,
+                        }}
+                        alt=""
+                        className=""
+                    />
+                </div>
             )}
             <AudioSpectrum
                 id="audio-canvas"
@@ -94,7 +106,12 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
                 capHeight={2}
                 meterWidth={2}
                 meterCount={512}
-                meterColor={[{ stop: 0.5, color: "#0CD7FD" }]}
+                meterColor={[
+                    {
+                        stop: 0.5,
+                        color: container?.designConfiguration?.widMusicBarColor,
+                    },
+                ]}
                 gap={4}
             />
             <div className="playButton" onClick={onVolumeChange}>
@@ -110,7 +127,6 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
                                 >
                                     <i className="far fa-volume" />
                                     <input
-                                        id="audio-element"
                                         type="range"
                                         min="0"
                                         max="100"
@@ -124,10 +140,17 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
                                 {setShowRange}
                             </label>
                         </div>
-                        <i
-                            className="far fa-volume"
-                            onMouseEnter={() => handleMouseEvent()}
-                        />
+                        {volRang === 0 ? (
+                            <i
+                                className="fal fa-volume-mute"
+                                onMouseEnter={() => handleMouseEvent()}
+                            />
+                        ) : (
+                            <i
+                                className="far fa-volume"
+                                onMouseEnter={() => handleMouseEvent()}
+                            />
+                        )}
                     </div>
                 )}
             </div>
