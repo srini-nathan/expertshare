@@ -4,10 +4,9 @@ import { PUser } from "../../../AdminModule/models";
 import { ChatMessage } from "../../models/entities/ChatMessage";
 import { FileTypeInfo } from "../../models";
 import { CONSTANTS } from "../../../config";
-import { useBuildAssetPath } from "../../hooks";
+import { useBuildAssetPath, useDateTime } from "../../hooks";
 import placeholder from "../../assets/images/user-avatar.png";
 import { UserApi } from "../../../AdminModule/apis";
-import { useCustomParseDate } from "../../../helpers/useCustomParseDate";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -40,7 +39,7 @@ export const AppChatOneToOneMessage: FC<AppChatOneToOneMessageProps> = ({
         FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         imageName
     );
-    const { customParse } = useCustomParseDate();
+    const { toShortTime } = useDateTime();
     const avatarUrl = imageName ? avatar : placeholder;
     const name = isMe ? "You" : `${firstName} ${lastName}`;
     return (
@@ -58,7 +57,7 @@ export const AppChatOneToOneMessage: FC<AppChatOneToOneMessageProps> = ({
                         {name}
                         {createdAt ? (
                             <span className="time">
-                                {customParse(new Date(createdAt), "hh:mm a")}
+                                {toShortTime(new Date(createdAt))}
                             </span>
                         ) : null}
                     </h4>

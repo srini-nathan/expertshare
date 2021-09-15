@@ -1,5 +1,6 @@
 import React, { FC, useState } from "react";
 import { Row, Col } from "react-bootstrap";
+import { format } from "date-fns";
 import { Link } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { Session, SessionCategory, User } from "../../../AdminModule/models";
@@ -14,7 +15,6 @@ import { FileTypeInfo } from "../../models";
 import { useGlobalData } from "../../contexts";
 import { getDateTimeWithoutTimezone } from "../../utils";
 import { AppShowUserListPopup } from "../AppShowUserListPopup";
-import { useCustomParseDate } from "../../../helpers/useCustomParseDate";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -40,7 +40,6 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
         FILETYPEINFO_SESSION_POSTER as FileTypeInfo,
         session.imageName
     );
-    const { customParse } = useCustomParseDate();
     const styles = session?.imageName
         ? {
               backgroundImage: `url(${sessionPosterPath})`,
@@ -141,7 +140,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                         <i className="fak fa-clock-light"></i>
                                         <Col className="inner-container--header--time--content pl-3">
                                             <h2 className="mb-0">
-                                                {customParse(
+                                                {format(
                                                     getDateTimeWithoutTimezone(
                                                         session.start
                                                     ),
