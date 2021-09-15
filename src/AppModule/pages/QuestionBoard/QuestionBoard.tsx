@@ -137,7 +137,7 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                         <div className="question-item--content--action pt-1">
                             <div className="row">
                                 {q.status !== STATUS_NEW && (
-                                    <div className="question-item--content--action--button approve col-6 py-2 pr-2">
+                                    <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 pt-2 pr-3 pr-sm-2 pr-md-3 pr-xl-2">
                                         <a
                                             href="#"
                                             className="btn btn-secondary"
