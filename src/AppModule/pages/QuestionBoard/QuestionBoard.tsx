@@ -303,7 +303,7 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
                                         {t(columnLabelKeys[boardCol])}
                                     </h2>
                                 </div>
-                                <div className="inner-container--header--search mt-3">
+                                <div className="inner-container--header--search mt-3 mx-2">
                                     <div className="search-input-box left-icon input-text">
                                         <input
                                             type="text"
