@@ -1,5 +1,4 @@
 import React, { FC } from "react";
-import { format } from "date-fns";
 import { Link } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
@@ -14,6 +13,7 @@ import { useGlobalData } from "../../contexts";
 import { getDateTimeWithoutTimezone, resolveImageWithStyle } from "../../utils";
 import { AppSponsors } from "../AppSponsors";
 import "./assets/scss/style.scss";
+import { useCustomParseDate } from "../../../helpers/useCustomParseDate";
 
 export interface AppConferenceCardProps {
     conference: PConference;
@@ -29,6 +29,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
     isGrantedControl,
 }): JSX.Element => {
     const { t } = useTranslation();
+    const { customParse } = useCustomParseDate();
     const {
         id,
         title,
@@ -114,7 +115,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                                 <>
                                     <div className="inner-container--det--time--spec--date">
                                         <h3 className="mb-0">
-                                            {format(
+                                            {customParse(
                                                 getDateTimeWithoutTimezone(
                                                     startAt
                                                 ),
@@ -130,7 +131,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                                     </div>
                                     <div className="inner-container--det--time--spec--period">
                                         <span>
-                                            {format(
+                                            {customParse(
                                                 getDateTimeWithoutTimezone(
                                                     startAt
                                                 ),
