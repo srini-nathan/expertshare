@@ -79,6 +79,15 @@ export const renderStreams = (
             );
         case "FILE":
             return <AppVideoPlayer url={streamUrl} />;
+        case "ZOOM":
+            return (
+                <div className="imageContainer">
+                    <i style={style}></i>
+                    <div className="overlay">
+                        <div className="overlay--content"></div>
+                    </div>
+                </div>
+            );
         default:
             if (showImage)
                 return (
