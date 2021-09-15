@@ -60,7 +60,7 @@ export const AppProfileHeader: FC<AppProfileHeaderProps> = ({
     };
     const [isReadMore, setIsReadMore] = useState(true);
     const showMore = () => {
-        if (getUserValue("biography").length < 800) return "";
+        if (getUserValue("biography").length <= 500) return "";
         if (isReadMore) return "+Show More";
         return "-Show Less";
     };
