@@ -67,6 +67,8 @@ $media-queries: (
     "ap-2": "only screen and (min-width: 1370px) and (max-width: 1720px)",
     "ap-3": "only screen and (min-width: 1024px) and (max-width: 1369px)",
     "ap-4": "only screen and (min-width: 769px) and (max-width: 1024px)",
+    //custom for music background player
+    "mbp-1": "only screen and (min-width: 769px) and (max-width: 1300px)",
 );
 
 @mixin media($breakpoints) {

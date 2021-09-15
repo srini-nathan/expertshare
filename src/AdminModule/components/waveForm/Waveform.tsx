@@ -1,4 +1,4 @@
-import React, { FC, useState, useRef } from "react";
+import React, { FC, useState, useRef, useEffect } from "react";
 import AudioSpectrum from "react-audio-spectrum";
 import { useGlobalData } from "../../../AppModule/contexts";
 import "./waveform.scss";
@@ -12,7 +12,8 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
     const { container } = useGlobalData();
 
     const audioRef: { current: any } = useRef(null);
-    const [playing, setPlaying] = useState(false);
+    const playPauseRef: { current: any } = useRef(null);
+    const [playing, setPlaying] = useState(true);
     const [captureImage, setCaptureImage] = useState(null) as any;
     const [mute, setMute] = useState(false);
     const [showRange, setShowRange] = useState(false);
@@ -34,6 +35,13 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
             }
         }
     };
+
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.play();
+            audioRef.current.muted = false;
+        }
+    }, []);
 
     const isMusicPlaying = () => {
         return playing;
@@ -68,7 +76,11 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
                 isMusicPlaying() ? "playing" : "not-playing"
             }`}
         >
-            <div className="playButton" onClick={onPlayPause}>
+            <div
+                className="playButton"
+                onClick={onPlayPause}
+                ref={playPauseRef}
+            >
                 {playing ? (
                     <i className="far fa-pause-circle" />
                 ) : (
@@ -78,7 +90,6 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
             <audio
                 id="audio-element"
                 preload="true"
-                muted={mute}
                 src={url}
                 crossOrigin="anonymous"
                 ref={audioRef}
@@ -101,7 +112,7 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
             <AudioSpectrum
                 id="audio-canvas"
                 height={35}
-                width={140}
+                width={"auto"}
                 audioId="audio-element"
                 capHeight={2}
                 meterWidth={2}

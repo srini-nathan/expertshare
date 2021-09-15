@@ -707,6 +707,9 @@
             > div:first-child {
                 width: 200px;
                 flex-basis: unset;
+                @include media("mbp-1") {
+                    width: 130px;
+                }
             }
 
             > div:nth-child(2) {
@@ -788,13 +791,17 @@
                     }
                 }
             }
-
+            .player-nav-item {
+                flex: none;
+                width: 250px;
+            }
             #show-menu-toggler {
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 width: 90px;
                 height: 100%;
+                margin: 0 10px;
                 cursor: pointer;
 
                 &:hover {
@@ -819,7 +826,11 @@
             display: none;
         }
     }
-
+    @include media("mbp-1") {
+        .player-nav-item {
+            width: 200px !important;
+        }
+    }
     @include media("lr-0") {
         .navbar-toggler-icon {
             display: none !important;
@@ -876,7 +887,12 @@
         display: none;
     }
 }
-
+.sidebar {
+    @include media("mobile") {
+        position: fixed !important;
+        height: auto;
+    }
+}
 .left-sidebar,
 .bottom-sidebar,
 .top-sidebar {

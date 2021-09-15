@@ -190,6 +190,9 @@ a {
             bottom: 80px;
         }
     }
+    @include media("mobile") {
+        padding-top: 60px;
+    }
 }
 .top-nav {
     @include media("not-mobile") {
