@@ -89,10 +89,10 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
             <div key={q.id} className="question-item card mb-4">
                 <div className="question-item--header">
                     <div className="row px-3 pt-3 mb-2">
-                        <div className="question-item--header--title col-12 col-xl-9">
+                        <div className="question-item--header--title col-12 col-xl-8 pr-0">
                             <h3 className="mb-2">{q?.session?.title || ""}</h3>
                         </div>
-                        <div className="question-item--header--button col-12 col-xl-3">
+                        <div className="question-item--header--button col-12 col-xl-4 pl-0">
                             <div className="question-item--header--button--arrow-right mb-2">
                                 <a href="#" className="btn btn-secondary">
                                     <i
