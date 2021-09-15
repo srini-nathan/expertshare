@@ -1,12 +1,11 @@
 .waveformContainer {
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
-  margin: 10px;
-  background: transparent;
-  min-height: 70px;
-  background: white;
+  padding: 0 10px;
+  min-height: 50px;
+  background-color: var(--background-music-player-background-color);
   border-radius: 5px;
   &.not-playing {
     canvas {
@@ -15,11 +14,14 @@
       margin-right: 2px;
     }
   }
-  .img-margin{
-    margin-bottom: 20px;
-    margin-right: 2px;
+  .img-wrapper {
+    margin: 0 10px;
+    img {
+      width: 100%;
+    }
   }
   .playButton {
+    padding-top: 3px;
     .range {
       display: block;
       .volumeRange {
@@ -27,24 +29,27 @@
         div {
           position: absolute;
           transform: rotate(270deg);
-          left: -52px;
-          bottom: 16px;
-          background-color: var(--card-background-color);
+          right: -75px;
+          bottom: 70px;
+          background-color: var(--background-music-player-background-color);
           border-radius: 5px;
           box-shadow: 0 12px 38px rgba(155, 167, 186, 0.5);
           padding: 5px;
           z-index: 999;
-          input {
+          input[type="range"] {
             width: 75px;
+            margin: 0 10px;
           }
         }
-        .btn-volume{
+        .btn-volume {
           flex-direction: row-reverse;
           display: flex;
+          justify-content: center;
           height: 50px;
+          width: 150px;
           i {
+            margin: 10px 0;
             transform: rotate(90deg);
-            margin: 4px 14px 6px 10px;
             font-size: 20px;
           }
         }
@@ -54,18 +59,28 @@
       display: none;
     }
     i {
-      margin: 0px 22px 20px 24px;
-      font-size: 24px;
+      display: flex;
+      align-items: center;
+      font-size: 22px;
       color: var(--navigation-item-text-color);
       &:hover {
         color: var(--navigation-item-text-color--hover) !important;
         cursor: pointer;
       }
+      &.fa-volume-up {
+        font-size: 20px;
+      }
+      &.fa-volume-mute {
+        font-weight: 500;
+      }
+    }
+    .audio-volume {
+      display: flex;
+      align-items: center;
     }
   }
   canvas {
-    margin-bottom: 20px;
-    margin-right: 2px;
+    width: 70%;
   }
   .wrapper {
     position: relative;

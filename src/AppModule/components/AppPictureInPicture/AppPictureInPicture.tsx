@@ -4,12 +4,15 @@ import { useRecoilState } from "recoil";
 import { renderStreams } from "../AppStreamManager";
 import "./assets/scss/style.scss";
 import { appPipPlayer, AppPipPlayerType } from "../../atoms";
+import { useGlobalData } from "../../contexts";
+import { parseConfiguration } from "../../utils";
 
 export const AppPictureInPicture = (): JSX.Element => {
+    const { container } = useGlobalData();
+    const config = parseConfiguration(container);
     const [value, setValue] = useRecoilState<AppPipPlayerType | null>(
         appPipPlayer
     );
-
     const [showDraggable, setShowDraggable] = React.useState(value !== null);
 
     useEffect(() => {
@@ -18,7 +21,7 @@ export const AppPictureInPicture = (): JSX.Element => {
         }
     }, [value]);
 
-    if (value === null) {
+    if (config.isPipEnable !== true || value === null) {
         return <></>;
     }
 
