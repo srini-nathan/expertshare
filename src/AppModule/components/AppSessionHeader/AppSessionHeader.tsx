@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
-import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 import { Link, navigate, useLocation } from "@reach/router";
 import "./assets/scss/style.scss";
@@ -13,6 +12,7 @@ import { useAuthState, useUserLocale, useIsGranted } from "../../hooks";
 import { UserApi } from "../../../AdminModule/apis";
 import { ROLES } from "../../../config";
 import { appPipPlayer } from "../../atoms";
+import { useCustomParseDate } from "../../../helpers/useCustomParseDate";
 
 export interface AppSessionHeaderProps {
     session: Session;
@@ -39,6 +39,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
     const { userId } = useAuthState();
     const setPipPlayerData = useSetRecoilState(appPipPlayer);
     const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
+    const { customParse } = useCustomParseDate();
 
     useEffect(() => {
         return () => {
@@ -258,7 +259,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                         >
                             <span className="date mb-1">
                                 {session.start &&
-                                    format(
+                                    customParse(
                                         getDateTimeWithoutTimezone(
                                             session.start
                                         ),
@@ -273,7 +274,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                             </span>
                             <span className="period">
                                 {session.start &&
-                                    format(
+                                    customParse(
                                         getDateTimeWithoutTimezone(
                                             session.start
                                         ),
@@ -287,7 +288,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                                     )}{" "}
                                 -{" "}
                                 {session.end &&
-                                    format(
+                                    customParse(
                                         getDateTimeWithoutTimezone(session.end),
                                         container &&
                                             container.configuration &&

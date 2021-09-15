@@ -1,10 +1,10 @@
 import React, { FC } from "react";
 import { Col } from "react-bootstrap";
-import { format } from "date-fns";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "./assets/scss/style.scss";
 import { useGlobalData } from "../../contexts";
 import { getDateOnly } from "../../utils";
+import { useCustomParseDate } from "../../../helpers/useCustomParseDate";
 
 export interface AppSessionDatesProps {
     sessionDates: { [key: string]: { start: string; end: string } };
@@ -18,6 +18,7 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
     setActiveDate,
 }): JSX.Element => {
     const { container } = useGlobalData();
+    const { customParse } = useCustomParseDate();
 
     return (
         <Col
@@ -45,7 +46,7 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
                                     >
                                         <div className="num-day">
                                             <span>
-                                                {format(
+                                                {customParse(
                                                     getDateOnly(
                                                         sessionDates[key].start
                                                     ),
@@ -55,7 +56,7 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
                                         </div>
                                         <div className="date-day">
                                             <span className="date-day--dofw">
-                                                {format(
+                                                {customParse(
                                                     getDateOnly(
                                                         sessionDates[key].start
                                                     ),
@@ -63,7 +64,7 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
                                                 )}
                                             </span>
                                             <span className="date-day--dofy">
-                                                {format(
+                                                {customParse(
                                                     getDateOnly(
                                                         sessionDates[key].start
                                                     ),
