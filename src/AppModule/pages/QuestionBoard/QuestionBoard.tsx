@@ -81,19 +81,19 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
         });
     };
     return statusQuestions.length <= 0 ? (
-        <span className="error mt-3 d-block w-100 text-center">
+        <span className="null mt-3 d-block w-100 text-center">
             {t("questionboard.list:noquestions")}
         </span>
     ) : (
         statusQuestions.map((q) => (
             <div key={q.id} className="question-item card mb-4">
                 <div className="question-item--header p-3">
-                    <div className="row m-0 p-0">
-                        <div className="question-item--header--title col-lg-8 pl-0">
-                            <h3 className="mb-0">{q?.session?.title || ""}</h3>
+                    <div className="row mx-0 mb-2 p-0">
+                        <div className="question-item--header--title col-12 col-xl-9 px-0">
+                            <h3 className="mb-2">{q?.session?.title || ""}</h3>
                         </div>
-                        <div className="question-item--header--button col-lg-4 pr-0">
-                            <div className="question-item--header--button--arrow-right pr-2">
+                        <div className="question-item--header--button col-12 col-xl-3 px-0">
+                            <div className="question-item--header--button--arrow-right mb-2">
                                 <a href="#" className="btn btn-secondary">
                                     <i
                                         className="fak fa-chevron-right"
@@ -101,7 +101,7 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                                     ></i>
                                 </a>
                             </div>
-                            <div className="question-item--header--button--move">
+                            <div className="question-item--header--button--move ml-2 mb-2">
                                 <a href="#" className="btn btn-secondary">
                                     <i
                                         className="fak fa-arrows-light"
@@ -112,7 +112,7 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                         </div>
                     </div>
 
-                    <div className="question-item--content user-2 rep px-3 pt-3">
+                    <div className="question-item--content user-2 rep">
                         <div className="question-item--content--header py-2">
                             <i
                                 className="question-item--content--header--avatar profile-pic mr-2"
@@ -134,7 +134,7 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                         <div className="question-item--content--comm py-2">
                             <p className="mb-0">{q.message}</p>
                         </div>
-                        <div className="question-item--content--action pt-1 pb-2">
+                        <div className="question-item--content--action pt-1">
                             <div className="row">
                                 {q.status !== STATUS_NEW && (
                                     <div className="question-item--content--action--button approve col-6 py-2 pr-2">
@@ -157,7 +157,7 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                                     </div>
                                 )}
                                 {q.status !== STATUS_ACCEPTED && (
-                                    <div className="question-item--content--action--button approve col-6 py-2 pr-2">
+                                    <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 pt-2 pr-3 pr-sm-2 pr-md-3 pr-xl-2">
                                         <a
                                             href="#"
                                             className="btn btn-secondary"
@@ -179,7 +179,7 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                                     </div>
                                 )}
                                 {q.status !== STATUS_REJECTED && (
-                                    <div className="question-item--content--action--button reject col-6 py-2 pl-2">
+                                    <div className="question-item--content--action--button reject col-12 col-sm-6 col-md-12 col-xl-6 pt-2 pl-3 pl-sm-2 pl-md-3 pl-xl-2">
                                         <a
                                             href="#"
                                             className="btn btn-secondary"
@@ -200,7 +200,7 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                                         </a>
                                     </div>
                                 )}
-                                <div className="question-item--content--action--button delete col-6 py-2 pr-2">
+                                <div className="question-item--content--action--button delete col-12 col-sm-6 col-md-12 col-xl-6 pt-3 pr-3 pr-sm-2 pr-md-3 pr-xl-2">
                                     <a
                                         href="#"
                                         className="btn btn-secondary"
@@ -213,7 +213,7 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                                         ></i>
                                     </a>
                                 </div>
-                                <div className="question-item--content--action--button edit col-6 py-2 pl-2">
+                                <div className="question-item--content--action--button edit col-12 col-sm-6 col-md-12 col-xl-6 pt-3 pl-3 pl-sm-2 pl-md-3 pl-xl-2">
                                     <a href="#" className="btn btn-secondary">
                                         {t("questionboard.list:status.edit")}
                                         <i
@@ -245,6 +245,12 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
         ACCEPTED: "questionboard.list:columns.title.accepted",
         REJECTED: "questionboard.list:columns.title.rejected",
         ANSWERED: "questionboard.list:columns.title.answered",
+    };
+    const columnIconName = {
+        NEW: "message-incoming",
+        ACCEPTED: "message-approved",
+        REJECTED: "message-reject",
+        ANSWERED: "start-conversation",
     };
     const { t } = useTranslation();
     const fetchQuestions = (params = {}) => {
@@ -284,13 +290,15 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
                         xs={12}
                         md={6}
                         lg={Math.max(12 / showColumns.length, 4)}
-                        xl={Math.max(12 / showColumns.length, 4)}
+                        xl={Math.max(12 / showColumns.length, 3)}
                         className="questionboard-admin--container--item"
                     >
                         <div className="inner-container card">
                             <div className="inner-container--header py-3 px-3">
                                 <div className="inner-container--header--title">
-                                    <i className="fak fa-message-incoming"></i>
+                                    <i
+                                        className={`fak fa-${columnIconName[boardCol]}`}
+                                    ></i>
                                     <h2 className="mb-0 pl-2">
                                         {t(columnLabelKeys[boardCol])}
                                     </h2>
@@ -300,7 +308,9 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
                                         <input
                                             type="text"
                                             className="w-100"
-                                            placeholder="Search..."
+                                            placeholder={t(
+                                                "questionboard.list:columns.search"
+                                            )}
                                             onChange={() =>
                                                 handleQuickSearch(boardCol)
                                             }
@@ -339,7 +349,7 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
             <AppPageHeader
                 title={t("questionboard.list:header.title")}
             ></AppPageHeader>
-            <div className="questionboard-admin--container">
+            <div className="questionboard-admin--container pt-1 pt-xl-3">
                 {renderQuestionStatusCols()}
             </div>
         </Fragment>

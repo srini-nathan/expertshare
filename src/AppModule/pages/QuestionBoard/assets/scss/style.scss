@@ -16,19 +16,19 @@
         }
         margin-bottom: 30px;
         .inner-container {
-            box-shadow: 0 3px 9px var(--secondary-10);
             &--header {
-                border-bottom: 1px solid var(--secondary-20);
+                border-bottom: 1px solid var(--card-divider-color);
                 &--title {
                     display: flex;
+                    word-break: break-all;
                     i {
                         font-size: 23px;
-                        color: var(--secondary);
+                        color: var(--card-text-color);
                     }
                     h2 {
                         font-size: 20px;
                         font-weight: 700;
-                        color: var(--secondary);
+                        color: var(--card-text-color);
                     }
                 }
             }
@@ -36,16 +36,16 @@
                 &--group {
                     height: 700px;
                     overflow: auto;
-                    scrollbar-color: var(--secondary) var(--secondary-10);
+                    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-background);
                     scrollbar-width: thin;
                     &::-webkit-scrollbar {
                         width: 3.5px;
                     }
                     &::-webkit-scrollbar-track {
-                        background: var(--secondary-10);
+                        background: var(--scrollbar-background);
                     }
                     &::-webkit-scrollbar-thumb {
-                        background: var(--secondary);
+                        background: var(--scrollbar-thumb);
                     }
                     &::-webkit-scrollbar-thumb:hover {
                         opacity: 50%;
@@ -53,22 +53,23 @@
                     .question-item {
                         overflow: hidden;
                         &--header {
-                            border-bottom: 1px solid var(--secondary-20);
+                            border-bottom: 1px solid var(--card-divider-color);
                             &--title {
                                 h3 {
                                     display: -webkit-box;
-                                    height: 56px;
+                                    height: 55px;
                                     overflow: hidden;
                                     -webkit-box-orient: vertical;
                                     -webkit-line-clamp: 2;
                                     font-size: 20px;
                                     font-weight: 700;
                                     line-height: 28px;
-                                    color: var(--secondary);
+                                    color: var(--card-text-color);
                                 }
                             }
                             &--button {
                                 display: flex;
+                                flex-flow: wrap;
                                 justify-content: flex-end;
                                 a {
                                     width: 36px;
@@ -110,15 +111,22 @@
                                 }
                                 &--det {
                                     display: grid;
+                                    width: 72%;
                                     h4 {
+                                        display: -webkit-box;
+                                        height: 16px;
+                                        overflow: hidden;
+                                        -webkit-box-orient: vertical;
+                                        -webkit-line-clamp: 1;
                                         font-size: 16px;
                                         font-weight: 500;
-                                        color: var(--secondary);
+                                        line-height: 16px;
+                                        color: var(--card-text-color);
                                     }
                                     span {
                                         font-size: 12px;
                                         font-weight: 500;
-                                        color: var(--secondary-70);
+                                        color: var(--card-second-text-color);
                                     }
                                 }
                             }
@@ -136,10 +144,20 @@
                             }
                             &--action {
                                 &--button {
+                                    @include media("qb-1") {
+                                        flex: 0 0 100%;
+                                        max-width: 100%;
+                                        padding-right: 10px;
+                                        padding-left: 10px;
+                                    }
                                     a {
                                         position: relative;
-                                        font-size: 14px;
-                                        font-weight: 500;
+                                        height: auto;
+                                        min-height: 36px;
+                                        padding-right: 30px !important;
+                                        padding-left: 10px !important;
+                                        line-height: 18px !important;
+                                        word-break: break-all;
                                         i {
                                             position: absolute;
                                             right: 10px;
@@ -163,14 +181,14 @@
                                 }
                             }
                             &.rep {
-                                border-top: 1px solid var(--secondary-20);
+                                border-top: 1px solid var(--card-divider-color);
                             }
                         }
                     }
-                    .error {
+                    .null {
                         font-size: 14px;
                         font-weight: 400;
-                        color: var(--secondary-70);
+                        color: var(--card-second-text-color);
                     }
                 }
             }
