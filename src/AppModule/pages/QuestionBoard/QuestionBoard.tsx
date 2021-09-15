@@ -135,9 +135,9 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                             <p className="mb-0">{q.message}</p>
                         </div>
                         <div className="question-item--content--action pt-1">
-                            <div className="row">
+                            <div className="row px-2">
                                 {q.status !== STATUS_NEW && (
-                                    <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 pt-2 pr-3 pr-sm-2 pr-md-3 pr-xl-2">
+                                    <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
                                         <a
                                             href="#"
                                             className="btn btn-secondary"
@@ -157,7 +157,7 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                                     </div>
                                 )}
                                 {q.status !== STATUS_ACCEPTED && (
-                                    <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 pt-2 pr-3 pr-sm-2 pr-md-3 pr-xl-2">
+                                    <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
                                         <a
                                             href="#"
                                             className="btn btn-secondary"
@@ -179,7 +179,7 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                                     </div>
                                 )}
                                 {q.status !== STATUS_REJECTED && (
-                                    <div className="question-item--content--action--button reject col-12 col-sm-6 col-md-12 col-xl-6 pt-2 pl-3 pl-sm-2 pl-md-3 pl-xl-2">
+                                    <div className="question-item--content--action--button reject col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
                                         <a
                                             href="#"
                                             className="btn btn-secondary"
@@ -200,7 +200,7 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                                         </a>
                                     </div>
                                 )}
-                                <div className="question-item--content--action--button delete col-12 col-sm-6 col-md-12 col-xl-6 pt-3 pr-3 pr-sm-2 pr-md-3 pr-xl-2">
+                                <div className="question-item--content--action--button delete col-12 col-sm-6 col-md-12 col-xl-6 pt-3 px-2">
                                     <a
                                         href="#"
                                         className="btn btn-secondary"
@@ -213,7 +213,7 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                                         ></i>
                                     </a>
                                 </div>
-                                <div className="question-item--content--action--button edit col-12 col-sm-6 col-md-12 col-xl-6 pt-3 pl-3 pl-sm-2 pl-md-3 pl-xl-2">
+                                <div className="question-item--content--action--button edit col-12 col-sm-6 col-md-12 col-xl-6 pt-3 px-2">
                                     <a href="#" className="btn btn-secondary">
                                         {t("questionboard.list:status.edit")}
                                         <i
