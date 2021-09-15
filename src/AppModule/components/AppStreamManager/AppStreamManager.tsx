@@ -79,6 +79,15 @@ export const renderStreams = (
             );
         case "FILE":
             return <AppVideoPlayer url={streamUrl} />;
+        case "ZOOM":
+            return (
+                <div className="imageContainer">
+                    <i style={style}></i>
+                    <div className="overlay">
+                        <div className="overlay--content"></div>
+                    </div>
+                </div>
+            );
         default:
             if (showImage)
                 return (
@@ -113,7 +122,7 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
     const { user } = useAuthState();
     const { container } = useGlobalData();
     const { id } = useParamId();
-
+    const { streamType } = session;
     useEffect(() => {
         return (): void => {
             clearInterval(intervalForDestroy);
@@ -254,7 +263,7 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
     };
 
     useMemo(() => {
-        if (live && session && session.zoomSignature) {
+        if (live && session && streamType === "ZOOM" && session.zoomSignature) {
             newConnect();
         }
     }, [live, session]);
@@ -372,7 +381,7 @@ export const AppStreamManager: FC<AppStreamManagerProps> = ({
         }
         if (
             !session.isReply &&
-            getDateTimeWithoutTimezone(session.currentTime) <
+            getDateTimeWithoutTimezone(session.currentTime) >
                 getDateTimeWithoutTimezone(session.end)
         ) {
             return (
