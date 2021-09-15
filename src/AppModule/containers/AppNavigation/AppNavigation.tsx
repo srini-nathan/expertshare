@@ -501,7 +501,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 label={"navigation:questionboard"}
                 path={"/questionboard"}
                 icon={{
-                    name: "fak fa-video",
+                    name: "fak fa-circle-question",
                 }}
                 className="main-menu"
                 onClick={() => isNavOpen(!navOpen)}
