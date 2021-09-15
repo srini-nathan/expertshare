@@ -90,7 +90,7 @@ const App = (): JSX.Element => {
     const isAutoLoginPage = !(
         autoLoginPage === null && autoLoginPageFromContainer === null
     );
-    const showPipPlayer = sessionDetailPage === null && reloadingPage === null;
+    let showPipPlayer = sessionDetailPage === null && reloadingPage === null;
     const { emitLogin, emitLogout, emitPageChange } = useUserSocketEvents();
     const { handler } = useCommandCenterSocketEvents();
     const skippedOnBoarding = isSkipOnBoarding();
@@ -148,6 +148,13 @@ const App = (): JSX.Element => {
 
     if (status === "LOADING" || isAuthenticated === null) {
         return <AppFullScreenLoader />;
+    }
+    if (
+        container &&
+        container.configuration &&
+        (container.configuration as any).isPipEnable === false
+    ) {
+        showPipPlayer = false;
     }
     if (!isAutoLoginPage && isAuthenticated === true && user && container) {
         if (!user.isOnboarded && !onBoardingPage && !skippedOnBoarding) {
