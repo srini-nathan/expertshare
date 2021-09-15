@@ -87,12 +87,12 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
     ) : (
         statusQuestions.map((q) => (
             <div key={q.id} className="question-item card mb-4">
-                <div className="question-item--header p-3">
-                    <div className="row mx-0 mb-2 p-0">
-                        <div className="question-item--header--title col-12 col-xl-9 px-0">
+                <div className="question-item--header">
+                    <div className="row px-3 pt-3 mb-2">
+                        <div className="question-item--header--title col-12 col-xl-9">
                             <h3 className="mb-2">{q?.session?.title || ""}</h3>
                         </div>
-                        <div className="question-item--header--button col-12 col-xl-3 px-0">
+                        <div className="question-item--header--button col-12 col-xl-3">
                             <div className="question-item--header--button--arrow-right mb-2">
                                 <a href="#" className="btn btn-secondary">
                                     <i
@@ -112,7 +112,7 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                         </div>
                     </div>
 
-                    <div className="question-item--content user-2 rep">
+                    <div className="question-item--content user-2 rep p-3">
                         <div className="question-item--content--header py-2">
                             <i
                                 className="question-item--content--header--avatar profile-pic mr-2"
