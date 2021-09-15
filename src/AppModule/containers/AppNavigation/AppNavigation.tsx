@@ -573,7 +573,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 {renderVideoMenu()}
                 {render3dMenu()}
                 {renderMoreMenu()}
-                {LiveNow()}
+                {configuration.isLiveNowEnable && LiveNow()}
                 {configuration.isMusicEnable && (
                     <div style={{ width: "100%" }}>
                         <Waveform
