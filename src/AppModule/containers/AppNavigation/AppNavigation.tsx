@@ -573,9 +573,6 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 {renderVideoMenu()}
                 {render3dMenu()}
                 {renderMoreMenu()}
-<<<<<<< HEAD
-                {LiveNow()}
-=======
                 {configuration.isLiveNowEnable && LiveNow()}
                 {configuration.isMusicEnable && (
                     <div style={{ width: "100%" }}>
@@ -585,7 +582,6 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                         />
                     </div>
                 )}
->>>>>>> 20ecf4f0a20896be1a49212c0309ffebd2555115
             </>
         );
     };
