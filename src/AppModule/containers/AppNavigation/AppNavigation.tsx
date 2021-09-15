@@ -574,14 +574,6 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 {render3dMenu()}
                 {renderMoreMenu()}
                 {LiveNow()}
-                {configuration.isMusicEnable && (
-                    <div style={{ width: "100%" }}>
-                        <Waveform
-                            url={`${baseConfig}/${configuration.musicFilename}`}
-                            loop={configuration.isMusicLoop}
-                        />
-                    </div>
-                )}
             </>
         );
     };
@@ -825,7 +817,34 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                             ]}
                                         />
                                     </ListGroupItem>
-
+                                    {menuLocation === "LEFT" &&
+                                        configuration.isMusicEnable && (
+                                            <ListGroupItem className="pt-2 mb-2 mb-sm-0">
+                                                <div style={{ width: "100%" }}>
+                                                    <Waveform
+                                                        url={`${baseConfig}/${configuration.musicFilename}`}
+                                                        loop={
+                                                            configuration.isMusicLoop
+                                                        }
+                                                    />
+                                                </div>
+                                            </ListGroupItem>
+                                        )}
+                                    {(menuLocation === "TOP" ||
+                                        menuLocation === "BOTTOM") &&
+                                        width < 768 &&
+                                        configuration.isMusicEnable && (
+                                            <ListGroupItem className="pt-2 mb-2 mb-sm-0">
+                                                <div style={{ width: "100%" }}>
+                                                    <Waveform
+                                                        url={`${baseConfig}/${configuration.musicFilename}`}
+                                                        loop={
+                                                            configuration.isMusicLoop
+                                                        }
+                                                    />
+                                                </div>
+                                            </ListGroupItem>
+                                        )}
                                     {(menuLocation === "LEFT" ||
                                         width < 768) && (
                                         <>
@@ -898,6 +917,16 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                         </ListGroup>
                     </Nav>
                 </Navbar.Collapse>
+                {(menuLocation === "TOP" || menuLocation === "BOTTOM") &&
+                    width >= 768 &&
+                    configuration.isMusicEnable && (
+                        <div className="player-nav-item ml-3">
+                            <Waveform
+                                url={`${baseConfig}/${configuration.musicFilename}`}
+                                loop={configuration.isMusicLoop}
+                            />
+                        </div>
+                    )}
                 <div
                     onClick={() => {
                         setShowMenu(!showMenu);

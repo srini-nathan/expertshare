@@ -112,7 +112,7 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
             <AudioSpectrum
                 id="audio-canvas"
                 height={35}
-                width={140}
+                width={"auto"}
                 audioId="audio-element"
                 capHeight={2}
                 meterWidth={2}
