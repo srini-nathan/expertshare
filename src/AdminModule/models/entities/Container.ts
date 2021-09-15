@@ -32,7 +32,7 @@ export class Container extends BaseEntity {
 
     configurationTypes: string[] | any[];
 
-    designConfiguration: string[] | any[];
+    designConfiguration: string[] | any;
 
     designConfigurationTypes: string[] | any[];
 
