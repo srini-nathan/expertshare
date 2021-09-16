@@ -113,24 +113,28 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                     </div>
 
                     <div className="question-item--content user-2 rep p-3">
-                        <div className="question-item--content--header py-2">
-                            <i
-                                className="question-item--content--header--avatar profile-pic mr-2"
-                                style={loginUserProfileStyle(q.user)}
-                            ></i>
-                            <div className="question-item--content--header--det">
-                                <h4 className="mb-0">
-                                    {q.user.firstName} {q.user.lastName}
-                                </h4>
-                                <span>
-                                    {format(
-                                        getDateTimeWithoutTimezone(q.createdAt),
+                        <a href={`/attendee/${q.user.id}/show`} target="_blank">
+                            <div className="question-item--content--header py-2">
+                                <i
+                                    className="question-item--content--header--avatar profile-pic mr-2"
+                                    style={loginUserProfileStyle(q.user)}
+                                ></i>
+                                <div className="question-item--content--header--det">
+                                    <h4 className="mb-0">
+                                        {q.user.firstName} {q.user.lastName}
+                                    </h4>
+                                    <span>
+                                        {format(
+                                            getDateTimeWithoutTimezone(
+                                                q.createdAt
+                                            ),
 
-                                        getDateFormat()
-                                    )}
-                                </span>
+                                            getDateFormat()
+                                        )}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                         <div className="question-item--content--comm py-2">
                             <p className="mb-0">{q.message}</p>
                         </div>
