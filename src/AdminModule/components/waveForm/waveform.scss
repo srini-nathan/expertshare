@@ -21,6 +21,7 @@
     }
   }
   .playButton {
+    width: 25px;
     padding-top: 3px;
     .range {
       display: block;
@@ -77,6 +78,7 @@
     .audio-volume {
       display: flex;
       align-items: center;
+      width: 25px;
     }
   }
   canvas {
