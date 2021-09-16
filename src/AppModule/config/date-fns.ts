@@ -25,18 +25,18 @@ export const init = (t: (key: string) => string) => {
     const monthValues = {
         narrow: ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"] as const,
         abbreviated: [
-            "Jan",
-            "Feb",
-            "Mar",
-            "Apr",
-            "May",
-            "Jun",
-            "Jul",
-            "Aug",
-            "Sep",
-            "Oct",
-            "Nov",
-            "Dec",
+            t("common.date:abbreviated.month.jan"),
+            t("common.date:abbreviated.month.feb"),
+            t("common.date:abbreviated.month.mar"),
+            t("common.date:abbreviated.month.apr"),
+            t("common.date:abbreviated.month.may"),
+            t("common.date:abbreviated.month.jun"),
+            t("common.date:abbreviated.month.jul"),
+            t("common.date:abbreviated.month.aug"),
+            t("common.date:abbreviated.month.sep"),
+            t("common.date:abbreviated.month.oct"),
+            t("common.date:abbreviated.month.nov"),
+            t("common.date:abbreviated.month.dec"),
         ] as const,
         wide: [
             t("common.date:wide.month.january"),
@@ -55,9 +55,33 @@ export const init = (t: (key: string) => string) => {
     };
 
     const dayValues = {
-        narrow: ["S", "M", "T", "W", "T", "F", "S"] as const,
-        short: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"] as const,
-        abbreviated: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const,
+        narrow: [
+            t("common.date:narrow.day.s"),
+            t("common.date:narrow.day.m"),
+            t("common.date:narrow.day.t"),
+            t("common.date:narrow.day.w"),
+            t("common.date:narrow.day.t"),
+            t("common.date:narrow.day.f"),
+            t("common.date:narrow.day.s")
+        ] as const,
+        short: [
+            t("common.date:short.day.su"),
+            t("common.date:short.day.mo"),
+            t("common.date:short.day.tu"),
+            t("common.date:short.day.we"),
+            t("common.date:short.day.th"),
+            t("common.date:short.day.fr"),
+            t("common.date:short.day.sa")
+        ] as const,
+        abbreviated: [
+            t("common.date:abbreviated.day.sun"),
+            t("common.date:abbreviated.day.mon"),
+            t("common.date:abbreviated.day.tue"),
+            t("common.date:abbreviated.day.wed"),
+            t("common.date:abbreviated.day.thu"),
+            t("common.date:abbreviated.day.fri"),
+            t("common.date:abbreviated.day.sat"),
+        ] as const,
         wide: [
             t("common.date:wide.day.sunday"),
             t("common.date:wide.day.monday"),
