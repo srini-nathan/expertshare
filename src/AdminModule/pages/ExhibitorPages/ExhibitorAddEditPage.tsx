@@ -803,7 +803,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                 />
                             </Row>
                             <Row>
-                                <Col xl={12} lg={12}>
+                                <Col xl={12} lg={12} className="mb-3">
                                     <AppSessionUsers
                                         xl={4}
                                         lg={4}
@@ -833,7 +833,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                 </Col>
                             </Row>
                             <Row>
-                                <Col xl={12} lg={12}>
+                                <Col xl={12} lg={12} className="mb-3">
                                     <AppSessionUsers
                                         xl={4}
                                         lg={4}
@@ -863,7 +863,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                 </Col>
                             </Row>
                             <Row>
-                                <Col xl={12} lg={12} className="test">
+                                <Col xl={12} lg={12} className="mb-3">
                                     <AppEventPicker
                                         xl={4}
                                         lg={4}
@@ -893,7 +893,7 @@ export const ExhibitorAddEditPage: FC<RouteComponentProps> = ({
                                 </Col>
                             </Row>
                             <Row>
-                                <Col xl={12} lg={12}>
+                                <Col xl={12} lg={12} className="mb-3">
                                     <AppSessionPicker
                                         xl={4}
                                         lg={4}
