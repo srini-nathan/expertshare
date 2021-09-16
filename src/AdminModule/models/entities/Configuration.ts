@@ -49,11 +49,11 @@ export class Configuration implements Configuration {
 
     longDate = "EEEE MMMM, dd";
 
-    shortTime = "hh=mm a";
+    shortTime = "hh:mm a";
 
-    longTime = "hh=mm a";
+    longTime = "hh:mm a";
 
-    shortDatetime = "EEEE MMMM, dd hh=mm a";
+    shortDatetime = "EEEE MMMM, dd hh:mm a";
 
-    longDatetime = "EEEE MMMM, dd hh=mm a";
+    longDatetime = "EEEE MMMM, dd hh:mm a";
 }
