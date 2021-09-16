@@ -5,14 +5,13 @@ import { useTranslation } from "react-i18next";
 import { Session, SessionCategory, User } from "../../../AdminModule/models";
 import "./assets/scss/style.scss";
 import placeholder from "../../assets/images/imgthumb.svg";
-import { useBuildAssetPath } from "../../hooks";
+import { useBuildAssetPath, useDateTime } from "../../hooks";
 import { CONSTANTS } from "../../../config";
 import { AppButton } from "../AppButton";
 import { AppCard } from "../AppCard";
 import { AppUserListItem } from "../AppUserListItem";
 import { FileTypeInfo } from "../../models";
-import { useGlobalData } from "../../contexts";
-import { humanReadableDate, getDateTimeWithoutTimezone } from "../../utils";
+import { getDateTimeWithoutTimezone } from "../../utils";
 import { AppShowUserListPopup } from "../AppShowUserListPopup";
 
 const { Upload: UPLOAD } = CONSTANTS;
@@ -49,10 +48,10 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
               backgroundPosition: "center",
           };
     const [showMore, isShowMore] = useState<boolean>(false);
-    const { container } = useGlobalData();
     const { t } = useTranslation();
     const users = [...session.speakers, ...session.moderators];
     const limited = users?.slice(0, 3);
+    const { toShortTime } = useDateTime();
 
     const getSize = (): string[] => {
         switch (session.cardSize) {
@@ -139,17 +138,10 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                         <i className="fak fa-clock-light"></i>
                                         <Col className="inner-container--header--time--content pl-3">
                                             <h2 className="mb-0">
-                                                {humanReadableDate(
+                                                {toShortTime(
                                                     getDateTimeWithoutTimezone(
                                                         session.start
-                                                    ),
-                                                    container &&
-                                                        container.configuration &&
-                                                        (container.configuration as any)
-                                                            .shortTime
-                                                        ? (container.configuration as any)
-                                                              .shortTime
-                                                        : "hh:mm a"
+                                                    )
                                                 )}
                                                 <span className="value">
                                                     {getDiffTime()}
