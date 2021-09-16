@@ -138,11 +138,12 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                         <i className="fak fa-clock-light"></i>
                                         <Col className="inner-container--header--time--content pl-3">
                                             <h2 className="mb-0">
-                                                {toShortTime(
-                                                    getDateTimeWithoutTimezone(
-                                                        session.start
-                                                    )
-                                                )}
+                                                {session?.start &&
+                                                    toShortTime(
+                                                        getDateTimeWithoutTimezone(
+                                                            session.start
+                                                        )
+                                                    )}
                                                 <span className="value">
                                                     {getDiffTime()}
                                                 </span>

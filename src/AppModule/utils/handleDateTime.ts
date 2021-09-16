@@ -102,5 +102,9 @@ export const getUTCDate = (): Date => {
 };
 
 export const humanReadableDate = (date: Date, toFormat: string): string => {
-    return format(date, toFormat, { locale });
+    try {
+        return format(date, toFormat, { locale });
+    } catch (e) {
+        return "Invalid";
+    }
 };
