@@ -139,7 +139,7 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
                                     <i className="far fa-volume" />
                                     <input
                                         type="range"
-                                        min="0"
+                                        min="1"
                                         max="100"
                                         value={volRang}
                                         onChange={handleRange}
