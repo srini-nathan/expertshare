@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
-import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 import { Link, navigate, useLocation } from "@reach/router";
 import "./assets/scss/style.scss";
@@ -8,7 +7,7 @@ import { useSetRecoilState } from "recoil";
 import { AppStreamManager } from "../AppStreamManager";
 import { PUser, Session } from "../../../AdminModule/models";
 import { useGlobalData } from "../../contexts";
-import { getDateTimeWithoutTimezone } from "../../utils";
+import { getDateTimeWithoutTimezone, humanReadableDate } from "../../utils";
 import { useAuthState, useUserLocale, useIsGranted } from "../../hooks";
 import { UserApi } from "../../../AdminModule/apis";
 import { ROLES } from "../../../config";
@@ -258,7 +257,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                         >
                             <span className="date mb-1">
                                 {session.start &&
-                                    format(
+                                    humanReadableDate(
                                         getDateTimeWithoutTimezone(
                                             session.start
                                         ),
@@ -273,7 +272,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                             </span>
                             <span className="period">
                                 {session.start &&
-                                    format(
+                                    humanReadableDate(
                                         getDateTimeWithoutTimezone(
                                             session.start
                                         ),
@@ -287,7 +286,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                                     )}{" "}
                                 -{" "}
                                 {session.end &&
-                                    format(
+                                    humanReadableDate(
                                         getDateTimeWithoutTimezone(session.end),
                                         container &&
                                             container.configuration &&

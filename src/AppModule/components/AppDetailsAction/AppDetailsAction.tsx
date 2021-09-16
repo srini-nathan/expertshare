@@ -1,6 +1,5 @@
 import React, { FunctionComponent, useState } from "react";
 import { Row, Col } from "react-bootstrap";
-import { format } from "date-fns";
 import { AppСhoseMethodMessage } from "../AppСhoseMethodMessage";
 import { AppButton } from "../AppButton";
 import "./assets/scss/style.scss";
@@ -8,7 +7,7 @@ import UserAvatar from "../../assets/images/user-avatar.png";
 import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath, useAuthState, useIsGranted } from "../../hooks";
 import { FileTypeInfo } from "../../models";
-import { getDateTimeWithoutTimezone } from "../../utils";
+import { getDateTimeWithoutTimezone, humanReadableDate } from "../../utils";
 import { useGlobalData } from "../../contexts";
 
 const { Upload: UPLOAD, Role: ROLE } = CONSTANTS;
@@ -141,7 +140,7 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                                         `${userObj.firstName} ${userObj.lastName}`}
                                 </div>
                                 <div className="det-profile--time">
-                                    {format(
+                                    {humanReadableDate(
                                         getDateTimeWithoutTimezone(createdAt),
 
                                         getDateFormat()

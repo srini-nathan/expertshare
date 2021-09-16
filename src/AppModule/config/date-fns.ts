@@ -1,6 +1,7 @@
 import type { Localize, LocalizeFn, QuarterIndex } from "date-fns/locale/types";
 import buildLocalizeFn from "date-fns/locale/_lib/buildLocalizeFn";
 import { enUS } from "date-fns/locale";
+import { registerLocale } from "react-datepicker";
 
 let locale: Locale = { ...enUS };
 export const init = (t: (key: string) => string) => {
@@ -197,7 +198,6 @@ export const init = (t: (key: string) => string) => {
         ...locale,
         localize,
     };
-
 };
 
 export {

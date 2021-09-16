@@ -1,6 +1,5 @@
 import React, { FC, useState } from "react";
 import { Row, Col } from "react-bootstrap";
-import { format } from "date-fns";
 import { Link } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { Session, SessionCategory, User } from "../../../AdminModule/models";
@@ -13,7 +12,7 @@ import { AppCard } from "../AppCard";
 import { AppUserListItem } from "../AppUserListItem";
 import { FileTypeInfo } from "../../models";
 import { useGlobalData } from "../../contexts";
-import { getDateTimeWithoutTimezone } from "../../utils";
+import { humanReadableDate, getDateTimeWithoutTimezone } from "../../utils";
 import { AppShowUserListPopup } from "../AppShowUserListPopup";
 
 const { Upload: UPLOAD } = CONSTANTS;
@@ -140,7 +139,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                         <i className="fak fa-clock-light"></i>
                                         <Col className="inner-container--header--time--content pl-3">
                                             <h2 className="mb-0">
-                                                {format(
+                                                {humanReadableDate(
                                                     getDateTimeWithoutTimezone(
                                                         session.start
                                                     ),

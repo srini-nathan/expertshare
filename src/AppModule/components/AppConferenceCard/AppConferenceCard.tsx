@@ -1,5 +1,4 @@
 import React, { FC } from "react";
-import { format } from "date-fns";
 import { Link } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
@@ -11,7 +10,11 @@ import {
 import { useAuthState, useBuildAssetPath } from "../../hooks";
 import placeholder from "../../assets/images/imgthumb.svg";
 import { useGlobalData } from "../../contexts";
-import { getDateTimeWithoutTimezone, resolveImageWithStyle } from "../../utils";
+import {
+    humanReadableDate,
+    getDateTimeWithoutTimezone,
+    resolveImageWithStyle,
+} from "../../utils";
 import { AppSponsors } from "../AppSponsors";
 import "./assets/scss/style.scss";
 
@@ -114,7 +117,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                                 <>
                                     <div className="inner-container--det--time--spec--date">
                                         <h3 className="mb-0">
-                                            {format(
+                                            {humanReadableDate(
                                                 getDateTimeWithoutTimezone(
                                                     startAt
                                                 ),
@@ -130,7 +133,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                                     </div>
                                     <div className="inner-container--det--time--spec--period">
                                         <span>
-                                            {format(
+                                            {humanReadableDate(
                                                 getDateTimeWithoutTimezone(
                                                     startAt
                                                 ),

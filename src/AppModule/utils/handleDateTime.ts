@@ -101,6 +101,6 @@ export const getUTCDate = (): Date => {
     return new Date(new Date().toISOString());
 };
 
-export const formatDated = (date: Date, toFormat: string): string => {
+export const humanReadableDate = (date: Date, toFormat: string): string => {
     return format(date, toFormat, { locale });
 };
