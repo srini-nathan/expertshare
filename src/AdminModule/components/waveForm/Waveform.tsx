@@ -60,6 +60,7 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
         audioRef.current.volume = event.target.value / 100;
         setVolRang(Number(event.target.value));
     };
+
     const handleMouseEvent = () => {
         setShowRange(true);
     };
@@ -70,6 +71,20 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
         e.stopPropagation();
         e.preventDefault();
     };
+
+    const onAudioEnd = () => {
+        if (!loop) {
+            const el = document.getElementById(
+                "audio-canvas"
+            ) as HTMLCanvasElement;
+            if (el) {
+                const image = el.toDataURL("image/png");
+                setCaptureImage(image);
+            }
+            setPlaying(false);
+        }
+    };
+
     return (
         <div
             className={`waveformContainer ${
@@ -94,6 +109,7 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
                 crossOrigin="anonymous"
                 ref={audioRef}
                 loop={loop}
+                onEnded={onAudioEnd}
             />
             {!isMusicPlaying() && (
                 <div className="img-wrapper">
