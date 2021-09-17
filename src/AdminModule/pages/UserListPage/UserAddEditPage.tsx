@@ -103,6 +103,10 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
     const [relationalManager, setRelationalManager] = useState<
         SimpleObject<string>[]
     >([]);
+    const [
+        fetchingRelationalManager,
+        setFetchingRelationalManager,
+    ] = useState<boolean>(true);
     const [languages, setLanguages] = useState<SimpleObject<string>[]>([]);
     const profilePicturePath = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo
@@ -354,6 +358,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
                 });
                 setRelationalManager(rm);
             }
+            setFetchingRelationalManager(false);
         });
     }, []);
 
@@ -428,7 +433,7 @@ export const UserAddEditPage: FC<RouteComponentProps> = ({
         }
     }, [id, isEditMode, trigger]);
 
-    if (loading) {
+    if (loading || fetchingRelationalManager) {
         return <AppLoader />;
     }
 
