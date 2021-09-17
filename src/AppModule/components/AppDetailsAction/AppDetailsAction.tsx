@@ -1,15 +1,18 @@
 import React, { FunctionComponent, useState } from "react";
 import { Row, Col } from "react-bootstrap";
-import { format } from "date-fns";
 import { AppСhoseMethodMessage } from "../AppСhoseMethodMessage";
 import { AppButton } from "../AppButton";
 import "./assets/scss/style.scss";
 import UserAvatar from "../../assets/images/user-avatar.png";
 import { CONSTANTS } from "../../../config";
-import { useBuildAssetPath, useAuthState, useIsGranted } from "../../hooks";
+import {
+    useBuildAssetPath,
+    useAuthState,
+    useIsGranted,
+    useDateTime,
+} from "../../hooks";
 import { FileTypeInfo } from "../../models";
 import { getDateTimeWithoutTimezone } from "../../utils";
-import { useGlobalData } from "../../contexts";
 
 const { Upload: UPLOAD, Role: ROLE } = CONSTANTS;
 
@@ -60,7 +63,6 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
         FILETYPEINFO_USER_PROFILE as FileTypeInfo,
         userObj.imageName
     );
-    const { container } = useGlobalData();
 
     const isGrantedControl = useIsGranted(ROLE_SPEAKER);
 
@@ -78,6 +80,7 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
 
     const [openMessageArea, setOpenMessageArea] = useState<boolean>(false);
     const [openEditArea, setOpenEditArea] = useState(false);
+    const { toLongDateTime } = useDateTime();
 
     const qId = questionId;
 
@@ -109,20 +112,6 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
         setOpenEditArea(false);
     };
 
-    const getDateFormat = () => {
-        let f = "";
-
-        if (container) {
-            if ((container.configuration as any).shortDate)
-                f = `${(container.configuration as any).shortDate}`;
-            else f = `EEEE MMMM, dd`;
-            if ((container.configuration as any).shortTime)
-                f = `${f} ${(container.configuration as any).shortTime}`;
-            else f = `${f} hh:mm a`;
-        }
-        return f;
-    };
-
     return (
         <div className="session-details-question--container--item pb-3">
             <Row className="row m-0 p-0">
@@ -141,10 +130,8 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                                         `${userObj.firstName} ${userObj.lastName}`}
                                 </div>
                                 <div className="det-profile--time">
-                                    {format(
-                                        getDateTimeWithoutTimezone(createdAt),
-
-                                        getDateFormat()
+                                    {toLongDateTime(
+                                        getDateTimeWithoutTimezone(createdAt)
                                     )}
                                 </div>
                             </div>

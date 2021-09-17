@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Redirect, Router, Location, useMatch } from "@reach/router";
+import { useTranslation } from "react-i18next";
 import SwiperCore, { Autoplay } from "swiper";
 import { appRouters } from "./bootstrap";
 import { DashboardLayout } from "./layouts/DashboardLayout";
@@ -9,6 +10,7 @@ import { ModuleRouter, PrimitiveObject } from "./models";
 import AppProvider from "./contexts/AppContext";
 import SessionProvider from "./contexts/SessionContext";
 import { AuthContext } from "../SecurityModule/contexts/AuthContext";
+import { init } from "./config/date-fns";
 import {
     useChosenContainer,
     useCommandCenterSocketEvents,
@@ -19,8 +21,8 @@ import {
 import { AppLoader, AppPictureInPicture, AppWelcomeModal } from "./components";
 import { LandingHelper } from "./pages";
 import { socket, EVENTS, CommandType } from "./socket";
-import { useGlobalData } from "./contexts";
 
+import { useGlobalData } from "./contexts";
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
 import { AuthState } from "../SecurityModule/models";
@@ -96,6 +98,9 @@ const App = (): JSX.Element => {
     const { emitLogin, emitLogout, emitPageChange } = useUserSocketEvents();
     const { handler } = useCommandCenterSocketEvents();
     const skippedOnBoarding = isSkipOnBoarding();
+    const { t } = useTranslation();
+
+    init(t);
 
     useEffect(() => {
         SwiperCore.use([Autoplay]);

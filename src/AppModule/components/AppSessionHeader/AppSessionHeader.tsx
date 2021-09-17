@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
 import { Row, Col } from "react-bootstrap";
-import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 import { Link, navigate, useLocation } from "@reach/router";
 import "./assets/scss/style.scss";
@@ -9,7 +8,12 @@ import { AppStreamManager } from "../AppStreamManager";
 import { PUser, Session } from "../../../AdminModule/models";
 import { useGlobalData } from "../../contexts";
 import { getDateTimeWithoutTimezone } from "../../utils";
-import { useAuthState, useUserLocale, useIsGranted } from "../../hooks";
+import {
+    useAuthState,
+    useUserLocale,
+    useIsGranted,
+    useDateTime,
+} from "../../hooks";
 import { UserApi } from "../../../AdminModule/apis";
 import { ROLES } from "../../../config";
 import { appPipPlayer } from "../../atoms";
@@ -31,7 +35,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
     sessionList,
     getAgenda,
 }): JSX.Element => {
-    const { container, activeLanguages } = useGlobalData();
+    const { activeLanguages } = useGlobalData();
     const { t } = useTranslation();
     const { locale, setLocale } = useUserLocale();
     const [live, isLive] = useState<boolean>(false);
@@ -39,6 +43,7 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
     const { userId } = useAuthState();
     const setPipPlayerData = useSetRecoilState(appPipPlayer);
     const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
+    const { toShortTime, toShortDate } = useDateTime();
 
     useEffect(() => {
         return () => {
@@ -258,44 +263,23 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                         >
                             <span className="date mb-1">
                                 {session.start &&
-                                    format(
+                                    toShortDate(
                                         getDateTimeWithoutTimezone(
                                             session.start
-                                        ),
-                                        container &&
-                                            container.configuration &&
-                                            (container.configuration as any)
-                                                .shortDate
-                                            ? (container.configuration as any)
-                                                  .shortDate
-                                            : "EEEE MMMM, dd"
+                                        )
                                     )}
                             </span>
                             <span className="period">
                                 {session.start &&
-                                    format(
+                                    toShortTime(
                                         getDateTimeWithoutTimezone(
                                             session.start
-                                        ),
-                                        container &&
-                                            container.configuration &&
-                                            (container.configuration as any)
-                                                .shortTime
-                                            ? (container.configuration as any)
-                                                  .shortTime
-                                            : "hh:mm a"
-                                    )}{" "}
+                                        )
+                                    )}
                                 -{" "}
                                 {session.end &&
-                                    format(
-                                        getDateTimeWithoutTimezone(session.end),
-                                        container &&
-                                            container.configuration &&
-                                            (container.configuration as any)
-                                                .shortTime
-                                            ? (container.configuration as any)
-                                                  .shortTime
-                                            : "hh:mm a"
+                                    toShortTime(
+                                        getDateTimeWithoutTimezone(session.end)
                                     )}
                             </span>
                         </Col>
