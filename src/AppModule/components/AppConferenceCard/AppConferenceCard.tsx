@@ -1,5 +1,4 @@
 import React, { FC } from "react";
-import { format } from "date-fns";
 import { Link } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
@@ -8,9 +7,8 @@ import {
     ExhibitorLogoPosterFileInfo,
     ConferencePosterFileInfo,
 } from "../../../config";
-import { useAuthState, useBuildAssetPath } from "../../hooks";
+import { useAuthState, useBuildAssetPath, useDateTime } from "../../hooks";
 import placeholder from "../../assets/images/imgthumb.svg";
-import { useGlobalData } from "../../contexts";
 import { getDateTimeWithoutTimezone, resolveImageWithStyle } from "../../utils";
 import { AppSponsors } from "../AppSponsors";
 import "./assets/scss/style.scss";
@@ -41,7 +39,6 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
         exhibitors = [],
     } = conference;
 
-    const { container } = useGlobalData();
     const { containerId } = useAuthState();
 
     const basePath = useBuildAssetPath(ConferencePosterFileInfo);
@@ -49,6 +46,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
         ExhibitorLogoPosterFileInfo
     );
     const style = resolveImageWithStyle(basePath, imageName, placeholder);
+    const { toShortDate, toShortTime } = useDateTime();
 
     return (
         <Col md={12} lg={4} xl={3} className="events-grid--container--item">
@@ -114,33 +112,19 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                                 <>
                                     <div className="inner-container--det--time--spec--date">
                                         <h3 className="mb-0">
-                                            {format(
+                                            {toShortDate(
                                                 getDateTimeWithoutTimezone(
                                                     startAt
-                                                ),
-                                                container &&
-                                                    container.configuration &&
-                                                    (container.configuration as any)
-                                                        .shortDate
-                                                    ? (container.configuration as any)
-                                                          .shortDate
-                                                    : "EEEE MMMM, dd"
+                                                )
                                             )}
                                         </h3>
                                     </div>
                                     <div className="inner-container--det--time--spec--period">
                                         <span>
-                                            {format(
+                                            {toShortTime(
                                                 getDateTimeWithoutTimezone(
                                                     startAt
-                                                ),
-                                                container &&
-                                                    container.configuration &&
-                                                    (container.configuration as any)
-                                                        .shortTime
-                                                    ? (container.configuration as any)
-                                                          .shortTime
-                                                    : "hh:mm a"
+                                                )
                                             )}
                                         </span>
                                     </div>

@@ -1,6 +1,10 @@
+import { mergeWith } from "lodash";
 import { DesignConfiguration } from "../../AdminModule/models/entities/DesignConfiguration";
 import { PrimitiveObject } from "../models";
-import { Configuration } from "../../AdminModule/models/entities/Configuration";
+import {
+    Configuration,
+    useDefaultOnEmpty,
+} from "../../AdminModule/models/entities/Configuration";
 
 export const parseIdFromResourceUrl = (resourceUrl: string): number | null => {
     const parts = resourceUrl.split("/");
@@ -72,9 +76,17 @@ export const resolveImage = (
 export const parseConfiguration = (container: any): Configuration => {
     let configuration: Configuration = new Configuration();
     if (container.configuration) {
-        configuration = { ...configuration, ...container.configuration };
+        configuration = mergeWith(
+            configuration,
+            container.configuration,
+            (defaultVal, dbVal, key) => {
+                if (useDefaultOnEmpty.indexOf(key) > -1 && !dbVal) {
+                    return defaultVal;
+                }
+                return dbVal;
+            }
+        );
     }
-
     return configuration;
 };
 
