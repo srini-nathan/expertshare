@@ -95,8 +95,14 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
         diff -= minutes * 60;
 
         if (hours > 0)
-            return ` ${hours}:${minutes} ${hours > 1 ? "hours" : "hour"}`;
-        return ` ${Math.floor(minutes)} mins`;
+            return ` ${hours}:${minutes} ${
+                hours > 1
+                    ? t("common.date:wide.hours")
+                    : t("common.date:wide.hour")
+            }`;
+        return ` ${Math.floor(minutes)} ${t(
+            "common.date:abbreviated.minutes"
+        )}`;
     };
 
     return (
