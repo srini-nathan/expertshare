@@ -57,3 +57,12 @@ export class Configuration implements Configuration {
 
     longDatetime = "EEEE MMMM, dd hh:mm a";
 }
+
+export const useDefaultOnEmpty = [
+    "shortDate",
+    "longDate",
+    "shortTime",
+    "longTime",
+    "shortDatetime",
+    "longDatetime",
+];
