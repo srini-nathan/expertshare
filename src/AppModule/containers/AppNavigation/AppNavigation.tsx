@@ -406,7 +406,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                     {/* @ts-ignore */}
                     <Accordion.Toggle
                         as={ListGroupItem}
-                        className={`nav-item py-2 px-lg-4`}
+                        className={`nav-item py-1 px-lg-4`}
                         eventKey="0"
                     >
                         <div
@@ -681,7 +681,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                         role === ROLE_SUPPORT) && (
                                         <>
                                             <ListGroupItem
-                                                className={`nav-item py-2 px-lg-4`}
+                                                className={`nav-item py-1 px-lg-4`}
                                             >
                                                 <div
                                                     onClick={() => {
