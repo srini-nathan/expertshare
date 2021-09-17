@@ -2,7 +2,7 @@ import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { isString as _isString } from "lodash";
+import { isString as _isString, orderBy } from "lodash";
 import { useBuildAssetPath, useDateTime } from "../../hooks";
 import { AppPageHeader, AppLoader } from "../../components";
 import { SessionQuestionApi } from "../../apis";
@@ -32,7 +32,7 @@ const QuestionCard = ({
 }) => {
     const { t } = useTranslation();
     searchText = searchText?.trim().toLowerCase();
-    const statusQuestions = questions.filter(
+    let statusQuestions = questions.filter(
         (q) =>
             q.status === status.toUpperCase() &&
             (q?.session?.title?.trim().toLowerCase().includes(searchText, 0) ||
@@ -43,6 +43,7 @@ const QuestionCard = ({
                     .includes(searchText, 0) ||
                 q?.user?.lastName?.trim().toLowerCase().includes(searchText, 0))
     );
+    statusQuestions = orderBy(statusQuestions, ["id"], ["desc"]);
     const profilePictureBasePath = useBuildAssetPath(UserProfileFileInfo);
     const { toLongDateTime } = useDateTime();
 
