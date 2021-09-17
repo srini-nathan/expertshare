@@ -15,7 +15,7 @@ export const ExhibitorDetailPageMembers: FC<ExhibitorDetailPageMembersType> = ({
 }): JSX.Element => {
     const { t } = useTranslation();
     const [showMore, isShowMore] = useState<boolean>(false);
-    const limitedMembers = members.slice(0, 4);
+    const limitedMembers = members.slice(0, 6);
     return (
         <>
             <AppShowUserListPopup
@@ -35,7 +35,7 @@ export const ExhibitorDetailPageMembers: FC<ExhibitorDetailPageMembersType> = ({
                 icon="atendees-cs"
             />
             <div className="inner-container--det--content--more">
-                {members.length > 4 && (
+                {members.length > 6 && (
                     <a
                         href={"#"}
                         onClick={(e) => {
