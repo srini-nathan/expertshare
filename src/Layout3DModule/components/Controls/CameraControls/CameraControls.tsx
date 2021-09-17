@@ -245,14 +245,14 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
             () => {
                 orbit.current.target = getNewTarget(
                     perspectiveFirstPerson.current,
-                    0.001
+                    0.0001
                 );
                 orbit.current.update();
             },
             () => {
                 orbit.current.target = getNewTarget(
                     perspectiveFirstPerson.current,
-                    0.001
+                    0.0001
                 );
                 orbit.current.update();
                 orbit.current.enabled = camEnabled;
@@ -297,16 +297,16 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
             if (!editMode) {
                 // first person mode
                 perspectiveHelper.current = null!;
-                const tgt = getNewTarget(perspectiveFirstPerson.current, 0.01);
+                const tgt = getNewTarget(perspectiveFirstPerson.current, 0.001);
                 orbit.current.object = perspectiveFirstPerson.current as any;
                 setParamsToOrbitControls(
                     orbit.current,
                     tgt,
                     0.4,
                     false,
+                    0.0001,
                     0.01,
-                    0.01,
-                    0.01
+                    0.0001
                 );
             } else {
                 // edit mode
@@ -332,14 +332,17 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
             if (!editMode) {
                 // first person mode
                 perspectiveHelper.current = null!;
-                const tgt = getNewTarget(perspectiveFirstPerson.current, 0.01);
+                const tgt = getNewTarget(
+                    perspectiveFirstPerson.current,
+                    0.0001
+                );
                 orbit.current.object = perspectiveFirstPerson.current as any;
                 setParamsToOrbitControls(
                     orbit.current,
                     tgt,
                     0.4,
                     false,
-                    0.01,
+                    0.0001,
                     0.01,
                     0.01
                 );
@@ -378,7 +381,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                 const fakeOrbit = new OrbitControls(fakeCam, undefined);
                 fakeOrbit.enabled = true;
                 fakeCam.lookAt(targetData.fromPosition.clone()); // look towards panel in room 1(to position), TODO: zoom in
-                fakeOrbit.target = getNewTarget(fakeCam, 0.001);
+                fakeOrbit.target = getNewTarget(fakeCam, 0.0001);
                 fakeOrbit.update();
 
                 // fakeCam.updateMatrix();
@@ -389,7 +392,7 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                 fakeCam.rotation.set(0, 0, 0);
                 fakeOrbit.update();
                 fakeCam.lookAt(targetData.toPosition.clone()); // look towards panel in room 2 (from position), TODO: zoom out
-                fakeOrbit.target = getNewTarget(fakeCam, 0.001);
+                fakeOrbit.target = getNewTarget(fakeCam, 0.0001);
                 fakeOrbit.update();
                 // fakeCam.updateMatrix();
 
@@ -508,14 +511,17 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
             if (!editMode) {
                 // first person mode
                 perspectiveHelper.current = null!;
-                const tgt = getNewTarget(perspectiveFirstPerson.current, 0.01);
+                const tgt = getNewTarget(
+                    perspectiveFirstPerson.current,
+                    0.0001
+                );
                 orbit.current.object = perspectiveFirstPerson.current as any;
                 setParamsToOrbitControls(
                     orbit.current,
                     tgt,
                     0.4,
                     false,
-                    0.01,
+                    0.0001,
                     0.01,
                     0.01
                 );
@@ -627,7 +633,8 @@ export const CameraControls = (props: OrbitControlsProps): JSX.Element => {
                         //     // firstPersonCameraRotation.current.y,
                         //     // firstPersonCameraRotation.current.z,
                         // ]}
-                        position={firtPersonCameraPosition.current}
+                        position={[0, 0, 0]}
+                        // position={firtPersonCameraPosition.current}
                         makeDefault={!editMode}
                     >
                         <mesh position={[0, 0, -0.5]}>
