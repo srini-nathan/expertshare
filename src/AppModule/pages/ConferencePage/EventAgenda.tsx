@@ -286,6 +286,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                         autoplay={{
                             delay: 2000,
                         }}
+                        loop={true}
                     >
                         {e.map((item: Session) => {
                             return (

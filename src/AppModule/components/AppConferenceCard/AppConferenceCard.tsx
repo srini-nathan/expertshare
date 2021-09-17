@@ -247,8 +247,14 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                                         }
                                         basePath={exhibitorLogoBasePath}
                                         options={{
-                                            slidesPerView: "auto",
-                                            autoplay: { delay: 1000 },
+                                            slidesPerView: 3,
+                                            loop: true,
+                                            autoplay: {
+                                                delay: 1000,
+                                                disableOnInteraction: true,
+                                            },
+                                            freeMode: true,
+                                            speed: 3000,
                                         }}
                                         containerId={containerId}
                                     />
