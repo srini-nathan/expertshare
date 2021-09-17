@@ -11,6 +11,13 @@ export interface Configuration {
     isQuestionBoardEnable: boolean;
     isLiveNowEnable: boolean;
     isPipEnable: boolean;
+    excludeDomainsFromAnalytics: string;
+    shortDate: string;
+    longDate: string;
+    shortTime: string;
+    longTime: string;
+    longDatetime: string;
+    shortDatetime: string;
 }
 
 export class Configuration implements Configuration {
@@ -37,4 +44,25 @@ export class Configuration implements Configuration {
     isLiveNowEnable = false;
 
     isPipEnable = false;
+
+    shortDate = "EEEE MMMM, dd";
+
+    longDate = "EEEE MMMM, dd";
+
+    shortTime = "hh:mm a";
+
+    longTime = "hh:mm a";
+
+    shortDatetime = "EEEE MMMM, dd hh:mm a";
+
+    longDatetime = "EEEE MMMM, dd hh:mm a";
 }
+
+export const useDefaultOnEmpty = [
+    "shortDate",
+    "longDate",
+    "shortTime",
+    "longTime",
+    "shortDatetime",
+    "longDatetime",
+];

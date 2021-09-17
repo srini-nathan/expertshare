@@ -1,5 +1,6 @@
 import { zonedTimeToUtc, utcToZonedTime } from "date-fns-tz";
 import { addDays, format } from "date-fns";
+import { locale } from "../config/date-fns";
 
 export const getDate = (date: string): string => {
     return format(new Date(date), "yyyy-MM-dd");
@@ -98,4 +99,12 @@ export const toLocalDate = (date: Date | number | string): Date => {
 
 export const getUTCDate = (): Date => {
     return new Date(new Date().toISOString());
+};
+
+export const humanReadableDate = (date: Date, toFormat: string): string => {
+    try {
+        return format(date, toFormat, { locale });
+    } catch (e) {
+        return "Invalid";
+    }
 };
