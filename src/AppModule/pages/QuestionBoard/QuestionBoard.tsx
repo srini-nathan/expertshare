@@ -1,27 +1,25 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
-import { format } from "date-fns";
 import { useTranslation } from "react-i18next";
 import { isString as _isString } from "lodash";
-import { useBuildAssetPath } from "../../hooks";
-import { FileTypeInfo } from "../../models";
+import { useBuildAssetPath, useDateTime } from "../../hooks";
 import { AppPageHeader, AppLoader } from "../../components";
 import { SessionQuestionApi } from "../../apis";
-import { errorToast, getDateTimeWithoutTimezone } from "../../utils";
+import {
+    errorToast,
+    getBGStyle,
+    getDateTimeWithoutTimezone,
+} from "../../utils";
 import { SessionQuestion } from "../../models/entities/SessionQuestion";
-import { CONSTANTS } from "../../../config";
+import { CONSTANTS, UserProfileFileInfo } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
-import { useGlobalData } from "../../contexts";
 
 import "./assets/scss/style.scss";
 import "./assets/scss/_common.scss";
 
-const { Upload: UPLOAD, SessionQuestion: STATUS } = CONSTANTS;
+const { SessionQuestion: STATUS } = CONSTANTS;
 
-const {
-    FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
-} = UPLOAD;
 const {
     STATUS: { STATUS_NEW, STATUS_ACCEPTED, STATUS_REJECTED },
 } = STATUS;
@@ -31,17 +29,11 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
     const statusQuestions = questions.filter(
         (q) => q.status === status.toUpperCase()
     );
-    const { container } = useGlobalData();
-    const profilePictureBasePath = useBuildAssetPath(
-        FILETYPEINFO_USER_PROFILE as FileTypeInfo
-    );
+    const profilePictureBasePath = useBuildAssetPath(UserProfileFileInfo);
+    const { toLongDateTime } = useDateTime();
 
     const loginUserProfileStyle = (user) => {
-        return {
-            backgroundImage: user?.imageName
-                ? `url(${profilePictureBasePath}/${user?.imageName})`
-                : `url(${placeholder})`,
-        };
+        return getBGStyle(profilePictureBasePath, user?.imageName, placeholder);
     };
 
     const updateQuestionStatus = (id: number, questionStatus: string) => {
@@ -53,20 +45,6 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
         ).then(() => {
             refreshQuestionList();
         });
-    };
-
-    const getDateFormat = () => {
-        let f = "";
-
-        if (container) {
-            if ((container.configuration as any).shortDate)
-                f = `${(container.configuration as any).shortDate}`;
-            else f = `EEEE MMMM, dd`;
-            if ((container.configuration as any).shortTime)
-                f = `${f} ${(container.configuration as any).shortTime}`;
-            else f = `${f} hh:mm a`;
-        }
-        return f;
     };
 
     const deleteQuestion = (id: number) => {
@@ -123,10 +101,8 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
                                     {q.user.firstName} {q.user.lastName}
                                 </h4>
                                 <span>
-                                    {format(
-                                        getDateTimeWithoutTimezone(q.createdAt),
-
-                                        getDateFormat()
+                                    {toLongDateTime(
+                                        getDateTimeWithoutTimezone(q.createdAt)
                                     )}
                                 </span>
                             </div>
