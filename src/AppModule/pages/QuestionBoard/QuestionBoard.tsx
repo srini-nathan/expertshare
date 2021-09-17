@@ -24,10 +24,24 @@ const {
     STATUS: { STATUS_NEW, STATUS_ACCEPTED, STATUS_REJECTED },
 } = STATUS;
 
-const QuestionCard = ({ status, questions, refreshQuestionList }) => {
+const QuestionCard = ({
+    status,
+    questions,
+    searchText,
+    refreshQuestionList,
+}) => {
     const { t } = useTranslation();
+    searchText = searchText?.trim().toLowerCase();
     const statusQuestions = questions.filter(
-        (q) => q.status === status.toUpperCase()
+        (q) =>
+            q.status === status.toUpperCase() &&
+            (q?.session?.title?.trim().toLowerCase().includes(searchText, 0) ||
+                q?.message?.trim().toLowerCase().includes(searchText, 0) ||
+                q?.user?.firstName
+                    ?.trim()
+                    .toLowerCase()
+                    .includes(searchText, 0) ||
+                q?.user?.lastName?.trim().toLowerCase().includes(searchText, 0))
     );
     const profilePictureBasePath = useBuildAssetPath(UserProfileFileInfo);
     const { toLongDateTime } = useDateTime();
@@ -209,6 +223,7 @@ const QuestionCard = ({ status, questions, refreshQuestionList }) => {
 export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
     const [loading, isLoading] = useState<boolean>(true);
     const [questions, setQuestions] = useState<any[]>([]);
+    const [searchText, setSearchText] = useState<any>({});
     // const [totalItems, setTotalItems] = useState<number>(0);
     const showColumns = [
         STATUS_NEW,
@@ -252,9 +267,10 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
         fetchQuestions();
     }, []);
 
-    const handleQuickSearch = (status: string) => {
+    const handleQuickSearch = (search: string, status: string) => {
         // eslint-disable-next-line no-console
-        console.log(status);
+        console.log(searchText, status);
+        setSearchText({ ...searchText, [status]: search });
     };
 
     const renderQuestionStatusCols = () => {
@@ -287,8 +303,11 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
                                             placeholder={t(
                                                 "questionboard.list:columns.search"
                                             )}
-                                            onChange={() =>
-                                                handleQuickSearch(boardCol)
+                                            onChange={(e) =>
+                                                handleQuickSearch(
+                                                    e.target.value,
+                                                    boardCol
+                                                )
                                             }
                                         />
                                         <a href="#">
@@ -308,6 +327,9 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
                                         <QuestionCard
                                             status={boardCol}
                                             questions={questions}
+                                            searchText={
+                                                searchText[boardCol] || ""
+                                            }
                                             refreshQuestionList={fetchQuestions}
                                         />
                                     )}
