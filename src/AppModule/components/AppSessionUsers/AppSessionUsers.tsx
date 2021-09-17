@@ -104,6 +104,7 @@ export const AppSessionUsers: FC<AppSessionUsersProps> = ({
                                 lg={lg}
                                 xl={xl}
                                 className="create-session--moderators--container--item pl-0 mt-2"
+                                key={item.id}
                             >
                                 <AppUserListItem user={item as User} />
                             </Col>

@@ -143,7 +143,10 @@ export const AppUserSelector: FC<AppUserSelectorProps> = ({
                             <Row className="m-0 content--inner">
                                 {users.map((user: User) => {
                                     return (
-                                        <div className="content--inner--item">
+                                        <div
+                                            className="content--inner--item"
+                                            key={user.id}
+                                        >
                                             <Row className="m-0">
                                                 <div className="detail  col-auto">
                                                     <AppUserListItem
@@ -193,6 +196,7 @@ export const AppUserSelector: FC<AppUserSelectorProps> = ({
                                                     id={item.id}
                                                     name={`${item.firstName} ${item.lastName}`}
                                                     handleRemoveId={removeUser}
+                                                    key={item.id}
                                                 />
                                             );
                                         })}

@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useSetRecoilState } from "recoil";
 import { ProductsWidget } from "./ProductsWidget";
 import { ExhibitorQAWidget } from "./ExhibitorQAWidget";
+import { ExhibitorDetailsWidget } from "./ExhibitorDetailsWidget";
 import {
     appDashboardLayoutOptions,
     AppDashboardLayoutOptions,
@@ -40,6 +41,8 @@ export const WidgetPage: FC<RouteComponentProps> = (): JSX.Element => {
             return <ProductsWidget id={id} />;
         case "exhibitors-qa":
             return <ExhibitorQAWidget id={id} />;
+        case "exhibitors-details":
+            return <ExhibitorDetailsWidget id={id} />;
         default:
             return (
                 <>
