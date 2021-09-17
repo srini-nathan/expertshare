@@ -21,7 +21,7 @@ export const AppSponsors: FC<AppSponsorsType> = ({
     basePath,
     options = {
         slidesPerView: "auto",
-        autoplay: true,
+        autoplay: { delay: 2000 },
     },
     containerId,
 }) => {
