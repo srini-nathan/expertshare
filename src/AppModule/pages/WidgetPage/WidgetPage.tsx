@@ -3,6 +3,7 @@ import { RouteComponentProps, useParams } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { useSetRecoilState } from "recoil";
 import { ProductsWidget } from "./ProductsWidget";
+import { ExhibitorQAWidget } from "./ExhibitorQAWidget";
 import {
     appDashboardLayoutOptions,
     AppDashboardLayoutOptions,
@@ -34,13 +35,16 @@ export const WidgetPage: FC<RouteComponentProps> = (): JSX.Element => {
         };
     });
 
-    if (type === "products") {
-        return <ProductsWidget id={id} />;
+    switch (type) {
+        case "products":
+            return <ProductsWidget id={id} />;
+        case "exhibitors-qa":
+            return <ExhibitorQAWidget id={id} />;
+        default:
+            return (
+                <>
+                    <p>{t("widgetPage:notWidgetFound")}</p>
+                </>
+            );
     }
-
-    return (
-        <>
-            <p>{t("widgetPage:notWidgetFound")}</p>
-        </>
-    );
 };

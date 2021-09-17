@@ -118,7 +118,7 @@
     },
     "devDependencies": {
         "@babel/core": "^7.12.17",
-        "@craco/craco": "^5.6.4",
+        "@craco/craco": "6",
         "@hookform/devtools": "^3.0.0-rc.2",
         "@storybook/addon-actions": "^6.1.18",
         "@storybook/addon-essentials": "^6.1.18",
