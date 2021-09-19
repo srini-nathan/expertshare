@@ -2,3 +2,35 @@
 }
 .exhibitor-qa-widget {
 }
+.exhibitor-details-widget {
+    .exhibitor-detail--members {
+        .edit-users--popup {
+            &.show-users {
+                overflow: hidden;
+                .content {
+                    height: 120px;
+                    margin-top: 10px;
+                    .detail {
+                        height: 50px;
+                    }
+                }
+            }
+        }
+    }
+}
+.app-in-iframe {
+    .exhibitor-detail--members {
+        .edit-users--popup {
+            &.show-users {
+                overflow: hidden;
+                .content {
+                    height: 120px;
+                    margin-top: 10px;
+                    .detail {
+                        height: 50px;
+                    }
+                }
+            }
+        }
+    }
+}
