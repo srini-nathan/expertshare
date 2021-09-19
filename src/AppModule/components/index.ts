@@ -95,3 +95,4 @@ export * from "./AppVideoPlayer";
 export * from "./AppExhibitorProductCard";
 export * from "./AppSponsors";
 export * from "./AppDocDownload";
+export * from "./AppSessionCard";
