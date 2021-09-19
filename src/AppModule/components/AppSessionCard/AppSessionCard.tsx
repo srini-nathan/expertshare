@@ -45,11 +45,6 @@ export const AppSessionCard: FC<AppSessionCardProps> = ({
             xl={4}
             className="exhibitor-sessions-grid--container--item"
         >
-            <AppShowUserListPopup
-                show={showMore}
-                handleClose={isShowMore}
-                users={users as User[]}
-            />
             <Col className="inner-container p-0 card">
                 <Link to={`/event/${cId}/session/${id}`}>
                     <div
@@ -58,6 +53,11 @@ export const AppSessionCard: FC<AppSessionCardProps> = ({
                     ></div>
                 </Link>
                 <div className="inner-container--det p-3 mx-2">
+                    <AppShowUserListPopup
+                        show={showMore}
+                        handleClose={isShowMore}
+                        users={users as User[]}
+                    />
                     <Col className="inner-container--det--title p-0">
                         <Link to={`/event/${cId}/session/${id}`}>
                             <h2>{title}</h2>

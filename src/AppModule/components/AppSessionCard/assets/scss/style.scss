@@ -53,7 +53,6 @@
 
         .inner-container {
             overflow: hidden;
-            height: 795px;
             &--banner {
                 display: flex;
                 height: 270px;
@@ -112,6 +111,8 @@
             }
 
             &--det {
+                position: relative;
+                height: 545px;
                 margin-top: -40px;
                 background-color: var(--card-background-color);
                 border-radius: var(--card-border-radius);
@@ -161,117 +162,27 @@
                         }
                     }
                 }
-
-                &--participants {
-                    display: flex;
-
-                    &--icon {
-                        i {
-                            font-size: 20px;
-                            color: var(--card-text-color);
-
-                            &::before {
-                                content: "\e000";
-                            }
-                        }
-                    }
-
-                    &--content {
-                        padding-top: 3px;
-
-                        &--title {
-                            h3 {
-                                font-size: 16px;
-                                font-weight: 700;
-                                color: var(--card-text-color);
-                            }
-                        }
-
-                        &--user {
-                            &--item {
-                                display: flex;
-                                align-items: center;
-
-                                &--avatar {
-                                    a {
-                                        i {
-                                            display: block;
-                                            width: 36px;
-                                            height: 36px;
-                                            background-repeat: no-repeat;
-                                            background-size: cover;
-                                            border-radius: 50%;
-
-                                            &::after {
-                                                position: relative;
-                                                top: 0;
-                                                left: 24px;
-                                                display: block;
-                                                width: 10px;
-                                                height: 10px;
-                                                content: "";
-                                                background-color: var(--primary);
-                                                border: 1px solid var(--border-border-radius-clr);
-                                                border-radius: 50%;
-                                            }
-                                        }
-                                    }
-                                }
-
-                                &--info {
-                                    a {
-                                        display: grid;
-
-                                        h4 {
-                                            font-size: 16px;
-                                            font-weight: 400;
-                                            color: var(--card-text-color);
-                                        }
-
-                                        span {
-                                            font-size: 12px;
-                                            font-weight: 400;
-                                            color: var(--card-second-text-color);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-
-                        &--more {
+                &--content {
+                    &--more {
+                        span {
                             padding-left: 40px;
-
-                            a {
-                                font-size: 14px;
-                                font-weight: 500;
-                                color: var(--primary);
-                            }
+                            font-size: 14px;
+                            font-weight: 500;
+                            color: var(--primary);
+                            cursor: pointer;
                         }
+                    }
+                }
+                .show-users {
+                    right: 0;
+                    left: 0;
+                    width: 100%;
+                    border-radius: var(--card-border-radius);
+                    .content {
+                        height: 422px;
                     }
                 }
             }
         }
     }
-
-    &--more {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        a {
-            position: relative;
-            width: 225px;
-
-            i {
-                position: absolute;
-                left: 10px;
-                font-weight: 600;
-
-                &::before {
-                    content: "\e018";
-                }
-            }
-        }
-    }
-
 }
