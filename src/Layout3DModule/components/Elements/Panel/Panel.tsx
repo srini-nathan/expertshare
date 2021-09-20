@@ -223,6 +223,7 @@ export const Panel = ({
     };
 
     const panelCliked = () => {
+        // if (e)e.stopPropagation()
         const { isTransitionEnabled, video, id } = panelData;
         const positionPanel = group.current.position.clone();
         const targetType = target.type;
@@ -258,6 +259,11 @@ export const Panel = ({
     };
 
     const onRemoteClick = (e: ThreeEvent<MouseEvent>) => {
+        if (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+
         if (isVisible) {
             e.stopPropagation();
             if (editMode) {
@@ -269,6 +275,11 @@ export const Panel = ({
     };
 
     const groupClicked = (e: ThreeEvent<MouseEvent>) => {
+        if (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+
         if (isVisible) {
             e.stopPropagation();
             if (editMode) {

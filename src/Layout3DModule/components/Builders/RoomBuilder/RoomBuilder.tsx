@@ -69,16 +69,15 @@ export const RoomBuilder = ({
                 );
             }
         );
-        // console.log("to panel: ", pan);
+        const panPosition = pan[pan.length - 1]
+            ? new Vector3(
+                  parseFloat(pan[pan.length - 1].position.x),
+                  parseFloat(pan[pan.length - 1].position.y),
+                  parseFloat(pan[pan.length - 1].position.z)
+              )
+            : new Vector3(0, 0, 10);
 
-        return new Vector3(
-            // pan[0].position.x,
-            // pan[0].position.y,
-            // pan[0].position.z
-            parseFloat(pan[pan.length - 1].position.x),
-            parseFloat(pan[pan.length - 1].position.y),
-            parseFloat(pan[pan.length - 1].position.z)
-        );
+        return panPosition;
     };
 
     const changeRoom = (
