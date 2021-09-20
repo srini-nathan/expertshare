@@ -46,7 +46,7 @@ export const AppSponsors: FC<AppSponsorsType> = ({
                 max: 3000,
                 min: 1024,
             },
-            items: 4,
+            items: 3,
             partialVisibilityGutter: 40,
         },
         tablet: {
