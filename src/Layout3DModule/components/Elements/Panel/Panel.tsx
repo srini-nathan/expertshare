@@ -396,7 +396,7 @@ export const Panel = ({
                         scale={(scaleGropu.scale as unknown) as Vector3} // {scaleDyn.current}
                         ref={group}
                         // onClick={groupClicked}
-                        onPointerDown={groupClicked}
+                        onClick={groupClicked}
                         onPointerMissed={() => {
                             if (isVisible && editMode) setActive(false);
                         }}
