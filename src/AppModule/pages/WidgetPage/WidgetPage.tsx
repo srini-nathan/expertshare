@@ -5,6 +5,7 @@ import { useSetRecoilState } from "recoil";
 import { ProductsWidget } from "./ProductsWidget";
 import { ExhibitorQAWidget } from "./ExhibitorQAWidget";
 import { ExhibitorDetailsWidget } from "./ExhibitorDetailsWidget";
+import { ExhibitorSessionsWidget } from "./ExhibitorSessionsWidget";
 import {
     appDashboardLayoutOptions,
     AppDashboardLayoutOptions,
@@ -43,6 +44,8 @@ export const WidgetPage: FC<RouteComponentProps> = (): JSX.Element => {
             return <ExhibitorQAWidget id={id} />;
         case "exhibitors-details":
             return <ExhibitorDetailsWidget id={id} />;
+        case "exhibitors-sessions":
+            return <ExhibitorSessionsWidget id={id} />;
         default:
             return (
                 <>

@@ -35,6 +35,7 @@ const {
   FILETYPEINFO_EXHIBITOR_DOC,
   FILETYPEINFO_CONFERENCE_POSTER,
   FILETYPEINFO_AFRAMEPANEL_MEDIA,
+  FILETYPEINFO_SESSION_POSTER,
 } = FILE_TYPE_INFO;
 
 const VoteOptionFileInfo = FILETYPEINFO_VOTEOPTION_POSTER as FileTypeInfo;
@@ -46,6 +47,7 @@ const ExhibitorProductPosterFileInfo = FILETYPEINFO_EXHIBITORPRODUCT_POSTER as F
 const ConferencePosterFileInfo = FILETYPEINFO_CONFERENCE_POSTER as FileTypeInfo;
 const ExhibitorDocFileInfo = FILETYPEINFO_EXHIBITOR_DOC as FileTypeInfo;
 const AFramePanelMediaFileInfo = FILETYPEINFO_AFRAMEPANEL_MEDIA as FileTypeInfo;
+const SessionPosterFileInfo = FILETYPEINFO_SESSION_POSTER as FileTypeInfo;
 
 // UploadImage types
 const {
@@ -93,6 +95,7 @@ export {
   EXHIBITOR_DOC_TYPE,
   AFramePanelMediaFileInfo,
   AFRAME_PANEL_MEDIA_TYPE,
+  SessionPosterFileInfo,
 }
 
 export {
