@@ -64,6 +64,16 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
     const handleMouseEvent = () => {
         setShowRange(true);
     };
+    const onVolumeBtnClick = (e, btnType) => {
+        if (btnType === "volume") {
+            audioRef.current.volume = 0.01;
+            setVolRang(e);
+        } else {
+            audioRef.current.volume = 1;
+            setVolRang(e);
+        }
+    };
+
     const handleMouseLeave = () => {
         setShowRange(false);
     };
@@ -142,8 +152,13 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
                 gap={4}
             />
             <div className="playButton" onClick={onVolumeChange}>
-                {mute ? (
-                    <i className="fal fa-volume-mute" />
+                {audioRef?.current?.volume === 0.01 ? (
+                    <div onClick={(e) => onVolumeBtnClick(e, "mute")}>
+                        <i
+                            className="fal fa-volume-mute"
+                            onMouseEnter={handleMouseEvent}
+                        />
+                    </div>
                 ) : (
                     <div className="audio-volume">
                         <div className={showRange ? "range" : "disableRange"}>
@@ -152,31 +167,47 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
                                     className="btn-volume"
                                     onMouseLeave={() => handleMouseLeave()}
                                 >
-                                    <i className="far fa-volume" />
+                                    <i
+                                        className="far fa-volume"
+                                        onClick={() =>
+                                            onVolumeBtnClick(100, "mute")
+                                        }
+                                    />
                                     <input
                                         type="range"
-                                        min="0"
+                                        min="1"
                                         max="100"
                                         value={volRang}
                                         onChange={handleRange}
                                         onClick={(e) => handleVolumeClick(e)}
                                         step="1"
                                     />
-                                    <i className="fal fa-volume-mute" />
+                                    <i
+                                        className="fal fa-volume-mute"
+                                        onClick={() =>
+                                            onVolumeBtnClick(1, "volume")
+                                        }
+                                    />
                                 </div>
                                 {setShowRange}
                             </label>
                         </div>
-                        {volRang === 0 ? (
-                            <i
-                                className="fal fa-volume-mute"
-                                onMouseEnter={() => handleMouseEvent()}
-                            />
+                        {audioRef?.current?.volume === 0.01 ? (
+                            <div onClick={() => onVolumeBtnClick(1, "mute")}>
+                                <i
+                                    className="fal fa-volume-mute"
+                                    onMouseEnter={() => handleMouseEvent()}
+                                />
+                            </div>
                         ) : (
-                            <i
-                                className="far fa-volume"
-                                onMouseEnter={() => handleMouseEvent()}
-                            />
+                            <div
+                                onClick={() => onVolumeBtnClick(100, "volume")}
+                            >
+                                <i
+                                    className="far fa-volume"
+                                    onMouseEnter={() => handleMouseEvent()}
+                                />
+                            </div>
                         )}
                     </div>
                 )}
