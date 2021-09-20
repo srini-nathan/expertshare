@@ -151,7 +151,7 @@ export const Remote = ({
                 visible={visible}
                 scale={scaleProps}
                 // onClick={onClick}
-                onPointerDown={onClick}
+                onClick={onClick}
                 onPointerMissed={() => {
                     // setActive(false);
                     onRemoteMissed();
