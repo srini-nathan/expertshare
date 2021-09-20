@@ -13,3 +13,10 @@ export const TargetTypes = {
     PROJECTOR: "projector",
     BILLBOARD: "billboard",
 };
+
+export const SourceTypes = {
+    YOUTUBE: "YOUTUBE",
+    VIMEO: "VIMEO",
+    SWISSCOM: "SWISSCOM",
+    DACAST: "DACAST",
+};
