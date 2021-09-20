@@ -116,8 +116,9 @@ export const SceneCanvas = ({
         setHasOrbited(true);
     };
 
-    const closeIframe = () => {
+    const closeIframe = (e: React.MouseEvent) => {
         // (iframeWindow.current as any).style.display = "none";
+        e.stopPropagation();
         setIframeVisible(false);
     };
 
