@@ -2,6 +2,15 @@
 @import "../../../../assets/scss/variables";
 
 .app-sponsors {
+    .carousel-style {
+        display: flex;
+        overflow: hidden;
+    }
+    .slider-class {
+        display: flex;
+        list-style-type: none;
+        padding-left: 0;
+    }
     &--item {
         width: 100%;
         padding: 10px;

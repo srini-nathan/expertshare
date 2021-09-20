@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
 import { SwiperOptions } from "swiper/types/swiper-options";
+import Carousel from "react-multi-carousel";
 import { Exhibitor } from "../../../AdminModule/models";
 import { AppSponsor } from "./AppSponsor";
 
@@ -14,16 +14,15 @@ interface AppSponsorsType {
     basePath: string;
     options?: SwiperOptions;
     containerId: number;
+    customCss?: any;
 }
 
 export const AppSponsors: FC<AppSponsorsType> = ({
     data,
     basePath,
-    options = {
-        slidesPerView: "auto",
-        autoplay: true,
-    },
+    options = {},
     containerId,
+    customCss,
 }) => {
     const { loading, getExhibitors } = useExhibitors();
     const [exhibitors, setExhibitors] = useState<Exhibitor[]>([]);
@@ -41,15 +40,58 @@ export const AppSponsors: FC<AppSponsorsType> = ({
     if (loading) {
         return <AppLoader />;
     }
+    const responsive = customCss || {
+        desktop: {
+            breakpoint: {
+                max: 3000,
+                min: 1024,
+            },
+            items: 4,
+            partialVisibilityGutter: 40,
+        },
+        tablet: {
+            breakpoint: { max: 1024, min: 464 },
+            items: 3,
+            partialVisibilityGutter: 30,
+        },
+        mobile: {
+            breakpoint: { max: 464, min: 0 },
+            items: 2,
+            partialVisibilityGutter: 30,
+        },
+    };
+
     return (
         <div className={"app-sponsors"}>
-            <Swiper {...options}>
+            <Carousel
+                additionalTransfrom={0}
+                arrows
+                autoPlay
+                autoPlaySpeed={1}
+                centerMode={false}
+                className="carousel-style"
+                containerClass="container-with-dots"
+                customTransition="all 1s linear"
+                draggable
+                focusOnSelect={false}
+                infinite
+                keyBoardControl
+                minimumTouchDrag={80}
+                renderButtonGroupOutside={false}
+                renderDotsOutside={false}
+                responsive={responsive}
+                showDots={false}
+                sliderClass="slider-class"
+                swipeable
+                transitionDuration={1000}
+                {...options}
+            >
                 {exhibitors.map((d) => (
-                    <SwiperSlide key={d.id} className={""}>
+                    <div key={d.id}>
                         <AppSponsor data={d} basePath={basePath} />
-                    </SwiperSlide>
+                    </div>
                 ))}
-            </Swiper>
+            </Carousel>
         </div>
     );
 };
