@@ -261,7 +261,7 @@ export const Panel = ({
     const onRemoteClick = (e: ThreeEvent<MouseEvent>) => {
         if (e) {
             e.stopPropagation();
-            e.preventDefault();
+            // e.preventDefault();
         }
 
         if (isVisible) {
@@ -277,7 +277,7 @@ export const Panel = ({
     const groupClicked = (e: ThreeEvent<MouseEvent>) => {
         if (e) {
             e.stopPropagation();
-            e.preventDefault();
+            // e.preventDefault();
         }
 
         if (isVisible) {
