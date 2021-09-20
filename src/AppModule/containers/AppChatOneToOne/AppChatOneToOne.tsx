@@ -125,24 +125,20 @@ export const AppChatOneToOne: FC = () => {
     }, [openThread]);
 
     useEffect(() => {
-        if (chatsWidth > accessScreenWidth) {
-            if (collapseChatsWidth < accessScreenWidth) {
-                setCollapseChats(true);
-                const chats = openChats.map(
-                    (chat: ICurrentChat, index: number) => {
-                        if (index) {
-                            chat.isOpen = false;
-                        }
-                        return chat;
-                    }
-                );
-                setOpenChats(chats);
-            } else if (openChats.length !== 1) {
-                const chats = [...openChats];
-                chats.pop();
-                setOpenChats(() => chats);
-                setCollapseChats(false);
-            }
+        if (collapseChatsWidth < accessScreenWidth) {
+            setCollapseChats(true);
+            const chats = openChats.map((chat: ICurrentChat, index: number) => {
+                if (index) {
+                    chat.isOpen = false;
+                }
+                return chat;
+            });
+            setOpenChats(chats);
+        } else if (openChats.length !== 1) {
+            const chats = [...openChats];
+            chats.pop();
+            setOpenChats(() => chats);
+            setCollapseChats(false);
         }
     }, [collapseChatsWidth, chatsWidth, isCollapseChats, accessScreenWidth]);
 
