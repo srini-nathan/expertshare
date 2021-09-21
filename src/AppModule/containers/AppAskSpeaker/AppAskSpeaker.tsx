@@ -9,7 +9,7 @@ import {
     PSessionQuestion,
     SessionQuestion,
 } from "../../models/entities/SessionQuestion";
-import { useAuthState } from "../../hooks";
+import { useAuthState, useAskSpeakerSocketEvents } from "../../hooks";
 import "./assets/scss/style.scss";
 
 export interface AppAskSpeakerProps {
@@ -28,6 +28,20 @@ export const AppAskSpeaker: FC<AppAskSpeakerProps> = ({
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
     let timerRef: any = null;
 
+    const {
+        emitPostNewAskSpeaker,
+        emitJoinAskSpeaker,
+        emitLeaveAskSpeaker,
+    } = useAskSpeakerSocketEvents();
+
+    useEffect(() => {
+        if (containerId) emitJoinAskSpeaker(containerId);
+
+        return () => {
+            emitLeaveAskSpeaker(containerId);
+        };
+    }, [containerId]);
+
     const submitQuestion = (msg: string) => {
         const question = SessionQuestion.createFrom(
             sessionId,
@@ -44,11 +58,19 @@ export const AppAskSpeaker: FC<AppAskSpeakerProps> = ({
             isReplyed: false,
             parent: null,
         })
-            .then(() => {
+            .then(({ response }) => {
                 setAlreadyAsked(true);
                 timerRef = setTimeout(() => {
                     setAlreadyAsked(false);
                 }, 3000);
+                if (response) {
+                    emitPostNewAskSpeaker(
+                        containerId,
+                        question.user,
+                        response,
+                        null
+                    );
+                }
             })
             .finally(() => {
                 setIsSubmitting(false);

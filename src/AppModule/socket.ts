@@ -36,6 +36,14 @@ export const EVENTS = {
     ON_NEW_DISCUSSION_QA: "on-new-discussion-qa",
     ON_EDIT_DISCUSSION_QA: "on-edit-discussion-qa",
     ON_DELETE_DISCUSSION_QA: "on-delete-discussion-qa",
+    JOIN_ASK_SPEAKER: "join-ask-speaker",
+    LEAVE_ASK_SPEAKER: "leave-ask-speaker",
+    POST_NEW_ASK_SPEAKER: "post-new-ask-speaker",
+    EDIT_ASK_SPEAKER: "edit-ask-speaker",
+    DELETE_ASK_SPEAKER: "delete-ask-speaker",
+    ON_NEW_ASK_SPEAKER: "on-new-ask-speaker",
+    ON_EDIT_ASK_SPEAKER: "on-edit-ask-speaker",
+    ON_DELETE_ASK_SPEAKER: "on-delete-ask-speaker",
     JOIN_COMMAND_CENTER: "join-command-center",
     NEW_COMMAND: "new-command",
     ON_NEW_COMMAND: "on-new-command",
@@ -267,5 +275,53 @@ export const joinLiveVoteResult = (voteId: number): void => {
 export const leaveLiveVoteResult = (voteId: number): void => {
     socket.emit(EVENTS.LEAVE_LIVE_VOTE_RESULT, {
         voteId,
+    });
+};
+
+// Ask Speaker Events
+export const joinAskSpeaker = (socketParentId: number): void => {
+    socket.emit(EVENTS.JOIN_ASK_SPEAKER, {
+        socketParentId,
+    });
+};
+
+export const leaveAskSpeaker = (socketParentId: number): void => {
+    socket.emit(EVENTS.LEAVE_ASK_SPEAKER, {
+        socketParentId,
+    });
+};
+
+export const postNewAskSpeaker = (
+    socketParentId: number,
+    sender: PUser,
+    payload: PComment,
+    parentId: number | null = null
+): void => {
+    socket.emit(EVENTS.POST_NEW_ASK_SPEAKER, {
+        socketParentId,
+        sender,
+        payload,
+        parentId,
+    });
+};
+
+export const editAskSpeaker = (
+    socketParentId: number,
+    sender: PUser,
+    payload: PComment,
+    parentId: number | null = null
+): void => {
+    socket.emit(EVENTS.EDIT_ASK_SPEAKER, {
+        socketParentId,
+        sender,
+        payload,
+        parentId,
+    });
+};
+
+export const deleteAskSpeaker = (socketParentId: number, id: number): void => {
+    socket.emit(EVENTS.DELETE_ASK_SPEAKER, {
+        socketParentId,
+        id,
     });
 };

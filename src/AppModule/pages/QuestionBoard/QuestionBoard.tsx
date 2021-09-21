@@ -3,7 +3,13 @@ import { RouteComponentProps } from "@reach/router";
 import { Col, Row } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { isString as _isString, orderBy } from "lodash";
-import { useBuildAssetPath, useDateTime } from "../../hooks";
+import { socket, EVENTS } from "../../socket";
+import {
+    useBuildAssetPath,
+    useDateTime,
+    useAskSpeakerSocketEvents,
+    useAuthState,
+} from "../../hooks";
 import { AppPageHeader, AppLoader } from "../../components";
 import { SessionQuestionApi } from "../../apis";
 import {
@@ -14,21 +20,70 @@ import {
 import { SessionQuestion } from "../../models/entities/SessionQuestion";
 import { CONSTANTS, UserProfileFileInfo } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
+import { PUser } from "../../../AdminModule/models";
 
 import "./assets/scss/style.scss";
 import "./assets/scss/_common.scss";
 
+type PAskSpeakerQuestion = SessionQuestion;
+
 const { SessionQuestion: STATUS } = CONSTANTS;
+
+const {
+    ON_NEW_ASK_SPEAKER,
+    ON_DELETE_ASK_SPEAKER,
+    ON_EDIT_ASK_SPEAKER,
+} = EVENTS;
 
 const {
     STATUS: { STATUS_NEW, STATUS_ACCEPTED, STATUS_REJECTED },
 } = STATUS;
 
+function createCore() {
+    let stateContainer: any[] = [];
+
+    const addNewQuestion = (newState: any, setter: any) => {
+        stateContainer = [newState, ...stateContainer];
+        setter(stateContainer);
+    };
+
+    const createState = (newState: any, setter: any) => {
+        stateContainer = newState;
+        setter(stateContainer);
+    };
+
+    const deleteQuestion = (id: any, setter: any) => {
+        stateContainer = stateContainer.filter((e) => e.id !== id);
+        setter(stateContainer);
+    };
+
+    const editQuestion = (newState: any, setter: any) => {
+        stateContainer = stateContainer.map((e) => {
+            if (e.id === newState.id) {
+                return newState;
+            }
+            return e;
+        });
+        setter(stateContainer);
+    };
+
+    return {
+        getState: () => stateContainer,
+        addNewQuestion,
+        createState,
+        deleteQuestion,
+        editQuestion,
+    };
+}
+const core = createCore();
+
 const QuestionCard = ({
     status,
     questions,
     searchText,
-    refreshQuestionList,
+    setQuestions,
+    emitEditAskSpeaker,
+    emitDeleteAskSpeaker,
 }) => {
     const { t } = useTranslation();
     searchText = searchText?.trim().toLowerCase();
@@ -46,7 +101,7 @@ const QuestionCard = ({
     statusQuestions = orderBy(statusQuestions, ["id"], ["desc"]);
     const profilePictureBasePath = useBuildAssetPath(UserProfileFileInfo);
     const { toLongDateTime } = useDateTime();
-
+    const { containerId } = useAuthState();
     const loginUserProfileStyle = (user) => {
         return getBGStyle(profilePictureBasePath, user?.imageName, placeholder);
     };
@@ -57,8 +112,9 @@ const QuestionCard = ({
             {
                 status: questionStatus,
             }
-        ).then(() => {
-            refreshQuestionList();
+        ).then(({ response }) => {
+            emitEditAskSpeaker(containerId, response?.user, response, null);
+            core.editQuestion(response, setQuestions);
         });
     };
 
@@ -69,7 +125,13 @@ const QuestionCard = ({
                     errorToast(error);
                 }
             } else {
-                refreshQuestionList();
+                emitDeleteAskSpeaker(containerId, id);
+                const p = core
+                    .getState()
+                    .find((e: PAskSpeakerQuestion) => e.id === id);
+                if (p) {
+                    core.deleteQuestion(id, setQuestions);
+                }
             }
         });
     };
@@ -87,7 +149,7 @@ const QuestionCard = ({
                         </div>
                         <div className="question-item--header--button col-12 col-xl-4 pl-0">
                             <div className="question-item--header--button--arrow-right mb-2">
-                                <a href="#" className="btn btn-secondary">
+                                <a className="btn btn-secondary">
                                     <i
                                         className="fak fa-chevron-right"
                                         aria-hidden="true"
@@ -95,7 +157,7 @@ const QuestionCard = ({
                                 </a>
                             </div>
                             <div className="question-item--header--button--move ml-2 mb-2">
-                                <a href="#" className="btn btn-secondary">
+                                <a className="btn btn-secondary">
                                     <i
                                         className="fak fa-arrows-light"
                                         aria-hidden="true"
@@ -134,7 +196,6 @@ const QuestionCard = ({
                                 {q.status !== STATUS_NEW && (
                                     <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
                                         <a
-                                            href="#"
                                             className="btn btn-secondary"
                                             onClick={() =>
                                                 updateQuestionStatus(
@@ -154,7 +215,6 @@ const QuestionCard = ({
                                 {q.status !== STATUS_ACCEPTED && (
                                     <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
                                         <a
-                                            href="#"
                                             className="btn btn-secondary"
                                             onClick={() =>
                                                 updateQuestionStatus(
@@ -176,7 +236,6 @@ const QuestionCard = ({
                                 {q.status !== STATUS_REJECTED && (
                                     <div className="question-item--content--action--button reject col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
                                         <a
-                                            href="#"
                                             className="btn btn-secondary"
                                             onClick={() =>
                                                 updateQuestionStatus(
@@ -197,7 +256,6 @@ const QuestionCard = ({
                                 )}
                                 <div className="question-item--content--action--button delete col-12 col-sm-6 col-md-12 col-xl-6 pt-3 px-2">
                                     <a
-                                        href="#"
                                         className="btn btn-secondary"
                                         onClick={() => deleteQuestion(q.id)}
                                     >
@@ -209,7 +267,7 @@ const QuestionCard = ({
                                     </a>
                                 </div>
                                 <div className="question-item--content--action--button edit col-12 col-sm-6 col-md-12 col-xl-6 pt-3 px-2">
-                                    <a href="#" className="btn btn-secondary">
+                                    <a className="btn btn-secondary">
                                         {t("questionboard.list:status.edit")}
                                         <i
                                             className="fak fa-pen-regular"
@@ -227,15 +285,24 @@ const QuestionCard = ({
 };
 export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
     const [loading, isLoading] = useState<boolean>(true);
-    const [questions, setQuestions] = useState<any[]>([]);
+    const [questions, setQuestions] = useState<any[]>(core.getState());
     const [searchText, setSearchText] = useState<any>({});
     // const [totalItems, setTotalItems] = useState<number>(0);
+    const { containerId } = useAuthState();
     const showColumns = [
         STATUS_NEW,
         STATUS_ACCEPTED,
         STATUS_REJECTED,
         "ANSWERED",
     ];
+
+    const {
+        emitJoinAskSpeaker,
+        emitLeaveAskSpeaker,
+        emitEditAskSpeaker,
+        emitDeleteAskSpeaker,
+    } = useAskSpeakerSocketEvents();
+
     const columnLabelKeys = {
         NEW: "questionboard.list:columns.title.new",
         ACCEPTED: "questionboard.list:columns.title.accepted",
@@ -262,11 +329,56 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
                     }
                 } else if (response !== null) {
                     // setTotalItems(response.totalItems);
-                    setQuestions(response.items);
+                    core.createState(response.items, setQuestions);
                 }
             }
         );
     };
+
+    useEffect(() => {
+        if (containerId) emitJoinAskSpeaker(containerId);
+
+        return () => {
+            emitLeaveAskSpeaker(containerId);
+        };
+    }, [containerId]);
+
+    useEffect(() => {
+        socket.on(
+            ON_NEW_ASK_SPEAKER,
+            (u: PUser, parent: number | null, payload: PAskSpeakerQuestion) => {
+                if (u && payload) {
+                    core.addNewQuestion(payload, setQuestions);
+                }
+            }
+        );
+
+        socket.on(ON_DELETE_ASK_SPEAKER, (qId: number) => {
+            if (qId) {
+                const p = core
+                    .getState()
+                    .find((e: PAskSpeakerQuestion) => e.id === qId);
+                if (p) {
+                    core.deleteQuestion(qId, setQuestions);
+                }
+            }
+        });
+
+        socket.on(
+            ON_EDIT_ASK_SPEAKER,
+            (u: PUser, parent: number | null, payload: PAskSpeakerQuestion) => {
+                if (u && payload) {
+                    core.editQuestion(payload, setQuestions);
+                }
+            }
+        );
+
+        return () => {
+            socket.off(ON_NEW_ASK_SPEAKER);
+            socket.off(ON_DELETE_ASK_SPEAKER);
+            socket.off(ON_EDIT_ASK_SPEAKER);
+        };
+    }, []);
 
     useEffect(() => {
         fetchQuestions();
@@ -332,10 +444,16 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
                                         <QuestionCard
                                             status={boardCol}
                                             questions={questions}
+                                            emitEditAskSpeaker={
+                                                emitEditAskSpeaker
+                                            }
+                                            emitDeleteAskSpeaker={
+                                                emitDeleteAskSpeaker
+                                            }
                                             searchText={
                                                 searchText[boardCol] || ""
                                             }
-                                            refreshQuestionList={fetchQuestions}
+                                            setQuestions={setQuestions}
                                         />
                                     )}
                                 </div>
