@@ -10,10 +10,11 @@ import {
     useAskSpeakerSocketEvents,
     useAuthState,
 } from "../../hooks";
-import { AppPageHeader, AppLoader } from "../../components";
+import { AppPageHeader, AppLoader, AppModal } from "../../components";
 import { SessionQuestionApi } from "../../apis";
 import {
     errorToast,
+    successToast,
     getBGStyle,
     getDateTimeWithoutTimezone,
 } from "../../utils";
@@ -86,6 +87,7 @@ const QuestionCard = ({
     emitDeleteAskSpeaker,
 }) => {
     const { t } = useTranslation();
+    const [showDelete, setShowDelete] = useState<number>(0);
     searchText = searchText?.trim().toLowerCase();
     let statusQuestions = questions.filter(
         (q) =>
@@ -125,6 +127,7 @@ const QuestionCard = ({
                     errorToast(error);
                 }
             } else {
+                successToast("Successfully deleted");
                 emitDeleteAskSpeaker(containerId, id);
                 const p = core
                     .getState()
@@ -257,7 +260,7 @@ const QuestionCard = ({
                                 <div className="question-item--content--action--button delete col-12 col-sm-6 col-md-12 col-xl-6 pt-3 px-2">
                                     <a
                                         className="btn btn-secondary"
-                                        onClick={() => deleteQuestion(q.id)}
+                                        onClick={() => setShowDelete(q.id)}
                                     >
                                         {t("questionboard.list:status.delete")}
                                         <i
@@ -279,6 +282,17 @@ const QuestionCard = ({
                         </div>
                     </div>
                 </div>
+                <AppModal
+                    show={showDelete > 0}
+                    handleClose={() => {
+                        setShowDelete(0);
+                    }}
+                    handleDelete={() => {
+                        deleteQuestion(showDelete);
+                    }}
+                    bodyContent={t("questionboard.list:delete.confirm.message")}
+                    title={t("questionboard.list:delete.confirm.title")}
+                />
             </div>
         ))
     );
