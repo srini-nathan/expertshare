@@ -84,10 +84,10 @@ const QuestionCard = ({
     searchText,
     setQuestions,
     emitEditAskSpeaker,
-    emitDeleteAskSpeaker,
+    setShowDelete,
 }) => {
     const { t } = useTranslation();
-    const [showDelete, setShowDelete] = useState<number>(0);
+
     searchText = searchText?.trim().toLowerCase();
     let statusQuestions = questions.filter(
         (q) =>
@@ -120,24 +120,6 @@ const QuestionCard = ({
         });
     };
 
-    const deleteQuestion = (id: number) => {
-        SessionQuestionApi.deleteById(id).then(({ error }) => {
-            if (error !== null) {
-                if (_isString(error)) {
-                    errorToast(error);
-                }
-            } else {
-                successToast("Successfully deleted");
-                emitDeleteAskSpeaker(containerId, id);
-                const p = core
-                    .getState()
-                    .find((e: PAskSpeakerQuestion) => e.id === id);
-                if (p) {
-                    core.deleteQuestion(id, setQuestions);
-                }
-            }
-        });
-    };
     return statusQuestions.length <= 0 ? (
         <span className="null mt-3 d-block w-100 text-center">
             {t("questionboard.list:noquestions")}
@@ -282,17 +264,6 @@ const QuestionCard = ({
                         </div>
                     </div>
                 </div>
-                <AppModal
-                    show={showDelete > 0}
-                    handleClose={() => {
-                        setShowDelete(0);
-                    }}
-                    handleDelete={() => {
-                        deleteQuestion(showDelete);
-                    }}
-                    bodyContent={t("questionboard.list:delete.confirm.message")}
-                    title={t("questionboard.list:delete.confirm.title")}
-                />
             </div>
         ))
     );
@@ -301,6 +272,7 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
     const [loading, isLoading] = useState<boolean>(true);
     const [questions, setQuestions] = useState<any[]>(core.getState());
     const [searchText, setSearchText] = useState<any>({});
+    const [showDelete, setShowDelete] = useState<number>(0);
     // const [totalItems, setTotalItems] = useState<number>(0);
     const { containerId } = useAuthState();
     const showColumns = [
@@ -461,9 +433,7 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
                                             emitEditAskSpeaker={
                                                 emitEditAskSpeaker
                                             }
-                                            emitDeleteAskSpeaker={
-                                                emitDeleteAskSpeaker
-                                            }
+                                            setShowDelete={setShowDelete}
                                             searchText={
                                                 searchText[boardCol] || ""
                                             }
@@ -479,6 +449,25 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
         );
     };
 
+    const deleteQuestion = (id: number) => {
+        SessionQuestionApi.deleteById(id).then(({ error }) => {
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
+                }
+            } else {
+                successToast("Successfully deleted");
+                emitDeleteAskSpeaker(containerId, id);
+                const p = core
+                    .getState()
+                    .find((e: PAskSpeakerQuestion) => e.id === id);
+                if (p) {
+                    core.deleteQuestion(id, setQuestions);
+                }
+            }
+        });
+    };
+
     return (
         <Fragment>
             <AppPageHeader
@@ -487,6 +476,19 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
             <div className="questionboard-admin--container pt-1 pt-xl-3">
                 {renderQuestionStatusCols()}
             </div>
+
+            <AppModal
+                show={showDelete > 0}
+                handleClose={() => {
+                    setShowDelete(0);
+                }}
+                handleDelete={() => {
+                    setShowDelete(0);
+                    deleteQuestion(showDelete);
+                }}
+                bodyContent={t("questionboard.list:delete.confirm.message")}
+                title={t("questionboard.list:delete.confirm.title")}
+            />
         </Fragment>
     );
 };
