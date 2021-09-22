@@ -17,6 +17,7 @@ import {
     successToast,
     getBGStyle,
     getDateTimeWithoutTimezone,
+    parseIdFromResourceUrl,
 } from "../../utils";
 import { SessionQuestion } from "../../models/entities/SessionQuestion";
 import { CONSTANTS, UserProfileFileInfo } from "../../../config";
@@ -139,7 +140,15 @@ const QuestionCard = ({
                         </div>
                         <div className="question-item--header--button col-12 col-xl-4 pl-0">
                             <div className="question-item--header--button--arrow-right mb-2">
-                                <a className="btn btn-secondary">
+                                <a
+                                    href={`/event/${parseIdFromResourceUrl(
+                                        q.session.conference["@id"]
+                                    )}/session/${parseIdFromResourceUrl(
+                                        q.session["@id"]
+                                    )}`}
+                                    className="btn btn-secondary"
+                                    target="_blank"
+                                >
                                     <i
                                         className="fak fa-chevron-right"
                                         aria-hidden="true"
