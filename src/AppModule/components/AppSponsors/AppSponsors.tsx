@@ -65,7 +65,7 @@ export const AppSponsors: FC<AppSponsorsType> = ({
                 showDots={false}
                 sliderClass="slider-class"
                 swipeable
-                transitionDuration={900}
+                transitionDuration={1000}
                 {...options}
             >
                 {exhibitors.map((d) => (
