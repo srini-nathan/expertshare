@@ -52,10 +52,12 @@
                             line-height: initial;
                         }
                         @include media("mcbk-1") {
-                            font-size: 30px;
+                            font-size: 27px;
+                            line-height: 35px;
                         }
                         @include media("mcbk-2") {
-                            font-size: 30px;
+                            font-size: 26px;
+                            line-height: 35px;
                         }
                     }
                 }
