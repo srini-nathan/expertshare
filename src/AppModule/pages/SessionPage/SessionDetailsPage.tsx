@@ -41,7 +41,7 @@ const sessionImages = {
             max: 3000,
             min: 1024,
         },
-        items: 8,
+        items: 12,
         partialVisibilityGutter: 40,
     },
     tablet: {
@@ -130,6 +130,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
         if (parseInt(sessionId, 10) === data.id && next)
             switchTonextSession(next as number);
     });
+
     useEffect(() => {
         if (id) emitJoinNextSession(id);
         return () => {
@@ -355,7 +356,16 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                                 data={(data.exhibitors as unknown) as string[]}
                                 basePath={exhibitorLogoBasePath}
                                 containerId={containerId}
-                                customCss={sessionImages}
+                                customCss={{
+                                    ...sessionImages,
+                                    desktop: {
+                                        ...sessionImages.desktop,
+                                        items:
+                                            data.isCommentEnable || vote
+                                                ? 8
+                                                : 12,
+                                    },
+                                }}
                             />
                         </AppCard>
                     ) : null}
