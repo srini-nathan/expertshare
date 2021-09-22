@@ -1,3 +1,6 @@
+@import "./../../../AppModule/assets/scss/variables";
+@import "./../../../AppModule/assets/scss/screens-sizes";
+
 .waveformContainer {
   display: flex;
   flex-direction: row;
@@ -7,6 +10,12 @@
   min-height: 50px;
   background-color: var(--background-music-player-background-color);
   border-radius: 5px;
+  @include media("mcbk-1") {
+    min-height: 40px;
+  }
+  @include media("mcbk-2") {
+    min-height: 40px;
+  }
   &.not-playing {
     canvas {
       display: none;
@@ -83,6 +92,9 @@
   }
   canvas {
     width: 70%;
+    @include media("mcbk-2") {
+      width: 63%;
+    }
   }
   .wrapper {
     position: relative;

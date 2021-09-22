@@ -51,6 +51,12 @@
                             font-size: 22px;
                             line-height: initial;
                         }
+                        @include media("mcbk-1") {
+                            font-size: 30px;
+                        }
+                        @include media("mcbk-2") {
+                            font-size: 30px;
+                        }
                     }
                 }
             }
@@ -128,6 +134,12 @@
                     i {
                         padding-right: 10px;
                         font-size: 22px;
+                        @include media("mcbk-1") {
+                            font-size: 20px;
+                        }
+                        @include media("mcbk-2") {
+                            font-size: 20px;
+                        }
                     }
 
                     &--content {
@@ -137,8 +149,23 @@
                             font-size: 16px;
                             font-weight: 700;
                             color: var(--card-text-color);
+                            @include media("mcbk-1") {
+                                margin-bottom: 5px;
+                                font-size: 14px;
+                            }
+                            @include media("mcbk-2") {
+                                margin-bottom: 5px;
+                                font-size: 14px;
+                            }
                         }
-
+                        .conference-tags-container {
+                            @include media("mcbk-1") {
+                                margin-top: 8px !important;
+                            }
+                            @include media("mcbk-2") {
+                                margin-top: 8px !important;
+                            }
+                        }
                         p {
                             display: grid;
                             font-size: 16px;
@@ -153,22 +180,45 @@
                             p {
                                 display: block;
                             }
+                            @include media("mcbk-1") {
+                                font-size: 14px;
+                            }
+                            @include media("mcbk-2") {
+                                font-size: 14px;
+                            }
                         }
                     }
                 }
 
                 &--sponsors {
                     &--title {
+                        @include media("mcbk-1") {
+                            margin-bottom: 5px !important;
+                        }
+                        @include media("mcbk-2") {
+                            margin-bottom: 5px !important;
+                        }
                         h2 {
                             font-size: 16px;
                             font-weight: 700;
                             color: var(--card-text-color);
-
+                            @include media("mcbk-1") {
+                                font-size: 14px;
+                            }
+                            @include media("mcbk-2") {
+                                font-size: 14px;
+                            }
                             i {
                                 position: relative;
                                 top: 3px;
                                 padding-right: 10px;
                                 font-size: 20px;
+                                @include media("mcbk-1") {
+                                    font-size: 18px;
+                                }
+                                @include media("mcbk-2") {
+                                    font-size: 18px;
+                                }
                             }
                         }
                     }

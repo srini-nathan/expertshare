@@ -30,7 +30,8 @@ $media-queries: (
     "smallmob": "only screen and (max-width: 460px)",
     "smallmob2": "only screen and (max-width: 374px)",
     "smallmob3": "only screen and (max-width: 354px)",
-    //custom for mcbook viewport size
+    "laptoponetwelve": "only screen and (min-width: 1200px)",
+    //custom for default screen viewport size
     "mcbk-1": "only screen and (min-width: 1200px) and (max-width: 1379px)",
     "mcbk-2": "only screen and (min-width: 1380px) and (max-width: 1700px)",
     //custom for spec code

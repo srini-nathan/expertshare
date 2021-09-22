@@ -53,7 +53,7 @@ export const ExhibitorDetailTabDetails: FC<ExhibitorDetailTabDetailsType> = ({
                     <Row className="m-0 mb-3 mb-lg-4">
                         <Col
                             sm={12}
-                            className="session-details-desc my-4 pt-1 px-2"
+                            className="session-details-desc my-1 pt-1 px-1"
                         >
                             <h2>
                                 <i className="fak fa-description"></i>

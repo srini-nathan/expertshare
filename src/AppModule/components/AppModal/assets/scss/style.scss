@@ -17,6 +17,12 @@ body.modal-open #root {
         max-width: 553px !important;
         height: 90% !important;
         margin: auto !important;
+        @include media("mcbk-1") {
+            max-width: 460px !important;
+        }
+        @include media("mcbk-2") {
+            max-width: 420px !important;
+        }
         @include media("mobile") {
             max-width: 300px !important;
             height: 100% !important;
@@ -28,7 +34,14 @@ body.modal-open #root {
         padding: 35px;
         margin: auto;
         background-color: var(--modal-background-color);
+        border: none;
         border-radius: var(--modal-border-radius) !important;
+        @include media("mcbk-1") {
+            padding: 20px;
+        }
+        @include media("mcbk-2") {
+            padding: 20px;
+        }
         @include media("mobile") {
             padding: 10px;
         }
@@ -67,7 +80,13 @@ body.modal-open #root {
             line-height: initial;
             color: var(--modal-text-color);
             overflow-wrap: break-word;
-            @include media("xl") {
+            @include media("mcbk-1") {
+                font-size: 27px;
+            }
+            @include media("mcbk-2") {
+                font-size: 23px;
+            }
+            @include media("lg") {
                 font-size: 36px;
             }
             @include media("mobile") {

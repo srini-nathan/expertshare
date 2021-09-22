@@ -120,7 +120,15 @@ export const ContainerOverview: FC<RouteComponentProps> = (): JSX.Element => {
             </AppPageHeader>
             <Row>
                 {overviews.map((container: PContainer) => (
-                    <Col xs={12} sm={6} md={4} lg={3} xl={3} key={container.id}>
+                    <Col
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        lg={3}
+                        xl={3}
+                        key={container.id}
+                        className="container-overview--container--col mt-3"
+                    >
                         <AppContainerOverviewCard
                             container={container}
                             onClick={() => {

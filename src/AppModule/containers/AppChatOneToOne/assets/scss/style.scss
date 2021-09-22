@@ -3,8 +3,12 @@
 
 .collapse-chat {
     width: 250px !important;
-    margin-top: 444px !important;
-    transition: width 300ms, margin-top 300ms;
+    height: 53px;
+    place-self: end;
+    transition: width 300ms, height 300ms;
+    .pt-3 {
+        padding-top: 12px !important;
+    }
 }
 
 .app-chat-one-to-one {
@@ -26,7 +30,12 @@
         height: initial;
         margin-right: 0;
     }
-
+    @include media("mcbk-1") {
+        width: 300px;
+    }
+    @include media("mcbk-2") {
+        width: 300px;
+    }
     .inner-container {
         .details {
             &--content {
@@ -69,14 +78,22 @@
                             overflow: hidden;
                             font-size: 16px;
                             font-weight: 500;
-                            color: var(--secondary);
+                            color: var(--card-text-color);
                             @include media("smallmob") {
                                 max-width: 190px;
+                            }
+                            @include media("mcbk-1") {
+                                height: 20px;
+                                font-size: 14px;
+                            }
+                            @include media("mcbk-2") {
+                                height: 20px;
+                                font-size: 14px;
                             }
                             .time {
                                 font-size: 12px;
                                 font-weight: 400;
-                                color: var(--secondary-70);
+                                color: var(--card-second-text-color);
                             }
                         }
                     }
@@ -87,7 +104,7 @@
                             margin-bottom: 0;
                             font-size: 12px;
                             font-weight: 500;
-                            color: var(--secondary);
+                            color: var(--card-text-color);
                         }
 
                         span {
@@ -100,7 +117,7 @@
                             overflow: hidden;
                             font-size: 12px;
                             font-weight: 400;
-                            color: var(--secondary-70);
+                            color: var(--card-second-text-color);
                             @include media("smallmob") {
                                 max-width: 190px;
                             }
@@ -244,13 +261,18 @@
                                 margin-bottom: 0;
                                 font-size: 16px;
                                 font-weight: 500;
-                                color: var(--secondary);
-
+                                color: var(--card-text-color);
+                                @include media("mcbk-1") {
+                                    font-size: 14px;
+                                }
+                                @include media("mcbk-2") {
+                                    font-size: 14px;
+                                }
                                 .time {
                                     padding-left: 4px;
                                     font-size: 12px;
                                     font-weight: 400;
-                                    color: var(--secondary-70);
+                                    color: var(--card-second-text-color);
                                 }
                             }
                         }
@@ -260,7 +282,7 @@
                                 font-size: 14px;
                                 font-weight: 400;
                                 line-height: 150%;
-                                color: var(--secondary);
+                                color: var(--card-text-color);
                                 word-break: break-word;
                             }
                         }

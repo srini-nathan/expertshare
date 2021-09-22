@@ -51,7 +51,13 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
     const style = resolveImageWithStyle(basePath, imageName, placeholder);
 
     return (
-        <Col md={12} lg={4} xl={3} className="events-grid--container--item">
+        <Col
+            xs={12}
+            sm={6}
+            lg={4}
+            xl={3}
+            className="events-grid--container--item"
+        >
             <Col className="inner-container p-0 card">
                 <Link to={`/event/${id}/agenda`}>
                     <div className="inner-container--banner" style={style}>
@@ -159,7 +165,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                         </div>
                         <Row
                             className={
-                                "m-0 mt-3 p-0 conference-tags-container--tags"
+                                "m-0 mt-2 p-0 conference-tags-container--tags"
                             }
                         >
                             {conferenceTags.map((e) => {

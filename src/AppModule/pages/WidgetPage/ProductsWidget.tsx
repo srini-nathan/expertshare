@@ -56,7 +56,7 @@ export const ProductsWidget: FC<ProductsWidgetType> = ({ id }): JSX.Element => {
 
     return (
         <div className={"products-widget"}>
-            <Row>
+            <Row className="mt-4">
                 {loading ? (
                     <AppLoader />
                 ) : (

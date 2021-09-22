@@ -377,7 +377,7 @@
                 align-items: center;
                 width: 40px;
                 height: 40px;
-                margin-bottom: 3px;
+                margin-bottom: 2px;
                 color: var(--navigation-item-icon-color);
                 border-radius: var(--secondary-button-border-radius);
 
@@ -400,6 +400,16 @@
                             width: 30px;
                             height: 30px;
                             padding: 6px;
+                        }
+                        @include media("mcbk-1") {
+                            width: 30px;
+                            height: 30px;
+                            padding: 5px;
+                        }
+                        @include media("mcbk-2") {
+                            width: 30px;
+                            height: 30px;
+                            padding: 5px;
                         }
                     }
                 }
@@ -720,6 +730,16 @@
             }
         }
     }
+    @include media("mcbk-1") {
+        height: 60px !important;
+    }
+    @include media("mcbk-2") {
+        height: 60px !important;
+        .main-logo-container {
+            height: 60px !important;
+        }
+    }
+
     @include media("not-mobile") {
         position: fixed;
         width: 100%;
@@ -819,12 +839,18 @@
             .player-nav-item {
                 flex: none;
                 width: 250px;
+                @include media("mcbk-1") {
+                    width: 210px;
+                }
+                @include media("mcbk-2") {
+                    width: 200px;
+                }
             }
             #show-menu-toggler {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                width: 90px;
+                width: 60px;
                 height: 100%;
                 margin: 0 10px;
                 cursor: pointer;
@@ -870,6 +896,28 @@
                 > .navbar-nav > .list-group {
                     > div:nth-child(2) {
                         bottom: 80px !important;
+                    }
+                }
+            }
+        }
+    }
+    @include media("mcbk-1") {
+        > .navbar {
+            > div:nth-child(2) {
+                > .navbar-nav > .list-group {
+                    > div:nth-child(2) {
+                        bottom: 60px !important;
+                    }
+                }
+            }
+        }
+    }
+    @include media("mcbk-2") {
+        > .navbar {
+            > div:nth-child(2) {
+                > .navbar-nav > .list-group {
+                    > div:nth-child(2) {
+                        bottom: 60px !important;
                     }
                 }
             }
@@ -933,7 +981,7 @@
 
         &::-webkit-scrollbar {
             width: 3px;
-            height: 3px;
+            height: 5px;
         }
 
         &::-webkit-scrollbar-track {

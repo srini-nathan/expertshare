@@ -257,7 +257,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                 <Col
                     className={
                         data.isCommentEnable || vote
-                            ? "pl-0 pr-0 pr-lg-3 comment-enable"
+                            ? "pl-0 pr-0 pr-lg-3 pr-xl-2 comment-enable"
                             : "px-0"
                     }
                     md={12}
@@ -277,7 +277,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                         />
                         <AppSessionTags session={data} />
                         <AppSessionExtraLink session={data} />
-                        <Row className="my-5 mx-0 px-2">
+                        <Row className="my-4 mx-0 px-2">
                             {data.speakers.length > 0 ? (
                                 <Col
                                     lg={data.moderators.length > 0 ? 8 : 12}

@@ -21,7 +21,7 @@ export const ExhibitorDetailTabs: FC<ExhibitorDetailTabsType> = ({
 
     return (
         <Row>
-            <Col className={"d-flex justify-content-between mb-3"}>
+            <Col className={"d-flex justify-content-between mb-2"}>
                 <div className="d-inline-block categories-nav--tabs">
                     <nav>
                         <div className="nav nav-tabs">

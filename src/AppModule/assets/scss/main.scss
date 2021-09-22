@@ -184,10 +184,26 @@ a {
             align-items: center;
             padding-left: 20px;
         }
+        @include media("mcbk-1") {
+            bottom: 60px;
+        }
+        @include media("mcbk-2") {
+            bottom: 60px;
+        }
     }
     @include media("not-mobile") {
         .app-message-inbox {
             bottom: 80px;
+        }
+    }
+    @include media("mcbk-1") {
+        .app-message-inbox {
+            bottom: 60px;
+        }
+    }
+    @include media("mcbk-2") {
+        .app-message-inbox {
+            bottom: 60px;
         }
     }
     @include media("mobile") {
@@ -213,6 +229,12 @@ a {
             left: 0;
             align-items: center;
             padding-left: 20px;
+        }
+        @include media("mcbk-1") {
+            bottom: 60px;
+        }
+        @include media("mcbk-2") {
+            bottom: 60px;
         }
     }
     @include media("not-mobile") {

@@ -295,7 +295,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                                             <i className="fak fa-arrows-light"></i>
                                                         </AppButton>
                                                     </div> */}
-                                                    <div className="inner-container--det--action--other--item col-6">
+                                                    <div className="inner-container--det--action--other--item col-auto pr-0">
                                                         <AppButton
                                                             onClick={() =>
                                                                 handleDelete(
@@ -310,7 +310,7 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                                             <i className="fak fa-trash-light"></i>
                                                         </AppButton>
                                                     </div>
-                                                    <div className="inner-container--det--action--other--item col-6">
+                                                    <div className="inner-container--det--action--other--item col-auto pr-0">
                                                         <Link
                                                             to={`/event/${conference}/session/${session.id}/update`}
                                                             className="btn-edit btn btn-secondary mr-0 ml-auto"

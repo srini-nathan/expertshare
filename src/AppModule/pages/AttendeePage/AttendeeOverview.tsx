@@ -164,7 +164,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                             data.map((item) => (
                                 <Col
                                     xs={12}
-                                    md={6}
+                                    sm={6}
                                     lg={4}
                                     xl={3}
                                     className="attendees-grid--container--item"

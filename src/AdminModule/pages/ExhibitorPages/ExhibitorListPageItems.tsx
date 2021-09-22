@@ -37,7 +37,9 @@ export const ExhibitorListItems: FC<ExhibitorListItemsType> = ({
                     return (
                         <Row>
                             <Col sm={12}>
-                                <h4 className="pb-1 pt-3">{cat.name}</h4>
+                                <h4 className="pb-1 pt-3 exhibitors-category-title">
+                                    {cat.name}
+                                </h4>
                             </Col>
                             {items.map((e) => (
                                 <AppExhibitorCard

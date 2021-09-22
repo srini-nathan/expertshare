@@ -48,7 +48,7 @@
     }
 
     &--index {
-        width: 384px;
+        width: 320px;
         overflow: hidden;
         background-color: var(--card-background-color);
         border-radius: var(--card-border-radius) var(--card-border-radius) 0 0;
@@ -58,7 +58,12 @@
             width: 100%;
             height: 90vh;
         }
-
+        @include media("mcbk-1") {
+            width: 300px !important;
+        }
+        @include media("mcbk-2") {
+            width: 300px !important;
+        }
         .inner-container {
             &--details {
                 &--content {
@@ -91,10 +96,17 @@
                         display: flex;
                         align-items: center;
                         margin-bottom: 0;
-                        font-size: 20px;
-                        font-weight: 700;
+                        font-size: 18px;
+                        font-weight: 500;
                         color: var(--secondary);
-
+                        @include media("mcbk-1") {
+                            font-size: 16px;
+                            font-weight: 500;
+                        }
+                        @include media("mcbk-2") {
+                            font-size: 16px;
+                            font-weight: 500;
+                        }
                         &--count {
                             display: inline-flex;
                             align-items: center;
@@ -338,12 +350,19 @@
                                         font-size: 16px;
                                         font-weight: 500;
                                         line-height: 22px;
-                                        color: var(--secondary);
-
+                                        color: var(--card-text-color);
+                                        @include media("mcbk-1") {
+                                            height: 20px;
+                                            font-size: 14px;
+                                        }
+                                        @include media("mcbk-2") {
+                                            height: 20px;
+                                            font-size: 14px;
+                                        }
                                         .time {
                                             font-size: 12px;
                                             font-weight: 400;
-                                            color: var(--secondary-70);
+                                            color: var(--card-second-text-color);
                                         }
                                     }
                                 }
@@ -358,13 +377,13 @@
                                         overflow: hidden;
                                         font-size: 12px;
                                         font-weight: 400;
-                                        color: var(--secondary);
+                                        color: var(--card-text-color);
                                     }
 
                                     span {
                                         font-size: 12px;
                                         font-weight: 400;
-                                        color: var(--secondary-70);
+                                        color: var(--card-second-text-color);
                                     }
                                 }
                             }
@@ -401,7 +420,12 @@
         margin-top: auto;
         margin-bottom: 0;
         overflow: hidden;
-
+        @include media("mcbk-1") {
+            height: 53px;
+        }
+        @include media("mcbk-2") {
+            height: 53px;
+        }
         .app-message-inbox-header {
             padding-top: 8px !important;
             padding-bottom: 10px !important;
