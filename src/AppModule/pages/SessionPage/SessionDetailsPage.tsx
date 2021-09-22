@@ -35,6 +35,27 @@ import { ExhibitorLogoPosterFileInfo } from "../../../config";
 
 const { ON_NEXT_SESSION, ON_LIVE_VOTE_REFRESH } = EVENTS;
 
+const sessionImages = {
+    desktop: {
+        breakpoint: {
+            max: 3000,
+            min: 1024,
+        },
+        items: 8,
+        partialVisibilityGutter: 40,
+    },
+    tablet: {
+        breakpoint: { max: 1024, min: 464 },
+        items: 6,
+        partialVisibilityGutter: 30,
+    },
+    mobile: {
+        breakpoint: { max: 464, min: 0 },
+        items: 3,
+        partialVisibilityGutter: 30,
+    },
+};
+
 export const SessionDetailsPage: FC<RouteComponentProps> = ({
     location,
 }): JSX.Element => {
@@ -334,6 +355,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                                 data={(data.exhibitors as unknown) as string[]}
                                 basePath={exhibitorLogoBasePath}
                                 containerId={containerId}
+                                customCss={sessionImages}
                             />
                         </AppCard>
                     ) : null}
