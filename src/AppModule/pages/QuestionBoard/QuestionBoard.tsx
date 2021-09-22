@@ -91,7 +91,10 @@ const QuestionCard = ({
     searchText = searchText?.trim().toLowerCase();
     let statusQuestions = questions.filter(
         (q) =>
-            q.status === status.toUpperCase() &&
+            ((q.status === status.toUpperCase() &&
+                status.toUpperCase() !== "ANSWERED" &&
+                !q.isReplyed) ||
+                (status.toUpperCase() === "ANSWERED" && q.isReplyed)) &&
             (q?.session?.title?.trim().toLowerCase().includes(searchText, 0) ||
                 q?.message?.trim().toLowerCase().includes(searchText, 0) ||
                 q?.user?.firstName
@@ -112,7 +115,9 @@ const QuestionCard = ({
         SessionQuestionApi.update<SessionQuestion, Partial<SessionQuestion>>(
             id,
             {
-                status: questionStatus,
+                ...(questionStatus === "ANSWERED"
+                    ? { isReplyed: true }
+                    : { status: questionStatus }),
             }
         ).then(({ response }) => {
             emitEditAskSpeaker(containerId, response?.user, response, null);
@@ -141,14 +146,16 @@ const QuestionCard = ({
                                     ></i>
                                 </a>
                             </div>
-                            <div className="question-item--header--button--move ml-2 mb-2">
-                                <a className="btn btn-secondary">
-                                    <i
-                                        className="fak fa-arrows-light"
-                                        aria-hidden="true"
-                                    ></i>
-                                </a>
-                            </div>
+                            {!q.isReplyed && (
+                                <div className="question-item--header--button--move ml-2 mb-2">
+                                    <a className="btn btn-secondary">
+                                        <i
+                                            className="fak fa-arrows-light"
+                                            aria-hidden="true"
+                                        ></i>
+                                    </a>
+                                </div>
+                            )}
                         </div>
                     </div>
 
@@ -178,7 +185,7 @@ const QuestionCard = ({
                         </div>
                         <div className="question-item--content--action pt-1">
                             <div className="row px-2">
-                                {q.status !== STATUS_NEW && (
+                                {q.status !== STATUS_NEW && !q.isReplyed && (
                                     <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
                                         <a
                                             className="btn btn-secondary"
@@ -197,7 +204,7 @@ const QuestionCard = ({
                                         </a>
                                     </div>
                                 )}
-                                {q.status !== STATUS_ACCEPTED && (
+                                {q.status !== STATUS_ACCEPTED && !q.isReplyed && (
                                     <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
                                         <a
                                             className="btn btn-secondary"
@@ -218,7 +225,30 @@ const QuestionCard = ({
                                         </a>
                                     </div>
                                 )}
-                                {q.status !== STATUS_REJECTED && (
+                                {(q.status === STATUS_NEW ||
+                                    q.status === STATUS_ACCEPTED) &&
+                                    !q.isReplyed && (
+                                        <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
+                                            <a
+                                                className="btn btn-secondary"
+                                                onClick={() =>
+                                                    updateQuestionStatus(
+                                                        q.id,
+                                                        "ANSWERED"
+                                                    )
+                                                }
+                                            >
+                                                {t(
+                                                    "questionboard.list:status.answered"
+                                                )}
+                                                <i
+                                                    className="fak fa-check-light"
+                                                    aria-hidden="true"
+                                                ></i>
+                                            </a>
+                                        </div>
+                                    )}
+                                {q.status !== STATUS_REJECTED && !q.isReplyed && (
                                     <div className="question-item--content--action--button reject col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
                                         <a
                                             className="btn btn-secondary"
@@ -251,15 +281,19 @@ const QuestionCard = ({
                                         ></i>
                                     </a>
                                 </div>
-                                <div className="question-item--content--action--button edit col-12 col-sm-6 col-md-12 col-xl-6 pt-3 px-2">
-                                    <a className="btn btn-secondary">
-                                        {t("questionboard.list:status.edit")}
-                                        <i
-                                            className="fak fa-pen-regular"
-                                            aria-hidden="true"
-                                        ></i>
-                                    </a>
-                                </div>
+                                {!q.isReplyed && (
+                                    <div className="question-item--content--action--button edit col-12 col-sm-6 col-md-12 col-xl-6 pt-3 px-2">
+                                        <a className="btn btn-secondary">
+                                            {t(
+                                                "questionboard.list:status.edit"
+                                            )}
+                                            <i
+                                                className="fak fa-pen-regular"
+                                                aria-hidden="true"
+                                            ></i>
+                                        </a>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
