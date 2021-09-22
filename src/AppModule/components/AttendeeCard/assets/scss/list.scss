@@ -186,13 +186,14 @@
 
                     &--mail {
                         display: -webkit-box;
-                        height: 20px;
+                        height: 40px;
                         overflow: hidden;
                         font-size: 14px;
                         font-weight: 700;
                         color: var(--primary);
                         -webkit-box-orient: vertical;
-                        -webkit-line-clamp: 1;
+                        -webkit-line-clamp: 2;
+                        word-break: break-all;
                         @include media("mcbk-1") {
                             font-size: 13px;
                         }
