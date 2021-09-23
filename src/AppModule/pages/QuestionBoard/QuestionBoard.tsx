@@ -10,7 +10,12 @@ import {
     useAskSpeakerSocketEvents,
     useAuthState,
 } from "../../hooks";
-import { AppPageHeader, AppLoader, AppModal } from "../../components";
+import {
+    AppPageHeader,
+    AppLoader,
+    AppModal,
+    AppMessageCompose,
+} from "../../components";
 import { SessionQuestionApi } from "../../apis";
 import {
     errorToast,
@@ -79,6 +84,118 @@ function createCore() {
 }
 const core = createCore();
 
+const QuestionActions = ({
+    t,
+    status,
+    isReplyed,
+    updateQuestionStatus,
+    qId,
+    setShowDelete,
+    editQuestionMode,
+    setEditQuestionMode,
+}) => {
+    return editQuestionMode === qId ? (
+        <div className="row px-2">
+            <div className="question-item--content--action--button cancel col-12 col-sm-6 col-md-12 col-xl-6 pt-3 px-2">
+                <a
+                    className="btn btn-secondary"
+                    onClick={() => setEditQuestionMode(null)}
+                >
+                    {t("questionboard.list:status.edit.cancel")}
+                    <i className="fak fa-times-light" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    ) : (
+        <div className="row px-2">
+            {(status !== STATUS_NEW || isReplyed) && (
+                <div className="question-item--content--action--button new col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
+                    <a
+                        className="btn btn-secondary"
+                        onClick={() => updateQuestionStatus(qId, STATUS_NEW)}
+                    >
+                        {t("questionboard.list:status.new")}
+                        <i
+                            className="fak fa-check-light"
+                            aria-hidden="true"
+                        ></i>
+                    </a>
+                </div>
+            )}
+            {(status !== STATUS_ACCEPTED || isReplyed) && (
+                <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
+                    <a
+                        className="btn btn-secondary"
+                        onClick={() =>
+                            updateQuestionStatus(qId, STATUS_ACCEPTED)
+                        }
+                    >
+                        {t("questionboard.list:status.approve")}
+                        <i
+                            className="fak fa-check-light"
+                            aria-hidden="true"
+                        ></i>
+                    </a>
+                </div>
+            )}
+
+            {(status !== STATUS_REJECTED || isReplyed) && (
+                <div className="question-item--content--action--button reject col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
+                    <a
+                        className="btn btn-secondary"
+                        onClick={() =>
+                            updateQuestionStatus(qId, STATUS_REJECTED)
+                        }
+                    >
+                        {t("questionboard.list:status.reject")}
+                        <i
+                            className="fak fa-times-light"
+                            aria-hidden="true"
+                        ></i>
+                    </a>
+                </div>
+            )}
+            {!isReplyed && (
+                <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
+                    <a
+                        className="btn btn-secondary"
+                        onClick={() => updateQuestionStatus(qId, "ANSWERED")}
+                    >
+                        {t("questionboard.list:status.answered")}
+                        <i
+                            className="fak fa-check-light"
+                            aria-hidden="true"
+                        ></i>
+                    </a>
+                </div>
+            )}
+            <div className="question-item--content--action--button delete col-12 col-sm-6 col-md-12 col-xl-6 pt-3 px-2">
+                <a
+                    className="btn btn-secondary"
+                    onClick={() => setShowDelete(qId)}
+                >
+                    {t("questionboard.list:status.delete")}
+                    <i className="fak fa-trash-light" aria-hidden="true"></i>
+                </a>
+            </div>
+            <div className="question-item--content--action--button edit col-12 col-sm-6 col-md-12 col-xl-6 pt-3 px-2">
+                <a
+                    className={
+                        editQuestionMode
+                            ? "btn btn-secondary disabled"
+                            : "btn btn-secondary"
+                    }
+                    onClick={() =>
+                        !editQuestionMode ? setEditQuestionMode(qId) : null
+                    }
+                >
+                    {t("questionboard.list:status.edit")}
+                    <i className="fak fa-pen-regular" aria-hidden="true"></i>
+                </a>
+            </div>
+        </div>
+    );
+};
 const QuestionCard = ({
     status,
     questions,
@@ -89,6 +206,7 @@ const QuestionCard = ({
 }) => {
     const { t } = useTranslation();
 
+    const [editQuestionMode, setEditQuestionMode] = useState(null);
     searchText = searchText?.trim().toLowerCase();
     let statusQuestions = questions.filter(
         (q) =>
@@ -118,9 +236,22 @@ const QuestionCard = ({
             {
                 ...(questionStatus === "ANSWERED"
                     ? { isReplyed: true }
-                    : { status: questionStatus }),
+                    : { isReplyed: false, status: questionStatus }),
             }
         ).then(({ response }) => {
+            emitEditAskSpeaker(containerId, response?.user, response, null);
+            core.editQuestion(response, setQuestions);
+        });
+    };
+
+    const saveEdit = (message: string, id: number) => {
+        SessionQuestionApi.update<SessionQuestion, Partial<SessionQuestion>>(
+            id,
+            {
+                message,
+            }
+        ).then(({ response }) => {
+            setEditQuestionMode(null);
             emitEditAskSpeaker(containerId, response?.user, response, null);
             core.editQuestion(response, setQuestions);
         });
@@ -155,7 +286,7 @@ const QuestionCard = ({
                                     ></i>
                                 </a>
                             </div>
-                            {!q.isReplyed && (
+                            {!q.isReplyed && editQuestionMode !== q.id && (
                                 <div className="question-item--header--button--move ml-2 mb-2">
                                     <a className="btn btn-secondary">
                                         <i
@@ -190,120 +321,37 @@ const QuestionCard = ({
                             </div>
                         </a>
                         <div className="question-item--content--comm py-2">
-                            <p className="mb-0">{q.message}</p>
+                            {editQuestionMode === q.id ? (
+                                <AppMessageCompose
+                                    id="compose-textarea"
+                                    placeholder={t(
+                                        "askSpeaker:form.question.placeholder"
+                                    )}
+                                    rows={4}
+                                    isSend
+                                    editMessage={q.message}
+                                    isEdit={true}
+                                    enterToPost={true}
+                                    handleUpdateData={(res) => {
+                                        saveEdit(res, q.id);
+                                    }}
+                                    handleDataSend={() => {}}
+                                />
+                            ) : (
+                                <p className="m-0 p-0">{q.message}</p>
+                            )}
                         </div>
                         <div className="question-item--content--action pt-1">
-                            <div className="row px-2">
-                                {q.status !== STATUS_NEW && !q.isReplyed && (
-                                    <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
-                                        <a
-                                            className="btn btn-secondary"
-                                            onClick={() =>
-                                                updateQuestionStatus(
-                                                    q.id,
-                                                    STATUS_NEW
-                                                )
-                                            }
-                                        >
-                                            {t("questionboard.list:status.new")}
-                                            <i
-                                                className="fak fa-check-light"
-                                                aria-hidden="true"
-                                            ></i>
-                                        </a>
-                                    </div>
-                                )}
-                                {q.status !== STATUS_ACCEPTED && !q.isReplyed && (
-                                    <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
-                                        <a
-                                            className="btn btn-secondary"
-                                            onClick={() =>
-                                                updateQuestionStatus(
-                                                    q.id,
-                                                    STATUS_ACCEPTED
-                                                )
-                                            }
-                                        >
-                                            {t(
-                                                "questionboard.list:status.approve"
-                                            )}
-                                            <i
-                                                className="fak fa-check-light"
-                                                aria-hidden="true"
-                                            ></i>
-                                        </a>
-                                    </div>
-                                )}
-                                {(q.status === STATUS_NEW ||
-                                    q.status === STATUS_ACCEPTED) &&
-                                    !q.isReplyed && (
-                                        <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
-                                            <a
-                                                className="btn btn-secondary"
-                                                onClick={() =>
-                                                    updateQuestionStatus(
-                                                        q.id,
-                                                        "ANSWERED"
-                                                    )
-                                                }
-                                            >
-                                                {t(
-                                                    "questionboard.list:status.answered"
-                                                )}
-                                                <i
-                                                    className="fak fa-check-light"
-                                                    aria-hidden="true"
-                                                ></i>
-                                            </a>
-                                        </div>
-                                    )}
-                                {q.status !== STATUS_REJECTED && !q.isReplyed && (
-                                    <div className="question-item--content--action--button reject col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
-                                        <a
-                                            className="btn btn-secondary"
-                                            onClick={() =>
-                                                updateQuestionStatus(
-                                                    q.id,
-                                                    STATUS_REJECTED
-                                                )
-                                            }
-                                        >
-                                            {t(
-                                                "questionboard.list:status.reject"
-                                            )}
-                                            <i
-                                                className="fak fa-times-light"
-                                                aria-hidden="true"
-                                            ></i>
-                                        </a>
-                                    </div>
-                                )}
-                                <div className="question-item--content--action--button delete col-12 col-sm-6 col-md-12 col-xl-6 pt-3 px-2">
-                                    <a
-                                        className="btn btn-secondary"
-                                        onClick={() => setShowDelete(q.id)}
-                                    >
-                                        {t("questionboard.list:status.delete")}
-                                        <i
-                                            className="fak fa-trash-light"
-                                            aria-hidden="true"
-                                        ></i>
-                                    </a>
-                                </div>
-                                {!q.isReplyed && (
-                                    <div className="question-item--content--action--button edit col-12 col-sm-6 col-md-12 col-xl-6 pt-3 px-2">
-                                        <a className="btn btn-secondary">
-                                            {t(
-                                                "questionboard.list:status.edit"
-                                            )}
-                                            <i
-                                                className="fak fa-pen-regular"
-                                                aria-hidden="true"
-                                            ></i>
-                                        </a>
-                                    </div>
-                                )}
-                            </div>
+                            <QuestionActions
+                                t={t}
+                                status={q.status}
+                                isReplyed={q.isReplyed}
+                                updateQuestionStatus={updateQuestionStatus}
+                                qId={q.id}
+                                setShowDelete={setShowDelete}
+                                editQuestionMode={editQuestionMode}
+                                setEditQuestionMode={setEditQuestionMode}
+                            />
                         </div>
                     </div>
                 </div>
@@ -348,20 +396,20 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
     const fetchQuestions = (params = {}) => {
         isLoading(true);
         isLoading(!params);
-        SessionQuestionApi.find<SessionQuestion>().then(
-            ({ response, error }) => {
-                isLoading(false);
+        SessionQuestionApi.find<SessionQuestion>(1, {
+            itemsPerPage: 1000,
+        }).then(({ response, error }) => {
+            isLoading(false);
 
-                if (error !== null) {
-                    if (_isString(error)) {
-                        errorToast(error);
-                    }
-                } else if (response !== null) {
-                    // setTotalItems(response.totalItems);
-                    core.createState(response.items, setQuestions);
+            if (error !== null) {
+                if (_isString(error)) {
+                    errorToast(error);
                 }
+            } else if (response !== null) {
+                // setTotalItems(response.totalItems);
+                core.createState(response.items, setQuestions);
             }
-        );
+        });
     };
 
     useEffect(() => {
