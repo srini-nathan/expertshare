@@ -243,14 +243,16 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 customToolbar
             >
                 <div className="d-flex pt-2 mb-2 mb-md-5 attendee-header-width">
-                    <AppButton
-                        className={"mr-1"}
-                        type={"button"}
-                        variant={"secondary"}
-                        onClick={() => setShow(!show)}
-                    >
-                        <i className="fak fa-filter-regular"></i>
-                    </AppButton>
+                    {view !== "list" ? (
+                        <AppButton
+                            className={"mr-1"}
+                            type={"button"}
+                            variant={"secondary"}
+                            onClick={() => setShow(!show)}
+                        >
+                            <i className="fak fa-filter-regular"></i>
+                        </AppButton>
+                    ) : null}
                     <AppListPageToolbar
                         onQuickFilterChange={handleFilter}
                         cancelTokenSources={cancelTokenSourcesRef.current}
@@ -258,7 +260,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                     <AppSwitchView link={"/attendee"} activeLink={view || ""} />
                 </div>
             </AppPageHeader>
-            {appliedRoles.length > 0 ? (
+            {view !== "list" && appliedRoles.length > 0 ? (
                 <div className="filter custom-select-tag-container mb-4">
                     <div className="selected-item-container">
                         {appliedRoles.map((role) => {
@@ -308,6 +310,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                                 onClick={() => {
                                     setPage(1);
                                     setAppliedRoles(selectedRoles);
+                                    appGridApi.current?.onFilterChanged();
                                     setShow(false);
                                 }}
                             >
