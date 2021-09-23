@@ -33,7 +33,7 @@ export const AppChatOneToOneHeader: FC<AppChatOneToOneHeaderProps> = ({
 
     const maxWidthCommentStyle = maxWidth
         ? { maxWidth: "120px" }
-        : { maxWidth: "255px" };
+        : { maxWidth: "170px" };
 
     const maxWidthSenderStyle = maxWidth
         ? {
@@ -41,7 +41,7 @@ export const AppChatOneToOneHeader: FC<AppChatOneToOneHeaderProps> = ({
               lineHeight: "22px",
           }
         : {
-              maxWidth: "255px",
+              maxWidth: "170px",
               lineHeight: "22px",
           };
 

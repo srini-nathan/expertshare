@@ -13,12 +13,12 @@
         padding: 30px;
         margin: 40px auto;
         user-select: none;
-        user-select: none;
-        user-select: none;
         background-color: var(--card-background-color);
         border-radius: var(--card-border-radius);
         -webkit-touch-callout: none;
-
+        @include media("mcbk-2") {
+            width: 480px;
+        }
         @include media("mobile") {
             width: 90%;
             padding: 10px;

@@ -30,6 +30,10 @@ $media-queries: (
     "smallmob": "only screen and (max-width: 460px)",
     "smallmob2": "only screen and (max-width: 374px)",
     "smallmob3": "only screen and (max-width: 354px)",
+    "laptoponetwelve": "only screen and (min-width: 1200px)",
+    //custom for default screen viewport size
+    "mcbk-1": "only screen and (min-width: 1200px) and (max-width: 1379px)",
+    "mcbk-2": "only screen and (min-width: 1380px) and (max-width: 1700px)",
     //custom for spec code
     "csc-1": "(min-width: 1200px) and (max-width: 1212px)",
     "csc-2": "(min-width: 1200px) and (max-width: 1350px)",
@@ -61,7 +65,7 @@ $media-queries: (
     //custom for conferencegrid
     "cg-1": "only screen and (min-width: 410px) and (max-width: 570px)",
     "cg-2": "only screen and (min-width: 992px) and (max-width: 1150px)",
-    "cg-3": "only screen and (min-width: 1151px) and (max-width: 1700px)",
+    "cg-3": "only screen and (min-width: 1151px) and (max-width: 1200px)",
     //custom for attendee profile
     "ap-1": "only screen and (min-width: 1720px)",
     "ap-2": "only screen and (min-width: 1370px) and (max-width: 1720px)",

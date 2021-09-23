@@ -21,7 +21,7 @@ export const AppNavigationItem: FC<AppNavigationItemProps> = ({
     ) {
         return (
             <ListGroupItem
-                className={`nav-item py-2 collapseable px-lg-4 ${className}`}
+                className={`nav-item py-1 collapseable px-lg-4 ${className}`}
                 onClick={() => {
                     if (onClick) {
                         onClick(false);
@@ -51,7 +51,7 @@ export const AppNavigationItem: FC<AppNavigationItemProps> = ({
             {(props) => {
                 return (
                     <ListGroupItem
-                        className={`nav-item py-2 collapseable px-lg-4 ${className} ${
+                        className={`nav-item collapseable px-lg-4 ${className} ${
                             props.location.pathname.includes(path)
                                 ? "active"
                                 : ""

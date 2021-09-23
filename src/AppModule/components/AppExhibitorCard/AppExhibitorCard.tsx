@@ -54,7 +54,13 @@ export const AppExhibitorCard: FC<AppExhibitorCardProps> = ({
           };
 
     return (
-        <Col md={12} lg={4} xl={3} className="exhibitor-grid--container--item">
+        <Col
+            xs={12}
+            sm={6}
+            lg={4}
+            xl={3}
+            className="exhibitor-grid--container--item"
+        >
             <Col className="inner-container p-0 card">
                 <Link to={detailLink}>
                     <div className="inner-container--banner" style={style}>

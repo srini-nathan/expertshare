@@ -1,24 +1,31 @@
 @import "../../../../assets/scss/screens-sizes";
 @import "../../../../assets/scss/variables";
-
-.right-container {
+.bottom-nav {
     .exhibitor-grid--container {
         &--item {
-            @include media("cg-2") {
-                flex: 0 0 50%;
-                max-width: 50%;
-            }
-            @include media("cg-3") {
-                flex: 0 0 33%;
-                max-width: 33%;
+            @include media("mcbk-2") {
+                flex: 0 0 20%;
+                max-width: 20%;
             }
         }
     }
 }
+.exhibitors-category-title {
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--secondary);
+}
 .exhibitor-grid--container {
     &--item {
+        @include media("mcbk-1") {
+            padding-right: 12px !important;
+            padding-left: 12px !important;
+        }
+        @include media("mcbk-2") {
+            padding-right: 12px !important;
+            padding-left: 12px !important;
+        }
         margin-bottom: 30px;
-
         .description {
             height: 70px;
             display: -webkit-box;
@@ -81,11 +88,21 @@
 
                 > img {
                     position: absolute;
-                    bottom: 25px;
-                    left: 22px;
-                    height: 70px;
+                    bottom: 15px;
+                    left: 15px;
+                    height: 60px;
                     background-color: var(--light-clr);
                     border-radius: var(--card-border-radius);
+                    @include media("mcbk-1") {
+                        bottom: 10px;
+                        left: 10px;
+                        height: 50px;
+                    }
+                    @include media("mcbk-2") {
+                        bottom: 10px;
+                        left: 10px;
+                        height: 50px;
+                    }
                 }
 
                 .click-image {
@@ -124,6 +141,16 @@
                             border: 1px solid var(--secondary-button-border-color);
                             border-radius: var(--secondary-button-border-radius);
                             box-shadow: 0 3px 9px var(--secondary-button-box-shadow-color);
+                            @include media("mcbk-1") {
+                                width: 30px;
+                                height: 30px;
+                                font-size: 16px;
+                            }
+                            @include media("mcbk-2") {
+                                width: 30px;
+                                height: 30px;
+                                font-size: 16px;
+                            }
                         }
 
                         &.add-favorite {
@@ -153,6 +180,16 @@
                         font-weight: 700;
                         line-height: 28px;
                         color: var(--card-text-color);
+                        @include media("mcbk-1") {
+                            height: 52px;
+                            font-size: 17px;
+                            line-height: 26px;
+                        }
+                        @include media("mcbk-2") {
+                            height: 52px;
+                            font-size: 17px;
+                            line-height: 26px;
+                        }
                     }
                 }
 
@@ -171,6 +208,18 @@
                                 font-size: 20px;
                                 font-weight: 500;
                             }
+                            @include media("mcbk-1") {
+                                font-size: 14px;
+                                i {
+                                    font-size: 18px;
+                                }
+                            }
+                            @include media("mcbk-2") {
+                                font-size: 14px;
+                                i {
+                                    font-size: 18px;
+                                }
+                            }
                         }
                     }
                     &--more {
@@ -181,6 +230,12 @@
                             color: var(--primary);
                             text-decoration: none;
                             word-break: break-all;
+                            @include media("mcbk-1") {
+                                font-size: 13px;
+                            }
+                            @include media("mcbk-2") {
+                                font-size: 13px;
+                            }
                         }
                     }
                 }
@@ -259,75 +314,6 @@
                     }
                 }
             }
-        }
-    }
-
-    &--more {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        a {
-            position: relative;
-            width: 225px;
-
-            i {
-                position: absolute;
-                left: 10px;
-                font-weight: 600;
-
-                &::before {
-                    content: "\e018";
-                }
-            }
-        }
-    }
-
-    .live-now-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: fit-content;
-        height: 36px;
-        padding: 10px;
-        font-size: 14px;
-        font-weight: 500;
-        color: var(--light-clr);
-        background-color: var(--danger);
-        border-radius: var(--danger-button-border-radius);
-
-        &:hover {
-            text-decoration: none;
-        }
-
-        i {
-            margin-right: 5px;
-            margin-bottom: 1px;
-            font-size: 20px;
-        }
-    }
-
-    .archived-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: fit-content;
-        height: 36px;
-        padding: 10px;
-        font-size: 14px;
-        font-weight: 500;
-        color: var(--light-clr);
-        background-color: var(--secondary);
-        border-radius: var(--secondary-button-border-radius);
-
-        &:hover {
-            text-decoration: none;
-        }
-
-        i {
-            margin-right: 5px;
-            margin-bottom: 1px;
-            font-size: 20px;
         }
     }
 }

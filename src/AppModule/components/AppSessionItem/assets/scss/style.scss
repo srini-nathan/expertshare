@@ -13,7 +13,22 @@
     color: var(--danger-button-text-color);
     background-color: var(--danger-button-background-color);
     border-radius: var(--danger-button-border-radius);
-
+    @include media("mcbk-1") {
+        height: 30px;
+        padding-top: 13px;
+        font-size: 12px;
+        i {
+            font-size: 18px;
+        }
+    }
+    @include media("mcbk-2") {
+        height: 30px;
+        padding-top: 13px;
+        font-size: 12px;
+        i {
+            font-size: 18px;
+        }
+    }
     &:hover {
         text-decoration: none;
     }
@@ -37,6 +52,16 @@
     color: var(--light-clr);
     background-color: var(--secondary);
     border-radius: var(--secondary-button-border-radius);
+    @include media("mcbk-1") {
+        height: 30px;
+        padding-top: 13px;
+        font-size: 12px;
+    }
+    @include media("mcbk-2") {
+        height: 30px;
+        padding-top: 13px;
+        font-size: 12px;
+    }
 
     &:hover {
         text-decoration: none;
@@ -79,16 +104,32 @@
 
                             &--content {
                                 display: grid;
-
+                                @include media("mcbk-1") {
+                                    padding-left: 7px !important;
+                                }
+                                @include media("mcbk-2") {
+                                    padding-left: 7px !important;
+                                }
                                 h2 {
                                     font-size: 16px;
                                     font-weight: 700;
-
+                                    @include media("mcbk-1") {
+                                        font-size: 14px;
+                                    }
+                                    @include media("mcbk-2") {
+                                        font-size: 14px;
+                                    }
                                     span {
                                         margin-left: 2px;
                                         font-size: 16px;
                                         font-weight: 700;
                                         opacity: 0.6;
+                                        @include media("mcbk-1") {
+                                            font-size: 14px;
+                                        }
+                                        @include media("mcbk-2") {
+                                            font-size: 14px;
+                                        }
                                     }
                                 }
 
@@ -171,6 +212,16 @@
                                     font-weight: 700;
                                     line-height: 28px;
                                     color: var(--card-text-color);
+                                    @include media("mcbk-1") {
+                                        height: 50px !important;
+                                        font-size: 16px;
+                                        line-height: 25px;
+                                    }
+                                    @include media("mcbk-2") {
+                                        height: 50px !important;
+                                        font-size: 16px;
+                                        line-height: 25px;
+                                    }
                                 }
                             }
                         }
@@ -184,7 +235,12 @@
 
                                 i {
                                     font-size: 23px;
-
+                                    @include media("mcbk-1") {
+                                        font-size: 20px;
+                                    }
+                                    @include media("mcbk-2") {
+                                        font-size: 20px;
+                                    }
                                     &::before {
                                         content: "\e000";
                                     }
@@ -194,6 +250,12 @@
                                     font-size: 16px;
                                     font-weight: 700;
                                     color: var(--card-text-color);
+                                    @include media("mcbk-1") {
+                                        font-size: 14px;
+                                    }
+                                    @include media("mcbk-2") {
+                                        font-size: 14px;
+                                    }
                                 }
                             }
 
@@ -265,6 +327,7 @@
 
                                         span {
                                             display: -webkit-box;
+                                            height: 17px;
                                             -webkit-box-orient: vertical;
                                             -webkit-line-clamp: 1;
                                             overflow: hidden;
@@ -283,6 +346,12 @@
                                     font-weight: 500;
                                     color: var(--primary);
                                     cursor: pointer;
+                                    @include media("mcbk-1") {
+                                        font-size: 13px;
+                                    }
+                                    @include media("mcbk-2") {
+                                        font-size: 13px;
+                                    }
                                 }
                             }
                         }
@@ -305,6 +374,7 @@
                                 &--item {
                                     a,
                                     button {
+                                        width: 36px;
                                         i {
                                             font-size: 17px;
                                             font-weight: 500;
@@ -361,7 +431,7 @@
                             }
                         }
                         .content {
-                            height: 260px;
+                            height: 225px;
                         }
                     }
                 }
@@ -408,7 +478,7 @@
                             }
                         }
                         .content {
-                            height: 260px;
+                            height: 250px;
                         }
                     }
                 }
@@ -457,7 +527,7 @@
                             }
                         }
                         .content {
-                            height: 260px;
+                            height: 250px;
                         }
                     }
                 }
@@ -488,7 +558,11 @@
                         @include media("ea-2") {
                             margin: 25px 0;
                         }
-
+                        @include media("laptoponetwelve") {
+                            flex: auto;
+                            width: 50% !important;
+                            max-width: unset;
+                        }
                         &--title {
                             a {
                                 h2 {
@@ -505,10 +579,12 @@
                         z-index: 1;
                     }
                     .show-users {
-                        right: 15px;
-                        bottom: 26px;
+                        right: 26px;
+                        bottom: 23px;
+                        left: auto;
                         width: 52%;
                         height: auto;
+                        border-radius: var(--card-border-radius);
                         @include media("ea-1") {
                             right: 8px;
                             bottom: 3px;
@@ -524,7 +600,7 @@
                             bottom: 75px;
                         }
                         .header {
-                            padding: 10px !important;
+                            padding: 8px !important;
                             &--title {
                                 h2 {
                                     i {

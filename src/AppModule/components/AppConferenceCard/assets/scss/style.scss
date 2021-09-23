@@ -8,9 +8,27 @@
                 flex: 0 0 50%;
                 max-width: 50%;
             }
-            @include media("cg-3") {
+            @include media("mcbk-1") {
                 flex: 0 0 33%;
                 max-width: 33%;
+                padding-right: 12px !important;
+                padding-left: 12px !important;
+            }
+            @include media("mcbk-2") {
+                flex: 0 0 25%;
+                max-width: 25%;
+                padding-right: 12px !important;
+                padding-left: 12px !important;
+            }
+        }
+    }
+}
+.bottom-nav {
+    .events-grid--container {
+        &--item {
+            @include media("mcbk-2") {
+                flex: 0 0 20%;
+                max-width: 20%;
             }
         }
     }
@@ -26,6 +44,14 @@
             -webkit-box-orient: vertical;
             overflow: hidden;
             text-overflow: ellipsis;
+            @include media("mcbk-1") {
+                height: 65px !important;
+                font-size: 14px;
+            }
+            @include media("mcbk-2") {
+                height: 65px !important;
+                font-size: 14px;
+            }
             p {
                 color: var(--card-text-color);
             }
@@ -35,7 +61,10 @@
             height: 80px;
 
             &--title {
+                display: flex;
+                align-items: center;
                 i {
+                    padding-bottom: 3px;
                     font-size: 20px;
                     color: var(--card-text-color);
                 }
@@ -44,6 +73,12 @@
                     font-size: 16px;
                     font-weight: 700;
                     color: var(--card-text-color);
+                    @include media("mcbk-1") {
+                        font-size: 14px;
+                    }
+                    @include media("mcbk-2") {
+                        font-size: 14px;
+                    }
                 }
             }
 
@@ -269,6 +304,12 @@
 
             &--sponsors {
                 height: 130px;
+                @include media("mcbk-1") {
+                    height: 105px;
+                }
+                @include media("mcbk-2") {
+                    height: 105px;
+                }
                 .content {
                     background-color: var(--widget-sponsor-background-color);
                     h3 {
@@ -278,6 +319,12 @@
 
                         i {
                             color: var(--card-text-color);
+                        }
+                        @include media("mcbk-1") {
+                            font-size: 14px;
+                        }
+                        @include media("mcbk-2") {
+                            font-size: 14px;
                         }
                     }
                 }
@@ -291,8 +338,20 @@
                                     &.placeholderImg {
                                         height: 60px;
                                         padding: 5px;
+                                        @include media("mcbk-1") {
+                                            height: 50px;
+                                        }
+                                        @include media("mcbk-2") {
+                                            height: 50px;
+                                        }
                                     }
                                 }
+                            }
+                            @include media("mcbk-1") {
+                                width: 90px !important;
+                            }
+                            @include media("mcbk-2") {
+                                width: 90px !important;
                             }
                         }
                     }
@@ -328,7 +387,7 @@
         justify-content: center;
         width: fit-content;
         height: 36px;
-        padding: 10px;
+        padding: 10px 10px 10px 5px;
         font-size: 14px;
         font-weight: 500;
         color: var(--light-clr);
@@ -343,6 +402,26 @@
             margin-right: 5px;
             margin-bottom: 1px;
             font-size: 20px;
+            @include media("mcbk-1") {
+                margin-right: 7px;
+                margin-bottom: 3px;
+                font-size: 17px;
+            }
+            @include media("mcbk-2") {
+                margin-right: 7px;
+                margin-bottom: 3px;
+                font-size: 17px;
+            }
+        }
+        @include media("mcbk-1") {
+            height: 30px;
+            padding-top: 13px;
+            font-size: 12px;
+        }
+        @include media("mcbk-2") {
+            height: 30px;
+            padding-top: 13px;
+            font-size: 12px;
         }
     }
 
@@ -367,6 +446,26 @@
             margin-right: 5px;
             margin-bottom: 1px;
             font-size: 20px;
+            @include media("mcbk-1") {
+                margin-right: 8px;
+                margin-bottom: 3px;
+                font-size: 16px;
+            }
+            @include media("mcbk-2") {
+                margin-right: 8px;
+                margin-bottom: 3px;
+                font-size: 16px;
+            }
+        }
+        @include media("mcbk-1") {
+            height: 30px;
+            padding-top: 13px;
+            font-size: 12px;
+        }
+        @include media("mcbk-2") {
+            height: 30px;
+            padding-top: 13px;
+            font-size: 12px;
         }
     }
 }

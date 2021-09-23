@@ -46,14 +46,14 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
             return <></>;
         }
         return (
-            <div className="inner-content--category mb-3">
+            <div>
                 <div className="conference-tags-container--title ">
                     <h3 className="mb-0">
                         <i className="fak fa-tags"></i>
                         {t("admin.exhibitorProduct:label.tags")}
                     </h3>
                 </div>
-                <Row className={"m-0 mt-3 p-0 conference-tags-container--tags"}>
+                <Row className={"m-0 mt-2 p-0 conference-tags-container--tags"}>
                     {exhibitorProductTags.map((e) => {
                         return (
                             <div className={"conference-tags"} key={e.id}>
@@ -113,7 +113,9 @@ export const AppExhibitorProductCard: FC<AppExhibitorProductCardProps> = ({
                 <div className="inner-content--desc mb-2">
                     <p className="mb-0">{description}</p>
                 </div>
-                {renderTags()}
+                <div className="inner-content--category mb-2">
+                    {renderTags()}
+                </div>
                 <div className="inner-content--price">
                     {parseInt(price, 10) > 0 ? <span> {price} </span> : null}
                 </div>

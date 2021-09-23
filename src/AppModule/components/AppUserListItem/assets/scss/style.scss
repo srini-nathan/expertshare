@@ -2,9 +2,11 @@
 @import "../../../../assets/scss/variables";
 
 .inner-container--det--content--speakers--item {
-    min-height: 50px;
     display: flex;
-
+    min-height: 50px;
+    @include media("mcbk-2") {
+        min-height: 45px;
+    }
     a {
         display: flex;
         margin: auto 0;
@@ -21,17 +23,35 @@
             overflow: hidden;
             font-size: 16px;
             font-weight: 500;
+            line-height: 18px;
             color: var(--card-text-color);
+            @include media("mcbk-1") {
+                font-size: 14px !important;
+                font-weight: 500 !important;
+                line-height: 16px;
+            }
+            @include media("mcbk-2") {
+                font-size: 14px !important;
+                font-weight: 500 !important;
+                line-height: 16px;
+            }
         }
 
         span {
             display: -webkit-box;
+            height: 16px;
             -webkit-box-orient: vertical;
             -webkit-line-clamp: 1;
             overflow: hidden;
             font-size: 12px;
             font-weight: 500;
             color: var(--card-second-text-color);
+            @include media("mcbk-1") {
+                font-weight: 400;
+            }
+            @include media("mcbk-2") {
+                font-weight: 400;
+            }
         }
     }
 
@@ -46,6 +66,14 @@
             background-repeat: no-repeat;
             background-size: cover;
             border-radius: 50%;
+            @include media("mcbk-1") {
+                width: 32px !important;
+                height: 32px !important;
+            }
+            @include media("mcbk-2") {
+                width: 32px !important;
+                height: 32px !important;
+            }
 
             // &::after {
             //     position: relative;

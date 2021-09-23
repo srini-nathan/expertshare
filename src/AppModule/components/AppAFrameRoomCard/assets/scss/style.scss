@@ -80,6 +80,16 @@
                             border: 1px solid var(--secondary-button-border-color);
                             border-radius: var(--secondary-button-border-radius);
                             box-shadow: 0 3px 9px var(--secondary-button-box-shadow-color);
+                            @include media("mcbk-1") {
+                                width: 30px;
+                                height: 30px;
+                                font-size: 16px;
+                            }
+                            @include media("mcbk-2") {
+                                width: 30px;
+                                height: 30px;
+                                font-size: 16px;
+                            }
                         }
 
                         &.add-favorite {
@@ -109,6 +119,16 @@
                         font-weight: 700;
                         line-height: 28px;
                         color: var(--card-text-color);
+                        @include media("mcbk-1") {
+                            height: 52px;
+                            font-size: 16px;
+                            line-height: 24px;
+                        }
+                        @include media("mcbk-2") {
+                            height: 52px;
+                            font-size: 17px;
+                            line-height: 26px;
+                        }
                     }
                 }
 
@@ -130,6 +150,12 @@
                                 font-size: 16px;
                                 font-weight: 700;
                                 color: var(--card-text-color);
+                                @include media("mcbk-1") {
+                                    font-size: 14px;
+                                }
+                                @include media("mcbk-2") {
+                                    font-size: 14px;
+                                }
                             }
                         }
 

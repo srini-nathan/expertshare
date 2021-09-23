@@ -119,9 +119,14 @@
                         font-size: 42px;
                         font-weight: 700;
                         color: var(--card-text-color);
-
-                        @include media("xl") {
-                            font-size: 30px;
+                        @include media("lg") {
+                            font-size: 27px;
+                        }
+                        @include media("mcbk-1") {
+                            font-size: 27px;
+                        }
+                        @include media("mcbk-2") {
+                            font-size: 27px;
                         }
                     }
                 }
@@ -131,6 +136,15 @@
                         font-size: 20px;
                         font-weight: 500;
                         color: var(--card-second-text-color);
+                        @include media("lg") {
+                            font-size: 17px;
+                        }
+                        @include media("mcbk-1") {
+                            font-size: 17px;
+                        }
+                        @include media("mcbk-2") {
+                            font-size: 17px;
+                        }
                     }
                 }
 
@@ -163,7 +177,7 @@
                             user-select: none;
                             background-color: var(--primary-10);
                             border: 1px solid var(--primary);
-                            border-radius: 17px;
+                            border-radius: var(--tag-border-radius);
                         }
                     }
                 }

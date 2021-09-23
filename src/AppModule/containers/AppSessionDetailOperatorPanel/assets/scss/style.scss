@@ -2,6 +2,30 @@
 @import "./../../../../assets/scss/screens-sizes";
 
 .app-session-detail-operator-panel {
+    .card-title {
+        @include media("mcbk-1") {
+            font-size: 19px;
+        }
+        @include media("mcbk-2") {
+            font-size: 19px;
+        }
+    }
+    .card-body {
+        .header {
+            .col-auto {
+                display: flex;
+                align-items: center;
+            }
+            h5 {
+                @include media("mcbk-1") {
+                    font-size: 16px;
+                }
+                @include media("mcbk-2") {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
     .inline-loader {
         position: absolute;
         height: auto;

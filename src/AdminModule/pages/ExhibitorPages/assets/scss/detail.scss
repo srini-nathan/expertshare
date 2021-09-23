@@ -1,3 +1,5 @@
+@import "../../../../../AppModule/assets/scss/screens-sizes";
+
 .exhibitors-header {
     overflow: hidden;
     &--detail {
@@ -25,10 +27,18 @@
         }
         &--title {
             h1 {
-                font-size: 42px;
+                font-size: 35px;
                 font-weight: 700;
                 line-height: 50px;
                 color: var(--card-text-color);
+                @include media("mcbk-1") {
+                    font-size: 26px;
+                    line-height: initial;
+                }
+                @include media("mcbk-2") {
+                    font-size: 26px;
+                    line-height: initial;
+                }
             }
         }
     }
@@ -40,13 +50,19 @@
             display: flex;
             align-items: center;
             width: 160px;
-            height: 90px;
+            height: auto;
             overflow: hidden;
             border-radius: var(--card-border-radius);
+            @include media("mcbk-1") {
+                width: 120px;
+            }
+            @include media("mcbk-2") {
+                width: 120px;
+            }
             i {
                 display: block;
                 width: inherit;
-                height: 100%;
+                padding-bottom: 56.5%;
                 background-color: var(--light-clr);
                 background-repeat: no-repeat;
                 background-position: center;
@@ -75,10 +91,24 @@
             font-weight: 700;
             color: var(--card-text-color);
             word-break: break-word;
+            @include media("mcbk-1") {
+                font-size: 16px;
+            }
+            @include media("mcbk-2") {
+                font-size: 16px;
+            }
             i {
                 padding-bottom: 5px;
                 font-size: 22px;
                 font-weight: 500;
+                @include media("mcbk-1") {
+                    padding-bottom: 0;
+                    font-size: 18px;
+                }
+                @include media("mcbk-2") {
+                    padding-bottom: 0;
+                    font-size: 18px;
+                }
             }
         }
     }
@@ -91,10 +121,24 @@
             font-weight: 700;
             color: var(--card-text-color);
             word-break: break-word;
+            @include media("mcbk-1") {
+                font-size: 16px;
+            }
+            @include media("mcbk-2") {
+                font-size: 16px;
+            }
             i {
                 padding-bottom: 5px;
                 font-size: 22px;
                 font-weight: 500;
+                @include media("mcbk-1") {
+                    padding-bottom: 0;
+                    font-size: 18px;
+                }
+                @include media("mcbk-2") {
+                    padding-bottom: 0;
+                    font-size: 18px;
+                }
             }
         }
     }
@@ -139,10 +183,24 @@
             font-weight: 700;
             color: var(--card-text-color);
             word-break: break-word;
+            @include media("mcbk-1") {
+                font-size: 16px;
+            }
+            @include media("mcbk-2") {
+                font-size: 16px;
+            }
             i {
                 padding-bottom: 5px;
                 font-size: 22px;
                 font-weight: 500;
+                @include media("mcbk-1") {
+                    padding-bottom: 0;
+                    font-size: 18px;
+                }
+                @include media("mcbk-2") {
+                    padding-bottom: 0;
+                    font-size: 18px;
+                }
             }
         }
         .custom-contact-item {
@@ -192,5 +250,6 @@
     }
     #tagFilter {
         width: 150px;
+        height: 36px;
     }
 }

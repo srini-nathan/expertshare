@@ -1,27 +1,22 @@
-// @media (min-width: 767px) and (max-width: 997px) {
-//     .attendees-grid--container--item {
-//         flex: 0 0 100% !important;
-//         max-width: 100% !important;
-//     }
-// }
-
-// @media (min-width: 998px) and (max-width: 1383px) {
-//     .attendees-grid--container--item {
-//         flex: 0 0 50% !important;
-//         max-width: 50% !important;
-//     }
-// }
-
-// @media (min-width: 1384px) and (max-width: 1824px) {
-//     .attendees-grid--container--item {
-//         flex: 0 0 33.33% !important;
-//         max-width: 33.33% !important;
-//     }
-// }
+@import "./../../../../../AppModule/assets/scss/screens-sizes";
 
 .attendees-grid {
     &--container {
         &--item {
+            @include media("mcbk-1") {
+                padding-right: 12px !important;
+                padding-left: 12px !important;
+            }
+            @include media("mcbk-2") {
+                max-width: 20% !important;
+                padding-right: 12px !important;
+                padding-left: 12px !important;
+            }
+            @include media("ea-4") {
+                max-width: 20% !important;
+                padding-right: 12px !important;
+                padding-left: 12px !important;
+            }
             .card {
                 margin-bottom: 30px;
 
@@ -63,7 +58,12 @@
 
                 &--avatar {
                     min-height: 206px;
-
+                    @include media("mcbk-1") {
+                        min-height: 135px;
+                    }
+                    @include media("mcbk-2") {
+                        min-height: 135px;
+                    }
                     .profile-avatar {
                         i {
                             position: relative;
@@ -75,6 +75,14 @@
                             background-position: center;
                             background-size: contain;
                             border-radius: var(--circle-border-radius);
+                            @include media("mcbk-1") {
+                                width: 125px;
+                                height: 125px;
+                            }
+                            @include media("mcbk-2") {
+                                width: 125px;
+                                height: 125px;
+                            }
                         }
 
                         &.online {
@@ -110,11 +118,25 @@
                         color: var(--light-clr);
                         background-color: var(--info);
                         border-radius: var(--secondary-button-border-radius);
+                        @include media("mcbk-1") {
+                            height: 30px;
+                            font-size: 13px;
+                        }
+                        @include media("mcbk-2") {
+                            height: 30px;
+                            font-size: 13px;
+                        }
 
                         i {
                             margin-right: 5px;
                             margin-bottom: 1px;
                             font-size: 20px;
+                            @include media("mcbk-1") {
+                                font-size: 17px;
+                            }
+                            @include media("mcbk-2") {
+                                font-size: 17px;
+                            }
                         }
                     }
                 }
@@ -134,6 +156,12 @@
                             color: var(--card-text-color);
                             -webkit-box-orient: vertical;
                             -webkit-line-clamp: 1;
+                            @include media("mcbk-1") {
+                                font-size: 17px;
+                            }
+                            @include media("mcbk-2") {
+                                font-size: 17px;
+                            }
                         }
                     }
 
@@ -145,6 +173,12 @@
                         font-weight: 400;
                         color: var(--card-second-text-color);
                         -webkit-box-orient: vertical;
+                        @include media("mcbk-1") {
+                            font-size: 13px;
+                        }
+                        @include media("mcbk-2") {
+                            font-size: 13px;
+                        }
                         p {
                             color: var(--card-second-text-color);
                         }
@@ -152,13 +186,20 @@
 
                     &--mail {
                         display: -webkit-box;
-                        height: 20px;
+                        height: 40px;
                         overflow: hidden;
                         font-size: 14px;
                         font-weight: 700;
                         color: var(--primary);
                         -webkit-box-orient: vertical;
-                        -webkit-line-clamp: 1;
+                        -webkit-line-clamp: 2;
+                        word-break: break-all;
+                        @include media("mcbk-1") {
+                            font-size: 13px;
+                        }
+                        @include media("mcbk-2") {
+                            font-size: 13px;
+                        }
                     }
                 }
 

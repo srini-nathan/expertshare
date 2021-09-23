@@ -154,7 +154,7 @@ export const ExhibitorDetailTabProducts: FC<ExhibitorDetailTabProductType> = ({
             ) : (
                 <></>
             )}
-            <Row>
+            <Row className="mt-4">
                 {loading ? (
                     <AppLoader />
                 ) : (
