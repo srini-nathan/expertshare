@@ -89,7 +89,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 },
                 user_search: filter,
                 isDisplayAsGuest: false,
-                "roles.role[]": appliedRoles?.map((r) => r.value),
+                "roles.role": appliedRoles?.map((r) => r.value),
             },
             (c) => cancelTokenSourcesRef.current.push(c)
         )
@@ -119,9 +119,6 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
             appGridApi.current?.setFilterModel({
                 user_search: {
                     filter: search,
-                },
-                "roles.role[]": {
-                    filter: appliedRoles?.map((r) => r.value),
                 },
             });
         } else {
