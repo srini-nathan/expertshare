@@ -25,6 +25,7 @@ export interface Configuration {
     isLoginLinkedinEnable: boolean;
     isLoginAzureEnable: boolean;
     isOnboardingEnable: boolean;
+    filterUserRoles: string[];
 }
 
 export class Configuration implements Configuration {
@@ -77,6 +78,7 @@ export class Configuration implements Configuration {
     isLoginAzureEnable = false;
 
     isOnboardingEnable = false;
+    filterUserRoles = [""];
 }
 
 export const useDefaultOnEmpty = [
