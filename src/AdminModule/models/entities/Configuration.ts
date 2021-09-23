@@ -18,6 +18,7 @@ export interface Configuration {
     longTime: string;
     longDatetime: string;
     shortDatetime: string;
+    filterUserRoles: string[];
 }
 
 export class Configuration implements Configuration {
@@ -56,6 +57,8 @@ export class Configuration implements Configuration {
     shortDatetime = "EEEE MMMM, dd hh:mm a";
 
     longDatetime = "EEEE MMMM, dd hh:mm a";
+
+    filterUserRoles = [""];
 }
 
 export const useDefaultOnEmpty = [
