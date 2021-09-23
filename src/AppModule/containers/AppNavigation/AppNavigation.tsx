@@ -63,6 +63,7 @@ const {
         ROLE_SUPPORT,
         ROLE_EXHIBITOR,
         ROLE_SPEAKER,
+        ROLE_MODERATOR,
     },
 } = Role;
 
@@ -491,7 +492,8 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 (role === ROLE_ADMIN ||
                     role === ROLE_OPERATOR ||
                     role === ROLE_SPEAKER ||
-                    role === ROLE_EXHIBITOR)
+                    role === ROLE_EXHIBITOR ||
+                    role === ROLE_MODERATOR)
             )
         ) {
             return null;

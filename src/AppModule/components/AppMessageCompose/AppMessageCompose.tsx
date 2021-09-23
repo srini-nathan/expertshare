@@ -155,7 +155,7 @@ export const AppMessageCompose: FC<AppMessageComposeProps> = ({
                                 onClick={isEdit ? updateData : sendData}
                                 disabled={data.length === 0}
                             >
-                                Send
+                                {isEdit ? "Save" : "Send"}
                             </AppButton>
                         </div>
                     </div>
