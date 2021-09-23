@@ -216,11 +216,11 @@ const QuestionCard = ({
                 (status.toUpperCase() === "ANSWERED" && q.isReplyed)) &&
             (q?.session?.title?.trim().toLowerCase().includes(searchText, 0) ||
                 q?.message?.trim().toLowerCase().includes(searchText, 0) ||
-                q?.user?.firstName
-                    ?.trim()
+                `${q?.user?.firstName?.trim() || ""} ${
+                    q?.user?.lastName?.trim() || ""
+                }`
                     .toLowerCase()
-                    .includes(searchText, 0) ||
-                q?.user?.lastName?.trim().toLowerCase().includes(searchText, 0))
+                    .includes(searchText, 0))
     );
     statusQuestions = orderBy(statusQuestions, ["id"], ["desc"]);
     const profilePictureBasePath = useBuildAssetPath(UserProfileFileInfo);
