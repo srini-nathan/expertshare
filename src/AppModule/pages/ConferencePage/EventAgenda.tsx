@@ -283,6 +283,10 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                             prevEl: `.${butonName}_left`,
                             nextEl: `.${butonName}_right`,
                         }}
+                        autoplay={{
+                            delay: 2000,
+                        }}
+                        loop={true}
                     >
                         {e.map((item: Session) => {
                             return (

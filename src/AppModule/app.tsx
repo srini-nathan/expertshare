@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Redirect, Router, Location, useMatch } from "@reach/router";
 import { useTranslation } from "react-i18next";
+import SwiperCore, { Autoplay } from "swiper";
 import { appRouters } from "./bootstrap";
 import { DashboardLayout } from "./layouts/DashboardLayout";
 import { AppConfiguration } from "./layouts/AppConfiguration";
@@ -27,6 +28,7 @@ import "./assets/scss/main.scss";
 import { AuthState } from "../SecurityModule/models";
 import { isAppLoadedInIFrame } from "./utils";
 import { PUser } from "../AdminModule/models";
+import "swiper/swiper-bundle.css";
 
 const { CONNECT, DISCONNECT } = EVENTS;
 interface Props {
@@ -101,6 +103,7 @@ const App = (): JSX.Element => {
     init(t);
 
     useEffect(() => {
+        SwiperCore.use([Autoplay]);
         if (isAppLoadedInIFrame()) {
             document.body.classList.add("app-in-iframe");
         }
