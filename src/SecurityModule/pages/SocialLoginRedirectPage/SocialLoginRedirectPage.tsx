@@ -1,13 +1,13 @@
 import React, { FC } from "react";
 import { RouteComponentProps, useParams } from "@reach/router";
-import { AuthContext, socialLogin } from "../../contexts/AuthContext";
+import { AuthContext, loginByToken } from "../../contexts/AuthContext";
 import { AppLoader } from "../../../AppModule/components";
 
 export const SocialLoginRedirectPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { token } = useParams();
     const { dispatch, state } = React.useContext(AuthContext);
     if (token && token.length > 0) {
-        socialLogin(token, dispatch).then();
+        loginByToken(token, dispatch).then();
     }
 
     if (state.isAuthenticated === null) {
