@@ -40,6 +40,7 @@ export const AppSponsors: FC<AppSponsorsType> = ({
     if (loading) {
         return <AppLoader />;
     }
+
     const responsive = customCss || {
         desktop: {
             breakpoint: {
@@ -61,6 +62,7 @@ export const AppSponsors: FC<AppSponsorsType> = ({
         },
     };
 
+
     return (
         <div className={"app-sponsors"}>
             <Carousel
@@ -72,9 +74,11 @@ export const AppSponsors: FC<AppSponsorsType> = ({
                 className="carousel-style"
                 containerClass="container-with-dots"
                 customTransition="all 1s linear"
+                dotListClass=""
                 draggable
                 focusOnSelect={false}
                 infinite
+                itemClass=""
                 keyBoardControl
                 minimumTouchDrag={80}
                 renderButtonGroupOutside={false}

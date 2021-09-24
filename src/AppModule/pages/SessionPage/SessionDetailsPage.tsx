@@ -130,6 +130,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
         if (parseInt(sessionId, 10) === data.id && next)
             switchTonextSession(next as number);
     });
+
     useEffect(() => {
         if (id) emitJoinNextSession(id);
         return () => {
