@@ -15,7 +15,6 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
     const playPauseRef: { current: any } = useRef(null);
     const [playing, setPlaying] = useState(true);
     const [captureImage, setCaptureImage] = useState(null) as any;
-    const [mute, setMute] = useState(false);
     const [showRange, setShowRange] = useState(false);
     const [volRang, setVolRang] = useState(100);
 
@@ -48,12 +47,7 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
     };
 
     const onVolumeChange = () => {
-        const el = document.getElementById("audio-canvas") as HTMLCanvasElement;
-        if (el) {
-            const image = el.toDataURL("image/png");
-            setCaptureImage(image);
-        }
-        setMute(!mute);
+        setShowRange(!showRange);
     };
 
     const handleRange = (event) => {
@@ -126,9 +120,7 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
                     <img
                         src={captureImage}
                         style={{
-                            borderColor:
-                                container?.designConfiguration
-                                    ?.widMusicBarColor,
+                            borderColor: container?.designConfiguration?.widMusicBarColor,
                         }}
                         alt=""
                         className=""
