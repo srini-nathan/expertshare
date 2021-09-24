@@ -19,4 +19,9 @@ export interface LoginActionConfig {
     auth2wayRole: string[];
     isPwdGenerated: boolean;
     newPassword: string;
+    isOnboarded: boolean;
+    isDisplayAsGuest: boolean;
+    isExposeEmail: boolean;
+    isAllowCommunication: boolean;
+    isOnboardingEnable: boolean;
 }

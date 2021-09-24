@@ -1,5 +1,6 @@
 import React, { FC, useState, useEffect, useRef } from "react";
 import { Link, RouteComponentProps } from "@reach/router";
+import { first } from "lodash";
 import { useTranslation } from "react-i18next";
 import { useForm } from "react-hook-form";
 import { Container, Row, Col, Form } from "react-bootstrap";
@@ -12,6 +13,7 @@ import { AppAuthHeader, AppAuthFooter } from "../../components";
 import {
     AppFormInput,
     AppFormInputPassword,
+    AppFormSwitch,
 } from "../../../AppModule/components";
 import {
     errorToast,
@@ -34,7 +36,7 @@ import {
     LANGUAGES,
 } from "../../../AppModule/config/app-env";
 import { useBuildAssetPath, useUserLocale } from "../../../AppModule/hooks";
-import { DesignConfigurationFileInfo } from "../../../config";
+import { DesignConfigurationFileInfo, ROLES } from "../../../config";
 import {
     EmailCheckRequest,
     EmailCheckResponse,
@@ -53,6 +55,12 @@ class LoginForm {
     isPwdGenerated = false;
 
     isExist = false;
+
+    isDisplayAsGuest = false;
+
+    isExposeEmail = true;
+
+    isAllowCommunication = true;
 }
 
 const schema = (t: (string) => string) => {
@@ -110,6 +118,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [userStatus, setUserStatus] = useState<EmailCheckResponse>(
         new EmailCheckResponse()
     );
+    const [role, setRole] = useState<string>();
 
     useEffect(() => {
         setLocale(activeLanguage);
@@ -138,6 +147,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     useEffect(() => {
         setValue("isExist", userStatus.isExist);
         setValue("isPwdGenerated", userStatus.isPwdGenerated);
+        setRole(first(userStatus.roles));
     }, [userStatus]);
 
     const onSubmitCheckUser = async ({ email }: LoginForm) => {
@@ -181,12 +191,20 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
         password,
         isPwdGenerated,
         newPassword,
+        isAllowCommunication,
+        isDisplayAsGuest,
+        isExposeEmail,
     }: LoginForm) => {
         const config: LoginActionConfig = {
             isAuth2wayEnable: configuration.isAuth2wayEnable,
             auth2wayRole: configuration.auth2wayRole,
             isPwdGenerated,
             newPassword,
+            isAllowCommunication,
+            isDisplayAsGuest,
+            isExposeEmail,
+            isOnboarded: userStatus.isOnboarded,
+            isOnboardingEnable: configuration.isOnboardingEnable,
         };
         await loginAction(userEmail, password, dispatch, config);
     };
@@ -351,6 +369,86 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                                                 }
                                                             />
                                                         </Form.Row>
+                                                        {!userStatus.isOnboarded &&
+                                                        !configuration.isOnboardingEnable ? (
+                                                            <Form.Row>
+                                                                <Col
+                                                                    sm="12"
+                                                                    className="mb-3  text-center"
+                                                                >
+                                                                    <span className="onboarding-sectoin">
+                                                                        {t(
+                                                                            "onboarding.section:privacy"
+                                                                        )}
+                                                                    </span>
+                                                                </Col>
+                                                                {role ===
+                                                                    ROLES.ROLE_SPEAKER ||
+                                                                role ===
+                                                                    ROLES.ROLE_MODERATOR ? null : (
+                                                                    <AppFormSwitch
+                                                                        id={
+                                                                            "isDisplayAsGuest"
+                                                                        }
+                                                                        name={
+                                                                            "isDisplayAsGuest"
+                                                                        }
+                                                                        label={t(
+                                                                            "profile.update:label.isDisplayAsGuest"
+                                                                        )}
+                                                                        md={12}
+                                                                        lg={4}
+                                                                        xl={4}
+                                                                        control={
+                                                                            control
+                                                                        }
+                                                                        defaultChecked={
+                                                                            false
+                                                                        }
+                                                                    />
+                                                                )}
+                                                                <AppFormSwitch
+                                                                    id={
+                                                                        "isExposeEmail"
+                                                                    }
+                                                                    name={
+                                                                        "isExposeEmail"
+                                                                    }
+                                                                    label={t(
+                                                                        "profile.update:label.isExposeEmail"
+                                                                    )}
+                                                                    md={12}
+                                                                    lg={4}
+                                                                    xl={4}
+                                                                    defaultChecked={
+                                                                        false
+                                                                    }
+                                                                    control={
+                                                                        control
+                                                                    }
+                                                                />
+                                                                <AppFormSwitch
+                                                                    id={
+                                                                        "isAllowCommunication"
+                                                                    }
+                                                                    name={
+                                                                        "isAllowCommunication"
+                                                                    }
+                                                                    label={t(
+                                                                        "profile.update:label.isAllowCommunication"
+                                                                    )}
+                                                                    md={12}
+                                                                    lg={4}
+                                                                    xl={4}
+                                                                    defaultChecked={
+                                                                        true
+                                                                    }
+                                                                    control={
+                                                                        control
+                                                                    }
+                                                                />
+                                                            </Form.Row>
+                                                        ) : null}
                                                     </>
                                                 ) : null}
                                                 <Link

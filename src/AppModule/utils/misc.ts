@@ -75,7 +75,7 @@ export const resolveImage = (
 
 export const parseConfiguration = (container: any): Configuration => {
     let configuration: Configuration = new Configuration();
-    if (container.configuration) {
+    if (container?.configuration) {
         configuration = mergeWith(
             configuration,
             container.configuration,

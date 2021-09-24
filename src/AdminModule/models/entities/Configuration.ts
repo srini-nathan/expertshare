@@ -24,6 +24,7 @@ export interface Configuration {
     isLoginGoogleEnable: boolean;
     isLoginLinkedinEnable: boolean;
     isLoginAzureEnable: boolean;
+    isOnboardingEnable: boolean;
 }
 
 export class Configuration implements Configuration {
@@ -74,6 +75,8 @@ export class Configuration implements Configuration {
     isLoginLinkedinEnable = false;
 
     isLoginAzureEnable = false;
+
+    isOnboardingEnable = false;
 }
 
 export const useDefaultOnEmpty = [

@@ -26,7 +26,7 @@ import { useGlobalData } from "./contexts";
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
 import { AuthState } from "../SecurityModule/models";
-import { isAppLoadedInIFrame } from "./utils";
+import { isAppLoadedInIFrame, parseConfiguration } from "./utils";
 import { PUser } from "../AdminModule/models";
 import "swiper/swiper-bundle.css";
 
@@ -99,6 +99,7 @@ const App = (): JSX.Element => {
     const { handler } = useCommandCenterSocketEvents();
     const skippedOnBoarding = isSkipOnBoarding();
     const { t } = useTranslation();
+    const config = parseConfiguration(container);
 
     init(t);
 
@@ -158,7 +159,12 @@ const App = (): JSX.Element => {
         return <AppFullScreenLoader />;
     }
     if (!isAutoLoginPage && isAuthenticated === true && user && container) {
-        if (!user.isOnboarded && !onBoardingPage && !skippedOnBoarding) {
+        if (
+            config.isOnboardingEnable &&
+            !user.isOnboarded &&
+            !onBoardingPage &&
+            !skippedOnBoarding
+        ) {
             navigator("/onboarding").then();
         } else if (!isChosen() && !isOverViewPage && !onBoardingPage) {
             navigator("/container").then();

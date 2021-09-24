@@ -23,6 +23,7 @@ import {
 } from "../../components";
 import {
     errorToast,
+    parseConfiguration,
     setViolations,
     successToast,
     validation,
@@ -89,6 +90,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
     const desclaimer = useRef<HTMLDivElement>(null);
     const { container } = useGlobalData();
     const [agree, isAgree] = useState<boolean>(false);
+    const config = parseConfiguration(container);
 
     const getValue = (name: string) => {
         let val = "";
@@ -138,6 +140,11 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
     const setLayoutOptions = useSetRecoilState<AppDashboardLayoutOptions>(
         appDashboardLayoutOptions
     );
+    useEffect(() => {
+        if (!config.isOnboardingEnable) {
+            navigator("/").then();
+        }
+    }, []);
 
     useEffect(() => {
         isDataLoading(true);
