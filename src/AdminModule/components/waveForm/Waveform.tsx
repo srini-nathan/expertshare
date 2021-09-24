@@ -120,7 +120,9 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
                     <img
                         src={captureImage}
                         style={{
-                            borderColor: container?.designConfiguration?.widMusicBarColor,
+                            borderColor:
+                                container?.designConfiguration
+                                    ?.widMusicBarColor,
                         }}
                         alt=""
                         className=""
