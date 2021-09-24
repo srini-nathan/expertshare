@@ -20,4 +20,5 @@ export interface User extends BaseEntity {
     userTags?: SimpleObject<string | number>[];
     userFieldValues?: SimpleObject<string | number>[];
     imageName?: string;
+    isPwdGenerated?: boolean;
 }

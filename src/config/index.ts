@@ -6,7 +6,7 @@ export * from "./helper";
 
 const R = ROUTES;
 const C = CONSTANTS;
-const { Upload, VoteQuestion, Role, Session } = CONSTANTS;
+const { Upload, VoteQuestion, Role, Session, EmailTemplate } = CONSTANTS;
 
 const {
   FILETYPE: FILE_TYPE,
@@ -35,6 +35,7 @@ const {
   FILETYPEINFO_EXHIBITOR_DOC,
   FILETYPEINFO_CONFERENCE_POSTER,
   FILETYPEINFO_AFRAMEPANEL_MEDIA,
+  FILETYPEINFO_DESIGN_CONFIGURATION,
   FILETYPEINFO_SESSION_POSTER,
 } = FILE_TYPE_INFO;
 
@@ -47,6 +48,7 @@ const ExhibitorProductPosterFileInfo = FILETYPEINFO_EXHIBITORPRODUCT_POSTER as F
 const ConferencePosterFileInfo = FILETYPEINFO_CONFERENCE_POSTER as FileTypeInfo;
 const ExhibitorDocFileInfo = FILETYPEINFO_EXHIBITOR_DOC as FileTypeInfo;
 const AFramePanelMediaFileInfo = FILETYPEINFO_AFRAMEPANEL_MEDIA as FileTypeInfo;
+const DesignConfigurationFileInfo = FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo;
 const SessionPosterFileInfo = FILETYPEINFO_SESSION_POSTER as FileTypeInfo;
 
 // UploadImage types
@@ -95,6 +97,7 @@ export {
   EXHIBITOR_DOC_TYPE,
   AFramePanelMediaFileInfo,
   AFRAME_PANEL_MEDIA_TYPE,
+  DesignConfigurationFileInfo,
   SessionPosterFileInfo,
 }
 
@@ -110,3 +113,13 @@ export {
   CARD_TYPE,
   ROLES,
 };
+
+const {
+  ETKEY,
+  ETKEYINFO
+} = EmailTemplate;
+
+export {
+  ETKEY,
+  ETKEYINFO,
+}

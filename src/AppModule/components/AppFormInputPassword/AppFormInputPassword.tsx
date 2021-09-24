@@ -32,12 +32,19 @@ export const AppFormInputPassword: FC<AppFormInputPasswordProps> = ({
     required = true,
     maxCount,
     control,
+    block,
     ...props
 }): JSX.Element => {
     const [data, setData] = useState<string>(defaultValue);
     const placeholderText = useInputPlaceholder(name, placeholder, label);
     const controlId = id || name;
-    const { sm = 12, md = 6, lg = 4, xl = 4, className = "" } = props;
+    const {
+        sm = 12,
+        md = block ? 12 : 6,
+        lg = block ? 12 : 4,
+        xl = block ? 12 : 4,
+        className = "",
+    } = props;
     const labelProps = { label, required, maxCount, description };
     const controllerProps = { name, defaultValue, control };
     const controlProps = {

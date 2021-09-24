@@ -8,6 +8,8 @@ export interface Configuration {
     isMusicEnable: boolean;
     isMusicLoop: boolean;
     musicFilename: string;
+    isAuth2wayEnable: boolean;
+    auth2wayRole: string[];
     isQuestionBoardEnable: boolean;
     isLiveNowEnable: boolean;
     isPipEnable: boolean;
@@ -18,6 +20,10 @@ export interface Configuration {
     longTime: string;
     longDatetime: string;
     shortDatetime: string;
+    isDisclaimerEnable: boolean;
+    isLoginGoogleEnable: boolean;
+    isLoginLinkedinEnable: boolean;
+    isLoginAzureEnable: boolean;
 }
 
 export class Configuration implements Configuration {
@@ -39,6 +45,10 @@ export class Configuration implements Configuration {
 
     musicFilename = "";
 
+    isAuth2wayEnable = false;
+
+    auth2wayRole = [""];
+
     isQuestionBoardEnable = false;
 
     isLiveNowEnable = false;
@@ -56,6 +66,14 @@ export class Configuration implements Configuration {
     shortDatetime = "EEEE MMMM, dd hh:mm a";
 
     longDatetime = "EEEE MMMM, dd hh:mm a";
+
+    isDisclaimerEnable = false;
+
+    isLoginGoogleEnable = false;
+
+    isLoginLinkedinEnable = false;
+
+    isLoginAzureEnable = false;
 }
 
 export const useDefaultOnEmpty = [

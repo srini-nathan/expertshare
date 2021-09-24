@@ -60,6 +60,8 @@ export class User extends BaseEntity {
 
     userField?: SimpleObject<any>[];
 
+    isPwdGenerated?: boolean;
+
     constructor({
         email = "",
         plainPassword = "",
@@ -88,6 +90,7 @@ export class User extends BaseEntity {
         userGroups = [],
         userFieldValues = [],
         userField = [],
+        isPwdGenerated = false,
         id,
         createdAt,
         updatedAt,
@@ -120,6 +123,7 @@ export class User extends BaseEntity {
         this.company = company;
         this.confirmPassword = confirmPassword;
         this.userGroups = userGroups;
+        this.isPwdGenerated = isPwdGenerated;
     }
 
     toString(): string {
@@ -156,6 +160,7 @@ export class User extends BaseEntity {
             userGroups: this.userGroups,
             userFieldValues: this.userFieldValues,
             userField: this.userField,
+            isPwdGenerated: this.isPwdGenerated,
         };
 
         return data;
