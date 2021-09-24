@@ -15,6 +15,8 @@ import {
     overViewLayout,
 } from "../../atoms";
 import { AppLoader } from "../../components";
+import { useGlobalData } from "../../contexts";
+import { parseConfiguration } from "../../utils";
 
 export const LandingHelper: FC<RouteComponentProps> = ({
     navigate,
@@ -27,6 +29,8 @@ export const LandingHelper: FC<RouteComponentProps> = ({
         appDashboardLayoutOptions
     );
     const { getPath } = useResolveEntryPage();
+    const { container } = useGlobalData();
+    const config = parseConfiguration(container);
 
     useEffect(() => {
         setLayoutOptions((currVal) => {
@@ -46,7 +50,12 @@ export const LandingHelper: FC<RouteComponentProps> = ({
     });
 
     useEffect(() => {
-        if (user && !user.isOnboarded && !isSkipOnBoarding()) {
+        if (
+            config.isOnboardingEnable &&
+            user &&
+            !user.isOnboarded &&
+            !isSkipOnBoarding()
+        ) {
             nav("/onboarding").then();
         } else if (!isChosen()) {
             nav("/container").then();
