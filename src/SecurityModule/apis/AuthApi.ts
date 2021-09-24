@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import { AxiosRequestConfig, AxiosResponse } from "axios";
 import { API } from "../../AppModule/apis/API";
 import { ROUTES, route } from "../../config";
 import { checkAndParseResponse } from "../../AppModule/utils/api";
@@ -13,6 +13,8 @@ const {
     api_reset_password_request_collection: API_RESET_PASSWORD_REQUEST,
     api_reset_password_collection: API_RESET_PASSWORD,
     api_security_get_token: API_SECURITY_GET_TOKEN,
+    api_security_otp_send: API_SECURITY_OTP_SEND,
+    api_security_otp_check: API_SECURITY_OTP_CHECK,
 } = ROUTES;
 
 // @TODO: Missing URL from routes.json
@@ -83,8 +85,12 @@ export class AuthApi extends API {
             });
     }
 
-    public static async me(): Promise<User> {
-        const res: AxiosResponse<User> = await this.makeGet<User>(API_ME);
+    public static async me(config: AxiosRequestConfig = {}): Promise<User> {
+        const res: AxiosResponse<User> = await this.makeGet<User>(
+            API_ME,
+            {},
+            config
+        );
         return res.data;
     }
 
@@ -97,6 +103,32 @@ export class AuthApi extends API {
                 containerId,
             })
         )
+            .then((res) => {
+                return res.data;
+            })
+            .catch(({ response }) => {
+                return this.handleError<R>(response.data);
+            });
+    }
+
+    static async sendOtp<P, R>(
+        payload: P,
+        config: AxiosRequestConfig = {}
+    ): Promise<R | ErrorResponse> {
+        return this.makePost<R, P>(API_SECURITY_OTP_SEND, payload, {}, config)
+            .then((res) => {
+                return res.data;
+            })
+            .catch(({ response }) => {
+                return this.handleError<R>(response.data);
+            });
+    }
+
+    static async checkOtp<P, R>(
+        payload: P,
+        config: AxiosRequestConfig = {}
+    ): Promise<R | ErrorResponse> {
+        return this.makePost<R, P>(API_SECURITY_OTP_CHECK, payload, {}, config)
             .then((res) => {
                 return res.data;
             })

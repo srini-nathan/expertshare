@@ -106,3 +106,12 @@ export const resolveImageWithStyle = (
             : bgStyle;
     return css;
 };
+
+export const copyToClipBoard = (text: string) => {
+    const el = document.createElement("textarea");
+    el.value = text;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
+};

@@ -113,15 +113,18 @@ export abstract class UserApi extends EntityAPI {
 
     public static async changePassword<R, P>(
         id: number,
-        entity: P
+        entity: P,
+        config: AxiosRequestConfig = {}
     ): Promise<FinalResponse<R | null>> {
-        const config: AxiosRequestConfig = this.getPatchRequestConfig<P>();
-
+        const axiosRequestConfig: AxiosRequestConfig = {
+            ...config,
+            ...this.getPatchRequestConfig<P>(),
+        };
         return this.makePatch<R, P>(
             route(API_CHANGE_PASSWORD_COLLECTION, { id }),
             JSON.stringify(entity),
             {},
-            config
+            axiosRequestConfig
         )
             .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
             .catch((error: AxiosError | ServerError) =>
@@ -129,14 +132,16 @@ export abstract class UserApi extends EntityAPI {
             );
     }
 
-    public static async emailExist(entity: any): Promise<any> {
-        return this.makePost<any, any>(EMAIL_EXIST, entity)
+    public static async emailExist<R, P>(
+        entity: P
+    ): Promise<FinalResponse<R | null>> {
+        return this.makePost<R, P>(EMAIL_EXIST, entity)
             .then(({ data }) => {
-                return Promise.resolve(new FinalResponse(data, null));
+                return Promise.resolve(new FinalResponse<R>(data, null));
             })
             .catch((error: AxiosError | ServerError) => {
                 const { message } = error;
-                return Promise.resolve(new FinalResponse(null, message));
+                return Promise.resolve(new FinalResponse<R>(null, message));
             });
     }
 

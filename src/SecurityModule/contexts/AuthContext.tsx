@@ -1,5 +1,6 @@
 import React, { createContext, useEffect } from "react";
 import { navigate } from "@reach/router";
+import { first } from "lodash";
 import jwtDecode from "jwt-decode";
 import { AuthApi, LoginResponse } from "../apis/AuthApi";
 import {
@@ -8,8 +9,10 @@ import {
     AUTH_USER_KEY,
     AUTH_SKIP_ONBOARDING,
 } from "../../AppModule/config/app-env";
-import { AuthState } from "../models/context/AuthState";
+import { AuthState, LoginActionConfig } from "../models/context/AuthState";
 import { clearAuthStorage, setUserLocale } from "../utils";
+import { UserApi } from "../../AdminModule/apis";
+import { PUser } from "../../AdminModule/models";
 
 interface IAuthAction {
     type: AuthActionTypes;
@@ -36,6 +39,14 @@ enum AuthActionTypes {
     LOGOUT,
 }
 export const AuthContext = createContext<AuthState | any>(initialState);
+
+export const buildConfig = (authToken: string) => {
+    return {
+        headers: {
+            Authorization: `Bearer ${authToken}`,
+        },
+    };
+};
 
 function reducer(state: AuthState, action: IAuthAction): AuthState {
     switch (action.type) {
@@ -118,7 +129,7 @@ export interface JWT {
     cntid: number;
 }
 
-export const socialLogin = async (
+export const loginByToken = async (
     token: string,
     dispatch: React.Dispatch<IAuthAction>
 ): Promise<void> => {
@@ -126,7 +137,7 @@ export const socialLogin = async (
         if (token) {
             const { ip, roles, cid, cntid }: JWT = await jwtDecode(token);
             await localStorage.setItem(AUTH_TOKEN_KEY, token);
-            const user = await AuthApi.me();
+            const user = await AuthApi.me(buildConfig(token));
             await localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
             await setUserLocale(user);
             dispatch({
@@ -180,13 +191,36 @@ export const autoLogin = async (
         localStorage.setItem(AUTH_CHOSEN_CONTAINER, "true");
         localStorage.setItem(AUTH_SKIP_ONBOARDING, "true");
     }
-    return socialLogin(token, dispatch);
+    return loginByToken(token, dispatch);
+};
+
+export const loginFailureAction = async (
+    dispatch: React.Dispatch<IAuthAction>
+) => {
+    await clearAuthStorage();
+    dispatch({
+        type: AuthActionTypes.LOGIN_ERROR,
+        payload: {
+            isAuthenticated: true,
+            showLogin: false,
+            loginSuccess: true,
+            user: null,
+            loginError: null,
+            token: null,
+            sessionFetched: false,
+            ip: null,
+            roles: [],
+            containerId: null,
+            clientId: null,
+        },
+    });
 };
 
 export const loginAction = async (
     username: string,
     password: string,
-    dispatch: React.Dispatch<IAuthAction>
+    dispatch: React.Dispatch<IAuthAction>,
+    configuration: LoginActionConfig
 ): Promise<void> => {
     try {
         const result: LoginResponse = await AuthApi.login({
@@ -195,49 +229,62 @@ export const loginAction = async (
         });
         const { token } = result;
         if (token) {
+            const {
+                isAuth2wayEnable,
+                auth2wayRole,
+                isPwdGenerated,
+                newPassword,
+            } = configuration;
             const { ip, roles, cid, cntid }: JWT = await jwtDecode(token);
-            await localStorage.setItem(AUTH_TOKEN_KEY, token);
-            const user = await AuthApi.me();
-            await localStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
-            await setUserLocale(user);
-            dispatch({
-                type: AuthActionTypes.LOGIN_SUCCESS,
-                payload: {
-                    ip,
-                    roles,
-                    isAuthenticated: true,
-                    token,
-                    showLogin: false,
-                    loginSuccess: true,
-                    user,
-                    loginError: null,
-                    sessionFetched: true,
-                    clientId: cid,
-                    containerId: cntid,
-                },
-            });
-            await navigate("/");
+            const role = first(roles);
+            const is2FA =
+                isAuth2wayEnable && role && auth2wayRole.indexOf(role) !== -1;
+            if (!isPwdGenerated && is2FA) {
+                await navigate(`/auth/verify-otp/${token}`);
+            } else {
+                const user = await AuthApi.me(buildConfig(token));
+                if (isPwdGenerated) {
+                    const { id } = user;
+                    await UserApi.changePassword<PUser, PUser>(
+                        id,
+                        {
+                            plainPassword: newPassword,
+                        },
+                        buildConfig(token)
+                    );
+                    user.isPwdGenerated = false;
+                }
+                if (!is2FA) {
+                    await localStorage.setItem(AUTH_TOKEN_KEY, token);
+                    await localStorage.setItem(
+                        AUTH_USER_KEY,
+                        JSON.stringify(user)
+                    );
+                    await setUserLocale(user);
+                    dispatch({
+                        type: AuthActionTypes.LOGIN_SUCCESS,
+                        payload: {
+                            ip,
+                            roles,
+                            isAuthenticated: true,
+                            token,
+                            showLogin: false,
+                            loginSuccess: true,
+                            user,
+                            loginError: null,
+                            sessionFetched: true,
+                            clientId: cid,
+                            containerId: cntid,
+                        },
+                    });
+                    await navigate("/");
+                } else {
+                    await navigate(`/auth/verify-otp/${token}`);
+                }
+            }
         }
     } catch (err) {
-        if (localStorage.getItem(AUTH_TOKEN_KEY)) {
-            await clearAuthStorage();
-            dispatch({
-                type: AuthActionTypes.LOGIN_ERROR,
-                payload: {
-                    isAuthenticated: true,
-                    showLogin: false,
-                    loginSuccess: true,
-                    user: null,
-                    loginError: null,
-                    token: null,
-                    sessionFetched: false,
-                    ip: null,
-                    roles: [],
-                    containerId: null,
-                    clientId: null,
-                },
-            });
-        }
+        await loginFailureAction(dispatch);
     }
 };
 
@@ -248,7 +295,7 @@ export default function AuthProvider({ children }: Props): JSX.Element {
             const token = localStorage.getItem(AUTH_TOKEN_KEY);
             if (token) {
                 try {
-                    const user = await AuthApi.me();
+                    const user = await AuthApi.me(buildConfig(token));
                     const { ip, roles, cid, cntid }: JWT = jwtDecode(token);
                     await setUserLocale(user);
                     dispatch({

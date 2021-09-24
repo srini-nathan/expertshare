@@ -16,16 +16,14 @@ import {
 import {
     errorToast,
     getBGStyle,
+    parseConfiguration,
     parseDesign,
     setViolations,
     validation,
 } from "../../../AppModule/utils";
 import "./assets/scss/styles.scss";
 import { UserApi } from "../../../AdminModule/apis";
-import {
-    FileTypeInfo,
-    UnprocessableEntityErrorResponse,
-} from "../../../AppModule/models";
+import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
 import {
     API_HOST,
     AUTH_CHOSEN_CONTAINER,
@@ -36,23 +34,51 @@ import {
     LANGUAGES,
 } from "../../../AppModule/config/app-env";
 import { useBuildAssetPath, useUserLocale } from "../../../AppModule/hooks";
-import { CONSTANTS } from "../../../config";
+import { DesignConfigurationFileInfo } from "../../../config";
+import {
+    EmailCheckRequest,
+    EmailCheckResponse,
+    LoginActionConfig,
+} from "../../models";
 
-const {
-    Upload: {
-        FILETYPEINFO: { FILETYPEINFO_DESIGN_CONFIGURATION },
-    },
-} = CONSTANTS;
+class LoginForm {
+    email = "";
 
-type LoginForm = {
-    email: string;
-    password?: string;
+    password = "";
+
+    newPassword = "";
+
+    confirmPassword = "";
+
+    isPwdGenerated = false;
+
+    isExist = false;
+}
+
+const schema = (t: (string) => string) => {
+    return yup.object().shape({
+        email: yup.string().email().required(),
+        isExist: yup.boolean(),
+        password: yup.string().when("isExist", {
+            is: true,
+            then: yup.string().min(6).required(),
+        }),
+        isPwdGenerated: yup.boolean(),
+        newPassword: yup.string().when("isPwdGenerated", {
+            is: true,
+            then: yup.string().min(6).required(),
+        }),
+        confirmPassword: yup.string().when("isPwdGenerated", {
+            is: true,
+            then: yup
+                .string()
+                .oneOf(
+                    [yup.ref("newPassword"), null],
+                    t("login.form:error.confirmPassword.notMatched")
+                ),
+        }),
+    });
 };
-
-const schema = yup.object().shape({
-    email: yup.string().email().required(),
-    // password: yup.string().min(6).required(),
-});
 
 export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [emailStatus, setEmailStatus] = useState<string>("");
@@ -60,27 +86,30 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [onboarded, isOnboarded] = useState<boolean>(false);
     const [activeLanguage, setActiveLanguage] = useState<string>("");
     const [userEmail, setUserEmail] = useState<string>("");
+    const { t } = useTranslation();
     const {
         control,
         handleSubmit,
         formState,
         setFocus,
         setError,
+        setValue,
     } = useForm<LoginForm>({
-        resolver: yupResolver(schema),
+        resolver: yupResolver(schema(t)),
         mode: "all",
     });
     const desclaimer = useRef<HTMLDivElement>(null);
     const { container, activeLanguages } = useGlobalData();
     const { errors } = formState;
-    const { t } = useTranslation();
     const { setLocale } = useUserLocale();
     const design = parseDesign(container);
-    const baseDesignConfig = useBuildAssetPath(
-        FILETYPEINFO_DESIGN_CONFIGURATION as FileTypeInfo
-    );
+    const baseDesignConfig = useBuildAssetPath(DesignConfigurationFileInfo);
     const { genImageBackgroundLogin } = design;
     const bgStyle = getBGStyle(baseDesignConfig, genImageBackgroundLogin);
+    const configuration = parseConfiguration(container);
+    const [userStatus, setUserStatus] = useState<EmailCheckResponse>(
+        new EmailCheckResponse()
+    );
 
     useEffect(() => {
         setLocale(activeLanguage);
@@ -106,9 +135,14 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
         return val;
     };
 
+    useEffect(() => {
+        setValue("isExist", userStatus.isExist);
+        setValue("isPwdGenerated", userStatus.isPwdGenerated);
+    }, [userStatus]);
+
     const onSubmitCheckUser = async ({ email }: LoginForm) => {
         setUserEmail(email);
-        return UserApi.emailExist({
+        return UserApi.emailExist<EmailCheckResponse, EmailCheckRequest>({
             email,
         }).then(({ error, errorMessage, response }) => {
             if (error instanceof UnprocessableEntityErrorResponse) {
@@ -116,6 +150,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
             } else if (errorMessage) {
                 errorToast(errorMessage);
             } else if (response) {
+                setUserStatus(response);
                 if (response.isExist) {
                     if (
                         response.isActivationEmailEnable &&
@@ -142,8 +177,18 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
         });
     };
     const { dispatch } = React.useContext(AuthContext);
-    const onSubmit = async ({ password }: LoginForm) => {
-        await loginAction(userEmail, password as string, dispatch);
+    const onSubmit = async ({
+        password,
+        isPwdGenerated,
+        newPassword,
+    }: LoginForm) => {
+        const config: LoginActionConfig = {
+            isAuth2wayEnable: configuration.isAuth2wayEnable,
+            auth2wayRole: configuration.auth2wayRole,
+            isPwdGenerated,
+            newPassword,
+        };
+        await loginAction(userEmail, password, dispatch, config);
     };
     const renderView = () => {
         switch (emailStatus) {
@@ -214,8 +259,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                                 xl={12}
                                                 type={"email"}
                                                 name={"email"}
-                                                placeholder="Email"
-                                                label={""}
+                                                placeholder={t("Email")}
                                                 required={true}
                                                 {...validation(
                                                     "email",
@@ -232,27 +276,83 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                             <>
                                                 <Form.Row>
                                                     <AppFormInputPassword
-                                                        md={12}
-                                                        lg={12}
-                                                        xl={12}
+                                                        block={true}
                                                         className="m-0"
                                                         name={"password"}
-                                                        label={""}
-                                                        placeholder="Password"
-                                                        required={true}
+                                                        placeholder={
+                                                            userStatus.isPwdGenerated
+                                                                ? t(
+                                                                      "login.form:placeholder.existingPassword"
+                                                                  )
+                                                                : t(
+                                                                      "login.form:placeholder.password"
+                                                                  )
+                                                        }
                                                         {...validation(
                                                             "password",
                                                             formState,
-                                                            false
+                                                            false,
+                                                            true
                                                         )}
-                                                        errorMessage={
-                                                            errors.password
-                                                                ?.message
-                                                        }
                                                         control={control}
                                                     />
                                                 </Form.Row>
-
+                                                {userStatus.isPwdGenerated ? (
+                                                    <>
+                                                        <hr
+                                                            className={"mt-3"}
+                                                        />
+                                                        <h5>
+                                                            {t(
+                                                                "login.form:title.setNewPassword"
+                                                            )}
+                                                        </h5>
+                                                        <Form.Row>
+                                                            <AppFormInputPassword
+                                                                className={
+                                                                    "mt-3 mb-0 pb-0"
+                                                                }
+                                                                block={true}
+                                                                name={
+                                                                    "newPassword"
+                                                                }
+                                                                placeholder={t(
+                                                                    "login.form:placeholder.newPassword"
+                                                                )}
+                                                                {...validation(
+                                                                    "newPassword",
+                                                                    formState,
+                                                                    false,
+                                                                    true
+                                                                )}
+                                                                control={
+                                                                    control
+                                                                }
+                                                            />
+                                                            <AppFormInputPassword
+                                                                className={
+                                                                    "pt-0"
+                                                                }
+                                                                block={true}
+                                                                name={
+                                                                    "confirmPassword"
+                                                                }
+                                                                placeholder={t(
+                                                                    "login.form:placeholder.confirmPassword"
+                                                                )}
+                                                                {...validation(
+                                                                    "confirmPassword",
+                                                                    formState,
+                                                                    false,
+                                                                    true
+                                                                )}
+                                                                control={
+                                                                    control
+                                                                }
+                                                            />
+                                                        </Form.Row>
+                                                    </>
+                                                ) : null}
                                                 <Link
                                                     to={"/auth/forgot-password"}
                                                     className="forgot-password "
@@ -264,10 +364,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                             </>
                                         )}
 
-                                        {container &&
-                                            container.configuration &&
-                                            (container.configuration as any)
-                                                .isDisclaimerEnable &&
+                                        {configuration.isDisclaimerEnable &&
                                             emailStatus === "exist" &&
                                             !onboarded && (
                                                 <Form.Group>
@@ -307,10 +404,7 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                         )} ...`}
                                         disabled={
                                             formState.isSubmitting ||
-                                            (container &&
-                                                container.configuration &&
-                                                (container.configuration as any)
-                                                    .isDisclaimerEnable &&
+                                            (configuration.isDisclaimerEnable &&
                                                 !agree &&
                                                 emailStatus === "exist" &&
                                                 !onboarded)
@@ -320,88 +414,59 @@ export const LoginPage: FC<RouteComponentProps> = (): JSX.Element => {
                                         {t("login.form:login")}
                                     </AppButton>
                                     <Row className={"mt-3"}>
-                                        {container &&
-                                            container.configuration &&
-                                            ((container.configuration as any)
-                                                .isLoginGoogleEnable ||
-                                                (container.configuration as any)
-                                                    .isLoginLinkedinEnable ||
-                                                (container.configuration as any)
-                                                    .isLoginAzureEnable) && (
-                                                <Col
-                                                    sm={12}
+                                        {(configuration.isLoginGoogleEnable ||
+                                            configuration.isLoginLinkedinEnable ||
+                                            configuration.isLoginAzureEnable) && (
+                                            <Col
+                                                sm={12}
+                                                className={
+                                                    "text-center my-4 normal-label"
+                                                }
+                                            >
+                                                <span>
+                                                    {t(
+                                                        "login.form:orLoginWith"
+                                                    )}
+                                                </span>
+                                            </Col>
+                                        )}
+                                        {configuration.isLoginGoogleEnable && (
+                                            <Col md={4} xl={4} lg={4} sm={12}>
+                                                <a
                                                     className={
-                                                        "text-center my-4 normal-label"
+                                                        "btn mb-3 btn-secondary justify-content-center social-media-button" +
+                                                        " google"
                                                     }
+                                                    href={`${API_HOST}/social/connect/google`}
                                                 >
-                                                    <span>
-                                                        {t(
-                                                            "login.form:orLoginWith"
-                                                        )}
-                                                    </span>
-                                                </Col>
-                                            )}
-                                        {container &&
-                                            container.configuration &&
-                                            (container.configuration as any)
-                                                .isLoginGoogleEnable && (
-                                                <Col
-                                                    md={4}
-                                                    xl={4}
-                                                    lg={4}
-                                                    sm={12}
+                                                    Google
+                                                </a>
+                                            </Col>
+                                        )}
+                                        {configuration.isLoginLinkedinEnable && (
+                                            <Col md={4} xl={4} lg={4} sm={12}>
+                                                <a
+                                                    className={
+                                                        "btn mb-3 btn-secondary justify-content-center social-media-button linkedin"
+                                                    }
+                                                    href={`${API_HOST}/social/connect/linkedin`}
                                                 >
-                                                    <a
-                                                        className={
-                                                            "btn mb-3 btn-secondary justify-content-center social-media-button" +
-                                                            " google"
-                                                        }
-                                                        href={`${API_HOST}/social/connect/google`}
-                                                    >
-                                                        Google
-                                                    </a>
-                                                </Col>
-                                            )}
-                                        {container &&
-                                            container.configuration &&
-                                            (container.configuration as any)
-                                                .isLoginLinkedinEnable && (
-                                                <Col
-                                                    md={4}
-                                                    xl={4}
-                                                    lg={4}
-                                                    sm={12}
+                                                    LinkedIn
+                                                </a>
+                                            </Col>
+                                        )}
+                                        {configuration.isLoginAzureEnable && (
+                                            <Col md={4} xl={4} lg={4} sm={12}>
+                                                <a
+                                                    className={
+                                                        "btn mb-3 btn-secondary justify-content-center social-media-button azure"
+                                                    }
+                                                    href={`${API_HOST}/social/connect/azure`}
                                                 >
-                                                    <a
-                                                        className={
-                                                            "btn mb-3 btn-secondary justify-content-center social-media-button linkedin"
-                                                        }
-                                                        href={`${API_HOST}/social/connect/linkedin`}
-                                                    >
-                                                        LinkedIn
-                                                    </a>
-                                                </Col>
-                                            )}
-                                        {container &&
-                                            container.configuration &&
-                                            (container.configuration as any)
-                                                .isLoginAzureEnable && (
-                                                <Col
-                                                    md={4}
-                                                    xl={4}
-                                                    lg={4}
-                                                    sm={12}
-                                                >
-                                                    <a
-                                                        className={
-                                                            "btn mb-3 btn-secondary justify-content-center social-media-button azure"
-                                                        }
-                                                        href={`${API_HOST}/social/connect/azure`}
-                                                    >
-                                                        Azure
-                                                    </a>
-                                                </Col>
-                                            )}
+                                                    Azure
+                                                </a>
+                                            </Col>
+                                        )}
                                     </Row>
                                 </Form>
                             </Col>

@@ -23,6 +23,7 @@ import {
     setViolations,
     successToast,
     validation,
+    copyToClipBoard,
 } from "../../../AppModule/utils";
 import {
     PrimitiveObject,
@@ -33,7 +34,7 @@ import {
     useNavigator,
     useParamId,
 } from "../../../AppModule/hooks";
-import { CONSTANTS } from "../../../config";
+import { ETKEY, ETKEYINFO } from "../../../config";
 import "./assets/scss/style.scss";
 
 const schema = yup.object().shape({
@@ -42,15 +43,6 @@ const schema = yup.object().shape({
     etKey: yup.string().required(),
     content: yup.string().required(),
 });
-
-const { EmailTemplate: EMAIL_TEMPLATE } = CONSTANTS;
-const { ETKEY, ETKEYINFO } = EMAIL_TEMPLATE;
-const {
-    ETKEYINFO_USER_ACTIVATION,
-    ETKEYINFO_FORGOT_PASSWORD,
-    ETKEYINFO_CREATE_PROFILE_ACTIVATION,
-    ETKEYINFO_USER_INVITATION,
-} = ETKEYINFO;
 
 const options: PrimitiveObject[] = Object.entries(ETKEY).map(([, value]) => ({
     value,
@@ -81,44 +73,12 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
         mode: "all",
     });
 
-    const copyToClipboard = (text: string) => {
-        const el = document.createElement("textarea");
-        el.value = text;
-        document.body.appendChild(el);
-        el.select();
-        document.execCommand("copy");
-        document.body.removeChild(el);
-    };
-
     const getPlaceholders = (): string[] => {
-        switch (selectedTemplate) {
-            case "USER_ACTIVATION":
-                return Object.entries(ETKEYINFO_USER_ACTIVATION).map(
-                    ([, value]) => {
-                        return value;
-                    }
-                );
-            case "FORGOT_PASSWORD":
-                return Object.entries(ETKEYINFO_FORGOT_PASSWORD).map(
-                    ([, value]) => {
-                        return value;
-                    }
-                );
-            case "CREATE_PROFILE_ACTIVATION":
-                return Object.entries(ETKEYINFO_CREATE_PROFILE_ACTIVATION).map(
-                    ([, value]) => {
-                        return value;
-                    }
-                );
-            case "USER_INVITATION":
-                return Object.entries(ETKEYINFO_USER_INVITATION).map(
-                    ([, value]) => {
-                        return value;
-                    }
-                );
-            default:
-                return [];
-        }
+        const infoKey = `ETKEYINFO_${selectedTemplate}`;
+        const info: string[] = ETKEYINFO[infoKey] ?? [];
+        return Object.entries(info).map(([, value]) => {
+            return value;
+        });
     };
 
     const onSubmit = async (formData: EmailTemplate) => {
@@ -134,8 +94,12 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                 navigator("..").then(() => {
                     successToast(
                         isEditMode
-                            ? "Email template updated"
-                            : "Email template created"
+                            ? t(
+                                  "admin.emailTemplate.form:message.success.updated"
+                              )
+                            : t(
+                                  "admin.emailTemplate.form:message.success.created"
+                              )
                     );
                 });
             }
@@ -149,7 +113,9 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                     if (errorMessage) {
                         errorToast(errorMessage);
                     } else if (isNotFound) {
-                        errorToast("Email template not exist");
+                        errorToast(
+                            t("admin.emailTemplate.form:message.error.notFound")
+                        );
                     } else if (response !== null) {
                         setData(response);
                         setSelectedTemplate(response.etKey);
@@ -308,8 +274,12 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                             return (
                                                 <Tooltip id={e} {...props}>
                                                     {show
-                                                        ? "Copied!"
-                                                        : "Click to Copy"}
+                                                        ? t(
+                                                              "admin.emailTemplate.form:tooltip.copiedToClipboard"
+                                                          )
+                                                        : t(
+                                                              "admin.emailTemplate.form:tooltip.clickToCopy"
+                                                          )}
                                                 </Tooltip>
                                             );
                                         }}
@@ -317,7 +287,7 @@ export const EmailTemplateAddEditPage: FC<RouteComponentProps> = ({
                                         <span
                                             className="emailTemplateKey"
                                             onClick={() => {
-                                                copyToClipboard(e);
+                                                copyToClipBoard(e);
                                                 show = true;
                                             }}
                                             key={i}
