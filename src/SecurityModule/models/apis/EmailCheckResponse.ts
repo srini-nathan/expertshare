@@ -8,4 +8,6 @@ export class EmailCheckResponse {
     isOnboarded = false;
 
     isPwdGenerated = false;
+
+    roles = [""];
 }

@@ -234,6 +234,11 @@ export const loginAction = async (
                 auth2wayRole,
                 isPwdGenerated,
                 newPassword,
+                isOnboardingEnable,
+                isOnboarded,
+                isAllowCommunication,
+                isDisplayAsGuest,
+                isExposeEmail,
             } = configuration;
             const { ip, roles, cid, cntid }: JWT = await jwtDecode(token);
             const role = first(roles);
@@ -245,14 +250,28 @@ export const loginAction = async (
                 const user = await AuthApi.me(buildConfig(token));
                 if (isPwdGenerated) {
                     const { id } = user;
-                    await UserApi.changePassword<PUser, PUser>(
-                        id,
-                        {
+                    let payload: any = {
+                        plainPassword: newPassword,
+                        isPwdGenerated: false,
+                    };
+                    if (!isOnboarded && !isOnboardingEnable) {
+                        payload = {
                             plainPassword: newPassword,
-                        },
+                            isPwdGenerated: false,
+                            isAllowCommunication,
+                            isDisplayAsGuest,
+                            isExposeEmail,
+                        };
+                    }
+                    await UserApi.changeOnLogin<PUser, PUser>(
+                        id,
+                        payload,
                         buildConfig(token)
                     );
                     user.isPwdGenerated = false;
+                    user.isAllowCommunication = isAllowCommunication;
+                    user.isDisplayAsGuest = isDisplayAsGuest;
+                    user.isExposeEmail = isExposeEmail;
                 }
                 if (!is2FA) {
                     await localStorage.setItem(AUTH_TOKEN_KEY, token);
