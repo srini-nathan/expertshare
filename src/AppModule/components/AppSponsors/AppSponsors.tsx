@@ -62,7 +62,6 @@ export const AppSponsors: FC<AppSponsorsType> = ({
         },
     };
 
-
     return (
         <div className={"app-sponsors"}>
             <Carousel
