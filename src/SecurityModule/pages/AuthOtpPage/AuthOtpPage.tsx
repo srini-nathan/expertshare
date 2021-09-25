@@ -15,7 +15,6 @@ import {
     successToast,
 } from "../../../AppModule/utils";
 import { UnprocessableEntityErrorResponse } from "../../../AppModule/models";
-import "./assets/scss/styles.scss";
 import { SendOtpPayload } from "../../models";
 import { AuthContext, loginByToken, buildConfig } from "../../contexts";
 

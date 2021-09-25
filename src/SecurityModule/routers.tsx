@@ -8,6 +8,7 @@ import {
     ResetPasswordPage,
     ResetPasswordConfirmationPage,
     AutoLogin,
+    AuthOtpPage,
 } from "./pages";
 import { ModuleRouter } from "../AppModule/models";
 import { SocialLoginRedirectPage } from "./pages/SocialLoginRedirectPage/SocialLoginRedirectPage";
@@ -34,6 +35,7 @@ export const routers: ModuleRouter[] = [
                     />
                     <AutoLogin path={"auto-login/:token/:skip"} />
                     <AutoLogin path={"auto-login/:token"} />
+                    <AuthOtpPage path={"verify-otp/:token"} />
                 </Router>
             );
         },
