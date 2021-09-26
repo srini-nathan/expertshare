@@ -1,4 +1,5 @@
 import { Role } from "../../AdminModule/models";
+import { ROLES } from "../../config";
 
 function getRoles() {
     const roles = localStorage.getItem("roles");
@@ -33,6 +34,18 @@ export function filterRoles(role: string) {
     return FilterRoute;
 }
 
+export function getOptions(roles?: string[]) {
+    const keys: string[] = Object.keys(ROLES);
+    const iteration = roles ?? keys;
+    return iteration.map((key) => {
+        return {
+            id: key,
+            value: key,
+            label: ROLES[key],
+        };
+    });
+}
+
 export function useRoles() {
-    return { filterRoles, getRoles };
+    return { filterRoles, getRoles, getOptions };
 }

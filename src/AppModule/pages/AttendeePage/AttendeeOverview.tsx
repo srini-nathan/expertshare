@@ -6,8 +6,9 @@ import {
     IServerSideGetRowsParams,
 } from "ag-grid-community";
 import { Canceler } from "axios";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Container } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
+import { useForm } from "react-hook-form";
 import { appGridColDef } from "./app-grid-col-def";
 import {
     AppPageHeader,
@@ -16,6 +17,8 @@ import {
     AppLoader,
     AppGridPagination,
     AppFormDropdown,
+    AppButton,
+    AppFormSelectCreatable,
 } from "../../components";
 import "./assets/scss/style.scss";
 import { AttendeeCard } from "../../components/AttendeeCard";
@@ -31,7 +34,22 @@ import {
 import { appGridConfig } from "../../config";
 import { UserApi } from "../../../AdminModule/apis";
 import { User } from "../../models/entities/User";
-import { cancelAllPrevRequest, errorToast } from "../../utils";
+import {
+    cancelAllPrevRequest,
+    errorToast,
+    parseConfiguration,
+} from "../../utils";
+import { useRoles } from "../../hooks";
+import { SimpleObject } from "../../models";
+import { useGlobalData } from "../../contexts";
+
+const OnlyFilter = [
+    "ROLE_READER",
+    "ROLE_USER",
+    "ROLE_SPEAKER",
+    "ROLE_MODERATOR",
+    "ROLE_EXHIBITOR",
+];
 
 export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
     const appGridApi = useRef<GridApi>();
@@ -47,6 +65,17 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
     const [page, setPage] = useState<number>(1);
     const [filter, setFilter] = useState<string>("");
     const { t } = useTranslation();
+    const { container } = useGlobalData();
+    const config = parseConfiguration(container);
+    const [show, setShow] = useState<boolean>(false);
+    const { control } = useForm();
+    const { getOptions } = useRoles();
+    const [selectedRoles, setSelectedRoles] = useState<SimpleObject<string>[]>(
+        getOptions(config.filterUserRoles)
+    );
+    const [appliedRoles, setAppliedRoles] = useState<SimpleObject<string>[]>(
+        getOptions(config.filterUserRoles)
+    );
     const fetchData = (params = {}) => {
         isLoading(true);
         cancelAllPrevRequest(cancelTokenSourcesRef.current);
@@ -60,6 +89,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 },
                 user_search: filter,
                 isDisplayAsGuest: false,
+                "roles.role": appliedRoles?.map((r) => r.value),
             },
             (c) => cancelTokenSourcesRef.current.push(c)
         )
@@ -82,7 +112,7 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
         if (view !== "list") {
             fetchData();
         }
-    }, [page, itemsPerPage, filter]);
+    }, [page, itemsPerPage, filter, appliedRoles]);
 
     async function handleFilter(search: string) {
         if (view === "list") {
@@ -212,7 +242,22 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 title={t("attendee.list:header.title")}
                 customToolbar
             >
-                <div className="d-flex pt-2 mb-2 mb-md-5 attendee-header-width">
+                <div
+                    className={`d-flex pt-2 attendee-header-width ${
+                        appliedRoles.length > 0 ? `mb-0` : `mb-5`
+                    }`}
+                >
+                    {view !== "list" ? (
+                        <AppButton
+                            className={"filter-button mr-2"}
+                            type={"button"}
+                            variant={"secondary"}
+                            onClick={() => setShow(!show)}
+                        >
+                            <i className="fak fa-filter-regular"></i>
+                            {t("attendee.list:header.button:filter")}
+                        </AppButton>
+                    ) : null}
                     <AppListPageToolbar
                         onQuickFilterChange={handleFilter}
                         cancelTokenSources={cancelTokenSourcesRef.current}
@@ -220,7 +265,90 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                     <AppSwitchView link={"/attendee"} activeLink={view || ""} />
                 </div>
             </AppPageHeader>
+            <div className="">
+                {view !== "list" && appliedRoles.length > 0 ? (
+                    <div className="filter custom-select-tag-container mb-3">
+                        <div className="selected-item-container p-0 justify-content-end">
+                            {appliedRoles.map((role) => {
+                                return (
+                                    <div
+                                        className="list-item ml-2"
+                                        key={role.value}
+                                    >
+                                        <span>{role.value}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                ) : null}
+            </div>
             {renderView()}
+            <div className={`off-canvas px-2 py-4 ${show ? "" : "d-none"}`}>
+                <Container fluid={false}>
+                    <div className="header mb-5">
+                        <div className="header--title">
+                            <h2 className="mb-0">
+                                {t("attendee.list:filter.label.title")}
+                            </h2>
+                        </div>
+                        <div className="header--close">
+                            <i
+                                className="fak fa-times-light"
+                                onClick={() => {
+                                    setShow(false);
+                                    setSelectedRoles(appliedRoles);
+                                }}
+                            ></i>
+                        </div>
+                    </div>
+                    <Row>
+                        <AppFormSelectCreatable
+                            name="roles"
+                            label={t("attendee.list:filter.label.userRoles")}
+                            md={12}
+                            lg={12}
+                            sm={12}
+                            xl={12}
+                            id="user-role-filter"
+                            onChangeHandler={setSelectedRoles}
+                            value={selectedRoles}
+                            options={getOptions(OnlyFilter)}
+                            control={control}
+                        />
+                    </Row>
+                    <Row>
+                        <Col xs={12} className="mb-2">
+                            <AppButton
+                                type={"button"}
+                                variant={"secondary"}
+                                className={"w-100"}
+                                onClick={() => {
+                                    setShow(false);
+                                    setSelectedRoles(appliedRoles);
+                                }}
+                            >
+                                {t("attendee.list:filter.button.cancel")}
+                            </AppButton>
+                        </Col>
+                        <Col xs={12} className="">
+                            <AppButton
+                                type={"button"}
+                                variant={"primary"}
+                                className={"w-100"}
+                                onClick={() => {
+                                    setPage(1);
+                                    setAppliedRoles(selectedRoles);
+                                    appGridApi.current?.onFilterChanged();
+                                    setShow(false);
+                                }}
+                            >
+                                {t("attendee.list:filter.button.apply")}
+                            </AppButton>
+                        </Col>
+                    </Row>
+                </Container>
+            </div>
         </Fragment>
     );
 };

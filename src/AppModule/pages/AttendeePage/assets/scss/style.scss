@@ -17,6 +17,13 @@
             }
         }
     }
+    .filter-button {
+        padding-right: 10px !important;
+        padding-left: 8px !important;
+        i {
+            padding-right: 8px;
+        }
+    }
 }
 .attendee-overview-page {
     .ag-cell {
@@ -242,5 +249,66 @@
         .ag-header-cell-label {
             justify-content: center;
         }
+    }
+}
+
+.off-canvas {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 350px;
+    height: 100vh;
+    background-color: var(--modal-background-color);
+    box-shadow: -11px 0 20px 7px var(--card-box-shadow-color);
+    .header {
+        &--title {
+            h2 {
+                font-size: 17px;
+                font-weight: 600;
+                color: var(--modal-text-color);
+            }
+        }
+        &--close {
+            position: absolute;
+            top: 22px;
+            right: 25px;
+            i {
+                font-size: 20px;
+                color: var(--modal-text-color);
+                cursor: pointer;
+            }
+        }
+    }
+    .form-label {
+        margin-bottom: 13px;
+    }
+    .custom-select__indicators {
+        position: absolute;
+        top: -40px;
+        right: 0;
+        flex-direction: row-reverse;
+        .custom-select__indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            padding: 0px !important;
+            margin-left: 10px;
+            color: var(--secondary-button-text-color);
+            background-color: var(--secondary-button-background-color);
+            border-radius: var(--secondary-button-border-radius);
+            box-shadow: 0 3px 9px var(--secondary-button-box-shadow-color);
+        }
+    }
+}
+.filter.custom-select-tag-container {
+    background-color: transparent;
+    box-shadow: none;
+    > div {
+        display: flex;
+        background-color: transparent;
+        box-shadow: none;
     }
 }
