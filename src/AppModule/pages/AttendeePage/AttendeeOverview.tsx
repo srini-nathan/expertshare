@@ -242,15 +242,20 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 title={t("attendee.list:header.title")}
                 customToolbar
             >
-                <div className="d-flex pt-2 mb-2 mb-md-5 attendee-header-width">
+                <div
+                    className={`d-flex pt-2 attendee-header-width ${
+                        appliedRoles.length > 0 ? `mb-0` : `mb-5`
+                    }`}
+                >
                     {view !== "list" ? (
                         <AppButton
-                            className={"mr-1"}
+                            className={"filter-button mr-2"}
                             type={"button"}
                             variant={"secondary"}
                             onClick={() => setShow(!show)}
                         >
                             <i className="fak fa-filter-regular"></i>
+                            {t("attendee.list:header.button:filter")}
                         </AppButton>
                     ) : null}
                     <AppListPageToolbar
@@ -260,22 +265,43 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                     <AppSwitchView link={"/attendee"} activeLink={view || ""} />
                 </div>
             </AppPageHeader>
-            {view !== "list" && appliedRoles.length > 0 ? (
-                <div className="filter custom-select-tag-container mb-4">
-                    <div className="selected-item-container">
-                        {appliedRoles.map((role) => {
-                            return (
-                                <div className="list-item m-2" key={role.value}>
-                                    <span>{role.value}</span>
-                                </div>
-                            );
-                        })}
+            <div className="">
+                {view !== "list" && appliedRoles.length > 0 ? (
+                    <div className="filter custom-select-tag-container mb-3">
+                        <div className="selected-item-container p-0 justify-content-end">
+                            {appliedRoles.map((role) => {
+                                return (
+                                    <div
+                                        className="list-item ml-2"
+                                        key={role.value}
+                                    >
+                                        <span>{role.value}</span>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
-                </div>
-            ) : null}
+                ) : null}
+            </div>
             {renderView()}
             <div className={`off-canvas px-2 py-4 ${show ? "" : "d-none"}`}>
                 <Container fluid={false}>
+                    <div className="header mb-5">
+                        <div className="header--title">
+                            <h2 className="mb-0">
+                                {t("attendee.list:filter.label.title")}
+                            </h2>
+                        </div>
+                        <div className="header--close">
+                            <i
+                                className="fak fa-times-light"
+                                onClick={() => {
+                                    setShow(false);
+                                    setSelectedRoles(appliedRoles);
+                                }}
+                            ></i>
+                        </div>
+                    </div>
                     <Row>
                         <AppFormSelectCreatable
                             name="roles"
@@ -292,10 +318,11 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                         />
                     </Row>
                     <Row>
-                        <Col className={"d-flex justify-content-end"}>
+                        <Col xs={12} className="mb-2">
                             <AppButton
                                 type={"button"}
                                 variant={"secondary"}
+                                className={"w-100"}
                                 onClick={() => {
                                     setShow(false);
                                     setSelectedRoles(appliedRoles);
@@ -303,10 +330,12 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                             >
                                 {t("attendee.list:filter.button.cancel")}
                             </AppButton>
+                        </Col>
+                        <Col xs={12} className="">
                             <AppButton
                                 type={"button"}
                                 variant={"primary"}
-                                className={"ml-2"}
+                                className={"w-100"}
                                 onClick={() => {
                                     setPage(1);
                                     setAppliedRoles(selectedRoles);
