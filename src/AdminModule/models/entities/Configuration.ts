@@ -78,6 +78,7 @@ export class Configuration implements Configuration {
     isLoginAzureEnable = false;
 
     isOnboardingEnable = false;
+
     filterUserRoles = [""];
 }
 
