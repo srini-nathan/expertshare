@@ -103,6 +103,8 @@ const App = (): JSX.Element => {
     init(t);
 
     useEffect(() => {
+        // remove data set when the session page is opened in 3D view
+        localStorage.removeItem("isSessionDetailsViewVisible");
         if (isAppLoadedInIFrame()) {
             document.body.classList.add("app-in-iframe");
         }

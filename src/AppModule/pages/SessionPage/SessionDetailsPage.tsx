@@ -88,7 +88,12 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
     const exhibitorLogoBasePath = useBuildAssetPath(
         ExhibitorLogoPosterFileInfo
     );
-
+    useEffect(() => {
+        localStorage.setItem("isSessionDetailsViewVisible", "true");
+        return () => {
+            localStorage.removeItem("isSessionDetailsViewVisible");
+        };
+    }, []);
     useEffect(() => {
         isLoading(true);
         SessionApi.getSession<Session[]>({

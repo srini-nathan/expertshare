@@ -1,7 +1,7 @@
 import React, { FC, useRef, useEffect } from "react";
 import { Modal } from "react-bootstrap";
 import "./assets/scss/style.scss";
-import { useGlobalData } from "../../contexts";
+import { AppContext, ContainerTypes, useGlobalData } from "../../contexts";
 import { CONSTANTS } from "../../../config";
 import { useBuildAssetPath, useUserLocale } from "../../hooks";
 import { FileTypeInfo } from "../../models";
@@ -21,6 +21,7 @@ export const AppWelcomeModal: FC<AppWelcomeModalProps> = ({
     show,
     handleClose,
 }): JSX.Element => {
+    const { dispatch } = React.useContext(AppContext);
     const { container } = useGlobalData();
     const { state } = React.useContext(AuthContext);
     const { user } = state as AuthState;
@@ -87,6 +88,10 @@ export const AppWelcomeModal: FC<AppWelcomeModalProps> = ({
     const handleCloseModal = () => {
         localStorage.setItem("showed-welcome-modal", "true");
         handleClose();
+        dispatch({
+            type: ContainerTypes.WELCOME_PLAYER_STATUS,
+            payload: false,
+        });
     };
 
     const renderBanner = () => {

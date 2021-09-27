@@ -5,11 +5,13 @@ import { Container } from "../../AdminModule/models";
 export interface AppState {
     isLoading: boolean;
     container: Container | null;
+    welcomePlayerStatus: boolean | null;
 }
 
 const initialState: AppState = {
     isLoading: false,
     container: null,
+    welcomePlayerStatus: null,
 };
 
 interface Action {
@@ -31,11 +33,17 @@ function reducer(state: AppState, action: Action): AppState {
             return {
                 isLoading: false,
                 container: action.payload,
+                welcomePlayerStatus: null,
             };
         case ContainerTypes.ERROR:
             return {
                 ...state,
                 isLoading: false,
+            };
+        case ContainerTypes.WELCOME_PLAYER_STATUS:
+            return {
+                ...state,
+                welcomePlayerStatus: false,
             };
         default:
             return state;
