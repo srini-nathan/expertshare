@@ -798,6 +798,17 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                             subDropDownItems={[
                                                 {
                                                     label: t(
+                                                        "navigation:meetings"
+                                                    ),
+                                                    path:
+                                                        "/meetings/my-meetings",
+                                                    iconClassName:
+                                                        "fak fa-handshake-alt-light",
+                                                    onClick: () =>
+                                                        isNavOpen(!navOpen),
+                                                },
+                                                {
+                                                    label: t(
                                                         "navigation:profile"
                                                     ),
                                                     path: "/my-profile",
