@@ -1,7 +1,7 @@
 import { BaseEntity } from "../../../AppModule/models/entities/BaseEntity";
 import { User } from "./User";
 import { MEETING_PROVIDER, MEETING_TYPE } from "../../../config";
-import { ExhibitorApi } from "../../apis";
+import { MeetingApi } from "../../apis";
 import { Client } from "./Client";
 
 export class Meeting extends BaseEntity {
@@ -80,7 +80,7 @@ export class Meeting extends BaseEntity {
     }
 
     toString(): string {
-        return ExhibitorApi.toResourceUrl(this.id);
+        return MeetingApi.toResourceUrl(this.id);
     }
 }
 
