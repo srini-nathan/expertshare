@@ -1,9 +1,8 @@
-import { BaseEntity } from "../../../AppModule/models/entities/BaseEntity";
-import { User } from "./User";
 import { MEETING_BOOKING_STATUS } from "../../../config";
-import { MeetingBookingApi } from "../../apis";
-import { Client } from "./Client";
+import { BaseEntity } from "./BaseEntity";
 import { Meeting } from "./Meeting";
+import { Client, User } from "../../../AdminModule/models";
+import { MeetingBookingApi } from "../../apis/MeetingBookingApi";
 
 export class MeetingBooking extends BaseEntity {
     meetingTime: string;

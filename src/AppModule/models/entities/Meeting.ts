@@ -1,8 +1,8 @@
-import { BaseEntity } from "../../../AppModule/models/entities/BaseEntity";
-import { User } from "./User";
+import { BaseEntity } from "./BaseEntity";
 import { MEETING_PROVIDER, MEETING_TYPE } from "../../../config";
-import { MeetingApi } from "../../apis";
-import { Client } from "./Client";
+import { Client } from "../../../AdminModule/models/entities/Client";
+import { User } from "../../../AdminModule/models/entities/User";
+import { MeetingApi } from "../../apis/MeetingApi";
 
 export class Meeting extends BaseEntity {
     name: string;

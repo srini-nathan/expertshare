@@ -28,5 +28,3 @@ export * from "./LiveVoteResultApi";
 export * from "./ExhibitorApi";
 export * from "./ExhibitorProductApi";
 export * from "./ExhibitorProductTagApi";
-export * from "./MeetingApi";
-export * from "./MeetingBookingApi";

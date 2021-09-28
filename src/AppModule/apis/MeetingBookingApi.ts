@@ -1,4 +1,4 @@
-import { EntityAPI } from "../../AppModule/apis/EntityAPI";
+import { EntityAPI } from "./EntityAPI";
 import { ROUTES } from "../../config";
 
 const {
