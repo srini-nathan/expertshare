@@ -3,12 +3,18 @@ import "./assets/scss/style.scss";
 import { AppIcon } from "../AppIcon";
 import { AppFormLabel } from "../AppFormLabel";
 
+interface ObjectOptionType {
+    value: string | number;
+    text: string;
+}
+
 export interface AppMultiSelectProps {
     label?: string;
     description?: string;
+    isObjectOptions?: boolean;
     placeholder: string;
-    options: string[];
-    selectedItems: string[];
+    options: any[];
+    selectedItems: string[] | number[];
     required?: boolean;
     onChange: (item: string) => void;
     onBlurHandler?: (value: React.FocusEvent<HTMLInputElement>) => void;
@@ -18,6 +24,7 @@ export const AppMultiSelect: FC<AppMultiSelectProps> = ({
     label = "",
     required = false,
     description,
+    isObjectOptions = false,
     placeholder,
     options,
     selectedItems,
@@ -27,31 +34,42 @@ export const AppMultiSelect: FC<AppMultiSelectProps> = ({
     const [searchText, setSearchText] = React.useState<string>("");
     const renderOptions = () => {
         return options
-            .filter((e: string) =>
-                e
+            ?.filter((e: string | ObjectOptionType) => {
+                const optionText = typeof e === "object" ? e.text : e;
+                return optionText
                     .trim()
                     .toLowerCase()
-                    .includes(searchText.trim().toLowerCase(), 0)
-            )
-            .map((e, i) => {
+                    .includes(searchText.trim().toLowerCase(), 0);
+            })
+            .map((e: string | ObjectOptionType, i) => {
                 let checked = false;
-                if (selectedItems.indexOf(e) !== -1) {
+                const searchFor = typeof e === "object" ? e.value : e;
+                if (selectedItems.indexOf(searchFor as never) !== -1) {
                     checked = true;
                 }
                 return (
                     <li className="list-group-item" key={i}>
                         <label className="checkbox-label-container">
                             <input
-                                onChange={() => onChange(e)}
+                                onChange={() => {
+                                    const inputSearchVal =
+                                        typeof e === "object" ? e.value : e;
+                                    onChange(inputSearchVal as never);
+                                }}
                                 type="checkbox"
                                 checked={checked}
                             ></input>
                             <span className="custom-checkbox"></span>
-                            {e}
+                            {typeof e === "object" ? e.text : e}
                         </label>
                     </li>
                 );
             });
+    };
+
+    const renderTextLabel = (e) => {
+        const cObject = options?.filter((option) => option.value === e);
+        return cObject?.[0]?.text;
     };
 
     const renderSelectedItems = () => {
@@ -61,7 +79,7 @@ export const AppMultiSelect: FC<AppMultiSelectProps> = ({
                     <span onClick={() => onChange(e)}>
                         <AppIcon name={"X"} />
                     </span>
-                    <span>{e}</span>
+                    <span>{isObjectOptions ? renderTextLabel(e) : e}</span>
                 </div>
             );
         });
