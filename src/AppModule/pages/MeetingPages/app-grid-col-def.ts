@@ -7,13 +7,14 @@ export const myMeetingsGridColDef = ({
     {
         headerName: "meeting.myMeetings.list:column.name",
         field: "name",
-        cellRenderer: "AppTitleRender",
+        cellRenderer: "AppNameRender",
         filter: "text",
         flex: 1,
     },
     {
         headerName: "meeting.myMeetings.list:column.isActive",
         field: "isActive",
+        cellRenderer: "AppFormRadio",
         filter: "text",
         flex: 1,
     },

@@ -1,7 +1,7 @@
 import { MEETING_BOOKING_STATUS } from "../../../config";
 import { BaseEntity } from "./BaseEntity";
 import { Meeting } from "./Meeting";
-import { Client, User } from "../../../AdminModule/models";
+import { Client, Container, User } from "../../../AdminModule/models";
 import { MeetingBookingApi } from "../../apis/MeetingBookingApi";
 
 export class MeetingBooking extends BaseEntity {
@@ -15,10 +15,13 @@ export class MeetingBooking extends BaseEntity {
 
     client: string | Client;
 
+    container: string | Container;
+
     status: string;
 
     constructor(
         meeting: string | Meeting,
+        container: string | Container,
         client: string | Client,
         user: User | string,
         {
@@ -33,6 +36,7 @@ export class MeetingBooking extends BaseEntity {
         super(id, createdAt, updatedAt);
         this.meeting = meeting;
         this.client = client;
+        this.container = container;
         this.user = user;
         this.status = status;
         this.duration = duration;

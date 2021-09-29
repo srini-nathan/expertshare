@@ -3,9 +3,10 @@ import { useTranslation } from "react-i18next";
 import { ICellRendererParams } from "ag-grid-community";
 import { AppGridAction, AppGridActionProps, AppRadio } from "../../components";
 import { AppCellActionWithRenderWithCustom } from "./app-actions";
-import { errorToast, successToast } from "../../utils";
+import { copyToClipBoard, errorToast, successToast } from "../../utils";
 import { Meeting, PMeeting } from "../../models/entities/Meeting";
 import { MeetingApi } from "../../apis/MeetingApi";
+import { useGlobalData } from "../../contexts";
 
 export const appGridFrameworkComponents = {
     AppFormRadio: (params: ICellRendererParams): ReactElement => {
@@ -42,12 +43,20 @@ export const appGridFrameworkComponents = {
     ): ReactElement => {
         const { data } = params;
         const { name, id } = data as Meeting;
+        const { container = { domain: "" } } = useGlobalData();
+        const link = `${window.location.protocol}//${container.domain}/book-meeting/${id}`;
         return (
-            <>
-                {name}
-                <br />
-                <span>/book-meeting/{id}</span>
-            </>
+            <div>
+                <strong>{name}</strong>
+                <code>{link}</code>
+                <span
+                    onClick={() => {
+                        copyToClipBoard(link);
+                    }}
+                >
+                    <i className="far fa-clone"></i>
+                </span>
+            </div>
         );
     },
     AppGridActionRenderer: (

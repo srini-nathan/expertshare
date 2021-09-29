@@ -1,14 +1,13 @@
 import React, { FC, Fragment, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { RouteComponentProps, useParams } from "@reach/router";
+import { RouteComponentProps } from "@reach/router";
 import { MeetingListTabs } from "./MeetingListTabs";
 import { AppPageHeader } from "../../components";
 import { MeetingListTabMyBookings } from "./MeetingListTabMyBookings";
 import { MeetingListTabMyMeetings } from "./MeetingListTabMyMeetings";
 
 export const MeetingListPage: FC<RouteComponentProps> = (): JSX.Element => {
-    const { tab = "my-meetings" } = useParams();
-    const [activeTab, setActiveTab] = useState<string>(tab);
+    const [activeTab, setActiveTab] = useState<string>("my-meetings");
     const { t } = useTranslation();
     return (
         <Fragment>

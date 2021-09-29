@@ -25,7 +25,7 @@ export const MeetingListTabMyMeetings: FC = (): JSX.Element => {
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const [totalItems, setTotalItems] = useState<number>(0);
-    const { clientId } = useAuthState();
+    const { clientId, userId } = useAuthState();
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -40,6 +40,7 @@ export const MeetingListTabMyMeetings: FC = (): JSX.Element => {
                         order: buildSortParams(request),
                         ...buildFilterParams(request),
                         "client.id": clientId,
+                        "user.id": userId,
                     },
                     (c) => {
                         cancelTokenSourcesRef.current.push(c);
