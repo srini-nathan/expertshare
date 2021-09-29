@@ -1,8 +1,9 @@
 import React, { FC, Fragment, useState, useEffect } from "react";
 import { RouteComponentProps } from "@reach/router";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row, Form } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { isString as _isString, orderBy } from "lodash";
+import { isString as _isString, orderBy, find as _find } from "lodash";
+import { useForm } from "react-hook-form";
 import { socket, EVENTS } from "../../socket";
 import {
     useBuildAssetPath,
@@ -14,7 +15,12 @@ import {
     AppPageHeader,
     AppLoader,
     AppModal,
+    AppButton,
+    AppIcon,
+    AppFormSelect,
     AppMessageCompose,
+    AppRightSideDrawer,
+    AppFormMultiSelect,
 } from "../../components";
 import { SessionQuestionApi } from "../../apis";
 import {
@@ -24,10 +30,12 @@ import {
     getDateTimeWithoutTimezone,
     parseIdFromResourceUrl,
 } from "../../utils";
+import { PrimitiveObject } from "../../models";
 import { SessionQuestion } from "../../models/entities/SessionQuestion";
 import { CONSTANTS, UserProfileFileInfo } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
-import { PUser } from "../../../AdminModule/models";
+import { PUser, Conference } from "../../../AdminModule/models";
+import { ConferenceApi, SessionApi } from "../../../AdminModule/apis";
 
 import "./assets/scss/style.scss";
 import "./assets/scss/_common.scss";
@@ -84,6 +92,116 @@ function createCore() {
 }
 const core = createCore();
 
+const FilterForm = ({
+    availableConferences,
+    handleFilterChange,
+    selectedConference,
+    availableSessions,
+    selectedSession,
+    setSelectedSession,
+    setSelectedConference,
+}) => {
+    const { t } = useTranslation();
+
+    const { control, handleSubmit } = useForm<any>({
+        mode: "all",
+    });
+
+    const onSubmit = async (formData: any) => {
+        handleFilterChange(formData);
+        setSelectedSession(formData.sessions);
+        setSelectedConference(formData.conferences);
+        return formData;
+    };
+
+    const getConferenceOption = () => {
+        return availableConferences?.items.map((e: any) => {
+            return {
+                value: e.id,
+                label: e.title,
+            };
+        });
+    };
+
+    return (
+        <Form noValidate onSubmit={handleSubmit(onSubmit)}>
+            <Row>
+                <Col md={12}>
+                    <AppFormSelect
+                        id={"conferences"}
+                        name={"conferences"}
+                        label={t(
+                            "questionboard.filter.form:label.select.conferences"
+                        )}
+                        className="conferences-container"
+                        md={12}
+                        lg={12}
+                        xl={12}
+                        sm={12}
+                        control={control}
+                        defaultValue={_find(getConferenceOption(), {
+                            value: selectedConference,
+                        })}
+                        placeholder={t(
+                            "questionboard.filter.form:label.select.conferences"
+                        )}
+                        options={getConferenceOption()}
+                        transform={{
+                            output: (template: PrimitiveObject) =>
+                                template?.value,
+                            input: (value: number) => {
+                                setSelectedConference(value);
+                                return _find([], {
+                                    value,
+                                });
+                            },
+                        }}
+                    />
+                </Col>
+                <Col md={12}>
+                    <AppFormMultiSelect
+                        id={"sessions"}
+                        name={"sessions"}
+                        label={t(
+                            "questionboard.filter.form:label.select.sessions"
+                        )}
+                        md={12}
+                        lg={12}
+                        xl={12}
+                        sm={12}
+                        required={false}
+                        isObjectOptions={true}
+                        defaultValue={selectedSession}
+                        placeholder={t(
+                            "questionboard.filter.form:label.select.sessions"
+                        )}
+                        options={availableSessions?.items?.map((s) => {
+                            return { value: s.id, text: s.title };
+                        })}
+                        control={control}
+                    />
+                </Col>
+                <Col md={12}>
+                    <AppButton
+                        type="button"
+                        variant={"secondary"}
+                        className="w-100 mb-2"
+                        onClick={() => {}}
+                    >
+                        {t("common.button:clearfilter")}
+                    </AppButton>
+                    <AppButton
+                        type="submit"
+                        variant={"primary"}
+                        className="w-100 mb-2"
+                    >
+                        {t("common.button:applyfilter")}
+                    </AppButton>
+                </Col>
+            </Row>
+        </Form>
+    );
+};
 const QuestionActions = ({
     t,
     status,
@@ -364,7 +482,11 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
     const [questions, setQuestions] = useState<any[]>(core.getState());
     const [searchText, setSearchText] = useState<any>({});
     const [showDelete, setShowDelete] = useState<number>(0);
-    // const [totalItems, setTotalItems] = useState<number>(0);
+    const [showFilter, setShowFilter] = useState<number>(0);
+    const [availableConferences, setAvailableConferences] = useState<any>([]);
+    const [availableSessions, setAvailableSessions] = useState<any>([]);
+    const [selectedConference, setSelectedConference] = useState<number>(0);
+    const [selectedSession, setSelectedSession] = useState<number[]>([]);
     const { containerId } = useAuthState();
     const showColumns = [
         STATUS_NEW,
@@ -395,9 +517,9 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
     const fetchQuestions = (params = {}) => {
         isLoading(true);
-        isLoading(!params);
         SessionQuestionApi.find<SessionQuestion>(1, {
             itemsPerPage: 1000,
+            ...params,
         }).then(({ response, error }) => {
             isLoading(false);
 
@@ -412,6 +534,53 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
         });
     };
 
+    const fetchSessions = (params = {}) => {
+        isLoading(true);
+        isLoading(!params);
+        SessionApi.getCollectionByConferenceId<Conference>(params).then(
+            ({ response, error }) => {
+                isLoading(false);
+
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    }
+                } else if (response !== null) {
+                    setAvailableSessions(response);
+                }
+            }
+        );
+    };
+
+    const fetchConferences = (params = {}) => {
+        isLoading(true);
+        isLoading(!params);
+        ConferenceApi.getCollection<Conference>(params).then(
+            ({ response, error }) => {
+                isLoading(false);
+
+                if (error !== null) {
+                    if (_isString(error)) {
+                        errorToast(error);
+                    }
+                } else if (response !== null) {
+                    setAvailableConferences(response);
+                    if (response?.items && response?.items[0]?.id) {
+                        setSelectedConference(response?.items[0]?.id);
+                        fetchQuestions({
+                            "container.id": containerId,
+                            "conference.id": response?.items[0]?.id,
+                        });
+                        fetchSessions({
+                            "container.id": containerId,
+                            "conference.id": response?.items[0]?.id,
+                        });
+                    }
+                }
+            }
+        );
+    };
+
     useEffect(() => {
         if (containerId) emitJoinAskSpeaker(containerId);
 
@@ -421,10 +590,33 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
     }, [containerId]);
 
     useEffect(() => {
+        if (selectedConference) {
+            fetchSessions({
+                "container.id": containerId,
+                "conference.id": selectedConference,
+            });
+            setSelectedSession([]);
+        }
+    }, [selectedConference]);
+
+    useEffect(() => {
         socket.on(
             ON_NEW_ASK_SPEAKER,
             (u: PUser, parent: number | null, payload: PAskSpeakerQuestion) => {
-                if (u && payload) {
+                if (
+                    u &&
+                    payload &&
+                    payload?.session instanceof Object &&
+                    selectedConference ===
+                        parseIdFromResourceUrl(
+                            payload?.session?.conference?.["@id"]
+                        ) &&
+                    (selectedSession.length <= 0 ||
+                        selectedSession.indexOf(
+                            parseIdFromResourceUrl(payload?.session?.["@id"]) ||
+                                0
+                        ) !== -1)
+                ) {
                     core.addNewQuestion(payload, setQuestions);
                 }
             }
@@ -444,7 +636,20 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
         socket.on(
             ON_EDIT_ASK_SPEAKER,
             (u: PUser, parent: number | null, payload: PAskSpeakerQuestion) => {
-                if (u && payload) {
+                if (
+                    u &&
+                    payload &&
+                    payload?.session instanceof Object &&
+                    selectedConference ===
+                        parseIdFromResourceUrl(
+                            payload?.session?.conference?.["@id"]
+                        ) &&
+                    (selectedSession.length <= 0 ||
+                        selectedSession.indexOf(
+                            parseIdFromResourceUrl(payload?.session?.["@id"]) ||
+                                0
+                        ) !== -1)
+                ) {
                     core.editQuestion(payload, setQuestions);
                 }
             }
@@ -458,13 +663,35 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
     }, []);
 
     useEffect(() => {
-        fetchQuestions();
+        fetchConferences({
+            "container.id": containerId,
+        });
     }, []);
 
     const handleQuickSearch = (search: string, status: string) => {
         // eslint-disable-next-line no-console
         console.log(searchText, status);
         setSearchText({ ...searchText, [status]: search });
+    };
+
+    const handleShowFilter = () => {
+        setShowFilter(1);
+    };
+
+    const handleFilterSubmit = (data) => {
+        if (data?.sessions?.length > 0) {
+            fetchQuestions({
+                "container.id": containerId,
+                "conference.id": data.conferences,
+                "session.id": data.sessions,
+            });
+        } else {
+            fetchQuestions({
+                "container.id": containerId,
+                "conference.id": data.conferences,
+            });
+        }
+        setShowFilter(0);
     };
 
     const renderQuestionStatusCols = () => {
@@ -563,11 +790,45 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
         <Fragment>
             <AppPageHeader
                 title={t("questionboard.list:header.title")}
-            ></AppPageHeader>
+                customToolbar
+            >
+                <div className="d-block mb-3 mb-md-5">
+                    <div className="d-block d-sm-flex pt-2 justify-content-end user-header-width">
+                        <AppButton
+                            className="mr-2 p-3 user-filter"
+                            variant="secondary"
+                            onClick={() => handleShowFilter()}
+                        >
+                            <AppIcon className="mr-2" name="Filter" />
+                            {t("common.button:filter")}
+                        </AppButton>
+                    </div>
+                </div>
+            </AppPageHeader>
             <div className="questionboard-admin--container pt-1 pt-xl-3">
                 {renderQuestionStatusCols()}
             </div>
-
+            <AppRightSideDrawer
+                show={showFilter > 0}
+                handleClose={() => {
+                    setShowFilter(0);
+                }}
+                handleDelete={() => {
+                    setShowFilter(0);
+                }}
+                bodyContent={
+                    <FilterForm
+                        handleFilterChange={handleFilterSubmit}
+                        selectedConference={selectedConference}
+                        availableConferences={availableConferences}
+                        availableSessions={availableSessions}
+                        selectedSession={selectedSession}
+                        setSelectedSession={setSelectedSession}
+                        setSelectedConference={setSelectedConference}
+                    />
+                }
+                title={t("questionboard.list:filterdrawer.title")}
+            />
             <AppModal
                 show={showDelete > 0}
                 handleClose={() => {

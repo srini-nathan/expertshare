@@ -1,0 +1,148 @@
+@import "../../../../assets/scss/screens-sizes";
+@import "../../../../assets/scss/variables";
+
+.modal {
+    /*From Right/Left */
+    &.filter-drawer {
+        display: flex !important;
+        flex-direction: row-reverse;
+        padding-right: 0 !important;
+        pointer-events: none;
+        * {
+            pointer-events: none;
+        }
+        .modal-dialog {
+            display: flex;
+            flex: auto;
+            margin: 0;
+            transform: translate(25%, 0) !important;
+            @include media("mobtoinf") {
+                max-width: 300px;
+            }
+            .modal-content {
+                background-color: var(--modal-background-color);
+                border: none;
+                border-radius: 0;
+                .modal-header {
+                    border-bottom: none;
+                    .modal-title {
+                        color: var(--modal-text-color);
+                        word-break: break-all;
+                    }
+                    .close {
+                        i {
+                            color: var(--modal-text-color);
+                            font-weight: 400;
+                        }
+                    }
+                }
+                .modal-body {
+                    overflow: auto;
+                }
+            }
+        }
+        &.show {
+            // background-color: var(--modal-backdrop-background-color);
+            pointer-events: auto;
+            * {
+                pointer-events: auto;
+            }
+            .modal-dialog {
+                transform: translate(0, 0) !important;
+            }
+        }
+    }
+}
+
+/* 24-10-2021 */
+.schedule-meeting--drop-down--det--name h3 {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--card-text-color);
+}
+.dropdown-field {
+    display: flex;
+    align-items: center;
+    height: 36px;
+    padding-right: 40px;
+    padding-left: 10px;
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 9px var(--select-box-shadow-color);
+}
+.reporting-index--check-box {
+    display: flex;
+    align-items: center;
+}
+.custom-checkbox {
+    display: flex;
+    align-items: center;
+}
+.reporting-index--check-box .wrap-label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+    margin-left: 15px;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--modal-text-color);
+}
+.guide-icon span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 11px;
+    height: 11px;
+    padding-top: 1px;
+    font-size: 9px;
+    font-weight: 100;
+    color: var(--light-clr);
+    background-color: var(--info);
+    border-radius: var(--circle-border-radius);
+}
+.btn-secondary:not(:disabled):not(.disabled) {
+    color: var(--secondary-button-text-color--active) !important;
+    border: var(--secondary-button-border-width) solid
+        var(--secondary-button-border-color) !important;
+}
+.dropdown-field .dropdown-toggle::after {
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-family: "Font Awesome Kit";
+    content: "";
+    border-top: unset !important;
+    border-right: unset !important;
+    border-bottom: unset !important;
+    border-left: unset !important;
+}
+.dropdown-field .dropdown-toggle {
+    width: 100%;
+    padding-top: 4px;
+    overflow: hidden;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--select-text-color);
+}
+.schedule-meeting--drop-down--det {
+    margin-bottom: 6px;
+}
+.dropdown-field .dropdown-menu {
+    top: 5px !important;
+    left: -10px !important;
+    z-index: 10000;
+    width: 100%;
+    padding: 0;
+    border: var(--select-border-width) solid var(--select-border-color);
+    border-radius: var(--border-radius);
+    box-shadow: 0 2px 9px var(--select-box-shadow-color);
+}
+.dropdown-menu.show {
+    display: block;
+}
+.guide-icon {
+    padding-bottom: 3px;
+    padding-left: 7px;
+}

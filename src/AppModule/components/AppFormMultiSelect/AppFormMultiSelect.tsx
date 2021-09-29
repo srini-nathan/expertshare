@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import { Control, Controller } from "react-hook-form";
 import { Form, Col } from "react-bootstrap";
 import { AppMultiSelect } from "../AppMultiSelect";
@@ -11,6 +11,7 @@ export interface AppFormMultiSelectProps {
     defaultValue: string[];
     placeholder?: string;
     label?: string;
+    isObjectOptions?: boolean;
     size?: "lg" | "sm";
     sm?: string | number;
     md?: string | number;
@@ -40,9 +41,15 @@ export const AppFormMultiSelect: FC<AppFormMultiSelectProps> = ({
     required = false,
     errorMessage,
     label = "",
+    isObjectOptions = false,
 }): JSX.Element => {
     const controlId = id || name;
     const [selectedOptions, setSelectedOptions] = useState(defaultValue || []);
+
+    useEffect(() => {
+        setSelectedOptions(defaultValue);
+    }, [defaultValue]);
+
     return (
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
@@ -79,6 +86,7 @@ export const AppFormMultiSelect: FC<AppFormMultiSelectProps> = ({
                         selectedItems={selectedOptions}
                         options={options}
                         placeholder={placeholder}
+                        isObjectOptions={isObjectOptions}
                         onChange={(e: string) => {
                             const index = selectedOptions.indexOf(e);
                             if (index !== -1) {

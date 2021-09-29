@@ -16,6 +16,8 @@ export * from "./AppClientInformation";
 export * from "./AppFormSwitch";
 export * from "./AppFormActions";
 export * from "./AppRadio";
+export * from "./AppRightSideDrawer";
+export * from "./AppFormMultiSelect";
 export * from "./AppIcon";
 export * from "./AppFormInputPassword";
 export * from "./AppFormInput";

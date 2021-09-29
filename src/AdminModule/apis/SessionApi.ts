@@ -22,6 +22,7 @@ const {
     api_sessions_change_card_size_collection: API_CHANGE_CARD_SIZE,
     api_sessions_get_item_collection: GET_ITEM,
     api_sessions_get_session_collection: GET_LIVE_SESSION,
+    api_sessions_get_session_collection: API_GET_SESSION_COLLECTION,
 } = ROUTES;
 
 export abstract class SessionApi extends EntityAPI {
@@ -96,5 +97,22 @@ export abstract class SessionApi extends EntityAPI {
             .catch((error: AxiosError | ServerError) =>
                 this.handleErrorDuringCreatingOrUpdating(error)
             );
+    }
+
+    public static async getCollectionByConferenceId<R>(
+        extraParams = {}
+    ): Promise<FinalResponse<ListResponse<R> | null>> {
+        return this.makeGet<R>(API_GET_SESSION_COLLECTION, {
+            ...extraParams,
+        })
+            .then(({ data }) => {
+                const list = this.acceptHydra
+                    ? onFindAllResponseHydra<R>(data)
+                    : onFindAllResponseJson<R>(data);
+                return Promise.resolve(
+                    new FinalResponse<ListResponse<R>>(list)
+                );
+            })
+            .catch((error) => this.handleUnknownError(error));
     }
 }
