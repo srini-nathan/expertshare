@@ -61,3 +61,19 @@ export const myBookingsGridColDef = ({
         },
     },
 ];
+
+export const myMeetingsDetailGridColDef = (): ColDef[] => [
+    {
+        headerName: "meeting.myBookings.list:column.name",
+        field: "name",
+        cellRenderer: "AppTitleRender",
+        filter: "text",
+        flex: 1,
+    },
+    {
+        headerName: "meeting.myBookings.list:column.time",
+        field: "time",
+        filter: "text",
+        flex: 1,
+    },
+];

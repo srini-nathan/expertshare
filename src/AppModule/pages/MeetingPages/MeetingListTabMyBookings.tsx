@@ -12,8 +12,8 @@ import {
     buildFilterParams,
     buildSortParams,
 } from "../../containers/AppGrid";
-import { appGridFrameworkComponents } from "./app-grid-framework-components";
-import { myMeetingsGridColDef } from "./app-grid-col-def";
+import { myBookingsAppGridFrameworkComponents } from "./app-grid-framework-components";
+import { myBookingsGridColDef } from "./app-grid-col-def";
 import { errorToast, successToast } from "../../utils";
 import { appGridConfig } from "../../config";
 import { useAuthState } from "../../hooks";
@@ -83,8 +83,10 @@ export const MeetingListTabMyBookings: FC = (): JSX.Element => {
             <Row>
                 <Col>
                     <AppGrid
-                        frameworkComponents={appGridFrameworkComponents}
-                        columnDef={myMeetingsGridColDef({
+                        frameworkComponents={
+                            myBookingsAppGridFrameworkComponents
+                        }
+                        columnDef={myBookingsGridColDef({
                             onPressDelete: handleDelete,
                         })}
                         dataSource={getDataSource()}

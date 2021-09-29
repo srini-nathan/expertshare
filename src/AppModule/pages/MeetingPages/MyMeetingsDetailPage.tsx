@@ -1,31 +1,34 @@
 import React, { FC, Fragment, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Col, Row } from "react-bootstrap";
+import { RouteComponentProps, useParams } from "@reach/router";
 import {
     GridApi,
     IServerSideDatasource,
     IServerSideGetRowsParams,
 } from "ag-grid-community";
 import { Canceler } from "axios";
+import { Col, Row } from "react-bootstrap";
+import { useAuthState } from "../../hooks";
+import { appGridConfig } from "../../config";
+import { MeetingBookingApi } from "../../apis/MeetingBookingApi";
+import { MeetingBooking } from "../../models/entities/MeetingBooking";
 import {
     AppGrid,
     buildFilterParams,
     buildSortParams,
 } from "../../containers/AppGrid";
-import { myMeetingsAppGridFrameworkComponents } from "./app-grid-framework-components";
-import { myMeetingsGridColDef } from "./app-grid-col-def";
-import { errorToast, successToast } from "../../utils";
-import { appGridConfig } from "../../config";
-import { useAuthState } from "../../hooks";
-import { MeetingApi } from "../../apis/MeetingApi";
-import { Meeting } from "../../models/entities/Meeting";
+import { errorToast } from "../../utils";
+import { myMeetingsDetailAppGridFrameworkComponents } from "./app-grid-framework-components";
+import { myMeetingsDetailGridColDef } from "./app-grid-col-def";
+import { AppBreadcrumb, AppPageHeader } from "../../components";
 
-export const MeetingListTabMyMeetings: FC = (): JSX.Element => {
+export const MyMeetingsDetailPage: FC<RouteComponentProps> = (): JSX.Element => {
     const { t } = useTranslation();
+    const { id } = useParams();
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const [totalItems, setTotalItems] = useState<number>(0);
-    const { clientId, userId } = useAuthState();
+    const { clientId, containerId, userId } = useAuthState();
 
     function getDataSource(): IServerSideDatasource {
         return {
@@ -34,13 +37,15 @@ export const MeetingListTabMyMeetings: FC = (): JSX.Element => {
                 const { endRow } = request;
                 const pageNo = endRow / appGridConfig.pageSize;
                 api?.hideOverlay();
-                MeetingApi.find<Meeting>(
+                MeetingBookingApi.find<MeetingBooking>(
                     pageNo,
                     {
                         order: buildSortParams(request),
                         ...buildFilterParams(request),
                         "client.id": clientId,
+                        "container.id": containerId,
                         "user.id": userId,
+                        "meeting.id": id,
                     },
                     (c) => {
                         cancelTokenSourcesRef.current.push(c);
@@ -63,31 +68,22 @@ export const MeetingListTabMyMeetings: FC = (): JSX.Element => {
         };
     }
 
-    async function handleDelete(id: number) {
-        MeetingApi.deleteById(id).then(({ error, errorMessage }) => {
-            if (error !== null) {
-                errorToast(t(errorMessage));
-            } else {
-                successToast(t("meeting.myMeetings.list:delete.toast.success"));
-                appGridApi.current?.refreshServerSideStore({
-                    purge: false,
-                    route: [],
-                });
-            }
-        });
-    }
-
     return (
         <Fragment>
+            <AppBreadcrumb
+                linkText={t("meetings.list:header.title")}
+                linkUrl={"/meetings"}
+            />
+            <AppPageHeader
+                title={t("meeting.myMeetingsDetail.list:header.title")}
+            ></AppPageHeader>
             <Row>
                 <Col>
                     <AppGrid
                         frameworkComponents={
-                            myMeetingsAppGridFrameworkComponents
+                            myMeetingsDetailAppGridFrameworkComponents
                         }
-                        columnDef={myMeetingsGridColDef({
-                            onPressDelete: handleDelete,
-                        })}
+                        columnDef={myMeetingsDetailGridColDef()}
                         dataSource={getDataSource()}
                         totalItems={totalItems}
                         onReady={(event) => {

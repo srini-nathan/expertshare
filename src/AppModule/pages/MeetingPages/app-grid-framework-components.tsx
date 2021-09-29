@@ -8,7 +8,7 @@ import { Meeting, PMeeting } from "../../models/entities/Meeting";
 import { MeetingApi } from "../../apis/MeetingApi";
 import { useGlobalData } from "../../contexts";
 
-export const appGridFrameworkComponents = {
+export const myMeetingsAppGridFrameworkComponents = {
     AppFormRadio: (params: ICellRendererParams): ReactElement => {
         const { data, api } = params;
         const { id, name, isActive } = data as Meeting;
@@ -70,6 +70,9 @@ export const appGridFrameworkComponents = {
             editAction: {
                 url: `/meetings/${id}`,
             },
+            viewAction: {
+                url: `/meetings/${id}/bookings`,
+            },
             deleteAction: {
                 confirmation: t(
                     "meeting.myMeetings.list:delete.confirmation.message"
@@ -86,3 +89,33 @@ export const appGridFrameworkComponents = {
         return <AppGridAction {...props} />;
     },
 };
+
+export const myBookingsAppGridFrameworkComponents = {
+    AppGridActionRenderer: (
+        params: AppCellActionWithRenderWithCustom
+    ): ReactElement => {
+        const { data, onPressDelete } = params;
+        const { id } = data as Meeting;
+        const { t } = useTranslation();
+        const props: AppGridActionProps = {
+            customClickActions: [
+                {
+                    confirmation: t(
+                        "meeting.myBookings.list:cancel.confirmation.message"
+                    ),
+                    confirmationTitle: t(
+                        "meeting.myBookings.list:cancel.confirmation.title"
+                    ),
+                    text: "meeting.myBookings.list:button.cancel",
+                    onClick: () => {
+                        onPressDelete(id);
+                    },
+                },
+            ],
+        };
+
+        return <AppGridAction {...props} />;
+    },
+};
+
+export const myMeetingsDetailAppGridFrameworkComponents = {};

@@ -800,8 +800,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                                     label: t(
                                                         "navigation:meetings"
                                                     ),
-                                                    path:
-                                                        "/meetings/my-meetings",
+                                                    path: "/meetings",
                                                     iconClassName:
                                                         "fak fa-handshake-alt-light",
                                                     onClick: () =>
