@@ -95,6 +95,7 @@ const core = createCore();
 const FilterForm = ({
     availableConferences,
     handleFilterChange,
+    handleFilterClearAll,
     selectedConference,
     availableSessions,
     selectedSession,
@@ -186,7 +187,7 @@ const FilterForm = ({
                         type="button"
                         variant={"secondary"}
                         className="w-100 mb-2"
-                        onClick={() => {}}
+                        onClick={handleFilterClearAll}
                     >
                         {t("common.button:clearfilter")}
                     </AppButton>
@@ -479,6 +480,7 @@ const QuestionCard = ({
 };
 export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
     const [loading, isLoading] = useState<boolean>(true);
+    const [fetchingQuestions, isFetchingQuestions] = useState<boolean>(true);
     const [questions, setQuestions] = useState<any[]>(core.getState());
     const [searchText, setSearchText] = useState<any>({});
     const [showDelete, setShowDelete] = useState<number>(0);
@@ -516,12 +518,12 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
     };
     const { t } = useTranslation();
     const fetchQuestions = (params = {}) => {
-        isLoading(true);
+        isFetchingQuestions(true);
         SessionQuestionApi.find<SessionQuestion>(1, {
             itemsPerPage: 1000,
             ...params,
         }).then(({ response, error }) => {
-            isLoading(false);
+            isFetchingQuestions(false);
 
             if (error !== null) {
                 if (_isString(error)) {
@@ -554,7 +556,6 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
 
     const fetchConferences = (params = {}) => {
         isLoading(true);
-        isLoading(!params);
         ConferenceApi.getCollection<Conference>(params).then(
             ({ response, error }) => {
                 isLoading(false);
@@ -660,7 +661,7 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
             socket.off(ON_DELETE_ASK_SPEAKER);
             socket.off(ON_EDIT_ASK_SPEAKER);
         };
-    }, []);
+    });
 
     useEffect(() => {
         fetchConferences({
@@ -669,8 +670,6 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
     }, []);
 
     const handleQuickSearch = (search: string, status: string) => {
-        // eslint-disable-next-line no-console
-        console.log(searchText, status);
         setSearchText({ ...searchText, [status]: search });
     };
 
@@ -691,6 +690,15 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
                 "conference.id": data.conferences,
             });
         }
+        setShowFilter(0);
+    };
+
+    const handleFilterClearAll = () => {
+        setSelectedConference(availableConferences?.items?.[0].id);
+        fetchQuestions({
+            "container.id": containerId,
+            "conference.id": availableConferences?.items?.[0].id,
+        });
         setShowFilter(0);
     };
 
@@ -742,7 +750,7 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
                             </div>
                             <div className="inner-container--content p-1 pt-2">
                                 <div className="inner-container--content--group px-3 pt-2">
-                                    {loading ? (
+                                    {loading || fetchingQuestions ? (
                                         <AppLoader />
                                     ) : (
                                         <QuestionCard
@@ -819,6 +827,7 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
                 bodyContent={
                     <FilterForm
                         handleFilterChange={handleFilterSubmit}
+                        handleFilterClearAll={handleFilterClearAll}
                         selectedConference={selectedConference}
                         availableConferences={availableConferences}
                         availableSessions={availableSessions}
