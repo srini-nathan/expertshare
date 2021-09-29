@@ -19,6 +19,7 @@ export interface AppEventAgendaHeeaderProps {
     handleClone: () => void;
     handleDelete: () => void;
     isGrantedControl: boolean;
+    isVisibleBackBtn: boolean;
 }
 
 const sponsorImages = {
@@ -68,6 +69,7 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
     handleClone,
     handleDelete,
     isGrantedControl,
+    isVisibleBackBtn,
 }): JSX.Element => {
     const { containerId } = useAuthState();
     const conferencePosterPath = useBuildAssetPath(ConferencePosterFileInfo);
@@ -91,16 +93,22 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                         xl={7}
                         className="inner-container--title px-0 pl-sm-0"
                     >
-                        <Link
-                            to={"/event"}
-                            className="back-btn btn btn-secondary back-btn mr-3 mb-3"
-                        >
-                            <i className="fak fa-chevron-left"></i>
-                            {t("event.agenda:button.back")}
-                        </Link>
-                        <Link to="#">
-                            <h1 className="mb-0">{conference?.title}</h1>
-                        </Link>
+                        {isVisibleBackBtn && (
+                            <>
+                                <Link
+                                    to={"/event"}
+                                    className="back-btn btn btn-secondary back-btn mr-3 mb-3"
+                                >
+                                    <i className="fak fa-chevron-left"></i>
+                                    {t("event.agenda:button.back")}
+                                </Link>
+                                <Link to="#">
+                                    <h1 className="mb-0">
+                                        {conference?.title}
+                                    </h1>
+                                </Link>
+                            </>
+                        )}
                     </Col>
                     <Col
                         sm="auto"

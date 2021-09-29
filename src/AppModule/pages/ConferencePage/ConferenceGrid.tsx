@@ -82,7 +82,9 @@ export const ConferenceGrid: FC<RouteComponentProps> = (): JSX.Element => {
                 }
             } else if (response !== null) {
                 if (response.items.length === 1) {
-                    navigate(`/event/${response.items[0].id}/agenda`);
+                    navigate(`/event/${response.items[0].id}/agenda`, {
+                        state: { isVisibleBackBtn: false },
+                    });
                 }
                 setConferences(response.items);
                 setTotalItems(response.totalItems);

@@ -45,9 +45,11 @@ const {
 } = ROLE;
 
 export const EventAgenda: FC<RouteComponentProps> = ({
+    location,
     navigate,
 }): JSX.Element => {
     const { id } = useParamId();
+    const { state } = location as any;
     const [data, setData] = useState<Conference>();
     const [activeDate, setActiveDate] = useState<{
         start: string;
@@ -353,6 +355,7 @@ export const EventAgenda: FC<RouteComponentProps> = ({
                     handleDelete={() => {
                         setDeleteShow(1);
                     }}
+                    isVisibleBackBtn={state?.isVisibleBackBtn ?? true}
                     conference={data}
                     isGrantedControl={isGrantedControl}
                 />
