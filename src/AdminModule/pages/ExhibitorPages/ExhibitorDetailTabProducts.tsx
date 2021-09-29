@@ -24,18 +24,22 @@ import { errorToast, successToast } from "../../../AppModule/utils";
 
 interface ExhibitorDetailTabProductType {
     exhibitor: Exhibitor;
+    exhibitorProduct: ExhibitorProduct[];
+    productsTotalCount: number;
 }
 
 export const ExhibitorDetailTabProducts: FC<ExhibitorDetailTabProductType> = ({
     exhibitor,
+    exhibitorProduct,
+    productsTotalCount,
 }) => {
     const { containerId } = useAuthState();
-    const [totalItems, setTotalItems] = useState<number>(0);
-    const [loading, isLoading] = useState<boolean>(true);
+    const [totalItems, setTotalItems] = useState<number>(productsTotalCount);
+    const [loading, isLoading] = useState<boolean>(false);
     const [pageSize, setPageSize] = useState<number>(30);
     const [page, setPage] = useState<number>(1);
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
-    const [data, setData] = useState<ExhibitorProduct[]>([]);
+    const [data, setData] = useState<ExhibitorProduct[]>(exhibitorProduct);
     const { id } = exhibitor;
     const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
     const { t } = useTranslation();
@@ -84,7 +88,9 @@ export const ExhibitorDetailTabProducts: FC<ExhibitorDetailTabProductType> = ({
     }
 
     useEffect(() => {
-        fetchData();
+        if (pageSize !== 30 || selectedTag !== 0) {
+            fetchData();
+        }
     }, [pageSize, selectedTag]);
 
     useEffect(() => {

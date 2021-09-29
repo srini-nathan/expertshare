@@ -37,6 +37,7 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = ({
     const isFrontPage = adminPage === null;
     const { id, view = "details" } = useParams();
     const [loading, isLoading] = useState<boolean>(true);
+    const [loadingProducts, isLoadingProducts] = useState<boolean>(true);
     const [data, setData] = useState<Exhibitor>();
     const { containerId } = useAuthState();
     const imagePath = useBuildAssetPath(ExhibitorPosterFileInfo);
@@ -45,10 +46,13 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = ({
     const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
     const [activeTab, setActiveTab] = useState<string>(view);
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
+    const [exhibitorProduct, setExhibitorProduct] = useState<
+        ExhibitorProduct[]
+    >([]);
     const [productsTotalCount, setProductsTotalCount] = useState<number>(0);
 
     const fetchExhibitorProduct = () => {
-        isLoading(true);
+        isLoadingProducts(true);
         ExhibitorProductApi.find<ExhibitorProduct>(
             1,
             {
@@ -61,11 +65,12 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = ({
         )
             .then(({ response }) => {
                 if (response !== null) {
+                    setExhibitorProduct(response.items);
                     setProductsTotalCount(response.totalItems);
                 }
             })
             .finally(() => {
-                isLoading(false);
+                isLoadingProducts(false);
             });
     };
 
@@ -86,7 +91,7 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = ({
         fetchExhibitorProduct();
     }, [id]);
 
-    if (loading) {
+    if (loading || loadingProducts) {
         return <AppLoader />;
     }
 
@@ -175,7 +180,11 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = ({
                         />
                     ) : null}
                     {data && activeTab === "products" ? (
-                        <ExhibitorDetailTabProducts exhibitor={data} />
+                        <ExhibitorDetailTabProducts
+                            exhibitor={data}
+                            exhibitorProduct={exhibitorProduct}
+                            productsTotalCount={productsTotalCount}
+                        />
                     ) : null}
                 </Col>
                 {data?.isCommentEnable && (
