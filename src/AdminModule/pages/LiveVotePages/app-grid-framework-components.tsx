@@ -12,10 +12,11 @@ import {
     LiveVoteResult,
     Session,
 } from "../../models";
-import { useBuildAssetPath, useDateTime } from "../../../AppModule/hooks";
+import { useBuildAssetPath } from "../../../AppModule/hooks";
 import { User, AppCellActionWithRenderParams } from "../../../AppModule/models";
 import { UserProfileFileInfo } from "../../../config";
 import UserAvatar from "../../../AppModule/assets/images/user-avatar.png";
+import { useCustomParseDate } from "../../../helpers/useCustomParseDate";
 
 export const appGridFrameworkComponents = {
     AppLiveVoteResultGridActionRenderer: (
@@ -78,9 +79,15 @@ export const appGridFrameworkComponents = {
     },
     AppCreatedAt: (params: AppCellActionWithRenderParams): ReactElement => {
         const { data } = params;
-        const { toShortDate } = useDateTime();
+        const { customParse } = useCustomParseDate();
         const { createdAt } = data as LiveVoteResult;
-        return <>{createdAt ? toShortDate(new Date(createdAt)) : ""}</>;
+        return (
+            <>
+                {createdAt
+                    ? customParse(new Date(createdAt), "EEEE MMMM, dd")
+                    : ""}
+            </>
+        );
     },
     AppIsSelectedBadge: (
         params: AppCellActionWithRenderParams

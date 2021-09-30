@@ -11,7 +11,9 @@ export interface Configuration {
     isAuth2wayEnable: boolean;
     auth2wayRole: string[];
     isQuestionBoardEnable: boolean;
+<<<<<<< HEAD
     isLiveNowEnable: boolean;
+<<<<<<< HEAD
     isPipEnable: boolean;
     excludeDomainsFromAnalytics: string;
     shortDate: string;
@@ -20,12 +22,20 @@ export interface Configuration {
     longTime: string;
     longDatetime: string;
     shortDatetime: string;
+<<<<<<< HEAD
     isDisclaimerEnable: boolean;
     isLoginGoogleEnable: boolean;
     isLoginLinkedinEnable: boolean;
     isLoginAzureEnable: boolean;
     isOnboardingEnable: boolean;
     filterUserRoles: string[];
+=======
+=======
+>>>>>>> 56c8c439 (feat: made live now dynamic)
+=======
+    isPipEnable: boolean;
+>>>>>>> 2ca0644f (Fix: PIP enable based on container settings)
+>>>>>>> 895967da55bc920a0cbee85f7b7a1fd0087cce42
 }
 
 export class Configuration implements Configuration {
@@ -53,7 +63,9 @@ export class Configuration implements Configuration {
 
     isQuestionBoardEnable = false;
 
+<<<<<<< HEAD
     isLiveNowEnable = false;
+<<<<<<< HEAD
 
     isPipEnable = false;
 
@@ -68,6 +80,7 @@ export class Configuration implements Configuration {
     shortDatetime = "EEEE MMMM, dd hh:mm a";
 
     longDatetime = "EEEE MMMM, dd hh:mm a";
+<<<<<<< HEAD
 
     isDisclaimerEnable = false;
 
@@ -80,6 +93,13 @@ export class Configuration implements Configuration {
     isOnboardingEnable = false;
 
     filterUserRoles = [""];
+=======
+=======
+>>>>>>> 56c8c439 (feat: made live now dynamic)
+=======
+    isPipEnable = false;
+>>>>>>> 2ca0644f (Fix: PIP enable based on container settings)
+>>>>>>> 895967da55bc920a0cbee85f7b7a1fd0087cce42
 }
 
 export const useDefaultOnEmpty = [

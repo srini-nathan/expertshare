@@ -12,6 +12,7 @@ import placeholder from "../../assets/images/imgthumb.svg";
 import { getDateTimeWithoutTimezone, resolveImageWithStyle } from "../../utils";
 import { AppSponsors } from "../AppSponsors";
 import "./assets/scss/style.scss";
+import { useCustomParseDate } from "../../../helpers/useCustomParseDate";
 
 export interface AppConferenceCardProps {
     conference: PConference;
@@ -48,6 +49,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
     isGrantedControl,
 }): JSX.Element => {
     const { t } = useTranslation();
+    const { customParse } = useCustomParseDate();
     const {
         id,
         title,
@@ -139,7 +141,11 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                                 <>
                                     <div className="inner-container--det--time--spec--date">
                                         <h3 className="mb-0">
+<<<<<<< HEAD
                                             {toShortDate(
+=======
+                                            {customParse(
+>>>>>>> b4532205 (created function for rendering time/date in consistent way)
                                                 getDateTimeWithoutTimezone(
                                                     startAt
                                                 )
@@ -148,7 +154,11 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                                     </div>
                                     <div className="inner-container--det--time--spec--period">
                                         <span>
+<<<<<<< HEAD
                                             {toShortTime(
+=======
+                                            {customParse(
+>>>>>>> b4532205 (created function for rendering time/date in consistent way)
                                                 getDateTimeWithoutTimezone(
                                                     startAt
                                                 )
