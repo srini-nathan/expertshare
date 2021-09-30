@@ -1,8 +1,9 @@
 import React, { FC } from "react";
 import Select, { MenuPlacement } from "react-select";
 import { Control, Controller } from "react-hook-form";
-import { Form, Col } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { PrimitiveObject } from "../../models";
+import { useGridHelper } from "../../hooks";
 
 import "./assets/scss/style.scss";
 
@@ -27,6 +28,7 @@ export interface AppFormSelectProps {
     control?: Control<any>;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     transform?: any;
+    block?: boolean;
 }
 
 export const AppFormSelect: FC<AppFormSelectProps> = ({
@@ -36,30 +38,30 @@ export const AppFormSelect: FC<AppFormSelectProps> = ({
     placeholder = "",
     options,
     menuPlacement = "auto",
-    className = "",
     control,
     description,
-    sm = 12,
-    md = 6,
-    lg = 4,
-    xl = 4,
     required = false,
     errorMessage,
     label = "",
     transform,
+    block,
+    ...props
 }): JSX.Element => {
     const controlId = id || name;
+    const {
+        sm = 12,
+        md = block ? 12 : 6,
+        lg = block ? 12 : 4,
+        xl = block ? 12 : 4,
+        className = "",
+    } = props;
+    const { getColumnClasses } = useGridHelper();
+    const colClasses = getColumnClasses(sm, md, lg, xl);
+
     return (
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         <Form.Group
-            as={Col}
-            md={md}
-            sm={sm}
-            lg={lg}
-            xl={xl}
+            className={`col form-group mb-0 ${colClasses} ${className}`}
             controlId={controlId}
-            className={`mb-0 ${className}`}
         >
             {label?.length > 0 ? (
                 <Form.Label>
