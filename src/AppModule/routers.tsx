@@ -19,6 +19,7 @@ import {
     LiveNowPage,
     MeetingListPage,
     MyMeetingsDetailPage,
+    MeetingAddEditPage,
 } from "./pages";
 import { ExhibitorListPage, ExhibitorDetailPage } from "../AdminModule/pages";
 import { ModuleRouter } from "./models";
@@ -74,6 +75,8 @@ export const routers: ModuleRouter[] = [
                     <AFramePanelPage path={"layout3d/:roomId/panel/:id"} />
                     <WidgetPage path={"widget/:type/:id"} />
                     <MeetingListPage path={"meetings"} />
+                    <MeetingAddEditPage path={"meetings/:id"} />
+                    <MeetingAddEditPage path={"meetings/new"} />
                     <MyMeetingsDetailPage path={"meetings/:id/bookings"} />
                 </Router>
             );
