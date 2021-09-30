@@ -3,7 +3,12 @@ import { Col } from "react-bootstrap";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "./assets/scss/style.scss";
 import { useGlobalData } from "../../contexts";
+<<<<<<< HEAD
 import { humanReadableDate, getDateOnly } from "../../utils";
+=======
+import { getDateOnly } from "../../utils";
+import { useCustomParseDate } from "../../../helpers/useCustomParseDate";
+>>>>>>> b4532205 (created function for rendering time/date in consistent way)
 
 export interface AppSessionDatesProps {
     sessionDates: { [key: string]: { start: string; end: string } };
@@ -17,6 +22,7 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
     setActiveDate,
 }): JSX.Element => {
     const { container } = useGlobalData();
+    const { customParse } = useCustomParseDate();
 
     return (
         <Col
@@ -44,7 +50,11 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
                                     >
                                         <div className="num-day">
                                             <span>
+<<<<<<< HEAD
                                                 {humanReadableDate(
+=======
+                                                {customParse(
+>>>>>>> b4532205 (created function for rendering time/date in consistent way)
                                                     getDateOnly(
                                                         sessionDates[key].start
                                                     ),
@@ -54,7 +64,11 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
                                         </div>
                                         <div className="date-day">
                                             <span className="date-day--dofw">
+<<<<<<< HEAD
                                                 {humanReadableDate(
+=======
+                                                {customParse(
+>>>>>>> b4532205 (created function for rendering time/date in consistent way)
                                                     getDateOnly(
                                                         sessionDates[key].start
                                                     ),
@@ -62,7 +76,11 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
                                                 )}
                                             </span>
                                             <span className="date-day--dofy">
+<<<<<<< HEAD
                                                 {humanReadableDate(
+=======
+                                                {customParse(
+>>>>>>> b4532205 (created function for rendering time/date in consistent way)
                                                     getDateOnly(
                                                         sessionDates[key].start
                                                     ),

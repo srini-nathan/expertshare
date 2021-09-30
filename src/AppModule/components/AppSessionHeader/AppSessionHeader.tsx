@@ -17,6 +17,7 @@ import {
 import { UserApi } from "../../../AdminModule/apis";
 import { ROLES } from "../../../config";
 import { appPipPlayer } from "../../atoms";
+import { useCustomParseDate } from "../../../helpers/useCustomParseDate";
 
 export interface AppSessionHeaderProps {
     session: Session;
@@ -43,7 +44,11 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
     const { userId } = useAuthState();
     const setPipPlayerData = useSetRecoilState(appPipPlayer);
     const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
+<<<<<<< HEAD
     const { toShortTime, toShortDate } = useDateTime();
+=======
+    const { customParse } = useCustomParseDate();
+>>>>>>> b4532205 (created function for rendering time/date in consistent way)
 
     useEffect(() => {
         return () => {
@@ -263,7 +268,11 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                         >
                             <span className="date mb-1">
                                 {session.start &&
+<<<<<<< HEAD
                                     toShortDate(
+=======
+                                    customParse(
+>>>>>>> b4532205 (created function for rendering time/date in consistent way)
                                         getDateTimeWithoutTimezone(
                                             session.start
                                         )
@@ -271,15 +280,31 @@ export const AppSessionHeader: FC<AppSessionHeaderProps> = ({
                             </span>
                             <span className="period">
                                 {session.start &&
+<<<<<<< HEAD
                                     toShortTime(
+=======
+                                    customParse(
+>>>>>>> b4532205 (created function for rendering time/date in consistent way)
                                         getDateTimeWithoutTimezone(
                                             session.start
                                         )
                                     )}
                                 -{" "}
                                 {session.end &&
+<<<<<<< HEAD
                                     toShortTime(
                                         getDateTimeWithoutTimezone(session.end)
+=======
+                                    customParse(
+                                        getDateTimeWithoutTimezone(session.end),
+                                        container &&
+                                            container.configuration &&
+                                            (container.configuration as any)
+                                                .shortTime
+                                            ? (container.configuration as any)
+                                                  .shortTime
+                                            : "hh:mm a"
+>>>>>>> b4532205 (created function for rendering time/date in consistent way)
                                     )}
                             </span>
                         </Col>
