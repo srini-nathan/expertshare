@@ -576,17 +576,6 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 {render3dMenu()}
                 {renderMoreMenu()}
                 {configuration.isLiveNowEnable && LiveNow()}
-<<<<<<< HEAD
-=======
-                {configuration.isMusicEnable && (
-                    <div style={{ width: "100%" }}>
-                        <Waveform
-                            url={`${baseConfig}/${configuration.musicFilename}`}
-                            loop={configuration.isMusicLoop}
-                        />
-                    </div>
-                )}
->>>>>>> 56c8c439 (feat: made live now dynamic)
             </>
         );
     };

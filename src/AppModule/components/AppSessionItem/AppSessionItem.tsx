@@ -13,7 +13,6 @@ import { AppUserListItem } from "../AppUserListItem";
 import { FileTypeInfo } from "../../models";
 import { getDateTimeWithoutTimezone } from "../../utils";
 import { AppShowUserListPopup } from "../AppShowUserListPopup";
-import { useCustomParseDate } from "../../../helpers/useCustomParseDate";
 
 const { Upload: UPLOAD } = CONSTANTS;
 const {
@@ -39,7 +38,6 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
         FILETYPEINFO_SESSION_POSTER as FileTypeInfo,
         session.imageName
     );
-    const { customParse } = useCustomParseDate();
     const styles = session?.imageName
         ? {
               backgroundImage: `url(${sessionPosterPath})`,
@@ -146,27 +144,12 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                         <i className="fak fa-clock-light"></i>
                                         <Col className="inner-container--header--time--content pl-3">
                                             <h2 className="mb-0">
-<<<<<<< HEAD
                                                 {session?.start &&
                                                     toShortTime(
                                                         getDateTimeWithoutTimezone(
                                                             session.start
                                                         )
                                                     )}
-=======
-                                                {customParse(
-                                                    getDateTimeWithoutTimezone(
-                                                        session.start
-                                                    ),
-                                                    container &&
-                                                        container.configuration &&
-                                                        (container.configuration as any)
-                                                            .shortTime
-                                                        ? (container.configuration as any)
-                                                              .shortTime
-                                                        : "hh:mm a"
-                                                )}
->>>>>>> b4532205 (created function for rendering time/date in consistent way)
                                                 <span className="value">
                                                     {getDiffTime()}
                                                 </span>

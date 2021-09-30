@@ -163,10 +163,7 @@ const FilterForm = ({
                     <AppFormMultiSelect
                         id={"sessions"}
                         name={"sessions"}
-<<<<<<< HEAD
                         className={"form-select"}
-=======
->>>>>>> 895967da55bc920a0cbee85f7b7a1fd0087cce42
                         label={t(
                             "questionboard.filter.form:label.select.sessions"
                         )}

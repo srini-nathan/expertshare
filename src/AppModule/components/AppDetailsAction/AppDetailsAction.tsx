@@ -13,11 +13,6 @@ import {
 } from "../../hooks";
 import { FileTypeInfo } from "../../models";
 import { getDateTimeWithoutTimezone } from "../../utils";
-<<<<<<< HEAD
-=======
-import { useGlobalData } from "../../contexts";
-import { useCustomParseDate } from "../../../helpers/useCustomParseDate";
->>>>>>> b4532205 (created function for rendering time/date in consistent way)
 
 const { Upload: UPLOAD, Role: ROLE } = CONSTANTS;
 
@@ -63,7 +58,6 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
     commentMessage = "",
     createdAt = "",
 }) => {
-    const { customParse } = useCustomParseDate();
     const { user } = useAuthState();
     const userProfilePath = useBuildAssetPath(
         FILETYPEINFO_USER_PROFILE as FileTypeInfo,
@@ -136,14 +130,8 @@ export const AppDetailsAction: FunctionComponent<AppDetailsActionProps> = ({
                                         `${userObj.firstName} ${userObj.lastName}`}
                                 </div>
                                 <div className="det-profile--time">
-<<<<<<< HEAD
                                     {toLongDateTime(
                                         getDateTimeWithoutTimezone(createdAt)
-=======
-                                    {customParse(
-                                        getDateTimeWithoutTimezone(createdAt),
-                                        getDateFormat()
->>>>>>> b4532205 (created function for rendering time/date in consistent way)
                                     )}
                                 </div>
                             </div>
