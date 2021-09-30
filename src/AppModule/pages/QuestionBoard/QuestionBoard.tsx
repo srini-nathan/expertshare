@@ -517,14 +517,17 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
         ANSWERED: "start-conversation",
     };
     const { t } = useTranslation();
-    const fetchQuestions = (params = {}) => {
+    const fetchQuestions = (params = {}, shouldResetSelection = false) => {
         isFetchingQuestions(true);
         SessionQuestionApi.find<SessionQuestion>(1, {
             itemsPerPage: 1000,
             ...params,
         }).then(({ response, error }) => {
             isFetchingQuestions(false);
-
+            if (shouldResetSelection) {
+                setSelectedConference(params["conference.id"]);
+                setSelectedSession([]);
+            }
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
@@ -694,12 +697,14 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
     };
 
     const handleFilterClearAll = () => {
-        setSelectedConference(availableConferences?.items?.[0].id);
-        fetchQuestions({
-            "container.id": containerId,
-            "conference.id": availableConferences?.items?.[0].id,
-        });
         setShowFilter(0);
+        fetchQuestions(
+            {
+                "container.id": containerId,
+                "conference.id": availableConferences?.items?.[0].id,
+            },
+            true
+        );
     };
 
     const renderQuestionStatusCols = () => {
