@@ -11,14 +11,14 @@ body {
     //@TODO Credit Suisse Customization --end
     background-color: var(--body-background-color);
     scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-background);
-    scrollbar-width: thin;
+    scrollbar-width: auto;
 
     &.app-in-iframe {
         background-color: var(--iframe-body-background-color) !important;
     }
 
     &::-webkit-scrollbar {
-        width: 7px;
+        width: 3px;
     }
     &::-webkit-scrollbar-track {
         background: var(--scrollbar-background);
