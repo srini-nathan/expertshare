@@ -14,10 +14,22 @@
                     font-size: 20px;
                     font-weight: 700;
                     color: var(--card-text-color);
+                    @include media("mcbk-1") {
+                        font-size: 16px;
+                    }
+                    @include media("mcbk-2") {
+                        font-size: 16px;
+                    }
                     i {
                         padding-right: 10px;
                         font-size: 23px;
                         font-weight: 500;
+                        @include media("mcbk-1") {
+                            font-size: 20px;
+                        }
+                        @include media("mcbk-2") {
+                            font-size: 20px;
+                        }
                     }
                 }
             }
@@ -45,10 +57,22 @@
             &--title {
                 font-size: 16px;
                 color: var(--card-text-color);
+                @include media("mcbk-1") {
+                    font-size: 14px;
+                }
+                @include media("mcbk-2") {
+                    font-size: 14px;
+                }
             }
             &--desc {
                 font-size: 14px;
                 color: var(--card-text-color);
+                @include media("mcbk-1") {
+                    font-size: 12px;
+                }
+                @include media("mcbk-2") {
+                    font-size: 12px;
+                }
             }
         }
         .inner {

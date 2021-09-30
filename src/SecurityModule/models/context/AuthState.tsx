@@ -13,3 +13,15 @@ export interface AuthState {
     clientId: number | null;
     containerId: number | null;
 }
+
+export interface LoginActionConfig {
+    isAuth2wayEnable: boolean;
+    auth2wayRole: string[];
+    isPwdGenerated: boolean;
+    newPassword: string;
+    isOnboarded: boolean;
+    isDisplayAsGuest: boolean;
+    isExposeEmail: boolean;
+    isAllowCommunication: boolean;
+    isOnboardingEnable: boolean;
+}

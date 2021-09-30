@@ -14,9 +14,14 @@
             font-weight: 500 !important;
             color: var(--tab-text-color);
             background-color: var(--tab-background-color);
-            border-radius: var(--tab-border-radius);
             border: none;
-
+            border-radius: var(--tab-border-radius);
+            @include media("mcbk-1") {
+                height: 60px;
+            }
+            @include media("mcbk-2") {
+                height: 60px;
+            }
             @include media("container-b-l") {
                 width: auto;
                 font-size: 16px;

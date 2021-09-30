@@ -75,7 +75,7 @@ export const resolveImage = (
 
 export const parseConfiguration = (container: any): Configuration => {
     let configuration: Configuration = new Configuration();
-    if (container.configuration) {
+    if (container?.configuration) {
         configuration = mergeWith(
             configuration,
             container.configuration,
@@ -105,4 +105,13 @@ export const resolveImageWithStyle = (
               }
             : bgStyle;
     return css;
+};
+
+export const copyToClipBoard = (text: string) => {
+    const el = document.createElement("textarea");
+    el.value = text;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand("copy");
+    document.body.removeChild(el);
 };

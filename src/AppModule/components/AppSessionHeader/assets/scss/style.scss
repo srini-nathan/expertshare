@@ -97,11 +97,18 @@
             &--text {
                 h1 {
                     margin-bottom: 0;
-                    font-size: 42px;
+                    font-size: 35px;
                     font-weight: 700;
                     line-height: 50.4px;
                     color: var(--card-text-color);
-
+                    @include media("mcbk-1") {
+                        font-size: 26px;
+                        line-height: initial;
+                    }
+                    @include media("mcbk-2") {
+                        font-size: 26px;
+                        line-height: initial;
+                    }
                     @include media("csc-3") {
                         font-size: 28px;
                         font-weight: 500;
@@ -124,7 +131,14 @@
                     font-size: 20px;
                     font-weight: 700;
                     color: var(--card-text-color);
-
+                    @include media("mcbk-1") {
+                        font-size: 17px;
+                        line-height: initial;
+                    }
+                    @include media("mcbk-2") {
+                        font-size: 17px;
+                        line-height: initial;
+                    }
                     @include media("csc-3") {
                         font-size: 16px;
                         font-weight: 500;
@@ -143,7 +157,14 @@
                     font-size: 16px;
                     font-weight: 500;
                     color: var(--card-second-text-color);
-
+                    @include media("mcbk-1") {
+                        font-size: 14px;
+                        line-height: initial;
+                    }
+                    @include media("mcbk-2") {
+                        font-size: 14px;
+                        line-height: initial;
+                    }
                     @include media("csc-3") {
                         font-size: 16px;
                         font-weight: 500;

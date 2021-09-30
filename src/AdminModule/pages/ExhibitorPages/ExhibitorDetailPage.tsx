@@ -73,7 +73,7 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = ({
                 <Col
                     className={
                         data?.isCommentEnable
-                            ? "pl-0 pr-0 pr-lg-3 comment-enable"
+                            ? "pl-0 pr-0 pr-lg-3 pr-xl-2 comment-enable"
                             : "px-0"
                     }
                     md={12}

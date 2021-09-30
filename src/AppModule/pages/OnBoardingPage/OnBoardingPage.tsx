@@ -23,6 +23,7 @@ import {
 } from "../../components";
 import {
     errorToast,
+    parseConfiguration,
     setViolations,
     successToast,
     validation,
@@ -89,6 +90,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
     const desclaimer = useRef<HTMLDivElement>(null);
     const { container } = useGlobalData();
     const [agree, isAgree] = useState<boolean>(false);
+    const config = parseConfiguration(container);
 
     const getValue = (name: string) => {
         let val = "";
@@ -104,13 +106,23 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
     };
 
     const validationShape = {
-        plainPassword: yup.string().min(6).required(),
-        firstName: yup.string().required("First Name is Reqired"),
-        lastName: yup.string().required("Last Name is Reqired"),
-        locale: yup.string().required("Locale is Reqired"),
-        confirmPassword: yup
-            .string()
-            .oneOf([yup.ref("plainPassword"), null], "Passwords must be match"),
+        firstName: yup.string().required("First Name is Required"),
+        lastName: yup.string().required("Last Name is Required"),
+        locale: yup.string().required("Locale is Required"),
+        isPwdGenerated: yup.boolean(),
+        plainPassword: yup.string().when("isPwdGenerated", {
+            is: true,
+            then: yup.string().min(6).required(),
+        }),
+        confirmPassword: yup.string().when("isPwdGenerated", {
+            is: true,
+            then: yup
+                .string()
+                .oneOf(
+                    [yup.ref("plainPassword"), null],
+                    t("login.form:error.confirmPassword.notMatched")
+                ),
+        }),
     };
 
     const validationSchema = yup.object().shape(validationShape);
@@ -128,6 +140,11 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
     const setLayoutOptions = useSetRecoilState<AppDashboardLayoutOptions>(
         appDashboardLayoutOptions
     );
+    useEffect(() => {
+        if (!config.isOnboardingEnable) {
+            navigator("/").then();
+        }
+    }, []);
 
     useEffect(() => {
         isDataLoading(true);
@@ -147,7 +164,7 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
 
     const submitForm = async (formData: UpdateProfileForm<any>) => {
         formData.isOnboarded = true;
-
+        formData.isPwdGenerated = false;
         return UserApi.replace<User, UpdateProfileForm<any>>(
             user?.id || 0,
             formData
@@ -410,45 +427,53 @@ export const OnBoardingPage: FC<RouteComponentProps> = ({
                                             },
                                         }}
                                     />
-                                    <AppFormInputPassword
-                                        md={12}
-                                        lg={12}
-                                        xl={12}
-                                        name={"plainPassword"}
-                                        className="mb-0"
-                                        label={t(
-                                            "profile.update:label.password"
-                                        )}
-                                        required={true}
-                                        {...validation(
-                                            "plainPassword",
-                                            formState,
-                                            false
-                                        )}
-                                        errorMessage={
-                                            errors.plainPassword?.message
-                                        }
-                                        control={control}
-                                    />
-                                    <AppFormInputPassword
-                                        lg={12}
-                                        xl={12}
-                                        name={"confirmPassword"}
-                                        className="mb-0"
-                                        label={t(
-                                            "profile.update:label.confirmPassword"
-                                        )}
-                                        required={true}
-                                        {...validation(
-                                            "confirmPassword",
-                                            formState,
-                                            false
-                                        )}
-                                        errorMessage={
-                                            errors.confirmPassword?.message
-                                        }
-                                        control={control}
-                                    />
+                                    {user?.isPwdGenerated ? (
+                                        <>
+                                            <AppFormInputPassword
+                                                md={12}
+                                                lg={12}
+                                                xl={12}
+                                                name={"plainPassword"}
+                                                className="mb-0"
+                                                label={t(
+                                                    "profile.update:label.password"
+                                                )}
+                                                required={true}
+                                                {...validation(
+                                                    "plainPassword",
+                                                    formState,
+                                                    false
+                                                )}
+                                                errorMessage={
+                                                    errors.plainPassword
+                                                        ?.message
+                                                }
+                                                control={control}
+                                            />
+                                            <AppFormInputPassword
+                                                lg={12}
+                                                xl={12}
+                                                name={"confirmPassword"}
+                                                className="mb-0"
+                                                label={t(
+                                                    "profile.update:label.confirmPassword"
+                                                )}
+                                                required={true}
+                                                {...validation(
+                                                    "confirmPassword",
+                                                    formState,
+                                                    false
+                                                )}
+                                                errorMessage={
+                                                    errors.confirmPassword
+                                                        ?.message
+                                                }
+                                                control={control}
+                                            />
+                                        </>
+                                    ) : (
+                                        <></>
+                                    )}
                                 </Form.Row>
                                 <Form.Row>
                                     <Col sm="12" className="mb-3  text-center">

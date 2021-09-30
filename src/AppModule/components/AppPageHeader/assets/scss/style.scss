@@ -4,7 +4,12 @@
 .page-title {
     margin: 0 0 20px;
     font-weight: 700;
-
+    @include media("mcbk-1") {
+        margin: 0 0 15px;
+    }
+    @include media("mcbk-2") {
+        margin: 0 0 15px;
+    }
     h1 {
         margin-bottom: 0;
         //@TODO Credit Suisse Customization -- start
@@ -16,7 +21,13 @@
         color: var(--secondary);
         word-break: break-word;
         @include media("lg") {
-            font-size: 2rem;
+            font-size: 1.8rem;
+        }
+        @include media("mcbk-1") {
+            font-size: 30px;
+        }
+        @include media("mcbk-2") {
+            font-size: 33px;
         }
     }
 }

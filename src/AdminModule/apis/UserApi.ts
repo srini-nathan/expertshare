@@ -2,8 +2,8 @@ import { AxiosError, AxiosRequestConfig, Canceler } from "axios";
 import {
     onFindAllResponseHydra,
     onFindAllResponseJson,
+    EntityAPI,
 } from "../../AppModule/apis";
-import { EntityAPI } from "../../AppModule/apis/EntityAPI";
 import {
     FinalResponse,
     ListResponse,
@@ -28,6 +28,7 @@ const {
     api_users_get_limited_collection: GET_LIMITED_USERS,
     api_users_email_exist_collection: EMAIL_EXIST,
     api_users_unsubscribe_item: UNSUBSCRIBE,
+    api_users_change_login_onboarding_item: API_CHANGE_LOGIN_ON_BOARDING,
 } = ROUTES;
 
 export abstract class UserApi extends EntityAPI {
@@ -113,15 +114,18 @@ export abstract class UserApi extends EntityAPI {
 
     public static async changePassword<R, P>(
         id: number,
-        entity: P
+        entity: P,
+        config: AxiosRequestConfig = {}
     ): Promise<FinalResponse<R | null>> {
-        const config: AxiosRequestConfig = this.getPatchRequestConfig<P>();
-
+        const axiosRequestConfig: AxiosRequestConfig = {
+            ...config,
+            ...this.getPatchRequestConfig<P>(),
+        };
         return this.makePatch<R, P>(
             route(API_CHANGE_PASSWORD_COLLECTION, { id }),
             JSON.stringify(entity),
             {},
-            config
+            axiosRequestConfig
         )
             .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
             .catch((error: AxiosError | ServerError) =>
@@ -129,14 +133,16 @@ export abstract class UserApi extends EntityAPI {
             );
     }
 
-    public static async emailExist(entity: any): Promise<any> {
-        return this.makePost<any, any>(EMAIL_EXIST, entity)
+    public static async emailExist<R, P>(
+        entity: P
+    ): Promise<FinalResponse<R | null>> {
+        return this.makePost<R, P>(EMAIL_EXIST, entity)
             .then(({ data }) => {
-                return Promise.resolve(new FinalResponse(data, null));
+                return Promise.resolve(new FinalResponse<R>(data, null));
             })
             .catch((error: AxiosError | ServerError) => {
                 const { message } = error;
-                return Promise.resolve(new FinalResponse(null, message));
+                return Promise.resolve(new FinalResponse<R>(null, message));
             });
     }
 
@@ -198,6 +204,27 @@ export abstract class UserApi extends EntityAPI {
             JSON.stringify({}),
             {},
             config
+        )
+            .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
+            .catch((error: AxiosError | ServerError) =>
+                this.handleErrorDuringCreatingOrUpdating(error)
+            );
+    }
+
+    public static async changeOnLogin<R, P>(
+        id: number,
+        entity: P,
+        config: AxiosRequestConfig = {}
+    ): Promise<FinalResponse<R | null>> {
+        const axiosRequestConfig: AxiosRequestConfig = {
+            ...config,
+            ...this.getPatchRequestConfig<P>(),
+        };
+        return this.makePatch<R, P>(
+            route(API_CHANGE_LOGIN_ON_BOARDING, { id }),
+            JSON.stringify(entity),
+            {},
+            axiosRequestConfig
         )
             .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
             .catch((error: AxiosError | ServerError) =>

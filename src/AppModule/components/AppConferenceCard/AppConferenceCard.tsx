@@ -20,6 +20,27 @@ export interface AppConferenceCardProps {
     handleClone: (id: number) => void;
 }
 
+const customCss = {
+    desktop: {
+        breakpoint: {
+            max: 3000,
+            min: 1024,
+        },
+        items: 3,
+        partialVisibilityGutter: 40,
+    },
+    tablet: {
+        breakpoint: { max: 1024, min: 464 },
+        items: 3,
+        partialVisibilityGutter: 30,
+    },
+    mobile: {
+        breakpoint: { max: 464, min: 0 },
+        items: 2,
+        partialVisibilityGutter: 30,
+    },
+};
+
 export const AppConferenceCard: FC<AppConferenceCardProps> = ({
     conference,
     handleClone,
@@ -49,7 +70,13 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
     const { toShortDate, toShortTime } = useDateTime();
 
     return (
-        <Col md={12} lg={4} xl={3} className="events-grid--container--item">
+        <Col
+            xs={12}
+            sm={6}
+            lg={4}
+            xl={3}
+            className="events-grid--container--item"
+        >
             <Col className="inner-container p-0 card">
                 <Link to={`/event/${id}/agenda`}>
                     <div className="inner-container--banner" style={style}>
@@ -143,7 +170,7 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                         </div>
                         <Row
                             className={
-                                "m-0 mt-3 p-0 conference-tags-container--tags"
+                                "m-0 mt-2 p-0 conference-tags-container--tags"
                             }
                         >
                             {conferenceTags.map((e) => {
@@ -247,9 +274,17 @@ export const AppConferenceCard: FC<AppConferenceCardProps> = ({
                                         }
                                         basePath={exhibitorLogoBasePath}
                                         options={{
-                                            slidesPerView: "auto",
+                                            slidesPerView: 3,
+                                            loop: true,
+                                            autoplay: {
+                                                delay: 1000,
+                                                disableOnInteraction: true,
+                                            },
+                                            freeMode: true,
+                                            speed: 3000,
                                         }}
                                         containerId={containerId}
+                                        customCss={customCss}
                                     />
                                 </div>
                             </div>

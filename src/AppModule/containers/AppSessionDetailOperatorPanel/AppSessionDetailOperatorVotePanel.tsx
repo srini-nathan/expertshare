@@ -252,7 +252,7 @@ export const AppSessionDetailOperatorVotePanel: FC<AppSessionDetailOperatorVoteP
             <div className={"header"}>
                 <Row>
                     <div className={"col-auto"}>
-                        <h5>
+                        <h5 className="mb-0">
                             {t(
                                 "sessionDetails:section.operatorActions.liveVote.header"
                             )}

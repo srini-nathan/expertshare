@@ -35,6 +35,27 @@ import { ExhibitorLogoPosterFileInfo } from "../../../config";
 
 const { ON_NEXT_SESSION, ON_LIVE_VOTE_REFRESH } = EVENTS;
 
+const sessionImages = {
+    desktop: {
+        breakpoint: {
+            max: 3000,
+            min: 1024,
+        },
+        items: 12,
+        partialVisibilityGutter: 40,
+    },
+    tablet: {
+        breakpoint: { max: 1024, min: 464 },
+        items: 6,
+        partialVisibilityGutter: 30,
+    },
+    mobile: {
+        breakpoint: { max: 464, min: 0 },
+        items: 3,
+        partialVisibilityGutter: 30,
+    },
+};
+
 export const SessionDetailsPage: FC<RouteComponentProps> = ({
     location,
 }): JSX.Element => {
@@ -67,7 +88,12 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
     const exhibitorLogoBasePath = useBuildAssetPath(
         ExhibitorLogoPosterFileInfo
     );
-
+    useEffect(() => {
+        localStorage.setItem("isSessionDetailsViewVisible", "true");
+        return () => {
+            localStorage.removeItem("isSessionDetailsViewVisible");
+        };
+    }, []);
     useEffect(() => {
         isLoading(true);
         SessionApi.getSession<Session[]>({
@@ -109,6 +135,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
         if (parseInt(sessionId, 10) === data.id && next)
             switchTonextSession(next as number);
     });
+
     useEffect(() => {
         if (id) emitJoinNextSession(id);
         return () => {
@@ -257,7 +284,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                 <Col
                     className={
                         data.isCommentEnable || vote
-                            ? "pl-0 pr-0 pr-lg-3 comment-enable"
+                            ? "pl-0 pr-0 pr-lg-3 pr-xl-2 comment-enable"
                             : "px-0"
                     }
                     md={12}
@@ -277,7 +304,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                         />
                         <AppSessionTags session={data} />
                         <AppSessionExtraLink session={data} />
-                        <Row className="my-5 mx-0 px-2">
+                        <Row className="my-4 mx-0 px-2">
                             {data.speakers.length > 0 ? (
                                 <Col
                                     lg={data.moderators.length > 0 ? 8 : 12}
@@ -334,6 +361,7 @@ export const SessionDetailsPage: FC<RouteComponentProps> = ({
                                 data={(data.exhibitors as unknown) as string[]}
                                 basePath={exhibitorLogoBasePath}
                                 containerId={containerId}
+                                customCss={sessionImages}
                             />
                         </AppCard>
                     ) : null}

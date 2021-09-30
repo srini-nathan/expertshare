@@ -28,7 +28,7 @@ export const AppSessionDescription: FC<AppSessionDescriptionProps> = ({
                         sm={12}
                         lg={session.sessionDocs.length > 0 ? 4 : 12}
                         xl={session.sessionDocs.length > 0 ? 6 : 12}
-                        className="session-details-desc my-4 pt-1 px-2"
+                        className="session-details-desc my-1 pt-1 px-2"
                     >
                         <h2>
                             <i className="fak fa-description"></i>
@@ -48,7 +48,7 @@ export const AppSessionDescription: FC<AppSessionDescriptionProps> = ({
                         sm={12}
                         lg={4}
                         xl={6}
-                        className="session-details-docs  my-4 pt-1 px-2"
+                        className="session-details-docs  my-1 pt-1 px-2"
                     >
                         <AppSessionDoc
                             showAddDelete={false}

@@ -25,8 +25,9 @@ import { useGlobalData } from "./contexts";
 import "./assets/scss/bootstrap.scss";
 import "./assets/scss/main.scss";
 import { AuthState } from "../SecurityModule/models";
-import { isAppLoadedInIFrame } from "./utils";
+import { isAppLoadedInIFrame, parseConfiguration } from "./utils";
 import { PUser } from "../AdminModule/models";
+import "swiper/swiper-bundle.css";
 
 const { CONNECT, DISCONNECT } = EVENTS;
 interface Props {
@@ -97,10 +98,13 @@ const App = (): JSX.Element => {
     const { handler } = useCommandCenterSocketEvents();
     const skippedOnBoarding = isSkipOnBoarding();
     const { t } = useTranslation();
+    const config = parseConfiguration(container);
 
     init(t);
 
     useEffect(() => {
+        // remove data set when the session page is opened in 3D view
+        localStorage.removeItem("isSessionDetailsViewVisible");
         if (isAppLoadedInIFrame()) {
             document.body.classList.add("app-in-iframe");
         }
@@ -155,7 +159,12 @@ const App = (): JSX.Element => {
         return <AppFullScreenLoader />;
     }
     if (!isAutoLoginPage && isAuthenticated === true && user && container) {
-        if (!user.isOnboarded && !onBoardingPage && !skippedOnBoarding) {
+        if (
+            config.isOnboardingEnable &&
+            !user.isOnboarded &&
+            !onBoardingPage &&
+            !skippedOnBoarding
+        ) {
             navigator("/onboarding").then();
         } else if (!isChosen() && !isOverViewPage && !onBoardingPage) {
             navigator("/container").then();

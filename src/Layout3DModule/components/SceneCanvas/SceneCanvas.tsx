@@ -120,6 +120,7 @@ export const SceneCanvas = ({
         // (iframeWindow.current as any).style.display = "none";
         e.stopPropagation();
         setIframeVisible(false);
+        localStorage.removeItem("isSessionDetailsViewVisible");
     };
 
     const changeRoomNow = (n: number) => {

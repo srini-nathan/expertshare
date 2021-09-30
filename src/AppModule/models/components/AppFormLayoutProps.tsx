@@ -3,4 +3,5 @@ export interface AppFormLayoutProps {
     md?: string | number;
     lg?: string | number;
     xl?: string | number;
+    block?: boolean;
 }

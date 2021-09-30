@@ -1,6 +1,7 @@
 import React, { FC, useState, useRef, useEffect } from "react";
 import AudioSpectrum from "react-audio-spectrum";
-import { useGlobalData } from "../../../AppModule/contexts";
+import { useMatch } from "@reach/router";
+import { AppContext, useGlobalData } from "../../../AppModule/contexts";
 import "./waveform.scss";
 
 interface WaveformProps {
@@ -10,25 +11,59 @@ interface WaveformProps {
 
 const Waveform: FC<WaveformProps> = ({ url, loop }) => {
     const { container } = useGlobalData();
+    const {
+        state: { welcomePlayerStatus },
+    } = React.useContext(AppContext);
+    const showedWelcomeModal = localStorage.getItem("showed-welcome-modal");
+    const sessionDetailPage = useMatch("/event/:conferenceId/session/:id");
 
     const audioRef: { current: any } = useRef(null);
     const playPauseRef: { current: any } = useRef(null);
-    const [playing, setPlaying] = useState(true);
+
+    const [playing, setPlaying] = useState(false);
     const [captureImage, setCaptureImage] = useState(null) as any;
     const [mute, setMute] = useState(false);
     const [showRange, setShowRange] = useState(false);
     const [volRang, setVolRang] = useState(100);
 
-    const onPlayPause = () => {
+    useEffect(() => {
+        if (welcomePlayerStatus === false) {
+            audioRef.current.play();
+            setPlaying(true);
+        }
+    }, [welcomePlayerStatus]);
+
+    const saveImageAndPause = () => {
         const el = document.getElementById("audio-canvas") as HTMLCanvasElement;
-        if (el) {
+        if (el && !audioRef.current.paused) {
             const image = el.toDataURL("image/png");
             setCaptureImage(image);
         }
+        audioRef.current.pause();
+        setPlaying(false);
+    };
+
+    useEffect(() => {
+        setInterval(() => {
+            const isSessionDetailsViewVisible = localStorage.getItem(
+                "isSessionDetailsViewVisible"
+            );
+            if (isSessionDetailsViewVisible) {
+                saveImageAndPause();
+            }
+        }, 1000);
+    }, []);
+
+    useEffect(() => {
+        if (sessionDetailPage && playing) {
+            saveImageAndPause();
+        }
+    }, [sessionDetailPage]);
+
+    const onPlayPause = () => {
         if (audioRef.current) {
             if (playing) {
-                audioRef.current.pause();
-                setPlaying(false);
+                saveImageAndPause();
             } else {
                 audioRef.current.play();
                 setPlaying(true);
@@ -37,9 +72,14 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
     };
 
     useEffect(() => {
-        if (audioRef.current) {
+        if (
+            audioRef.current &&
+            showedWelcomeModal === "true" &&
+            !sessionDetailPage
+        ) {
             audioRef.current.play();
             audioRef.current.muted = false;
+            setPlaying(true);
         }
     }, []);
 
@@ -48,11 +88,7 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
     };
 
     const onVolumeChange = () => {
-        const el = document.getElementById("audio-canvas") as HTMLCanvasElement;
-        if (el) {
-            const image = el.toDataURL("image/png");
-            setCaptureImage(image);
-        }
+        saveImageAndPause();
         setMute(!mute);
     };
 
@@ -84,14 +120,7 @@ const Waveform: FC<WaveformProps> = ({ url, loop }) => {
 
     const onAudioEnd = () => {
         if (!loop) {
-            const el = document.getElementById(
-                "audio-canvas"
-            ) as HTMLCanvasElement;
-            if (el) {
-                const image = el.toDataURL("image/png");
-                setCaptureImage(image);
-            }
-            setPlaying(false);
+            saveImageAndPause();
         }
     };
 
