@@ -10,6 +10,7 @@ export interface Configuration {
     musicFilename: string;
     isQuestionBoardEnable: boolean;
     isLiveNowEnable: boolean;
+<<<<<<< HEAD
     isPipEnable: boolean;
     excludeDomainsFromAnalytics: string;
     shortDate: string;
@@ -18,6 +19,8 @@ export interface Configuration {
     longTime: string;
     longDatetime: string;
     shortDatetime: string;
+=======
+>>>>>>> 56c8c439 (feat: made live now dynamic)
 }
 
 export class Configuration implements Configuration {
@@ -42,6 +45,7 @@ export class Configuration implements Configuration {
     isQuestionBoardEnable = false;
 
     isLiveNowEnable = false;
+<<<<<<< HEAD
 
     isPipEnable = false;
 
@@ -56,6 +60,8 @@ export class Configuration implements Configuration {
     shortDatetime = "EEEE MMMM, dd hh:mm a";
 
     longDatetime = "EEEE MMMM, dd hh:mm a";
+=======
+>>>>>>> 56c8c439 (feat: made live now dynamic)
 }
 
 export const useDefaultOnEmpty = [
