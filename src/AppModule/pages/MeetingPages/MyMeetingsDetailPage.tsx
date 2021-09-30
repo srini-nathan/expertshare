@@ -71,7 +71,7 @@ export const MyMeetingsDetailPage: FC<RouteComponentProps> = (): JSX.Element => 
     return (
         <Fragment>
             <AppBreadcrumb
-                linkText={t("meetings.list:header.title")}
+                linkText={t("meeting.list:header.title")}
                 linkUrl={"/meetings"}
             />
             <AppPageHeader

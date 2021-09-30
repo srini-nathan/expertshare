@@ -12,7 +12,7 @@ export const MeetingListPage: FC<RouteComponentProps> = (): JSX.Element => {
     return (
         <Fragment>
             <AppPageHeader
-                title={t("meetings.list:header.title")}
+                title={t("meeting.list:header.title")}
                 createLink={"/meetings/new"}
                 createLabel={"meeting.list:button.create"}
                 showToolbar={activeTab === "my-meetings"}
