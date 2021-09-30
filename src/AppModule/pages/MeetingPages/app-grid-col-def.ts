@@ -15,6 +15,7 @@ export const myMeetingsGridColDef = ({
         headerName: "meeting.myMeetings.list:column.isActive",
         field: "isActive",
         cellRenderer: "AppFormRadio",
+        sortable: false,
         filter: "text",
         flex: 1,
     },
@@ -32,9 +33,7 @@ export const myMeetingsGridColDef = ({
     },
 ];
 
-export const myBookingsGridColDef = ({
-    onPressDelete,
-}: AppCellActionWithCustom): ColDef[] => [
+export const myBookingsGridColDef = (): ColDef[] => [
     {
         headerName: "meeting.myBookings.list:column.name",
         field: "meeting.name",
@@ -53,13 +52,10 @@ export const myBookingsGridColDef = ({
         headerName: "meeting.myBookings.list:column.actions",
         field: "id",
         sortable: false,
-        maxWidth: 160,
+        maxWidth: 100,
         cellClass: "text-right",
         headerClass: "action-header",
         cellRenderer: "AppGridActionRenderer",
-        cellRendererParams: {
-            onPressDelete,
-        },
     },
 ];
 

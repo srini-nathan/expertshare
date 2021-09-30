@@ -40,6 +40,7 @@ interface AppGridCustomAction {
     icon?: string;
     text?: string;
     disable?: boolean;
+    className?: string;
 }
 
 interface AppGridCustomClickAction extends AppGridCustomAction {
@@ -98,6 +99,7 @@ interface ClickActionProps extends AppGridCustomAction {
     confirmation?: string;
     text?: string;
     confirmationTitle?: string;
+    className?: string;
 }
 
 const ClickAction: FC<ClickActionProps> = ({
@@ -107,6 +109,7 @@ const ClickAction: FC<ClickActionProps> = ({
     confirmationTitle = "Delete Action",
     confirmation,
     text,
+    className = "",
 }): JSX.Element => {
     const [show, setShow] = useState(false);
     if (!onClick) {
@@ -134,7 +137,7 @@ const ClickAction: FC<ClickActionProps> = ({
             ) : null}
             <a
                 href="#"
-                className={disable ? "disabled text-muted" : ""}
+                className={disable ? "disabled text-muted" : className}
                 onClick={(event) => {
                     event.preventDefault();
                     event.stopPropagation();

@@ -1,5 +1,4 @@
 import React, { FC, Fragment, useRef, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Col, Row } from "react-bootstrap";
 import {
     GridApi,
@@ -14,14 +13,13 @@ import {
 } from "../../containers/AppGrid";
 import { myBookingsAppGridFrameworkComponents } from "./app-grid-framework-components";
 import { myBookingsGridColDef } from "./app-grid-col-def";
-import { errorToast, successToast } from "../../utils";
+import { errorToast } from "../../utils";
 import { appGridConfig } from "../../config";
 import { useAuthState } from "../../hooks";
 import { MeetingBookingApi } from "../../apis/MeetingBookingApi";
 import { MeetingBooking } from "../../models/entities/MeetingBooking";
 
 export const MeetingListTabMyBookings: FC = (): JSX.Element => {
-    const { t } = useTranslation();
     const appGridApi = useRef<GridApi>();
     const cancelTokenSourcesRef = useRef<Canceler[]>([]);
     const [totalItems, setTotalItems] = useState<number>(0);
@@ -64,20 +62,6 @@ export const MeetingListTabMyBookings: FC = (): JSX.Element => {
         };
     }
 
-    async function handleDelete(id: number) {
-        MeetingBookingApi.deleteById(id).then(({ error, errorMessage }) => {
-            if (error !== null) {
-                errorToast(t(errorMessage));
-            } else {
-                successToast(t("meeting.myBookings.list:delete.toast.success"));
-                appGridApi.current?.refreshServerSideStore({
-                    purge: false,
-                    route: [],
-                });
-            }
-        });
-    }
-
     return (
         <Fragment>
             <Row>
@@ -86,9 +70,7 @@ export const MeetingListTabMyBookings: FC = (): JSX.Element => {
                         frameworkComponents={
                             myBookingsAppGridFrameworkComponents
                         }
-                        columnDef={myBookingsGridColDef({
-                            onPressDelete: handleDelete,
-                        })}
+                        columnDef={myBookingsGridColDef()}
                         dataSource={getDataSource()}
                         totalItems={totalItems}
                         onReady={(event) => {

@@ -12,8 +12,13 @@ import {
 import { Meeting, PMeeting } from "../../models/entities/Meeting";
 import { MeetingApi } from "../../apis/MeetingApi";
 import { useGlobalData } from "../../contexts";
-import { MeetingBooking } from "../../models/entities/MeetingBooking";
+import {
+    MeetingBooking,
+    PMeetingBooking,
+} from "../../models/entities/MeetingBooking";
 import { useDateTime } from "../../hooks";
+import { MeetingBookingApi } from "../../apis/MeetingBookingApi";
+import { MEETING_BOOKING_STATUS } from "../../../config";
 
 export const myMeetingsAppGridFrameworkComponents = {
     AppFormRadio: (params: ICellRendererParams): ReactElement => {
@@ -141,21 +146,38 @@ export const myBookingsAppGridFrameworkComponents = {
     AppGridActionRenderer: (
         params: AppCellActionWithRenderWithCustom
     ): ReactElement => {
-        const { data, onPressDelete } = params;
-        const { id } = data as MeetingBooking;
+        const { data, api } = params;
+        const { id, status } = data as MeetingBooking;
         const { t } = useTranslation();
         const props: AppGridActionProps = {
             customClickActions: [
                 {
+                    disable: status === MEETING_BOOKING_STATUS.STATUS_CANCELED,
+                    icon: "X",
                     confirmation: t(
                         "meeting.myBookings.list:cancel.confirmation.message"
                     ),
                     confirmationTitle: t(
                         "meeting.myBookings.list:cancel.confirmation.title"
                     ),
-                    text: "meeting.myBookings.list:button.cancel",
                     onClick: () => {
-                        onPressDelete(id);
+                        MeetingBookingApi.update<
+                            MeetingBooking,
+                            PMeetingBooking
+                        >(id, {
+                            status: MEETING_BOOKING_STATUS.STATUS_CANCELED,
+                        }).then(({ errorMessage, error }) => {
+                            if (error) {
+                                errorToast(errorMessage);
+                            } else {
+                                api.refreshServerSideStore({ purge: true });
+                                successToast(
+                                    t(
+                                        "meeting.myBookings.list:toast.success.cancelBooking"
+                                    )
+                                );
+                            }
+                        });
                     },
                 },
             ],
