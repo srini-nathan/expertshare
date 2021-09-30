@@ -104,7 +104,7 @@ const FilterForm = ({
 }) => {
     const { t } = useTranslation();
 
-    const { control, handleSubmit } = useForm<any>({
+    const { control, handleSubmit, setValue } = useForm<any>({
         mode: "all",
     });
 
@@ -123,6 +123,12 @@ const FilterForm = ({
         });
     };
 
+    useEffect(() => {
+        setValue("sessions", selectedSession);
+    }, [selectedSession]);
+
+    // eslint-disable-next-line no-console
+    console.log("selectedSession", selectedSession);
     return (
         <Form noValidate onSubmit={handleSubmit(onSubmit)}>
             <Row>
@@ -543,6 +549,7 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
     const fetchSessions = (params = {}, isInitialLoad = false) => {
         isLoading(true);
         isLoading(!params);
+        setSelectedSession([]);
         SessionApi.getCollectionByConferenceId<Conference>(params).then(
             ({ response, error }) => {
                 isLoading(false);
@@ -606,8 +613,7 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
             "conference.id": confId,
             isVisible: true,
         });
-        setSelectedConference(confId);
-        setSelectedSession([]);
+        // setSelectedConference(confId);
     };
 
     useEffect(() => {
@@ -696,11 +702,15 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
                 "container.id": containerId,
                 "session.id": data.sessions,
             });
+            setSelectedSession(data.sessions);
+            setSelectedConference(data.conferences);
         } else {
             fetchQuestions({
                 "container.id": containerId,
                 "session.id": availableSessions?.items?.map((s) => s.id),
             });
+            setSelectedSession([]);
+            setSelectedConference(data.conferences);
         }
         setShowFilter(0);
     };
@@ -837,6 +847,11 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
                 show={showFilter > 0}
                 handleClose={() => {
                     setShowFilter(0);
+                    fetchSessions({
+                        "container.id": containerId,
+                        "conference.id": selectedConference,
+                        isVisible: true,
+                    });
                 }}
                 handleDelete={() => {
                     setShowFilter(0);
