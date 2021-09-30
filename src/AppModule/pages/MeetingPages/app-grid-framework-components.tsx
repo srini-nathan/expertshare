@@ -7,6 +7,7 @@ import { copyToClipBoard, errorToast, successToast } from "../../utils";
 import { Meeting, PMeeting } from "../../models/entities/Meeting";
 import { MeetingApi } from "../../apis/MeetingApi";
 import { useGlobalData } from "../../contexts";
+import { MeetingBooking } from "../../models/entities/MeetingBooking";
 
 export const myMeetingsAppGridFrameworkComponents = {
     AppFormRadio: (params: ICellRendererParams): ReactElement => {
@@ -20,7 +21,7 @@ export const myMeetingsAppGridFrameworkComponents = {
                 defaultChecked={isActive}
                 id={`is-active-${name}-${id}`}
                 onChange={() => {
-                    MeetingApi.update<Meeting, PMeeting>(id, {
+                    MeetingApi.setActive<Meeting, PMeeting>(id, {
                         isActive: true,
                     }).then(({ errorMessage, error }) => {
                         if (error) {
@@ -70,9 +71,9 @@ export const myMeetingsAppGridFrameworkComponents = {
             editAction: {
                 url: `/meetings/${id}`,
             },
-            viewAction: {
-                url: `/meetings/${id}/bookings`,
-            },
+            // viewAction: {
+            //     url: `/meetings/${id}/bookings`,
+            // },
             deleteAction: {
                 confirmation: t(
                     "meeting.myMeetings.list:delete.confirmation.message"
@@ -95,7 +96,7 @@ export const myBookingsAppGridFrameworkComponents = {
         params: AppCellActionWithRenderWithCustom
     ): ReactElement => {
         const { data, onPressDelete } = params;
-        const { id } = data as Meeting;
+        const { id } = data as MeetingBooking;
         const { t } = useTranslation();
         const props: AppGridActionProps = {
             customClickActions: [
