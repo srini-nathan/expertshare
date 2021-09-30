@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { UseFormReturn } from "react-hook-form";
+import { Meeting } from "../../models/entities/Meeting";
 
-export interface MeetingAddEditTabsProps {
+interface MeetingAddEditTabsProps {
     defaultActiveTab: number;
     onChangeTab: (tab: number) => void;
+}
+
+export interface MeetingAddEditTabProps {
+    active: number;
+    data: Meeting;
+    form: UseFormReturn<Meeting>;
+    isEditMode: boolean;
 }
 
 export const MeetingAddEditTabs = ({

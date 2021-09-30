@@ -1,10 +1,7 @@
 import React from "react";
+import { MeetingAddEditTabProps } from "./MeetingAddEditTabs";
 
-export interface MeetingAddEditTab2Props {
-    active: number;
-}
-
-export const MeetingAddEditTab2 = ({ active }: MeetingAddEditTab2Props) => {
+export const MeetingAddEditTab2 = ({ active }: MeetingAddEditTabProps) => {
     return (
         <div
             className={`inner-content--steps--container scheduling tab-pane fade ${
