@@ -100,7 +100,7 @@ const FilterForm = ({
     availableSessions,
     selectedSession,
     setSelectedSession,
-    setSelectedConference,
+    getUpdatedSessions,
 }) => {
     const { t } = useTranslation();
 
@@ -111,7 +111,6 @@ const FilterForm = ({
     const onSubmit = async (formData: any) => {
         handleFilterChange(formData);
         setSelectedSession(formData.sessions);
-        setSelectedConference(formData.conferences);
         return formData;
     };
 
@@ -148,10 +147,11 @@ const FilterForm = ({
                         )}
                         options={getConferenceOption()}
                         transform={{
-                            output: (template: PrimitiveObject) =>
-                                template?.value,
+                            output: (template: PrimitiveObject) => {
+                                getUpdatedSessions(template?.value);
+                                return template?.value;
+                            },
                             input: (value: number) => {
-                                setSelectedConference(value);
                                 return _find([], {
                                     value,
                                 });
@@ -540,7 +540,7 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
         });
     };
 
-    const fetchSessions = (params = {}) => {
+    const fetchSessions = (params = {}, isInitialLoad = false) => {
         isLoading(true);
         isLoading(!params);
         SessionApi.getCollectionByConferenceId<Conference>(params).then(
@@ -553,12 +553,18 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
                     }
                 } else if (response !== null) {
                     setAvailableSessions(response);
+                    if (isInitialLoad) {
+                        fetchQuestions({
+                            "container.id": containerId,
+                            "session.id": response?.items.map((s) => s.id),
+                        });
+                    }
                 }
             }
         );
     };
 
-    const fetchConferences = (params = {}) => {
+    const fetchConferences = (params = {}, isInitialLoad = false) => {
         isLoading(true);
         ConferenceApi.getCollection<Conference>(params).then(
             ({ response, error }) => {
@@ -572,14 +578,14 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
                     setAvailableConferences(response);
                     if (response?.items && response?.items[0]?.id) {
                         setSelectedConference(response?.items[0]?.id);
-                        fetchQuestions({
-                            "container.id": containerId,
-                            "conference.id": response?.items[0]?.id,
-                        });
-                        fetchSessions({
-                            "container.id": containerId,
-                            "conference.id": response?.items[0]?.id,
-                        });
+                        fetchSessions(
+                            {
+                                "container.id": containerId,
+                                "conference.id": response?.items[0]?.id,
+                                isVisible: true,
+                            },
+                            isInitialLoad
+                        );
                     }
                 }
             }
@@ -594,15 +600,15 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
         };
     }, [containerId]);
 
-    useEffect(() => {
-        if (selectedConference) {
-            fetchSessions({
-                "container.id": containerId,
-                "conference.id": selectedConference,
-            });
-            setSelectedSession([]);
-        }
-    }, [selectedConference]);
+    const getUpdatedSessions = (confId: number) => {
+        fetchSessions({
+            "container.id": containerId,
+            "conference.id": confId,
+            isVisible: true,
+        });
+        setSelectedConference(confId);
+        setSelectedSession([]);
+    };
 
     useEffect(() => {
         socket.on(
@@ -668,9 +674,12 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
     });
 
     useEffect(() => {
-        fetchConferences({
-            "container.id": containerId,
-        });
+        fetchConferences(
+            {
+                "container.id": containerId,
+            },
+            true
+        );
     }, []);
 
     const handleQuickSearch = (search: string, status: string) => {
@@ -685,13 +694,12 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
         if (data?.sessions?.length > 0) {
             fetchQuestions({
                 "container.id": containerId,
-                "conference.id": data.conferences,
                 "session.id": data.sessions,
             });
         } else {
             fetchQuestions({
                 "container.id": containerId,
-                "conference.id": data.conferences,
+                "session.id": availableSessions?.items?.map((s) => s.id),
             });
         }
         setShowFilter(0);
@@ -699,10 +707,13 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
 
     const handleFilterClearAll = () => {
         setShowFilter(0);
-        fetchQuestions(
+        setSelectedConference(availableConferences?.items[0]?.id);
+        setSelectedSession([]);
+        fetchSessions(
             {
                 "container.id": containerId,
-                "conference.id": availableConferences?.items?.[0].id,
+                "conference.id": availableConferences?.items[0]?.id,
+                isVisible: true,
             },
             true
         );
@@ -839,7 +850,7 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
                         availableSessions={availableSessions}
                         selectedSession={selectedSession}
                         setSelectedSession={setSelectedSession}
-                        setSelectedConference={setSelectedConference}
+                        getUpdatedSessions={getUpdatedSessions}
                     />
                 }
                 title={t("questionboard.list:filterdrawer.title")}
