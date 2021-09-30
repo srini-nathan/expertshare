@@ -37,14 +37,15 @@ export const myBookingsGridColDef = ({
 }: AppCellActionWithCustom): ColDef[] => [
     {
         headerName: "meeting.myBookings.list:column.name",
-        field: "name",
-        cellRenderer: "AppTitleRender",
+        field: "meeting.name",
+        cellRenderer: "AppNameRender",
         filter: "text",
         flex: 1,
     },
     {
         headerName: "meeting.myBookings.list:column.time",
         field: "time",
+        cellRenderer: "AppTimeRender",
         filter: "text",
         flex: 1,
     },
