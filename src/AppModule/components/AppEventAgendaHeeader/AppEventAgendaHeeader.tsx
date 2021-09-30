@@ -104,6 +104,7 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                     </Col>
                     <Col
                         sm="auto"
+                        lg="5"
                         className="inner-container--action mr-0 ml-auto px-0 mt-2 mt-lg-0"
                     >
                         {isGrantedControl && (
@@ -111,7 +112,7 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                                 <div className="inner-container--action--base m-auto row">
                                     <Link
                                         to="/admin/session-categories"
-                                        className="manage-cat btn btn-secondary mt-2 mt-sm-0"
+                                        className="manage-cat btn btn-secondary mt-2 mt-sm-0 mb-2"
                                     >
                                         {t(
                                             "event.agenda:button.manageCategory"
@@ -119,19 +120,19 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                                     </Link>
                                     <Link
                                         to={`/event/${conference.id}/session/create`}
-                                        className="manage-cat ml-2 btn btn-secondary mt-2 mt-sm-0"
+                                        className="manage-cat ml-2 btn btn-secondary mt-2 mt-sm-0 mb-2"
                                     >
                                         {t("event.agenda:button.createSession")}
                                     </Link>
 
                                     <Link
                                         to={`/event/create`}
-                                        className="manage-cat ml-2 btn btn-secondary mt-2 mt-sm-0"
+                                        className="manage-cat ml-2 btn btn-secondary mt-2 mt-sm-0 mb-2"
                                     >
                                         {t("event.agenda:button.createEvent")}
                                     </Link>
                                 </div>
-                                <div className="inner-container--action--exclusive p-0 mt-2 mt-sm-3">
+                                <div className="inner-container--action--exclusive p-0 mt-2 mt-sm-3 mb-2">
                                     <AppButton
                                         variant="secondary"
                                         onClick={() => {
@@ -143,7 +144,7 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                                     </AppButton>
                                     <Link
                                         to={`/event/${conference.id}/update`}
-                                        className="mx-2"
+                                        className="mx-2 mb-2"
                                     >
                                         <AppButton variant="secondary">
                                             <i className="fak fa-pen-regular"></i>
@@ -154,7 +155,7 @@ export const AppEventAgendaHeeader: FC<AppEventAgendaHeeaderProps> = ({
                                         onClick={() => {
                                             handleDelete();
                                         }}
-                                        className="  ml-2"
+                                        className="  ml-2 mb-2"
                                     >
                                         <i className="fak fa-trash-light"></i>
                                     </AppButton>
