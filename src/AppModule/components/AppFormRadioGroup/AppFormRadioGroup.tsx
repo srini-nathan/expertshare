@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Controller } from "react-hook-form";
-import { Col, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import "./assets/scss/style.scss";
 import {
     AppFormElementProps,
@@ -9,6 +9,7 @@ import {
     SimpleObject,
 } from "../../models";
 import { AppFormLabel } from "../AppFormLabel";
+import { useGridHelper } from "../../hooks";
 
 export interface AppFormRadioGroupProps
     extends AppFormElementProps,
@@ -29,16 +30,26 @@ export const AppFormRadioGroup: FC<AppFormRadioGroupProps> = ({
     options,
     control,
     defaultValue,
+    block,
     ...props
 }): JSX.Element => {
     const controlId = id || name;
     const labelProps = { label, required, description };
-    const { sm = 12, md = 6, lg = 4, xl = 4, className = "" } = props;
-    const groupProps = { sm, md, lg, xl, controlId, as: Col };
+    const {
+        sm = 12,
+        md = block ? 12 : 6,
+        lg = block ? 12 : 4,
+        xl = block ? 12 : 4,
+        className = "",
+    } = props;
+    const { getColumnClasses } = useGridHelper();
+    const colClasses = getColumnClasses(sm, md, lg, xl);
+
     return (
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        <Form.Group {...groupProps} className={`mb-0 ${className}`}>
+        <Form.Group
+            className={`col form-group mb-0 ${colClasses} ${className}`}
+            controlId={controlId}
+        >
             <AppFormLabel {...labelProps} />
             <Controller
                 name={name}
