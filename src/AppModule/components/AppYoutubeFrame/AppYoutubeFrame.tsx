@@ -14,7 +14,10 @@ export const AppYoutubeFrame: FC<AppYoutube> = ({
     width,
     // configuration,
 }): JSX.Element => {
-    let videoID = url.split("v=")[1];
+    let videoID =
+        url.indexOf("v=") > 0
+            ? url.split("v=")[1]
+            : url.split("/")[url.split("/").length - 1];
     if (videoID) {
         const ampersandPosition = videoID.indexOf("&");
 
