@@ -96,7 +96,11 @@ const QuestionActions = ({
 }) => {
     return editQuestionMode === qId ? (
         <div className="row px-2">
-            <div className="question-item--content--action--button cancel col-12 col-sm-6 col-md-12 col-xl-6 pt-3 px-2">
+            <div
+                className={`question-item--content--action--button cancel col-12 col-sm-6 col-md-12 py-2 px-2 ${
+                    editQuestionMode ? "col-xl-12 are" : "col-xl-6 na"
+                }`}
+            >
                 <a
                     className="btn btn-secondary"
                     onClick={() => setEditQuestionMode(null)}
@@ -109,7 +113,7 @@ const QuestionActions = ({
     ) : (
         <div className="row px-2">
             {(status !== STATUS_NEW || isReplyed) && (
-                <div className="question-item--content--action--button new col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
+                <div className="question-item--content--action--button new col-12 col-sm-6 col-md-12 col-xl-6 py-2 px-2">
                     <a
                         className="btn btn-secondary"
                         onClick={() => updateQuestionStatus(qId, STATUS_NEW)}
@@ -123,7 +127,7 @@ const QuestionActions = ({
                 </div>
             )}
             {(status !== STATUS_ACCEPTED || isReplyed) && (
-                <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
+                <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 py-2 px-2">
                     <a
                         className="btn btn-secondary"
                         onClick={() =>
@@ -140,7 +144,7 @@ const QuestionActions = ({
             )}
 
             {(status !== STATUS_REJECTED || isReplyed) && (
-                <div className="question-item--content--action--button reject col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
+                <div className="question-item--content--action--button reject col-12 col-sm-6 col-md-12 col-xl-6 py-2 px-2">
                     <a
                         className="btn btn-secondary"
                         onClick={() =>
@@ -156,7 +160,7 @@ const QuestionActions = ({
                 </div>
             )}
             {!isReplyed && (
-                <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 pt-2 px-2">
+                <div className="question-item--content--action--button approve col-12 col-sm-6 col-md-12 col-xl-6 py-2 px-2">
                     <a
                         className="btn btn-secondary"
                         onClick={() => updateQuestionStatus(qId, "ANSWERED")}
@@ -169,7 +173,7 @@ const QuestionActions = ({
                     </a>
                 </div>
             )}
-            <div className="question-item--content--action--button delete col-12 col-sm-6 col-md-12 col-xl-6 pt-3 px-2">
+            <div className="question-item--content--action--button delete col-12 col-sm-6 col-md-12 col-xl-6 py-2 px-2">
                 <a
                     className="btn btn-secondary"
                     onClick={() => setShowDelete(qId)}
@@ -178,7 +182,7 @@ const QuestionActions = ({
                     <i className="fak fa-trash-light" aria-hidden="true"></i>
                 </a>
             </div>
-            <div className="question-item--content--action--button edit col-12 col-sm-6 col-md-12 col-xl-6 pt-3 px-2">
+            <div className="question-item--content--action--button edit col-12 col-sm-6 col-md-12 col-xl-6 py-2 px-2">
                 <a
                     className={
                         editQuestionMode
