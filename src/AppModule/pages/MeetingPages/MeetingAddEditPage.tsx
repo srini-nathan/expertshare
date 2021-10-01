@@ -20,7 +20,7 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
     const [active, setActive] = useState<number>(1);
     const { hookForm, isEditMode, data } = useDataAddEdit<Meeting>(
         new Meeting(clientResourceId, userResourceId),
-        schema
+        schema()
     );
     const { formState, handleSubmit } = hookForm;
     const navigator = useNavigator(navigate);
