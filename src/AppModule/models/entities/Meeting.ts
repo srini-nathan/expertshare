@@ -54,8 +54,8 @@ export class Meeting extends BaseEntity {
             startDate = "",
             endDate = "",
             repeatWeek = 0,
-            noticePeriod = 0,
-            bufferPeriod = 0,
+            noticePeriod = 5,
+            bufferPeriod = 5,
             isActive = true,
             isSendReminder = true,
         }: PMeeting = {}

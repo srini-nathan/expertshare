@@ -8,6 +8,7 @@ export const MeetingAddEditTab2 = ({
     active,
     data,
     form,
+    isEditMode,
 }: MeetingAddEditTabProps) => {
     return (
         <div
@@ -28,6 +29,7 @@ export const MeetingAddEditTab2 = ({
                     <MeetingAddEditTab2AdditionalSettings
                         data={data}
                         form={form}
+                        isEditMode={isEditMode}
                     />
                 </div>
             </div>
