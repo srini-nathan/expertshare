@@ -56,8 +56,7 @@
                 &--group {
                     height: 700px;
                     overflow: auto;
-                    scrollbar-color: var(--scrollbar-thumb)
-                        var(--scrollbar-background);
+                    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-background);
                     scrollbar-width: thin;
                     &::-webkit-scrollbar {
                         width: 3.5px;
@@ -361,6 +360,26 @@
                             outline: unset !important;
                             box-shadow: unset !important;
                         }
+                    }
+                }
+            }
+        }
+    }
+}
+.filter-drawer {
+    .form-select {
+        .selected-item-container {
+            padding: 7px;
+            .list-item {
+                height: fit-content;
+                min-height: 25px;
+                padding: 0 5px !important;
+                margin: 2px !important;
+                span {
+                    svg {
+                        width: 16px;
+                        height: 16px;
+                        margin-right: 2px;
                     }
                 }
             }
