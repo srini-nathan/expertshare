@@ -1,7 +1,8 @@
-import { FC, useEffect, useState, Fragment } from "react";
+import { FC, useEffect, useState, Fragment, useRef } from "react";
 import { Link, RouteComponentProps, useParams, useMatch } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import { Col, Row } from "react-bootstrap";
+import { Canceler } from "axios";
 import {
     AppLoader,
     AppQuestionsAndAnswers,
@@ -9,8 +10,8 @@ import {
 import { errorToast, getBGStyle, resolveImage } from "../../../AppModule/utils";
 import "./assets/scss/detail.scss";
 
-import { ExhibitorApi } from "../../apis";
-import { Exhibitor, User } from "../../models";
+import { ExhibitorApi, ExhibitorProductApi } from "../../apis";
+import { Exhibitor, ExhibitorProduct, User } from "../../models";
 import {
     ExhibitorPosterFileInfo,
     ExhibitorLogoPosterFileInfo,
@@ -36,6 +37,7 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = ({
     const isFrontPage = adminPage === null;
     const { id, view = "details" } = useParams();
     const [loading, isLoading] = useState<boolean>(true);
+    const [loadingProducts, isLoadingProducts] = useState<boolean>(true);
     const [data, setData] = useState<Exhibitor>();
     const { containerId } = useAuthState();
     const imagePath = useBuildAssetPath(ExhibitorPosterFileInfo);
@@ -43,6 +45,34 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = ({
     const [members, setMembers] = useState<User[]>([]);
     const isGrantedControl = useIsGranted(ROLES.ROLE_OPERATOR);
     const [activeTab, setActiveTab] = useState<string>(view);
+    const cancelTokenSourcesRef = useRef<Canceler[]>([]);
+    const [exhibitorProduct, setExhibitorProduct] = useState<
+        ExhibitorProduct[]
+    >([]);
+    const [productsTotalCount, setProductsTotalCount] = useState<number>(0);
+
+    const fetchExhibitorProduct = () => {
+        isLoadingProducts(true);
+        ExhibitorProductApi.find<ExhibitorProduct>(
+            1,
+            {
+                "exhibitor.id": id,
+                "container.id": containerId,
+            },
+            (c) => {
+                cancelTokenSourcesRef.current.push(c);
+            }
+        )
+            .then(({ response }) => {
+                if (response !== null) {
+                    setExhibitorProduct(response.items);
+                    setProductsTotalCount(response.totalItems);
+                }
+            })
+            .finally(() => {
+                isLoadingProducts(false);
+            });
+    };
 
     useEffect(() => {
         isLoading(true);
@@ -58,9 +88,10 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = ({
                 isLoading(false);
             }
         );
+        fetchExhibitorProduct();
     }, [id]);
 
-    if (loading) {
+    if (loading || loadingProducts) {
         return <AppLoader />;
     }
 
@@ -140,6 +171,7 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = ({
                                 navigate(pageUrl);
                             }
                         }}
+                        productsTotalCount={productsTotalCount}
                     />
                     {data && activeTab === "details" ? (
                         <ExhibitorDetailTabDetails
@@ -148,7 +180,11 @@ export const ExhibitorDetailPage: FC<RouteComponentProps> = ({
                         />
                     ) : null}
                     {data && activeTab === "products" ? (
-                        <ExhibitorDetailTabProducts exhibitor={data} />
+                        <ExhibitorDetailTabProducts
+                            exhibitor={data}
+                            exhibitorProduct={exhibitorProduct}
+                            productsTotalCount={productsTotalCount}
+                        />
                     ) : null}
                 </Col>
                 {data?.isCommentEnable && (
