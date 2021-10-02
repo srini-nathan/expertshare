@@ -18,13 +18,17 @@ export const AppSessionDates: FC<AppSessionDatesProps> = ({
 }): JSX.Element => {
     const { container } = useGlobalData();
 
+    const getTotalSlide = () => {
+        return Object.keys(sessionDates).length;
+    };
+
     return (
         <Col
             sm={12}
             className="event-detail-admin--days--container mt-1 mb-3 px-0"
         >
             <div className="inner-container day-carousel">
-                <Swiper slidesPerView={"auto"}>
+                <Swiper slidesPerView={"auto"} initialSlide={getTotalSlide()}>
                     {sessionDates &&
                         Object.keys(sessionDates).map((key) => {
                             return (
