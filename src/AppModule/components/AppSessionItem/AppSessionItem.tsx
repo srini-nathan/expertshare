@@ -113,11 +113,6 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                     getSize()[1]
                 }`}
             >
-                <AppShowUserListPopup
-                    show={showMore}
-                    handleClose={isShowMore}
-                    users={users as User[]}
-                />
                 <AppCard className={`inner-container p-0`}>
                     <Row className="m-0 p-0">
                         <Col
@@ -214,6 +209,11 @@ export const AppSessionItem: FC<AppSessionItemProps> = ({
                                 getSize()[4]
                             } p-3 mx-2`}
                         >
+                            <AppShowUserListPopup
+                                show={showMore}
+                                handleClose={isShowMore}
+                                users={users as User[]}
+                            />
                             <div className="inner-container--det--title">
                                 <Link
                                     to={`/event/${conference}/session/${session.id}`}
