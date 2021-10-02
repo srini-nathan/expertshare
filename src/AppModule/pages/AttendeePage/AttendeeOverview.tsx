@@ -88,7 +88,6 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                     lastName: "asc",
                 },
                 user_search: filter,
-                isDisplayAsGuest: false,
                 "roles.role": appliedRoles?.map((r) => r.value),
             },
             (c) => cancelTokenSourcesRef.current.push(c)
@@ -134,7 +133,6 @@ export const AttendeeOverview: FC<RouteComponentProps> = (): JSX.Element => {
                 const pageNo = endRow / appGridConfig.pageSize;
                 api?.hideOverlay();
                 UserApi.getAttendeeList<User>(pageNo, {
-                    isDisplayAsGuest: false,
                     order: buildSortParams(request),
                     ...buildFilterParams(request),
                 }).then(({ response, errorMessage }) => {
