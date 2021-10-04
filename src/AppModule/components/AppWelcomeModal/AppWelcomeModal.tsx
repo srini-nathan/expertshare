@@ -48,6 +48,13 @@ export const AppWelcomeModal: FC<AppWelcomeModalProps> = ({
         FILETYPEINFO_CONFIGURATION as FileTypeInfo
     );
     useEffect(() => {
+        if (videoPlayerRef?.current?.paused) {
+            setIsPlaying(false);
+        } else {
+            setIsPlaying(true);
+        }
+    }, [videoPlayerRef?.current?.paused]);
+    useEffect(() => {
         if (container) {
             if (
                 container.configuration &&
