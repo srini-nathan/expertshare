@@ -492,7 +492,6 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                 (role === ROLE_ADMIN ||
                     role === ROLE_OPERATOR ||
                     role === ROLE_SPEAKER ||
-                    role === ROLE_EXHIBITOR ||
                     role === ROLE_MODERATOR)
             )
         ) {
