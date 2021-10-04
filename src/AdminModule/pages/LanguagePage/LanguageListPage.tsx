@@ -117,10 +117,9 @@ export const LanguageListPage: FC<RouteComponentProps> = (): JSX.Element => {
         }
     }
     async function uploadFile(e: any) {
-        showLoader(t("admin.language.list:translation.importing"));
         const formData = new FormData();
         formData.append("file", e.target.files[0]);
-
+        showLoader(t("admin.language.list:translation.importing"));
         LanguageApi.importLanguage(containerId, selectedLocale, formData).then(
             ({ error, response }) => {
                 hideLoader();

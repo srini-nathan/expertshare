@@ -72,7 +72,7 @@ export abstract class LanguageApi extends EntityAPI {
             config
         )
             .then(({ data }) => {
-                return data;
+                return Promise.resolve(new FinalResponse(data, null));
             })
             .catch((error: AxiosError | ServerError) => {
                 const { message } = error;

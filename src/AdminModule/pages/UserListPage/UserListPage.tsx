@@ -204,6 +204,10 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
         formData.append("file", e.target.files[0]);
         showLoader(t("admin.users.list:importingusers"));
         UserApi.importUsers(formData).then(({ error, response }) => {
+            hideLoader();
+            if (fileInputRef && fileInputRef?.current) {
+                fileInputRef.current.value = "";
+            }
             if (error !== null) {
                 if (_isString(error)) {
                     errorToast(error);
@@ -211,7 +215,6 @@ export const UserListPage: FC<RouteComponentProps> = (): JSX.Element => {
             } else if (response !== null) {
                 successToast("Imported!");
             }
-            hideLoader();
         });
     }
     async function handleDelete(id: number) {
