@@ -10,6 +10,7 @@ import {
     AppFormLabelTranslatable,
     AppFormRadioGroup,
     AppFormSelect,
+    AppFormSwitch,
 } from "../../components";
 import { getTypeOptions, getIntervalOptions } from "./meeting-helper";
 import { getDateTimeWithoutTimezone, validation } from "../../utils";
@@ -179,6 +180,22 @@ export const MeetingAddEditTab2AdditionalSettings: FC<MeetingAddEditTab2Addition
                             true
                         )}
                         defaultValue={`${data.repeatWeek}`}
+                        control={control}
+                    />
+                </Form.Row>
+            </div>
+            <div className="col-12">
+                <Form.Row>
+                    <AppFormSwitch
+                        name={"isBookOnce"}
+                        label={t("meeting.form:label.isBookOnce")}
+                        {...validation(
+                            "isBookOnce",
+                            formState,
+                            isEditMode,
+                            true
+                        )}
+                        defaultChecked={data.isBookOnce}
                         control={control}
                     />
                 </Form.Row>

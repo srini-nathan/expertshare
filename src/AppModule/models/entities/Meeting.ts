@@ -4,6 +4,12 @@ import { Client } from "../../../AdminModule/models/entities/Client";
 import { User } from "../../../AdminModule/models/entities/User";
 import { MeetingApi } from "../../apis/MeetingApi";
 
+export interface Duration {
+    hours: number;
+    minutes: number;
+    id: number;
+}
+
 export class Meeting extends BaseEntity {
     name: string;
 
@@ -15,7 +21,7 @@ export class Meeting extends BaseEntity {
 
     type: string;
 
-    duration: string[];
+    duration: string[] | Duration[];
 
     availability: string[];
 
@@ -33,6 +39,8 @@ export class Meeting extends BaseEntity {
 
     isSendReminder: boolean;
 
+    isBookOnce: boolean;
+
     user: string | User;
 
     client: string | Client;
@@ -49,7 +57,7 @@ export class Meeting extends BaseEntity {
             providerUrl = "",
             description = "",
             type = MEETING_TYPE.TYPE_SINGLE,
-            duration = [],
+            duration = [`45`],
             availability = [],
             startDate = "",
             endDate = "",
@@ -58,6 +66,7 @@ export class Meeting extends BaseEntity {
             bufferPeriod = 5,
             isActive = true,
             isSendReminder = true,
+            isBookOnce = false,
         }: PMeeting = {}
     ) {
         super(id, createdAt, updatedAt);
@@ -77,6 +86,7 @@ export class Meeting extends BaseEntity {
         this.bufferPeriod = bufferPeriod;
         this.isActive = isActive;
         this.isSendReminder = isSendReminder;
+        this.isBookOnce = isBookOnce;
     }
 
     toString(): string {
