@@ -21,6 +21,17 @@ const schema = () => {
             )
             .min(1)
             .max(3),
+        availability: yup
+            .array()
+            .of(
+                yup.object().shape({
+                    day: yup.number().min(1).max(7).required(),
+                    start: yup.number().min(0).max(2400).required(),
+                    end: yup.number().min(0).max(2400).required(),
+                })
+            )
+            .min(1)
+            .max(3),
     });
 };
 

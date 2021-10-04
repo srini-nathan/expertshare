@@ -55,3 +55,30 @@ export const getIntervalOptions = (
 
     return options;
 };
+
+export const getDays = (t: (key: string) => string): SimpleObject<string>[] => {
+    return [
+        { value: "1", label: t("common.date:wide.day.monday") },
+        { value: "2", label: t("common.date:wide.day.tuesday") },
+        { value: "3", label: t("common.date:wide.day.wednesday") },
+        { value: "4", label: t("common.date:wide.day.thursday") },
+        { value: "5", label: t("common.date:wide.day.friday") },
+        { value: "6", label: t("common.date:wide.day.saturday") },
+        { value: "7", label: t("common.date:wide.day.sunday") },
+    ];
+};
+
+export const getTime = (interval = 30): SimpleObject<string>[] => {
+    const options: SimpleObject<string>[] = [];
+    for (let i = 0; i <= 24; i++) {
+        for (let k = 0; k < 60; k += interval) {
+            const hours = i > 9 ? `${i}` : `0${i}`;
+            const minutes = k > 9 ? `${k}` : `0${k}`;
+            options.push({
+                value: `${hours}${minutes}`,
+                label: `${hours}:${minutes}`,
+            });
+        }
+    }
+    return options;
+};

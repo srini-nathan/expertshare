@@ -3,12 +3,13 @@ import { MeetingAddEditTabProps } from "./MeetingAddEditTabs";
 import { MeetingAddEditTab2Duration } from "./MeetingAddEditTab2Duration";
 import { MeetingAddEditTab2AvailabilityWindow } from "./MeetingAddEditTab2AvailabilityWindow";
 import { MeetingAddEditTab2AdditionalSettings } from "./MeetingAddEditTab2AdditionalSettings";
-import { Duration } from "../../models/entities/Meeting";
+import { Availability, Duration } from "../../models/entities/Meeting";
 
 interface MeetingAddEditTab2Props extends MeetingAddEditTabProps {
     addDuration: () => void;
     removeDuration: (index: number) => void;
     durations: Duration[];
+    availabilities: Availability[];
 }
 
 export const MeetingAddEditTab2 = ({
@@ -19,6 +20,7 @@ export const MeetingAddEditTab2 = ({
     addDuration,
     removeDuration,
     durations,
+    availabilities,
 }: MeetingAddEditTab2Props) => {
     return (
         <div
@@ -42,6 +44,8 @@ export const MeetingAddEditTab2 = ({
                     <MeetingAddEditTab2AvailabilityWindow
                         data={data}
                         form={form}
+                        isEditMode={isEditMode}
+                        availabilities={availabilities}
                     />
                     <MeetingAddEditTab2AdditionalSettings
                         data={data}

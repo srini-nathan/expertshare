@@ -96,6 +96,20 @@ export const AppFormSelect: FC<AppFormSelectProps> = ({
                         menuPlacement={menuPlacement}
                         onChange={(e) => field.onChange(transform.output(e))}
                         value={transform.input(field.value)}
+                        styles={{
+                            option: (provided) => {
+                                return {
+                                    ...provided,
+                                    zIndex: 9999999999,
+                                };
+                            },
+                            menuList: (provided) => {
+                                return {
+                                    ...provided,
+                                    backgroundColor: "blue",
+                                };
+                            },
+                        }}
                     />
                 )}
             />

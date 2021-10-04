@@ -10,6 +10,19 @@ export interface Duration {
     id: number;
 }
 
+export interface Availability {
+    day: number;
+    start: number;
+    end: number;
+    id: number;
+}
+
+export interface DbAvailability {
+    day: number;
+    start: string;
+    end: string;
+}
+
 export class Meeting extends BaseEntity {
     name: string;
 
@@ -23,7 +36,7 @@ export class Meeting extends BaseEntity {
 
     duration: string[] | Duration[];
 
-    availability: string[];
+    availability: DbAvailability[];
 
     startDate: string;
 
@@ -58,7 +71,7 @@ export class Meeting extends BaseEntity {
             description = "",
             type = MEETING_TYPE.TYPE_SINGLE,
             duration = [`45`],
-            availability = [],
+            availability = [{ day: 1, start: "10:00", end: "11:00" }],
             startDate = "",
             endDate = "",
             repeatWeek = 0,

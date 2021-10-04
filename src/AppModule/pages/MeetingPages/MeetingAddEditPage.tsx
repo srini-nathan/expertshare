@@ -8,10 +8,10 @@ import { MeetingAddEditTab1 } from "./MeetingAddEditTab1";
 import { MeetingAddEditTab2 } from "./MeetingAddEditTab2";
 import { MeetingAddEditTab3 } from "./MeetingAddEditTab3";
 import { useAuthState, useDataAddEdit, useNavigator } from "../../hooks";
-import { Meeting, Duration } from "../../models/entities/Meeting";
+import { Meeting, Duration, Availability } from "../../models/entities/Meeting";
 import { schema } from "./schema";
-import "./assets/scss/style.scss";
 import { getRandomId } from "../../utils";
+import "./assets/scss/style.scss";
 
 export const MeetingAddEditPage: FC<RouteComponentProps> = ({
     navigate,
@@ -26,6 +26,7 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
     const { formState, handleSubmit } = hookForm;
     const navigator = useNavigator(navigate);
     const [durations, setDurations] = useState<Duration[]>([]);
+    const [availabilities, setAvailabilities] = useState<Availability[]>([]);
 
     const onSubmit = async () => {};
 
@@ -59,8 +60,26 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
         setDurations(rawObjects);
     };
 
+    const initAvailability = () => {
+        const rawObjects: Availability[] = data?.availability.map(
+            ({ day, start, end }) => {
+                const timeStart = parseInt(start.split(":").join(""), 10);
+                const timeEnd = parseInt(end.split(":").join(""), 10);
+
+                return {
+                    day,
+                    start: timeStart,
+                    end: timeEnd,
+                    id: getRandomId(),
+                };
+            }
+        );
+        setAvailabilities(rawObjects);
+    };
+
     useEffect(() => {
         initDuration();
+        initAvailability();
     }, [data]);
 
     return (
@@ -103,6 +122,7 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
                                 addDuration={addDuration}
                                 removeDuration={removeDuration}
                                 durations={durations}
+                                availabilities={availabilities}
                             />
                             <MeetingAddEditTab3
                                 active={active}
