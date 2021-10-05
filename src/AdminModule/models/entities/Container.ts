@@ -45,7 +45,7 @@ export class Container extends BaseEntity {
     imageName: string;
 
     constructor(
-        client: string,
+        client: string | Client,
         {
             domain = "",
             name = "",
