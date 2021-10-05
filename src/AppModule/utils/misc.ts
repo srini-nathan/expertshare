@@ -115,3 +115,8 @@ export const copyToClipBoard = (text: string) => {
     document.execCommand("copy");
     document.body.removeChild(el);
 };
+
+export const padNumber = (num: number, size: number) => {
+    const s = `000000000${num}`;
+    return s.substr(s.length - size);
+};

@@ -24,13 +24,10 @@ const schema = () => {
         repeatWeek: yup
             .number()
             .when("type", {
-                is: (val) => MEETING_TYPE.TYPE_SINGLE === val,
-                then: yup.number().min(1).required(),
-            })
-            .when("type", {
                 is: (val) => MEETING_TYPE.TYPE_REPEAT_WEEKLY === val,
-                then: yup.number().min(2).required(),
-            }),
+                then: yup.number().min(2),
+            })
+            .required(),
         duration: yup
             .array()
             .of(
@@ -57,6 +54,8 @@ const schema = () => {
                 })
             )
             .min(1),
+        noticePeriod: yup.number().required(),
+        bufferPeriod: yup.number().required(),
     });
 };
 

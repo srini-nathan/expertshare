@@ -159,7 +159,7 @@ export const MeetingAddEditTab2AdditionalSettings: FC<MeetingAddEditTab2Addition
                         md={6}
                         xl={6}
                         sm={12}
-                        disabled={type !== MEETING_TYPE.TYPE_REPEAT_WEEKLY}
+                        readOnly={type !== MEETING_TYPE.TYPE_REPEAT_WEEKLY}
                         {...validation(
                             "repeatWeek",
                             formState,

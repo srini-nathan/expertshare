@@ -1,18 +1,10 @@
 import React from "react";
 import { Form } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
-import { find as _find } from "lodash";
 import { MeetingAddEditTabProps } from "./MeetingAddEditTabs";
-import {
-    AppFormInput,
-    AppFormSelect,
-    AppFormSwitch,
-    AppFormTextArea,
-} from "../../components";
+import { AppFormInput, AppFormSwitch, AppFormTextArea } from "../../components";
 import { validations } from "./schema";
 import { validation } from "../../utils";
-import { SimpleObject } from "../../models";
-import { getProviderOptions } from "./meeting-helper";
 
 export const MeetingAddEditTab1 = ({
     active,
@@ -21,7 +13,6 @@ export const MeetingAddEditTab1 = ({
     isEditMode,
 }: MeetingAddEditTabProps) => {
     const { t } = useTranslation();
-    const providers = getProviderOptions(t);
     const { control, formState } = form;
     return (
         <div
@@ -50,38 +41,6 @@ export const MeetingAddEditTab1 = ({
                                     )}
                                     defaultValue={data.name}
                                     control={control}
-                                />
-                            </Form.Row>
-                            <Form.Row>
-                                <AppFormSelect
-                                    id={"provider"}
-                                    name={"provider"}
-                                    label={t("meeting.form:label.provider")}
-                                    block={true}
-                                    required={true}
-                                    className="rm-container"
-                                    {...validation(
-                                        "provider",
-                                        formState,
-                                        isEditMode,
-                                        true
-                                    )}
-                                    placeholder={"type"}
-                                    defaultValue={data.provider}
-                                    options={providers}
-                                    control={control}
-                                    transform={{
-                                        output: (
-                                            option: SimpleObject<string>
-                                        ) => {
-                                            return option?.value;
-                                        },
-                                        input: (value: string) => {
-                                            return _find(providers, {
-                                                value,
-                                            });
-                                        },
-                                    }}
                                 />
                             </Form.Row>
                             <Form.Row>

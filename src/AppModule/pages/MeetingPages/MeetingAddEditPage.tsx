@@ -11,8 +11,17 @@ import { MeetingAddEditTab2 } from "./MeetingAddEditTab2";
 import { useAuthState, useDataAddEdit, useNavigator } from "../../hooks";
 import { Meeting, Duration, Availability } from "../../models/entities/Meeting";
 import { schema } from "./schema";
-import { getRandomId } from "../../utils";
+import {
+    errorToast,
+    getRandomId,
+    padNumber,
+    setViolations,
+    successToast,
+} from "../../utils";
 import "./assets/scss/style.scss";
+import { UnprocessableEntityErrorResponse } from "../../models";
+import { MeetingApi } from "../../apis/MeetingApi";
+import { MEETING_PROVIDER } from "../../../config";
 
 export const MeetingAddEditPage: FC<RouteComponentProps> = ({
     navigate,
@@ -20,16 +29,51 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
     const { t } = useTranslation();
     const { clientResourceId, userResourceId } = useAuthState();
     const [active, setActive] = useState<number>(1);
-    const { hookForm, isEditMode, data } = useDataAddEdit<Meeting>(
+    const { hookForm, isEditMode, data, id } = useDataAddEdit<Meeting>(
         new Meeting(clientResourceId, userResourceId),
         schema()
     );
-    const { formState, handleSubmit, control } = hookForm;
+    const { formState, handleSubmit, control, setError } = hookForm;
     const navigator = useNavigator(navigate);
     const [durations, setDurations] = useState<Duration[]>([]);
     const [availabilities, setAvailabilities] = useState<Availability[]>([]);
 
-    const onSubmit = async () => {};
+    const onSubmit = async (formData) => {
+        formData.provider = MEETING_PROVIDER.PROVIDER_MEET;
+        const drs = formData.duration as Duration[];
+        formData.duration = drs.map((dr) => {
+            const { hours, minutes } = dr;
+            const total = minutes + hours * 60;
+            return `${total}`;
+        });
+        const avails = formData.availability as Availability[];
+        formData.availability = avails.map((dr) => {
+            const { day, start, end } = dr;
+            return {
+                day,
+                start: padNumber(parseInt(start, 10), 4),
+                end: padNumber(parseInt(end, 10), 4),
+            };
+        });
+
+        return MeetingApi.createOrUpdate<Meeting>(id, formData).then(
+            ({ error, errorMessage }) => {
+                if (error instanceof UnprocessableEntityErrorResponse) {
+                    setViolations<Meeting>(error, setError);
+                } else if (errorMessage) {
+                    errorToast(errorMessage);
+                } else {
+                    navigator("..").then(() => {
+                        successToast(
+                            isEditMode
+                                ? t("meeting.form:updated.info.message")
+                                : t("meeting.form:created.info.message")
+                        );
+                    });
+                }
+            }
+        );
+    };
 
     const addDuration = () => {
         setDurations([
