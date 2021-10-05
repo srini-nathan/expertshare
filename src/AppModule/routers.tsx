@@ -20,6 +20,8 @@ import {
     MeetingListPage,
     MyMeetingsDetailPage,
     MeetingAddEditPage,
+    MeetingBookingPage,
+    MeetingBookingConfirmPage,
 } from "./pages";
 import { ExhibitorListPage, ExhibitorDetailPage } from "../AdminModule/pages";
 import { ModuleRouter } from "./models";
@@ -78,6 +80,10 @@ export const routers: ModuleRouter[] = [
                     <MeetingAddEditPage path={"meetings/:id"} />
                     <MeetingAddEditPage path={"meetings/new"} />
                     <MyMeetingsDetailPage path={"meetings/:id/bookings"} />
+                    <MeetingBookingPage path={"book-meeting/:id"} />
+                    <MeetingBookingConfirmPage
+                        path={"book-meeting/:id/confirm"}
+                    />
                 </Router>
             );
         },
