@@ -3,7 +3,12 @@ import { Form } from "react-bootstrap";
 import { useTranslation } from "react-i18next";
 import { find as _find } from "lodash";
 import { MeetingAddEditTabProps } from "./MeetingAddEditTabs";
-import { AppFormInput, AppFormSelect, AppFormTextArea } from "../../components";
+import {
+    AppFormInput,
+    AppFormSelect,
+    AppFormSwitch,
+    AppFormTextArea,
+} from "../../components";
 import { validations } from "./schema";
 import { validation } from "../../utils";
 import { SimpleObject } from "../../models";
@@ -104,6 +109,22 @@ export const MeetingAddEditTab1 = ({
                                 block={true}
                                 required={false}
                                 label={t("meeting.form:label.description")}
+                            />
+                        </Form.Row>
+                    </div>
+                    <div className="col-12 col-md-6">
+                        <Form.Row>
+                            <AppFormSwitch
+                                name={"isSendReminder"}
+                                label={t("meeting.form:label.isSendReminder")}
+                                {...validation(
+                                    "isSendReminder",
+                                    formState,
+                                    isEditMode,
+                                    true
+                                )}
+                                defaultChecked={data.isSendReminder}
+                                control={control}
                             />
                         </Form.Row>
                     </div>

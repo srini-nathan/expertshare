@@ -8,7 +8,6 @@ import { AppBreadcrumb, AppFormActions, AppPageHeader } from "../../components";
 import { MeetingAddEditTabs } from "./MeetingAddEditTabs";
 import { MeetingAddEditTab1 } from "./MeetingAddEditTab1";
 import { MeetingAddEditTab2 } from "./MeetingAddEditTab2";
-import { MeetingAddEditTab3 } from "./MeetingAddEditTab3";
 import { useAuthState, useDataAddEdit, useNavigator } from "../../hooks";
 import { Meeting, Duration, Availability } from "../../models/entities/Meeting";
 import { schema } from "./schema";
@@ -144,12 +143,6 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
                                 availabilities={availabilities}
                                 addAvailability={addAvailability}
                                 removeAvailability={removeAvailability}
-                            />
-                            <MeetingAddEditTab3
-                                active={active}
-                                form={hookForm}
-                                data={data}
-                                isEditMode={isEditMode}
                             />
                         </div>
                     </div>

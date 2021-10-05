@@ -69,23 +69,6 @@ export const MeetingAddEditTabs = ({
                         {t("meeting.form:wizard.step2.scheduling")}
                     </a>
                 </li>
-                <li className="nav-item">
-                    <a
-                        className={`nav-link ${active === 3 ? "active" : ""}`}
-                        id="confirmation-tab"
-                        data-toggle="tab"
-                        href="#confirmation"
-                        onClick={(e) => {
-                            handleChange(e, 3);
-                        }}
-                        role="tab"
-                        aria-controls="confirmation"
-                        aria-selected="false"
-                    >
-                        <i>03</i>
-                        {t("meeting.form:wizard.step3.confirmation")}
-                    </a>
-                </li>
             </ul>
         </div>
     );
