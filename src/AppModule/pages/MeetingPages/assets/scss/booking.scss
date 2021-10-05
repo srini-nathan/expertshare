@@ -134,3 +134,11 @@
         }
     }
 }
+
+.duration.active {
+    label {
+        color: var(--tab-text-color--active) !important;
+        background-color: var(--tab-background-color--active) !important;
+        box-shadow: 0 3px 9px var(--tab-box-shadow-color--active) !important;
+    }
+}

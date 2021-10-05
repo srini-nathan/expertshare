@@ -2,12 +2,13 @@ import React, { FC, useEffect, useState } from "react";
 import { RouteComponentProps, useParams } from "@reach/router";
 import "./assets/scss/booking.scss";
 import { useTranslation } from "react-i18next";
+import ReactDatePicker from "react-datepicker";
 import { Meeting } from "../../models/entities/Meeting";
 import { MeetingApi } from "../../apis/MeetingApi";
 import { UserApi } from "../../../AdminModule/apis";
 import { User } from "../../../AdminModule/models";
 import { AppLoader, AppPageHeader } from "../../components";
-import { useBuildAssetPath } from "../../hooks";
+import { useBuildAssetPath, useDateTime } from "../../hooks";
 import { errorToast, parseIdFromResourceUrl, getBGStyle } from "../../utils";
 import { UserProfileFileInfo } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
@@ -22,6 +23,16 @@ export const MeetingBookingPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [data, setData] = useState<Meeting>();
     const { t } = useTranslation();
     const basePath = useBuildAssetPath(UserProfileFileInfo);
+    const [startDate, setStartDate] = useState<any>(new Date());
+    const [duration, setDuration] = useState<string>();
+    const { toShortDate } = useDateTime();
+
+    const displayMinutes = (minutes: string): string => {
+        const mins = parseInt(minutes, 10);
+        return mins < 60
+            ? minutes
+            : `${Math.floor(mins / 60)}:${Math.floor(mins % 60)}`;
+    };
 
     useEffect(() => {
         setLoading(true);
@@ -111,6 +122,68 @@ export const MeetingBookingPage: FC<RouteComponentProps> = (): JSX.Element => {
                                 "meeting.booking:title.chooseYourMeetingDayAndTime"
                             )}
                         </h2>
+                        <div className="row">
+                            <div className="col-12 col-lg-8">
+                                <div className="card p-3 mb-2">
+                                    <div className="row">
+                                        <div className="col-12 col-xl-6 schedule-meeting--calendar my-3">
+                                            <ReactDatePicker
+                                                minDate={new Date()}
+                                                selected={startDate}
+                                                inline={true}
+                                                onChange={(d) => {
+                                                    if (d) {
+                                                        setStartDate(d);
+                                                    }
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="col-12 col-xl-6 schedule-meeting--duration-selector my-3">
+                                            <div className="schedule-meeting--duration-selector--duration mb-3">
+                                                <div className="title">
+                                                    <h2 className="text-center">
+                                                        {t(
+                                                            "meeting.booking:title.duration"
+                                                        )}
+                                                    </h2>
+                                                </div>
+                                                <div className="radio-btn-txt-seperated">
+                                                    <div className="radio-btn-txt-seperated--container py-2 px-1">
+                                                        {data?.duration.map(
+                                                            (minutes) => {
+                                                                return (
+                                                                    <div
+                                                                        className={`form-check text-center mr-2 duration ${
+                                                                            duration ===
+                                                                            minutes
+                                                                                ? "active"
+                                                                                : ""
+                                                                        }`}
+                                                                    >
+                                                                        <label
+                                                                            className={`form-check-label`}
+                                                                            onClick={() => {
+                                                                                setDuration(
+                                                                                    minutes
+                                                                                );
+                                                                            }}
+                                                                        >
+                                                                            {displayMinutes(
+                                                                                minutes
+                                                                            )}
+                                                                        </label>
+                                                                    </div>
+                                                                );
+                                                            }
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div className="inner-container--footer w-100 px-4 pt-4 pb-3">
                         <div className="row">
@@ -121,7 +194,10 @@ export const MeetingBookingPage: FC<RouteComponentProps> = (): JSX.Element => {
                                     )}
                                 </span>
                                 <span className="full-time mt-2">
-                                    26th June, 2021 01:15 - 01:45 PM (30 min)
+                                    {toShortDate(startDate)} 01:15 - 01:45 PM
+                                    {duration
+                                        ? ` ( ${displayMinutes(duration)} ) `
+                                        : null}
                                 </span>
                             </div>
                         </div>
