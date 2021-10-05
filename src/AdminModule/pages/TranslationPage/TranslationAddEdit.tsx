@@ -45,6 +45,7 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
     const [pageSize, setPageSize] = useState<number>(30);
     const [active, setActive] = useState<number>(1);
     const [activeFilter, setActiveFilter] = useState<string>("tKey");
+    const [activeSearchText, setActiveSearchText] = useState<string>("");
     const { t } = useTranslation();
     const [translataionCombines, setTranslationCombines] = useState<
         TranslationCombineList[]
@@ -79,9 +80,10 @@ export const TranslationAddEdit: FC<RouteComponentProps> = (): JSX.Element => {
         isLoading(false);
     }, [translataionCombines]);
 
-    const fetchData = (search = "") => {
+    const fetchData = (search = activeSearchText) => {
         const extraParams: SimpleObject<string> = {};
         if (search !== "") {
+            setActiveSearchText(search);
             extraParams[activeFilter] = search;
         }
         isLoading(true);
