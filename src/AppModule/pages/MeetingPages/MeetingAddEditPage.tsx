@@ -2,8 +2,6 @@ import React, { FC, Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RouteComponentProps } from "@reach/router";
 import { Form, Row } from "react-bootstrap";
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { DevTool } from "@hookform/devtools";
 import { AppBreadcrumb, AppFormActions, AppPageHeader } from "../../components";
 import { MeetingAddEditTabs } from "./MeetingAddEditTabs";
 import { MeetingAddEditTab1 } from "./MeetingAddEditTab1";
@@ -33,7 +31,7 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
         new Meeting(clientResourceId, userResourceId),
         schema()
     );
-    const { formState, handleSubmit, control, setError } = hookForm;
+    const { formState, handleSubmit, setError } = hookForm;
     const navigator = useNavigator(navigate);
     const [durations, setDurations] = useState<Duration[]>([]);
     const [availabilities, setAvailabilities] = useState<Availability[]>([]);
@@ -158,7 +156,6 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
                         : t("meeting.form:header.title.add")
                 }
             ></AppPageHeader>
-            <DevTool control={control} />
             <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                 <div className="schedule-meeting--container mb-3">
                     <div className="inner-content card">
