@@ -45,12 +45,12 @@ export const MeetingAddEditTab2AdditionalSettings: FC<MeetingAddEditTab2Addition
 
     useEffect(() => {
         const startDate = getValues("startDate");
-        if (type === MEETING_TYPE.TYPE_SINGLE) {
+        if (type === MEETING_TYPE.TYPE_SINGLE && startDate) {
             setValue("endDate", addWeeks(new Date(startDate), 1));
             setValue("repeatWeek", 1);
         } else if (type === MEETING_TYPE.TYPE_REPEAT_WEEKLY) {
             setValue("repeatWeek", 2);
-        } else {
+        } else if (startDate) {
             setValue("endDate", addWeeks(new Date(startDate), 1));
             setValue("repeatWeek", 0);
         }
@@ -122,7 +122,7 @@ export const MeetingAddEditTab2AdditionalSettings: FC<MeetingAddEditTab2Addition
                         <AppDatePicker
                             dateFormat={"d MMMM yyyy"}
                             required={true}
-                            readOnly={type !== MEETING_TYPE.TYPE_REPEAT_CUSTOM}
+                            disabled={type !== MEETING_TYPE.TYPE_REPEAT_CUSTOM}
                             {...validation(
                                 "endDate",
                                 formState,

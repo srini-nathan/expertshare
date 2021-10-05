@@ -42,8 +42,8 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
         ]);
     };
 
-    const removeDuration = (id: number) => {
-        setDurations(durations.filter((d) => d.id !== id));
+    const removeDuration = (durationId: number) => {
+        setDurations(durations.filter((d) => d.id !== durationId));
     };
 
     const initDuration = () => {
@@ -90,8 +90,10 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
         ]);
     };
 
-    const removeAvailability = (id: number) => {
-        setAvailabilities(availabilities.filter((d) => d.id !== id));
+    const removeAvailability = (availabilityId: number) => {
+        setAvailabilities(
+            availabilities.filter((d) => d.id !== availabilityId)
+        );
     };
 
     useEffect(() => {
