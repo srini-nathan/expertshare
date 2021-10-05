@@ -38,9 +38,9 @@ export class Meeting extends BaseEntity {
 
     availability: DbAvailability[];
 
-    startDate: string;
+    startDate: string | Date;
 
-    endDate: string;
+    endDate: string | Date;
 
     repeatWeek: number;
 
@@ -74,7 +74,7 @@ export class Meeting extends BaseEntity {
             availability = [{ day: 1, start: "10:00", end: "11:00" }],
             startDate = "",
             endDate = "",
-            repeatWeek = 0,
+            repeatWeek = 1,
             noticePeriod = 5,
             bufferPeriod = 5,
             isActive = true,

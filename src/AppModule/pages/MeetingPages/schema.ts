@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import { MEETING_TYPE } from "../../../config";
 
 const validations = {
     name: {
@@ -11,6 +12,25 @@ const schema = () => {
         name: yup.string().required().max(validations.name.max),
         description: yup.string(),
         providerUrl: yup.string().url().required(),
+        type: yup.string().required(),
+        startDate: yup.date().required(),
+        endDate: yup
+            .date()
+            .min(
+                yup.ref("startDate"),
+                "End date must be greater than start date"
+            )
+            .required(),
+        repeatWeek: yup
+            .number()
+            .when("type", {
+                is: (val) => MEETING_TYPE.TYPE_SINGLE === val,
+                then: yup.number().min(1).required(),
+            })
+            .when("type", {
+                is: (val) => MEETING_TYPE.TYPE_REPEAT_WEEKLY === val,
+                then: yup.number().min(2).required(),
+            }),
         duration: yup
             .array()
             .of(
