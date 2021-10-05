@@ -3,6 +3,7 @@ import { RouteComponentProps, useParams } from "@reach/router";
 import "./assets/scss/booking.scss";
 import { useTranslation } from "react-i18next";
 import ReactDatePicker from "react-datepicker";
+import { format } from "date-fns";
 import { Meeting } from "../../models/entities/Meeting";
 import { MeetingApi } from "../../apis/MeetingApi";
 import { UserApi } from "../../../AdminModule/apis";
@@ -25,6 +26,9 @@ export const MeetingBookingPage: FC<RouteComponentProps> = (): JSX.Element => {
     const basePath = useBuildAssetPath(UserProfileFileInfo);
     const [startDate, setStartDate] = useState<any>(new Date());
     const [duration, setDuration] = useState<string>();
+    const [loadingSlots, setLoadingSlots] = useState<boolean>(true);
+    const [slot, setSlot] = useState<any>();
+    const [slots, setSlots] = useState<any[]>();
     const { toShortDate } = useDateTime();
 
     const displayMinutes = (minutes: string): string => {
@@ -32,6 +36,33 @@ export const MeetingBookingPage: FC<RouteComponentProps> = (): JSX.Element => {
         return mins < 60
             ? minutes
             : `${Math.floor(mins / 60)}:${Math.floor(mins % 60)}`;
+    };
+
+    const renderSlots = () => {
+        return (
+            <div className="radio-btn-txt-seperated--container px-2 py-1">
+                {loadingSlots ? (
+                    <p>Loading...</p>
+                ) : (
+                    slots?.map((s) => {
+                        return (
+                            <div className="form-check text-center mb-2">
+                                <label
+                                    className={`form-check-label ${
+                                        slot === s ? "active" : ""
+                                    }`}
+                                    onClick={() => {
+                                        setSlot(s);
+                                    }}
+                                >
+                                    09:00 - 09:30 AM
+                                </label>
+                            </div>
+                        );
+                    })
+                )}
+            </div>
+        );
     };
 
     useEffect(() => {
@@ -64,6 +95,22 @@ export const MeetingBookingPage: FC<RouteComponentProps> = (): JSX.Element => {
             });
         }
     }, [userId]);
+
+    useEffect(() => {
+        if (startDate && duration) {
+            setLoadingSlots(true);
+            MeetingApi.getSlots<any>(
+                id,
+                format(startDate, "yyyy-MM-dd"),
+                `${duration}`
+            ).then(({ response }) => {
+                if (response !== null) {
+                    setSlots(response);
+                }
+                setLoadingSlots(false);
+            });
+        }
+    }, [id, startDate, duration]);
 
     if (loading || loadingUser) {
         return <AppLoader />;
@@ -177,6 +224,26 @@ export const MeetingBookingPage: FC<RouteComponentProps> = (): JSX.Element => {
                                                             }
                                                         )}
                                                     </div>
+                                                </div>
+                                            </div>
+                                            <div className="schedule-meeting--duration-selector--time">
+                                                <div className="title">
+                                                    <h2 className="text-center">
+                                                        {t(
+                                                            "meeting.booking:title.time"
+                                                        )}
+                                                    </h2>
+                                                </div>
+                                                <div className="radio-btn-txt-seperated">
+                                                    {duration ? (
+                                                        renderSlots()
+                                                    ) : (
+                                                        <p>
+                                                            {t(
+                                                                "meeting.booking:info.selectDuration"
+                                                            )}
+                                                        </p>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
