@@ -12,8 +12,8 @@ export interface Duration {
 
 export interface Availability {
     day: number;
-    start: number;
-    end: number;
+    start: string;
+    end: string;
     id: number;
 }
 

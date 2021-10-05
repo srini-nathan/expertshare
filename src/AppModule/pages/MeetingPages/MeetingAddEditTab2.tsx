@@ -10,6 +10,8 @@ interface MeetingAddEditTab2Props extends MeetingAddEditTabProps {
     removeDuration: (index: number) => void;
     durations: Duration[];
     availabilities: Availability[];
+    addAvailability: () => void;
+    removeAvailability: (index: number) => void;
 }
 
 export const MeetingAddEditTab2 = ({
@@ -21,6 +23,8 @@ export const MeetingAddEditTab2 = ({
     removeDuration,
     durations,
     availabilities,
+    addAvailability,
+    removeAvailability,
 }: MeetingAddEditTab2Props) => {
     return (
         <div
@@ -46,6 +50,8 @@ export const MeetingAddEditTab2 = ({
                         form={form}
                         isEditMode={isEditMode}
                         availabilities={availabilities}
+                        addAvailability={addAvailability}
+                        removeAvailability={removeAvailability}
                     />
                     <MeetingAddEditTab2AdditionalSettings
                         data={data}

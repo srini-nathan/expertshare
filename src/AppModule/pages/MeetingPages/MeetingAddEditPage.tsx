@@ -2,6 +2,8 @@ import React, { FC, Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RouteComponentProps } from "@reach/router";
 import { Form, Row } from "react-bootstrap";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { DevTool } from "@hookform/devtools";
 import { AppBreadcrumb, AppFormActions, AppPageHeader } from "../../components";
 import { MeetingAddEditTabs } from "./MeetingAddEditTabs";
 import { MeetingAddEditTab1 } from "./MeetingAddEditTab1";
@@ -23,7 +25,7 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
         new Meeting(clientResourceId, userResourceId),
         schema()
     );
-    const { formState, handleSubmit } = hookForm;
+    const { formState, handleSubmit, control } = hookForm;
     const navigator = useNavigator(navigate);
     const [durations, setDurations] = useState<Duration[]>([]);
     const [availabilities, setAvailabilities] = useState<Availability[]>([]);
@@ -63,8 +65,8 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
     const initAvailability = () => {
         const rawObjects: Availability[] = data?.availability.map(
             ({ day, start, end }) => {
-                const timeStart = parseInt(start.split(":").join(""), 10);
-                const timeEnd = parseInt(end.split(":").join(""), 10);
+                const timeStart = start.split(":").join("");
+                const timeEnd = end.split(":").join("");
 
                 return {
                     day,
@@ -75,6 +77,22 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
             }
         );
         setAvailabilities(rawObjects);
+    };
+
+    const addAvailability = () => {
+        setAvailabilities([
+            ...availabilities,
+            {
+                day: 1,
+                start: "0100",
+                end: "1100",
+                id: getRandomId(),
+            },
+        ]);
+    };
+
+    const removeAvailability = (id: number) => {
+        setAvailabilities(availabilities.filter((d) => d.id !== id));
     };
 
     useEffect(() => {
@@ -95,6 +113,7 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
                         : t("meeting.form:header.title.add")
                 }
             ></AppPageHeader>
+            <DevTool control={control} />
             <Form noValidate onSubmit={handleSubmit(onSubmit)}>
                 <div className="schedule-meeting--container mb-3">
                     <div className="inner-content card">
@@ -123,6 +142,8 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
                                 removeDuration={removeDuration}
                                 durations={durations}
                                 availabilities={availabilities}
+                                addAvailability={addAvailability}
+                                removeAvailability={removeAvailability}
                             />
                             <MeetingAddEditTab3
                                 active={active}

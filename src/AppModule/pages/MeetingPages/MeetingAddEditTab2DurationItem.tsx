@@ -25,6 +25,8 @@ export const MeetingAddEditTab2DurationItem: FC<MeetingAddEditTab2DurationItemPr
 }): JSX.Element => {
     const { t } = useTranslation();
     const { formState, control } = form;
+    const hoursKey = `duration[${index}].hours`;
+    const minutesKey = `duration[${index}].minutes`;
     return (
         <div className="duration-item mb-3 p-3">
             <div className="schedule-meeting--text-box mr-2">
@@ -38,10 +40,10 @@ export const MeetingAddEditTab2DurationItem: FC<MeetingAddEditTab2DurationItemPr
                     </div>
                     <div className="schedule-meeting--text-box--tx col-12 px-0">
                         <AppFormInput
-                            name={`duration[${index}].hours`}
+                            name={hoursKey}
                             label={``}
                             {...validation(
-                                `duration[${index}].hours`,
+                                hoursKey,
                                 formState,
                                 isEditMode,
                                 true
@@ -66,7 +68,7 @@ export const MeetingAddEditTab2DurationItem: FC<MeetingAddEditTab2DurationItemPr
                     </div>
                     <div className="schedule-meeting--text-box--tx col-12 px-0">
                         <AppFormInput
-                            name={`duration[${index}].minutes`}
+                            name={minutesKey}
                             label={``}
                             {...validation(
                                 `duration[${index}].minutes`,
@@ -74,7 +76,7 @@ export const MeetingAddEditTab2DurationItem: FC<MeetingAddEditTab2DurationItemPr
                                 isEditMode,
                                 true
                             )}
-                            defaultValue={`${duration.minutes}`}
+                            defaultValue={minutesKey}
                             control={control}
                             lg={12}
                             md={12}

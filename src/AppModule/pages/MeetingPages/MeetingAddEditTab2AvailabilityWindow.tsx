@@ -3,12 +3,15 @@ import { UseFormReturn } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Availability, Meeting } from "../../models/entities/Meeting";
 import { MeetingAddEditTab2AvailabilityItem } from "./MeetingAddEditTab2AvailabilityItem";
+import { AppButton } from "../../components";
 
 interface MeetingAddEditTab2AvailabilityWindowProps {
     data: Meeting;
     form: UseFormReturn<Meeting>;
     availabilities: Availability[];
     isEditMode: boolean;
+    addAvailability: () => void;
+    removeAvailability: (index: number) => void;
 }
 
 export const MeetingAddEditTab2AvailabilityWindow: FC<MeetingAddEditTab2AvailabilityWindowProps> = ({
@@ -16,6 +19,8 @@ export const MeetingAddEditTab2AvailabilityWindow: FC<MeetingAddEditTab2Availabi
     availabilities,
     form,
     isEditMode,
+    addAvailability,
+    removeAvailability,
 }): JSX.Element => {
     const { t } = useTranslation();
     return (
@@ -37,7 +42,7 @@ export const MeetingAddEditTab2AvailabilityWindow: FC<MeetingAddEditTab2Availabi
                         </div>
                     </div>
                     <div className="schedule-meeting--available-times-box--content col-12 px-0">
-                        {availabilities.map((availability) => {
+                        {availabilities.map((availability, index) => {
                             return (
                                 <MeetingAddEditTab2AvailabilityItem
                                     key={availability.id}
@@ -46,13 +51,18 @@ export const MeetingAddEditTab2AvailabilityWindow: FC<MeetingAddEditTab2Availabi
                                     isEditMode={isEditMode}
                                     availabilities={availabilities}
                                     availability={availability}
+                                    removeAvailability={removeAvailability}
+                                    index={index}
                                 />
                             );
                         })}
-                        <a className="btn btn-secondary add-duration-btn pl-4 pr-3 mt-3">
-                            <i className="fak fa-plus-light"></i>
-                            Another Day
-                        </a>
+                        <AppButton
+                            variant={"secondary"}
+                            className="add-duration-btn pl-4 pr-3 mt-3"
+                            onClick={() => addAvailability()}
+                        >
+                            {t("meeting.form:button.anotherDay")}
+                        </AppButton>
                     </div>
                 </div>
             </div>

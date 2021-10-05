@@ -27,11 +27,16 @@ const schema = () => {
                 yup.object().shape({
                     day: yup.number().min(1).max(7).required(),
                     start: yup.number().min(0).max(2400).required(),
-                    end: yup.number().min(0).max(2400).required(),
+                    end: yup
+                        .number()
+                        .moreThan(yup.ref("start"), () => {
+                            return `Must be greater than start time`;
+                        })
+                        .max(2400)
+                        .required(),
                 })
             )
-            .min(1)
-            .max(3),
+            .min(1),
     });
 };
 
