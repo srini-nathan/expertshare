@@ -103,8 +103,8 @@ export const MeetingBookingPage: FC<RouteComponentProps> = (): JSX.Element => {
                 id,
                 format(startDate, "yyyy-MM-dd"),
                 `${duration}`
-            ).then(({ response }) => {
-                if (response !== null) {
+            ).then(({ error, response }) => {
+                if (!error && response !== null) {
                     setSlots(response);
                 }
                 setLoadingSlots(false);
@@ -170,7 +170,7 @@ export const MeetingBookingPage: FC<RouteComponentProps> = (): JSX.Element => {
                             )}
                         </h2>
                         <div className="row">
-                            <div className="col-12 col-lg-8">
+                            <div className="col-12">
                                 <div className="card p-3 mb-2">
                                     <div className="row">
                                         <div className="col-12 col-xl-6 schedule-meeting--calendar my-3">
@@ -178,6 +178,7 @@ export const MeetingBookingPage: FC<RouteComponentProps> = (): JSX.Element => {
                                                 minDate={new Date()}
                                                 selected={startDate}
                                                 inline={true}
+                                                calendarClassName="custom-datepicker"
                                                 onChange={(d) => {
                                                     if (d) {
                                                         setStartDate(d);

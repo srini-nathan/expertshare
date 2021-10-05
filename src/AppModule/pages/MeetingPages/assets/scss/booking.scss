@@ -142,3 +142,91 @@
         box-shadow: 0 3px 9px var(--tab-box-shadow-color--active) !important;
     }
 }
+
+.meeting-booked-successfully {
+    &--content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 80vh;
+        .success-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 150px;
+            height: 150px;
+            padding: 20px;
+            font-size: 116px;
+            font-weight: 500;
+            color: var(--light-clr);
+            background-color: var(--success);
+            border-radius: var(--circle-border-radius);
+            @include media("md") {
+                width: 90px;
+                height: 90px;
+                padding: 20px;
+                font-size: 58px;
+                font-weight: 500;
+            }
+        }
+        .title {
+            font-size: 42px;
+            font-weight: 700;
+            color: var(--card-text-color);
+            @include media("md") {
+                font-size: 28px;
+            }
+        }
+        .topic {
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--card-text-color);
+            @include media("md") {
+                font-size: 16px;
+            }
+        }
+        .date {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--success);
+            @include media("md") {
+                font-size: 16px;
+            }
+        }
+        .class-url {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--card-second-text-color);
+            text-decoration: none;
+            word-break: break-all;
+            @include media("md") {
+                font-size: 16px;
+            }
+        }
+        .back-btn {
+            position: relative;
+            min-width: 150px;
+            padding-left: 35px;
+            i {
+                position: absolute;
+                left: 10px;
+                font-size: 16px;
+                font-weight: 500;
+                &::before {
+                    content: "\e017";
+                }
+            }
+        }
+        .copy-btn {
+            position: relative;
+            min-width: 150px;
+            padding-right: 35px;
+            i {
+                position: absolute;
+                right: 10px;
+                font-size: 16px;
+                font-weight: 500;
+            }
+        }
+    }
+}
