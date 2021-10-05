@@ -26,7 +26,7 @@ export const AppWelcomeModal: FC<AppWelcomeModalProps> = ({
     const { state } = React.useContext(AuthContext);
     const { user } = state as AuthState;
     const { locale } = useUserLocale();
-    const [isPlaying, setIsPlaying] = React.useState(true);
+    const [isPlaying, setIsPlaying] = React.useState(false);
     const [enable, isEnable] = React.useState(false);
     const [fullScreen, isFullScreen] = React.useState(false);
     const [media, setMedia] = React.useState("");
@@ -106,6 +106,9 @@ export const AppWelcomeModal: FC<AppWelcomeModalProps> = ({
                             if (ref) {
                                 videoPlayerRef.current = ref;
                             }
+                        }}
+                        onPlay={() => {
+                            setIsPlaying(true);
                         }}
                     >
                         <source
