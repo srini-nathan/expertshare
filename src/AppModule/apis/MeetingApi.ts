@@ -11,6 +11,7 @@ const {
     api_meetings_patch_item: API_PATCH_ITEM,
     api_meetings_post_collection: API_POST_COLLECTION,
     api_meetings_set_active_item: API_PATCH_SET_ACTIVE,
+    api_meeting_get_slots: API_GET_SLOTS,
 } = ROUTES;
 
 export abstract class MeetingApi extends EntityAPI {
@@ -37,6 +38,22 @@ export abstract class MeetingApi extends EntityAPI {
             {},
             config
         )
+            .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
+            .catch((error: AxiosError | ServerError) =>
+                this.handleErrorDuringCreatingOrUpdating(error)
+            );
+    }
+
+    public static async getSlots<R>(
+        meetingId: number,
+        date: string,
+        duration: string
+    ): Promise<FinalResponse<R | null>> {
+        return this.makeGet<R>(API_GET_SLOTS, {
+            meetingId,
+            date,
+            duration,
+        })
             .then(({ data }) => Promise.resolve(new FinalResponse<R>(data)))
             .catch((error: AxiosError | ServerError) =>
                 this.handleErrorDuringCreatingOrUpdating(error)
