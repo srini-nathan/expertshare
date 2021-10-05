@@ -10,6 +10,7 @@ import {
     useDateTime,
     useAskSpeakerSocketEvents,
     useAuthState,
+    useNavigator,
 } from "../../hooks";
 import {
     AppPageHeader,
@@ -39,6 +40,11 @@ import { ConferenceApi, SessionApi } from "../../../AdminModule/apis";
 
 import "./assets/scss/style.scss";
 import "./assets/scss/_common.scss";
+
+const { Role } = CONSTANTS;
+const {
+    ROLE: { ROLE_ADMIN, ROLE_OPERATOR, ROLE_SPEAKER, ROLE_MODERATOR },
+} = Role;
 
 type PAskSpeakerQuestion = SessionQuestion;
 
@@ -489,7 +495,9 @@ const QuestionCard = ({
         ))
     );
 };
-export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
+export const QuestionBoard: FC<RouteComponentProps> = ({
+    navigate,
+}): JSX.Element => {
     const [loading, isLoading] = useState<boolean>(true);
     const [fetchingQuestions, isFetchingQuestions] = useState<boolean>(true);
     const [questions, setQuestions] = useState<any[]>(core.getState());
@@ -501,12 +509,29 @@ export const QuestionBoard: FC<RouteComponentProps> = (): JSX.Element => {
     const [selectedConference, setSelectedConference] = useState<number>(0);
     const [selectedSession, setSelectedSession] = useState<number[]>([]);
     const { containerId } = useAuthState();
+    const { role } = useAuthState();
+    const navigator = useNavigator(navigate);
     const showColumns = [
         STATUS_NEW,
         STATUS_ACCEPTED,
         STATUS_REJECTED,
         "ANSWERED",
     ];
+
+    useEffect(() => {
+        if (
+            !(
+                role === ROLE_MODERATOR ||
+                role === ROLE_OPERATOR ||
+                role === ROLE_SPEAKER ||
+                role === ROLE_ADMIN
+            )
+        ) {
+            // eslint-disable-next-line no-console
+            console.log("role", role);
+            navigator("/").then();
+        }
+    }, [role, navigator]);
 
     const {
         emitJoinAskSpeaker,
