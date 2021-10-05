@@ -5,4 +5,6 @@ export interface AppFormElementProps {
     label?: string;
     description?: string;
     className?: string;
+    readOnly?: boolean;
+    disabled?: boolean;
 }

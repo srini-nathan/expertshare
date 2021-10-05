@@ -40,6 +40,8 @@ export const AppFormInput: FC<AppFormInputProps> = ({
     onBlurHandler,
     onChange,
     block,
+    readOnly,
+    disabled,
     ...props
 }): JSX.Element => {
     const [data, setData] = useState<string>(defaultValue);
@@ -59,6 +61,8 @@ export const AppFormInput: FC<AppFormInputProps> = ({
         isValid,
         isInvalid,
         type,
+        readOnly,
+        disabled,
     };
     const { getColumnClasses } = useGridHelper();
     const colClasses = getColumnClasses(sm, md, lg, xl);
