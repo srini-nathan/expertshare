@@ -4,17 +4,30 @@ import "./assets/scss/booking.scss";
 import { useTranslation } from "react-i18next";
 import ReactDatePicker from "react-datepicker";
 import { format } from "date-fns";
+import { Row } from "react-bootstrap";
 import { Meeting } from "../../models/entities/Meeting";
 import { MeetingApi } from "../../apis/MeetingApi";
+import { MeetingBookingApi } from "../../apis/MeetingBookingApi";
 import { UserApi } from "../../../AdminModule/apis";
 import { User } from "../../../AdminModule/models";
-import { AppLoader, AppPageHeader } from "../../components";
-import { useBuildAssetPath, useDateTime } from "../../hooks";
+import { AppButton, AppLoader, AppPageHeader } from "../../components";
+import {
+    useAuthState,
+    useBuildAssetPath,
+    useDateTime,
+    useNavigator,
+} from "../../hooks";
 import { errorToast, parseIdFromResourceUrl, getBGStyle } from "../../utils";
-import { UserProfileFileInfo } from "../../../config";
+import { UserProfileFileInfo, MEETING_BOOKING_STATUS } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
+import {
+    MeetingBooking,
+    PMeetingBooking,
+} from "../../models/entities/MeetingBooking";
 
-export const MeetingBookingPage: FC<RouteComponentProps> = (): JSX.Element => {
+export const MeetingBookingPage: FC<RouteComponentProps> = ({
+    navigate,
+}): JSX.Element => {
     const { id } = useParams();
     const [loading, setLoading] = useState<boolean>(true);
     const [loadingUser, setLoadingUser] = useState<boolean>(true);
@@ -30,6 +43,13 @@ export const MeetingBookingPage: FC<RouteComponentProps> = (): JSX.Element => {
     const [slot, setSlot] = useState<any>();
     const [slots, setSlots] = useState<any[]>();
     const { toShortDate } = useDateTime();
+    const {
+        containerResourceId,
+        clientResourceId,
+        userResourceId,
+    } = useAuthState();
+    const [submitting, setSubmitting] = useState<boolean>(false);
+    const navigator = useNavigator(navigate);
 
     const displayMinutes = (minutes: string): string => {
         const mins = parseInt(minutes, 10);
@@ -63,6 +83,25 @@ export const MeetingBookingPage: FC<RouteComponentProps> = (): JSX.Element => {
                 )}
             </div>
         );
+    };
+
+    const bookMeeting = () => {
+        if (duration && slot) {
+            setSubmitting(true);
+            const booking: PMeetingBooking = {
+                meeting: MeetingApi.toResourceUrl(id),
+                container: containerResourceId,
+                client: clientResourceId,
+                user: userResourceId,
+                status: MEETING_BOOKING_STATUS.STATUS_CREATED,
+                duration: parseInt(duration, 10),
+            };
+            MeetingBookingApi.create<MeetingBooking, PMeetingBooking>(
+                booking
+            ).finally(() => {
+                setSubmitting(false);
+            });
+        }
     };
 
     useEffect(() => {
@@ -271,6 +310,30 @@ export const MeetingBookingPage: FC<RouteComponentProps> = (): JSX.Element => {
                         </div>
                     </div>
                 </div>
+                <Row>
+                    <div className="col-12">
+                        <div className="d-flex justify-content-end footer-action w-100 p-3">
+                            <AppButton
+                                type="button"
+                                variant={"secondary"}
+                                className="mr-4"
+                                disabled={submitting}
+                                onClick={() => navigator(-1).then()}
+                            >
+                                {t("common.button:cancel")}
+                            </AppButton>
+                            <AppButton
+                                type="button"
+                                isLoading={submitting}
+                                disabled={submitting || !slot || !duration}
+                                loadingTxt={t("common.button:submitting")}
+                                onClick={() => bookMeeting()}
+                            >
+                                {t("common.button:confirm")}
+                            </AppButton>
+                        </div>
+                    </div>
+                </Row>
             </div>
         </div>
     );
