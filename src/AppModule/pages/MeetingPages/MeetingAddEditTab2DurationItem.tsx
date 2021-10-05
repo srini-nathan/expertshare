@@ -71,12 +71,12 @@ export const MeetingAddEditTab2DurationItem: FC<MeetingAddEditTab2DurationItemPr
                             name={minutesKey}
                             label={``}
                             {...validation(
-                                `duration[${index}].minutes`,
+                                minutesKey,
                                 formState,
                                 isEditMode,
                                 true
                             )}
-                            defaultValue={minutesKey}
+                            defaultValue={`${duration.minutes}`}
                             control={control}
                             lg={12}
                             md={12}
