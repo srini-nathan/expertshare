@@ -8,7 +8,6 @@ import { Row } from "react-bootstrap";
 import { Meeting } from "../../models/entities/Meeting";
 import { MeetingApi } from "../../apis/MeetingApi";
 import { MeetingBookingApi } from "../../apis/MeetingBookingApi";
-import { UserApi } from "../../../AdminModule/apis";
 import { User } from "../../../AdminModule/models";
 import { AppButton, AppLoader, AppPageHeader } from "../../components";
 import {
@@ -17,7 +16,7 @@ import {
     useDateTime,
     useNavigator,
 } from "../../hooks";
-import { errorToast, parseIdFromResourceUrl, getBGStyle } from "../../utils";
+import { errorToast, getBGStyle } from "../../utils";
 import { UserProfileFileInfo, MEETING_BOOKING_STATUS } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
 import {
@@ -36,9 +35,7 @@ export const MeetingBookingPage: FC<RouteComponentProps> = ({
 }): JSX.Element => {
     const { id } = useParams();
     const [loading, setLoading] = useState<boolean>(true);
-    const [loadingUser, setLoadingUser] = useState<boolean>(true);
     const [found, setFound] = useState<boolean>(true);
-    const [userId, setUserId] = useState<number>();
     const [user, setUser] = useState<User>();
     const [data, setData] = useState<Meeting>();
     const { t } = useTranslation();
@@ -147,28 +144,11 @@ export const MeetingBookingPage: FC<RouteComponentProps> = ({
                 errorToast(t("meeting.booking:notExist"));
             } else if (response) {
                 setData(response);
-                if (response.user) {
-                    const uId = parseIdFromResourceUrl(response.user as string);
-                    if (uId) {
-                        setUserId(uId);
-                    }
-                }
+                setUser(response.user as User);
             }
             setLoading(false);
         });
     }, [id, t]);
-
-    useEffect(() => {
-        setLoadingUser(true);
-        if (userId) {
-            UserApi.getAttendeeView<User>(userId).then(({ response }) => {
-                if (response !== null) {
-                    setUser(response);
-                }
-                setLoadingUser(false);
-            });
-        }
-    }, [userId]);
 
     useEffect(() => {
         if (startDate && duration) {
@@ -192,7 +172,23 @@ export const MeetingBookingPage: FC<RouteComponentProps> = ({
         setDuration("");
     }, [startDate]);
 
-    if (loading || loadingUser) {
+    const getUserType = (userType) => {
+        switch (userType) {
+            case "speaker":
+            case "exhibitor":
+            case "moderator":
+                return (
+                    <a className="btn btn-info speaker-btn">
+                        <i className="fak fa-speakers"></i>
+                        <span>{t(`common.user.badge:${userType}`)}</span>
+                    </a>
+                );
+            default:
+                return <></>;
+        }
+    };
+
+    if (loading) {
         return <AppLoader />;
     }
 
@@ -211,13 +207,7 @@ export const MeetingBookingPage: FC<RouteComponentProps> = ({
                             className="inner-container--profile-pic--content"
                             style={profileStyle}
                         >
-                            {/* <a href="#" className="btn btn-info speaker-btn"> */}
-                            {/*    <i */}
-                            {/*        className="fak fa-speakers" */}
-                            {/*        aria-hidden="true" */}
-                            {/*    ></i> */}
-                            {/*    Speaker */}
-                            {/* </a> */}
+                            {getUserType(user?.userType)}
                         </div>
                     </div>
                     <div className="inner-container--main-det col-12 col-md-auto mt-4 mt-xl-0 text-center text-md-left">

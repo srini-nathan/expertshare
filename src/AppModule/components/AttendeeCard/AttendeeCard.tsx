@@ -3,16 +3,15 @@ import { Link } from "@reach/router";
 import { useTranslation } from "react-i18next";
 import "./assets/scss/list.scss";
 import { useAuthState, useBuildAssetPath, useInitChat } from "../../hooks";
-import { CONSTANTS } from "../../../config";
-import { FileTypeInfo, User } from "../../models";
+import { UserProfileFileInfo } from "../../../config";
+import { User } from "../../models";
 import placeholder from "../../assets/images/user-avatar.png";
 import { useCheckFeature } from "../../hooks/useCheckFeature";
 import { useGlobalData } from "../../contexts";
-
-const { Upload: UPLOAD } = CONSTANTS;
-const {
-    FILETYPEINFO: { FILETYPEINFO_USER_PROFILE },
-} = UPLOAD;
+import { Meeting } from "../../models/entities/Meeting";
+import { MeetingApi } from "../../apis/MeetingApi";
+import { parseConfiguration } from "../../utils";
+import { Configuration } from "../../../AdminModule/models";
 
 export interface AttendeeCardProps {
     attendee: any;
@@ -22,6 +21,11 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
     attendee,
 }): JSX.Element => {
     const [online] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [meeting, setMeeting] = useState<Meeting | null>(null);
+    const [haveActiveMeeting, setHaveActiveMeeting] = useState<boolean | null>(
+        null
+    );
     const { t } = useTranslation();
 
     const {
@@ -38,13 +42,14 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
         id,
     } = attendee as User;
     const profilePicturePath = useBuildAssetPath(
-        FILETYPEINFO_USER_PROFILE as FileTypeInfo,
+        UserProfileFileInfo,
         imageName
     );
     const { container } = useGlobalData();
     const { startChat } = useInitChat();
-    const { user } = useAuthState();
+    const { user, clientId } = useAuthState();
     const { isChatEnable } = useCheckFeature();
+    const config: Configuration = parseConfiguration(container);
 
     const style = imageName
         ? {
@@ -84,6 +89,84 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
 
             default:
                 return <></>;
+        }
+    };
+
+    const renderPopup = () => {
+        if (config?.isBookingEnable && loading) {
+            return (
+                <div className="popup">
+                    <div className="popup--inner">
+                        <div className="popup--inner--item view-profile">
+                            <p>{t("common.message:loading")}</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        return (
+            <div className="popup">
+                <div className="popup--inner">
+                    {isChatEnable() &&
+                        isAllowCommunication &&
+                        container &&
+                        user && (
+                            <div
+                                className="popup--inner--item conversation"
+                                onClick={() => {
+                                    if (user.id) {
+                                        startChat(user.id, id, container.id);
+                                    }
+                                }}
+                            >
+                                <a>
+                                    <i className="fak fa-start-conversation"></i>
+                                    {t(
+                                        "attendee.form:button.startConversation"
+                                    )}
+                                </a>
+                            </div>
+                        )}
+                    {config?.isBookingEnable && meeting && haveActiveMeeting ? (
+                        <div className="popup--inner--item view-profile">
+                            <Link to={`/book-meeting/${meeting.id}`}>
+                                <i className="fa fa-calendar-plus"></i>
+                                {t("attendee.form:button.bookMeeting")}
+                            </Link>
+                        </div>
+                    ) : null}
+                    <div className="popup--inner--item view-profile">
+                        <Link
+                            to={`/attendee/${attendee.id}/show`}
+                            className={
+                                online
+                                    ? "profile-avatar online"
+                                    : "profile-avatar"
+                            }
+                        >
+                            <i className="fak fa-view-profile"></i>
+                            {t("attendee.form:button.viewProfile")}
+                        </Link>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    const initMenu = () => {
+        if (config?.isBookingEnable && !loading && haveActiveMeeting === null) {
+            setLoading(true);
+            MeetingApi.getUserActiveMeetings<Meeting>(id, clientId)
+                .then(({ response, error }) => {
+                    if (!error && response && response?.items) {
+                        setMeeting(response.items[0] ?? null);
+                        setHaveActiveMeeting(response?.totalItems > 0);
+                    }
+                })
+                .finally(() => {
+                    setLoading(false);
+                });
         }
     };
 
@@ -158,64 +241,13 @@ export const AttendeeCard: FC<AttendeeCardProps> = ({
                         </button>
                     </div> */}
                     <div className="card--buttons--get-in-contact col-12 px-2">
-                        <button className="btn btn-secondary">
+                        <button
+                            className="btn btn-secondary"
+                            onMouseEnter={initMenu}
+                        >
                             <i className="fak fa-start-conversation"></i>
                             {t("attendee.form:button.getInContact")}
-                            <div className="popup">
-                                <div className="popup--inner">
-                                    {/* <div className="popup--inner--item video-chat">
-                                        <a href="#">
-                                            <AppIcon name={"Video"} />
-                                            Start Video Chat
-                                        </a>
-                                    </div> */}
-                                    {isChatEnable() &&
-                                        isAllowCommunication &&
-                                        container &&
-                                        user && (
-                                            <div
-                                                className="popup--inner--item conversation"
-                                                onClick={() => {
-                                                    if (user.id) {
-                                                        startChat(
-                                                            user.id,
-                                                            id,
-                                                            container.id
-                                                        );
-                                                    }
-                                                }}
-                                            >
-                                                <a>
-                                                    <i className="fak fa-start-conversation"></i>
-                                                    {t(
-                                                        "attendee.form:button.startConversation"
-                                                    )}
-                                                </a>
-                                            </div>
-                                        )}
-                                    <div className="popup--inner--item view-profile">
-                                        <Link
-                                            to={`/attendee/${attendee.id}/show`}
-                                            className={
-                                                online
-                                                    ? "profile-avatar online"
-                                                    : "profile-avatar"
-                                            }
-                                        >
-                                            <i className="fak fa-view-profile"></i>
-                                            {t(
-                                                "attendee.form:button.viewProfile"
-                                            )}
-                                        </Link>
-                                    </div>
-                                    {/* <div className="popup--inner--item view-profile">
-                                        <a href="#">
-                                            <AppIcon name="Download" />
-                                            Download VCF
-                                        </a>
-                                    </div> */}
-                                </div>
-                            </div>
+                            {renderPopup()}
                         </button>
                     </div>
                 </div>

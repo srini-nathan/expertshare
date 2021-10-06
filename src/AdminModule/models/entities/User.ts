@@ -62,6 +62,8 @@ export class User extends BaseEntity {
 
     isPwdGenerated?: boolean;
 
+    userType?: string;
+
     constructor({
         email = "",
         plainPassword = "",
@@ -81,6 +83,7 @@ export class User extends BaseEntity {
         role = "",
         status = "",
         userTags = [],
+        userType = "",
         isBlocked = false,
         isOnboarded = false,
         isDisplayAsGuest = false,
@@ -124,6 +127,7 @@ export class User extends BaseEntity {
         this.confirmPassword = confirmPassword;
         this.userGroups = userGroups;
         this.isPwdGenerated = isPwdGenerated;
+        this.userType = userType;
     }
 
     toString(): string {
@@ -161,6 +165,7 @@ export class User extends BaseEntity {
             userFieldValues: this.userFieldValues,
             userField: this.userField,
             isPwdGenerated: this.isPwdGenerated,
+            userType: this.userType,
         };
 
         return data;

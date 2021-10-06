@@ -1,7 +1,8 @@
 import { AxiosError, AxiosRequestConfig } from "axios";
 import { EntityAPI } from "./EntityAPI";
 import { route, ROUTES } from "../../config";
-import { FinalResponse, ServerError } from "../models";
+import { FinalResponse, ListResponse, ServerError } from "../models";
+import { onFindAllResponseHydra, onFindAllResponseJson } from "./transformer";
 
 const {
     api_meetings_delete_item: API_DELETE_ITEM,
@@ -12,6 +13,7 @@ const {
     api_meetings_post_collection: API_POST_COLLECTION,
     api_meetings_set_active_item: API_PATCH_SET_ACTIVE,
     api_meeting_get_slots: API_GET_SLOTS,
+    api_meetings_get_active_collection: API_GET_ACTIVES,
 } = ROUTES;
 
 export abstract class MeetingApi extends EntityAPI {
@@ -58,5 +60,27 @@ export abstract class MeetingApi extends EntityAPI {
             .catch((error: AxiosError | ServerError) =>
                 this.handleErrorDuringCreatingOrUpdating(error)
             );
+    }
+
+    public static async getUserActiveMeetings<E>(
+        userId: number,
+        clientId: number
+    ): Promise<FinalResponse<ListResponse<E> | null>> {
+        return this.makeGet<E>(API_GET_ACTIVES, {
+            "user.id": userId,
+            "client.id": clientId,
+        })
+            .then(({ data }) => {
+                const list = this.acceptHydra
+                    ? onFindAllResponseHydra<E>(data)
+                    : onFindAllResponseJson<E>(data);
+                return Promise.resolve(
+                    new FinalResponse<ListResponse<E>>(list)
+                );
+            })
+            .catch((error: AxiosError | ServerError) => {
+                const { message } = error;
+                return Promise.resolve(new FinalResponse(null, message));
+            });
     }
 }
