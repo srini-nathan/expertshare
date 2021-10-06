@@ -62,17 +62,6 @@ export const MeetingBookingPage: FC<RouteComponentProps> = ({
     const [submitting, setSubmitting] = useState<boolean>(false);
     const navigator = useNavigator(navigate);
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const parseTime = (minutes: string): string => {
-        const mins = parseInt(minutes, 10);
-        return mins < 60
-            ? `00:${mins}`
-            : `${padNumber(Math.floor(mins / 60), 2)}:${padNumber(
-                  Math.floor(mins % 60),
-                  2
-              )}`;
-    };
-
     const displayMinutes = (minutes: string): string => {
         const mins = parseInt(minutes, 10);
         return mins < 60
