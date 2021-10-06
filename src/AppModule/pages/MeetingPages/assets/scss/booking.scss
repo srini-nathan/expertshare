@@ -135,7 +135,8 @@
     }
 }
 
-.duration.active {
+.duration.active,
+.slot.active {
     label {
         color: var(--tab-text-color--active) !important;
         background-color: var(--tab-background-color--active) !important;

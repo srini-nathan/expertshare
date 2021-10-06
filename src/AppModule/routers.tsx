@@ -82,7 +82,7 @@ export const routers: ModuleRouter[] = [
                     <MyMeetingsDetailPage path={"meetings/:id/bookings"} />
                     <MeetingBookingPage path={"book-meeting/:id"} />
                     <MeetingBookingConfirmPage
-                        path={"book-meeting/:id/confirm"}
+                        path={"booked-meeting/:id/confirm"}
                     />
                 </Router>
             );

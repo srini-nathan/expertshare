@@ -2,10 +2,18 @@ import React, { FC, useEffect, useState } from "react";
 import { RouteComponentProps, useParams } from "@reach/router";
 import "./assets/scss/booking.scss";
 import { useTranslation } from "react-i18next";
-import { MeetingApi } from "../../apis/MeetingApi";
 import { Meeting } from "../../models/entities/Meeting";
-import { errorToast, copyToClipBoard } from "../../utils";
+import {
+    errorToast,
+    copyToClipBoard,
+    getDateTimeWithoutTimezone,
+} from "../../utils";
 import { AppLoader, AppPageHeader } from "../../components";
+import { MeetingBooking } from "../../models/entities/MeetingBooking";
+import { MeetingBookingApi } from "../../apis/MeetingBookingApi";
+import { useDateTime } from "../../hooks";
+
+let backPage = `/`;
 
 export const MeetingBookingConfirmPage: FC<RouteComponentProps> = ({
     navigate,
@@ -13,19 +21,30 @@ export const MeetingBookingConfirmPage: FC<RouteComponentProps> = ({
     const { t } = useTranslation();
     const { id } = useParams();
     const [loading, setLoading] = useState<boolean>(true);
+    const [booking, setBooking] = useState<MeetingBooking>();
     const [data, setData] = useState<Meeting>();
     const [found, setFound] = useState<boolean>(true);
+    const { toLongDateTime } = useDateTime();
+
     useEffect(() => {
         setLoading(true);
-        MeetingApi.findById<Meeting>(id).then(({ isNotFound, response }) => {
-            if (isNotFound) {
-                setFound(false);
-                errorToast(t("meeting.booking:notexit"));
-            } else if (response) {
-                setData(response);
+        MeetingBookingApi.findById<MeetingBooking>(id).then(
+            ({ isNotFound, response }) => {
+                if (isNotFound) {
+                    setFound(false);
+                    errorToast(t("meeting.bookingConfirm:notExist"));
+                    if (navigate) {
+                        navigate("/");
+                    }
+                } else if (response) {
+                    setBooking(response);
+                    const m = response.meeting as Meeting;
+                    setData(m);
+                    backPage = `/book-meeting/${m.id}`;
+                }
+                setLoading(false);
             }
-            setLoading(false);
-        });
+        );
     }, [id, t]);
 
     if (loading) {
@@ -33,7 +52,7 @@ export const MeetingBookingConfirmPage: FC<RouteComponentProps> = ({
     }
 
     if (found === false) {
-        return <AppPageHeader title={t("meeting:notexit")} />;
+        return <AppPageHeader title={t("meeting:notExist")} />;
     }
 
     return (
@@ -43,7 +62,13 @@ export const MeetingBookingConfirmPage: FC<RouteComponentProps> = ({
                 {t("meeting.bookingConfirm:youBookedMeeting")}
             </h3>
             <p className="topic text-center mb-3">{data?.name}</p>
-            <p className="date text-center mb-3">26th June, 2021, 08:00 PM</p>
+            <p className="date text-center mb-3">
+                {booking?.meetingTime
+                    ? toLongDateTime(
+                          getDateTimeWithoutTimezone(booking?.meetingTime)
+                      )
+                    : "Invalid"}
+            </p>
             <a
                 href={data?.providerUrl}
                 target="_blank"
@@ -58,7 +83,7 @@ export const MeetingBookingConfirmPage: FC<RouteComponentProps> = ({
                         className="btn btn-primary back-btn"
                         onClick={() => {
                             if (navigate) {
-                                navigate("..");
+                                navigate(backPage);
                             }
                         }}
                     >

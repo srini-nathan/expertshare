@@ -3,7 +3,7 @@ import { RouteComponentProps, useParams } from "@reach/router";
 import "./assets/scss/booking.scss";
 import { useTranslation } from "react-i18next";
 import ReactDatePicker from "react-datepicker";
-import { format } from "date-fns";
+import { format, addMinutes } from "date-fns";
 import { Row } from "react-bootstrap";
 import { Meeting } from "../../models/entities/Meeting";
 import { MeetingApi } from "../../apis/MeetingApi";
@@ -17,13 +17,24 @@ import {
     useDateTime,
     useNavigator,
 } from "../../hooks";
-import { errorToast, parseIdFromResourceUrl, getBGStyle } from "../../utils";
+import {
+    errorToast,
+    parseIdFromResourceUrl,
+    getBGStyle,
+    padNumber,
+} from "../../utils";
 import { UserProfileFileInfo, MEETING_BOOKING_STATUS } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
 import {
     MeetingBooking,
     PMeetingBooking,
 } from "../../models/entities/MeetingBooking";
+
+interface Slot {
+    date: string;
+    timezone: string;
+    timezone_type: string;
+}
 
 export const MeetingBookingPage: FC<RouteComponentProps> = ({
     navigate,
@@ -40,8 +51,8 @@ export const MeetingBookingPage: FC<RouteComponentProps> = ({
     const [startDate, setStartDate] = useState<any>(new Date());
     const [duration, setDuration] = useState<string>();
     const [loadingSlots, setLoadingSlots] = useState<boolean>(true);
-    const [slot, setSlot] = useState<any>();
-    const [slots, setSlots] = useState<any[]>();
+    const [slot, setSlot] = useState<Slot>();
+    const [slots, setSlots] = useState<Slot[]>();
     const { toShortDate } = useDateTime();
     const {
         containerResourceId,
@@ -50,6 +61,17 @@ export const MeetingBookingPage: FC<RouteComponentProps> = ({
     } = useAuthState();
     const [submitting, setSubmitting] = useState<boolean>(false);
     const navigator = useNavigator(navigate);
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const parseTime = (minutes: string): string => {
+        const mins = parseInt(minutes, 10);
+        return mins < 60
+            ? `00:${mins}`
+            : `${padNumber(Math.floor(mins / 60), 2)}:${padNumber(
+                  Math.floor(mins % 60),
+                  2
+              )}`;
+    };
 
     const displayMinutes = (minutes: string): string => {
         const mins = parseInt(minutes, 10);
@@ -64,21 +86,33 @@ export const MeetingBookingPage: FC<RouteComponentProps> = ({
                 {loadingSlots ? (
                     <p>Loading...</p>
                 ) : (
-                    slots?.map((s) => {
-                        return (
-                            <div className="form-check text-center mb-2">
-                                <label
-                                    className={`form-check-label ${
-                                        slot === s ? "active" : ""
+                    slots?.map((s, index) => {
+                        if (duration) {
+                            const date = new Date(s.date);
+                            const nextTime = addMinutes(
+                                new Date(s.date),
+                                parseInt(duration, 10)
+                            );
+                            return (
+                                <div
+                                    className={`form-check text-center mb-2 slot ${
+                                        slot?.date === s.date ? "active" : ""
                                     }`}
-                                    onClick={() => {
-                                        setSlot(s);
-                                    }}
+                                    key={index}
                                 >
-                                    09:00 - 09:30 AM
-                                </label>
-                            </div>
-                        );
+                                    <label
+                                        className={`form-check-label`}
+                                        onClick={() => {
+                                            setSlot(s);
+                                        }}
+                                    >
+                                        {format(date, "p")} -{" "}
+                                        {format(nextTime, "p")}
+                                    </label>
+                                </div>
+                            );
+                        }
+                        return null;
                     })
                 )}
             </div>
@@ -95,12 +129,21 @@ export const MeetingBookingPage: FC<RouteComponentProps> = ({
                 user: userResourceId,
                 status: MEETING_BOOKING_STATUS.STATUS_CREATED,
                 duration: parseInt(duration, 10),
+                meetingTime: slot.date,
             };
-            MeetingBookingApi.create<MeetingBooking, PMeetingBooking>(
-                booking
-            ).finally(() => {
-                setSubmitting(false);
-            });
+            MeetingBookingApi.create<MeetingBooking, PMeetingBooking>(booking)
+                .then(({ error, errorMessage, response }) => {
+                    if (error) {
+                        errorToast(errorMessage);
+                    } else if (response) {
+                        if (navigate) {
+                            navigate(`/booked-meeting/${response.id}/confirm`);
+                        }
+                    }
+                })
+                .finally(() => {
+                    setSubmitting(false);
+                });
         }
     };
 
@@ -109,7 +152,7 @@ export const MeetingBookingPage: FC<RouteComponentProps> = ({
         MeetingApi.findById<Meeting>(id).then(({ isNotFound, response }) => {
             if (isNotFound) {
                 setFound(false);
-                errorToast(t("meeting.booking:notexit"));
+                errorToast(t("meeting.booking:notExist"));
             } else if (response) {
                 setData(response);
                 if (response.user) {
@@ -143,13 +186,19 @@ export const MeetingBookingPage: FC<RouteComponentProps> = ({
                 format(startDate, "yyyy-MM-dd"),
                 `${duration}`
             ).then(({ error, response }) => {
-                if (!error && response !== null) {
-                    setSlots(response);
+                if (!error && response !== null && response?.slots) {
+                    setSlots(response?.slots);
                 }
                 setLoadingSlots(false);
             });
+        } else {
+            setSlots([]);
         }
-    }, [id, startDate, duration]);
+    }, [id, duration]);
+
+    useEffect(() => {
+        setDuration("");
+    }, [startDate]);
 
     if (loading || loadingUser) {
         return <AppLoader />;
@@ -158,7 +207,7 @@ export const MeetingBookingPage: FC<RouteComponentProps> = ({
     const profileStyle = getBGStyle(basePath, user?.imageName, placeholder);
 
     if (found === false) {
-        return <AppPageHeader title={t("meeting:notexit")} />;
+        return <AppPageHeader title={t("meeting:notExist")} />;
     }
 
     return (
@@ -170,13 +219,13 @@ export const MeetingBookingPage: FC<RouteComponentProps> = ({
                             className="inner-container--profile-pic--content"
                             style={profileStyle}
                         >
-                            <a href="#" className="btn btn-info speaker-btn">
-                                <i
-                                    className="fak fa-speakers"
-                                    aria-hidden="true"
-                                ></i>
-                                Speaker
-                            </a>
+                            {/* <a href="#" className="btn btn-info speaker-btn"> */}
+                            {/*    <i */}
+                            {/*        className="fak fa-speakers" */}
+                            {/*        aria-hidden="true" */}
+                            {/*    ></i> */}
+                            {/*    Speaker */}
+                            {/* </a> */}
                         </div>
                     </div>
                     <div className="inner-container--main-det col-12 col-md-auto mt-4 mt-xl-0 text-center text-md-left">
@@ -237,9 +286,15 @@ export const MeetingBookingPage: FC<RouteComponentProps> = ({
                                                 <div className="radio-btn-txt-seperated">
                                                     <div className="radio-btn-txt-seperated--container py-2 px-1">
                                                         {data?.duration.map(
-                                                            (minutes) => {
+                                                            (
+                                                                minutes,
+                                                                index
+                                                            ) => {
                                                                 return (
                                                                     <div
+                                                                        key={
+                                                                            index
+                                                                        }
                                                                         className={`form-check text-center mr-2 duration ${
                                                                             duration ===
                                                                             minutes
