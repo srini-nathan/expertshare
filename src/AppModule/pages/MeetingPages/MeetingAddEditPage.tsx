@@ -4,6 +4,7 @@ import { RouteComponentProps } from "@reach/router";
 import { Form, Row } from "react-bootstrap";
 import {
     AppBreadcrumb,
+    AppButton,
     AppFormActions,
     AppLoader,
     AppPageHeader,
@@ -227,12 +228,33 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
                     </div>
                 </div>
                 <Row>
-                    <AppFormActions
-                        isEditMode={isEditMode}
-                        navigation={navigator}
-                        backLink={".."}
-                        isLoading={formState.isSubmitting}
-                    />
+                    {active === 1 ? (
+                        <div className="d-flex justify-content-end footer-action w-100 p-3">
+                            <AppButton
+                                type="button"
+                                variant={"secondary"}
+                                className="mr-4"
+                                onClick={() => navigator("..").then()}
+                            >
+                                {t("common.button:cancel")}
+                            </AppButton>
+                            <AppButton
+                                type="button"
+                                onClick={() => {
+                                    setActive(2);
+                                }}
+                            >
+                                {t("common.button:next")}
+                            </AppButton>
+                        </div>
+                    ) : (
+                        <AppFormActions
+                            isEditMode={isEditMode}
+                            navigation={navigator}
+                            backLink={".."}
+                            isLoading={formState.isSubmitting}
+                        />
+                    )}
                 </Row>
             </Form>
         </Fragment>
