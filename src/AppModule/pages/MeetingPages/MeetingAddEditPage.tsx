@@ -27,14 +27,40 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
     const { t } = useTranslation();
     const { clientResourceId, userResourceId } = useAuthState();
     const [active, setActive] = useState<number>(1);
-    const { hookForm, isEditMode, data, id } = useDataAddEdit<Meeting>(
+    const {
+        hookForm,
+        isEditMode,
+        data,
+        id,
+        setData,
+        setIsLoading,
+    } = useDataAddEdit<Meeting>(
         new Meeting(clientResourceId, userResourceId),
         schema()
     );
-    const { formState, handleSubmit, setError } = hookForm;
+    const { formState, handleSubmit, setError, trigger } = hookForm;
     const navigator = useNavigator(navigate);
     const [durations, setDurations] = useState<Duration[]>([]);
     const [availabilities, setAvailabilities] = useState<Availability[]>([]);
+
+    useEffect(() => {
+        if (isEditMode && id) {
+            setIsLoading(true);
+            MeetingApi.findById<Meeting>(id).then(
+                ({ response, isNotFound, errorMessage }) => {
+                    if (errorMessage) {
+                        errorToast(t(errorMessage));
+                    } else if (isNotFound) {
+                        errorToast(t("meeting.form:notfound.error.message"));
+                    } else if (response !== null) {
+                        setData(response);
+                        trigger();
+                    }
+                    setIsLoading(false);
+                }
+            );
+        }
+    }, [id, isEditMode, trigger]);
 
     const onSubmit = async (formData) => {
         formData.provider = MEETING_PROVIDER.PROVIDER_MEET;
