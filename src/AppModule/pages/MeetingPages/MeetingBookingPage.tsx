@@ -138,16 +138,25 @@ export const MeetingBookingPage: FC<RouteComponentProps> = ({
 
     useEffect(() => {
         setLoading(true);
-        MeetingApi.findById<Meeting>(id).then(({ isNotFound, response }) => {
-            if (isNotFound) {
-                setFound(false);
-                errorToast(t("meeting.booking:notExist"));
-            } else if (response) {
-                setData(response);
-                setUser(response.user as User);
-            }
-            setLoading(false);
-        });
+        MeetingApi.findById<Meeting>(id)
+            .then(({ isNotFound, response }) => {
+                if (isNotFound) {
+                    setFound(false);
+                    errorToast(t("meeting.booking:notExist"));
+                    navigator("/").then();
+                } else if (response) {
+                    setData(response);
+                    setUser(response.user as User);
+                    if (response.isActive !== true) {
+                        setFound(false);
+                        errorToast(t("meeting.booking:notExist"));
+                        navigator("/").then();
+                    }
+                }
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     }, [id, t]);
 
     useEffect(() => {
