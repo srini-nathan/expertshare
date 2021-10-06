@@ -2,7 +2,12 @@ import React, { FC, Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RouteComponentProps } from "@reach/router";
 import { Form, Row } from "react-bootstrap";
-import { AppBreadcrumb, AppFormActions, AppPageHeader } from "../../components";
+import {
+    AppBreadcrumb,
+    AppFormActions,
+    AppLoader,
+    AppPageHeader,
+} from "../../components";
 import { MeetingAddEditTabs } from "./MeetingAddEditTabs";
 import { MeetingAddEditTab1 } from "./MeetingAddEditTab1";
 import { MeetingAddEditTab2 } from "./MeetingAddEditTab2";
@@ -34,6 +39,7 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
         id,
         setData,
         setIsLoading,
+        isLoading,
     } = useDataAddEdit<Meeting>(
         new Meeting(clientResourceId, userResourceId),
         schema()
@@ -168,6 +174,10 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
         initDuration();
         initAvailability();
     }, [data]);
+
+    if (isLoading) {
+        return <AppLoader />;
+    }
 
     return (
         <Fragment>

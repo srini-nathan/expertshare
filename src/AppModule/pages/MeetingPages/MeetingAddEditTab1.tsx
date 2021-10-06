@@ -68,6 +68,7 @@ export const MeetingAddEditTab1 = ({
                                 block={true}
                                 required={false}
                                 label={t("meeting.form:label.description")}
+                                defaultValue={data.description}
                             />
                         </Form.Row>
                     </div>
