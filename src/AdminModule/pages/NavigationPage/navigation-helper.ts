@@ -5,15 +5,19 @@ export const getInternalLinksOptions = (t: any): SimpleObject<string>[] => {
     const options: SimpleObject<string>[] = [
         {
             value: "/event",
-            label: t("Events"),
+            label: t("navigation.main:events"),
         },
         {
             value: "/attendee",
-            label: t("Attendee"),
+            label: t("navigation.main:attendee"),
         },
         {
             value: "/exhibitors",
-            label: t("Exhibitors"),
+            label: t("navigation.main:exhibitors"),
+        },
+        {
+            value: "/meetings",
+            label: t("navigation.main:meetings"),
         },
     ];
     return options;
