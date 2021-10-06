@@ -13,6 +13,7 @@ export interface AppPageHeaderProps {
     createLabel?: string;
     onQuickFilterChange?: (s: string) => void;
     cancelTokenSources?: Canceler[];
+    showSearchBar?: boolean;
 }
 
 export const AppPageHeader: FC<AppPageHeaderProps> = ({
@@ -24,6 +25,7 @@ export const AppPageHeader: FC<AppPageHeaderProps> = ({
     onQuickFilterChange,
     cancelTokenSources,
     children,
+    showSearchBar,
 }): JSX.Element => {
     let mdSize = 6;
     if (customToolbar) {
@@ -43,6 +45,7 @@ export const AppPageHeader: FC<AppPageHeaderProps> = ({
                         createLink={createLink}
                         onQuickFilterChange={onQuickFilterChange}
                         cancelTokenSources={cancelTokenSources}
+                        showSearchBar={showSearchBar}
                     />
                 </Col>
             )}

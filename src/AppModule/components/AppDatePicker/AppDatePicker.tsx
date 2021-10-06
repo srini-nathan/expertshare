@@ -13,6 +13,9 @@ export interface AppDatePickerProps {
     showTimeSelect?: boolean;
     showTimeInput?: boolean;
     control?: Control<any>;
+    readOnly?: boolean;
+    disabled?: boolean;
+    required?: boolean;
 }
 
 export const AppDatePicker: FC<AppDatePickerProps> = ({
@@ -22,10 +25,11 @@ export const AppDatePicker: FC<AppDatePickerProps> = ({
     control,
     showTimeSelect = false,
     showTimeInput = false,
+    ...props
 }): JSX.Element => {
     const dateValue = defaultValue || new Date();
     const [open, setOpen] = useState(false);
-
+    const { readOnly, disabled } = props;
     return (
         <Controller
             control={control}
@@ -34,9 +38,12 @@ export const AppDatePicker: FC<AppDatePickerProps> = ({
             render={({ field }) => (
                 <InputGroup>
                     <ReactDatePicker
+                        {...props}
                         selected={field.value}
                         onInputClick={() => {
-                            setOpen(true);
+                            if (!readOnly && !disabled) {
+                                setOpen(true);
+                            }
                         }}
                         onChange={(...e) => {
                             setOpen(!open);
@@ -57,7 +64,9 @@ export const AppDatePicker: FC<AppDatePickerProps> = ({
                     <InputGroup.Append>
                         <InputGroup.Text
                             onClick={() => {
-                                setOpen(!open);
+                                if (!readOnly && !disabled) {
+                                    setOpen(!open);
+                                }
                             }}
                         >
                             <AppIcon name="calendar" />

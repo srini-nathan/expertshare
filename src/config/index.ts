@@ -6,7 +6,7 @@ export * from "./helper";
 
 const R = ROUTES;
 const C = CONSTANTS;
-const { Upload, VoteQuestion, Role, Session, EmailTemplate } = CONSTANTS;
+const { Upload, VoteQuestion, Role, Session, EmailTemplate, Meeting, MeetingBooking } = CONSTANTS;
 
 const {
   FILETYPE: FILE_TYPE,
@@ -123,3 +123,16 @@ export {
   ETKEY,
   ETKEYINFO,
 }
+
+const {
+  PROVIDER: MEETING_PROVIDER,
+  TYPE: MEETING_TYPE,
+} = Meeting;
+
+const { STATUS: MEETING_BOOKING_STATUS } =  MeetingBooking;
+
+export {
+  MEETING_PROVIDER,
+  MEETING_TYPE,
+  MEETING_BOOKING_STATUS
+};

@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
-import { Col, Form } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { Controller } from "react-hook-form";
-import { useInputPlaceholder } from "../../hooks";
+import { useGridHelper, useInputPlaceholder } from "../../hooks";
 import { AppFormLabel } from "../AppFormLabel";
 import {
     AppFormLayoutProps,
@@ -39,13 +39,21 @@ export const AppFormInput: FC<AppFormInputProps> = ({
     value,
     onBlurHandler,
     onChange,
+    block,
+    readOnly,
+    disabled,
     ...props
 }): JSX.Element => {
     const [data, setData] = useState<string>(defaultValue);
     const placeholderText = useInputPlaceholder(name, placeholder, label);
     const controlId = id || name;
-    const { sm = 12, md = 6, lg = 4, xl = 4, className = "" } = props;
-    const groupProps = { sm, md, lg, xl, controlId, as: Col };
+    const {
+        sm = 12,
+        md = block ? 12 : 6,
+        lg = block ? 12 : 4,
+        xl = block ? 12 : 4,
+        className = "",
+    } = props;
     const labelProps = { label, required, maxCount, description };
     const controllerProps = { name, defaultValue, control };
     const controlProps = {
@@ -53,7 +61,11 @@ export const AppFormInput: FC<AppFormInputProps> = ({
         isValid,
         isInvalid,
         type,
+        readOnly,
+        disabled,
     };
+    const { getColumnClasses } = useGridHelper();
+    const colClasses = getColumnClasses(sm, md, lg, xl);
 
     let valueController = {};
     if (value)
@@ -62,9 +74,10 @@ export const AppFormInput: FC<AppFormInputProps> = ({
         };
 
     return (
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        <Form.Group {...groupProps} className={`mb-0 ${className}`}>
+        <Form.Group
+            className={`col form-group  mb-0 ${colClasses} ${className}`}
+            controlId={controlId}
+        >
             <AppFormLabel counter={data?.length} {...labelProps} />
             <Controller
                 {...controllerProps}

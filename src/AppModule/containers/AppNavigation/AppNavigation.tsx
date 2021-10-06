@@ -583,6 +583,33 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
         return UserApi.updateProfile<PUser, PUser>(user.id, formData);
     };
 
+    const getUserProfileMenu = () => {
+        const menu: any[] = [];
+        if (configuration?.isBookingEnable) {
+            menu.push({
+                label: t("navigation:meetings"),
+                path: "/meetings",
+                iconClassName: "fak fa-handshake-alt-light",
+                onClick: () => isNavOpen(!navOpen),
+            });
+        }
+        return [
+            ...menu,
+            {
+                label: t("navigation:profile"),
+                path: "/my-profile",
+                iconClassName: "fak fa-userprofile-cs-profile",
+                onClick: () => isNavOpen(!navOpen),
+            },
+            {
+                label: t("navigation:logOut"),
+                onClick: () => isNavOpen(!navOpen),
+                action: handleLogoutEvent,
+                iconClassName: "fak fa-logout-cs",
+            },
+        ];
+    };
+
     return (
         <aside
             className={`${
@@ -794,28 +821,7 @@ const AppNavigation: FC<AppNavigationProps> = ({ items }) => {
                                             }
                                             style={style}
                                             iconClassName="profile-picture"
-                                            subDropDownItems={[
-                                                {
-                                                    label: t(
-                                                        "navigation:profile"
-                                                    ),
-                                                    path: "/my-profile",
-                                                    iconClassName:
-                                                        "fak fa-userprofile-cs-profile",
-                                                    onClick: () =>
-                                                        isNavOpen(!navOpen),
-                                                },
-                                                {
-                                                    label: t(
-                                                        "navigation:logOut"
-                                                    ),
-                                                    onClick: () =>
-                                                        isNavOpen(!navOpen),
-                                                    action: handleLogoutEvent,
-                                                    iconClassName:
-                                                        "fak fa-logout-cs",
-                                                },
-                                            ]}
+                                            subDropDownItems={getUserProfileMenu()}
                                         />
                                     </ListGroupItem>
                                     {menuLocation === "LEFT" &&

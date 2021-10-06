@@ -13,3 +13,4 @@ export * from "./InfoPage";
 export * from "./AFramePanelPage";
 export * from "./WidgetPage";
 export * from "./LiveNowPage";
+export * from "./MeetingPages";

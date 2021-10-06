@@ -26,6 +26,7 @@ export interface Configuration {
     isLoginAzureEnable: boolean;
     isOnboardingEnable: boolean;
     filterUserRoles: string[];
+    isBookingEnable: boolean;
 }
 
 export class Configuration implements Configuration {
@@ -80,6 +81,8 @@ export class Configuration implements Configuration {
     isOnboardingEnable = false;
 
     filterUserRoles = [""];
+
+    isBookingEnable = false;
 }
 
 export const useDefaultOnEmpty = [

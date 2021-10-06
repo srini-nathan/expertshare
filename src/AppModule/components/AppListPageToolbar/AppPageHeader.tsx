@@ -16,6 +16,7 @@ export interface AppListPageToolbarProps {
     createLabel?: string;
     onQuickFilterChange?: (s: string) => void;
     cancelTokenSources?: Canceler[];
+    showSearchBar?: boolean;
 }
 
 export const AppListPageToolbar: FC<AppListPageToolbarProps> = ({
@@ -24,6 +25,7 @@ export const AppListPageToolbar: FC<AppListPageToolbarProps> = ({
     onQuickFilterChange = () => {},
     cancelTokenSources = [],
     grantedControl = true,
+    showSearchBar = true,
 }): JSX.Element => {
     const search$ = useRef(new Subject<string>());
     const destroy$ = new Subject<string>();
@@ -54,20 +56,22 @@ export const AppListPageToolbar: FC<AppListPageToolbarProps> = ({
             <Col className={"d-flex justify-content-end"} xs="12" sm="auto">
                 <Form className={"w-100"}>
                     <Form.Row className={"justify-content-end"}>
-                        <Col xs="6" sm="auto" className="mb-2">
-                            <InputGroup className="header-search">
-                                <Form.Control
-                                    onChange={handleQuickSearch}
-                                    placeholder={t("common.button:search")}
-                                    type={"search"}
-                                ></Form.Control>
-                                <InputGroup.Prepend>
-                                    <InputGroup.Text id="basic-addon1">
-                                        <AppIcon name="Search" />
-                                    </InputGroup.Text>
-                                </InputGroup.Prepend>
-                            </InputGroup>
-                        </Col>
+                        {showSearchBar ? (
+                            <Col xs="6" sm="auto" className="mb-2">
+                                <InputGroup className="header-search">
+                                    <Form.Control
+                                        onChange={handleQuickSearch}
+                                        placeholder={t("common.button:search")}
+                                        type={"search"}
+                                    ></Form.Control>
+                                    <InputGroup.Prepend>
+                                        <InputGroup.Text id="basic-addon1">
+                                            <AppIcon name="Search" />
+                                        </InputGroup.Text>
+                                    </InputGroup.Prepend>
+                                </InputGroup>
+                            </Col>
+                        ) : null}
                         <Col xs="6" sm="auto" className="mb-2">
                             {createLink && grantedControl ? (
                                 <AppButton
