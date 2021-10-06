@@ -381,7 +381,7 @@ export const MeetingBookingPage: FC<RouteComponentProps> = ({
                                 variant={"secondary"}
                                 className="mr-4"
                                 disabled={submitting}
-                                onClick={() => navigator(-1).then()}
+                                onClick={() => navigator("/").then()}
                             >
                                 {t("common.button:cancel")}
                             </AppButton>
