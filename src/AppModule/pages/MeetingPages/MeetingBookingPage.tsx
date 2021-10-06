@@ -81,10 +81,18 @@ export const MeetingBookingPage: FC<RouteComponentProps> = ({
     };
 
     const renderSlots = () => {
+        if (loadingSlots) {
+            return (
+                <div className="radio-btn-txt-seperated--container px-2 py-1">
+                    <p>Loading...</p>
+                </div>
+            );
+        }
+
         return (
             <div className="radio-btn-txt-seperated--container px-2 py-1">
-                {loadingSlots ? (
-                    <p>Loading...</p>
+                {slots?.length === 0 ? (
+                    <p>{t("meeting.booking:notSlotsAvailable")}</p>
                 ) : (
                     slots?.map((s, index) => {
                         if (duration) {
