@@ -18,7 +18,6 @@ import { schema } from "./schema";
 import {
     errorToast,
     getRandomId,
-    padNumber,
     setViolations,
     successToast,
 } from "../../utils";
@@ -26,6 +25,7 @@ import "./assets/scss/style.scss";
 import { UnprocessableEntityErrorResponse } from "../../models";
 import { MeetingApi } from "../../apis/MeetingApi";
 import { MEETING_PROVIDER } from "../../../config";
+import { storableTime } from "./meeting-helper";
 
 export const MeetingAddEditPage: FC<RouteComponentProps> = ({
     navigate,
@@ -82,8 +82,8 @@ export const MeetingAddEditPage: FC<RouteComponentProps> = ({
             const { day, start, end } = dr;
             return {
                 day,
-                start: padNumber(parseInt(start, 10), 4),
-                end: padNumber(parseInt(end, 10), 4),
+                start: storableTime(`${start}`),
+                end: storableTime(`${end}`),
             };
         });
 

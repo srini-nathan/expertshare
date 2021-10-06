@@ -72,13 +72,31 @@ export const getTime = (interval = 30): SimpleObject<string>[] => {
     const options: SimpleObject<string>[] = [];
     for (let i = 0; i <= 24; i++) {
         for (let k = 0; k < 60; k += interval) {
-            const hours = i > 9 ? `${i}` : `0${i}`;
-            const minutes = k > 9 ? `${k}` : `0${k}`;
-            options.push({
-                value: `${hours}${minutes}`,
-                label: `${hours}:${minutes}`,
-            });
+            if (!(i === 24 && k > 0)) {
+                const hours = i > 9 ? `${i}` : `0${i}`;
+                const minutes = k > 9 ? `${k}` : `0${k}`;
+                options.push({
+                    value: `${hours}${minutes}`,
+                    label: `${hours}:${minutes}`,
+                });
+            }
         }
     }
     return options;
+};
+
+export const storableTime = (time: string): string => {
+    // eslint-disable-next-line no-console
+    console.log(time, "time");
+    if (time.length === 3) {
+        const split = time.split("");
+        return `0${split[0]}:${split[1]}${split[2]}`;
+    }
+
+    if (time.length === 4) {
+        const split = time.split("");
+        return `${split[0]}${split[1]}:${split[2]}${split[3]}`;
+    }
+
+    return `00:${time}`;
 };
