@@ -17,11 +17,7 @@ import {
     useDateTime,
     useNavigator,
 } from "../../hooks";
-import {
-    errorToast,
-    parseIdFromResourceUrl,
-    getBGStyle,
-} from "../../utils";
+import { errorToast, parseIdFromResourceUrl, getBGStyle } from "../../utils";
 import { UserProfileFileInfo, MEETING_BOOKING_STATUS } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
 import {
