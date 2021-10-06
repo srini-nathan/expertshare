@@ -86,8 +86,6 @@ export const getTime = (interval = 30): SimpleObject<string>[] => {
 };
 
 export const storableTime = (time: string): string => {
-    // eslint-disable-next-line no-console
-    console.log(time, "time");
     if (time.length === 3) {
         const split = time.split("");
         return `0${split[0]}:${split[1]}${split[2]}`;
