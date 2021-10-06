@@ -21,7 +21,6 @@ import {
     errorToast,
     parseIdFromResourceUrl,
     getBGStyle,
-    padNumber,
 } from "../../utils";
 import { UserProfileFileInfo, MEETING_BOOKING_STATUS } from "../../../config";
 import placeholder from "../../assets/images/user-avatar.png";
